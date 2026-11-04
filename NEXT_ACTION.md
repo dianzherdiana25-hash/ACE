@@ -1,13 +1,13 @@
-# NEXT_ACTION — diagnosis ambiguitas lintas grammar E1.4i
+# NEXT_ACTION — E1.4j pembuatan saksi dengan anggaran terbatas
 
-1. Verifikasi HEAD GitHub dan baca [E1.4h](design/e1.4/E14H_RESULT_v1.md), [bukti](evidence/e14/e14h_verification_v1.json) dan [piagam](PROJECT_CHARTER.md). Skor tinggi pada S alami enam kejadian menutupi kesulitan mengenali panjang. Lima dari enam blok memiliki fit demo sempurna di kedua grammar. Tidak ada kata target di pool atau probe sel tersebut.
-2. Bangun bank publik baru yang memisahkan pool tanpa saksi dari pool yang memiliki saksi lintas grammar berdasarkan konstruksi. Tahan distribusi alami tetap terpisah dan laporkan prevalensi saksi. Gunakan input baru, pisahkan RNG, pertahankan kasus negatif, dan bekukan generator, ambang, serta biaya sebelum penilaian. Jangan tuning dari skor E1.4g/h.
-3. Uji satu label yang dipilih dari perselisihan lintas grammar. Bandingkan dengan E1.4h, tanpa label, dan satu label acak, dengan pembanding retrospektif yang mengukur apakah peluang memang ada. Nilai diagnosis panjang dan false positive pada saksi secara terpisah dari akurasi mentah. Catat keadaan ketika sistem seharusnya menunda keputusan karena bukti belum memadai.
-4. **NATURAL_HOLD** membatasi transfer. Benchmark publik ini meneliti pengenalan keterbatasan sebagai langkah menuju pembentukan representasi baru.
+1. Verifikasi HEAD GitHub dan baca [hasil E1.4i](design/e1.4/E14I_RESULT_v1.md), [bukti](evidence/e14/e14i_verification_v1.json) dan [piagam](PROJECT_CHARTER.md). Pada enam kasus simbol alami, batas jumlah jendela per input mencegah jaminan diagnosis dengan satu label. Metode E1.4i membeli sembilan label pada 12 kasus alami ambigu. Hanya dua menyelesaikan diagnosis.
+2. Bekukan bank publik baru dan uji apakah worker dapat menyusun input pembeda dari hipotesis yang masih konsisten tanpa menerima target, label pool, atau probe. Bandingkan pembentukan terarah, pool tetap, dan pengajuan acak dengan anggaran penilaian input tanpa label dan label yang dicatat. Pisahkan kasus dengan saksi tunggal yang cukup, kasus yang membutuhkan rangkaian bukti, dan kasus tanpa pemisahan dalam anggaran.
+3. Tentukan gerbang sebelum scoring. Ukur diagnosis per label, abstain, kesalahan diagnosis, false positive, jumlah input yang diperiksa, dan batas komputasi. Pertahankan kasus gagal. Jika anggaran satu label tidak dapat menjamin pemisahan, ukur anggaran lebih besar sebagai kondisi terpisah.
+4. **NATURAL_HOLD** tetap membatasi transfer. Tahap ini menguji pembuatan eksperimen untuk mengurai ketidakpastian di antara dua grammar yang tersedia.
 
 ## Reproduksi E1.4i
 
-Dari checkout pembekuan E1.4i, buat direktori lokal `WORK`. Jalankan kedua penilaian dengan ledger terpisah. Pakai nama ledger yang sama untuk resume.
+Dari checkout [pembekuan E1.4i](https://github.com/dianzherdiana25-hash/ACE/commit/63aeaf63f1762dc766c13a8188c15a2996316daf), buat direktori lokal `WORK`. Jalankan kedua penilaian dengan ledger terpisah. Pakai nama ledger yang sama untuk resume.
 
 ```bash
 PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 210 --heartbeat 15 --log WORK/iscore.log -- python3 -m e14.e14i_run run WORK/iscore.sqlite WORK/iscore.json.gz

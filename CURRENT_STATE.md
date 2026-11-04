@@ -1,6 +1,12 @@
 # Keadaan ACE saat ini
 
-## E1.4i — pembekuan pra-penilaian
+## E1.4i — selesai dan direproduksi
+
+**WITNESS_DEVELOPMENT_GO.** Ketika dua grammar sama-sama cocok dengan demo, satu pertanyaan pembeda menentukan panjang pada 24/24 dunia terkontrol dan menghasilkan 96/96 probe tepat per keluarga. Ketika saksi dikeluarkan, sistem menunda diagnosis dan membeli nol label pada 24/24 dunia. **NATURAL_HOLD** tetap berlaku. Di 12 kasus alami ambigu, hanya dua dapat dipecahkan dengan satu label dari pool. Audit lanjutan menunjukkan satu label tidak dapat menjamin diagnosis pada enam kasus simbol untuk input mana pun yang sah.
+
+[Hasil](design/e1.4/E14I_RESULT_v1.md) · [Bukti](evidence/e14/e14i_verification_v1.json) · [Protokol beku](https://github.com/dianzherdiana25-hash/ACE/commit/63aeaf63f1762dc766c13a8188c15a2996316daf). Dua run 72 dunia selesai dengan hasil deterministik sama. Regresi lulus 83/83. Langkah berikutnya menguji pembuatan pertanyaan dan pengendalian anggaran saat bukti satu label tidak cukup.
+
+## E1.4i — checkpoint historis pra-penilaian
 
 Bank publik baru memisahkan kasus alami dan dua kondisi berpasangan. Kondisi terkontrol memakai demo dan probe yang sama dengan dua item pool yang berbeda. Empat tes pra-penilaian lulus. Penilaian dimulai setelah verifikasi commit pembekuan di GitHub. [Protokol](design/e1.4/E14I_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14I_LOCK_v1.json).
 

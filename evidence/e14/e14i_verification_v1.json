@@ -1,0 +1,686 @@
+{
+  "audit": {
+    "deterministic_sha256": "5b162cd2a9f2d3d91bb9a864c79aa6d7f2a54fb065647e462fa7b05df653c157",
+    "one_label_branches": 576,
+    "replay_match": true,
+    "status": "completed",
+    "worlds": 72
+  },
+  "bank_sha256": "ea42cb75ce219309f6b9a663a2d029cba7b9ed19fe537e7ba1b501fffc250a4d",
+  "boundary": {
+    "binary": "/usr/bin/bwrap",
+    "checks": {
+      "credential_env_absent": true,
+      "evaluator_module_absent": true,
+      "host_loopback_denied": true,
+      "private_file_denied": true,
+      "selector_stage_without_evaluator": true,
+      "worker_mount_read_only": true
+    },
+    "native_elf": true,
+    "sha256": "573236e5328ac2ebb08f59ae3a9805b4f8d12bdef14be8af4450d5463294985f"
+  },
+  "bubblewrap": "0.12.0",
+  "compressed_sha256": {
+    "ireplay": "150470b9f2e8b2009b310c5845d03857ca50fe6fbf139ac215b22f300fa42574",
+    "iscore": "95f8a2cddeb9d23e4c07e47a22c1e8de2f0882ed47fad5ac6faca85b4e03bc89"
+  },
+  "freeze_commit": "63aeaf63f1762dc766c13a8188c15a2996316daf",
+  "freeze_tree": "4786e2968c7cbeba953ad1a7004ce1d24d76b8e2",
+  "plan_sha256": "fc9dc0a5c40daa9ca05478521002c0c3774499ba9280aab9b4d29a9fd7247374",
+  "posthoc_capacity": {
+    "cases": [
+      {
+        "block": "natural:1",
+        "demo_candidates": {
+          "5": 1,
+          "6": 1
+        },
+        "family": "G",
+        "length": 5,
+        "max_windows_per_input": {
+          "5": 10,
+          "6": 9
+        },
+        "pool_has_disjoint_support": false,
+        "queried_disjoint_support": false,
+        "queries_required_for_guarantee_at_least": 1
+      },
+      {
+        "block": "natural:2",
+        "demo_candidates": {
+          "5": 1,
+          "6": 1
+        },
+        "family": "G",
+        "length": 5,
+        "max_windows_per_input": {
+          "5": 10,
+          "6": 9
+        },
+        "pool_has_disjoint_support": true,
+        "queried_disjoint_support": true,
+        "queries_required_for_guarantee_at_least": 1
+      },
+      {
+        "block": "natural:0",
+        "demo_candidates": {
+          "5": 1,
+          "6": 1
+        },
+        "family": "G",
+        "length": 6,
+        "max_windows_per_input": {
+          "5": 10,
+          "6": 9
+        },
+        "pool_has_disjoint_support": true,
+        "queried_disjoint_support": true,
+        "queries_required_for_guarantee_at_least": 1
+      },
+      {
+        "block": "natural:4",
+        "demo_candidates": {
+          "5": 2,
+          "6": 1
+        },
+        "family": "G",
+        "length": 6,
+        "max_windows_per_input": {
+          "5": 10,
+          "6": 9
+        },
+        "pool_has_disjoint_support": false,
+        "queried_disjoint_support": false,
+        "queries_required_for_guarantee_at_least": 1
+      },
+      {
+        "block": "natural:0",
+        "demo_candidates": {
+          "5": 90,
+          "6": 540
+        },
+        "family": "S",
+        "length": 5,
+        "max_windows_per_input": {
+          "5": 59,
+          "6": 58
+        },
+        "pool_has_disjoint_support": false,
+        "queried_disjoint_support": false,
+        "queries_required_for_guarantee_at_least": 2
+      },
+      {
+        "block": "natural:2",
+        "demo_candidates": {
+          "5": 1,
+          "6": 1
+        },
+        "family": "S",
+        "length": 5,
+        "max_windows_per_input": {
+          "5": 59,
+          "6": 58
+        },
+        "pool_has_disjoint_support": false,
+        "queried_disjoint_support": false,
+        "queries_required_for_guarantee_at_least": 1
+      },
+      {
+        "block": "natural:3",
+        "demo_candidates": {
+          "5": 101,
+          "6": 554
+        },
+        "family": "S",
+        "length": 5,
+        "max_windows_per_input": {
+          "5": 59,
+          "6": 58
+        },
+        "pool_has_disjoint_support": false,
+        "queried_disjoint_support": false,
+        "queries_required_for_guarantee_at_least": 2
+      },
+      {
+        "block": "natural:4",
+        "demo_candidates": {
+          "5": 1,
+          "6": 1
+        },
+        "family": "S",
+        "length": 5,
+        "max_windows_per_input": {
+          "5": 59,
+          "6": 58
+        },
+        "pool_has_disjoint_support": false,
+        "queried_disjoint_support": false,
+        "queries_required_for_guarantee_at_least": 1
+      },
+      {
+        "block": "natural:0",
+        "demo_candidates": {
+          "5": 95,
+          "6": 553
+        },
+        "family": "S",
+        "length": 6,
+        "max_windows_per_input": {
+          "5": 59,
+          "6": 58
+        },
+        "pool_has_disjoint_support": false,
+        "queried_disjoint_support": false,
+        "queries_required_for_guarantee_at_least": 2
+      },
+      {
+        "block": "natural:2",
+        "demo_candidates": {
+          "5": 86,
+          "6": 544
+        },
+        "family": "S",
+        "length": 6,
+        "max_windows_per_input": {
+          "5": 59,
+          "6": 58
+        },
+        "pool_has_disjoint_support": false,
+        "queried_disjoint_support": false,
+        "queries_required_for_guarantee_at_least": 2
+      },
+      {
+        "block": "natural:3",
+        "demo_candidates": {
+          "5": 114,
+          "6": 563
+        },
+        "family": "S",
+        "length": 6,
+        "max_windows_per_input": {
+          "5": 59,
+          "6": 58
+        },
+        "pool_has_disjoint_support": false,
+        "queried_disjoint_support": false,
+        "queries_required_for_guarantee_at_least": 2
+      },
+      {
+        "block": "natural:4",
+        "demo_candidates": {
+          "5": 79,
+          "6": 539
+        },
+        "family": "S",
+        "length": 6,
+        "max_windows_per_input": {
+          "5": 59,
+          "6": 58
+        },
+        "pool_has_disjoint_support": false,
+        "queried_disjoint_support": false,
+        "queries_required_for_guarantee_at_least": 2
+      }
+    ],
+    "natural_ambiguous_worlds": 12,
+    "pool_has_disjoint_support": 2,
+    "single_label_guarantee_impossible": 6
+  },
+  "python": "3.12.14",
+  "raw_sha256": {
+    "ireplay": "88b1863363179aeb0748e63337bba228d17438393ba59ae0326bec791b675b4b",
+    "iscore": "7a6f038e9d9682e6f07ebd5065f065e4f40f665441fed9c8951ac38d4d3f6000"
+  },
+  "resume_byte_identical": true,
+  "summary": {
+    "cells": [
+      {
+        "ambiguous_worlds": 4,
+        "blocks": 6,
+        "condition": "natural",
+        "diagnosed_blocks": 2,
+        "distance_positive_ambiguous": 2,
+        "family": "S",
+        "hindsight_diagnosable_ambiguous": 0,
+        "hindsight_gain_ambiguous": 0,
+        "length": 5,
+        "score_x8": {
+          "cross": {
+            "abstained": 32,
+            "diagnosed_correct": 16,
+            "exact": 376,
+            "false_positive": 0,
+            "labels": 16
+          },
+          "e14h": {
+            "abstained": 0,
+            "diagnosed_correct": 48,
+            "exact": 376,
+            "false_positive": 0,
+            "labels": 48
+          },
+          "hindsight": {
+            "abstained": 32,
+            "diagnosed_correct": 16,
+            "exact": 376,
+            "false_positive": 0,
+            "labels": 48
+          },
+          "random": {
+            "abstained": 32,
+            "diagnosed_correct": 16,
+            "exact": 376,
+            "false_positive": 0,
+            "labels": 48
+          },
+          "zero": {
+            "abstained": 32,
+            "diagnosed_correct": 16,
+            "exact": 376,
+            "false_positive": 0,
+            "labels": 0
+          }
+        },
+        "worlds": 6
+      },
+      {
+        "ambiguous_worlds": 4,
+        "blocks": 6,
+        "condition": "natural",
+        "diagnosed_blocks": 2,
+        "distance_positive_ambiguous": 4,
+        "family": "S",
+        "hindsight_diagnosable_ambiguous": 0,
+        "hindsight_gain_ambiguous": 0,
+        "length": 6,
+        "score_x8": {
+          "cross": {
+            "abstained": 32,
+            "diagnosed_correct": 16,
+            "exact": 368,
+            "false_positive": 16,
+            "labels": 32
+          },
+          "e14h": {
+            "abstained": 0,
+            "diagnosed_correct": 16,
+            "exact": 368,
+            "false_positive": 16,
+            "labels": 48
+          },
+          "hindsight": {
+            "abstained": 32,
+            "diagnosed_correct": 16,
+            "exact": 368,
+            "false_positive": 16,
+            "labels": 48
+          },
+          "random": {
+            "abstained": 32,
+            "diagnosed_correct": 16,
+            "exact": 368,
+            "false_positive": 16,
+            "labels": 48
+          },
+          "zero": {
+            "abstained": 32,
+            "diagnosed_correct": 16,
+            "exact": 368,
+            "false_positive": 16,
+            "labels": 0
+          }
+        },
+        "worlds": 6
+      },
+      {
+        "ambiguous_worlds": 12,
+        "blocks": 6,
+        "condition": "witness",
+        "diagnosed_blocks": 6,
+        "distance_positive_ambiguous": 12,
+        "family": "S",
+        "hindsight_diagnosable_ambiguous": 12,
+        "hindsight_gain_ambiguous": 6,
+        "length": null,
+        "score_x8": {
+          "cross": {
+            "abstained": 0,
+            "diagnosed_correct": 96,
+            "exact": 768,
+            "false_positive": 0,
+            "labels": 96
+          },
+          "e14h": {
+            "abstained": 0,
+            "diagnosed_correct": 48,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 96
+          },
+          "hindsight": {
+            "abstained": 0,
+            "diagnosed_correct": 96,
+            "exact": 768,
+            "false_positive": 0,
+            "labels": 96
+          },
+          "random": {
+            "abstained": 72,
+            "diagnosed_correct": 24,
+            "exact": 624,
+            "false_positive": 144,
+            "labels": 96
+          },
+          "zero": {
+            "abstained": 96,
+            "diagnosed_correct": 0,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 0
+          }
+        },
+        "worlds": 12
+      },
+      {
+        "ambiguous_worlds": 12,
+        "blocks": 6,
+        "condition": "no_witness",
+        "diagnosed_blocks": 0,
+        "distance_positive_ambiguous": 0,
+        "family": "S",
+        "hindsight_diagnosable_ambiguous": 0,
+        "hindsight_gain_ambiguous": 0,
+        "length": null,
+        "score_x8": {
+          "cross": {
+            "abstained": 96,
+            "diagnosed_correct": 0,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 0
+          },
+          "e14h": {
+            "abstained": 0,
+            "diagnosed_correct": 48,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 96
+          },
+          "hindsight": {
+            "abstained": 96,
+            "diagnosed_correct": 0,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 96
+          },
+          "random": {
+            "abstained": 96,
+            "diagnosed_correct": 0,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 96
+          },
+          "zero": {
+            "abstained": 96,
+            "diagnosed_correct": 0,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 0
+          }
+        },
+        "worlds": 12
+      },
+      {
+        "ambiguous_worlds": 2,
+        "blocks": 6,
+        "condition": "natural",
+        "diagnosed_blocks": 5,
+        "distance_positive_ambiguous": 1,
+        "family": "G",
+        "hindsight_diagnosable_ambiguous": 1,
+        "hindsight_gain_ambiguous": 0,
+        "length": 5,
+        "score_x8": {
+          "cross": {
+            "abstained": 8,
+            "diagnosed_correct": 40,
+            "exact": 384,
+            "false_positive": 0,
+            "labels": 8
+          },
+          "e14h": {
+            "abstained": 0,
+            "diagnosed_correct": 48,
+            "exact": 384,
+            "false_positive": 0,
+            "labels": 48
+          },
+          "hindsight": {
+            "abstained": 8,
+            "diagnosed_correct": 40,
+            "exact": 384,
+            "false_positive": 0,
+            "labels": 48
+          },
+          "random": {
+            "abstained": 15,
+            "diagnosed_correct": 33,
+            "exact": 384,
+            "false_positive": 0,
+            "labels": 48
+          },
+          "zero": {
+            "abstained": 16,
+            "diagnosed_correct": 32,
+            "exact": 384,
+            "false_positive": 0,
+            "labels": 0
+          }
+        },
+        "worlds": 6
+      },
+      {
+        "ambiguous_worlds": 2,
+        "blocks": 6,
+        "condition": "natural",
+        "diagnosed_blocks": 5,
+        "distance_positive_ambiguous": 2,
+        "family": "G",
+        "hindsight_diagnosable_ambiguous": 1,
+        "hindsight_gain_ambiguous": 0,
+        "length": 6,
+        "score_x8": {
+          "cross": {
+            "abstained": 8,
+            "diagnosed_correct": 40,
+            "exact": 384,
+            "false_positive": 0,
+            "labels": 16
+          },
+          "e14h": {
+            "abstained": 0,
+            "diagnosed_correct": 32,
+            "exact": 384,
+            "false_positive": 0,
+            "labels": 48
+          },
+          "hindsight": {
+            "abstained": 8,
+            "diagnosed_correct": 40,
+            "exact": 384,
+            "false_positive": 0,
+            "labels": 48
+          },
+          "random": {
+            "abstained": 15,
+            "diagnosed_correct": 33,
+            "exact": 384,
+            "false_positive": 0,
+            "labels": 48
+          },
+          "zero": {
+            "abstained": 16,
+            "diagnosed_correct": 32,
+            "exact": 384,
+            "false_positive": 0,
+            "labels": 0
+          }
+        },
+        "worlds": 6
+      },
+      {
+        "ambiguous_worlds": 12,
+        "blocks": 6,
+        "condition": "witness",
+        "diagnosed_blocks": 6,
+        "distance_positive_ambiguous": 12,
+        "family": "G",
+        "hindsight_diagnosable_ambiguous": 12,
+        "hindsight_gain_ambiguous": 6,
+        "length": null,
+        "score_x8": {
+          "cross": {
+            "abstained": 0,
+            "diagnosed_correct": 96,
+            "exact": 768,
+            "false_positive": 0,
+            "labels": 96
+          },
+          "e14h": {
+            "abstained": 0,
+            "diagnosed_correct": 48,
+            "exact": 608,
+            "false_positive": 160,
+            "labels": 96
+          },
+          "hindsight": {
+            "abstained": 0,
+            "diagnosed_correct": 96,
+            "exact": 768,
+            "false_positive": 0,
+            "labels": 96
+          },
+          "random": {
+            "abstained": 72,
+            "diagnosed_correct": 24,
+            "exact": 624,
+            "false_positive": 144,
+            "labels": 96
+          },
+          "zero": {
+            "abstained": 96,
+            "diagnosed_correct": 0,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 0
+          }
+        },
+        "worlds": 12
+      },
+      {
+        "ambiguous_worlds": 12,
+        "blocks": 6,
+        "condition": "no_witness",
+        "diagnosed_blocks": 0,
+        "distance_positive_ambiguous": 0,
+        "family": "G",
+        "hindsight_diagnosable_ambiguous": 0,
+        "hindsight_gain_ambiguous": 0,
+        "length": null,
+        "score_x8": {
+          "cross": {
+            "abstained": 96,
+            "diagnosed_correct": 0,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 0
+          },
+          "e14h": {
+            "abstained": 0,
+            "diagnosed_correct": 48,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 96
+          },
+          "hindsight": {
+            "abstained": 96,
+            "diagnosed_correct": 0,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 96
+          },
+          "random": {
+            "abstained": 96,
+            "diagnosed_correct": 0,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 96
+          },
+          "zero": {
+            "abstained": 96,
+            "diagnosed_correct": 0,
+            "exact": 576,
+            "false_positive": 192,
+            "labels": 0
+          }
+        },
+        "worlds": 12
+      }
+    ],
+    "decision": "WITNESS_DEVELOPMENT_GO",
+    "fit_comparisons": 12610944,
+    "natural_decision": "NATURAL_HOLD_CARRIED_FORWARD",
+    "oracle_calls": 3456,
+    "worker_calls": 1368,
+    "worlds": 72
+  },
+  "terminal": {
+    "capacity": {
+      "elapsed_s": 0.101,
+      "exit_code": 0,
+      "log_file": "/workspace/scratch/6a567033693b/ACE-E14G/../ace-e14i-run.6ZarnM/capacity.log",
+      "status": "OK"
+    },
+    "iaudit": {
+      "elapsed_s": 1.503,
+      "exit_code": 0,
+      "log_file": "iaudit.log",
+      "status": "OK"
+    },
+    "ireplay": {
+      "elapsed_s": 58.871,
+      "exit_code": 0,
+      "log_file": "ireplay.log",
+      "status": "OK"
+    },
+    "iresume": {
+      "elapsed_s": 0.201,
+      "exit_code": 0,
+      "log_file": "iresume.log",
+      "status": "OK"
+    },
+    "iscore": {
+      "elapsed_s": 59.026,
+      "exit_code": 0,
+      "log_file": "iscore.log",
+      "status": "OK"
+    },
+    "regression": {
+      "elapsed_s": 83.509,
+      "exit_code": 0,
+      "log_file": "../e14i-regression.log",
+      "status": "OK"
+    }
+  },
+  "tests": {
+    "prescore": [
+      4,
+      4
+    ],
+    "recovered_suite": [
+      83,
+      83
+    ]
+  }
+}
