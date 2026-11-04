@@ -1,5 +1,10 @@
 # Keadaan ACE saat ini
 
+## E1.4d (4 November 2026) — context-conditioned transfer result: HOLD
+
+Frozen source `32f73d7`; new S/G five-event grammar tasks. Source meta-policy selected `ABSTAIN` on **12/12** target episodes. Correct target predictions: inherited **77/96**, task-local max-partition **79/96**, minimax one-label **79/96**, sham **77/96**, uniform one-label expected **78.25/96**, no label **77/96**, full eight-label target reference **87/96**. Strict four-stratum GO gate failed. Replay exact; local regression 46/46, audit 10/10, prescore 7/7. Corrected full source information acquisition = **216** labels, not narrow intervention subtotal 96. Candidate/evaluator lack independent process isolation; development only. [Report](design/e1.4/E14D_CONTEXT_POLICY_RESULT_v1.md); [raw JSON gzip](evidence/e14/e14d_public_development_v1.json.gz). **Next: E1.4e source/meta-validation and abstention diagnosis**.
+
+
 ## E1.4c-v2 corrected-pool replication (4 November 2026)
 
 Scientific HOLD even after separating query-pool RNG from target-dependent demonstrations. Frozen source caedbe7. Twelve sources and twelve targets, 432/432 new inputs with no earlier public/v1 duplicates; 96 source training labels plus 96 target counterfactual oracle calls. Scores inherited vs local: S related 12/24 vs 15/24, S unrelated 12/24 vs 12/24, G related 16/24 vs 16/24, G unrelated 16/24 vs 11/24. Inherited pooled 56/96 vs local 54/96 but strict four-stratum gate fails. Counterfactual pool-invariance 4/4, E1.4 regression log 29/29 OK, arithmetic audit 8/8, deterministic replay exact. This corrective study is not independent confirmation; candidate/evaluator share a process and training costs are not amortized. [v2 report](design/e1.4/E14C_V2_POOL_INDEPENDENCE_RESULT_v1.md), [raw](evidence/e14/e14c_v2_public_development_v1.json).

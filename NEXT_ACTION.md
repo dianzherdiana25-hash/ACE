@@ -1,9 +1,12 @@
-# Aksi berikutnya untuk Work, Codex, atau chat ini
+# NEXT_ACTION — ACE E1.4e
 
-**Last accepted checkpoint:** E1.4c-v1 HOLD with shared-PRNG flaw at bf43a97, E1.4c-v2 corrected frozen at caedbe7 and scored HOLD. [v2 report](design/e1.4/E14C_V2_POOL_INDEPENDENCE_RESULT_v1.md), [raw evidence](evidence/e14/e14c_v2_public_development_v1.json). Do not use a positive pooled mean to overrule the prespecified four-stratum decision.
+**Latest scientific checkpoint:** E1.4d `HOLD_CONTEXT_TRANSFER` on frozen source `32f73d7`; inherited question policy abstained in **12/12** targets (77/96 correct), local/max-Gini 79/96, minimax 79/96, 8-label reference 87/96. Full source meta-policy acquisition consumed 216 label events (not just the 96 source query-label subtotal). [Result](design/e1.4/E14D_CONTEXT_POLICY_RESULT_v1.md) | [gzip raw result](evidence/e14/e14d_public_development_v1.json.gz) | [direct workflow](docs/ACE_DIRECT_EXECUTION.md).
 
-1. Design E1.4d to learn **when** to reuse an acquired question-selection policy based on task-level features and uncertainty, rather than inheriting one static family heuristic. Do not tune on the v1/v2 target outcomes.
-2. Build new independent source/target motifs and new query pools, with target-hidden generator and oracle separation, plus controls: local max-partition, random single label, no-label, sham, and strong grammar-informed baseline. Include no-disagreement, both-wrong, negative transfer and representation-insufficient cases.
-3. Account for total source acquisition + target label costs and CPU, not only one-label target-arm parity. Predeclare paired family/regime acceptance criteria before scoring; keep failures and raw denominators.
-4. Restore genuine isolated evaluator using official Bubblewrap if possible and test nonexposure of evaluator data, worker environment and network. A same-process module split is not independent custody.
-5. Run bounded stages with heartbeat and terminal state, commit tested evidence on research/e1.3-design, read back HEAD. No additional costs, no sealed E1.3 confirmation, no Tod/main changes.
+**E1.4e priority:** diagnose when source-trained abstention becomes a degenerate policy, using **new data and before-scoring protocol**. Specifically:
+1. Audit source bucket occupancy and net utilities without using E1.4d target scores to tune hyperparameters. Separate research diagnosis from new effect estimation.
+2. Predefine fresh source/meta-validation and target splits; use genuinely target-independent preallocated unlabeled query pools, both-wrong and no-disagreement controls, and an out-of-grammar challenge.
+3. Compare abstaining inherited policy, context-conditioned policy, task-only max-Gini, minimax, uniform one-label, no-label, sham and a strong informed reference. Count **source initial demos + source probe labels + source query labels + target interventions + target scoring** separately. Report amortized budget and CPU.
+4. Freeze code, bank and acceptance rule at a new GitHub commit **before** scoring. Run isolated candidates with official tested Bubblewrap or a verified equivalent; if unavailable, label the experiment development-only without independent custody.
+5. Use bounded execution and explicit failure status; archive negative results in GitHub. Do not change the Tod repo, merge `main` or open E1.3 sealed confirmation.
+
+The vision remains **Open-Ended Autonomous Intelligence Evolution**, not a claim already achieved.
