@@ -1,0 +1,12 @@
+{
+  "bank_sha256": "e145c2fe95bd6fc59923973c1c35133b198cb53512f08c701e8ac5e1eee4b529",
+  "limitations": [
+    "Does not test stochastic independence of pool RNG from target word."
+  ],
+  "no_overlap_with_prior_or_within_bank": true,
+  "normalized_inputs": {
+    "total_G": 216,
+    "total_S": 216
+  },
+  "source_commit": "3025d7ffcb1362104c8ffd39530e07208aafeaf8"
+}

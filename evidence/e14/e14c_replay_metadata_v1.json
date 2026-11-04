@@ -1,0 +1,11 @@
+{
+  "audit_tests": 7,
+  "frozen_commit": "3025d7ffcb1362104c8ffd39530e07208aafeaf8",
+  "initial_verify_failure": "Python tuple/list JSON round-trip comparison",
+  "patched_verify_only": true,
+  "replay_normalized_exact": true,
+  "score_sha256": "e60f72bfbeefc36c28f9de3fc2193b0ee79d3d09101b64228cbd16228457b7d6",
+  "source_training_labels": 96,
+  "target_counterfactual_calls": 96,
+  "test_suite_e14": 24
+}

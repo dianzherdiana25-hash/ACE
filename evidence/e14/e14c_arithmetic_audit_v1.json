@@ -1,0 +1,67 @@
+{
+  "decision": "HOLD_CROSS_EPISODE_TRANSFER_HYPOTHESIS",
+  "limitations": [
+    "Saved JSON consistency only; no oracle-semantic or split leakage check.",
+    "v1 pool RNG draw stream can depend on word-dependent demo filtering.",
+    "No independent worker isolation; development-only study."
+  ],
+  "source_training_labels": 96,
+  "sources": 12,
+  "status": "INTERNAL_REPORT_ARITHMETIC_PASS",
+  "summary": [
+    {
+      "episodes": 3,
+      "family": "S",
+      "inherited": 16,
+      "local_random_disagreement": 16,
+      "no_label": 12,
+      "one_label_hindsight_ceiling": 20,
+      "regime": "related",
+      "sham": 20,
+      "task_local": 12,
+      "total": 24,
+      "uniform_expected": 14.0
+    },
+    {
+      "episodes": 3,
+      "family": "S",
+      "inherited": 12,
+      "local_random_disagreement": 16,
+      "no_label": 12,
+      "one_label_hindsight_ceiling": 16,
+      "regime": "unrelated",
+      "sham": 12,
+      "task_local": 12,
+      "total": 24,
+      "uniform_expected": 12.5
+    },
+    {
+      "episodes": 3,
+      "family": "G",
+      "inherited": 11,
+      "local_random_disagreement": 13,
+      "no_label": 16,
+      "one_label_hindsight_ceiling": 16,
+      "regime": "related",
+      "sham": 15,
+      "task_local": 16,
+      "total": 24,
+      "uniform_expected": 14.0
+    },
+    {
+      "episodes": 3,
+      "family": "G",
+      "inherited": 10,
+      "local_random_disagreement": 9,
+      "no_label": 9,
+      "one_label_hindsight_ceiling": 10,
+      "regime": "unrelated",
+      "sham": 8,
+      "task_local": 8,
+      "total": 24,
+      "uniform_expected": 8.875
+    }
+  ],
+  "target_counterfactual_oracle_calls": 96,
+  "targets": 12
+}

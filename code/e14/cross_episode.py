@@ -147,7 +147,7 @@ def main():
     result=run(args.source_commit)
     if args.verify:
         saved=json.loads(args.verify.read_text())
-        if saved!=result:
+        if canonical_json(saved)!=canonical_json(result):
             raise ValueError("deterministic E1.4c replication mismatch")
     print(json.dumps(result,sort_keys=True,separators=(",",":")))
 

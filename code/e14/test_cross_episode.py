@@ -80,6 +80,12 @@ class CrossEpisodeTests(unittest.TestCase):
         self.assertEqual(chosen["S"]["source_training_labels"],48)
         self.assertNotEqual(chosen["S"]["sham_policy"],chosen["S"]["policy"])
 
+    def test_replay_canonicalizes_tuple_list_after_json_round_trip(self):
+        raw={"policies":[{"chosen":(1,2,3,4)}]}
+        loaded=json.loads(canonical_json(raw))
+        self.assertNotEqual(raw,loaded)
+        self.assertEqual(canonical_json(raw),canonical_json(loaded))
+
     def test_gate_requires_all_family_regimes_and_controls(self):
         values=[{"inherited":15,"task_local":14,"sham":14,"uniform_expected":14.5,"no_label":10}
                 for _ in range(4)]

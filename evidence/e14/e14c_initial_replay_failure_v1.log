@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data/ACE_E14c_work/code/e14/cross_episode.py", line 156, in <module>
+    main()
+    ~~~~^^
+  File "/mnt/data/ACE_E14c_work/code/e14/cross_episode.py", line 151, in main
+    raise ValueError("deterministic E1.4c replication mismatch")
+ValueError: deterministic E1.4c replication mismatch
