@@ -5,6 +5,16 @@
 3. Tentukan gerbang sebelum scoring. Ukur diagnosis per label, abstain, kesalahan diagnosis, false positive, jumlah input yang diperiksa, dan batas komputasi. Pertahankan kasus gagal. Jika anggaran satu label tidak dapat menjamin pemisahan, ukur anggaran lebih besar sebagai kondisi terpisah.
 4. **NATURAL_HOLD** tetap membatasi transfer. Tahap ini menguji pembuatan eksperimen untuk mengurai ketidakpastian di antara dua grammar yang tersedia.
 
+## Reproduksi E1.4j
+
+Dari checkout pembekuan E1.4j, buat direktori lokal `WORK`. Gunakan ledger yang sama untuk melanjutkan eksekusi dan ledger terpisah untuk replay.
+
+```bash
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 150 --heartbeat 15 --log WORK/jscore.log -- python3 -m e14.e14j_run run WORK/jscore.sqlite WORK/jscore.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 150 --heartbeat 15 --log WORK/jreplay.log -- python3 -m e14.e14j_run run WORK/jreplay.sqlite WORK/jreplay.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 90 --heartbeat 10 --log WORK/jaudit.log -- python3 -m e14.e14j_audit WORK/jscore.json.gz WORK/jreplay.json.gz
+```
+
 ## Reproduksi E1.4i
 
 Dari checkout [pembekuan E1.4i](https://github.com/dianzherdiana25-hash/ACE/commit/63aeaf63f1762dc766c13a8188c15a2996316daf), buat direktori lokal `WORK`. Jalankan kedua penilaian dengan ledger terpisah. Pakai nama ledger yang sama untuk resume.

@@ -1,5 +1,9 @@
 # Keadaan ACE saat ini
 
+## E1.4j — pembekuan pra-penilaian
+
+Bank publik baru berisi 48 blok, 72 dunia, dan 2.304 input. Uji pembuatan pertanyaan membandingkan guided, pool tetap, dan acak, dengan nol, satu, dan dua label. Empat tes pra-penilaian lulus. [Protokol](design/e1.4/E14J_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14J_LOCK_v1.json).
+
 ## E1.4i — selesai dan direproduksi
 
 **WITNESS_DEVELOPMENT_GO.** Ketika dua grammar sama-sama cocok dengan demo, satu pertanyaan pembeda menentukan panjang pada 24/24 dunia terkontrol dan menghasilkan 96/96 probe tepat per keluarga. Ketika saksi dikeluarkan, sistem menunda diagnosis dan membeli nol label pada 24/24 dunia. **NATURAL_HOLD** tetap berlaku. Di 12 kasus alami ambigu, hanya dua dapat dipecahkan dengan satu label dari pool. Audit lanjutan menunjukkan satu label tidak dapat menjamin diagnosis pada enam kasus simbol untuk input mana pun yang sah.
