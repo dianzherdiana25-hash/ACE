@@ -1,12 +1,12 @@
-# NEXT_ACTION — E1.4l pemeringkatan bukti, biaya, dan risiko fallback
+# NEXT_ACTION — E1.4m pencarian kontra-contoh dan uji kecukupan model
 
-1. Verifikasi HEAD GitHub dan baca [hasil E1.4k](design/e1.4/E14K_RESULT_v1.md), [bukti](evidence/e14/e14k_verification_v1.json), dan [piagam](PROJECT_CHARTER.md). Dua kegagalan diagnosis graf pada label pertama memiliki kandidat bercakupan penuh yang tidak dipilih pemeringkat. Di simbol alami, majemuk memakai lebih banyak kejadian untuk diagnosis dan akurasi yang sama.
-2. Pada bank baru, bekukan generator bersama dan bandingkan minimax E1.4k dengan pemeringkat yang memperhitungkan peluang menghapus seluruh kelas dan biaya kejadian. Catat pertukaran antara cakupan, label, dan panjang input. Samakan batas evaluasi kandidat serta uji lengan abstain ketika biaya pertanyaan melebihi manfaat estimasi.
-3. Ukur diagnosis benar, salah, abstain, skor probe, false positive fallback, dan biaya aktual. Uji pelaporan prediksi selektif saat diagnosis belum selesai. Pertahankan contoh negatif dan pisahkan keputusan cakupan terkontrol dari **NATURAL_HOLD** untuk transfer.
+1. Verifikasi HEAD GitHub dan baca [hasil E1.4l](design/e1.4/E14L_RESULT_v1.md), [bukti](evidence/e14/e14l_verification_v1.json) dan [piagam](PROJECT_CHARTER.md). Pada bank luar model, 32 prediksi yang diterima lengan ambang semuanya keliru. Tidak ada lengan yang menghabiskan himpunan hipotesis di delapan dunia tersebut.
+2. Pada bank baru, bandingkan query adjudikasi kelas, query acak, dan query yang mencari kontra-contoh terhadap prediksi bersama kelas. Gunakan target dalam model, target tujuh kejadian yang belum terlihat, dan kondisi jarang dengan ambang yang ditetapkan sebelum scoring.
+3. Ukur seberapa sering setiap strategi menemukan label yang menggugurkan semua hipotesis, seberapa sering keliru menolak model yang sesuai, biaya label dan kejadian, serta risiko pada prediksi yang masih diterima. Pisahkan deteksi kegagalan model dari penambahan kelas baru. Pertahankan **NATURAL_HOLD** untuk transfer.
 
 ## Reproduksi E1.4l
 
-Dari checkout pembekuan E1.4l, buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.
+Dari checkout [pembekuan E1.4l](https://github.com/dianzherdiana25-hash/ACE/commit/904dcc62d94bcbfdd6070437af434ec7cce25730), buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.
 
 ```bash
 PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 150 --heartbeat 15 --log WORK/lscore.log -- python3 -m e14.e14l_run run WORK/lscore.sqlite WORK/lscore.json.gz

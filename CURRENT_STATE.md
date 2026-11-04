@@ -1,6 +1,12 @@
 # Keadaan ACE saat ini
 
-## E1.4l — checkpoint pra-penilaian
+## E1.4l — ranking lolos, gerbang biaya dan selektif HOLD
+
+Ranking satu-label lolos pada packable. Simbol seri 5/5 dan graf 3/5 melawan 2/5 minimax. Ambang hemat menurunkan diagnosis dalam model dari 40 ke 29. Cakupan selektif simbol hanya 96/256. Pada uji aturan di luar model, semua 32 prediksi yang diterima lengan ambang salah. **NATURAL_HOLD** untuk transfer.
+
+[Hasil](design/e1.4/E14L_RESULT_v1.md) · [Bukti](evidence/e14/e14l_verification_v1.json) · [Protokol beku](https://github.com/dianzherdiana25-hash/ACE/commit/904dcc62d94bcbfdd6070437af434ec7cce25730). Tahap berikutnya mencari bukti untuk menggugurkan seluruh kelas hipotesis.
+
+## E1.4l — checkpoint historis pra-penilaian
 
 Bank baru berisi 52 blok, 72 dunia, dan 2.080 input mentah. Tiga strategi memakai generator yang sama saat keadaan sama. Delapan dunia di luar model menguji kesepakatan yang keliru. Tes pra-penilaian 4/4. [Protokol](design/e1.4/E14L_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14L_LOCK_v1.json).
 
