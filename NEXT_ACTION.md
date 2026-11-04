@@ -1,8 +1,9 @@
 # NEXT_ACTION — uji pemilihan representasi E1.4h
 
 1. Verifikasi HEAD GitHub. Baca [hasil E1.4g](design/e1.4/E14G_RESULT_v1.md), [bukti verifikasi](evidence/e14/e14g_verification_v1.json), dan [piagam](PROJECT_CHARTER.md).
-2. Pada bank publik baru, uji apakah skor kecocokan demo dapat memilih grammar lima atau enam tanpa mengetahui panjang target. Bandingkan dengan grammar lima tetap, enam tetap, tanpa label, dan acuan yang tahu panjang. Laporkan kapan peralihan merugikan. Pisahkan bank alami dari bank diagnostik. Bekukan seed, aturan peralihan, biaya label dan gerbang sebelum scoring.
-3. **NATURAL_HOLD** menahan transfer dan tuning pada skor target lama. Keputusan berikutnya hanya berlaku untuk pemilihan di antara dua grammar yang telah tersedia.
+2. Jalankan [protokol beku E1.4h](design/e1.4/E14H_PROTOCOL_v1.md). Dari checkout beku, siapkan direktori lokal `WORK`. Jalankan `PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 150 --heartbeat 15 --log WORK/hscore.log -- python3 -m e14.e14h_route run WORK/hscore.sqlite WORK/hscore.json.gz`. Ulangi dengan nama ledger baru. Audit melalui `python3 -m e14.e14h_route audit WORK/hscore.json.gz WORK/hreplay.json.gz` dengan `PYTHONPATH=code` dan runner berbatas.
+3. Pada bank publik baru, uji apakah skor kecocokan demo dapat memilih grammar lima atau enam tanpa mengetahui panjang target. Bandingkan dengan grammar lima tetap, enam tetap, tanpa label, dan acuan yang tahu panjang. Laporkan kapan peralihan merugikan. Pisahkan bank alami dari bank diagnostik. Bekukan seed, aturan peralihan, biaya label dan gerbang sebelum scoring.
+4. **NATURAL_HOLD** menahan transfer dan tuning pada skor target lama. Keputusan berikutnya hanya berlaku untuk pemilihan di antara dua grammar yang telah tersedia.
 
 ## Reproduksi E1.4g
 

@@ -1,5 +1,9 @@
 # Keadaan ACE saat ini
 
+## E1.4h — checkpoint pra-penilaian
+
+Grammar lima dan enam akan dibandingkan pada bank publik baru. Pemilih hanya menerima jumlah kecocokan demo dari kedua grammar saat menentukan representasi. [Protokol beku](design/e1.4/E14H_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14H_LOCK_v1.json). Tes pra-penilaian 2/2. Penilaian dimulai setelah verifikasi commit pembekuan di GitHub.
+
 ## E1.4g — selesai dan direproduksi
 
 **BENCHMARK_DEVELOPMENT_GO** untuk bank yang sengaja menyediakan peluang belajar. Pemilih aktif mencapai 96/96 di masing-masing keluarga dengan satu label tambahan, dibanding ekspektasi acak 60/96. Pada tugas enam kejadian, semua pemilih dengan grammar lima mencapai paling banyak 48/96 per keluarga. Acuan yang tahu panjang mencapai 96/96. **NATURAL_HOLD** terpisah. Hanya 1/6 blok simbol dan 0/6 blok graf alami pada panjang lima memberi peluang perbaikan.
