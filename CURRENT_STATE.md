@@ -1,6 +1,12 @@
 # Keadaan ACE saat ini
 
-## E1.4k — checkpoint pra-penilaian
+## E1.4k — pertanyaan majemuk lulus pada cakupan terkontrol
+
+**COMPOUND_DEVELOPMENT_GO.** Dengan satu label, majemuk terarah mendiagnosis panjang pada 6/6 kasus simbol dan 4/6 kasus graf packable. Kedua kontrol mencapai 0/6 per keluarga. Pada simbol alami, majemuk dan pendek sama-sama mencapai 2/12 diagnosis dan 90/96 probe tepat. Untuk 11 label, majemuk memakai 132 kejadian dibanding 62. **NATURAL_HOLD** untuk transfer.
+
+[Hasil](design/e1.4/E14K_RESULT_v1.md) · [Bukti](evidence/e14/e14k_verification_v1.json) · [Protokol beku](https://github.com/dianzherdiana25-hash/ACE/commit/ae73b9c9d69366d5a503fd1529ced1b11c716dd8). Tahap berikutnya menguji aturan pemeringkatan dengan biaya dan risiko fallback yang diukur.
+
+## E1.4k — checkpoint historis pra-penilaian
 
 Bank baru berisi 48 blok, 72 dunia, dan 1.920 input mentah. Pembanding memakai pertanyaan pendek terarah, panjang acak, dan majemuk terarah. Tes pra-penilaian 4/4. [Protokol](design/e1.4/E14K_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14K_LOCK_v1.json).
 

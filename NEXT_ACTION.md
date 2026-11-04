@@ -1,13 +1,12 @@
-# NEXT_ACTION — E1.4k pertanyaan majemuk dan biaya cakupan
+# NEXT_ACTION — E1.4l pemeringkatan bukti, biaya, dan risiko fallback
 
-1. Verifikasi HEAD GitHub. Baca [hasil E1.4j](design/e1.4/E14J_RESULT_v1.md), [bukti](evidence/e14/e14j_verification_v1.json) dan [piagam](PROJECT_CHARTER.md). Empat kasus simbol alami masih ambigu setelah dua label. Pada bahasa query maksimal enam kejadian, batas bawah jaminan adalah 40–54 pertanyaan pada lintasan jawaban kosong. Jumlah yang cukup masih terbuka.
-2. Pada bank baru, uji pembentukan input lebih panjang yang mencakup beberapa motif kompatibel. Bandingkan generator pendek E1.4j, generator panjang acak, dan generator panjang terarah dengan batas input, jumlah kandidat dan anggaran label yang dibekukan. Periksa legalitas render dan pisahkan jumlah kejadian dari jumlah label.
-3. Ukur cakupan kelas, penurunan ambiguitas, diagnosis per biaya, abstain, dan false positive. Laporkan prediksi fallback terpisah, karena E1.4j mengamati false positive dapat naik setelah label pertama. Simpan hasil negatif, audit dan replay terisolasi.
-4. Pertahankan **NATURAL_HOLD** untuk transfer. Pertanyaan riset berikutnya adalah efisiensi memperoleh bukti di bawah representasi yang tersedia.
+1. Verifikasi HEAD GitHub dan baca [hasil E1.4k](design/e1.4/E14K_RESULT_v1.md), [bukti](evidence/e14/e14k_verification_v1.json), dan [piagam](PROJECT_CHARTER.md). Dua kegagalan diagnosis graf pada label pertama memiliki kandidat bercakupan penuh yang tidak dipilih pemeringkat. Di simbol alami, majemuk memakai lebih banyak kejadian untuk diagnosis dan akurasi yang sama.
+2. Pada bank baru, bekukan generator bersama dan bandingkan minimax E1.4k dengan pemeringkat yang memperhitungkan peluang menghapus seluruh kelas dan biaya kejadian. Catat pertukaran antara cakupan, label, dan panjang input. Samakan batas evaluasi kandidat serta uji lengan abstain ketika biaya pertanyaan melebihi manfaat estimasi.
+3. Ukur diagnosis benar, salah, abstain, skor probe, false positive fallback, dan biaya aktual. Uji pelaporan prediksi selektif saat diagnosis belum selesai. Pertahankan contoh negatif dan pisahkan keputusan cakupan terkontrol dari **NATURAL_HOLD** untuk transfer.
 
 ## Reproduksi E1.4k
 
-Dari checkout pembekuan E1.4k, buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.
+Dari checkout [pembekuan E1.4k](https://github.com/dianzherdiana25-hash/ACE/commit/ae73b9c9d69366d5a503fd1529ced1b11c716dd8), buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.
 
 ```bash
 PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 150 --heartbeat 15 --log WORK/kscore.log -- python3 -m e14.e14k_run run WORK/kscore.sqlite WORK/kscore.json.gz
