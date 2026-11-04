@@ -1,9 +1,18 @@
-# NEXT_ACTION — jalankan E1.4g dari checkpoint beku
+# NEXT_ACTION — uji pemilihan representasi E1.4h
 
-1. Periksa HEAD branch GitHub dan cocokkan [manifest E1.4g](design/e1.4/E14G_LOCK_v1.json). Baca [protokol](design/e1.4/E14G_PROTOCOL_v1.md).
-2. Dari checkout ACE, buat direktori kerja lokal. Jalankan `PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 210 --heartbeat 15 --log WORK/score.log -- python3 -m e14.e14g_run --ledger WORK/score.sqlite --output WORK/score.json.gz`. Ganti `WORK` dengan direktori tersebut. Ulangi dengan ledger dan keluaran lain untuk replay. Pakai kembali ledger yang sama jika eksekusi terputus.
-3. Jalankan `PYTHONPATH=code python3 -m e14.e14g_audit WORK/score.json.gz WORK/replay.json.gz` melalui runner berbatas waktu. Simpan bukti terminal, keputusan kedua distribusi, dan langkah berikutnya. Perbarui Issue #1 setelah verifikasi commit hasil.
-4. Seluruh pekerjaan pada jalur publik. Aturan umum ada di [piagam](PROJECT_CHARTER.md).
+1. Verifikasi HEAD GitHub. Baca [hasil E1.4g](design/e1.4/E14G_RESULT_v1.md), [bukti verifikasi](evidence/e14/e14g_verification_v1.json), dan [piagam](PROJECT_CHARTER.md).
+2. Pada bank publik baru, uji apakah skor kecocokan demo dapat memilih grammar lima atau enam tanpa mengetahui panjang target. Bandingkan dengan grammar lima tetap, enam tetap, tanpa label, dan acuan yang tahu panjang. Laporkan kapan peralihan merugikan. Pisahkan bank alami dari bank diagnostik. Bekukan seed, aturan peralihan, biaya label dan gerbang sebelum scoring.
+3. **NATURAL_HOLD** menahan transfer dan tuning pada skor target lama. Keputusan berikutnya hanya berlaku untuk pemilihan di antara dua grammar yang telah tersedia.
+
+## Reproduksi E1.4g
+
+Dari checkout commit pembekuan, buat direktori `WORK` lokal. Jalankan dua perintah berbatas waktu dengan nama ledger dan output berbeda. Pakai kembali ledger yang sama untuk melanjutkan setelah interupsi.
+
+```bash
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 210 --heartbeat 15 --log WORK/score.log -- python3 -m e14.e14g_run --ledger WORK/score.sqlite --output WORK/score.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 210 --heartbeat 15 --log WORK/replay.log -- python3 -m e14.e14g_run --ledger WORK/replay.sqlite --output WORK/replay.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 90 --heartbeat 10 --log WORK/audit.log -- python3 -m e14.e14g_audit WORK/score.json.gz WORK/replay.json.gz
+```
 
 ## Handoff historis E1.4f
 

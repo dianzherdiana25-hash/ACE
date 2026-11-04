@@ -1,6 +1,12 @@
 # Keadaan ACE saat ini
 
-## E1.4g — protokol pengembangan dibekukan
+## E1.4g — selesai dan direproduksi
+
+**BENCHMARK_DEVELOPMENT_GO** untuk bank yang sengaja menyediakan peluang belajar. Pemilih aktif mencapai 96/96 di masing-masing keluarga dengan satu label tambahan, dibanding ekspektasi acak 60/96. Pada tugas enam kejadian, semua pemilih dengan grammar lima mencapai paling banyak 48/96 per keluarga. Acuan yang tahu panjang mencapai 96/96. **NATURAL_HOLD** terpisah. Hanya 1/6 blok simbol dan 0/6 blok graf alami pada panjang lima memberi peluang perbaikan.
+
+[Protokol beku](https://github.com/dianzherdiana25-hash/ACE/commit/129b5b8505c6b747efd5f3d4b64a412f16f4c8e2) · [Hasil](design/e1.4/E14G_RESULT_v1.md) · [Verifikasi](evidence/e14/e14g_verification_v1.json). Lima canary isolasi lulus, dan replay serta auditor mencocokkan 72 dunia. Tahap E1.4h menguji pemilihan grammar tanpa mengetahui panjang aturan, dengan bank baru. Visi dan batas mandat ada di [piagam](PROJECT_CHARTER.md).
+
+## E1.4g — checkpoint pra-penilaian
 
 Bank publik memisahkan tugas sintetis alami dari tugas dengan peluang belajar yang dibangun sejak awal. Ada 48 blok dan 72 dunia. Delapan tes pra-penilaian lulus, termasuk batas representasi dan lima pemeriksaan isolasi. Snapshot historis `b34b316` cocok dengan tree GitHub. Regresi yang dapat dipulihkan dari snapshot tersebut lulus 69/69. Catatan historis E1.4f tetap menyimpan 84/84.
 

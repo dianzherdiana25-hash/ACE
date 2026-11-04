@@ -1,0 +1,315 @@
+{
+  "audit": {
+    "audited_cells": 8,
+    "audited_one_label_branches": 576,
+    "audited_worlds": 72,
+    "deterministic_sha256": "4c1bd74bb824716c5e727ae0ffb35106e740db935ac8fdd423a8dbb3d16e5536",
+    "replay_match": true,
+    "status": "completed"
+  },
+  "bank_sha256": "ec4c3a321c348af588b750b9499999c4e7b26709852c001f4d7766655924ee12",
+  "boundary": {
+    "binary": "/usr/bin/bwrap",
+    "checks": {
+      "credential_env_absent": true,
+      "evaluator_module_absent": true,
+      "host_loopback_denied": true,
+      "private_file_denied": true,
+      "worker_mount_read_only": true
+    },
+    "native_elf": true,
+    "sha256": "573236e5328ac2ebb08f59ae3a9805b4f8d12bdef14be8af4450d5463294985f"
+  },
+  "bubblewrap": "0.12.0",
+  "compressed_sha256": {
+    "replay": "430a5fe9a269f7767d4c859dc1d78f646186dd19e7c39ad9cfed466e335147d3",
+    "score": "419f458f4671ad8ff8d53f77a0f4e1656819a26ae4ea1044e97c8624e94ce19d"
+  },
+  "freeze_commit": "129b5b8505c6b747efd5f3d4b64a412f16f4c8e2",
+  "freeze_tree": "53db88fa385d7a476376661e35fd1a934c9ddbbb",
+  "plan_sha256": "55f31357fc0076f44921a984d8f3609c53b0af0a1080ac22a5bb650a0ab00368",
+  "python": "3.12.14",
+  "raw_sha256": {
+    "replay": "8eccf07d7f711ceadf03a3bf0bbfbcc7f75a79d4f0db5699056574c1f8ce0345",
+    "score": "30298171c88d8daacc9df0de4014220d1f32a6c11357468a891e34740d94d46c"
+  },
+  "resume_byte_identical": true,
+  "summary": {
+    "blocks": 48,
+    "cells": [
+      {
+        "blocks": 6,
+        "distribution": "natural",
+        "family": "S",
+        "gini_harm_worlds": 0,
+        "length": 5,
+        "oracle_calls": 288,
+        "positive_blocks": {
+          "gini_gt_no_label": 1,
+          "gini_gt_random": 1,
+          "hindsight_gt_no_label": 1,
+          "informed_gt_hindsight": 0,
+          "minimax_gt_random": 1
+        },
+        "probe_total": 48,
+        "score_x8": {
+          "gini": 384,
+          "hindsight": 384,
+          "informed": 384,
+          "minimax": 384,
+          "no_label": 368,
+          "random": 370,
+          "static": 368
+        },
+        "unanimous_pools": 4,
+        "worlds": 6
+      },
+      {
+        "blocks": 6,
+        "distribution": "natural",
+        "family": "S",
+        "gini_harm_worlds": 0,
+        "length": 6,
+        "oracle_calls": 288,
+        "positive_blocks": {
+          "gini_gt_no_label": 0,
+          "gini_gt_random": 0,
+          "hindsight_gt_no_label": 0,
+          "informed_gt_hindsight": 1,
+          "minimax_gt_random": 0
+        },
+        "probe_total": 48,
+        "score_x8": {
+          "gini": 368,
+          "hindsight": 368,
+          "informed": 368,
+          "minimax": 368,
+          "no_label": 368,
+          "random": 368,
+          "static": 368
+        },
+        "unanimous_pools": 1,
+        "worlds": 6
+      },
+      {
+        "blocks": 6,
+        "distribution": "natural",
+        "family": "G",
+        "gini_harm_worlds": 0,
+        "length": 5,
+        "oracle_calls": 288,
+        "positive_blocks": {
+          "gini_gt_no_label": 0,
+          "gini_gt_random": 0,
+          "hindsight_gt_no_label": 0,
+          "informed_gt_hindsight": 0,
+          "minimax_gt_random": 0
+        },
+        "probe_total": 48,
+        "score_x8": {
+          "gini": 384,
+          "hindsight": 384,
+          "informed": 384,
+          "minimax": 384,
+          "no_label": 384,
+          "random": 384,
+          "static": 384
+        },
+        "unanimous_pools": 6,
+        "worlds": 6
+      },
+      {
+        "blocks": 6,
+        "distribution": "natural",
+        "family": "G",
+        "gini_harm_worlds": 0,
+        "length": 6,
+        "oracle_calls": 288,
+        "positive_blocks": {
+          "gini_gt_no_label": 0,
+          "gini_gt_random": 1,
+          "hindsight_gt_no_label": 0,
+          "informed_gt_hindsight": 4,
+          "minimax_gt_random": 1
+        },
+        "probe_total": 48,
+        "score_x8": {
+          "gini": 328,
+          "hindsight": 328,
+          "informed": 384,
+          "minimax": 328,
+          "no_label": 328,
+          "random": 327,
+          "static": 328
+        },
+        "unanimous_pools": 6,
+        "worlds": 6
+      },
+      {
+        "blocks": 6,
+        "distribution": "opportunity",
+        "family": "S",
+        "gini_harm_worlds": 0,
+        "length": 5,
+        "oracle_calls": 576,
+        "positive_blocks": {
+          "gini_gt_no_label": 6,
+          "gini_gt_random": 6,
+          "hindsight_gt_no_label": 6,
+          "informed_gt_hindsight": 0,
+          "minimax_gt_random": 6
+        },
+        "probe_total": 96,
+        "score_x8": {
+          "gini": 768,
+          "hindsight": 768,
+          "informed": 768,
+          "minimax": 768,
+          "no_label": 384,
+          "random": 480,
+          "static": 448
+        },
+        "unanimous_pools": 0,
+        "worlds": 12
+      },
+      {
+        "blocks": 6,
+        "distribution": "opportunity",
+        "family": "S",
+        "gini_harm_worlds": 0,
+        "length": 6,
+        "oracle_calls": 576,
+        "positive_blocks": {
+          "gini_gt_no_label": 0,
+          "gini_gt_random": 0,
+          "hindsight_gt_no_label": 0,
+          "informed_gt_hindsight": 6,
+          "minimax_gt_random": 0
+        },
+        "probe_total": 96,
+        "score_x8": {
+          "gini": 384,
+          "hindsight": 384,
+          "informed": 768,
+          "minimax": 384,
+          "no_label": 384,
+          "random": 384,
+          "static": 384
+        },
+        "unanimous_pools": 12,
+        "worlds": 12
+      },
+      {
+        "blocks": 6,
+        "distribution": "opportunity",
+        "family": "G",
+        "gini_harm_worlds": 0,
+        "length": 5,
+        "oracle_calls": 576,
+        "positive_blocks": {
+          "gini_gt_no_label": 6,
+          "gini_gt_random": 6,
+          "hindsight_gt_no_label": 6,
+          "informed_gt_hindsight": 0,
+          "minimax_gt_random": 6
+        },
+        "probe_total": 96,
+        "score_x8": {
+          "gini": 768,
+          "hindsight": 768,
+          "informed": 768,
+          "minimax": 768,
+          "no_label": 384,
+          "random": 480,
+          "static": 448
+        },
+        "unanimous_pools": 0,
+        "worlds": 12
+      },
+      {
+        "blocks": 6,
+        "distribution": "opportunity",
+        "family": "G",
+        "gini_harm_worlds": 0,
+        "length": 6,
+        "oracle_calls": 576,
+        "positive_blocks": {
+          "gini_gt_no_label": 0,
+          "gini_gt_random": 0,
+          "hindsight_gt_no_label": 0,
+          "informed_gt_hindsight": 6,
+          "minimax_gt_random": 0
+        },
+        "probe_total": 96,
+        "score_x8": {
+          "gini": 384,
+          "hindsight": 384,
+          "informed": 768,
+          "minimax": 384,
+          "no_label": 384,
+          "random": 384,
+          "static": 384
+        },
+        "unanimous_pools": 2,
+        "worlds": 12
+      }
+    ],
+    "decision": "BENCHMARK_DEVELOPMENT_GO",
+    "engineered_gate": true,
+    "natural_decision": "NATURAL_HOLD",
+    "natural_gate": false,
+    "oracle_calls": 3456,
+    "worker_calls": 864,
+    "worlds": 72
+  },
+  "terminal": {
+    "audit": {
+      "elapsed_s": 0.601,
+      "exit_code": 0,
+      "log_file": "audit.log",
+      "status": "OK"
+    },
+    "regression": {
+      "elapsed_s": 78.118,
+      "exit_code": 0,
+      "log_file": "../e14g-regression.log",
+      "status": "OK"
+    },
+    "replay": {
+      "elapsed_s": 36.062,
+      "exit_code": 0,
+      "log_file": "replay.log",
+      "status": "OK"
+    },
+    "resume": {
+      "elapsed_s": 0.201,
+      "exit_code": 0,
+      "log_file": "resume.log",
+      "status": "OK"
+    },
+    "score": {
+      "elapsed_s": 34.758,
+      "exit_code": 0,
+      "log_file": "score.log",
+      "status": "OK"
+    }
+  },
+  "tests": {
+    "historical_E14f_recorded": [
+      84,
+      84
+    ],
+    "historical_recovered_checkout": [
+      69,
+      69
+    ],
+    "prescore": [
+      8,
+      8
+    ],
+    "recovered_plus_E14g": [
+      77,
+      77
+    ]
+  }
+}
