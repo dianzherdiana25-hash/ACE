@@ -1,0 +1,11 @@
+{
+  "environment": "ChatGPT local container, 2026-11-04",
+  "status": "BLOCKED_ENV",
+  "python": "3.13.5",
+  "native_bubblewrap_found": false,
+  "private_frozen_checkout_present": false,
+  "unshare_binary_available": true,
+  "can_use_unshare_as_drop_in": false,
+  "notes": "Actual E1.4n protocol invokes native Bubblewrap and a private full GitHub checkout. Neither is present in this runtime. Do not substitute an unverified sandbox or claim scoring. GitHub static integrity check passed 8/8 independently.",
+  "score_executed": false
+}

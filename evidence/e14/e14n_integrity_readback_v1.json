@@ -1,0 +1,67 @@
+{
+  "ref_commit": "fb9ac72c9c6b039f402a1905b3635f2a4efbecdb",
+  "manifest": "design/e1.4/E14N_LOCK_v1.json",
+  "manifest_blob_sha1": "68641265aaec0341e90d7c3f62e7c833a5f5f69c",
+  "method": "GitHub connector fetch_file exact bytes and standalone SHA-256 (abc and empty-message test vectors passed)",
+  "checked": 8,
+  "matched": 8,
+  "entries": [
+    {
+      "path": "code/e14/e14n_audit.py",
+      "sha256_expected": "eb814a3d267b3816eea4a0dacef515a365e9f29aaad7634fecf2df560cfba94d",
+      "sha256_actual": "eb814a3d267b3816eea4a0dacef515a365e9f29aaad7634fecf2df560cfba94d",
+      "git_blob_sha1": "974741706d1180fc3f49bb7ccc9f537a840499aa",
+      "pass": true
+    },
+    {
+      "path": "code/e14/e14n_bank.py",
+      "sha256_expected": "822055bf26f4f15e60c442b4677f208baed4a614b09753838431aae56a811fbb",
+      "sha256_actual": "822055bf26f4f15e60c442b4677f208baed4a614b09753838431aae56a811fbb",
+      "git_blob_sha1": "53ac719e2ec975553d3fe86bbd0a2d6045beb4f0",
+      "pass": true
+    },
+    {
+      "path": "code/e14/e14n_run.py",
+      "sha256_expected": "717f56ab2d5ca018a85a1904c5b1bd52e2b3e248a0eb13ee59831154fb7c3efb",
+      "sha256_actual": "717f56ab2d5ca018a85a1904c5b1bd52e2b3e248a0eb13ee59831154fb7c3efb",
+      "git_blob_sha1": "e740f44ed8f40d71dd8cddd7026ac90adf63e09",
+      "pass": true
+    },
+    {
+      "path": "code/e14/e14n_worker.py",
+      "sha256_expected": "7dfa09629fbe9ffb04266e8e5cc58ce8faf85cf7bb447bc9cd5f4049ae42eda7",
+      "sha256_actual": "7dfa09629fbe9ffb04266e8e5cc58ce8faf85cf7bb447bc9cd5f4049ae42eda7",
+      "git_blob_sha1": "9808222a520b995116eb3c549aa43dc2ded325ea",
+      "pass": true
+    },
+    {
+      "path": "code/e14/test_e14n.py",
+      "sha256_expected": "47305c3544283126475cbe1aa64216008cd7ce42b24cceba0421639111e6ad68",
+      "sha256_actual": "47305c3544283126475cbe1aa64216008cd7ce42b24cceba0421639111e6ad68",
+      "git_blob_sha1": "0bf0a503c1338a6bb800b51943b102a3664d5b38",
+      "pass": true
+    },
+    {
+      "path": "design/e1.4/E14M_LOCK_v1.json",
+      "sha256_expected": "95fc3f8876ad7765f156e9e3ec7f234efa3c2a61be24389776fec20648a0b300",
+      "sha256_actual": "95fc3f8876ad7765f156e9e3ec7f234efa3c2a61be24389776fec20648a0b300",
+      "git_blob_sha1": "43c169447c20a30b5c199e7898574a4089e65494",
+      "pass": true
+    },
+    {
+      "path": "design/e1.4/E14N_PROTOCOL_v1.md",
+      "sha256_expected": "0127f0eb375ed50708ed17a6dd7f8dfd130dabdb0864afea7ede6d54579fb982",
+      "sha256_actual": "0127f0eb375ed50708ed17a6dd7f8dfd130dabdb0864afea7ede6d54579fb982",
+      "git_blob_sha1": "deacde647b7f4b0290b324c95d22893392eee53d",
+      "pass": true
+    },
+    {
+      "path": "evidence/e14/e14n_public_bank_v1.json.gz",
+      "sha256_expected": "4c286c335546d1dc66fab60b9e464a9f94f444174ce496786fc260d20deee5e1",
+      "sha256_actual": "4c286c335546d1dc66fab60b9e464a9f94f444174ce496786fc260d20deee5e1",
+      "git_blob_sha1": "75bb9704ebc84dc28436b91ce88437eb1308e9f9",
+      "pass": true
+    }
+  ],
+  "note": "Static integrity readback only; not a runtime, test, scoring, or semantic acceptance."
+}

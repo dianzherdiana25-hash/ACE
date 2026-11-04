@@ -1,4 +1,15 @@
-# NEXT_ACTION — E1.4n perluasan representasi setelah kontra-contoh
+# ACE E1.4n — recover from latest pre-score freeze
+
+**Frozen scientific source:** `fb9ac72c9c6b039f402a1905b3635f2a4efbecdb`. Eight locked files independently rehashed with SHA-256: **8/8 PASS** in the current ChatGPT session. [Readback evidence](evidence/e14/e14n_integrity_readback_v1.json).
+
+**Environment restriction is not a scientific decision:** native Bubblewrap is missing and a complete ACE checkout is not accessible to the current local Python environment; `BLOCKED_ENV` was recorded without scoring. Do not replace `/usr/bin/bwrap` with a test stub. The earlier Work environment verified native isolation on E1.4g–m, but new E1.4n runs must validate it again.
+
+**Immediate authorized continuation** on a sandbox-capable host or Work/Codex execution environment:
+1. Checkout the exact frozen commit; run `python3 -m e14.e14n_run freeze` **only for a throwaway comparison** if needed. Do not overwrite the already committed frozen bank, lock, code, or protocol.
+2. Run the already prescribed three bounded `e14n_run` score/replay/`e14n_audit` commands below from the frozen checkout with separate SQLite ledgers and independent outputs. Verify native Bubblewrap boundary and canary checks.
+3. Check deterministic score/replay equality, audit oracle labels, candidate fits, CPU, held-out predictions, 72 worlds, and the locked repair decision. Do not change GO/HOLD thresholds after viewing results.
+4. Record `COMPLETE`, `TIMEOUT`, `FAILED`, or `BLOCKED_ENV` visibly with terminal evidence; commit raw compressed score, replay, audit, regression and report only after independent checks pass, read back GitHub HEAD. Do not spend money, touch Tod/main, or open sealed E1.3 material.
+
 
 1. Verifikasi HEAD GitHub dan baca [hasil E1.4m](design/e1.4/E14M_RESULT_v1.md), [bukti](evidence/e14/e14m_verification_v1.json), dan [piagam](PROJECT_CHARTER.md). Kontra-contoh terarah menggugurkan versi model pada 15/16 dunia terjangkau. Dunia langka tetap HOLD dan punya batas informasi yang berbeda.
 2. Pada bank publik baru, uji mekanisme yang memicu proposal perluasan DSL bertipe setelah versi hipotesis awal kosong. Bandingkan perluasan terarah oleh kontra-contoh, perluasan panjang tetap, dan model yang menahan prediksi. Pisahkan deteksi dari kecocokan baru dan kinerja pada probe yang tidak pernah diberikan kepada worker. Pertahankan kontrol dalam model agar perluasan tidak dipicu tanpa alasan.
