@@ -1,5 +1,9 @@
 # Keadaan ACE saat ini
 
+## E1.4k — checkpoint pra-penilaian
+
+Bank baru berisi 48 blok, 72 dunia, dan 1.920 input mentah. Pembanding memakai pertanyaan pendek terarah, panjang acak, dan majemuk terarah. Tes pra-penilaian 4/4. [Protokol](design/e1.4/E14K_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14K_LOCK_v1.json).
+
 ## E1.4j — pembuatan pertanyaan lulus pada uji terkontrol
 
 **SYNTHESIS_DEVELOPMENT_GO.** ACE menyusun pertanyaan dari hipotesis yang cocok dengan contoh. Dengan satu label, 16/16 kasus satu-saksi terdiagnosis. Pada kondisi berurutan, delapan kasus aturan panjang baru terdiagnosis setelah label kedua. Pada kondisi di luar jaminan dua label, delapan kasus panjang tetap abstain. Pada simbol alami, diagnosis naik dari 1/12 ke 8/12 dengan satu label, tetapi akurasi probe tetap 95/96. **NATURAL_HOLD** untuk transfer.

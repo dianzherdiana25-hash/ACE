@@ -5,6 +5,16 @@
 3. Ukur cakupan kelas, penurunan ambiguitas, diagnosis per biaya, abstain, dan false positive. Laporkan prediksi fallback terpisah, karena E1.4j mengamati false positive dapat naik setelah label pertama. Simpan hasil negatif, audit dan replay terisolasi.
 4. Pertahankan **NATURAL_HOLD** untuk transfer. Pertanyaan riset berikutnya adalah efisiensi memperoleh bukti di bawah representasi yang tersedia.
 
+## Reproduksi E1.4k
+
+Dari checkout pembekuan E1.4k, buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.
+
+```bash
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 150 --heartbeat 15 --log WORK/kscore.log -- python3 -m e14.e14k_run run WORK/kscore.sqlite WORK/kscore.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 150 --heartbeat 15 --log WORK/kreplay.log -- python3 -m e14.e14k_run run WORK/kreplay.sqlite WORK/kreplay.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 90 --heartbeat 10 --log WORK/kaudit.log -- python3 -m e14.e14k_audit WORK/kscore.json.gz WORK/kreplay.json.gz
+```
+
 ## Reproduksi E1.4j
 
 Dari checkout [pembekuan E1.4j](https://github.com/dianzherdiana25-hash/ACE/commit/f62d4cf65d8a9e6b54e9062698378560a2881b95), buat direktori lokal `WORK`. Gunakan ledger yang sama untuk melanjutkan eksekusi dan ledger terpisah untuk replay.

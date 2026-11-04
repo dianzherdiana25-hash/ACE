@@ -1,0 +1,13 @@
+{
+  "sha256": {
+    "code/e14/e14k_audit.py": "af046c8d70c385887a7c5591a0793648a500a3be58402cb82f1fabafafe57b89",
+    "code/e14/e14k_bank.py": "4fd8ba62a586fb0b25b2ccda34043654b2108a334b97952daecc7fb28bd1e986",
+    "code/e14/e14k_run.py": "05adec3cd7bafa672c40cec4e0ee751f1a6ce0f0cfc56d749be22867c94e740d",
+    "code/e14/e14k_worker.py": "84e00a8894caa3431452b40334c6b76ceb565d0f666d6c4df87f3956c031f03b",
+    "code/e14/test_e14k.py": "27a5f191d7e6db297144898b69b461647e475b873b785a1bbec249be7aff2886",
+    "design/e1.4/E14J_LOCK_v1.json": "38d1b43adc0b236cfc90b885d26638f10d47785fcec546483fe758bf7472b121",
+    "design/e1.4/E14K_PROTOCOL_v1.md": "04631dcce0c1453afef000bf907162b78a872c1bf0f5cd7132aafec9caa3b27c",
+    "evidence/e14/e14k_public_bank_v1.json.gz": "d81a1156beddac6b7ab37a0808f594f64314fe081364d25f622d2b677eab6738"
+  },
+  "version": 1
+}
