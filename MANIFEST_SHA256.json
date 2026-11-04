@@ -1,0 +1,232 @@
+{
+  "snapshot_utc": "2026-11-04T06:51:46.607762+00:00",
+  "scope": "portable handoff, no external scientific certification",
+  "number_of_files": 45,
+  "files": [
+    {
+      "path": "ACE_RESEARCH_MASTER_RECORD_v1.0.md",
+      "sha256": "0ee5fe20dd932b7fde3721f9256db0a035daf782db9c64320f390abad63b0196",
+      "size_bytes": 7954
+    },
+    {
+      "path": "CODEX_HANDOFF.md",
+      "sha256": "937643db3e2bee8ca590488984114d057847ad04934dcc0ee83c74a27e88fdca",
+      "size_bytes": 1970
+    },
+    {
+      "path": "E13_GATE.md",
+      "sha256": "96a45bffc5cc5c42e024083ad9b858210803c8250ceed2ee6599a60af5e8a50c",
+      "size_bytes": 1613
+    },
+    {
+      "path": "README.md",
+      "sha256": "ab88bc3ed611b8451ec5168a452472d3da300a718f845f329a7243a39de12b22",
+      "size_bytes": 153
+    },
+    {
+      "path": "START_HERE.md",
+      "sha256": "72f92f3965343ae8c6650a4fc22e6fb01a68b645c7aec3f162cadab82440f988",
+      "size_bytes": 2065
+    },
+    {
+      "path": "code/e12/README.md",
+      "sha256": "70514aec70ee5cc4beff19dbdb057b494f8783d0b3bd7a8b58b526d0a50ea99c",
+      "size_bytes": 1071
+    },
+    {
+      "path": "code/e12/agents.py",
+      "sha256": "f05cfc11f970357155611d9bfa833e93c189ce433ead0476dadec546b91aa01c",
+      "size_bytes": 4786
+    },
+    {
+      "path": "code/e12/audit_e12.py",
+      "sha256": "8535bc3f4fc342a9de46a553f7381edafcb955b63a52b7099ff74629b7a1ec7c",
+      "size_bytes": 2511
+    },
+    {
+      "path": "code/e12/independent_eval.py",
+      "sha256": "0a2081e63a130c087076a01c90516a115226a942ba450e8ee0e71aef05b95d2f",
+      "size_bytes": 785
+    },
+    {
+      "path": "code/e12/oracle.py",
+      "sha256": "f69a96950e7e9bda137efa2575ab6653819b5e67674420a7c9ac1a45ac44d9be",
+      "size_bytes": 3052
+    },
+    {
+      "path": "code/e12/posthoc_stats.py",
+      "sha256": "25ceaa5f6e451dfafb86ceee8f2d2a8004ecf9a13cf15a2e833f8a9639bde70e",
+      "size_bytes": 1617
+    },
+    {
+      "path": "code/e12/preconfirm_lock.json",
+      "sha256": "3d824e28dcb7dc663ecdb96b4ffbeb69e3f3700cb4bcfed26ae0b54b14daf2a9",
+      "size_bytes": 1012
+    },
+    {
+      "path": "code/e12/protocol.json",
+      "sha256": "eda45bd6f49742482d42ec820c3d6481367b994efe2aceb64599f0f831a14427",
+      "size_bytes": 1818
+    },
+    {
+      "path": "code/e12/run_e12.py",
+      "sha256": "63e351ad590829922e3c2377e66b900f91b90207efee0f3027ddd0239209946c",
+      "size_bytes": 3295
+    },
+    {
+      "path": "code/e12/test_e12.py",
+      "sha256": "0ac7cb81ac301553a97820c37324f5c60012662727cece63edac27570a600c1f",
+      "size_bytes": 2461
+    },
+    {
+      "path": "docs/ACE_F1_Baseline_Harness_Blueprint_v0.1.md",
+      "sha256": "5e2de9c65ca3825127976987477abceff98f4e4599641ea6ae9bb25c6464e446",
+      "size_bytes": 19527
+    },
+    {
+      "path": "docs/ACE_F5_Research_Synthesis_and_Decision_v0.1.md",
+      "sha256": "fe787f26d0de75013c4ff5f5a406ebfb4f0bccb90c0f1345811d9e6bd81a2dd9",
+      "size_bytes": 18171
+    },
+    {
+      "path": "docs/ACE_Research_Execution_Spec_v0.1.md",
+      "sha256": "4afa70f9f86fe463a16960f467a2a39809d91870d9a258c39e0c58f2cde3420e",
+      "size_bytes": 21349
+    },
+    {
+      "path": "docs/E11_Research_Report_v0.1.md",
+      "sha256": "fb57df5497fe676aa0b3fcf98204dea5301d2cda5e0a0e215a0a501b3a4dcf97",
+      "size_bytes": 8549
+    },
+    {
+      "path": "docs/E12_Research_Report_v0.1.md",
+      "sha256": "e3e536464edb79feb378194559c4f7b84d9ba27f1480bb1d714ea89e8e61984c",
+      "size_bytes": 8839
+    },
+    {
+      "path": "docs/E1_Research_Report_v0.1.md",
+      "sha256": "9c48fc16f37caa66481fe0e16a38cc201fa912de831adb3ad223a6fab74e1c88",
+      "size_bytes": 9122
+    },
+    {
+      "path": "docs/PRD_ACE_v0.1.md",
+      "sha256": "03887aef928bc4b21f51f2efd85b61b7c4990a4569c3a84355453508be9cbb6c",
+      "size_bytes": 18816
+    },
+    {
+      "path": "evidence/ACE_E11_Implementation_And_Evidence_v0.1.zip",
+      "sha256": "98e5126dcb9bb2d1615c5f733c0c8b3ec02e4987464cd3a788dd1d72f84074e9",
+      "size_bytes": 67741
+    },
+    {
+      "path": "evidence/ACE_E12_Primitive_Discovery_Research_Evidence_v0.1.zip",
+      "sha256": "d27f58fe8540f7bf4906dc9417c52883351581cf199ea7f514cd7221af405c51",
+      "size_bytes": 147048
+    },
+    {
+      "path": "evidence/ACE_E1_Implementation_And_Evidence_v0.1.zip",
+      "sha256": "cca2eea63ba82b09a3129b8c0cad32af6fe553ac4135daaf2ab87d9ab599e367",
+      "size_bytes": 202526
+    },
+    {
+      "path": "evidence/ACE_F0_Actual_Verification_Package_v0.1.zip",
+      "sha256": "3e64a2094cbcd19c15740c7009b2c8f8cf7afa76737016176cfe492e28226627",
+      "size_bytes": 18632
+    },
+    {
+      "path": "evidence/ACE_F0_reproduced_evidence.zip",
+      "sha256": "4a612905b62e32b6c4619c0b614dfa81544111264a4b6c03483b296cbb798922",
+      "size_bytes": 5829
+    },
+    {
+      "path": "evidence/ACE_F1_Implementation_Evidence_v0.1.zip",
+      "sha256": "b5937ebe2e4ca01c9dca37a311dc7b92088782d644317e784dfab0c647aa296d",
+      "size_bytes": 75877
+    },
+    {
+      "path": "evidence/ACE_F1_reproduced_evidence.zip",
+      "sha256": "a9151b1e0ef42918f6ce70dd5716f6c7386563280f154e154b105b915a4bb10a",
+      "size_bytes": 59141
+    },
+    {
+      "path": "evidence/ACE_F2_Implementation_Evidence_v0.1.zip",
+      "sha256": "18c8daeb7916f012c4b5b6fb9520a8b001388288ec0f69ef2fd8d2d3bf394348",
+      "size_bytes": 105054
+    },
+    {
+      "path": "evidence/ACE_F2_reproduced_evidence.zip",
+      "sha256": "b59a49da7010c97bf87211812f480c3a58a031d013575665f4f6ad4920d4efa2",
+      "size_bytes": 125864
+    },
+    {
+      "path": "evidence/ACE_F31_Implementation_Evidence_v0.1.zip",
+      "sha256": "c369e70b534d92a168ee27edf145f856b77787313d34a3422ae60500abd1672c",
+      "size_bytes": 1066243
+    },
+    {
+      "path": "evidence/ACE_F32_Implementation_And_Evidence_v0.1.zip",
+      "sha256": "76a624c5f79282be3e4c7ab0b5bf59edd182265bfbf1dc78be4d5a5d07c6ce47",
+      "size_bytes": 2339025
+    },
+    {
+      "path": "evidence/ACE_F33_Compositional_Research_Evidence_v0.1.zip",
+      "sha256": "7481ac074ef6ab24f7495656eecca27f8800f637ed6d9b8a32b11d87e25ab3ff",
+      "size_bytes": 2279157
+    },
+    {
+      "path": "evidence/ACE_F3_Causal_Ablation_Evidence_v0.1.zip",
+      "sha256": "60dcd9ff82f003558d01c80106055fd8cf2f3addf8923b9036e443ef9ea1d209",
+      "size_bytes": 227126
+    },
+    {
+      "path": "evidence/ACE_F3_Implementation_Evidence_v0.1.zip",
+      "sha256": "4e011be2307fd3d0ab3cecb303d64c54b84b1bdb35ee8e4a0cf4e1d24f4fdae7",
+      "size_bytes": 149507
+    },
+    {
+      "path": "evidence/ACE_F3_reproduced_evidence.zip",
+      "sha256": "6c036fd1efc894e3fb38ea19f8cf62719f32ea2b7f1f00749f721b98fe1ccf9c",
+      "size_bytes": 115714
+    },
+    {
+      "path": "evidence/ACE_F4A_Structural_Transfer_Evidence_v0.1.zip",
+      "sha256": "9e37f674c19f55df1a650f25558c0b76409f43201f576b6a9577eb4667f3d51b",
+      "size_bytes": 210146
+    },
+    {
+      "path": "evidence/ACE_F4B_Topology_Transfer_Research_Evidence_v0.1.zip",
+      "sha256": "74eb64af5245f31ce1727952121fedaf11924c5c1e78d85cee10d6ac656859d9",
+      "size_bytes": 150594
+    },
+    {
+      "path": "evidence/ACE_F5_Research_Decision_Package_v0.1.zip",
+      "sha256": "fb5fe10e593bdd2ad179004ce561d97da4329f6e9dc9f036c42ebfc51b5663e3",
+      "size_bytes": 30862
+    },
+    {
+      "path": "notebooks/ACE_E12_Primitive_Induction_Colab_v0.1.ipynb",
+      "sha256": "1da618e4b6e4bc328d7c6f9ded5c11f987dac5f2a001d7304f461cad08c03475",
+      "size_bytes": 17480
+    },
+    {
+      "path": "notebooks/ACE_F0_Colab_Replication_v0.1.ipynb",
+      "sha256": "32d51a2fb13760c71653ea660461c61c5611d55ae29ea07ab91c5bac0f11cf09",
+      "size_bytes": 16194
+    },
+    {
+      "path": "notebooks/ACE_F1_Baseline_Colab_v0.1.ipynb",
+      "sha256": "6fbeabbf44c32ae549aa9c7bf75799e7aaa2d220fe852a9d9de73ab432f5b02b",
+      "size_bytes": 22407
+    },
+    {
+      "path": "notebooks/ACE_F2_Adaptive_Colab_v0.1.ipynb",
+      "sha256": "7505cc3e9bbb881657db341792794588399de240fcc07a67589c4410521dd622",
+      "size_bytes": 85519
+    },
+    {
+      "path": "notebooks/ACE_F3_Evolution_Colab_v0.1.ipynb",
+      "sha256": "19aaafc256f4a851141291098e8a9bd96bb86640a437c52d8a4809c516d1dce0",
+      "size_bytes": 41218
+    }
+  ]
+}

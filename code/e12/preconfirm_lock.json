@@ -1,0 +1,17 @@
+{
+  "name": "ACE-E1.2-preconfirmation-lock",
+  "scope": "local filesystem pre-confirmation; not third-party timestamp attestation",
+  "locked_at_utc": "2026-11-04T06:37:09.080870+00:00",
+  "file_sha256": {
+    "oracle.py": "f69a96950e7e9bda137efa2575ab6653819b5e67674420a7c9ac1a45ac44d9be",
+    "agents.py": "f05cfc11f970357155611d9bfa833e93c189ce433ead0476dadec546b91aa01c",
+    "run_e12.py": "63e351ad590829922e3c2377e66b900f91b90207efee0f3027ddd0239209946c",
+    "independent_eval.py": "0a2081e63a130c087076a01c90516a115226a942ba450e8ee0e71aef05b95d2f",
+    "audit_e12.py": "8535bc3f4fc342a9de46a553f7381edafcb955b63a52b7099ff74629b7a1ec7c",
+    "test_e12.py": "0ac7cb81ac301553a97820c37324f5c60012662727cece63edac27570a600c1f",
+    "protocol.json": "eda45bd6f49742482d42ec820c3d6481367b994efe2aceb64599f0f831a14427"
+  },
+  "development_summary_sha256": "165a1f784c266de8c5b89fc5758410884ab111f7d19e29652e4b8ef2cfa3a0e4",
+  "confirmation_reserved_seeds": "12501-12540",
+  "completed_confirmatory_run": false
+}

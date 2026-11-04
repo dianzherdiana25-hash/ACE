@@ -1,0 +1,41 @@
+{
+  "project": "ACE E1.2 Primitive Discovery (bounded grammar)",
+  "hypothesis": "In source-related tasks, induction of an operator from examples followed by reuse yields higher hidden accuracy than target-only feedback search with equal candidate counts.",
+  "primary_contrast": "REUSE - TARGET_ONLY on RELATED hidden9 exact-vector accuracy",
+  "secondary_contrasts": [
+    "REUSE - SHAM RELATED hidden9",
+    "REUSE - WRONG RELATED hidden9",
+    "REUSE - TARGET_ONLY UNRELATED hidden9",
+    "REUSE - STRUCTURED RELATED hidden9"
+  ],
+  "grammar": "y[i]=(a*x[i]+b*x[(i+side)%n]+c*(i%2)+d) mod 17; a,b,c in {1,2,3}, d in {0,1,2,3}, side in {-1,+1}",
+  "source_examples": 5,
+  "target_examples": 4,
+  "hidden9_per_target": 8,
+  "hidden13_per_target": 8,
+  "policies": [
+    "REUSE",
+    "TARGET_ONLY",
+    "SHAM",
+    "WRONG",
+    "STRUCTURED"
+  ],
+  "source_evaluations": 216,
+  "target_evaluations_per_task": 64,
+  "tasks_per_episode": {
+    "related": 2,
+    "unrelated": 2
+  },
+  "development": {
+    "start_seed": 211,
+    "episodes": 12
+  },
+  "confirmation": {
+    "start_seed": 12501,
+    "episodes": 40
+  },
+  "uncertainty": "Paired cluster bootstrap on 40 confirmation episodes, 6000 replicates; 95% percentile interval; 0 included => inconclusive",
+  "acceptance": "Honest reporting; no pre-claim of positive result; no use of hidden outputs in policies",
+  "limits": "No new fundamental primitive; operator assembled from pre-defined arithmetic and neighbor/index grammar; cost matched by source/target proposal evaluations not exact CPU time; internal oracle, not external judge; no neural agent.",
+  "additional_baseline_note": "STRUCTURED solves known grammar with modular linear algebra. Same 216 source and 64 target candidate evaluations, but different computational overhead. No claim of equal CPU."
+}
