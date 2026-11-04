@@ -1,6 +1,12 @@
 # Keadaan ACE saat ini
 
-## E1.4m — checkpoint pra-penilaian
+## E1.4m — deteksi kontra-contoh terjangkau lulus
+
+**Reachable GO.** Falsifikasi menggugurkan seluruh hipotesis pada 8/8 target simbol dan 7/8 target graf terjangkau. Kedua pembanding 0/8 di masing-masing keluarga. Seluruh 40 kasus dalam model bertahan di setiap lengan. Pada kondisi langka, semua lengan 0/16. **Rare HOLD · NATURAL_HOLD.**
+
+[Hasil](design/e1.4/E14M_RESULT_v1.md) · [Bukti](evidence/e14/e14m_verification_v1.json) · [Protokol beku](https://github.com/dianzherdiana25-hash/ACE/commit/835016481e61261386a02ae4867ece580d4cd1cd). Berikutnya, uji apakah kontra-contoh bisa memicu perluasan representasi yang tervalidasi.
+
+## E1.4m — checkpoint historis pra-penilaian
 
 Bank baru 56 blok, 72 dunia dan 2.240 input. Uji memisahkan target dalam model, target tujuh kejadian terjangkau dari contoh negatif, dan target langka. Tes pra-penilaian 4/4. [Protokol](design/e1.4/E14M_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14M_LOCK_v1.json).
 

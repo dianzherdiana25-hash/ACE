@@ -1,0 +1,1414 @@
+{
+  "audit": {
+    "deterministic_sha256": "1061abbc4e4739b1f097d1e96ca25d740d29644be322d9b54adf29d9fb4e71fb",
+    "replay_match": true,
+    "status": "completed",
+    "worlds": 72
+  },
+  "bank_sha256": "95eff84fe0515d1ac04469e70b2c29cfb36b0178bc129f4c8c63ac5d06ca8195",
+  "boundary": {
+    "binary": "/usr/bin/bwrap",
+    "checks": {
+      "counterexample_stage_without_evaluator": true,
+      "credential_env_absent": true,
+      "evaluator_module_absent": true,
+      "host_loopback_denied": true,
+      "private_file_denied": true,
+      "worker_mount_read_only": true
+    },
+    "native_elf": true,
+    "sha256": "573236e5328ac2ebb08f59ae3a9805b4f8d12bdef14be8af4450d5463294985f"
+  },
+  "bubblewrap": "0.12.0",
+  "compressed_sha256": {
+    "mreplay": "b0254ff9ee3288c5c5d973263e7c8f49c4cc81c3c81892f28a88de77f1ae0a30",
+    "mscore": "681c574036dc3e0e8e5c91ae42e089b912850a932af6f5eb217822684720753f"
+  },
+  "freeze_commit": "835016481e61261386a02ae4867ece580d4cd1cd",
+  "freeze_tree": "fea90146b614a6b016b9efeab1943e3863930ec7",
+  "plan_sha256": "1a5359bb273b5aab8ccd75f3b0baa3cbcfd8e89893b4c402ab752c1722804e25",
+  "posthoc_rare_search_bounds": {
+    "G": {
+      "candidate_counts": [
+        94,
+        85,
+        82,
+        82,
+        83,
+        86,
+        79,
+        83
+      ],
+      "max_tested_motifs_before_activation": 12,
+      "max_uniform_activation_probability_fraction": [
+        12,
+        79
+      ]
+    },
+    "S": {
+      "candidate_counts": [
+        2100,
+        2100,
+        2100,
+        2109,
+        2107,
+        2108,
+        2102,
+        2106
+      ],
+      "max_tested_motifs_before_activation": 12,
+      "max_uniform_activation_probability_fraction": [
+        12,
+        2100
+      ]
+    }
+  },
+  "posthoc_reachable_missed_offers": [
+    {
+      "block": "reachable:3",
+      "family": "G",
+      "rounds": [
+        {
+          "blank_predicted_target_offers": [],
+          "round": 1,
+          "selected": 4
+        },
+        {
+          "blank_predicted_target_offers": [],
+          "round": 2,
+          "selected": 4
+        },
+        {
+          "blank_predicted_target_offers": [
+            6
+          ],
+          "round": 3,
+          "selected": 4
+        },
+        {
+          "blank_predicted_target_offers": [
+            7
+          ],
+          "round": 4,
+          "selected": 4
+        }
+      ]
+    }
+  ],
+  "python": "3.12.14",
+  "raw_sha256": {
+    "mreplay": "c47f6556793629ba853debd5695154522f3e5de43dc720eaad85b9db5eeee02f",
+    "mscore": "51dd1f04c76db3470bbfc6425ad459c979fb84dc0765ed26c4cff8c179b1d9c1"
+  },
+  "resume_byte_identical": true,
+  "summary": {
+    "cells": [
+      {
+        "arms": {
+          "adjudicate": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 39,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 99,
+              "candidate_checks": 36056,
+              "labels": 11,
+              "offers": 96,
+              "oracle_activations": 2,
+              "proposal_attempts": 5375,
+              "rejected": 0,
+              "selective_covered": 40,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 162,
+              "candidate_checks": 71672,
+              "labels": 18,
+              "offers": 184,
+              "oracle_activations": 2,
+              "proposal_attempts": 10421,
+              "rejected": 0,
+              "selective_covered": 40,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 141584,
+              "labels": 32,
+              "offers": 296,
+              "oracle_activations": 3,
+              "proposal_attempts": 17245,
+              "rejected": 0,
+              "selective_covered": 48,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "falsify": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 39,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 108,
+              "candidate_checks": 36056,
+              "labels": 12,
+              "offers": 96,
+              "oracle_activations": 0,
+              "proposal_attempts": 5375,
+              "rejected": 0,
+              "selective_covered": 39,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 216,
+              "candidate_checks": 72112,
+              "labels": 24,
+              "offers": 192,
+              "oracle_activations": 0,
+              "proposal_attempts": 10750,
+              "rejected": 0,
+              "selective_covered": 39,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 432,
+              "candidate_checks": 144224,
+              "labels": 48,
+              "offers": 384,
+              "oracle_activations": 0,
+              "proposal_attempts": 21500,
+              "rejected": 0,
+              "selective_covered": 39,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "random": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 39,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 108,
+              "candidate_checks": 36056,
+              "labels": 12,
+              "offers": 96,
+              "oracle_activations": 0,
+              "proposal_attempts": 768,
+              "rejected": 0,
+              "selective_covered": 39,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 216,
+              "candidate_checks": 71840,
+              "labels": 24,
+              "offers": 192,
+              "oracle_activations": 0,
+              "proposal_attempts": 1536,
+              "rejected": 0,
+              "selective_covered": 39,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 432,
+              "candidate_checks": 142480,
+              "labels": 48,
+              "offers": 384,
+              "oracle_activations": 0,
+              "proposal_attempts": 3072,
+              "rejected": 0,
+              "selective_covered": 39,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          }
+        },
+        "condition": "natural",
+        "family": "S",
+        "worlds": 12
+      },
+      {
+        "arms": {
+          "adjudicate": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 54259,
+              "labels": 8,
+              "offers": 59,
+              "oracle_activations": 0,
+              "proposal_attempts": 222,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 107987,
+              "labels": 16,
+              "offers": 118,
+              "oracle_activations": 0,
+              "proposal_attempts": 452,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 213873,
+              "labels": 32,
+              "offers": 236,
+              "oracle_activations": 0,
+              "proposal_attempts": 940,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "falsify": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 54259,
+              "labels": 8,
+              "offers": 59,
+              "oracle_activations": 0,
+              "proposal_attempts": 222,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 103001,
+              "labels": 16,
+              "offers": 112,
+              "oracle_activations": 0,
+              "proposal_attempts": 444,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 243,
+              "candidate_checks": 180256,
+              "labels": 27,
+              "offers": 196,
+              "oracle_activations": 0,
+              "proposal_attempts": 888,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "random": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 58856,
+              "labels": 8,
+              "offers": 64,
+              "oracle_activations": 0,
+              "proposal_attempts": 512,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 117216,
+              "labels": 16,
+              "offers": 128,
+              "oracle_activations": 1,
+              "proposal_attempts": 1024,
+              "rejected": 0,
+              "selective_covered": 8,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 218168,
+              "labels": 32,
+              "offers": 256,
+              "oracle_activations": 1,
+              "proposal_attempts": 2048,
+              "rejected": 0,
+              "selective_covered": 8,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          }
+        },
+        "condition": "matched",
+        "family": "S",
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "adjudicate": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 54259,
+              "labels": 8,
+              "offers": 59,
+              "oracle_activations": 0,
+              "proposal_attempts": 222,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 107987,
+              "labels": 16,
+              "offers": 118,
+              "oracle_activations": 0,
+              "proposal_attempts": 452,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 213873,
+              "labels": 32,
+              "offers": 236,
+              "oracle_activations": 0,
+              "proposal_attempts": 940,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "falsify": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 54259,
+              "labels": 8,
+              "offers": 59,
+              "oracle_activations": 3,
+              "proposal_attempts": 222,
+              "rejected": 3,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 117,
+              "candidate_checks": 84611,
+              "labels": 13,
+              "offers": 92,
+              "oracle_activations": 4,
+              "proposal_attempts": 360,
+              "rejected": 4,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 153,
+              "candidate_checks": 104844,
+              "labels": 17,
+              "offers": 114,
+              "oracle_activations": 8,
+              "proposal_attempts": 470,
+              "rejected": 8,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "random": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 58856,
+              "labels": 8,
+              "offers": 64,
+              "oracle_activations": 0,
+              "proposal_attempts": 512,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 117216,
+              "labels": 16,
+              "offers": 128,
+              "oracle_activations": 0,
+              "proposal_attempts": 1024,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 232528,
+              "labels": 32,
+              "offers": 256,
+              "oracle_activations": 0,
+              "proposal_attempts": 2048,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          }
+        },
+        "condition": "reachable",
+        "family": "S",
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "adjudicate": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 55277,
+              "labels": 8,
+              "offers": 60,
+              "oracle_activations": 0,
+              "proposal_attempts": 228,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 110014,
+              "labels": 16,
+              "offers": 120,
+              "oracle_activations": 0,
+              "proposal_attempts": 464,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 217876,
+              "labels": 32,
+              "offers": 240,
+              "oracle_activations": 0,
+              "proposal_attempts": 962,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "falsify": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 55277,
+              "labels": 8,
+              "offers": 60,
+              "oracle_activations": 0,
+              "proposal_attempts": 228,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 105949,
+              "labels": 16,
+              "offers": 115,
+              "oracle_activations": 0,
+              "proposal_attempts": 456,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 252,
+              "candidate_checks": 187943,
+              "labels": 28,
+              "offers": 204,
+              "oracle_activations": 0,
+              "proposal_attempts": 912,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "random": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 58960,
+              "labels": 8,
+              "offers": 64,
+              "oracle_activations": 0,
+              "proposal_attempts": 512,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 117432,
+              "labels": 16,
+              "offers": 128,
+              "oracle_activations": 0,
+              "proposal_attempts": 1024,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 232904,
+              "labels": 32,
+              "offers": 256,
+              "oracle_activations": 0,
+              "proposal_attempts": 2048,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          }
+        },
+        "condition": "rare",
+        "family": "S",
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "adjudicate": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 96,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 9,
+              "candidate_checks": 104,
+              "labels": 1,
+              "offers": 96,
+              "oracle_activations": 1,
+              "proposal_attempts": 4787,
+              "rejected": 0,
+              "selective_covered": 96,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 9,
+              "candidate_checks": 112,
+              "labels": 1,
+              "offers": 104,
+              "oracle_activations": 1,
+              "proposal_attempts": 5179,
+              "rejected": 0,
+              "selective_covered": 96,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 9,
+              "candidate_checks": 112,
+              "labels": 1,
+              "offers": 104,
+              "oracle_activations": 1,
+              "proposal_attempts": 5179,
+              "rejected": 0,
+              "selective_covered": 96,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "falsify": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 96,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 108,
+              "candidate_checks": 104,
+              "labels": 12,
+              "offers": 96,
+              "oracle_activations": 0,
+              "proposal_attempts": 4787,
+              "rejected": 0,
+              "selective_covered": 96,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 216,
+              "candidate_checks": 208,
+              "labels": 24,
+              "offers": 192,
+              "oracle_activations": 0,
+              "proposal_attempts": 9574,
+              "rejected": 0,
+              "selective_covered": 96,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 432,
+              "candidate_checks": 416,
+              "labels": 48,
+              "offers": 384,
+              "oracle_activations": 0,
+              "proposal_attempts": 19148,
+              "rejected": 0,
+              "selective_covered": 96,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "random": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 96,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 108,
+              "candidate_checks": 104,
+              "labels": 12,
+              "offers": 96,
+              "oracle_activations": 0,
+              "proposal_attempts": 768,
+              "rejected": 0,
+              "selective_covered": 96,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 216,
+              "candidate_checks": 208,
+              "labels": 24,
+              "offers": 192,
+              "oracle_activations": 1,
+              "proposal_attempts": 1536,
+              "rejected": 0,
+              "selective_covered": 96,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 432,
+              "candidate_checks": 416,
+              "labels": 48,
+              "offers": 384,
+              "oracle_activations": 2,
+              "proposal_attempts": 3072,
+              "rejected": 0,
+              "selective_covered": 96,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          }
+        },
+        "condition": "natural",
+        "family": "G",
+        "worlds": 12
+      },
+      {
+        "arms": {
+          "adjudicate": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 3760,
+              "labels": 8,
+              "offers": 64,
+              "oracle_activations": 2,
+              "proposal_attempts": 261,
+              "rejected": 0,
+              "selective_covered": 10,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 6376,
+              "labels": 16,
+              "offers": 128,
+              "oracle_activations": 6,
+              "proposal_attempts": 537,
+              "rejected": 0,
+              "selective_covered": 25,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 261,
+              "candidate_checks": 9368,
+              "labels": 29,
+              "offers": 256,
+              "oracle_activations": 9,
+              "proposal_attempts": 1135,
+              "rejected": 0,
+              "selective_covered": 31,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "falsify": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 3760,
+              "labels": 8,
+              "offers": 64,
+              "oracle_activations": 0,
+              "proposal_attempts": 261,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 7520,
+              "labels": 16,
+              "offers": 128,
+              "oracle_activations": 0,
+              "proposal_attempts": 522,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 14681,
+              "labels": 32,
+              "offers": 250,
+              "oracle_activations": 0,
+              "proposal_attempts": 1044,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "random": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 3760,
+              "labels": 8,
+              "offers": 64,
+              "oracle_activations": 0,
+              "proposal_attempts": 512,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 7232,
+              "labels": 16,
+              "offers": 128,
+              "oracle_activations": 1,
+              "proposal_attempts": 1024,
+              "rejected": 0,
+              "selective_covered": 4,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 12152,
+              "labels": 32,
+              "offers": 256,
+              "oracle_activations": 3,
+              "proposal_attempts": 2048,
+              "rejected": 0,
+              "selective_covered": 15,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          }
+        },
+        "condition": "matched",
+        "family": "G",
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "adjudicate": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 3760,
+              "labels": 8,
+              "offers": 64,
+              "oracle_activations": 0,
+              "proposal_attempts": 261,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 7128,
+              "labels": 16,
+              "offers": 128,
+              "oracle_activations": 0,
+              "proposal_attempts": 541,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 12720,
+              "labels": 32,
+              "offers": 256,
+              "oracle_activations": 0,
+              "proposal_attempts": 1224,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "falsify": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 3760,
+              "labels": 8,
+              "offers": 64,
+              "oracle_activations": 0,
+              "proposal_attempts": 261,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 7520,
+              "labels": 16,
+              "offers": 128,
+              "oracle_activations": 4,
+              "proposal_attempts": 522,
+              "rejected": 4,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 207,
+              "candidate_checks": 10465,
+              "labels": 23,
+              "offers": 178,
+              "oracle_activations": 7,
+              "proposal_attempts": 749,
+              "rejected": 7,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "random": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 3760,
+              "labels": 8,
+              "offers": 64,
+              "oracle_activations": 0,
+              "proposal_attempts": 512,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 7232,
+              "labels": 16,
+              "offers": 128,
+              "oracle_activations": 0,
+              "proposal_attempts": 1024,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 13432,
+              "labels": 32,
+              "offers": 256,
+              "oracle_activations": 0,
+              "proposal_attempts": 2048,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          }
+        },
+        "condition": "reachable",
+        "family": "G",
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "adjudicate": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 3760,
+              "labels": 8,
+              "offers": 64,
+              "oracle_activations": 0,
+              "proposal_attempts": 276,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 7112,
+              "labels": 16,
+              "offers": 128,
+              "oracle_activations": 0,
+              "proposal_attempts": 578,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 12752,
+              "labels": 32,
+              "offers": 256,
+              "oracle_activations": 0,
+              "proposal_attempts": 1319,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "falsify": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 3760,
+              "labels": 8,
+              "offers": 64,
+              "oracle_activations": 0,
+              "proposal_attempts": 276,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 7520,
+              "labels": 16,
+              "offers": 128,
+              "oracle_activations": 0,
+              "proposal_attempts": 552,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 14693,
+              "labels": 32,
+              "offers": 250,
+              "oracle_activations": 0,
+              "proposal_attempts": 1104,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          },
+          "random": {
+            "0": {
+              "bought_events": 0,
+              "candidate_checks": 0,
+              "labels": 0,
+              "offers": 0,
+              "oracle_activations": 0,
+              "proposal_attempts": 0,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "1": {
+              "bought_events": 72,
+              "candidate_checks": 3760,
+              "labels": 8,
+              "offers": 64,
+              "oracle_activations": 0,
+              "proposal_attempts": 512,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "2": {
+              "bought_events": 144,
+              "candidate_checks": 7192,
+              "labels": 16,
+              "offers": 128,
+              "oracle_activations": 0,
+              "proposal_attempts": 1024,
+              "rejected": 0,
+              "selective_covered": 0,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            },
+            "4": {
+              "bought_events": 288,
+              "candidate_checks": 13264,
+              "labels": 32,
+              "offers": 256,
+              "oracle_activations": 1,
+              "proposal_attempts": 2048,
+              "rejected": 0,
+              "selective_covered": 4,
+              "selective_errors": 0,
+              "selective_false_positive": 0
+            }
+          }
+        },
+        "condition": "rare",
+        "family": "G",
+        "worlds": 8
+      }
+    ],
+    "false_rejects": 0,
+    "fit_comparisons": 18039120,
+    "natural_decision": "NATURAL_HOLD_CARRIED_FORWARD",
+    "oracle_calls": 3645,
+    "rare": "HOLD",
+    "reachable": "GO",
+    "worker_calls": 981,
+    "worlds": 72
+  },
+  "terminal": {
+    "maudit": {
+      "elapsed_s": 27.758,
+      "exit_code": 0,
+      "log_file": "maudit.log",
+      "status": "OK"
+    },
+    "mreplay": {
+      "elapsed_s": 58.292,
+      "exit_code": 0,
+      "log_file": "mreplay.log",
+      "status": "OK"
+    },
+    "mresume": {
+      "elapsed_s": 0.401,
+      "exit_code": 0,
+      "log_file": "mresume.log",
+      "status": "OK"
+    },
+    "mscore": {
+      "elapsed_s": 58.118,
+      "exit_code": 0,
+      "log_file": "mscore.log",
+      "status": "OK"
+    },
+    "regression": {
+      "elapsed_s": 95.705,
+      "exit_code": 0,
+      "log_file": "../e14m-regression.log",
+      "status": "OK"
+    }
+  },
+  "tests": {
+    "prescore": [
+      4,
+      4
+    ],
+    "recovered_suite": [
+      99,
+      99
+    ]
+  }
+}

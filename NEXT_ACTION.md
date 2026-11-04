@@ -1,12 +1,12 @@
-# NEXT_ACTION — E1.4m pencarian kontra-contoh dan uji kecukupan model
+# NEXT_ACTION — E1.4n perluasan representasi setelah kontra-contoh
 
-1. Verifikasi HEAD GitHub dan baca [hasil E1.4l](design/e1.4/E14L_RESULT_v1.md), [bukti](evidence/e14/e14l_verification_v1.json) dan [piagam](PROJECT_CHARTER.md). Pada bank luar model, 32 prediksi yang diterima lengan ambang semuanya keliru. Tidak ada lengan yang menghabiskan himpunan hipotesis di delapan dunia tersebut.
-2. Pada bank baru, bandingkan query adjudikasi kelas, query acak, dan query yang mencari kontra-contoh terhadap prediksi bersama kelas. Gunakan target dalam model, target tujuh kejadian yang belum terlihat, dan kondisi jarang dengan ambang yang ditetapkan sebelum scoring.
-3. Ukur seberapa sering setiap strategi menemukan label yang menggugurkan semua hipotesis, seberapa sering keliru menolak model yang sesuai, biaya label dan kejadian, serta risiko pada prediksi yang masih diterima. Pisahkan deteksi kegagalan model dari penambahan kelas baru. Pertahankan **NATURAL_HOLD** untuk transfer.
+1. Verifikasi HEAD GitHub dan baca [hasil E1.4m](design/e1.4/E14M_RESULT_v1.md), [bukti](evidence/e14/e14m_verification_v1.json), dan [piagam](PROJECT_CHARTER.md). Kontra-contoh terarah menggugurkan versi model pada 15/16 dunia terjangkau. Dunia langka tetap HOLD dan punya batas informasi yang berbeda.
+2. Pada bank publik baru, uji mekanisme yang memicu proposal perluasan DSL bertipe setelah versi hipotesis awal kosong. Bandingkan perluasan terarah oleh kontra-contoh, perluasan panjang tetap, dan model yang menahan prediksi. Pisahkan deteksi dari kecocokan baru dan kinerja pada probe yang tidak pernah diberikan kepada worker. Pertahankan kontrol dalam model agar perluasan tidak dipicu tanpa alasan.
+3. Tetapkan batas ekspansi, label, biaya, risiko dan ambang sebelum scoring. Ukur waktu, kandidat tambahan, generalisasi probe, salah ekspansi, serta keadaan tanpa solusi. Audit dan replay terisolasi. Pertahankan **Rare HOLD** dan **NATURAL_HOLD** untuk transfer.
 
 ## Reproduksi E1.4m
 
-Dari checkout pembekuan E1.4m, buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.
+Dari checkout [pembekuan E1.4m](https://github.com/dianzherdiana25-hash/ACE/commit/835016481e61261386a02ae4867ece580d4cd1cd), buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.
 
 ```bash
 PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 180 --heartbeat 15 --log WORK/mscore.log -- python3 -m e14.e14m_run run WORK/mscore.sqlite WORK/mscore.json.gz
