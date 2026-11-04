@@ -24,5 +24,7 @@
   },
   "oracle_labels": 816,
   "isolation": "NOT_VERIFIED",
-  "code_archive": "PINNED_SHA256_NOT_YET_ATTACHED"
+  "code_archive": "VERIFIED_GITHUB_BLOB_ATTACHED_MATCHES_PRESCORE",
+  "code_archive_git_sha1": "d9c867040a76e8903b534dd0f0e06bd6f608e731",
+  "code_archive_sha256": "2f5f365c7d7940b39cdce361c31bdb28bf448a45a8ecc2e0c1503c3257be9865"
 }
