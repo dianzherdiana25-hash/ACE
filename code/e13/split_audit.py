@@ -15,6 +15,7 @@ class RuleBlock:
     shape: object
     tasks: tuple[object, ...]
     reference: Callable[[object], Output]
+    inputs: tuple[object, ...] = ()
 
 
 def audit_splits(blocks, probe_inputs):
@@ -32,6 +33,7 @@ def audit_splits(blocks, probe_inputs):
         behavior = [block.reference(probe) for probe in probes]
         keys = [("rule shape", block.shape), ("probe behavior", behavior)]
         keys.extend(("task payload", task) for task in block.tasks)
+        keys.extend(("task input", case) for case in block.inputs)
         for kind, value in keys:
             key = (block.family, kind, canonical_json(value))
             split = first_split.setdefault(key, block.split)

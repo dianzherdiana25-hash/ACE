@@ -47,3 +47,16 @@ Tiga tree di GitHub identik dengan tree checkpoint lokal. Branch penelitian bera
 ## Gerbang berikutnya
 
 Bangun bank aturan development/selection dan oracle evaluator di jalur terpisah, lalu jalankan audit split pada bank itu. Lanjutkan kontrol kuat, pilot, pemilihan B*, dan penguncian sebelum evaluasi konfirmatori. Set konfirmatori dan audit reproduksi terpisah masih terbuka. Status tetap development. Lihat [desain E1.3](../../design/e1.3/E13_DESIGN_v0.1.md).
+
+## Bank development
+
+```bash
+PYTHONPATH=code python3 -m e13.evaluator.bank
+PYTHONPATH=code python3 -m unittest discover -s code -p 'test_*.py' -v
+```
+
+Bank publik seed 1304 membangun 12 episode simbolik dan 12 episode graf, seimbang antara target terkait dan tidak terkait. Tiap keluarga memiliki dua kelompok aturan, masing-masing berisi sumber, target terkait, dan target tidak terkait. Tiap episode memiliki enam probe per ukuran, yaitu **288 probe** seluruhnya. SHA-256 bank adalah `76c7c3a486a57f47a22a74c35de7b757e12a692dbdd6ef4bfcb8ad0f4a7a07a2`.
+
+Oracle berdiri sendiri di `evaluator/oracle.py`. Untuk graf, oracle menggunakan relaksasi sinkron pada graf keadaan, termasuk siklus dan sisi biaya nol. Struktur terkait membutuhkan jarak edit pohon terurut positif dan subpohon identik yang terdiri dari lebih dari satu node. Target tidak terkait memiliki jarak positif tanpa subpohon tersebut. Pembeda semantik memakai 121 urutan simbol dan 127 rantai graf pada domain kecil. Demonstrasi harus menyingkirkan aturan saingan dalam katalog publik. Pemeriksaan ini terbatas pada saingan dan domain yang dicakup.
+
+Audit lintas split menolak bentuk aturan, sidik perilaku, tugas, dan input yang sama. Sisi graf diurutkan dan urutan demo/probe tidak menentukan hash tugas. Audit belum mengkanonisasi isomorfisme graf atau membuktikan kesetaraan semantik umum. Tes injeksi salinan lulus. Bank berisi split development saja dan modul evaluator berada di luar daftar staging worker. Bank selection terpisah tetap gerbang terbuka.
