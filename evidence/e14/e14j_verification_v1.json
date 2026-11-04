@@ -1,0 +1,1046 @@
+{
+  "audit": {
+    "deterministic_sha256": "d0dbc75a735980b8b54a267b891b85a1923f9d9de3f378a0bab43773ca8785cc",
+    "replay_match": true,
+    "status": "completed",
+    "worlds": 72
+  },
+  "bank_sha256": "362707292f3eb80befbe889a114b750e6b6f6c5fd297e80c31c1a08bb273aded",
+  "boundary": {
+    "binary": "/usr/bin/bwrap",
+    "checks": {
+      "credential_env_absent": true,
+      "evaluator_module_absent": true,
+      "host_loopback_denied": true,
+      "private_file_denied": true,
+      "synthesis_stage_without_evaluator": true,
+      "worker_mount_read_only": true
+    },
+    "native_elf": true,
+    "sha256": "573236e5328ac2ebb08f59ae3a9805b4f8d12bdef14be8af4450d5463294985f"
+  },
+  "bubblewrap": "0.12.0",
+  "compressed_sha256": {
+    "jreplay": "90be781b1114ef472197db915cb65922a914bb8517a65bb736c8dc6c881cc680",
+    "jscore": "a8843849a0202fc77c1c55be9c56a70cc6474715e4bbb8f54f2800582433eea7"
+  },
+  "freeze_commit": "f62d4cf65d8a9e6b54e9062698378560a2881b95",
+  "freeze_tree": "06c43ce3b30e564b13b4d9daec66b41cec3a43b7",
+  "plan_sha256": "eb6f667efb9c5149f8b415feee2789149db1c3f4a7cace794945183f806534ab",
+  "posthoc_symbolic_blank_path_bounds": [
+    {
+      "block": "natural:3",
+      "compatible_at_start": {
+        "5": 108,
+        "6": 563
+      },
+      "minimum_queries_for_guarantee_at_least": 54,
+      "truth_length": 5
+    },
+    {
+      "block": "natural:0",
+      "compatible_at_start": {
+        "5": 83,
+        "6": 539
+      },
+      "minimum_queries_for_guarantee_at_least": 42,
+      "truth_length": 6
+    },
+    {
+      "block": "natural:1",
+      "compatible_at_start": {
+        "5": 87,
+        "6": 539
+      },
+      "minimum_queries_for_guarantee_at_least": 44,
+      "truth_length": 6
+    },
+    {
+      "block": "natural:4",
+      "compatible_at_start": {
+        "5": 80,
+        "6": 536
+      },
+      "minimum_queries_for_guarantee_at_least": 40,
+      "truth_length": 6
+    }
+  ],
+  "python": "3.12.14",
+  "raw_sha256": {
+    "jreplay": "53e49fec087c7cc269cefbc592957439b90c9f2c1715de55ea61f28f1d95ca3e",
+    "jscore": "e4750149cd72989ca6b36e025982437704f0ec9c4d2a214f81f6a19544229cbd"
+  },
+  "resume_byte_identical": true,
+  "summary": {
+    "cells": [
+      {
+        "arms": {
+          "fixed": {
+            "0": {
+              "abstained": 11,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 1,
+              "exact": 95,
+              "false_positive": 0,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 9,
+              "candidate_checks": 20392,
+              "candidate_inputs": 88,
+              "diagnosed": 3,
+              "exact": 95,
+              "false_positive": 0,
+              "labels": 6,
+              "proposal_attempts": 88,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 9,
+              "candidate_checks": 38088,
+              "candidate_inputs": 116,
+              "diagnosed": 3,
+              "exact": 95,
+              "false_positive": 0,
+              "labels": 10,
+              "proposal_attempts": 120,
+              "wrong": 0
+            }
+          },
+          "guided": {
+            "0": {
+              "abstained": 11,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 1,
+              "exact": 95,
+              "false_positive": 0,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 4,
+              "candidate_checks": 20308,
+              "candidate_inputs": 46,
+              "diagnosed": 8,
+              "exact": 95,
+              "false_positive": 0,
+              "labels": 11,
+              "proposal_attempts": 78,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 4,
+              "candidate_checks": 40508,
+              "candidate_inputs": 78,
+              "diagnosed": 8,
+              "exact": 95,
+              "false_positive": 0,
+              "labels": 15,
+              "proposal_attempts": 142,
+              "wrong": 0
+            }
+          },
+          "random": {
+            "0": {
+              "abstained": 11,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 1,
+              "exact": 95,
+              "false_positive": 0,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 11,
+              "candidate_checks": 20392,
+              "candidate_inputs": 88,
+              "diagnosed": 1,
+              "exact": 95,
+              "false_positive": 0,
+              "labels": 4,
+              "proposal_attempts": 704,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 11,
+              "candidate_checks": 40576,
+              "candidate_inputs": 120,
+              "diagnosed": 1,
+              "exact": 95,
+              "false_positive": 0,
+              "labels": 8,
+              "proposal_attempts": 960,
+              "wrong": 0
+            }
+          }
+        },
+        "condition": "natural",
+        "family": "S",
+        "long_abstained_at_two": 3,
+        "long_resolved_only_at_two": 0,
+        "paired_guided_at_one": 2,
+        "worlds": 12
+      },
+      {
+        "arms": {
+          "fixed": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 8,
+              "candidate_checks": 128,
+              "candidate_inputs": 64,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 64,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 8,
+              "candidate_checks": 128,
+              "candidate_inputs": 64,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 64,
+              "wrong": 0
+            }
+          },
+          "guided": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 0,
+              "candidate_checks": 16,
+              "candidate_inputs": 8,
+              "diagnosed": 8,
+              "exact": 64,
+              "false_positive": 0,
+              "labels": 8,
+              "proposal_attempts": 16,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 0,
+              "candidate_checks": 16,
+              "candidate_inputs": 8,
+              "diagnosed": 8,
+              "exact": 64,
+              "false_positive": 0,
+              "labels": 8,
+              "proposal_attempts": 16,
+              "wrong": 0
+            }
+          },
+          "random": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 8,
+              "candidate_checks": 128,
+              "candidate_inputs": 64,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 512,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 8,
+              "candidate_checks": 128,
+              "candidate_inputs": 64,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 512,
+              "wrong": 0
+            }
+          }
+        },
+        "condition": "single",
+        "family": "S",
+        "long_abstained_at_two": 0,
+        "long_resolved_only_at_two": 0,
+        "paired_guided_at_one": 4,
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "fixed": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 8,
+              "candidate_checks": 27104,
+              "candidate_inputs": 64,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 8,
+              "proposal_attempts": 64,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 8,
+              "candidate_checks": 50764,
+              "candidate_inputs": 120,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 12,
+              "proposal_attempts": 128,
+              "wrong": 0
+            }
+          },
+          "guided": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 6,
+              "candidate_checks": 27104,
+              "candidate_inputs": 64,
+              "diagnosed": 2,
+              "exact": 52,
+              "false_positive": 8,
+              "labels": 8,
+              "proposal_attempts": 80,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 0,
+              "candidate_checks": 47448,
+              "candidate_inputs": 112,
+              "diagnosed": 8,
+              "exact": 56,
+              "false_positive": 0,
+              "labels": 14,
+              "proposal_attempts": 134,
+              "wrong": 0
+            }
+          },
+          "random": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 8,
+              "candidate_checks": 27104,
+              "candidate_inputs": 64,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 8,
+              "proposal_attempts": 512,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 8,
+              "candidate_checks": 54144,
+              "candidate_inputs": 128,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 16,
+              "proposal_attempts": 1024,
+              "wrong": 0
+            }
+          }
+        },
+        "condition": "sequence",
+        "family": "S",
+        "long_abstained_at_two": 0,
+        "long_resolved_only_at_two": 4,
+        "paired_guided_at_one": 0,
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "fixed": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 8,
+              "candidate_checks": 27504,
+              "candidate_inputs": 64,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 8,
+              "proposal_attempts": 64,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 8,
+              "candidate_checks": 51514,
+              "candidate_inputs": 120,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 14,
+              "proposal_attempts": 128,
+              "wrong": 0
+            }
+          },
+          "guided": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 8,
+              "candidate_checks": 27504,
+              "candidate_inputs": 64,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 8,
+              "proposal_attempts": 88,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 6,
+              "candidate_checks": 54944,
+              "candidate_inputs": 128,
+              "diagnosed": 2,
+              "exact": 52,
+              "false_positive": 8,
+              "labels": 16,
+              "proposal_attempts": 168,
+              "wrong": 0
+            }
+          },
+          "random": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 8,
+              "candidate_checks": 27504,
+              "candidate_inputs": 64,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 8,
+              "proposal_attempts": 512,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 8,
+              "candidate_checks": 54928,
+              "candidate_inputs": 128,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 16,
+              "proposal_attempts": 1024,
+              "wrong": 0
+            }
+          }
+        },
+        "condition": "beyond",
+        "family": "S",
+        "long_abstained_at_two": 4,
+        "long_resolved_only_at_two": 0,
+        "paired_guided_at_one": 0,
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "fixed": {
+            "0": {
+              "abstained": 0,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 12,
+              "exact": 96,
+              "false_positive": 0,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 0,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 12,
+              "exact": 96,
+              "false_positive": 0,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 0,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 12,
+              "exact": 96,
+              "false_positive": 0,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            }
+          },
+          "guided": {
+            "0": {
+              "abstained": 0,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 12,
+              "exact": 96,
+              "false_positive": 0,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 0,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 12,
+              "exact": 96,
+              "false_positive": 0,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 0,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 12,
+              "exact": 96,
+              "false_positive": 0,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            }
+          },
+          "random": {
+            "0": {
+              "abstained": 0,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 12,
+              "exact": 96,
+              "false_positive": 0,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 0,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 12,
+              "exact": 96,
+              "false_positive": 0,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 0,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 12,
+              "exact": 96,
+              "false_positive": 0,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            }
+          }
+        },
+        "condition": "natural",
+        "family": "G",
+        "long_abstained_at_two": 0,
+        "long_resolved_only_at_two": 0,
+        "paired_guided_at_one": 6,
+        "worlds": 12
+      },
+      {
+        "arms": {
+          "fixed": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 8,
+              "candidate_checks": 120,
+              "candidate_inputs": 60,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 64,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 8,
+              "candidate_checks": 120,
+              "candidate_inputs": 60,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 64,
+              "wrong": 0
+            }
+          },
+          "guided": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 0,
+              "candidate_checks": 16,
+              "candidate_inputs": 8,
+              "diagnosed": 8,
+              "exact": 64,
+              "false_positive": 0,
+              "labels": 8,
+              "proposal_attempts": 16,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 0,
+              "candidate_checks": 16,
+              "candidate_inputs": 8,
+              "diagnosed": 8,
+              "exact": 64,
+              "false_positive": 0,
+              "labels": 8,
+              "proposal_attempts": 16,
+              "wrong": 0
+            }
+          },
+          "random": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 4,
+              "candidate_checks": 128,
+              "candidate_inputs": 64,
+              "diagnosed": 4,
+              "exact": 56,
+              "false_positive": 8,
+              "labels": 4,
+              "proposal_attempts": 512,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 4,
+              "candidate_checks": 128,
+              "candidate_inputs": 64,
+              "diagnosed": 4,
+              "exact": 56,
+              "false_positive": 8,
+              "labels": 4,
+              "proposal_attempts": 512,
+              "wrong": 0
+            }
+          }
+        },
+        "condition": "single",
+        "family": "G",
+        "long_abstained_at_two": 0,
+        "long_resolved_only_at_two": 0,
+        "paired_guided_at_one": 4,
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "fixed": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 36,
+              "false_positive": 4,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 8,
+              "candidate_checks": 708,
+              "candidate_inputs": 56,
+              "diagnosed": 0,
+              "exact": 36,
+              "false_positive": 4,
+              "labels": 0,
+              "proposal_attempts": 64,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 8,
+              "candidate_checks": 708,
+              "candidate_inputs": 56,
+              "diagnosed": 0,
+              "exact": 36,
+              "false_positive": 4,
+              "labels": 0,
+              "proposal_attempts": 64,
+              "wrong": 0
+            }
+          },
+          "guided": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 36,
+              "false_positive": 4,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 7,
+              "candidate_checks": 800,
+              "candidate_inputs": 64,
+              "diagnosed": 1,
+              "exact": 50,
+              "false_positive": 12,
+              "labels": 8,
+              "proposal_attempts": 80,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 0,
+              "candidate_checks": 1456,
+              "candidate_inputs": 120,
+              "diagnosed": 8,
+              "exact": 56,
+              "false_positive": 0,
+              "labels": 15,
+              "proposal_attempts": 143,
+              "wrong": 0
+            }
+          },
+          "random": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 36,
+              "false_positive": 4,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 8,
+              "candidate_checks": 800,
+              "candidate_inputs": 64,
+              "diagnosed": 0,
+              "exact": 44,
+              "false_positive": 12,
+              "labels": 6,
+              "proposal_attempts": 512,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 6,
+              "candidate_checks": 1344,
+              "candidate_inputs": 112,
+              "diagnosed": 2,
+              "exact": 48,
+              "false_positive": 4,
+              "labels": 12,
+              "proposal_attempts": 896,
+              "wrong": 0
+            }
+          }
+        },
+        "condition": "sequence",
+        "family": "G",
+        "long_abstained_at_two": 0,
+        "long_resolved_only_at_two": 4,
+        "paired_guided_at_one": 0,
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "fixed": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 8,
+              "candidate_checks": 1066,
+              "candidate_inputs": 62,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 2,
+              "proposal_attempts": 64,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 8,
+              "candidate_checks": 1304,
+              "candidate_inputs": 76,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 2,
+              "proposal_attempts": 80,
+              "wrong": 0
+            }
+          },
+          "guided": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 6,
+              "candidate_checks": 1104,
+              "candidate_inputs": 64,
+              "diagnosed": 2,
+              "exact": 51,
+              "false_positive": 9,
+              "labels": 8,
+              "proposal_attempts": 88,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 5,
+              "candidate_checks": 1904,
+              "candidate_inputs": 112,
+              "diagnosed": 3,
+              "exact": 53,
+              "false_positive": 5,
+              "labels": 14,
+              "proposal_attempts": 148,
+              "wrong": 0
+            }
+          },
+          "random": {
+            "0": {
+              "abstained": 8,
+              "candidate_checks": 0,
+              "candidate_inputs": 0,
+              "diagnosed": 0,
+              "exact": 48,
+              "false_positive": 16,
+              "labels": 0,
+              "proposal_attempts": 0,
+              "wrong": 0
+            },
+            "1": {
+              "abstained": 7,
+              "candidate_checks": 1104,
+              "candidate_inputs": 64,
+              "diagnosed": 1,
+              "exact": 52,
+              "false_positive": 9,
+              "labels": 6,
+              "proposal_attempts": 512,
+              "wrong": 0
+            },
+            "2": {
+              "abstained": 7,
+              "candidate_checks": 1600,
+              "candidate_inputs": 104,
+              "diagnosed": 1,
+              "exact": 54,
+              "false_positive": 4,
+              "labels": 10,
+              "proposal_attempts": 832,
+              "wrong": 0
+            }
+          }
+        },
+        "condition": "beyond",
+        "family": "G",
+        "long_abstained_at_two": 4,
+        "long_resolved_only_at_two": 0,
+        "paired_guided_at_one": 0,
+        "worlds": 8
+      }
+    ],
+    "decision": "SYNTHESIS_DEVELOPMENT_GO",
+    "fit_comparisons": 8087484,
+    "natural_decision": "NATURAL_HOLD_CARRIED_FORWARD",
+    "oracle_calls": 3074,
+    "worker_calls": 410,
+    "worlds": 72
+  },
+  "terminal": {
+    "jaudit": {
+      "elapsed_s": 2.206,
+      "exit_code": 0,
+      "log_file": "jaudit.log",
+      "status": "OK"
+    },
+    "jreplay": {
+      "elapsed_s": 20.823,
+      "exit_code": 0,
+      "log_file": "jreplay.log",
+      "status": "OK"
+    },
+    "jresume": {
+      "elapsed_s": 0.301,
+      "exit_code": 0,
+      "log_file": "jresume.log",
+      "status": "OK"
+    },
+    "jscore": {
+      "elapsed_s": 21.201,
+      "exit_code": 0,
+      "log_file": "jscore.log",
+      "status": "OK"
+    },
+    "regression": {
+      "elapsed_s": 79.891,
+      "exit_code": 0,
+      "log_file": "../e14j-regression.log",
+      "status": "OK"
+    }
+  },
+  "tests": {
+    "prescore": [
+      4,
+      4
+    ],
+    "recovered_suite": [
+      87,
+      87
+    ]
+  }
+}

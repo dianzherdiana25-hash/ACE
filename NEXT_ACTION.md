@@ -1,13 +1,13 @@
-# NEXT_ACTION — E1.4j pembuatan saksi dengan anggaran terbatas
+# NEXT_ACTION — E1.4k pertanyaan majemuk dan biaya cakupan
 
-1. Verifikasi HEAD GitHub dan baca [hasil E1.4i](design/e1.4/E14I_RESULT_v1.md), [bukti](evidence/e14/e14i_verification_v1.json) dan [piagam](PROJECT_CHARTER.md). Pada enam kasus simbol alami, batas jumlah jendela per input mencegah jaminan diagnosis dengan satu label. Metode E1.4i membeli sembilan label pada 12 kasus alami ambigu. Hanya dua menyelesaikan diagnosis.
-2. Bekukan bank publik baru dan uji apakah worker dapat menyusun input pembeda dari hipotesis yang masih konsisten tanpa menerima target, label pool, atau probe. Bandingkan pembentukan terarah, pool tetap, dan pengajuan acak dengan anggaran penilaian input tanpa label dan label yang dicatat. Pisahkan kasus dengan saksi tunggal yang cukup, kasus yang membutuhkan rangkaian bukti, dan kasus tanpa pemisahan dalam anggaran.
-3. Tentukan gerbang sebelum scoring. Ukur diagnosis per label, abstain, kesalahan diagnosis, false positive, jumlah input yang diperiksa, dan batas komputasi. Pertahankan kasus gagal. Jika anggaran satu label tidak dapat menjamin pemisahan, ukur anggaran lebih besar sebagai kondisi terpisah.
-4. **NATURAL_HOLD** tetap membatasi transfer. Tahap ini menguji pembuatan eksperimen untuk mengurai ketidakpastian di antara dua grammar yang tersedia.
+1. Verifikasi HEAD GitHub. Baca [hasil E1.4j](design/e1.4/E14J_RESULT_v1.md), [bukti](evidence/e14/e14j_verification_v1.json) dan [piagam](PROJECT_CHARTER.md). Empat kasus simbol alami masih ambigu setelah dua label. Pada bahasa query maksimal enam kejadian, batas bawah jaminan adalah 40–54 pertanyaan pada lintasan jawaban kosong. Jumlah yang cukup masih terbuka.
+2. Pada bank baru, uji pembentukan input lebih panjang yang mencakup beberapa motif kompatibel. Bandingkan generator pendek E1.4j, generator panjang acak, dan generator panjang terarah dengan batas input, jumlah kandidat dan anggaran label yang dibekukan. Periksa legalitas render dan pisahkan jumlah kejadian dari jumlah label.
+3. Ukur cakupan kelas, penurunan ambiguitas, diagnosis per biaya, abstain, dan false positive. Laporkan prediksi fallback terpisah, karena E1.4j mengamati false positive dapat naik setelah label pertama. Simpan hasil negatif, audit dan replay terisolasi.
+4. Pertahankan **NATURAL_HOLD** untuk transfer. Pertanyaan riset berikutnya adalah efisiensi memperoleh bukti di bawah representasi yang tersedia.
 
 ## Reproduksi E1.4j
 
-Dari checkout pembekuan E1.4j, buat direktori lokal `WORK`. Gunakan ledger yang sama untuk melanjutkan eksekusi dan ledger terpisah untuk replay.
+Dari checkout [pembekuan E1.4j](https://github.com/dianzherdiana25-hash/ACE/commit/f62d4cf65d8a9e6b54e9062698378560a2881b95), buat direktori lokal `WORK`. Gunakan ledger yang sama untuk melanjutkan eksekusi dan ledger terpisah untuk replay.
 
 ```bash
 PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 150 --heartbeat 15 --log WORK/jscore.log -- python3 -m e14.e14j_run run WORK/jscore.sqlite WORK/jscore.json.gz

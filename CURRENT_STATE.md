@@ -1,6 +1,12 @@
 # Keadaan ACE saat ini
 
-## E1.4j — pembekuan pra-penilaian
+## E1.4j — pembuatan pertanyaan lulus pada uji terkontrol
+
+**SYNTHESIS_DEVELOPMENT_GO.** ACE menyusun pertanyaan dari hipotesis yang cocok dengan contoh. Dengan satu label, 16/16 kasus satu-saksi terdiagnosis. Pada kondisi berurutan, delapan kasus aturan panjang baru terdiagnosis setelah label kedua. Pada kondisi di luar jaminan dua label, delapan kasus panjang tetap abstain. Pada simbol alami, diagnosis naik dari 1/12 ke 8/12 dengan satu label, tetapi akurasi probe tetap 95/96. **NATURAL_HOLD** untuk transfer.
+
+[Hasil](design/e1.4/E14J_RESULT_v1.md) · [Bukti](evidence/e14/e14j_verification_v1.json) · [Protokol beku](https://github.com/dianzherdiana25-hash/ACE/commit/f62d4cf65d8a9e6b54e9062698378560a2881b95). Berikutnya, uji apakah pertanyaan lebih panjang dapat menutup banyak hipotesis dengan biaya yang sepadan.
+
+## E1.4j — checkpoint historis pra-penilaian
 
 Bank publik baru berisi 48 blok, 72 dunia, dan 2.304 input. Uji pembuatan pertanyaan membandingkan guided, pool tetap, dan acak, dengan nol, satu, dan dua label. Empat tes pra-penilaian lulus. [Protokol](design/e1.4/E14J_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14J_LOCK_v1.json).
 
