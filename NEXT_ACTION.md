@@ -4,6 +4,16 @@
 2. Pada bank publik baru, uji mekanisme yang memicu proposal perluasan DSL bertipe setelah versi hipotesis awal kosong. Bandingkan perluasan terarah oleh kontra-contoh, perluasan panjang tetap, dan model yang menahan prediksi. Pisahkan deteksi dari kecocokan baru dan kinerja pada probe yang tidak pernah diberikan kepada worker. Pertahankan kontrol dalam model agar perluasan tidak dipicu tanpa alasan.
 3. Tetapkan batas ekspansi, label, biaya, risiko dan ambang sebelum scoring. Ukur waktu, kandidat tambahan, generalisasi probe, salah ekspansi, serta keadaan tanpa solusi. Audit dan replay terisolasi. Pertahankan **Rare HOLD** dan **NATURAL_HOLD** untuk transfer.
 
+## Reproduksi E1.4n
+
+Dari checkout pembekuan E1.4n, buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.
+
+```bash
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 180 --heartbeat 15 --log WORK/nscore.log -- python3 -m e14.e14n_run run WORK/nscore.sqlite WORK/nscore.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 180 --heartbeat 15 --log WORK/nreplay.log -- python3 -m e14.e14n_run run WORK/nreplay.sqlite WORK/nreplay.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 120 --heartbeat 10 --log WORK/naudit.log -- python3 -m e14.e14n_audit WORK/nscore.json.gz WORK/nreplay.json.gz
+```
+
 ## Reproduksi E1.4m
 
 Dari checkout [pembekuan E1.4m](https://github.com/dianzherdiana25-hash/ACE/commit/835016481e61261386a02ae4867ece580d4cd1cd), buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.

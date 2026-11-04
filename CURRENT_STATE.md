@@ -1,5 +1,9 @@
 # Keadaan ACE saat ini
 
+## E1.4n — checkpoint pra-penilaian
+
+Bank baru 56 blok, 72 dunia dan 2.322 input mentah. Perluasan DSL dipicu oleh habisnya kelas lama. Tiga pencarian dan satu kebijakan menahan prediksi menerima bukti yang sama. Tes pra-penilaian 4/4. [Protokol](design/e1.4/E14N_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14N_LOCK_v1.json).
+
 ## E1.4m — deteksi kontra-contoh terjangkau lulus
 
 **Reachable GO.** Falsifikasi menggugurkan seluruh hipotesis pada 8/8 target simbol dan 7/8 target graf terjangkau. Kedua pembanding 0/8 di masing-masing keluarga. Seluruh 40 kasus dalam model bertahan di setiap lengan. Pada kondisi langka, semua lengan 0/16. **Rare HOLD · NATURAL_HOLD.**
