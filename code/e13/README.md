@@ -185,3 +185,13 @@ cmp evidence/e13/preconfirm_power_v1.json /tmp/ace-e13-power.json
 ```
 
 Untuk mengulang profil, gunakan `PYTHONPATH` yang menunjuk `code/` dari checkout beku `2d9d86c`, lalu jalankan `python3 code/e13/evaluator/public_resource_profile.py` dari checkpoint perencanaan. CPU dan wall adalah pengukuran yang dapat berubah. Reproduksi selection menggunakan paket evaluator privat dan checkout beku yang sama, dengan [hasil verifikasi](../../evidence/e13/selection_reproduction_v1.json) sebagai pembanding.
+
+## Checkpoint arm evaluator
+
+```bash
+PYTHONPATH=code python3 -m unittest e13.test_run_ledger -v
+```
+
+Ledger evaluator menyimpan arm terminal secara transaksional dan memakai kunci unik berdasarkan keluarga, rezim, blok, episode, slot seed dan kebijakan. Digest rencana mengikat kunci, urutan, kandidat, bank, oracle dan protokol. Runner kedua ditolak selama ledger aktif. Pada gangguan, arm tanpa catatan terminal tetap menunggu. Kegagalan kandidat yang diklasifikasikan adapter disimpan dengan skor nol dan denominator tetap. Gangguan yang belum diklasifikasi menghentikan run dan dicatat tanpa mengarang skor.
+
+Tes pada fixture publik menjalankan satu arm dalam worker, menyimulasikan interupsi, lalu menyelesaikan tiga arm yang tersisa. Pemanggilan ulang melewati semua arm terminal. Ledger belum mengizinkan atau membuka bank konfirmatori. Adapter, penguncian dan pemeriksaan sumber daya harus lulus sebelum penggunaan itu.
