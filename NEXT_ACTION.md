@@ -5,6 +5,16 @@
 3. Uji satu label yang dipilih dari perselisihan lintas grammar. Bandingkan dengan E1.4h, tanpa label, dan satu label acak, dengan pembanding retrospektif yang mengukur apakah peluang memang ada. Nilai diagnosis panjang dan false positive pada saksi secara terpisah dari akurasi mentah. Catat keadaan ketika sistem seharusnya menunda keputusan karena bukti belum memadai.
 4. **NATURAL_HOLD** membatasi transfer. Benchmark publik ini meneliti pengenalan keterbatasan sebagai langkah menuju pembentukan representasi baru.
 
+## Reproduksi E1.4i
+
+Dari checkout pembekuan E1.4i, buat direktori lokal `WORK`. Jalankan kedua penilaian dengan ledger terpisah. Pakai nama ledger yang sama untuk resume.
+
+```bash
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 210 --heartbeat 15 --log WORK/iscore.log -- python3 -m e14.e14i_run run WORK/iscore.sqlite WORK/iscore.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 210 --heartbeat 15 --log WORK/ireplay.log -- python3 -m e14.e14i_run run WORK/ireplay.sqlite WORK/ireplay.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 90 --heartbeat 10 --log WORK/iaudit.log -- python3 -m e14.e14i_audit WORK/iscore.json.gz WORK/ireplay.json.gz
+```
+
 ## Reproduksi E1.4h
 
 Dari checkout [pembekuan E1.4h](https://github.com/dianzherdiana25-hash/ACE/commit/d6db8d065104ada75e676801bed62daa26cf094a), siapkan direktori `WORK` lokal. Gunakan nama ledger yang sama untuk resume, dan ledger baru untuk replay.

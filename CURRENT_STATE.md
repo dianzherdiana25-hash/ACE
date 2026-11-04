@@ -1,5 +1,9 @@
 # Keadaan ACE saat ini
 
+## E1.4i — pembekuan pra-penilaian
+
+Bank publik baru memisahkan kasus alami dan dua kondisi berpasangan. Kondisi terkontrol memakai demo dan probe yang sama dengan dua item pool yang berbeda. Empat tes pra-penilaian lulus. Penilaian dimulai setelah verifikasi commit pembekuan di GitHub. [Protokol](design/e1.4/E14I_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14I_LOCK_v1.json).
+
 ## E1.4h — pemilihan representasi lulus pada diagnostik
 
 **ROUTING_DEVELOPMENT_GO.** Sistem memilih panjang aturan dari kecocokan dua grammar pada demo. Dalam bank peluang, pemilihan adaptif benar 192/192 per keluarga pada dua panjang, dibanding 144/192 untuk masing-masing pilihan tetap. Pada simbol alami panjang enam, sistem hanya mengenali kebutuhan beralih pada 1/6 blok. Seluruh pool dan probe di sel itu tidak memuat kata target, jadi akurasi tinggi saja dapat menutupi kegagalan diagnosis.
