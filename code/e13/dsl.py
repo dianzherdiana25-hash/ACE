@@ -44,12 +44,18 @@ class Program:
         return hashlib.sha256(self.ast).hexdigest()
 
 
-def compile_ast(raw: bytes) -> Program:
+def compile_ast(raw: bytes, *, allow_extension=False) -> Program:
     value = read_json(raw, max_bytes=1024)
     require_fields(value, "family", "ast")
     family, ast = value["family"], value["ast"]
-    if type(ast) is dict and ast.get("op") in ("symbol_machine", "graph_machine"):
-        return _compile_machine(family, ast, canonical_json(value))
+    if type(ast) is dict:
+        operation = ast.get("op")
+        if operation in ("symbol_machine", "graph_machine"):
+            return _compile_machine(family, ast, canonical_json(value), 1, 4)
+        if operation in ("symbol_extension", "graph_extension"):
+            if not allow_extension:
+                raise ContractError("state extension is disabled")
+            return _compile_machine(family, ast, canonical_json(value), 5, 8)
     require_fields(ast, "op", "rule")
     rule = ast["rule"]
     require_fields(rule, "op")
@@ -63,11 +69,11 @@ def compile_ast(raw: bytes) -> Program:
     raise ContractError("operation does not match the family or vocabulary")
 
 
-def _compile_machine(family, ast, canonical):
+def _compile_machine(family, ast, canonical, minimum, maximum):
     operation = ast["op"]
-    if family == "S" and operation == "symbol_machine":
+    if family == "S" and operation in ("symbol_machine", "symbol_extension"):
         require_fields(ast, "op", "table")
-        rows = array(ast["table"], 1, 4)
+        rows = array(ast["table"], minimum, maximum)
         table = []
         for row in rows:
             cells = []
@@ -75,14 +81,14 @@ def _compile_machine(family, ast, canonical):
                 state, bit = array(cell, 2, 2)
                 cells.append((integer(state, 0, len(rows) - 1), integer(bit, 0, 1)))
             table.append(tuple(cells))
-        return Program(family, canonical, operation, tuple(table))
-    if family == "G" and operation == "graph_machine":
+        return Program(family, canonical, "symbol_machine", tuple(table))
+    if family == "G" and operation in ("graph_machine", "graph_extension"):
         require_fields(ast, "op", "table", "accept")
-        rows = array(ast["table"], 1, 4)
+        rows = array(ast["table"], minimum, maximum)
         table = tuple(tuple(integer(cell, -1, len(rows) - 1)
                             for cell in array(row, 3, 3)) for row in rows)
         accepts = tuple(integer(bit, 0, 1) for bit in array(ast["accept"], len(rows), len(rows)))
-        return Program(family, canonical, operation, table, accepts)
+        return Program(family, canonical, "graph_machine", table, accepts)
     raise ContractError("machine does not match the family")
 
 
@@ -182,8 +188,8 @@ def execute(program: Program, value: Input, fuel: Fuel) -> Output:
     return _path_cost(value, program.option, fuel)
 
 
-def predict(program_ast: bytes, raw_input: bytes, fuel: Fuel) -> Output:
+def predict(program_ast: bytes, raw_input: bytes, fuel: Fuel, *, allow_extension=False) -> Output:
     """Evaluate a single unlabeled input against an immutable AST."""
-    program = compile_ast(program_ast)
+    program = compile_ast(program_ast, allow_extension=allow_extension)
     value = input_value(program.family, read_json(raw_input, max_bytes=4096))
     return execute(program, value, fuel)

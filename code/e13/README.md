@@ -80,6 +80,8 @@ Katalog awal tetap tersedia melalui worker. Pembanding buta menginferensi transd
 
 ## Pilot development v0.2
 
+Jalankan perintah berikut dari [checkpoint v0.2](https://github.com/dianzherdiana25-hash/ACE/commit/9128bbf8c272bc1a9aec6be75b4e5e5efaea9154). Replay terikat pada hash kode di checkpoint itu.
+
 ```bash
 PYTHONPATH=code python3 -m e13.evaluator.pilot --verify evidence/e13/development_pilot_v0.2.json > /tmp/ace-e13-pilot-v02.json
 PYTHONPATH=code python3 -m e13.evaluator.capacity > /tmp/ace-e13-capacity.json
@@ -98,3 +100,14 @@ Fixed memakai satu metode konstan per keluarga. Beam menjelajah mutasi lokal tab
 [Data pilot v0.2](../../evidence/e13/development_pilot_v0.2.json) memiliki 96 baris. Replay memeriksa seluruh bidang deterministik, termasuk hash kode dan bank, dan mengizinkan perbedaan waktu/RSS. Akurasi, biaya, kegagalan dan skor per strata dicatat untuk setiap kebijakan. `B*` memerlukan bank selection dan pembanding lengkap.
 
 [Audit kapasitas](../../evidence/e13/development_capacity_v0.1.json) terpisah memakai label publik untuk penyempurnaan dengan contoh tandingan. Untuk masing-masing dari 12 aturan, ditemukan AST hingga empat keadaan yang cocok pada seluruh 145–176 saksi yang diperiksa untuk aturan itu. Auditor tidak mengubah kebijakan pilot. Cakupan ini mengikat saksi publik dan tidak membuktikan ekuivalensi untuk seluruh input atau ketiadaan kapasitas baru pada bank lain.
+
+## Diagnostik batas representasi
+
+```bash
+PYTHONPATH=code python3 -m e13.evaluator.boundary > /tmp/ace-e13-boundary.json
+cmp evidence/e13/development_representation_boundary_v0.1.json /tmp/ace-e13-boundary.json
+```
+
+Dua kasus publik yang terpisah dari pilot menguji batas formal yang sempit. Pada simbol, keluaran menandai setiap penurunan kelima. Lima prefiks dengan 0–4 penurunan berakhir pada simbol yang sama. Untuk setiap pasang prefiks ada kelanjutan identik yang membedakan keluaran mereka. Empat keadaan deterministik tidak cukup karena sekurangnya dua dari lima prefiks harus berbagi keadaan. Pada graf, pertanyaannya adalah biaya minimum lintasan dengan tepat lima sisi. Pada rantai dengan label tetap, lima prefiks nonkosong dari rantai lima sisi semuanya bisa mencapai penerimaan. Setiap pasang bisa dibedakan dengan meneruskan keduanya menggunakan jumlah sisi yang sama hingga hanya satu berjumlah lima. Label sebelumnya sama pada kedua prefiks, dan keadaan tolak tidak bisa mewakili prefiks yang masih dapat diterima.
+
+[Data diagnostik](../../evidence/e13/development_representation_boundary_v0.1.json) menyimpan 20 pasang saksi dan dua AST diagnostik buatan manual. Interpreter dapat mengaktifkan 5–8 keadaan melalui parameter eksplisit pada jalur evaluator. Worker dan evaluator pilot tetap memakai batas default empat. Bukti ini memisahkan daya ekspresi dalam dua kelas mesin pada kontrak saat ini. Eksperimen berikutnya perlu menguji apakah ACE dapat menyintesis serta mewariskan perluasan dari contoh dan mengungguli kontrol.
