@@ -104,5 +104,5 @@ def main():
     args=p.parse_args();r=report(args.source_commit)
     if args.verify and canonical_json(r)!=canonical_json(json.loads(args.verify.read_text())):
         raise ValueError('replay mismatch')
-    print(canonical_json(r))
+    print(canonical_json(r).decode("utf-8"))
 if __name__=='__main__':main()
