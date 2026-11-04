@@ -1,0 +1,13 @@
+{
+  "audit_tests": "8/8 PASS",
+  "bank_sha256": "96abeaf7434a95ae1e80f3011db89aed9d6ab76650ba11c0fe8cc6d895062e8a",
+  "decision": "HOLD_CROSS_EPISODE_TRANSFER_HYPOTHESIS",
+  "e14_regression_log": "29/29 OK; outer tool timed out before collecting supervisor status",
+  "evidence_sha256": "00bb3550434490ca06cd3cba349fa9687036296650a119be7750628f5968411e",
+  "frozen_source_commit": "caedbe761cab31da306459b5e6a3f3dd86255d0b",
+  "independent_worker_isolation": false,
+  "replay": "OK exit 0",
+  "replay_exact": true,
+  "special_tests": "4/4 PASS",
+  "terminal_run": "OK exit 0 under 90s supervisor"
+}

@@ -18,7 +18,7 @@ def ensure(ok,reason):
 
 
 def audit(r):
-    ensure(r.get("mode")=="E1.4c_public_development","mode")
+    ensure(r.get("mode") in ("E1.4c_public_development", "E1.4c_public_development_v2"), "mode")
     ss,ts=r.get("sources"),r.get("targets")
     ensure(isinstance(ss,list) and isinstance(ts,list) and len(ss)==len(ts)==12,"episode count")
     ensure(len({x["task_id"] for x in ss+ts})==24,"duplicate task")

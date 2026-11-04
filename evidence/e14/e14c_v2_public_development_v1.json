@@ -1,0 +1,3717 @@
+{
+  "bank_seed": 141712,
+  "bank_sha256": "96abeaf7434a95ae1e80f3011db89aed9d6ab76650ba11c0fe8cc6d895062e8a",
+  "caps": 0,
+  "decision": "HOLD_CROSS_EPISODE_TRANSFER_HYPOTHESIS",
+  "freeze_version": 2,
+  "learned_policies": {
+    "G": {
+      "policy": "last_disagreement",
+      "sham_policy": "seeded_disagreement",
+      "source_episodes": 6,
+      "source_training_labels": 48,
+      "source_utility": {
+        "first_disagreement": 27,
+        "last_disagreement": 38,
+        "long_disagreement": 26,
+        "max_partition": 20,
+        "min_partition": 25,
+        "seeded_disagreement": 26,
+        "seeded_uniform": 26,
+        "short_disagreement": 25
+      }
+    },
+    "S": {
+      "policy": "first_disagreement",
+      "sham_policy": "min_partition",
+      "source_episodes": 6,
+      "source_training_labels": 48,
+      "source_utility": {
+        "first_disagreement": 28,
+        "last_disagreement": 26,
+        "long_disagreement": 22,
+        "max_partition": 26,
+        "min_partition": 22,
+        "seeded_disagreement": 27,
+        "seeded_uniform": 27,
+        "short_disagreement": 22
+      }
+    }
+  },
+  "limitations": [
+    "Corrected pool preallocation is independent of target-dependent demo RNG.",
+    "Posthoc corrective design based on v1 quality audit, not independent confirmation.",
+    "Finite known 4-event grammar, not open-ended architecture invention.",
+    "96 source labels; per-target one-label parity excludes training amortization.",
+    "Eight target counterfactual oracle calls per target, not one observed random arm.",
+    "Candidate and evaluator share a process; no worker isolation or sealed data.",
+    "Small, human-designed balanced-probe distribution; no confirmatory inference."
+  ],
+  "mode": "E1.4c_public_development_v2",
+  "one_label_target_budget_per_policy": 1,
+  "pool_seed": 141711,
+  "seed": 141702,
+  "source_commit": "caedbe761cab31da306459b5e6a3f3dd86255d0b",
+  "source_episodes": 12,
+  "sources": [
+    {
+      "arms": [
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 67,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 65,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 71,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "candidate_count": 74,
+      "family": "S",
+      "pair_id": 0,
+      "policies": {
+        "first_disagreement": {
+          "correct": 4,
+          "index": 0,
+          "reason": "disagreement"
+        },
+        "last_disagreement": {
+          "correct": 4,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "long_disagreement": {
+          "correct": 4,
+          "index": 2,
+          "reason": "disagreement"
+        },
+        "max_partition": {
+          "correct": 4,
+          "index": 4,
+          "reason": "disagreement"
+        },
+        "min_partition": {
+          "correct": 4,
+          "index": 6,
+          "reason": "disagreement"
+        },
+        "seeded_disagreement": {
+          "correct": 4,
+          "index": 6,
+          "reason": "disagreement"
+        },
+        "seeded_uniform": {
+          "correct": 4,
+          "index": 6,
+          "reason": "uniform"
+        },
+        "short_disagreement": {
+          "correct": 4,
+          "index": 5,
+          "reason": "disagreement"
+        }
+      },
+      "regime": "related",
+      "source_training_labels": 8,
+      "task_id": "4d6db3cf38e28835b02904105cb87639",
+      "word": [
+        2,
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 67,
+          "chosen": [
+            0,
+            0,
+            1,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 65,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 67,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "candidate_count": 73,
+      "family": "S",
+      "pair_id": 1,
+      "policies": {
+        "first_disagreement": {
+          "correct": 3,
+          "index": 0,
+          "reason": "disagreement"
+        },
+        "last_disagreement": {
+          "correct": 3,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "long_disagreement": {
+          "correct": 3,
+          "index": 4,
+          "reason": "disagreement"
+        },
+        "max_partition": {
+          "correct": 3,
+          "index": 6,
+          "reason": "disagreement"
+        },
+        "min_partition": {
+          "correct": 3,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "seeded_disagreement": {
+          "correct": 4,
+          "index": 1,
+          "reason": "disagreement"
+        },
+        "seeded_uniform": {
+          "correct": 4,
+          "index": 1,
+          "reason": "uniform"
+        },
+        "short_disagreement": {
+          "correct": 3,
+          "index": 3,
+          "reason": "disagreement"
+        }
+      },
+      "regime": "related",
+      "source_training_labels": 8,
+      "task_id": "6b6a56a60bf2a8c069039b0ca0480e40",
+      "word": [
+        0,
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 1,
+          "chosen": [
+            0,
+            1,
+            0,
+            1
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 62,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 1,
+          "chosen": [
+            0,
+            1,
+            0,
+            1
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 63,
+          "chosen": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "candidate_count": 73,
+      "family": "S",
+      "pair_id": 2,
+      "policies": {
+        "first_disagreement": {
+          "correct": 3,
+          "index": 0,
+          "reason": "disagreement"
+        },
+        "last_disagreement": {
+          "correct": 3,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "long_disagreement": {
+          "correct": 3,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "max_partition": {
+          "correct": 3,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "min_partition": {
+          "correct": 3,
+          "index": 5,
+          "reason": "disagreement"
+        },
+        "seeded_disagreement": {
+          "correct": 3,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "seeded_uniform": {
+          "correct": 3,
+          "index": 7,
+          "reason": "uniform"
+        },
+        "short_disagreement": {
+          "correct": 3,
+          "index": 1,
+          "reason": "disagreement"
+        }
+      },
+      "regime": "related",
+      "source_training_labels": 8,
+      "task_id": "e400232600ea8711ba497271d3331a77",
+      "word": [
+        0,
+        1,
+        0,
+        1
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 1,
+          "chosen": [
+            2,
+            1,
+            1,
+            0
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 70,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 71,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 71,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "candidate_count": 76,
+      "family": "S",
+      "pair_id": 3,
+      "policies": {
+        "first_disagreement": {
+          "correct": 8,
+          "index": 0,
+          "reason": "disagreement"
+        },
+        "last_disagreement": {
+          "correct": 4,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "long_disagreement": {
+          "correct": 4,
+          "index": 4,
+          "reason": "disagreement"
+        },
+        "max_partition": {
+          "correct": 4,
+          "index": 1,
+          "reason": "disagreement"
+        },
+        "min_partition": {
+          "correct": 4,
+          "index": 6,
+          "reason": "disagreement"
+        },
+        "seeded_disagreement": {
+          "correct": 4,
+          "index": 1,
+          "reason": "disagreement"
+        },
+        "seeded_uniform": {
+          "correct": 4,
+          "index": 1,
+          "reason": "uniform"
+        },
+        "short_disagreement": {
+          "correct": 4,
+          "index": 2,
+          "reason": "disagreement"
+        }
+      },
+      "regime": "unrelated",
+      "source_training_labels": 8,
+      "task_id": "315b36ab501004a57c1217b08a2181a6",
+      "word": [
+        2,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 1,
+          "chosen": [
+            2,
+            0,
+            2,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 1,
+          "chosen": [
+            2,
+            0,
+            2,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 64,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "candidate_count": 74,
+      "family": "S",
+      "pair_id": 4,
+      "policies": {
+        "first_disagreement": {
+          "correct": 8,
+          "index": 0,
+          "reason": "disagreement"
+        },
+        "last_disagreement": {
+          "correct": 4,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "long_disagreement": {
+          "correct": 4,
+          "index": 1,
+          "reason": "disagreement"
+        },
+        "max_partition": {
+          "correct": 4,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "min_partition": {
+          "correct": 4,
+          "index": 2,
+          "reason": "disagreement"
+        },
+        "seeded_disagreement": {
+          "correct": 4,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "seeded_uniform": {
+          "correct": 4,
+          "index": 3,
+          "reason": "uniform"
+        },
+        "short_disagreement": {
+          "correct": 4,
+          "index": 2,
+          "reason": "disagreement"
+        }
+      },
+      "regime": "unrelated",
+      "source_training_labels": 8,
+      "task_id": "fa04ca7d9f6722996cfc53b0d6baf147",
+      "word": [
+        2,
+        0,
+        2,
+        2
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "correct": 2,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 1,
+          "chosen": [
+            1,
+            0,
+            0,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 1,
+          "chosen": [
+            1,
+            0,
+            0,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 71,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 67,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 67,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 1,
+          "chosen": [
+            1,
+            0,
+            0,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "candidate_count": 76,
+      "family": "S",
+      "pair_id": 5,
+      "policies": {
+        "first_disagreement": {
+          "correct": 2,
+          "index": 0,
+          "reason": "disagreement"
+        },
+        "last_disagreement": {
+          "correct": 8,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "long_disagreement": {
+          "correct": 4,
+          "index": 5,
+          "reason": "disagreement"
+        },
+        "max_partition": {
+          "correct": 8,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "min_partition": {
+          "correct": 4,
+          "index": 4,
+          "reason": "disagreement"
+        },
+        "seeded_disagreement": {
+          "correct": 8,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "seeded_uniform": {
+          "correct": 8,
+          "index": 3,
+          "reason": "uniform"
+        },
+        "short_disagreement": {
+          "correct": 4,
+          "index": 4,
+          "reason": "disagreement"
+        }
+      },
+      "regime": "unrelated",
+      "source_training_labels": 8,
+      "task_id": "ecbb7015524a544b013c3d9b4a15fc55",
+      "word": [
+        1,
+        0,
+        0,
+        2
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 6,
+          "chosen": [
+            0,
+            2,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 15,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            2,
+            1
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 5,
+          "chosen": [
+            0,
+            2,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 5,
+          "chosen": [
+            0,
+            2,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 11,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 4,
+          "chosen": [
+            1,
+            2,
+            1,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "candidate_count": 19,
+      "family": "G",
+      "pair_id": 0,
+      "policies": {
+        "first_disagreement": {
+          "correct": 4,
+          "index": 0,
+          "reason": "disagreement"
+        },
+        "last_disagreement": {
+          "correct": 8,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "long_disagreement": {
+          "correct": 4,
+          "index": 4,
+          "reason": "disagreement"
+        },
+        "max_partition": {
+          "correct": 4,
+          "index": 6,
+          "reason": "disagreement"
+        },
+        "min_partition": {
+          "correct": 4,
+          "index": 1,
+          "reason": "disagreement"
+        },
+        "seeded_disagreement": {
+          "correct": 4,
+          "index": 6,
+          "reason": "disagreement"
+        },
+        "seeded_uniform": {
+          "correct": 4,
+          "index": 6,
+          "reason": "uniform"
+        },
+        "short_disagreement": {
+          "correct": 4,
+          "index": 1,
+          "reason": "disagreement"
+        }
+      },
+      "regime": "related",
+      "source_training_labels": 8,
+      "task_id": "1c7c418dcf0c15d5713766bec9cd3740",
+      "word": [
+        1,
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 10,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 6,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 16,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 9,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 4,
+          "chosen": [
+            1,
+            1,
+            2,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "candidate_count": 17,
+      "family": "G",
+      "pair_id": 1,
+      "policies": {
+        "first_disagreement": {
+          "correct": 4,
+          "index": 0,
+          "reason": "disagreement"
+        },
+        "last_disagreement": {
+          "correct": 3,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "long_disagreement": {
+          "correct": 4,
+          "index": 6,
+          "reason": "disagreement"
+        },
+        "max_partition": {
+          "correct": 4,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "min_partition": {
+          "correct": 4,
+          "index": 2,
+          "reason": "disagreement"
+        },
+        "seeded_disagreement": {
+          "correct": 4,
+          "index": 1,
+          "reason": "disagreement"
+        },
+        "seeded_uniform": {
+          "correct": 4,
+          "index": 1,
+          "reason": "uniform"
+        },
+        "short_disagreement": {
+          "correct": 4,
+          "index": 2,
+          "reason": "disagreement"
+        }
+      },
+      "regime": "related",
+      "source_training_labels": 8,
+      "task_id": "158dedafe7394dd179779acb1d1bfd13",
+      "word": [
+        2,
+        1,
+        1,
+        2
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 11,
+          "chosen": [
+            0,
+            1,
+            2,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 4,
+          "chosen": [
+            0,
+            1,
+            2,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 5,
+          "chosen": [
+            0,
+            2,
+            2,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 5,
+          "chosen": [
+            0,
+            2,
+            1,
+            2
+          ],
+          "correct": 2,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 5,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 6,
+          "chosen": [
+            0,
+            2,
+            1,
+            2
+          ],
+          "correct": 2,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 6,
+          "chosen": [
+            0,
+            2,
+            2,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "candidate_count": 16,
+      "family": "G",
+      "pair_id": 2,
+      "policies": {
+        "first_disagreement": {
+          "correct": 4,
+          "index": 0,
+          "reason": "disagreement"
+        },
+        "last_disagreement": {
+          "correct": 8,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "long_disagreement": {
+          "correct": 8,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "max_partition": {
+          "correct": 2,
+          "index": 6,
+          "reason": "disagreement"
+        },
+        "min_partition": {
+          "correct": 3,
+          "index": 1,
+          "reason": "disagreement"
+        },
+        "seeded_disagreement": {
+          "correct": 8,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "seeded_uniform": {
+          "correct": 8,
+          "index": 7,
+          "reason": "uniform"
+        },
+        "short_disagreement": {
+          "correct": 3,
+          "index": 1,
+          "reason": "disagreement"
+        }
+      },
+      "regime": "related",
+      "source_training_labels": 8,
+      "task_id": "f60f5ba6397ebac65bc953604588d235",
+      "word": [
+        2,
+        2,
+        2,
+        1
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 15,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 14,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 10,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 3,
+          "chosen": [
+            0,
+            2,
+            2,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 11,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 5,
+          "chosen": [
+            0,
+            2,
+            2,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "candidate_count": 19,
+      "family": "G",
+      "pair_id": 3,
+      "policies": {
+        "first_disagreement": {
+          "correct": 4,
+          "index": 0,
+          "reason": "disagreement"
+        },
+        "last_disagreement": {
+          "correct": 8,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "long_disagreement": {
+          "correct": 4,
+          "index": 2,
+          "reason": "disagreement"
+        },
+        "max_partition": {
+          "correct": 4,
+          "index": 2,
+          "reason": "disagreement"
+        },
+        "min_partition": {
+          "correct": 8,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "seeded_disagreement": {
+          "correct": 4,
+          "index": 1,
+          "reason": "disagreement"
+        },
+        "seeded_uniform": {
+          "correct": 4,
+          "index": 1,
+          "reason": "uniform"
+        },
+        "short_disagreement": {
+          "correct": 8,
+          "index": 3,
+          "reason": "disagreement"
+        }
+      },
+      "regime": "unrelated",
+      "source_training_labels": 8,
+      "task_id": "0229c4d1a55bc3b39c034b309d6927c5",
+      "word": [
+        0,
+        2,
+        2,
+        2
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 14,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 17,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 17,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 15,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "candidate_count": 21,
+      "family": "G",
+      "pair_id": 4,
+      "policies": {
+        "first_disagreement": {
+          "correct": 3,
+          "index": 0,
+          "reason": "disagreement"
+        },
+        "last_disagreement": {
+          "correct": 3,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "long_disagreement": {
+          "correct": 3,
+          "index": 1,
+          "reason": "disagreement"
+        },
+        "max_partition": {
+          "correct": 3,
+          "index": 1,
+          "reason": "disagreement"
+        },
+        "min_partition": {
+          "correct": 3,
+          "index": 2,
+          "reason": "disagreement"
+        },
+        "seeded_disagreement": {
+          "correct": 3,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "seeded_uniform": {
+          "correct": 3,
+          "index": 3,
+          "reason": "uniform"
+        },
+        "short_disagreement": {
+          "correct": 3,
+          "index": 5,
+          "reason": "disagreement"
+        }
+      },
+      "regime": "unrelated",
+      "source_training_labels": 8,
+      "task_id": "70409c4b9d11f3d5c678beca68e613e2",
+      "word": [
+        0,
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 6,
+          "chosen": [
+            0,
+            2,
+            1,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 6,
+          "chosen": [
+            0,
+            2,
+            1,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 15,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 7,
+          "chosen": [
+            1,
+            1,
+            2,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 6,
+          "chosen": [
+            0,
+            2,
+            2,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 6,
+          "chosen": [
+            0,
+            2,
+            1,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "candidate_count": 18,
+      "family": "G",
+      "pair_id": 5,
+      "policies": {
+        "first_disagreement": {
+          "correct": 8,
+          "index": 0,
+          "reason": "disagreement"
+        },
+        "last_disagreement": {
+          "correct": 8,
+          "index": 7,
+          "reason": "disagreement"
+        },
+        "long_disagreement": {
+          "correct": 3,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "max_partition": {
+          "correct": 3,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "min_partition": {
+          "correct": 3,
+          "index": 2,
+          "reason": "disagreement"
+        },
+        "seeded_disagreement": {
+          "correct": 3,
+          "index": 3,
+          "reason": "disagreement"
+        },
+        "seeded_uniform": {
+          "correct": 3,
+          "index": 3,
+          "reason": "uniform"
+        },
+        "short_disagreement": {
+          "correct": 3,
+          "index": 6,
+          "reason": "disagreement"
+        }
+      },
+      "regime": "unrelated",
+      "source_training_labels": 8,
+      "task_id": "e34baff1ac13a0372ce263fae11bfab1",
+      "word": [
+        2,
+        1,
+        2,
+        2
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "episodes": 3,
+      "family": "S",
+      "inherited": 12,
+      "local_random_disagreement": 11,
+      "no_label": 11,
+      "one_label_hindsight_ceiling": 16,
+      "regime": "related",
+      "sham": 11,
+      "task_local": 15,
+      "total": 24,
+      "uniform_expected": 11.625
+    },
+    {
+      "episodes": 3,
+      "family": "S",
+      "inherited": 12,
+      "local_random_disagreement": 12,
+      "no_label": 12,
+      "one_label_hindsight_ceiling": 16,
+      "regime": "unrelated",
+      "sham": 12,
+      "task_local": 12,
+      "total": 24,
+      "uniform_expected": 12.375
+    },
+    {
+      "episodes": 3,
+      "family": "G",
+      "inherited": 16,
+      "local_random_disagreement": 16,
+      "no_label": 16,
+      "one_label_hindsight_ceiling": 20,
+      "regime": "related",
+      "sham": 16,
+      "task_local": 16,
+      "total": 24,
+      "uniform_expected": 15.75
+    },
+    {
+      "episodes": 3,
+      "family": "G",
+      "inherited": 16,
+      "local_random_disagreement": 11,
+      "no_label": 11,
+      "one_label_hindsight_ceiling": 16,
+      "regime": "unrelated",
+      "sham": 11,
+      "task_local": 11,
+      "total": 24,
+      "uniform_expected": 11.75
+    }
+  ],
+  "target_counterfactual_oracle_calls": 96,
+  "target_episodes": 12,
+  "targets": [
+    {
+      "arms": [
+        {
+          "candidate_count": 64,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 65,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 65,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 67,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 65,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 63,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "best_possible_one_label": 4,
+      "family": "S",
+      "no_label": 4,
+      "pair_id": 0,
+      "policies": {
+        "inherited": {
+          "correct": 4,
+          "index": 0,
+          "labels": 1,
+          "policy": "first_disagreement",
+          "reason": "disagreement"
+        },
+        "local_random_disagreement": {
+          "correct": 4,
+          "index": 6,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "sham": {
+          "correct": 4,
+          "index": 2,
+          "labels": 1,
+          "policy": "min_partition",
+          "reason": "disagreement"
+        },
+        "task_local": {
+          "correct": 4,
+          "index": 7,
+          "labels": 1,
+          "policy": "max_partition",
+          "reason": "disagreement"
+        }
+      },
+      "regime": "related",
+      "target_candidate_count": 72,
+      "target_oracle_counterfactual_labels": 8,
+      "task_id": "0a563efd79201e4f3185c0bdd75d4ed5",
+      "uniform_expected_denominator": 8,
+      "uniform_expected_numerator": 32,
+      "word": [
+        2,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 65,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 71,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 70,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "best_possible_one_label": 4,
+      "family": "S",
+      "no_label": 3,
+      "pair_id": 1,
+      "policies": {
+        "inherited": {
+          "correct": 4,
+          "index": 0,
+          "labels": 1,
+          "policy": "first_disagreement",
+          "reason": "disagreement"
+        },
+        "local_random_disagreement": {
+          "correct": 3,
+          "index": 1,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "sham": {
+          "correct": 3,
+          "index": 5,
+          "labels": 1,
+          "policy": "min_partition",
+          "reason": "disagreement"
+        },
+        "task_local": {
+          "correct": 3,
+          "index": 4,
+          "labels": 1,
+          "policy": "max_partition",
+          "reason": "disagreement"
+        }
+      },
+      "regime": "related",
+      "target_candidate_count": 74,
+      "target_oracle_counterfactual_labels": 8,
+      "task_id": "a687ba7e073d6203ac1446d17b2b23f5",
+      "uniform_expected_denominator": 8,
+      "uniform_expected_numerator": 25,
+      "word": [
+        0,
+        2,
+        0,
+        2
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 65,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 65,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 1,
+          "chosen": [
+            2,
+            1,
+            0,
+            1
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "best_possible_one_label": 8,
+      "family": "S",
+      "no_label": 4,
+      "pair_id": 2,
+      "policies": {
+        "inherited": {
+          "correct": 4,
+          "index": 0,
+          "labels": 1,
+          "policy": "first_disagreement",
+          "reason": "disagreement"
+        },
+        "local_random_disagreement": {
+          "correct": 4,
+          "index": 7,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "sham": {
+          "correct": 4,
+          "index": 5,
+          "labels": 1,
+          "policy": "min_partition",
+          "reason": "disagreement"
+        },
+        "task_local": {
+          "correct": 8,
+          "index": 6,
+          "labels": 1,
+          "policy": "max_partition",
+          "reason": "disagreement"
+        }
+      },
+      "regime": "related",
+      "target_candidate_count": 73,
+      "target_oracle_counterfactual_labels": 8,
+      "task_id": "e0ea57585da8467bd78a804cc0a4118b",
+      "uniform_expected_denominator": 8,
+      "uniform_expected_numerator": 36,
+      "word": [
+        2,
+        1,
+        0,
+        1
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 67,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 67,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 70,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 65,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "best_possible_one_label": 4,
+      "family": "S",
+      "no_label": 4,
+      "pair_id": 3,
+      "policies": {
+        "inherited": {
+          "correct": 4,
+          "index": 0,
+          "labels": 1,
+          "policy": "first_disagreement",
+          "reason": "disagreement"
+        },
+        "local_random_disagreement": {
+          "correct": 4,
+          "index": 1,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "sham": {
+          "correct": 4,
+          "index": 4,
+          "labels": 1,
+          "policy": "min_partition",
+          "reason": "disagreement"
+        },
+        "task_local": {
+          "correct": 4,
+          "index": 7,
+          "labels": 1,
+          "policy": "max_partition",
+          "reason": "disagreement"
+        }
+      },
+      "regime": "unrelated",
+      "target_candidate_count": 74,
+      "target_oracle_counterfactual_labels": 8,
+      "task_id": "a4c3586f70a84a2668ad767999e148e8",
+      "uniform_expected_denominator": 8,
+      "uniform_expected_numerator": 32,
+      "word": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 67,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 64,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 1,
+          "chosen": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 66,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "best_possible_one_label": 8,
+      "family": "S",
+      "no_label": 4,
+      "pair_id": 4,
+      "policies": {
+        "inherited": {
+          "correct": 4,
+          "index": 0,
+          "labels": 1,
+          "policy": "first_disagreement",
+          "reason": "disagreement"
+        },
+        "local_random_disagreement": {
+          "correct": 4,
+          "index": 3,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "sham": {
+          "correct": 4,
+          "index": 0,
+          "labels": 1,
+          "policy": "min_partition",
+          "reason": "disagreement"
+        },
+        "task_local": {
+          "correct": 4,
+          "index": 2,
+          "labels": 1,
+          "policy": "max_partition",
+          "reason": "disagreement"
+        }
+      },
+      "regime": "unrelated",
+      "target_candidate_count": 74,
+      "target_oracle_counterfactual_labels": 8,
+      "task_id": "3e8399dda61f4b691092087f0f7bb10f",
+      "uniform_expected_denominator": 8,
+      "uniform_expected_numerator": 36,
+      "word": [
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 65,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 67,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 64,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 67,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 65,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 68,
+          "chosen": [
+            0,
+            0,
+            0,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 69,
+          "chosen": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "best_possible_one_label": 4,
+      "family": "S",
+      "no_label": 4,
+      "pair_id": 5,
+      "policies": {
+        "inherited": {
+          "correct": 4,
+          "index": 0,
+          "labels": 1,
+          "policy": "first_disagreement",
+          "reason": "disagreement"
+        },
+        "local_random_disagreement": {
+          "correct": 4,
+          "index": 3,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "sham": {
+          "correct": 4,
+          "index": 6,
+          "labels": 1,
+          "policy": "min_partition",
+          "reason": "disagreement"
+        },
+        "task_local": {
+          "correct": 4,
+          "index": 2,
+          "labels": 1,
+          "policy": "max_partition",
+          "reason": "disagreement"
+        }
+      },
+      "regime": "unrelated",
+      "target_candidate_count": 74,
+      "target_oracle_counterfactual_labels": 8,
+      "task_id": "f7874d2232d81ea73af4011f01514db7",
+      "uniform_expected_denominator": 8,
+      "uniform_expected_numerator": 31,
+      "word": [
+        1,
+        1,
+        2,
+        0
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 4,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 14,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 8,
+          "chosen": [
+            0,
+            2,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 16,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 15,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 3,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 10,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 14,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "best_possible_one_label": 8,
+      "family": "G",
+      "no_label": 8,
+      "pair_id": 0,
+      "policies": {
+        "inherited": {
+          "correct": 8,
+          "index": 7,
+          "labels": 1,
+          "policy": "last_disagreement",
+          "reason": "disagreement"
+        },
+        "local_random_disagreement": {
+          "correct": 8,
+          "index": 6,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "sham": {
+          "correct": 8,
+          "index": 6,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "task_local": {
+          "correct": 4,
+          "index": 2,
+          "labels": 1,
+          "policy": "max_partition",
+          "reason": "disagreement"
+        }
+      },
+      "regime": "related",
+      "target_candidate_count": 18,
+      "target_oracle_counterfactual_labels": 8,
+      "task_id": "f14226b3f89458ef1484a29f615d8286",
+      "uniform_expected_denominator": 8,
+      "uniform_expected_numerator": 60,
+      "word": [
+        1,
+        1,
+        1,
+        2
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 14,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 10,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 9,
+          "chosen": [
+            0,
+            2,
+            2,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 15,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 15,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 5,
+          "chosen": [
+            0,
+            2,
+            1,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 14,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "best_possible_one_label": 4,
+      "family": "G",
+      "no_label": 4,
+      "pair_id": 1,
+      "policies": {
+        "inherited": {
+          "correct": 4,
+          "index": 7,
+          "labels": 1,
+          "policy": "last_disagreement",
+          "reason": "disagreement"
+        },
+        "local_random_disagreement": {
+          "correct": 4,
+          "index": 1,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "sham": {
+          "correct": 4,
+          "index": 1,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "task_local": {
+          "correct": 4,
+          "index": 2,
+          "labels": 1,
+          "policy": "max_partition",
+          "reason": "disagreement"
+        }
+      },
+      "regime": "related",
+      "target_candidate_count": 18,
+      "target_oracle_counterfactual_labels": 8,
+      "task_id": "8050bcfc63693115add9e59adaee82e1",
+      "uniform_expected_denominator": 8,
+      "uniform_expected_numerator": 31,
+      "word": [
+        2,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 6,
+          "chosen": [
+            0,
+            2,
+            2,
+            2
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 12,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 5,
+          "chosen": [
+            0,
+            2,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 11,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 14,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 12,
+          "chosen": [
+            0,
+            1,
+            2,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 11,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 12,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "best_possible_one_label": 8,
+      "family": "G",
+      "no_label": 4,
+      "pair_id": 2,
+      "policies": {
+        "inherited": {
+          "correct": 4,
+          "index": 7,
+          "labels": 1,
+          "policy": "last_disagreement",
+          "reason": "disagreement"
+        },
+        "local_random_disagreement": {
+          "correct": 4,
+          "index": 7,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "sham": {
+          "correct": 4,
+          "index": 7,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "task_local": {
+          "correct": 8,
+          "index": 0,
+          "labels": 1,
+          "policy": "max_partition",
+          "reason": "disagreement"
+        }
+      },
+      "regime": "related",
+      "target_candidate_count": 17,
+      "target_oracle_counterfactual_labels": 8,
+      "task_id": "ddc85c8f2a5e68a061aac2abaa5afeaa",
+      "uniform_expected_denominator": 8,
+      "uniform_expected_numerator": 35,
+      "word": [
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 6,
+          "chosen": [
+            1,
+            1,
+            1,
+            2
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 12,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 10,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 5,
+          "chosen": [
+            0,
+            2,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 10,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 3,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 8,
+          "chosen": [
+            0,
+            1,
+            2,
+            1
+          ],
+          "correct": 8,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "best_possible_one_label": 8,
+      "family": "G",
+      "no_label": 3,
+      "pair_id": 3,
+      "policies": {
+        "inherited": {
+          "correct": 8,
+          "index": 7,
+          "labels": 1,
+          "policy": "last_disagreement",
+          "reason": "disagreement"
+        },
+        "local_random_disagreement": {
+          "correct": 3,
+          "index": 1,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "sham": {
+          "correct": 3,
+          "index": 1,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "task_local": {
+          "correct": 3,
+          "index": 3,
+          "labels": 1,
+          "policy": "max_partition",
+          "reason": "disagreement"
+        }
+      },
+      "regime": "unrelated",
+      "target_candidate_count": 18,
+      "target_oracle_counterfactual_labels": 8,
+      "task_id": "b93894dbc20f9f9cedb2edb04651c77a",
+      "uniform_expected_denominator": 8,
+      "uniform_expected_numerator": 30,
+      "word": [
+        1,
+        2,
+        1,
+        1
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 15,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 5,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 15,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 15,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 14,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 4,
+          "chosen": [
+            0,
+            2,
+            2,
+            2
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 16,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "best_possible_one_label": 4,
+      "family": "G",
+      "no_label": 4,
+      "pair_id": 4,
+      "policies": {
+        "inherited": {
+          "correct": 4,
+          "index": 7,
+          "labels": 1,
+          "policy": "last_disagreement",
+          "reason": "disagreement"
+        },
+        "local_random_disagreement": {
+          "correct": 4,
+          "index": 3,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "sham": {
+          "correct": 4,
+          "index": 3,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "task_local": {
+          "correct": 4,
+          "index": 2,
+          "labels": 1,
+          "policy": "max_partition",
+          "reason": "disagreement"
+        }
+      },
+      "regime": "unrelated",
+      "target_candidate_count": 17,
+      "target_oracle_counterfactual_labels": 8,
+      "task_id": "7123c861fa8a2a076426c808bb308721",
+      "uniform_expected_denominator": 8,
+      "uniform_expected_numerator": 32,
+      "word": [
+        2,
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "arms": [
+        {
+          "candidate_count": 16,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 0
+        },
+        {
+          "candidate_count": 15,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 1
+        },
+        {
+          "candidate_count": 13,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 2
+        },
+        {
+          "candidate_count": 15,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 3
+        },
+        {
+          "candidate_count": 14,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 4
+        },
+        {
+          "candidate_count": 12,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 5
+        },
+        {
+          "candidate_count": 16,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 6
+        },
+        {
+          "candidate_count": 16,
+          "chosen": [
+            0,
+            1,
+            1,
+            1
+          ],
+          "correct": 4,
+          "labels": 1,
+          "question": 7
+        }
+      ],
+      "best_possible_one_label": 4,
+      "family": "G",
+      "no_label": 4,
+      "pair_id": 5,
+      "policies": {
+        "inherited": {
+          "correct": 4,
+          "index": 7,
+          "labels": 1,
+          "policy": "last_disagreement",
+          "reason": "disagreement"
+        },
+        "local_random_disagreement": {
+          "correct": 4,
+          "index": 3,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "sham": {
+          "correct": 4,
+          "index": 3,
+          "labels": 1,
+          "policy": "seeded_disagreement",
+          "reason": "disagreement"
+        },
+        "task_local": {
+          "correct": 4,
+          "index": 5,
+          "labels": 1,
+          "policy": "max_partition",
+          "reason": "disagreement"
+        }
+      },
+      "regime": "unrelated",
+      "target_candidate_count": 20,
+      "target_oracle_counterfactual_labels": 8,
+      "task_id": "44930cf380444726665983058e6542cc",
+      "uniform_expected_denominator": 8,
+      "uniform_expected_numerator": 32,
+      "word": [
+        0,
+        2,
+        2,
+        1
+      ]
+    }
+  ],
+  "total_training_labels": 96
+}

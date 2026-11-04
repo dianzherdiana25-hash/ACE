@@ -20,6 +20,11 @@ class AuditTests(unittest.TestCase):
         modify(r)
         with self.assertRaisesRegex(ValueError,reason):audit(r)
 
+    def test_corrected_v2_report(self):
+        path=EVIDENCE.with_name("e14c_v2_public_development_v1.json")
+        self.assertEqual(audit(json.loads(path.read_text()))["decision"],
+                         "HOLD_CROSS_EPISODE_TRANSFER_HYPOTHESIS")
+
     def test_duplicate_task(self):
         self.bad(lambda r:r["targets"][0].__setitem__("task_id",r["sources"][0]["task_id"]),"duplicate task")
 

@@ -1,0 +1,12 @@
+{
+  "bank_sha256": "96abeaf7434a95ae1e80f3011db89aed9d6ab76650ba11c0fe8cc6d895062e8a",
+  "hidden_word_pool_independence_test": "4/4 structural tests passed",
+  "inputs": {
+    "G": 216,
+    "S": 216
+  },
+  "no_overlap": true,
+  "prelock_commit": "caedbe761cab31da306459b5e6a3f3dd86255d0b",
+  "scope": "input overlap and structure, not statistical independence proof",
+  "source_target_pairs": 12
+}
