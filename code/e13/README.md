@@ -195,3 +195,13 @@ PYTHONPATH=code python3 -m unittest e13.test_run_ledger -v
 Ledger evaluator menyimpan arm terminal secara transaksional dan memakai kunci unik berdasarkan keluarga, rezim, blok, episode, slot seed dan kebijakan. Digest rencana mengikat kunci, urutan, kandidat, bank, oracle dan protokol. Runner kedua ditolak selama ledger aktif. Pada gangguan, arm tanpa catatan terminal tetap menunggu. Kegagalan kandidat yang diklasifikasikan adapter disimpan dengan skor nol dan denominator tetap. Gangguan yang belum diklasifikasi menghentikan run dan dicatat tanpa mengarang skor.
 
 Tes pada fixture publik menjalankan satu arm dalam worker, menyimulasikan interupsi, lalu menyelesaikan tiga arm yang tersisa. Pemanggilan ulang melewati semua arm terminal. Ledger belum mengizinkan atau membuka bank konfirmatori. Adapter, penguncian dan pemeriksaan sumber daya harus lulus sebelum penggunaan itu.
+
+## Runner terkunci dan uji urutan publik
+
+```bash
+PYTHONPATH=code python3 -m unittest e13.test_locked_runner -v
+```
+
+Dry-run menilai 54 arm dari sembilan kebijakan. Runner mencocokkan digest lock yang diberikan kustodian dengan evaluator, rencana, audit dan ukuran anggaran. Mode konfirmatori menolak bank kecil dan memerlukan bukti audit tersendiri. AST invalid pada respons valid dan timeout setelah marker masuk fase kandidat dapat diklasifikasikan sebagai kegagalan kandidat. Transport rusak, sandbox gagal sebelum marker, atau exit yang tidak dapat diatribusikan menahan run. Profil dry-run hanya mencakup fixture publik, dengan komitmen evaluator nyata tetap berada di luar kandidat.
+
+Pembanding berinformasi menerima kelas hipotesis di sandbox tersendiri. Ia mengurutkan hipotesis secara deterministik, memilih memakai demo target, dan mengembalikan AST beku. Oracle evaluasi membandingkan prediksi terhadap probe di luar worker. Hasil dan keterbatasan ada di [keputusan E1.3](../../design/e1.3/E13_DECISION_v1.md).

@@ -33,13 +33,13 @@ class SelectionFuel(Fuel):
         super().spend()
 
 
-def evaluate_arm(episode, policy):
+def evaluate_arm(episode, policy, *, fit_policy=None, reference_extension=False, keep_trace=False):
     """Fit with visible demos, then score a frozen AST against private probes."""
     raw = json.loads(episode.fit_request)
     raw["fuel"] = FIT_STEPS
     request = parse_fit_request(canonical_json(raw))
     started = perf_counter_ns()
-    fit = fit_isolated(canonical_json(raw), policy=policy)
+    fit = (fit_policy or fit_isolated)(canonical_json(raw), policy=policy)
     cpu_start = process_time_ns()
     budget = SelectionFuel(
         TOTAL_STEPS - fit.steps,
@@ -56,7 +56,7 @@ def evaluate_arm(episode, policy):
                 try:
                     budget.check_time()
                     answer = predict(fit.program.ast, probe.input, budget,
-                                     allow_extension=policy in EXTENSION_POLICIES)
+                                     allow_extension=reference_extension or policy in EXTENSION_POLICIES)
                     budget.check_time()
                 except FuelExhausted:
                     capped = True
@@ -75,4 +75,5 @@ def evaluate_arm(episode, policy):
         "predict_cpu_us": predict_cpu, "total_cpu_us": arm_cpu, "wall_us": arm_wall,
         "predict_steps": budget.used, "cap_reached": capped,
         "scores": {size: summarize_outcomes(values) for size, values in outcomes.items()},
+        **({"fit_trace": fit.trace} if keep_trace and fit.trace is not None else {}),
     }

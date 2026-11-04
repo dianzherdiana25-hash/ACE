@@ -1,0 +1,136 @@
+{
+  "mode": "public_dry_run",
+  "scope": "public stress cases; source repeats target demos to isolate expressivity",
+  "plan_sha256": "d4d1428ea8ad9fbc1c3986d5d1e8c81b625e599c4c19389bb657106d919fd1c1",
+  "lock_sha256": "c67efc584300b977a601b6301166edd32b34cbb23626dc1f246e20946f09ac0f",
+  "candidate_sha256": "00ce5f29aa61751b7556fccac98527057996c17b279f5eb8cdfa366f79701666",
+  "bank_sha256": "b2d6e7a054e230b9644e19f2f4df35ec57b6dc752aab70c7cb5fbcf9612aa2f3",
+  "certificates": [
+    {
+      "family": "S",
+      "transition_definitions": 99,
+      "paired_witnesses": 4,
+      "distinguishing_definitions_per_pair": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "max_correct_on_balanced_pairs": 4
+    },
+    {
+      "family": "G",
+      "transition_definitions": 106,
+      "paired_witnesses": 4,
+      "distinguishing_definitions_per_pair": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "max_correct_on_balanced_pairs": 4
+    }
+  ],
+  "arms": 54,
+  "by_policy": {
+    "beam": {
+      "S": {
+        "correct": 24,
+        "total": 24
+      },
+      "G": {
+        "correct": 12,
+        "total": 24
+      }
+    },
+    "c_extend": {
+      "S": {
+        "correct": 12,
+        "total": 24
+      },
+      "G": {
+        "correct": 12,
+        "total": 24
+      }
+    },
+    "c_no_extend": {
+      "S": {
+        "correct": 12,
+        "total": 24
+      },
+      "G": {
+        "correct": 12,
+        "total": 24
+      }
+    },
+    "c_no_transfer": {
+      "S": {
+        "correct": 12,
+        "total": 24
+      },
+      "G": {
+        "correct": 12,
+        "total": 24
+      }
+    },
+    "c_sham": {
+      "S": {
+        "correct": 12,
+        "total": 24
+      },
+      "G": {
+        "correct": 12,
+        "total": 24
+      }
+    },
+    "enumerative": {
+      "S": {
+        "correct": 12,
+        "total": 24
+      },
+      "G": {
+        "correct": 12,
+        "total": 24
+      }
+    },
+    "fixed": {
+      "S": {
+        "correct": 0,
+        "total": 24
+      },
+      "G": {
+        "correct": 12,
+        "total": 24
+      }
+    },
+    "structured": {
+      "S": {
+        "correct": 24,
+        "total": 24
+      },
+      "G": {
+        "correct": 12,
+        "total": 24
+      }
+    },
+    "structured_oracle": {
+      "S": {
+        "correct": 24,
+        "total": 24
+      },
+      "G": {
+        "correct": 24,
+        "total": 24
+      }
+    }
+  },
+  "max_observed_cpu_us": 231650,
+  "max_observed_wall_us": 241733,
+  "reference_profile": {
+    "arms": 6,
+    "max_cpu_us": 28999,
+    "max_wall_us": 37762
+  },
+  "score_caps": 0,
+  "candidate_failures": 0
+}

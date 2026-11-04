@@ -1,8 +1,7 @@
 # Aksi berikutnya untuk Work atau Codex
 
-1. Mulai dari kepala `research/e1.3-design`. Baca [status](CURRENT_STATE.md), [rancangan prelock](design/e1.3/E13_PRELOCK_v0.1.md), [bukti reproduksi selection](evidence/e13/selection_reproduction_v1.json) dan [GitHub Issue #1](https://github.com/dianzherdiana25-hash/ACE/issues/1).
-2. Integrasikan ledger arm yang sudah diuji dengan adapter konfirmatori. Klasifikasikan kegagalan kandidat dan infrastruktur dengan bukti, verifikasi lock, dan ukur biaya total. Siapkan STRUCTURED_ORACLE yang hanya tahu kelas grammar. Pertahankan solver beku dan B* beam.
-3. Jalur evaluator membangun bank konfirmatori terpisah dan menunjukkan 48 blok independen per keluarga per rezim. Audit bentuk aturan, saksi, ambiguitas, dan duplikasi terhadap development dan selection. Simpan generator dan label di luar kandidat.
-4. Verifikasi biaya/kuota, bekukan digest dan rencana analisis, lalu buka akses runner satu kali hanya setelah semua gerbang lulus. Bila kuota, blok efektif atau integritas split tidak cukup, catat HOLD.
+1. Mulai dari kepala `research/e1.3-design`. Baca [piagam](PROJECT_CHARTER.md), [status](CURRENT_STATE.md), [keputusan E1.3](design/e1.3/E13_DECISION_v1.md), dan [GitHub Issue #1](https://github.com/dianzherdiana25-hash/ACE/issues/1).
+2. Uji E1.4 pada development baru. Bandingkan pencarian hitung, sintesis urutan, dan kandidat yang memilih representasi berdasarkan saksi di demonstrasi. Pertahankan kontrol untuk demonstrasi ambigu dan pembanding beam.
+3. Simpan rencana dan kode sebelum penilaian. Catat batas komputasi, kegagalan, dan kasus pemilihan representasi yang merugikan. Pertahankan bank konfirmatori terpisah.
 
 Gunakan CPU lokal, anggaran Rp0, dan kontrak checkpoint pada [piagam](PROJECT_CHARTER.md).

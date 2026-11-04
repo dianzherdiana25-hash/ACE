@@ -22,6 +22,17 @@ class WorkerError(RuntimeError):
     """The isolated fit did not return a valid result."""
 
 
+class InvalidCandidateAST(WorkerError):
+    """A structurally valid worker response carried an invalid program."""
+
+
+class CandidateWallTimeout(WorkerError):
+    """The worker entered the candidate phase before exceeding the wall limit."""
+
+
+READY_MARKER = b"ACE_CANDIDATE_PHASE_V1\n"
+
+
 @dataclass(frozen=True)
 class WorkerMetrics:
     cpu_us: int
@@ -68,6 +79,8 @@ def _sandbox_python(args, raw=b"", *, solver=None):
             env={"LANG": "C"}, close_fds=True,
         )
     except subprocess.TimeoutExpired as error:
+        if solver is not None and (error.stderr or b"").startswith(READY_MARKER):
+            raise CandidateWallTimeout("fit worker exceeded the wall limit") from error
         raise WorkerError("fit worker exceeded the wall limit") from error
     except OSError as error:
         raise WorkerError("isolated fit runtime unavailable") from error
@@ -155,7 +168,8 @@ def _fit_isolated(raw, request, policy, inherited=None):
         _stage_solver(root)
         output, wall_us = _sandbox_python(
             ["-c", "import sys; sys.path.insert(0, '/solver'); "
-             "from e13.worker import main; main(sys.argv[1])", policy],
+             "from e13.worker import main; "
+             f"sys.stderr.buffer.write({READY_MARKER!r}); sys.stderr.flush(); main(sys.argv[1])", policy],
             raw, solver=root,
         )
     try:
@@ -165,20 +179,23 @@ def _fit_isolated(raw, request, policy, inherited=None):
         require_fields(value, *fields, *(("trace",) if with_trace else ()))
         if value["status"] not in ("fit", "fallback", "fuel_exhausted"):
             raise ContractError("unexpected fit status")
-        program = compile_ast(canonical_json(value["program"]),
-                              allow_extension=with_trace and policy != "c_no_extend")
-        if program.family != request.family or (with_trace and not program.table):
-            raise ContractError("unexpected worker program family")
         candidates = integer(value["candidates"], 1, request.fuel)
         steps = integer(value["steps"], 1, request.fuel)
+        metrics = WorkerMetrics(integer(value["cpu_us"], 0, 1_000_000), wall_us,
+                                integer(value["rss_kib"], 1, _MEMORY_BYTES // 1024))
+        try:
+            program = compile_ast(canonical_json(value["program"]),
+                                  allow_extension=with_trace and policy != "c_no_extend")
+            if program.family != request.family or (with_trace and not program.table):
+                raise ContractError("unexpected worker program family")
+        except ContractError as error:
+            raise InvalidCandidateAST("invalid candidate program") from error
         trace = value.get("trace")
         if with_trace:
             _validate_trace(trace, request, policy, program, candidates, steps, inherited)
         return IsolatedFit(
             program, candidates, steps,
-            WorkerMetrics(integer(value["cpu_us"], 0, 1_000_000), wall_us,
-                          integer(value["rss_kib"], 1, _MEMORY_BYTES // 1024)),
-            value["status"], trace,
+            metrics, value["status"], trace,
         )
     except ContractError as error:
         raise WorkerError("invalid isolated fit result") from error
