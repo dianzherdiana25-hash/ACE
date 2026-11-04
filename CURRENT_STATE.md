@@ -1,6 +1,12 @@
 # Keadaan ACE saat ini
 
-## E1.4h — checkpoint pra-penilaian
+## E1.4h — pemilihan representasi lulus pada diagnostik
+
+**ROUTING_DEVELOPMENT_GO.** Sistem memilih panjang aturan dari kecocokan dua grammar pada demo. Dalam bank peluang, pemilihan adaptif benar 192/192 per keluarga pada dua panjang, dibanding 144/192 untuk masing-masing pilihan tetap. Pada simbol alami panjang enam, sistem hanya mengenali kebutuhan beralih pada 1/6 blok. Seluruh pool dan probe di sel itu tidak memuat kata target, jadi akurasi tinggi saja dapat menutupi kegagalan diagnosis.
+
+[Hasil](design/e1.4/E14H_RESULT_v1.md) · [Bukti](evidence/e14/e14h_verification_v1.json) · [Protokol beku](https://github.com/dianzherdiana25-hash/ACE/commit/d6db8d065104ada75e676801bed62daa26cf094a). **NATURAL_HOLD** masih membatasi transfer. Langkah berikutnya ialah menguji pencarian saksi ketika dua representasi sama-sama cocok, sebelum membuat klaim tentang kemampuan menemukan representasi baru.
+
+## E1.4h — checkpoint historis pra-penilaian
 
 Grammar lima dan enam akan dibandingkan pada bank publik baru. Pemilih hanya menerima jumlah kecocokan demo dari kedua grammar saat menentukan representasi. [Protokol beku](design/e1.4/E14H_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14H_LOCK_v1.json). Tes pra-penilaian 2/2. Penilaian dimulai setelah verifikasi commit pembekuan di GitHub.
 
