@@ -208,7 +208,7 @@ def run():
 
 def deterministic(report):
     """Keep scores, choices, fuel, decisions and hashes. Drop host timings."""
-    if isinstance(report, list):
+    if isinstance(report, (list, tuple)):
         return [deterministic(item) for item in report]
     if isinstance(report, dict):
         return {key: deterministic(value) for key, value in report.items()
@@ -220,8 +220,16 @@ def deterministic(report):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--verify", type=Path)
+    verification = parser.add_mutually_exclusive_group()
+    verification.add_argument("--verify", type=Path)
+    verification.add_argument("--compare", type=Path, nargs=2, metavar=("EXPECTED", "REPLAY"))
     args = parser.parse_args()
+    if args.compare:
+        expected, replay = (json.loads(path.read_text()) for path in args.compare)
+        if deterministic(expected) != deterministic(replay):
+            raise ValueError("saved query pilot replay differs")
+        print("saved query pilot replay matches")
+        return
     report = run()
     if args.verify is not None and deterministic(report) != deterministic(json.loads(args.verify.read_text())):
         raise ValueError("query pilot replay differs")

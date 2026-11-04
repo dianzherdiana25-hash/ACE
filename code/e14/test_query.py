@@ -74,3 +74,7 @@ class QueryTests(unittest.TestCase):
         self.assertEqual(deterministic({"limits": {"query_cpu_us": 100},
                                         "fit": {"cpu_us": 80, "status": "fit"}}),
                          {"limits": {"query_cpu_us": 100}, "fit": {"status": "fit"}})
+
+    def test_serialized_disagreement_list_matches_in_memory_tuple(self):
+        self.assertEqual(deterministic({"disagreements": (1, 3)}),
+                         deterministic({"disagreements": [1, 3]}))
