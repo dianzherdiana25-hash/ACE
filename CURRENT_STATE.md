@@ -1,5 +1,10 @@
 # Keadaan ACE saat ini
 
+### E1.4n Linux namespace capability probe (4 November 2026)
+
+A **separate** host-level canary executed inside real Linux user/mount/net/PID namespaces with read-only solver, private rootfs, and scrubbed environment. **Six of six** canary checks passed, including private evaluator-file and host-loopback denial. [Source](tools/ace_namespace_capacity_probe.py) · [Observed result](evidence/e14/e14n_namespace_capacity_v1.json) · [Limitations](docs/ACE_E14N_NAMESPACE_CAPACITY_v1.md). This **does not** establish equivalence to the frozen Bubblewrap worker or complete ACE evaluator confidentiality. E1.4n remains **PRE-SCORE / BLOCKED_ENV in this local host**; no scoring or replay was run.
+
+
 ## E1.4n host-specific recovery audit — no scoring yet (4 November 2026)
 
 An independent GitHub **SHA-256 readback of all 8 frozen manifest files passed 8/8** for frozen source `fb9ac72`; this includes bank gzip and E1.4m upstream lock. [Static audit](evidence/e14/e14n_integrity_readback_v1.json). **Scientific status unchanged: PRE-SCORE FROZEN.** This ChatGPT local container has no native Bubblewrap or complete current private repository checkout, so E1.4n scoring was **not run**; local preflight is `BLOCKED_ENV`. [Environment record](evidence/e14/e14n_local_environment_preflight_v1.json). This is a host-specific execution barrier, **not** a scientific GO/HOLD or E1.4n failure. Use the existing original frozen runner and a verified sandbox-capable host, preserve fresh score/replay/audit and commit with readback. Work's prior prescore 4/4 tests were not rerun in this host.

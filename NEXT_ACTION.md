@@ -1,5 +1,10 @@
 # ACE E1.4n — recover from latest pre-score freeze
 
+## Host sandbox capability development (independent of E1.4n score)
+
+The local host supports real user, network, mount, and PID namespaces, with **6/6** isolation-canary conditions passing on a minimal worker. This finding is documented at [namespace capability audit](docs/ACE_E14N_NAMESPACE_CAPACITY_v1.md). It **does not** replace native Bubblewrap or permit E1.4n scientific scoring under an altered frozen protocol. If attempting a future equivalent sandbox, validate the full evaluator nonexposure threat model and resource isolation with the actual worker and freeze a new engineering protocol first. For E1.4n, continue on a validated Bubblewrap host with full private checkout.
+
+
 **Frozen scientific source:** `fb9ac72c9c6b039f402a1905b3635f2a4efbecdb`. Eight locked files independently rehashed with SHA-256: **8/8 PASS** in the current ChatGPT session. [Readback evidence](evidence/e14/e14n_integrity_readback_v1.json).
 
 **Environment restriction is not a scientific decision:** native Bubblewrap is missing and a complete ACE checkout is not accessible to the current local Python environment; `BLOCKED_ENV` was recorded without scoring. Do not replace `/usr/bin/bwrap` with a test stub. The earlier Work environment verified native isolation on E1.4g–m, but new E1.4n runs must validate it again.

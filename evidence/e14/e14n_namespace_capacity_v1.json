@@ -1,0 +1,19 @@
+{
+  "timestamp_utc": "2026-11-04T13:56:53.162158+00:00",
+  "purpose": "HOST_NAMESPACE_FEASIBILITY_ONLY",
+  "frozen_ace_scoring_executed": false,
+  "bubblewrap_validated": false,
+  "elapsed_s": 0.053,
+  "exit_code": 0,
+  "stdout": "{\"evaluator_module_absent\": true, \"host_etc_denied\": true, \"host_loopback_denied\": true, \"private_evaluator_file_denied\": true, \"secret_environment_cleared\": true, \"solver_read_only\": true}\n",
+  "stderr": "",
+  "checks": {
+    "evaluator_module_absent": true,
+    "host_etc_denied": true,
+    "host_loopback_denied": true,
+    "private_evaluator_file_denied": true,
+    "secret_environment_cleared": true,
+    "solver_read_only": true
+  },
+  "pass": true
+}
