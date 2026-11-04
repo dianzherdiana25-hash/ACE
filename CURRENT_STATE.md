@@ -1,5 +1,9 @@
 # Keadaan ACE saat ini
 
+## E1.4m — checkpoint pra-penilaian
+
+Bank baru 56 blok, 72 dunia dan 2.240 input. Uji memisahkan target dalam model, target tujuh kejadian terjangkau dari contoh negatif, dan target langka. Tes pra-penilaian 4/4. [Protokol](design/e1.4/E14M_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14M_LOCK_v1.json).
+
 ## E1.4l — ranking lolos, gerbang biaya dan selektif HOLD
 
 Ranking satu-label lolos pada packable. Simbol seri 5/5 dan graf 3/5 melawan 2/5 minimax. Ambang hemat menurunkan diagnosis dalam model dari 40 ke 29. Cakupan selektif simbol hanya 96/256. Pada uji aturan di luar model, semua 32 prediksi yang diterima lengan ambang salah. **NATURAL_HOLD** untuk transfer.

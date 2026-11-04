@@ -4,6 +4,16 @@
 2. Pada bank baru, bandingkan query adjudikasi kelas, query acak, dan query yang mencari kontra-contoh terhadap prediksi bersama kelas. Gunakan target dalam model, target tujuh kejadian yang belum terlihat, dan kondisi jarang dengan ambang yang ditetapkan sebelum scoring.
 3. Ukur seberapa sering setiap strategi menemukan label yang menggugurkan semua hipotesis, seberapa sering keliru menolak model yang sesuai, biaya label dan kejadian, serta risiko pada prediksi yang masih diterima. Pisahkan deteksi kegagalan model dari penambahan kelas baru. Pertahankan **NATURAL_HOLD** untuk transfer.
 
+## Reproduksi E1.4m
+
+Dari checkout pembekuan E1.4m, buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.
+
+```bash
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 180 --heartbeat 15 --log WORK/mscore.log -- python3 -m e14.e14m_run run WORK/mscore.sqlite WORK/mscore.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 180 --heartbeat 15 --log WORK/mreplay.log -- python3 -m e14.e14m_run run WORK/mreplay.sqlite WORK/mreplay.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 120 --heartbeat 10 --log WORK/maudit.log -- python3 -m e14.e14m_audit WORK/mscore.json.gz WORK/mreplay.json.gz
+```
+
 ## Reproduksi E1.4l
 
 Dari checkout [pembekuan E1.4l](https://github.com/dianzherdiana25-hash/ACE/commit/904dcc62d94bcbfdd6070437af434ec7cce25730), buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.
