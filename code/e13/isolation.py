@@ -31,9 +31,10 @@ class IsolatedFit:
     candidates: int
     steps: int
     metrics: WorkerMetrics
+    status: str = "fit"
 
 
-_SOLVER_FILES = ("__init__.py", "baseline.py", "contract.py", "dsl.py", "worker.py")
+_SOLVER_FILES = ("__init__.py", "baseline.py", "blind.py", "contract.py", "dsl.py", "worker.py")
 _WALL_SECONDS = 3
 _MEMORY_BYTES = 128 * 1024 * 1024
 
@@ -76,18 +77,23 @@ def _stage_solver(root):
         shutil.copyfile(Path(__file__).with_name(name), package / name)
 
 
-def fit_isolated(raw: bytes) -> IsolatedFit:
+def fit_isolated(raw: bytes, *, policy="catalog") -> IsolatedFit:
+    if policy not in ("catalog", "blind"):
+        raise ValueError("unknown isolated fit policy")
     request = parse_fit_request(raw)
     with tempfile.TemporaryDirectory(prefix="ace-e13-solver-") as temp:
         root = Path(temp)
         _stage_solver(root)
         output, wall_us = _sandbox_python(
-            ["-c", "import sys; sys.path.insert(0, '/solver'); from e13.worker import main; main()"],
+            ["-c", "import sys; sys.path.insert(0, '/solver'); "
+             "from e13.worker import main; main(sys.argv[1])", policy],
             raw, solver=root,
         )
     try:
         value = read_json(output, max_bytes=2_048)
-        require_fields(value, "program", "candidates", "steps", "cpu_us", "rss_kib")
+        require_fields(value, "program", "candidates", "steps", "status", "cpu_us", "rss_kib")
+        if value["status"] not in ("fit", "fallback", "fuel_exhausted"):
+            raise ContractError("unexpected fit status")
         program = compile_ast(canonical_json(value["program"]))
         if program.family != request.family:
             raise ContractError("unexpected worker program family")
@@ -96,6 +102,7 @@ def fit_isolated(raw: bytes) -> IsolatedFit:
             integer(value["steps"], 1, request.fuel),
             WorkerMetrics(integer(value["cpu_us"], 0, 1_000_000), wall_us,
                           integer(value["rss_kib"], 1, _MEMORY_BYTES // 1024)),
+            value["status"],
         )
     except ContractError as error:
         raise WorkerError("invalid isolated fit result") from error

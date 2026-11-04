@@ -34,6 +34,7 @@ import sys
 sys.path.insert(0, "/solver")
 assert importlib.util.find_spec("e13.baseline") is not None
 assert importlib.util.find_spec("e13.public_bank") is None
+assert importlib.util.find_spec("e13.evaluator") is None
 assert importlib.util.find_spec("e13.split_audit") is None
 assert "ACE_CANARY" not in os.environ
 assert resource.getrlimit(resource.RLIMIT_CPU) == (1, 1)

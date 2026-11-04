@@ -1,8 +1,8 @@
 # Aksi berikutnya untuk Work atau Codex
 
-1. Mulai dari kepala `research/e1.3-design`. Baca [status](CURRENT_STATE.md) dan [desain E1.3](design/e1.3/E13_DESIGN_v0.1.md). Ulangi pemeriksaan manifest dan bank sesuai [README E1.3](code/e13/README.md).
-2. Implementasikan pembanding terstruktur dan enumeratif yang menerima demonstrasi melalui worker. Tempatkan oracle, bentuk aturan dan probe di luar mount worker. Gunakan DSL bertipe dan plafon langkah.
-3. Jalankan pilot engineering pada bank development. Catat skor per keluarga, relasi dan ukuran, kegagalan, biaya solver dan evaluator, serta hash input. Jalankan kontrol lengkap sebelum selection dan tetapkan B* hanya pada split selection.
-4. Lanjutkan jalur evaluator terpisah untuk bank selection. Buktikan bloknya berbeda dari development. Tahan data konfirmatori sampai gerbang penguncian dan reproduksi teknis terpenuhi.
+1. Mulai dari kepala `research/e1.3-design`. Baca [status](CURRENT_STATE.md), [desain E1.3](design/e1.3/E13_DESIGN_v0.1.md), dan [hasil pilot](code/e13/README.md#pilot-development-v01). Reproduksi manifest, regresi, dan pilot.
+2. Tambahkan pencarian beam berbatas dengan DSL dan anggaran yang sama. Laporkan hasil per keluarga dan ukuran. Pertahankan kegagalan pembanding pada data development.
+3. Lengkapi kontrol C serta rekam artefak yang dapat diwariskan, lineage, dan biaya. Pisahkan pengujian kebaruan terhadap vocabulary tertutup dari pengujian transfer dan kausalitas.
+4. Siapkan bank selection di jalur evaluator terpisah dan buktikan perbedaan blok dengan development. Pilih B* hanya setelah semua pembanding siap. Tetap tahan konfirmasi sampai penguncian dan audit reproduksi teknis terpenuhi.
 
 Gunakan CPU lokal, anggaran Rp0, dan kontrak checkpoint pada [piagam](PROJECT_CHARTER.md).

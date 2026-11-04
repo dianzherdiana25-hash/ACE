@@ -60,3 +60,18 @@ Bank publik seed 1304 membangun 12 episode simbolik dan 12 episode graf, seimban
 Oracle berdiri sendiri di `evaluator/oracle.py`. Untuk graf, oracle menggunakan relaksasi sinkron pada graf keadaan, termasuk siklus dan sisi biaya nol. Struktur terkait membutuhkan jarak edit pohon terurut positif dan subpohon identik yang terdiri dari lebih dari satu node. Target tidak terkait memiliki jarak positif tanpa subpohon tersebut. Pembeda semantik memakai 121 urutan simbol dan 127 rantai graf pada domain kecil. Demonstrasi harus menyingkirkan aturan saingan dalam katalog publik. Pemeriksaan ini terbatas pada saingan dan domain yang dicakup.
 
 Audit lintas split menolak bentuk aturan, sidik perilaku, tugas, dan input yang sama. Sisi graf diurutkan dan urutan demo/probe tidak menentukan hash tugas. Audit belum mengkanonisasi isomorfisme graf atau membuktikan kesetaraan semantik umum. Tes injeksi salinan lulus. Bank berisi split development saja dan modul evaluator berada di luar daftar staging worker. Bank selection terpisah tetap gerbang terbuka.
+
+## Pilot development v0.1
+
+```bash
+PYTHONPATH=code python3 -m e13.evaluator.pilot > /tmp/ace-e13-pilot.json
+```
+
+Katalog awal tetap tersedia melalui worker. Pembanding buta menginferensi transduser simbolik dari jejak demonstrasi target, dan mengenumerasi mesin penghitung event serta keadaan penerima untuk graf. Ia tidak memuat nama aturan atau oracle. AST menggunakan tabel bertipe dengan satu sampai empat keadaan, keadaan awal nol, dan tiga event. Untuk simbol, event berasal dari perbandingan naik, sama, turun. Untuk graf, event adalah label pertama, label sama, dan label berbeda. Tabel graf dapat menolak transisi. Semua prediksi melalui interpreter berbatas langkah. Sebagai kontrol target-only, pembanding baru mengabaikan demonstrasi sumber.
+
+| Pembanding | Simbol biasa | Simbol ekstrapolasi | Graf biasa | Graf ekstrapolasi | Total |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Katalog | 31/72 | 20/72 | 26/72 | 32/72 | 109/288 |
+| Inferensi simbol + enumerasi graf | 72/72 | 57/72 | 68/72 | 72/72 | 269/288 |
+
+[Data v0.1](../../evidence/e13/development_pilot_v0.1.json) mencatat 48 eksekusi berpasangan, hash, langkah, CPU worker, RSS, waktu wall fit dan CPU penilai. Dua run cocok pada skor, hash AST, status dan hitungan langkah. Waktu dan RSS merupakan observasi mesin. CPU worker dan evaluator dicatat terpisah. Akuntansi CPU launcher dan satu batas CPU gabungan fit/prediksi masih terbuka untuk konfirmasi. Angka pilot ini menguji rekayasa pada aturan yang diketahui penulis benchmark. Bank selection, kontrol C, dan evaluasi konfirmatori belum tersedia.

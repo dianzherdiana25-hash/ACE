@@ -6,7 +6,7 @@ import operator
 from dataclasses import dataclass
 
 from .contract import (
-    MAX_FUEL, ContractError, Graph, Input, Output, canonical_json, input_value,
+    MAX_FUEL, ContractError, Graph, Input, Output, array, canonical_json, input_value,
     integer, read_json, require_fields,
 )
 
@@ -36,6 +36,8 @@ class Program:
     family: str
     ast: bytes
     option: str
+    table: tuple = ()
+    accepts: tuple[int, ...] = ()
 
     @property
     def sha256(self):
@@ -46,6 +48,8 @@ def compile_ast(raw: bytes) -> Program:
     value = read_json(raw, max_bytes=1024)
     require_fields(value, "family", "ast")
     family, ast = value["family"], value["ast"]
+    if type(ast) is dict and ast.get("op") in ("symbol_machine", "graph_machine"):
+        return _compile_machine(family, ast, canonical_json(value))
     require_fields(ast, "op", "rule")
     rule = ast["rule"]
     require_fields(rule, "op")
@@ -57,6 +61,71 @@ def compile_ast(raw: bytes) -> Program:
     if family == "G" and ast["op"] == "path_cost" and option in _TRANSITIONS:
         return Program(family, canonical_json(value), option)
     raise ContractError("operation does not match the family or vocabulary")
+
+
+def _compile_machine(family, ast, canonical):
+    operation = ast["op"]
+    if family == "S" and operation == "symbol_machine":
+        require_fields(ast, "op", "table")
+        rows = array(ast["table"], 1, 4)
+        table = []
+        for row in rows:
+            cells = []
+            for cell in array(row, 3, 3):
+                state, bit = array(cell, 2, 2)
+                cells.append((integer(state, 0, len(rows) - 1), integer(bit, 0, 1)))
+            table.append(tuple(cells))
+        return Program(family, canonical, operation, tuple(table))
+    if family == "G" and operation == "graph_machine":
+        require_fields(ast, "op", "table", "accept")
+        rows = array(ast["table"], 1, 4)
+        table = tuple(tuple(integer(cell, -1, len(rows) - 1)
+                            for cell in array(row, 3, 3)) for row in rows)
+        accepts = tuple(integer(bit, 0, 1) for bit in array(ast["accept"], len(rows), len(rows)))
+        return Program(family, canonical, operation, table, accepts)
+    raise ContractError("machine does not match the family")
+
+
+def symbol_event(left, right):
+    """Three comparison events shared by symbolic machines and inference."""
+    return 0 if left < right else 1 if left == right else 2
+
+
+def graph_costs(graph: Graph, table, fuel: Fuel):
+    """Find minimum cost to each monitor state at the goal."""
+    adjacency = [[] for _ in range(graph.nodes)]
+    for edge in graph.edges:
+        fuel.spend()
+        adjacency[edge.start].append(edge)
+    best = {(graph.start, -1, 0): 0}
+    queue = [(0, graph.start, -1, 0)]
+    costs = [None] * len(table)
+    while queue:
+        fuel.spend()
+        cost, node, previous, state = heapq.heappop(queue)
+        if cost != best[node, previous, state]:
+            continue
+        if node == graph.goal and costs[state] is None:
+            costs[state] = cost
+            if None not in costs:
+                break
+        for edge in adjacency[node]:
+            fuel.spend()
+            event = 0 if previous == -1 else 1 if previous == edge.label else 2
+            next_state = table[state][event]
+            if next_state == -1:
+                continue
+            destination = (edge.end, edge.label, next_state)
+            new_cost = cost + edge.cost
+            if destination not in best or new_cost < best[destination]:
+                best[destination] = new_cost
+                heapq.heappush(queue, (new_cost, *destination))
+    return costs
+
+
+def accepted_cost(costs, accepts):
+    return min((cost for cost, accept in zip(costs, accepts, strict=True)
+                if accept and cost is not None), default=None)
 
 
 def _path_cost(graph: Graph, option: str, fuel: Fuel) -> int | None:
@@ -93,6 +162,14 @@ def execute(program: Program, value: Input, fuel: Fuel) -> Output:
     fuel.spend()
     if program.family == "S":
         assert isinstance(value, tuple)
+        if program.option == "symbol_machine":
+            state = 0
+            flags = []
+            for left, right in zip(value, value[1:]):
+                fuel.spend()
+                state, bit = program.table[state][symbol_event(left, right)]
+                flags.append(bit)
+            return tuple(flags)
         predicate = _PREDICATES[program.option]
         flags = []
         for previous, current in zip(value, value[1:]):
@@ -100,6 +177,8 @@ def execute(program: Program, value: Input, fuel: Fuel) -> Output:
             flags.append(int(predicate(previous, current)))
         return tuple(flags)
     assert isinstance(value, Graph)
+    if program.option == "graph_machine":
+        return accepted_cost(graph_costs(value, program.table, fuel), program.accepts)
     return _path_cost(value, program.option, fuel)
 
 

@@ -11,6 +11,7 @@ class FitResult:
     program: Program
     candidates: int
     steps: int
+    status: str = "fit"
 
 
 def _catalog(family):
