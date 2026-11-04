@@ -1,0 +1,28 @@
+{
+  "decision": "BENCHMARK_HOLD_REDESIGN",
+  "original_raw_sha256": "ede97348d64aa879a7072bffde02a62cef661bebf4ff91166e7a92fc6acd11c5",
+  "freeze_commit": "5d44ed79f9e7a3cac1f0940748d3f375ecdf4385",
+  "bank_sha256": "d79acfec7a9778bae4f2e6599a00cdbe5b3e22b4a13d269fa74bf7d54bdfbf2b",
+  "prescore_tests": {
+    "pass": 8,
+    "total": 8
+  },
+  "independent_auditor": {
+    "pass": 10,
+    "total": 10
+  },
+  "replay": {
+    "exit": 0,
+    "canonical_match": true,
+    "bytes_identical": true
+  },
+  "e14_full_regression": {
+    "pass": 84,
+    "total": 84,
+    "elapsed_seconds": 71.577,
+    "fixture_repair_only": true
+  },
+  "oracle_labels": 816,
+  "isolation": "NOT_VERIFIED",
+  "code_archive": "PINNED_SHA256_NOT_YET_ATTACHED"
+}
