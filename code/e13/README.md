@@ -152,3 +152,11 @@ Terstruktur menginferensi transisi dan keluaran dari jejak simbolik. Pada graf, 
 | Beam | 69/144 | 96/144 | 16/48 | 26/48 |
 
 [Bukti](../../evidence/e13/development_closed_comparators_v0.1.json) memuat 108 fit serta ukuran CPU worker, CPU penilai, langkah, dan hasil per probe. Enam fit enumeratif mencapai plafon langkah. Dua fit terstruktur memakai AST cadangan setelah tidak menemukan kecocokan lengkap. AST yang valid tetap dinilai. Bank publik memberikan peringkat berbeda. Pemilihan B* dan penguncian biaya menunggu bank selection.
+
+## Protokol selection evaluator
+
+Gerbang ini menerima 12 episode dengan satu blok target per episode dan tiga episode per keluarga dan rezim. Setiap target memiliki empat probe biasa dan empat ekstrapolasi. Bentuk aturan menghilangkan literal dan nama insidental. Target terkait harus berbeda secara struktur sambil berbagi subpohon operasi nontrivial. Target tak terkait harus berbeda dan tidak berbagi subpohon itu. Audit membandingkan bentuk, perilaku pada saksi terbatas, input dengan sisi terurut, dan kecukupan demo terhadap dua bank development dan fixture publik. Ekuivalensi di luar saksi berstatus `UNKNOWN`. Isomorfisme graf umum belum diperiksa.
+
+Jalur evaluator menyimpan generator, oracle, dan label di luar checkout. Worker menerima fit JSON tanpa nama aturan atau label probe. Interpreter evaluator menilai AST beku. Tiga kebijakan tertutup dijalankan dengan urutan acak deterministik. Anggaran per arm 75.000 langkah fit dan 100.000 langkah total, dengan prediksi memakai sisa langkah. CPU fit worker ditambah CPU prediksi dibatasi 1 detik. Wall fit dan prediksi dibatasi 3 detik. Batas memori fit tetap 128 MiB ruang alamat. Waktu CPU proses launcher dan biaya audit/generator terpisah dari skor arm. Probe yang berhenti karena cap tetap dalam denominator. Kegagalan infrastruktur menahan keputusan.
+
+Peringkat memakai akurasi rata-rata berbobot sama untuk simbol dan graf, lalu CPU total yang lebih rendah, lalu ID leksikografis. Catat skor ketiga kebijakan, cap dan fallback, digest bank dan sumber evaluator. Akurasi ini memilih pembanding untuk bank selection. Kontras kausal, ukuran sampel dan penguncian konfirmatori adalah gerbang tersendiri.
