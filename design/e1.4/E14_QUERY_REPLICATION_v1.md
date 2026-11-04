@@ -1,0 +1,9 @@
+# ACE E1.4b — replikasi pool tanpa penyaringan
+
+**Development publik.** Pilot awal mengungguli pilihan acak saat dua saksi sengaja dimasukkan ke pool. Replikasi menguji apakah hasil bertahan ketika masukan pertanyaan dibangkitkan tanpa memakai label target, kelas laten, atau prediksi kandidat.
+
+Pertahankan model hitung, model urutan, aturan memilih ketidaksepakatan, batas komputasi, dan kontrol tanpa label serta nilai harapan delapan cabang satu-label dari [protokol awal](E14_QUERY_PILOT_v1.md). Pool memakai RNG terpisah seed 141612. Delapan jejak per episode diambil dari alfabet kejadian masing-masing keluarga dan panjang 2–8 kejadian, ditambah kejadian awal pada graf. Satu-satunya penolakan pool terkait ukuran kontrak dan duplikasi input. Oracle baru dipanggil per cabang setelah pilihan aktif dicatat.
+
+Bank seed 141611 memuat enam episode per keluarga dan delapan probe akhir per episode. Kasus simbol memakai kata kejadian yang berbeda dari motif pilot sebelumnya dalam basis pendek yang sama. Kasus graf memakai motif routing yang dikenal, dengan instans dan konteks baru pada rantai. Sumber demo, pool, dan probe baru dibandingkan dengan development publik E1.3, routing E1.4 dan pilot pertanyaan awal. Normalisasi mencakup urutan sisi. Data selection privat dan set konfirmatori berada di luar studi.
+
+Tetapkan GO ke pengembangan lintas episode hanya jika skor aktif lebih tinggi dari kontrol tanpa label dan nilai harapan acak pada **kedua keluarga**, dengan semua fase dalam batas. Jika syarat gagal, catat HOLD dan pisahkan ketidaktersediaan pertanyaan berguna dari pemilihan yang kurang tepat. Untuk diagnosis, hitung jumlah episode yang mempunyai setidaknya satu cabang lebih baik dari baseline dan skor maksimum retrospektif di dalam pool. Maksimum itu memakai hasil setelah penilaian dan hanya menjadi batas diagnostik. Ukuran kecil dan bank dirancang untuk development. Hasil tidak dipakai sebagai kesimpulan inferensial.

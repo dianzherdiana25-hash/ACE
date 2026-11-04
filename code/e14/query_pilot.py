@@ -85,10 +85,10 @@ def _episode(case):
     }
 
 
-def _summary(rows):
+def _summary(rows, *, regimes=REGIMES):
     records = []
     for family in ("S", "G"):
-        for regime in REGIMES:
+        for regime in regimes:
             group = [r for r in rows if r["family"] == family and r["regime"] == regime]
             active = [r["uniform_one_label_arms"][r["active_question"]] for r in group]
             expected = [Fraction(sum(a["correct"] for a in r["uniform_one_label_arms"]),
@@ -108,8 +108,10 @@ def _summary(rows):
     return records
 
 
-def _decision(summary):
-    primary = [row for row in summary if row["regime"] == "witness_pool"]
+def _decision(summary, *, primary_regime="witness_pool"):
+    primary = [row for row in summary if row["regime"] == primary_regime]
+    if {row["family"] for row in primary} != {"S", "G"}:
+        raise ValueError("primary comparison requires both families")
     if all(row["active_correct"] > max(row["uniform_expected_correct"], row["initial_correct"])
            for row in primary):
         return "go_to_public_replication"
