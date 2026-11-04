@@ -1,5 +1,11 @@
 # Keadaan ACE saat ini
 
+## E1.4g — protokol pengembangan dibekukan
+
+Bank publik memisahkan tugas sintetis alami dari tugas dengan peluang belajar yang dibangun sejak awal. Ada 48 blok dan 72 dunia. Delapan tes pra-penilaian lulus, termasuk batas representasi dan lima pemeriksaan isolasi. Snapshot historis `b34b316` cocok dengan tree GitHub. Regresi yang dapat dipulihkan dari snapshot tersebut lulus 69/69. Catatan historis E1.4f tetap menyimpan 84/84.
+
+Baca [protokol](design/e1.4/E14G_PROTOCOL_v1.md) dan [manifest pembekuan](design/e1.4/E14G_LOCK_v1.json). Penilaian baru dimulai setelah checkpoint pembekuan terverifikasi di GitHub.
+
 ## E1.4f benchmark opportunity audit — 4 November 2026
 
 **BENCHMARK_HOLD_REDESIGN.** New 24-task S/G in-basis/out-of-basis public study was hash-frozen at `5d44ed7` before scores. Main represented+curated+diagnostic strata: S hindsight-positive **2/6**, feasible Max-Gini positive **1/6**, summed gain +4/48; G hindsight-positive **2/6**, Max-Gini **1/6**, gain +2/48; strict prescored thresholds ≥3/6 and ≥2/6 failed. Replay byte-identical; prescore 8/8, independent auditor 10/10, and restored full E1.4 regression **84/84** passed. The 816 newly measured labels came from exhaustive development oracle calls; curated pool has more unlabeled compute. No worker isolation or external semantic confirmation. [Result](design/e1.4/E14F_OPPORTUNITY_RESULT_v1.md), [raw gzip](evidence/e14/e14f_public_development_v1.json.gz). Source archive now attached and Git-verified at [code/e14/e14f_frozen_source_2026-11-04.tar.xz](code/e14/e14f_frozen_source_2026-11-04.tar.xz); prescore hash unchanged. Next **E1.4g benchmark opportunity distribution redesign**, not another policy tuning round.

@@ -1,4 +1,11 @@
-# NEXT_ACTION — ACE E1.4g benchmark redesign and custody validation
+# NEXT_ACTION — jalankan E1.4g dari checkpoint beku
+
+1. Periksa HEAD branch GitHub dan cocokkan [manifest E1.4g](design/e1.4/E14G_LOCK_v1.json). Baca [protokol](design/e1.4/E14G_PROTOCOL_v1.md).
+2. Dari checkout ACE, buat direktori kerja lokal. Jalankan `PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 210 --heartbeat 15 --log WORK/score.log -- python3 -m e14.e14g_run --ledger WORK/score.sqlite --output WORK/score.json.gz`. Ganti `WORK` dengan direktori tersebut. Ulangi dengan ledger dan keluaran lain untuk replay. Pakai kembali ledger yang sama jika eksekusi terputus.
+3. Jalankan `PYTHONPATH=code python3 -m e14.e14g_audit WORK/score.json.gz WORK/replay.json.gz` melalui runner berbatas waktu. Simpan bukti terminal, keputusan kedua distribusi, dan langkah berikutnya. Perbarui Issue #1 setelah verifikasi commit hasil.
+4. Seluruh pekerjaan pada jalur publik. Aturan umum ada di [piagam](PROJECT_CHARTER.md).
+
+## Handoff historis E1.4f
 
 **Scientific latest:** E1.4f development diagnosis `BENCHMARK_HOLD_REDESIGN`, frozen [5d44ed7](https://github.com/dianzherdiana25-hash/ACE/commit/5d44ed79f9e7a3cac1f0940748d3f375ecdf4385), report [E14F_RESULT](design/e1.4/E14F_OPPORTUNITY_RESULT_v1.md), and [raw gzip JSON](evidence/e14/e14f_public_development_v1.json.gz). Opportunity remains sparse: in the primary curated/diagnostic condition, hindsight-positive S/G **2/6 each**; feasible Max-Gini positive **1/6 each**. The old E1.4 broad regression issue is locally resolved (84/84 PASS) after restoring missing historical fixture JSON. E1.4f code/protocol archive attached and remote Git SHA verified; use [reproduction instructions](code/e14/E14F_REPRODUCE.md).
 

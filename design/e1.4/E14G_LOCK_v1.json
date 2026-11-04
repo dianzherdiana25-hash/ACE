@@ -1,0 +1,26 @@
+{
+  "sha256": {
+    "code/e13/__init__.py": "ab36da9593964be7712808eed9968a47091bcfd3d7c7d41a4d66cf274b8d3e61",
+    "code/e13/baseline.py": "aa5efd5e446a67c5a01ce85a647fe839aa899bd502bf4d31bf9523d4c2ff475e",
+    "code/e13/blind.py": "a96199715e76f4b13b315c94c225a24ad1647bb31d41f42863b9ff255530c071",
+    "code/e13/comparators.py": "6e0e30726418b7436d286566841f41511e111c98aecde136291739359a16d3ce",
+    "code/e13/contract.py": "cc1b68cce3774acad11486f0b6c84865e3b01f3ccc8a627eb3f4d79129497fa1",
+    "code/e13/dsl.py": "e186c2f4f0f876b08189564ccc4be122d1fd8b7a68ad6fd32485da3447b8d637",
+    "code/e13/evaluator/__init__.py": "1ded0db7a502724a10c8c424028d1098a83dff34f988a7f29fe7b2adaca46305",
+    "code/e13/evaluator/run_ledger.py": "7b34fa15a0aa688810a3e358a0f1a0292bd97c2ab729187f43c4f07770402a57",
+    "code/e13/extension.py": "edb62dee9838ef75e181655b7a8f882930a5a68c6dd7176ff2e594453116b32f",
+    "code/e13/isolation.py": "709d51dc3372f93a674c47d4cd15aa63f4f93f8c4ea91ff8cb36a8643526b948",
+    "code/e14/__init__.py": "b2ed97f711d176ee7e782b78d8ffcfaa12c9451053f1d56f7daf2ec110e7fe6e",
+    "code/e14/e14g_audit.py": "8b3909ca57aef9a73e6cbd74a72ac05be52e3bd728cc53ba7d5812a4287dda00",
+    "code/e14/e14g_bank.py": "e01a6b2849997bd7267c21618e648bd009cdab16bf82c31e9fc1c96f56459295",
+    "code/e14/e14g_isolation.py": "5e8719d0f1c59b3e49a64f72a0b655a40ff67d0a10eebb09c36795419e608292",
+    "code/e14/e14g_run.py": "3f768df560b7a8764f08da2ce5f5a91344e052cdb0bd9cd885ab1d80fb3571d5",
+    "code/e14/e14g_worker.py": "b96cc927296b0a689a6e973471b96b6b85ca2b294da74b4378c06f969aa2fe95",
+    "code/e14/test_e14g.py": "dcf848f9868e7af4d3acb205b211db7c88dfd311d3f308a2b56c97f4130ab206",
+    "design/e1.4/E14G_PROTOCOL_v1.md": "626f5f8dccd8ae028900ea67a0cce5d3b160802fbf95720a27fc2ca21d7073fd",
+    "evidence/e14/e14g_prior_inputs_v1.json.gz": "5215633159bf008e0c5dc49a787a409b351308e880320376669539391b649ffb",
+    "evidence/e14/e14g_public_bank_v1.json.gz": "14173e9fad9646d69e2327536065c380f82e022fa948aec2ac85f3dbf53a27dc",
+    "tools/ace_bounded_runner.py": "4c6662c08fb243451c1b13da01e026fd29a24ce9b4f2ef400a7a1a9f4ae69b86"
+  },
+  "version": 1
+}
