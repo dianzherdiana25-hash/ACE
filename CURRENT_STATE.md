@@ -1,6 +1,11 @@
 # Keadaan ACE saat ini
 
-**Status untuk pembaca umum.** ACE sudah bisa menguji metode kecil dan menemukan kapan pemakaian ulang metode membantu atau merugikan. Pada E1.2, metode yang memakai ulang pengetahuan berhasil pada soal terkait, tetapi pembanding terstruktur juga berhasil seluruhnya. E1.3 sedang menyiapkan uji yang lebih ketat untuk aturan yang disembunyikan dari kandidat.
+## Checkpoint E1.4b — replikasi pool tanpa penyaringan (4 November 2026)
+
+**Terbaru:** Replikasi *public development* pada snapshot beku `38b1c3b` selesai; 12 episode, 96 cabang satu-label, 132 fit. Pada simbol, pertanyaan aktif 27/48 vs acak ekspektasi 20,25/48 dan tanpa label 17/48; pada graf 28/48 vs acak 25/48 dan tanpa label 24/48. Kriteria GO pengembangan dua keluarga terpenuhi, **belum** bukti inferensial atau evolusi terbuka. Tes beku 70/70, bank 2/2, auditor 17/17, anti-stuck 7/7; replay deterministik cocok. Analisis eksploratori gabungan meliputi nol. Lingkungan uji memakai pengganti Bubblewrap terbatas; **validasi dengan binary resmi tetap terbuka**. Semua hasil beku E1.3 v1 NO-GO tetap berlaku, tidak ada pembukaan konfirmasi tersegel. [Hasil](design/e1.4/E14_QUERY_REPLICATION_RESULT_v1.md) · [Bukti](evidence/e14/query_replication_v1.json) · [Kontrak pemulihan](docs/ACE_WORKFLOW_RECOVERY.md).
+
+
+**Status untuk pembaca umum.** E1.3 v1 ditutup dengan NO-GO ilmiah; E1.4 menguji pemilihan representasi dan pertanyaan. Replikasi E1.4b pada pool baru melewati gerbang pengembangan, tetapi transfer lintas episode dan generalisasi masih terbuka.
 
 - **Proyek** [Piagam ACE](PROJECT_CHARTER.md) dan visi OAIE.
 - **Branch** [`research/e1.3-design`](https://github.com/dianzherdiana25-hash/ACE/tree/research/e1.3-design). SHA checkpoint terkini adalah kepala branch tersebut. Checkpoint implementasi yang direkonsiliasi adalah [`0bb5c7d`](https://github.com/dianzherdiana25-hash/ACE/commit/0bb5c7d9fcd04abb361fe28b12b1b6c14560d2d9), yang memiliki tree sama dengan sumber lokal `6c1f6e3`. `main` berada di luar alur perubahan.

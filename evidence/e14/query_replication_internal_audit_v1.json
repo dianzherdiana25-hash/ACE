@@ -1,0 +1,40 @@
+{
+  "audit": "INTERNAL_REPORT_CONSISTENCY_PASS",
+  "decision": "go_to_cross_episode_development",
+  "episodes": 12,
+  "input_sha256": "a8f74134bc1a7fe9efa34d9bac43f6d000be85dd652408bde869b36d69410c0d",
+  "kind": "replication",
+  "limitations": [
+    "This validates SAVED report internal arithmetic and structure only.",
+    "It does not rerun candidate fits, re-evaluate oracle labels,",
+    "or prove that inputs were independent of labels or candidates."
+  ],
+  "observed_fit_caps": 0,
+  "observed_prediction_caps": 0,
+  "one_label_control_arms": 96,
+  "per_group": [
+    {
+      "active_correct": 28,
+      "episodes": 6,
+      "family": "G",
+      "initial_correct": 24,
+      "regime": "unconditioned_pool",
+      "total": 48,
+      "uniform_expected_denominator": 1,
+      "uniform_expected_numerator": 25
+    },
+    {
+      "active_correct": 27,
+      "episodes": 6,
+      "family": "S",
+      "initial_correct": 17,
+      "regime": "unconditioned_pool",
+      "total": 48,
+      "uniform_expected_denominator": 4,
+      "uniform_expected_numerator": 81
+    }
+  ],
+  "reported_isolated_fits": 132,
+  "selector_budget_exhaustions": 0,
+  "total_probes_per_policy": 96
+}

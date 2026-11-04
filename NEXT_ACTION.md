@@ -1,6 +1,9 @@
 # Aksi berikutnya untuk Work atau Codex
 
-1. Mulai dari kepala `research/e1.3-design`. Baca [piagam](PROJECT_CHARTER.md), [status](CURRENT_STATE.md), [keputusan E1.3](design/e1.3/E13_DECISION_v1.md), dan [hasil pertanyaan E1.4b](design/e1.4/E14_QUERY_RESULT_v1.md).
-2. Replikasi mekanisme satu label pada bank baru dengan pool yang dibangkitkan tanpa memeriksa label atau prediksi. Pertahankan biaya label dan pembanding seragam yang sama. Bekukan kode dan bank sebelum penilaian.
-3. Pisahkan kegagalan karena pemilih sepakat, fit tidak eksak, cap, atau representasi tak memadai. Keputusan tentang pewarisan lintas episode menunggu bukti dua keluarga.
-4. Simpan hasil dan replay di branch penelitian. Gunakan CPU lokal, anggaran Rp0, dan kontrak checkpoint pada [piagam](PROJECT_CHARTER.md).
+**Checkpoint ilmiah terbaru:** E1.4b public replication **GO ke development lintas episode**, bukan GO ke konfirmasi tersegel. [Laporan](design/e1.4/E14_QUERY_REPLICATION_RESULT_v1.md) dan [data mentah](evidence/e14/query_replication_v1.json); seluruh kode frozen di commit `38b1c3b`. Gunakan kepala `research/e1.3-design` saat memulai; jangan ulang atau modifikasi bank beku.
+
+1. **Validasi teknis lintas lingkungan:** jalankan replay dan tes dari snapshot `38b1c3b` pada Linux dengan Bubblewrap resmi dan namespace yang didukung. Periksa kontrol isolasi dan parity hash, bukan sekadar skor. Jika infrastruktur tidak cocok, catat BLOCKED, jangan mengklaim keberhasilan.
+2. **Rancang E1.4c dengan sampel baru:** sebelum scoring, tetapkan pasangan source/target dan pemisahan eksplorasi/selection/evaluasi, family S/G, kontrol target-only, pertanyaan acak dengan satu label, sham, informed reference, dan kasus negatif ketika kedua model salah atau tidak bersepakat. Tetapkan budget label dan CPU, metrik transfer positif/negatif, serta failure taxonomy.
+3. **Implementasikan dan jalankan pilot pengembangan yang dibekukan:** gunakan sumber yang tersedia, selesaikan tes unit, jalankan eksplorasi secara aman, nilai apakah transfer pemilihan pertanyaan lintas episode mengungguli kontrol secara konsisten. Jangan gunakan ulang 12 episode E1.4b untuk tuning; jangan buka E1.3 sealed bank.
+4. **Persisten dan anti-stuck:** untuk setiap tahap jalankan satu proses berbatas waktu (contoh `scripts/ace_progress_guard.py`), simpan terminal log serta checksum; commit ke `research/e1.3-design` dan readback HEAD. Jika gagal, simpan alasan `FAILED/TIMEOUT/INFRA_FAILURE/PERSISTENCE_BLOCKED` dan pekerjaan yang masih mungkin dilakukan.
+5. Pertahankan [piagam](PROJECT_CHARTER.md), [ledger](RESEARCH_LEDGER.md), batas Rp0, jangan ubah Tod atau `main` tanpa persetujuan.
