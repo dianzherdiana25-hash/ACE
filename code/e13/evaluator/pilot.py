@@ -46,19 +46,33 @@ def _record(episode, policy):
 
     scoring_cpu = process_time_ns()
     fuel = Fuel(request.fuel)
-    for size, probes in (("ordinary", episode.in_distribution),
-                         ("extrapolation", episode.extrapolation)):
-        for probe in probes:
-            try:
-                answer = predict(fit.program.ast, probe.input, fuel)
-            except FuelExhausted:
-                scores[size]["failures"] += 1
-            else:
-                scores[size]["correct"] += answer == probe.expected
+    outcomes = score_probes(episode, fit.program.ast, fuel)
+    scores = {size: summarize_outcomes(values) for size, values in outcomes.items()}
     return {**row, "scores": scores, "fit_status": fit.status,
             "ast_sha256": fit.program.sha256, "proposals": fit.candidates, "fit_steps": fit.steps,
             "predict_steps": fuel.used, "worker": asdict(fit.metrics),
             "scoring_cpu_us": (process_time_ns() - scoring_cpu) // 1_000}
+
+
+def score_probes(episode, ast, fuel, *, allow_extension=False):
+    outcomes = {}
+    for size, probes in (("ordinary", episode.in_distribution),
+                         ("extrapolation", episode.extrapolation)):
+        matches = []
+        for probe in probes:
+            try:
+                answer = predict(ast, probe.input, fuel, allow_extension=allow_extension)
+            except FuelExhausted:
+                matches.append(None)
+            else:
+                matches.append(answer == probe.expected)
+        outcomes[size] = matches
+    return outcomes
+
+
+def summarize_outcomes(values):
+    return {"correct": sum(value is True for value in values),
+            "total": len(values), "failures": sum(value is None for value in values)}
 
 
 def summarize(rows):

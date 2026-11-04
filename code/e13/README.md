@@ -111,3 +111,26 @@ cmp evidence/e13/development_representation_boundary_v0.1.json /tmp/ace-e13-boun
 Dua kasus publik yang terpisah dari pilot menguji batas formal yang sempit. Pada simbol, keluaran menandai setiap penurunan kelima. Lima prefiks dengan 0–4 penurunan berakhir pada simbol yang sama. Untuk setiap pasang prefiks ada kelanjutan identik yang membedakan keluaran mereka. Empat keadaan deterministik tidak cukup karena sekurangnya dua dari lima prefiks harus berbagi keadaan. Pada graf, pertanyaannya adalah biaya minimum lintasan dengan tepat lima sisi. Pada rantai dengan label tetap, lima prefiks nonkosong dari rantai lima sisi semuanya bisa mencapai penerimaan. Setiap pasang bisa dibedakan dengan meneruskan keduanya menggunakan jumlah sisi yang sama hingga hanya satu berjumlah lima. Label sebelumnya sama pada kedua prefiks, dan keadaan tolak tidak bisa mewakili prefiks yang masih dapat diterima.
 
 [Data diagnostik](../../evidence/e13/development_representation_boundary_v0.1.json) menyimpan 20 pasang saksi dan dua AST diagnostik buatan manual. Interpreter dapat mengaktifkan 5–8 keadaan melalui parameter eksplisit pada jalur evaluator. Worker dan evaluator pilot tetap memakai batas default empat. Bukti ini memisahkan daya ekspresi dalam dua kelas mesin pada kontrak saat ini. Eksperimen berikutnya perlu menguji apakah ACE dapat menyintesis serta mewariskan perluasan dari contoh dan mengungguli kontrol.
+
+## Pilot sintesis dan pewarisan v0.1
+
+```bash
+PYTHONPATH=code python3 -m e13.evaluator.transfer_pilot --verify evidence/e13/development_transfer_pilot_v0.1.json > /tmp/ace-e13-transfer.json
+PYTHONPATH=code python3 -m unittest discover -s code -p 'test_*.py' -q
+```
+
+Solver mengusulkan definisi transisi umum dari subset event dan tabel siklus atau saturasi. Demo sumber menentukan definisi yang diprioritaskan untuk target. Readout target dipelajari kembali dari demo target. Artefak bertipe menyimpan tabel transisi, keluarga dan versi. Hash mendeteksi perubahan dan mengikat proposal ke definisi induk. Penerus menerima JSON artefak dan demo target melalui worker terisolasi baru. Schema v1 memakai satu salinan demo target untuk memenuhi field sumber. Contoh sumber asli tidak dikirim.
+
+Keempat kondisi memakai plafon fit yang sama dan membagi bahan bakar menjadi separuh sumber dan separuh target. Kontrol tanpa perluasan membatasi tabel pada empat keadaan. Kontrol tanpa warisan mengulang pekerjaan sumber dan memulai target tanpa definisi sumber. Sham menggeser skor secara siklik tanpa titik tetap jika ada lebih dari satu kandidat. Nilai asli dan geseran dapat diperiksa, termasuk saat skor seri membuat perlakuan tidak informatif. Fit berhenti pada kandidat pertama yang cocok dengan semua demo target atau saat anggaran habis. Biaya proposal aktual dapat berbeda. Prediksi tetap memiliki plafon langkah tersendiri dan CPU evaluator diukur terpisah.
+
+| Kebijakan | Kapasitas | Terkait | Tak terkait |
+| --- | ---: | ---: | ---: |
+| C_EXTEND | 32/32 | 29/32 | 7/32 |
+| C_NO_EXTEND | 3/32 | 2/32 | 24/32 |
+| C_NO_TRANSFER | 19/32 | 1/32 | 29/32 |
+| C_SHAM | 19/32 | 3/32 | 23/32 |
+| Beam | 3/32 | 10/32 | 29/32 |
+
+[Bukti lengkap](../../evidence/e13/development_transfer_pilot_v0.1.json) berisi 96 fit, hasil per probe, AST beku, langkah, CPU, RSS, saksi demo, dan 24 replay di worker baru. Jejak proposal menyimpan indeks dari `proposal_sha256_by_index` dan skor asli. Kedua kebijakan pembanding lain dari pilot lama juga dicatat bersama fixed dan beam. Dibanding C_NO_TRANSFER, pewarisan memperbaiki 28 probe terkait dan merugikan 22 probe tak terkait tanpa perubahan berlawanan di kedua kelompok. Angka tersebut berkelompok pada empat episode per rezim.
+
+Kasus terkait memakai variasi readout dari motif sumber, sehingga gerbang motif baru di desain utama masih terbuka. Demo target yang sedikit sengaja membuat pemilihan ambigu di diagnostik ini. Hasil memeriksa implementasi sintesis, penggunaan ulang dan risiko prioritas yang salah pada grammar event terbatas. Ekuivalensi semantik program terpelajar tetap `UNKNOWN`. Bank ini seluruhnya publik dan tidak digunakan untuk memilih B*.
