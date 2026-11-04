@@ -1,0 +1,13 @@
+{
+  "status": "INSTRUMENTED_ORACLE_REPLAY_MATCHED",
+  "bank_generator_calls": 300,
+  "runner_calls": 336,
+  "actual_e14e_oracle_invocations": 636,
+  "by_family": {
+    "S": 318,
+    "G": 318
+  },
+  "e14e_unique_design_labels": 540,
+  "duplicate_full_target_fit_calls": 96,
+  "historical_fixture_inventory_oracle_calls_excluded": true
+}

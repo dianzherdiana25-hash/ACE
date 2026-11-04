@@ -1,0 +1,21 @@
+{
+  "status": "FOCUSED_VERIFICATION_COMPLETE",
+  "prescore_tests": {
+    "pass": 8,
+    "total": 8
+  },
+  "independent_auditor_tests": {
+    "pass": 12,
+    "total": 12
+  },
+  "replay": {
+    "exit_code": 0,
+    "exact_json_match": true
+  },
+  "raw_json_sha256": "a841018356a069f5a7f269791e9fecd69e4c5107a17347f6389ddabb6f7846c8",
+  "code_git_blob_sha": "db452543d6bdeef6b4092881f467ab6345cd7cdf",
+  "raw_git_blob_sha": "c9a7505542082a2822ed6853660273eb0200bd6d",
+  "input_uniqueness": "540/540 against previous public fixture inventory",
+  "full_regression": "INTERRUPTED_PARTIAL_E_NOT_ACCEPTED",
+  "isolation": "UNVERIFIED_SAME_PROCESS"
+}
