@@ -57,13 +57,14 @@ def _symbol_fit(demos, fuel):
     return [[(0, 0)] * 3], attempts, "fallback"
 
 
-def _graph_tables():
+def _graph_tables(max_states=4, *, allow_rejection=True):
     """Enumerate transition structures from event subsets and counter sizes."""
     yield ((0, 0, 0),)
     # One-state tables can forbid event types instead of tracking counts.
-    for mask in range(1, 8):
-        yield (tuple(-int(bool(mask & (1 << event))) for event in range(3)),)
-    for states in range(2, 5):
+    if allow_rejection:
+        for mask in range(1, 8):
+            yield (tuple(-int(bool(mask & (1 << event))) for event in range(3)),)
+    for states in range(2, max_states + 1):
         for wrap, event_mask in product((False, True), range(1, 8)):
             yield tuple(tuple(
                 ((state + 1) % states if wrap else min(state + 1, states - 1))

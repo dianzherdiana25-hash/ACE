@@ -12,6 +12,7 @@ class FitResult:
     candidates: int
     steps: int
     status: str = "fit"
+    trace: dict | None = None
 
 
 def _catalog(family):
