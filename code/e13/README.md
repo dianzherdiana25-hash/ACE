@@ -174,3 +174,14 @@ Pembanding dibekukan pada [`2d9d86c`](https://github.com/dianzherdiana25-hash/AC
 **B* selection internal adalah beam.** Replay dari checkout beku kedua menghasilkan urutan akurasi sama dan mencocokkan seluruh 36 arm pada bidang deterministik. Tiga fit enumeratif mencapai plafon langkah dan enam fit menggunakan AST cadangan karena belum mencapai kecocokan demo lengkap. Seluruh AST valid tetap dinilai. Pada run asli, arm terberat memakai 75.138 langkah total dan sekitar 111 ms CPU fit + prediksi. Seluruh arm berada dalam batas yang dipilih.
 
 [Bukti agregat](../../evidence/e13/selection_summary_v1.json) memuat digest bank, oracle dan kode, peringkat, serta cap. Generator, label dan log per episode tetap di paket evaluator. Paket itu memuat instruksi replay dari checkpoint beku. Selisih dua probe menentukan urutan pada bank internal ini. Evaluasi konfirmatori memiliki split, analisis daya dan penguncian tersendiri.
+
+## Daya dan analisis sebelum konfirmasi
+
+[Rancangan prelock](../../design/e1.3/E13_PRELOCK_v0.1.md) menjelaskan pairing, perlakuan kegagalan, rencana 48 blok, dan kondisi HOLD. Untuk menghitung ulang simulasi dengan NumPy 2.3.5:
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=code python3 -m e13.evaluator.power evidence/e13/public_resource_profile_v1.json > /tmp/ace-e13-power.json
+cmp evidence/e13/preconfirm_power_v1.json /tmp/ace-e13-power.json
+```
+
+Untuk mengulang profil, gunakan `PYTHONPATH` yang menunjuk `code/` dari checkout beku `2d9d86c`, lalu jalankan `python3 code/e13/evaluator/public_resource_profile.py` dari checkpoint perencanaan. CPU dan wall adalah pengukuran yang dapat berubah. Reproduksi selection menggunakan paket evaluator privat dan checkout beku yang sama, dengan [hasil verifikasi](../../evidence/e13/selection_reproduction_v1.json) sebagai pembanding.

@@ -1,0 +1,80 @@
+{
+  "mode": "selection_technical_reproduction",
+  "status": "pass",
+  "scope": "separate follow-up task; same project, clean candidate and evaluator directories",
+  "bundle_sha256": "786e8b82d9e41fcf0024e9104b714099648f5fe29ff420a615abbb8796071b92",
+  "candidate_checkpoint": "2d9d86c1d7a142f985ea1188532508bca077522c",
+  "candidate_source_sha256": "7737816213e7ef9b16332e1b5aa84150bbe2a25a2fce02f6e67a532c929028a1",
+  "bank_sha256": "e17e22a4e53df4d875f2635ddc0bc96d652c9d68eb70012d99ac8af8ff6118fa",
+  "oracle_source_sha256": [
+    "97cb68de8937f066fb8336622db0c14bc7a48eb887918c92ea2b160be5f5f421"
+  ],
+  "worker_canary": "pass",
+  "matching_deterministic_arms": 36,
+  "fit_status": {
+    "beam": {
+      "fit": 12
+    },
+    "enumerative": {
+      "fallback": 3,
+      "fit": 6,
+      "fuel_exhausted": 3
+    },
+    "structured": {
+      "fallback": 3,
+      "fit": 9
+    }
+  },
+  "score_cap_arms": 0,
+  "ranking": [
+    {
+      "accuracy": 0.5208333333333334,
+      "families": {
+        "G": {
+          "correct": 28,
+          "failures": 0,
+          "total": 48
+        },
+        "S": {
+          "correct": 22,
+          "failures": 0,
+          "total": 48
+        }
+      },
+      "policy": "beam"
+    },
+    {
+      "accuracy": 0.5,
+      "families": {
+        "G": {
+          "correct": 23,
+          "failures": 0,
+          "total": 48
+        },
+        "S": {
+          "correct": 25,
+          "failures": 0,
+          "total": 48
+        }
+      },
+      "policy": "enumerative"
+    },
+    {
+      "accuracy": 0.4375,
+      "families": {
+        "G": {
+          "correct": 19,
+          "failures": 0,
+          "total": 48
+        },
+        "S": {
+          "correct": 23,
+          "failures": 0,
+          "total": 48
+        }
+      },
+      "policy": "structured"
+    }
+  ],
+  "selected": "beam"
+}
