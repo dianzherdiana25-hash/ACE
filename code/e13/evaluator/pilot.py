@@ -17,7 +17,7 @@ from ..isolation import WorkerError, fit_isolated
 from .bank import bank_digest, development_bank
 
 
-POLICIES = ("catalog", "blind")
+POLICIES = ("fixed", "catalog", "blind", "beam")
 _ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -96,14 +96,32 @@ def run_pilot(*, bank_seed=1304, order_seed=130413):
     }
 
 
+def verify_replay(reference, replay):
+    """Compare every deterministic field while allowing host/timing variation."""
+    def comparable(report):
+        record = dict(report)
+        for key in ("machine", "bank_cpu_us", "evaluator_total_cpu_us", "wall_us"):
+            record.pop(key, None)
+        measurements = {"worker", "scoring_cpu_us"}
+        record["runs"] = [{key: value for key, value in row.items() if key not in measurements}
+                          for row in report["runs"]]
+        return record
+
+    if comparable(reference) != comparable(replay):
+        raise ValueError("pilot replay differs in deterministic fields")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--bank-seed", type=int, default=1304)
     parser.add_argument("--order-seed", type=int, default=130413)
+    parser.add_argument("--verify", type=Path, help="compare with a saved pilot JSON")
     args = parser.parse_args()
     report = run_pilot(bank_seed=args.bank_seed, order_seed=args.order_seed)
+    if args.verify is not None:
+        verify_replay(json.loads(args.verify.read_text()), report)
     print(json.dumps(report, indent=2))
-    return int(any(run["fit_status"] != "fit" or any(s["failures"] for s in run["scores"].values())
+    return int(any(run["fit_status"] == "worker_error" or any(s["failures"] for s in run["scores"].values())
                    for run in report["runs"]))
 
 

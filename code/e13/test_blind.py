@@ -1,6 +1,7 @@
 """Regression tests for the bounded generic machines and isolated pilot."""
 
 import json
+from copy import deepcopy
 import unittest
 from unittest.mock import patch
 
@@ -9,7 +10,7 @@ from .contract import ContractError, canonical_json
 from .dsl import Fuel, FuelExhausted, compile_ast, predict
 from .evaluator.bank import _chain, development_bank
 from .evaluator.oracle import graph
-from .evaluator.pilot import _record, summarize
+from .evaluator.pilot import _record, summarize, verify_replay
 from .isolation import WorkerError, fit_isolated
 
 
@@ -65,3 +66,30 @@ class MachineTests(unittest.TestCase):
         self.assertEqual(row["fit_status"], "worker_error")
         self.assertEqual([(s["correct"], s["total"], s["failures"]) for s in summarize([row])],
                          [(0, 6, 6), (0, 6, 6)])
+
+
+    def test_beam_is_deterministic_and_keeps_a_bounded_ast_on_fuel_stop(self):
+        episodes = development_bank()[0]
+        for episode in (episodes[0], episodes[-1]):
+            first = fit_isolated(episode.fit_request, policy="beam")
+            second = fit_isolated(episode.fit_request, policy="beam")
+            self.assertEqual((first.program.sha256, first.candidates, first.steps),
+                             (second.program.sha256, second.candidates, second.steps))
+            self.assertLessEqual(first.candidates, 160)
+            request = json.loads(episode.fit_request)
+            request["fuel"] = 1
+            limited = fit_isolated(canonical_json(request), policy="beam")
+            self.assertEqual(limited.status, "fuel_exhausted")
+            self.assertEqual(limited.steps, 1)
+            self.assertEqual(limited.program.family, episode.family)
+
+    def test_replay_check_rejects_changed_result_and_accepts_timing_change(self):
+        reference = {"mode": "development", "runs": [
+            {"fit_steps": 21, "worker": {"cpu_us": 10}, "scoring_cpu_us": 4}
+        ]}
+        replay = deepcopy(reference)
+        replay["runs"][0]["worker"]["cpu_us"] = 99
+        verify_replay(reference, replay)
+        replay["runs"][0]["fit_steps"] = 22
+        with self.assertRaisesRegex(ValueError, "deterministic fields"):
+            verify_replay(reference, replay)

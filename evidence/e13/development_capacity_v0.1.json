@@ -1,0 +1,419 @@
+{
+  "mode": "development",
+  "rules": [
+    {
+      "family": "S",
+      "rule": "repeat",
+      "witnesses": 145,
+      "status": "covered_on_witnesses",
+      "ast_sha256": "a3653ee131aced73207f9bc54ca4b730a84b060cac19870ae34a3230414c5f75",
+      "ast": {
+        "ast": {
+          "op": "symbol_machine",
+          "table": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                0
+              ]
+            ]
+          ]
+        },
+        "family": "S"
+      }
+    },
+    {
+      "family": "S",
+      "rule": "repeat_run",
+      "witnesses": 169,
+      "status": "covered_on_witnesses",
+      "ast_sha256": "6a6f1116421720ed77e9e9d1dea14d3b293b675d469048c55b20e038e9e53e6b",
+      "ast": {
+        "ast": {
+          "op": "symbol_machine",
+          "table": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                0,
+                0
+              ]
+            ]
+          ]
+        },
+        "family": "S"
+      }
+    },
+    {
+      "family": "S",
+      "rule": "down",
+      "witnesses": 169,
+      "status": "covered_on_witnesses",
+      "ast_sha256": "347edddb343c20b2612bccc5266953ce569a5c25a1230457072ee76dadddfd6f",
+      "ast": {
+        "ast": {
+          "op": "symbol_machine",
+          "table": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                1
+              ]
+            ]
+          ]
+        },
+        "family": "S"
+      }
+    },
+    {
+      "family": "S",
+      "rule": "rise",
+      "witnesses": 145,
+      "status": "covered_on_witnesses",
+      "ast_sha256": "e608b5dd8a583247c3353af4f546cda565a8740c560d41435df18509669de0ff",
+      "ast": {
+        "ast": {
+          "op": "symbol_machine",
+          "table": [
+            [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ]
+          ]
+        },
+        "family": "S"
+      }
+    },
+    {
+      "family": "S",
+      "rule": "rise_start",
+      "witnesses": 171,
+      "status": "covered_on_witnesses",
+      "ast_sha256": "ed3a3920e7b19891d4d76621956de1a57bfa98f00f2a6828d4deba936c869abd",
+      "ast": {
+        "ast": {
+          "op": "symbol_machine",
+          "table": [
+            [
+              [
+                1,
+                1
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ]
+          ]
+        },
+        "family": "S"
+      }
+    },
+    {
+      "family": "S",
+      "rule": "down_parity",
+      "witnesses": 169,
+      "status": "covered_on_witnesses",
+      "ast_sha256": "9edab39c525c6892c765550bbd6d1ce03d8d3395c3a17ad0028fed01a838ca95",
+      "ast": {
+        "ast": {
+          "op": "symbol_machine",
+          "table": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                0,
+                0
+              ]
+            ]
+          ]
+        },
+        "family": "S"
+      }
+    },
+    {
+      "family": "G",
+      "rule": "repeat_once",
+      "witnesses": 154,
+      "status": "covered_on_witnesses",
+      "ast_sha256": "f8634b79a1035bd8cef8820663c425b755a018836d15a86824415918c4b60c6d",
+      "ast": {
+        "ast": {
+          "accept": [
+            0,
+            1,
+            0
+          ],
+          "op": "graph_machine",
+          "table": [
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              1,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              2
+            ]
+          ]
+        },
+        "family": "G"
+      }
+    },
+    {
+      "family": "G",
+      "rule": "repeat_odd",
+      "witnesses": 176,
+      "status": "covered_on_witnesses",
+      "ast_sha256": "0bc665fb1beaedf1cfe813b84fd88790b43358b8152a9914381b722e99e6dffb",
+      "ast": {
+        "ast": {
+          "accept": [
+            0,
+            1
+          ],
+          "op": "graph_machine",
+          "table": [
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ]
+        },
+        "family": "G"
+      }
+    },
+    {
+      "family": "G",
+      "rule": "edge_even",
+      "witnesses": 175,
+      "status": "covered_on_witnesses",
+      "ast_sha256": "5ddd2df059a7b3871b23b8f944c112c8654aea72cc7e05c00dcfe6d4068c5523",
+      "ast": {
+        "ast": {
+          "accept": [
+            1,
+            0
+          ],
+          "op": "graph_machine",
+          "table": [
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ]
+        },
+        "family": "G"
+      }
+    },
+    {
+      "family": "G",
+      "rule": "switch_once",
+      "witnesses": 151,
+      "status": "covered_on_witnesses",
+      "ast_sha256": "0bb4ced814d38c3311dd1a28f54f4a1a9be0269dda33a184ba64a5a4963d41fe",
+      "ast": {
+        "ast": {
+          "accept": [
+            0,
+            1,
+            0
+          ],
+          "op": "graph_machine",
+          "table": [
+            [
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ]
+          ]
+        },
+        "family": "G"
+      }
+    },
+    {
+      "family": "G",
+      "rule": "switch_at_least_two",
+      "witnesses": 175,
+      "status": "covered_on_witnesses",
+      "ast_sha256": "82e1f942be39f639be579c3c04d47ad38e58124240f8aa5df9a2db58f3434faa",
+      "ast": {
+        "ast": {
+          "accept": [
+            0,
+            0,
+            1
+          ],
+          "op": "graph_machine",
+          "table": [
+            [
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ]
+          ]
+        },
+        "family": "G"
+      }
+    },
+    {
+      "family": "G",
+      "rule": "edge_min_three",
+      "witnesses": 175,
+      "status": "covered_on_witnesses",
+      "ast_sha256": "d8eba81ce6ebab254c34e74af1d69a5435969d4b705846e2eb2b75b2ef3a46a0",
+      "ast": {
+        "ast": {
+          "accept": [
+            0,
+            0,
+            1
+          ],
+          "op": "graph_machine",
+          "table": [
+            [
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ]
+          ]
+        },
+        "family": "G"
+      }
+    }
+  ]
+}

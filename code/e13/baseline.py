@@ -41,3 +41,9 @@ def fit(raw: bytes) -> FitResult:
 
     assert best_program is not None
     return FitResult(best_program, count, fuel.used)
+
+
+
+def fit_fixed(raw: bytes) -> FitResult:
+    request = parse_fit_request(raw)
+    return FitResult(next(_catalog(request.family)), 1, 1)

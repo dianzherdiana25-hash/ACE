@@ -34,7 +34,7 @@ class IsolatedFit:
     status: str = "fit"
 
 
-_SOLVER_FILES = ("__init__.py", "baseline.py", "blind.py", "contract.py", "dsl.py", "worker.py")
+_SOLVER_FILES = ("__init__.py", "baseline.py", "beam.py", "blind.py", "contract.py", "dsl.py", "worker.py")
 _WALL_SECONDS = 3
 _MEMORY_BYTES = 128 * 1024 * 1024
 
@@ -78,7 +78,7 @@ def _stage_solver(root):
 
 
 def fit_isolated(raw: bytes, *, policy="catalog") -> IsolatedFit:
-    if policy not in ("catalog", "blind"):
+    if policy not in ("fixed", "catalog", "blind", "beam"):
         raise ValueError("unknown isolated fit policy")
     request = parse_fit_request(raw)
     with tempfile.TemporaryDirectory(prefix="ace-e13-solver-") as temp:
