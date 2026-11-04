@@ -4,6 +4,16 @@
 2. Pada bank baru, bekukan generator bersama dan bandingkan minimax E1.4k dengan pemeringkat yang memperhitungkan peluang menghapus seluruh kelas dan biaya kejadian. Catat pertukaran antara cakupan, label, dan panjang input. Samakan batas evaluasi kandidat serta uji lengan abstain ketika biaya pertanyaan melebihi manfaat estimasi.
 3. Ukur diagnosis benar, salah, abstain, skor probe, false positive fallback, dan biaya aktual. Uji pelaporan prediksi selektif saat diagnosis belum selesai. Pertahankan contoh negatif dan pisahkan keputusan cakupan terkontrol dari **NATURAL_HOLD** untuk transfer.
 
+## Reproduksi E1.4l
+
+Dari checkout pembekuan E1.4l, buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.
+
+```bash
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 150 --heartbeat 15 --log WORK/lscore.log -- python3 -m e14.e14l_run run WORK/lscore.sqlite WORK/lscore.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 150 --heartbeat 15 --log WORK/lreplay.log -- python3 -m e14.e14l_run run WORK/lreplay.sqlite WORK/lreplay.json.gz
+PYTHONPATH=code python3 tools/ace_bounded_runner.py --timeout 120 --heartbeat 10 --log WORK/laudit.log -- python3 -m e14.e14l_audit WORK/lscore.json.gz WORK/lreplay.json.gz
+```
+
 ## Reproduksi E1.4k
 
 Dari checkout [pembekuan E1.4k](https://github.com/dianzherdiana25-hash/ACE/commit/ae73b9c9d69366d5a503fd1529ced1b11c716dd8), buat direktori `WORK` lokal. Gunakan ledger baru untuk replay dan ledger yang sama untuk resume.

@@ -1,5 +1,9 @@
 # Keadaan ACE saat ini
 
+## E1.4l — checkpoint pra-penilaian
+
+Bank baru berisi 52 blok, 72 dunia, dan 2.080 input mentah. Tiga strategi memakai generator yang sama saat keadaan sama. Delapan dunia di luar model menguji kesepakatan yang keliru. Tes pra-penilaian 4/4. [Protokol](design/e1.4/E14L_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14L_LOCK_v1.json).
+
 ## E1.4k — pertanyaan majemuk lulus pada cakupan terkontrol
 
 **COMPOUND_DEVELOPMENT_GO.** Dengan satu label, majemuk terarah mendiagnosis panjang pada 6/6 kasus simbol dan 4/6 kasus graf packable. Kedua kontrol mencapai 0/6 per keluarga. Pada simbol alami, majemuk dan pendek sama-sama mencapai 2/12 diagnosis dan 90/96 probe tepat. Untuk 11 label, majemuk memakai 132 kejadian dibanding 62. **NATURAL_HOLD** untuk transfer.
