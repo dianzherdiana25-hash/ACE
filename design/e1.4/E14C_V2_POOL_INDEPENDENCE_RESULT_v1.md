@@ -14,9 +14,9 @@
 | Family / regime | Inherited | Task-local max-partition | Sham | Uniform one-label expectation | No extra label | Hindsight one-label ceiling |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | S / related | **12** | **15** | 11 | 11.625 | 11 | 16 |
-| S / unrelated | **12** | 12 | 12 | 12.375 | 12 | 12 |
-| G / related | **16** | 16 | 16 | 15.75 | 16 | 16 |
-| G / unrelated | **16** | 11 | 11 | 11.75 | 11 | 24 |
+| S / unrelated | **12** | 12 | 12 | 12.375 | 12 | 16 |
+| G / related | **16** | 16 | 16 | 15.75 | 16 | 20 |
+| G / unrelated | **16** | 11 | 11 | 11.75 | 11 | 16 |
 | **All 12 targets** | **56/96** | 54/96 | 50/96 | 51.5/96 | 50/96 | 68/96 |
 
 - Source-trained strategies: `S = first_disagreement`, `G = last_disagreement`; sham: `S = min_partition`, `G = seeded_disagreement`.
