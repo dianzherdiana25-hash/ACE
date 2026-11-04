@@ -1,0 +1,110 @@
+{
+  "arms": 36,
+  "audit": {
+    "bank_sha256": "e17e22a4e53df4d875f2635ddc0bc96d652c9d68eb70012d99ac8af8ff6118fa",
+    "episodes": 12,
+    "equivalence": "UNKNOWN outside finite witnesses",
+    "oracle_rules": 14,
+    "oracle_source_sha256": [
+      "97cb68de8937f066fb8336622db0c14bc7a48eb887918c92ea2b160be5f5f421"
+    ],
+    "public_inputs": {
+      "G": 393,
+      "S": 344
+    },
+    "split": "selection",
+    "status": "admitted",
+    "target_blocks": 12,
+    "worker_canary": "pass"
+  },
+  "budget": {
+    "fit_and_predict_cpu_us": 1000000,
+    "fit_and_predict_wall_us": 3000000,
+    "fit_steps": 75000,
+    "total_steps": 100000
+  },
+  "candidate_checkpoint": "2d9d86c1d7a142f985ea1188532508bca077522c",
+  "candidate_source_sha256": "7737816213e7ef9b16332e1b5aa84150bbe2a25a2fce02f6e67a532c929028a1",
+  "fit_status": {
+    "beam": {
+      "fit": 12
+    },
+    "enumerative": {
+      "fallback": 3,
+      "fit": 6,
+      "fuel_exhausted": 3
+    },
+    "structured": {
+      "fallback": 3,
+      "fit": 9
+    }
+  },
+  "mode": "selection",
+  "order_seed": 131506,
+  "ranking": [
+    {
+      "accuracy": 0.5208333333333334,
+      "cpu_us": 549564,
+      "families": {
+        "G": {
+          "correct": 28,
+          "failures": 0,
+          "total": 48
+        },
+        "S": {
+          "correct": 22,
+          "failures": 0,
+          "total": 48
+        }
+      },
+      "policy": "beam"
+    },
+    {
+      "accuracy": 0.5,
+      "cpu_us": 667549,
+      "families": {
+        "G": {
+          "correct": 23,
+          "failures": 0,
+          "total": 48
+        },
+        "S": {
+          "correct": 25,
+          "failures": 0,
+          "total": 48
+        }
+      },
+      "policy": "enumerative"
+    },
+    {
+      "accuracy": 0.4375,
+      "cpu_us": 434443,
+      "families": {
+        "G": {
+          "correct": 19,
+          "failures": 0,
+          "total": 48
+        },
+        "S": {
+          "correct": 23,
+          "failures": 0,
+          "total": 48
+        }
+      },
+      "policy": "structured"
+    }
+  ],
+  "score_cap_arms": 0,
+  "selected": "beam",
+  "clean_replay": {
+    "matching_arms": 36,
+    "same_ranking": true
+  },
+  "observed_maximum": {
+    "arm_cpu_us": 111458,
+    "arm_wall_us": 120859,
+    "arm_steps": 75138,
+    "worker_rss_kib": 13696
+  },
+  "scope": "internal selection after candidate freeze; separate evaluator path, same project authoring context"
+}

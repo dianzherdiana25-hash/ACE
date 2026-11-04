@@ -160,3 +160,17 @@ Gerbang ini menerima 12 episode dengan satu blok target per episode dan tiga epi
 Jalur evaluator menyimpan generator, oracle, dan label di luar checkout. Worker menerima fit JSON tanpa nama aturan atau label probe. Interpreter evaluator menilai AST beku. Tiga kebijakan tertutup dijalankan dengan urutan acak deterministik. Anggaran per arm 75.000 langkah fit dan 100.000 langkah total, dengan prediksi memakai sisa langkah. CPU fit worker ditambah CPU prediksi dibatasi 1 detik. Wall fit dan prediksi dibatasi 3 detik. Batas memori fit tetap 128 MiB ruang alamat. Waktu CPU proses launcher dan biaya audit/generator terpisah dari skor arm. Probe yang berhenti karena cap tetap dalam denominator. Kegagalan infrastruktur menahan keputusan.
 
 Peringkat memakai akurasi rata-rata berbobot sama untuk simbol dan graf, lalu CPU total yang lebih rendah, lalu ID leksikografis. Catat skor ketiga kebijakan, cap dan fallback, digest bank dan sumber evaluator. Akurasi ini memilih pembanding untuk bank selection. Kontras kausal, ukuran sampel dan penguncian konfirmatori adalah gerbang tersendiri.
+
+### Keputusan selection v1
+
+Pembanding dibekukan pada [`2d9d86c`](https://github.com/dianzherdiana25-hash/ACE/commit/2d9d86c1d7a142f985ea1188532508bca077522c) sebelum generator evaluator ditulis di direktori terpisah. Penulis berasal dari konteks proyek yang sama. Audit 12 blok target meliputi 344 input simbolik dan 393 graf publik yang dicatat, ditambah suite saksi kecil. Canary worker gagal membaca sumber evaluator sesuai batas isolasi. Audit memeriksa ekuivalensi pada domain terbatas.
+
+| Kebijakan | Simbol | Graf | Total |
+| --- | ---: | ---: | ---: |
+| Beam | 22/48 | 28/48 | 50/96 |
+| Enumeratif | 25/48 | 23/48 | 48/96 |
+| Terstruktur | 23/48 | 19/48 | 42/96 |
+
+**B* selection internal adalah beam.** Replay dari checkout beku kedua menghasilkan urutan akurasi sama dan mencocokkan seluruh 36 arm pada bidang deterministik. Tiga fit enumeratif mencapai plafon langkah dan enam fit menggunakan AST cadangan karena belum mencapai kecocokan demo lengkap. Seluruh AST valid tetap dinilai. Pada run asli, arm terberat memakai 75.138 langkah total dan sekitar 111 ms CPU fit + prediksi. Seluruh arm berada dalam batas yang dipilih.
+
+[Bukti agregat](../../evidence/e13/selection_summary_v1.json) memuat digest bank, oracle dan kode, peringkat, serta cap. Generator, label dan log per episode tetap di paket evaluator. Paket itu memuat instruksi replay dari checkpoint beku. Selisih dua probe menentukan urutan pada bank internal ini. Evaluasi konfirmatori memiliki split, analisis daya dan penguncian tersendiri.
