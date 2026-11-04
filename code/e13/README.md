@@ -114,6 +114,8 @@ Dua kasus publik yang terpisah dari pilot menguji batas formal yang sempit. Pada
 
 ## Pilot sintesis dan pewarisan v0.1
 
+Jalankan replay hash kode dari [checkpoint pilot](https://github.com/dianzherdiana25-hash/ACE/commit/cad0a457b4dc6e1e80d47dc570e92bf2c4245bba).
+
 ```bash
 PYTHONPATH=code python3 -m e13.evaluator.transfer_pilot --verify evidence/e13/development_transfer_pilot_v0.1.json > /tmp/ace-e13-transfer.json
 PYTHONPATH=code python3 -m unittest discover -s code -p 'test_*.py' -q
@@ -134,3 +136,19 @@ Keempat kondisi memakai plafon fit yang sama dan membagi bahan bakar menjadi sep
 [Bukti lengkap](../../evidence/e13/development_transfer_pilot_v0.1.json) berisi 96 fit, hasil per probe, AST beku, langkah, CPU, RSS, saksi demo, dan 24 replay di worker baru. Jejak proposal menyimpan indeks dari `proposal_sha256_by_index` dan skor asli. Kedua kebijakan pembanding lain dari pilot lama juga dicatat bersama fixed dan beam. Dibanding C_NO_TRANSFER, pewarisan memperbaiki 28 probe terkait dan merugikan 22 probe tak terkait tanpa perubahan berlawanan di kedua kelompok. Angka tersebut berkelompok pada empat episode per rezim.
 
 Kasus terkait memakai variasi readout dari motif sumber, sehingga gerbang motif baru di desain utama masih terbuka. Demo target yang sedikit sengaja membuat pemilihan ambigu di diagnostik ini. Hasil memeriksa implementasi sintesis, penggunaan ulang dan risiko prioritas yang salah pada grammar event terbatas. Ekuivalensi semantik program terpelajar tetap `UNKNOWN`. Bank ini seluruhnya publik dan tidak digunakan untuk memilih B*.
+
+## Pilot pembanding terpisah
+
+```bash
+PYTHONPATH=code python3 -m e13.evaluator.comparator_pilot --verify evidence/e13/development_closed_comparators_v0.1.json > /tmp/ace-e13-comparators.json
+```
+
+Terstruktur menginferensi transisi dan keluaran dari jejak simbolik. Pada graf, setiap struktur transisi menghasilkan kendala pada keadaan penerima berdasarkan biaya demo, lalu solver mencari readout yang memenuhi kendala tersebut. Enumeratif menjelajah readout simbolik menurut jumlah bit aktif dan menghapus duplikat perilaku pada demo. Pada graf, enumeratif menguji subset keadaan penerima dari tabel transisi yang sama. Beam memakai mutasi lokal dan skor demo. Ketiganya tetap dalam batas empat keadaan.
+
+| Pembanding | Development S | Development G | Diagnostik S | Diagnostik G |
+| --- | ---: | ---: | ---: | ---: |
+| Terstruktur | 129/144 | 140/144 | 16/48 | 17/48 |
+| Enumeratif | 71/144 | 140/144 | 16/48 | 17/48 |
+| Beam | 69/144 | 96/144 | 16/48 | 26/48 |
+
+[Bukti](../../evidence/e13/development_closed_comparators_v0.1.json) memuat 108 fit serta ukuran CPU worker, CPU penilai, langkah, dan hasil per probe. Enam fit enumeratif mencapai plafon langkah. Dua fit terstruktur memakai AST cadangan setelah tidak menemukan kecocokan lengkap. AST yang valid tetap dinilai. Bank publik memberikan peringkat berbeda. Pemilihan B* dan penguncian biaya menunggu bank selection.

@@ -89,7 +89,7 @@ def _symbol_readout(table, demos, fuel):
     return readout, score
 
 
-def _graph_readout(table, demos, fuel):
+def _graph_constraints(table, demos, fuel):
     constraints = []
     for demo in demos:
         costs = graph_costs(demo.input, table, fuel)
@@ -102,12 +102,20 @@ def _graph_readout(table, demos, fuel):
             elif cost == demo.output:
                 accept |= 1 << state
         constraints.append((reject, accept, demo.output is None))
+    return constraints
 
+
+def _graph_score(mask, constraints):
+    return sum(not mask & reject and (unreachable or bool(mask & accept))
+               for reject, accept, unreachable in constraints)
+
+
+def _graph_readout(table, demos, fuel):
+    constraints = _graph_constraints(table, demos, fuel)
     best_mask, best_score = 0, -1
     for mask in range(1 << len(table)):
         fuel.spend()
-        score = sum(not mask & reject and (unreachable or bool(mask & accept))
-                    for reject, accept, unreachable in constraints)
+        score = _graph_score(mask, constraints)
         if score > best_score:
             best_mask, best_score = mask, score
         if score == len(demos):

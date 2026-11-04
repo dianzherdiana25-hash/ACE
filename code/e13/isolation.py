@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from time import perf_counter_ns
 
+from .comparators import POLICIES as COMPARATORS
 from .contract import (
     ContractError, array, canonical_json, integer, parse_fit_request, read_json,
     require_fields,
@@ -38,7 +39,7 @@ class IsolatedFit:
     trace: dict | None = None
 
 
-_SOLVER_FILES = ("__init__.py", "baseline.py", "beam.py", "blind.py", "contract.py",
+_SOLVER_FILES = ("__init__.py", "baseline.py", "beam.py", "blind.py", "comparators.py", "contract.py",
                  "dsl.py", "extension.py", "worker.py")
 _WALL_SECONDS = 3
 _MEMORY_BYTES = 128 * 1024 * 1024
@@ -131,7 +132,7 @@ def _validate_trace(trace, request, policy, program, candidates, steps, inherite
 
 
 def fit_isolated(raw: bytes, *, policy="catalog") -> IsolatedFit:
-    if policy not in ("fixed", "catalog", "blind", "beam", *POLICIES):
+    if policy not in ("fixed", "catalog", "blind", "beam", *COMPARATORS, *POLICIES):
         raise ValueError("unknown isolated fit policy")
     return _fit_isolated(raw, parse_fit_request(raw), policy)
 

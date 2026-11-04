@@ -7,6 +7,8 @@ import sys
 from .baseline import fit, fit_fixed
 from .beam import fit_beam
 from .blind import fit_blind
+from .comparators import POLICIES as COMPARATORS
+from .comparators import fit_comparator
 from .contract import MAX_FIT_BYTES, canonical_json
 from .extension import POLICIES, REPLAY_BYTES, fit_extension, replay_extension
 
@@ -16,6 +18,8 @@ def main(policy="catalog"):
     raw = sys.stdin.buffer.read(limit + 1)
     if policy in POLICIES:
         result = fit_extension(raw, policy)
+    elif policy in COMPARATORS:
+        result = fit_comparator(raw, policy)
     elif policy == "replay":
         result = replay_extension(raw)
     else:
