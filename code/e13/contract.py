@@ -28,6 +28,7 @@ class Graph:
 Input = tuple[int, ...] | Graph
 Output = tuple[int, ...] | int | None
 MAX_FUEL = 100_000
+MAX_FIT_BYTES = 32_768
 MAX_TOKENS = 64
 
 
@@ -119,7 +120,7 @@ def _examples(family, values):
 
 
 def parse_fit_request(raw: bytes) -> FitRequest:
-    value = read_json(raw, max_bytes=32_768)
+    value = read_json(raw, max_bytes=MAX_FIT_BYTES)
     require_fields(value, "version", "task_id", "family", "seed", "fuel", "source", "target")
     integer(value["version"], 1, 1)
     task_id, family = value["task_id"], value["family"]

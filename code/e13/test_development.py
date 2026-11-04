@@ -5,7 +5,8 @@ from dataclasses import replace
 
 from .baseline import fit
 from .contract import ContractError, canonical_json, parse_fit_request
-from .development import _graph_reference, public_fixtures, run_fixture
+from .development import run_fixture
+from .public_bank import _graph_reference, public_fixtures
 from .dsl import Fuel, FuelExhausted, compile_ast, predict
 
 
@@ -18,7 +19,7 @@ class DevelopmentTests(unittest.TestCase):
         symbols, graph = public_fixtures()
         for fixture, family in ((symbols, "S"), (graph, "G")):
             with self.subTest(family=family):
-                result = run_fixture(fixture)
+                result = run_fixture(fixture, fit)
                 self.assertEqual(result["family"], family)
                 self.assertEqual((result["correct"], result["total"]), (3, 3))
                 self.assertEqual(result["candidates"], 3)
