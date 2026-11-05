@@ -1,5 +1,19 @@
 # NEXT_ACTION — satu anggaran untuk diagnosis, perbaikan, dan pewarisan graf
 
+## New P0 after E1.4t — distinct primitive, semantic alias challenge and independent acceptance
+
+E1.4t **completed an engineering sprint** on [draft PR #15](https://github.com/dianzherdiana25-hash/ACE/pull/15): 69/69 locally available tests PASS, 48 new worlds, 240 scored and 240 replayed arms, 573 receipt labels rechecked per run, and an explicit [HOLD result](design/e1.4/E14T_RESULT_v1.md). The historical section below is retained for continuity; **do not rebuild the completed E1.4t scaffold or rescore the frozen bank to rescue the negative outcome**.
+
+1. **P0 — exact-head verification & custody.** On a complete ACE checkout with an independently checked namespace/official Bubblewrap threat model, run the historical 114-test regression *plus* 36 new E1.4t tests; verify the committed frozen SHA and score/replay/SQLite raw receipts. Test untrusted-worker read/write/network/CPU/memory boundaries and establish a trustworthy auditor/oracle receipt trail; block CI scientific signoff until then.
+2. **P0 — resolve the observed semantic false-confidence.** In E1.4t rare cases, integrated accepted one wrong exact motif even though six scored probes matched. Prepare fresh adversarial distinguishing probes that separate syntactically different but observationally similar hypotheses. Do **not** call zero observed errors strong semantic acceptance.
+3. **P1 — genuine capability creation.** Specify and implement a *new type or operator* outside preprovided length-5–9 motif grammar, with a mechanism that can propose and evaluate representation primitives, not simply extend motif length. Compare against exhaustive synthesis, a strong grammar-agnostic model, and no-inheritance controls, equalizing target/source acquisition and compute budgets.
+4. **P1 — actual predecessor learning and cost.** Replace the synthetic aligned source prefix with an artifact autonomously learned on a separate source task. Charge source examples, fitting and worker CPU/RSS; test negative transfer, lineage consistency, and removal/replacement of prior architectures.
+5. **P1 — new independent freeze.** Keep all E1.4t frozen code/lock/bank/probe results immutable. Build a separately versioned untouched bank and preregister numerical GO/HOLD, natural, rare and out-of-grammar gates before viewing outputs. Report failed cases transparently.
+6. **P2 — PR review and controlled merge only after gates.** Keep PR #15 draft and Issue #13 OPEN pending the remaining full-graph, independent-isolation and primitive-creation acceptance. No changes to Tod, no `main` merge, no purchase or fee.
+
+Reproducible E1.4t commands are in [protocol](design/e1.4/E14T_PROTOCOL_v1.md), and outputs with hash evidence are in [result](design/e1.4/E14T_RESULT_v1.md) and `evidence/e14/e14t_*`.
+
+
 ## P0 — Codex implementation: integrate the one-budget graph loop
 
 A standalone, evaluator-side shared-purchase journal now exists in `code/e14/e14_shared_budget.py` with **12/12 local unit tests passing**; see [the full engineering and audit contract](docs/ACE_E14_SHARED_LABEL_CONTRACT_v1.md). **This is not the integrated experiment**; no new Issue #13 bank or scorer was frozen/scored.
