@@ -105,8 +105,81 @@ class CollisionGateTests(unittest.TestCase):
             raise AssertionError(request.full_url)
         r = live_snapshot(REPO, 'synthetic-test-token', opener)
         self.assertEqual(['code/test.py'], r['pull_requests'][0]['files'])
-        self.assertEqual(['GET', 'GET'], [method for _, method in calls])
+        self.assertEqual(['GET', 'GET', 'GET'], [method for _, method in calls])
         self.assertNotIn('synthetic-test-token', ''.join(url for url, _ in calls))
+
+    def test_github_detects_head_race_and_fails_closed(self):
+        class Response:
+            def __init__(self, x): self.x = x
+            def __enter__(self): return self
+            def __exit__(self, *args): return False
+            def read(self, n=-1): return json.dumps(self.x).encode()
+        reads = [0]
+        def opener(request, timeout):
+            if '/pulls?' in request.full_url:
+                reads[0] += 1
+                sha = SHA if reads[0] == 1 else 'b' * 40
+                return Response([{'number': 26, 'head': {'ref': 'e16', 'sha': sha},
+                                  'base': {'ref': 'e15'}}])
+            return Response([{'filename': 'x.py'}])
+        with self.assertRaisesRegex(AuditError, 'changed during snapshot'):
+            live_snapshot(REPO, '', opener)
+        self.assertEqual(2, reads[0])
+
+    def test_github_detects_new_pr_in_second_read(self):
+        class Response:
+            def __init__(self, x): self.x = x
+            def __enter__(self): return self
+            def __exit__(self, *args): return False
+            def read(self, n=-1): return json.dumps(self.x).encode()
+        count = [0]
+        def opener(request, timeout):
+            if '/pulls?' in request.full_url:
+                count[0] += 1
+                one = {'number': 26, 'head': {'ref': 'e16', 'sha': SHA},
+                       'base': {'ref': 'e15'}}
+                two = {'number': 27, 'head': {'ref': 'e15-source', 'sha': SHA},
+                       'base': {'ref': 'e15'}}
+                return Response([one] if count[0] == 1 else [one, two])
+            return Response([{'filename': 'x.py'}])
+        with self.assertRaisesRegex(AuditError, 'changed during snapshot'):
+            live_snapshot(REPO, '', opener)
+
+    def test_github_detects_closed_pr_during_read(self):
+        class Response:
+            def __init__(self, x): self.x = x
+            def __enter__(self): return self
+            def __exit__(self, *args): return False
+            def read(self, n=-1): return json.dumps(self.x).encode()
+        count = [0]
+        def opener(request, timeout):
+            if '/pulls?' in request.full_url:
+                count[0] += 1
+                return Response([{'number': 26, 'head': {'ref': 'e16', 'sha': SHA},
+                                  'base': {'ref': 'e15'}}] if count[0] == 1 else [])
+            return Response([{'filename': 'x.py'}])
+        with self.assertRaisesRegex(AuditError, 'changed during snapshot'):
+            live_snapshot(REPO, '', opener)
+
+    def test_cli_required_pr_missing_blocks_false_safe_report(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / 'snapshot.json'
+            p.write_text(json.dumps(snapshot(pr(26, 'e15', 'e16', ['a.py']))))
+            with patch('sys.stderr', new_callable=io.StringIO) as stderr:
+                self.assertEqual(1, main(['--repo', REPO, '--snapshot', str(p),
+                                          '--require-pr', '26', '--require-pr', '27']))
+                self.assertIn('27', stderr.getvalue())
+
+    def test_cli_required_pr_validated_and_explicit_offline_scope(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / 'snapshot.json'
+            p.write_text(json.dumps(snapshot(pr(26, 'e15', 'e16', ['a.py']))))
+            with patch('sys.stdout', new_callable=io.StringIO) as stdout:
+                self.assertEqual(0, main(['--repo', REPO, '--snapshot', str(p), '--require-pr', '26']))
+                self.assertEqual('OFFLINE_SNAPSHOT_NOT_PROVEN_COMPLETE',
+                                 json.loads(stdout.getvalue())['capture_method'])
+            with patch('sys.stderr', new_callable=io.StringIO):
+                self.assertEqual(1, main(['--repo', REPO, '--snapshot', str(p), '--require-pr', '0']))
 
     def test_github_malformed_response_fails_closed(self):
         class Response:
