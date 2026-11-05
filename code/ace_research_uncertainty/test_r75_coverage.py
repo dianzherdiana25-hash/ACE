@@ -3,7 +3,7 @@ import hashlib
 import math
 import unittest
 from unittest.mock import patch
-import r75_coverage as r
+from . import r75_coverage as r
 
 
 class R75Tests(unittest.TestCase):
