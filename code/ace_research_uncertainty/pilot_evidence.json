@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "kind": "ACE_R7_PUBLIC_SYNTHETIC_PILOT",
+  "scientific_decision": "HOLD_NEGATIVE_NO_PROMOTION",
+  "seed": 20261105,
+  "source_branch": "research/e15-source-evolution",
+  "source_commit": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+  "selected_config": {
+    "strength": 12,
+    "z": 1
+  },
+  "config_selection": "validation_utility_then_ECE_tiebreak",
+  "study": {
+    "train_tasks": 30,
+    "validation_tasks": 12,
+    "test_tasks": 20,
+    "ood_tasks": 20,
+    "strata_per_task": 6,
+    "offline_training_labels": 2160,
+    "online_budgets": [
+      0,
+      6,
+      12,
+      24
+    ],
+    "online_labels_per_split_at_24": 480,
+    "oracle_labels": 0
+  },
+  "run": {
+    "local_unit_tests_passed": 11,
+    "local_unit_tests_failed": 0,
+    "run_deterministic": true,
+    "full_stdout_sha256": "6add3863c4d1f080baadc3486dee5052cd37206704446ea75e07e4d0654d564e",
+    "lock_sha256": "373625c409b8e852009c11c7a302ce3145b6bdd54afb4fef6c93286faf995294",
+    "code_git_blob_sha": "4785d7c75afcab3f1cc46d74dd41cb7bec4308ab",
+    "test_git_blob_sha": "a509e542e797adfce2f3c06ebb9a91de908382c0",
+    "exact_head_actions_checked": false,
+    "independent_scientific_verification": false
+  },
+  "at_24": {
+    "test": {
+      "fixed": [
+        30,
+        8,
+        82,
+        0.056467,
+        0.178429
+      ],
+      "random": [
+        20,
+        5,
+        95,
+        0.048228,
+        0.187431
+      ],
+      "random_lcb": [
+        20,
+        0,
+        100,
+        0.034333,
+        0.15614
+      ],
+      "active_lcb": [
+        0,
+        0,
+        120,
+        0.02938,
+        0.156096
+      ],
+      "oracle_true": 48
+    },
+    "ood": {
+      "fixed": [
+        12,
+        8,
+        100,
+        0.034549,
+        0.211791
+      ],
+      "random": [
+        10,
+        7,
+        103,
+        0.046067,
+        0.21689
+      ],
+      "random_lcb": [
+        1,
+        5,
+        114,
+        0.200243,
+        0.287742
+      ],
+      "active_lcb": [
+        0,
+        0,
+        120,
+        0.279584,
+        0.307476
+      ],
+      "oracle_true": 21
+    }
+  },
+  "metric_order": [
+    "correct_accepts",
+    "false_accepts",
+    "abstentions",
+    "ECE",
+    "Brier"
+  ],
+  "negative_evidence": [
+    "active_lcb abstained on every evaluated stratum",
+    "active sampling did not improve utility-per-label",
+    "source-fitted prior badly miscalibrated under shifted mechanisms",
+    "zero accepted means false-acceptance rate undefined"
+  ],
+  "restriction": "public development only; test and OOD already inspected; new holdout required before any adjusted method can be confirmed"
+}
