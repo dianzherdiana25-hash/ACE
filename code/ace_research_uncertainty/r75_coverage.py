@@ -11,6 +11,7 @@ import json
 import math
 import random
 from dataclasses import dataclass
+from functools import lru_cache
 
 SEED_TRAIN = 20261108
 FINAL_SEEDS = (20261109, 20261110, 20261111)
@@ -71,6 +72,16 @@ def worlds(split: str, family: str, seed: int, count: int) -> tuple[World, ...]:
     return tuple(out)
 
 
+@lru_cache(maxsize=1024)
+def _scored_truth(uid: str, probabilities: tuple[float, ...]) -> tuple[int, ...]:
+    """Cache evaluator-only probe outcomes; byte-identical to uncached draws.
+
+    This pure cache changes runtime cost, NOT split, policy, scoring, or labels.
+    """
+    return tuple(int(rand_for("r75-score", uid, g, j).random() < probabilities[g])
+                 for g in range(GROUPS) for j in range(64))
+
+
 class Evaluator:
     def __init__(self, world: World, max_labels: int):
         self._world = world
@@ -101,12 +112,8 @@ class Evaluator:
             raise ValueError("invalid decision")
         if len(estimates) != GROUPS or any(not 0 <= p <= 1 for p in estimates):
             raise ValueError("invalid estimates")
-        y, q = [], []
-        for g in range(GROUPS):
-            for j in range(64):
-                y.append(int(rand_for("r75-score", self._world.uid, g, j).random()
-                             < self._world.p[g]))
-                q.append(estimates[g])
+        y = _scored_truth(self._world.uid, self._world.p)
+        q = [estimates[g] for g in range(GROUPS) for _ in range(64)]
         bins = [[0., 0., 0] for _ in range(10)]
         brier = 0.
         for p, label in zip(q, y):
