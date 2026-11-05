@@ -226,8 +226,36 @@ def verify(report):
     summary = report["modes"]
     for mode in ("clean", "noisy"):
         correct = sum(counts[(mode, size)] for size in STATES)
-        insist(summary[mode]["induced_correct"] == correct, "aggregate correct count")
-    insist(report["predeclared"]["combined_h3_go"] is False, "unexpected gate status")
+        baseline = sum(max(c[mode]["scores"][method]["holdout"]["correct"]
+                           for method in ("prefix_memorizer", "suffix3", "fixed_library"))
+                       for c in report["cases"])
+        good = sum(c[mode]["scores"]["induced"]["holdout"]["correct"] >= 231
+                   for c in report["cases"])
+        merges = sum(c[mode]["attempts"] for c in report["cases"])
+        expected = {"induced_accuracy": round(correct/12288, 6),
+                    "induced_correct": correct,
+                    "oracle_control_accuracy": round(baseline/12288, 6),
+                    "oracle_control_correct": baseline,
+                    "gain_vs_oracle": round((correct-baseline)/12288, 6),
+                    "high_accuracy_tasks": good,
+                    "merge_attempts": merges}
+        insist(summary[mode] == expected, f"{mode} aggregate drift")
+        for size in STATES:
+            rows = [c for c in report["cases"] if c["target_source_states"] == size]
+            by_size = {"induced_correct": counts[(mode, size)],
+                       "total": len(rows) * 256,
+                       "high_accuracy_tasks": sum(c[mode]["scores"]["induced"]["holdout"]["correct"] >= 231
+                                                  for c in rows),
+                       "mean_inferred_states": round(sum(c[mode]["states"] for c in rows)/len(rows), 3)}
+            insist(report["by_source_size"][str(size)][mode] == by_size,
+                   "state-size summary drift")
+    degradation = (summary["clean"]["induced_correct"] - summary["noisy"]["induced_correct"])/12288
+    a = summary["clean"]["gain_vs_oracle"] >= .05 and summary["clean"]["high_accuracy_tasks"] >= 36
+    b = degradation <= .05 and summary["noisy"]["high_accuracy_tasks"] >= 36
+    insist(report["predeclared"] == {"noise_degradation": round(degradation, 6),
+                                     "h3a_clean_scaling_pass": a,
+                                     "h3b_noise_robustness_pass": b,
+                                     "combined_h3_go": bool(a and b)}, "gate recomputation drift")
     return {"independently_audited_worlds": 48, "scored_arm_splits": 48 * 2 * 4 * 3,
             "oracle_labels_verified": 24528, "heldout_induced_correct": {
                 mode: summary[mode]["induced_correct"] for mode in ("clean", "noisy")},
