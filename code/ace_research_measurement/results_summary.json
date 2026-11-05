@@ -1,0 +1,52 @@
+{
+  "schema": "ace.r8.public_summary.v1",
+  "source": "controlled local stdlib-only synthetic experiment; NOT a live ACE agent",
+  "tests": {
+    "passed": 13,
+    "failed": 0,
+    "scope": "local unit tests"
+  },
+  "full_deterministic_json_sha256": "012b8744793776d2a83aa62cc2a7ef038cb7f5e4c26247dc3b661814f58456e1",
+  "controls": [
+    {
+      "name": "expanded_handcoded_positive_control",
+      "n": 64,
+      "micro_delta": 0.75,
+      "family_macro_delta": 0.75,
+      "novel_delta": 1,
+      "compositional_delta": 1,
+      "base_ops": 640,
+      "candidate_ops": 768,
+      "signal": []
+    },
+    {
+      "name": "exact_instance_memorizer_negative_control",
+      "n": 64,
+      "micro_delta": 0,
+      "family_macro_delta": 0,
+      "novel_delta": 0,
+      "compositional_delta": 0,
+      "base_ops": 640,
+      "candidate_ops": 640,
+      "signal": [
+        "NO_POSITIVE_EXPLORATORY_FAMILY_CI"
+      ]
+    },
+    {
+      "name": "goodhart_easy_family_overweight_control",
+      "n": 144,
+      "micro_delta": 0.3333333333333333,
+      "family_macro_delta": -0.7142857142857143,
+      "novel_delta": -1,
+      "compositional_delta": -1,
+      "base_ops": 1440,
+      "candidate_ops": 1440,
+      "signal": [
+        "GOODHART_MICRO_MACRO_INVERSION",
+        "NO_POSITIVE_EXPLORATORY_FAMILY_CI"
+      ]
+    }
+  ],
+  "claim_gate": "NOT_CONFIRMED",
+  "caveat": "Engineered validity probes, not actual ACE cognitive growth or independent confirmation."
+}
