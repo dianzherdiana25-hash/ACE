@@ -1,0 +1,271 @@
+{
+  "arms": 168,
+  "auditor_oracle_calls": 236,
+  "date": "2026-11-05",
+  "development_sha256": "0f2e91e697666fe2fbfad587d90b4bb03026e6336c9cd51d7c9066e491dd48d2",
+  "development_summary": {
+    "pair": {
+      "active": {
+        "accepted": 28,
+        "audit_calls": 51,
+        "covered": 168,
+        "exact": 28,
+        "probe_errors": 0,
+        "purchased": 51,
+        "worlds": 28,
+        "wrong_accepted": 0
+      },
+      "base-only": {
+        "accepted": 0,
+        "audit_calls": 0,
+        "covered": 0,
+        "exact": 0,
+        "probe_errors": 0,
+        "purchased": 0,
+        "worlds": 28,
+        "wrong_accepted": 0
+      },
+      "fixed": {
+        "accepted": 21,
+        "audit_calls": 73,
+        "covered": 144,
+        "exact": 21,
+        "probe_errors": 0,
+        "purchased": 73,
+        "worlds": 28,
+        "wrong_accepted": 0
+      },
+      "random": {
+        "accepted": 26,
+        "audit_calls": 68,
+        "covered": 162,
+        "exact": 26,
+        "probe_errors": 0,
+        "purchased": 68,
+        "worlds": 28,
+        "wrong_accepted": 0
+      }
+    },
+    "single": {
+      "active": {
+        "accepted": 8,
+        "audit_calls": 8,
+        "covered": 48,
+        "exact": 8,
+        "probe_errors": 0,
+        "purchased": 8,
+        "worlds": 8,
+        "wrong_accepted": 0
+      },
+      "base-only": {
+        "accepted": 8,
+        "audit_calls": 12,
+        "covered": 48,
+        "exact": 8,
+        "probe_errors": 0,
+        "purchased": 12,
+        "worlds": 8,
+        "wrong_accepted": 0
+      },
+      "fixed": {
+        "accepted": 8,
+        "audit_calls": 12,
+        "covered": 48,
+        "exact": 8,
+        "probe_errors": 0,
+        "purchased": 12,
+        "worlds": 8,
+        "wrong_accepted": 0
+      },
+      "random": {
+        "accepted": 8,
+        "audit_calls": 12,
+        "covered": 48,
+        "exact": 8,
+        "probe_errors": 0,
+        "purchased": 12,
+        "worlds": 8,
+        "wrong_accepted": 0
+      }
+    },
+    "triple": {
+      "active": {
+        "accepted": 0,
+        "audit_calls": 0,
+        "covered": 0,
+        "exact": 0,
+        "probe_errors": 0,
+        "purchased": 0,
+        "worlds": 6,
+        "wrong_accepted": 0
+      },
+      "base-only": {
+        "accepted": 0,
+        "audit_calls": 0,
+        "covered": 0,
+        "exact": 0,
+        "probe_errors": 0,
+        "purchased": 0,
+        "worlds": 6,
+        "wrong_accepted": 0
+      },
+      "fixed": {
+        "accepted": 0,
+        "audit_calls": 0,
+        "covered": 0,
+        "exact": 0,
+        "probe_errors": 0,
+        "purchased": 0,
+        "worlds": 6,
+        "wrong_accepted": 0
+      },
+      "random": {
+        "accepted": 0,
+        "audit_calls": 0,
+        "covered": 0,
+        "exact": 0,
+        "probe_errors": 0,
+        "purchased": 0,
+        "worlds": 6,
+        "wrong_accepted": 0
+      }
+    }
+  },
+  "heldout_probe_labels": 1008,
+  "initial_demo_labels": 528,
+  "initial_pr15_head": "e1ff5537986d9f9563fcabcb236a2956e4cfe511",
+  "isolated_deterministic_sha256": "8ce95957534f20e29204e71b6fbf93da13e5d600def58406bdaddfcfffb6b772",
+  "isolated_worker_cpu_us": 9843406,
+  "isolated_worker_invocations": 404,
+  "isolated_worker_wall_us": 21300213,
+  "namespace_preflight": {
+    "evaluator_absent": true,
+    "external_network_blocked": true,
+    "home_absent": true,
+    "host_etc_absent": true,
+    "no_root_path_env": true,
+    "pid_namespace_small_pid": true,
+    "project_absent": true,
+    "system_mount_readonly": true
+  },
+  "postdevelopment_sensitivity": [
+    {
+      "active": 28,
+      "fixed": 21,
+      "random": 26,
+      "seed": 2026110507
+    },
+    {
+      "active": 28,
+      "fixed": 25,
+      "random": 26,
+      "seed": 2026110508
+    },
+    {
+      "active": 28,
+      "fixed": 24,
+      "random": 26,
+      "seed": 2026110509
+    },
+    {
+      "active": 28,
+      "fixed": 23,
+      "random": 25,
+      "seed": 2026110510
+    },
+    {
+      "active": 28,
+      "fixed": 25,
+      "random": 26,
+      "seed": 2026110511
+    },
+    {
+      "active": 28,
+      "fixed": 25,
+      "random": 26,
+      "seed": 2026110512
+    },
+    {
+      "active": 28,
+      "fixed": 24,
+      "random": 27,
+      "seed": 2026110513
+    },
+    {
+      "active": 28,
+      "fixed": 23,
+      "random": 24,
+      "seed": 2026110514
+    }
+  ],
+  "purchased_target_labels": 236,
+  "science_decision": "NOT_ASSESSED",
+  "source_manifest": {
+    "code/e14/e14u_audit.py": {
+      "bytes": 7806,
+      "git_blob_sha1": "07c134ebae0e4a83b486eef931ee4ae6bb7bd88e",
+      "sha256": "3be42a633253358875ce245157e8bb8883a77759a04c22a999252984b41af3bc"
+    },
+    "code/e14/e14u_dev.py": {
+      "bytes": 7792,
+      "git_blob_sha1": "61a5712538d74aa112e6800b520a9c154c8609ac",
+      "sha256": "918148445332e141515c3b6e88374c9bbb9f18f072c4a788d6248b321c70b2b0"
+    },
+    "code/e14/e14u_isolated.py": {
+      "bytes": 7436,
+      "git_blob_sha1": "eda330a02818c5c90d0712440a1c0003c20ce2c9",
+      "sha256": "bf685f842e97d698bcf50ff3ca50f7cdd1fcd80d9f4e4d8cbaf71b8b24f98230"
+    },
+    "code/e14/e14u_primitive.py": {
+      "bytes": 7405,
+      "git_blob_sha1": "0ea31eea02c2eeb2d74119196d3166c609518fb9",
+      "sha256": "9005e40330233d9cbb28079f710e7fbd8d3e4e431f3883b703e9773ccc898f0c"
+    },
+    "code/e14/e14u_robustness.py": {
+      "bytes": 1953,
+      "git_blob_sha1": "953b585d5b7bd5cedfeeb129c643cd8abba37cf8",
+      "sha256": "1a019c300d3b0e28827d6d5aaa4c188d20a5a9ae9beaa58be62df7eb54a92376"
+    },
+    "code/e14/e14u_worker.py": {
+      "bytes": 6183,
+      "git_blob_sha1": "7c136b8647abd23621091a6c4eac256c1bc4e9bd",
+      "sha256": "91d262f42c0dd76423c2e39600d1d3186d7c50de5a738e2febb88d60c55f9315"
+    },
+    "code/e14/test_e14u_audit_worker.py": {
+      "bytes": 9042,
+      "git_blob_sha1": "c9ed9d6360a82ee2344e4c3e4225eaec14b9a2ef",
+      "sha256": "81e0afef472268a1b5396a71b4cd0119d2bd3727a25126d822f1a62ddd9ce3df"
+    },
+    "code/e14/test_e14u_primitive.py": {
+      "bytes": 7590,
+      "git_blob_sha1": "c2220c275ca86751e76376636920575b558fb613",
+      "sha256": "c0084c4df60f7848b94553993d39cbd0474cb67fcffc6cf710be619d6aa3e7dd"
+    },
+    "code/e14/test_e14u_robustness.py": {
+      "bytes": 1267,
+      "git_blob_sha1": "71710687bfae4fd9e80d03f99338f2d76615dbb0",
+      "sha256": "9e18939f8f5d6473260b4bef33614dea02a9f573e24a88def78f7e367d65b90f"
+    },
+    "design/e1.4/E14U_PROTOCOL_DEV_v0.md": {
+      "bytes": 3772,
+      "git_blob_sha1": "b402bbcee8b20322c60de12c3eacfe1a6babd237",
+      "sha256": "455786ac8df7e0f3db53ea50494d6dfa543439c98d2a7bf3d8ef53df5e767209"
+    },
+    "docs/ACE_E14U_DEVELOPMENT_v0.md": {
+      "bytes": 7707,
+      "git_blob_sha1": "39415197fb265cab82e4e08b2ea16124e90491e3",
+      "sha256": "2a7c29a85b7a95a887436b88a35bbe1f276102ccc48a53e71ec5ee54928b9fa4"
+    }
+  },
+  "status": "ENGINEERING_PUBLIC_DEVELOPMENT_NONCONFIRMATORY",
+  "tests": "130/130 PASS on partial compatible workspace",
+  "unverified": [
+    "full historical 114-test repository checkout",
+    "native Bubblewrap exact-worker security",
+    "independent preregistered new bank",
+    "unassisted source discovery",
+    "open-ended architectural invention"
+  ],
+  "version": 0,
+  "worlds": 42
+}
