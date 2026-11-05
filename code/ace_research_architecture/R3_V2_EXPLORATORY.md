@@ -30,6 +30,18 @@ All arms use 5 binary inputs, at most 5 AND/OR/XOR gates, 18 train / 7 validatio
 ## Engineering checks
 21/21 **local** Python unit tests passed (14 inherited v1 tests + 7 new v2 tests). The new tests cover deterministic repetition, invalid arms and edge validation, finite budgets, actual topology mutations, and a holdout-label inversion that changes test scoring without changing architecture selection. All 180 record rows were generated with the same source and declared budget, using separate runs per bank to avoid long in-process execution. Two **separate local Python CLI reruns** reproduced the 90/90 development and 90/90 additional-task records *exactly* (180/180 full-record matches). These are same-source local replays, **not independent external validation or GitHub CI**. Full results JSON SHA-256: `ac673e7de28e6d453a00af0d5e6f23c95693ab95c796b31f292d2548bcf2faea`; conversation ZIP SHA-256: `84bae73b5440b70eafa15b39ef9cb6537b7cc254a726ca83f2e9ccd8d77fa081`.
 
+## Paired uncertainty diagnostic (exploratory, not a confirmatory CI)
+
+Paired by identical task and seed; 12,000 bootstrap resamples of the **six task clusters** per bank, keeping all three seeds per resampled task. The reported 2.5th–97.5th percentile ranges are conditional on these manually authored tasks, and must not be interpreted as population-general confidence statements.
+
+| Bank | Comparison (test accuracy) | Difference | Paired W/T/L | Task-cluster bootstrap percentile interval |
+|---|---|---:|---:|---:|
+| Development | Neutral + coverage minus greedy | **-18.25 pp** | 2 / 5 / 11 | -30.95 to -7.14 pp |
+| Additional public | Neutral + coverage minus greedy | **+0.79 pp** | 4 / 9 / 5 | -10.32 to +10.32 pp |
+| Additional public | Neutral + coverage minus fixed-wiring config | +12.70 pp | 8 / 5 / 5 | -1.59 to +34.13 pp |
+
+The near-zero additional-task difference versus greedy is consistent with both a material deficit and a material improvement. No promotion gate is met.
+
 ## Interpretation
 Neutral stepping stones alone lose to greedy in *both* banks. Neutral + validation coverage is worse than greedy by 18.25 percentage points in development, but ahead by only 0.79 points on the additional public bank, with greater measured gate-work and a lower number of perfect solutions. Neither positive nor negative split warrants population-level extrapolation. This does **not** meet the gate for scientific superiority, autonomous runtime self-modification or OAIE. The author-visible additional bank is not an independent holdout. A common per-case ceiling is not equal actual cost.
 
