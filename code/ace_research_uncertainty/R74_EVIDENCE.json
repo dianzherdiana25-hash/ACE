@@ -1,0 +1,220 @@
+{
+  "schema": 1,
+  "track": "ACE Research R7",
+  "study": "R7.4 conditional e-process certification",
+  "kind": "PUBLIC_SYNTHETIC_DEVELOPMENT",
+  "decision": "HOLD",
+  "pr": 43,
+  "precommitted_protocol_commit": "e39c0548bc6d0260af746366fb3646362722d833",
+  "source_git_blob": "73f9a17271b9c1248891448c83a80cbb78054983",
+  "test_git_blob": "dbb1f469143305c3e8810927fec6a1b16e5646db",
+  "commands": {
+    "tests": "PYTHONPATH=code python -m unittest ace_research_uncertainty.test_experiment ace_research_uncertainty.test_r72_certification ace_research_uncertainty.test_r73_shift ace_research_uncertainty.test_r74_riskgate -q",
+    "validation": "PYTHONPATH=code python -m ace_research_uncertainty.r74_riskgate --phase validation",
+    "final": "PYTHONPATH=code python -m ace_research_uncertainty.r74_riskgate --phase final > ACE_R74_locked_final_results.json",
+    "audit": "python ace_r74_audit.py [local offline JSON-only verification, no scoring]"
+  },
+  "tests": {
+    "python": "3.13.5",
+    "passed": 51,
+    "failed": 0,
+    "exact_head_github_actions": false
+  },
+  "bank": {
+    "seed": 20261108,
+    "train": 30,
+    "validation": 12,
+    "stable_test": 20,
+    "ood_a": 20,
+    "ood_b": 20,
+    "ood_c": 20,
+    "ood_d": 20,
+    "group_count": 6,
+    "offline_training_labels": 2160,
+    "per_task_online_caps": [
+      0,
+      6,
+      12,
+      24
+    ]
+  },
+  "metrics": {
+    "false_acceptance_rate_denominator_zero": "null",
+    "utility": "20 correct -60 wrong -2 abstain -1 purchased label",
+    "oracle": "privileged evaluation-only theoretical ceiling"
+  },
+  "final_artifact": {
+    "filename": "ACE_R74_locked_final_results.json",
+    "bytes": 79597,
+    "sha256": "0f7e01fade89eab217e717ca44a89dd807972cfabbdbd3e115c99bfa059918ef",
+    "final_scoring_runs": 1
+  },
+  "audit": {
+    "arms": 120,
+    "checks": 1197,
+    "failures": 0,
+    "scoring_rerun": false,
+    "audit_file_sha256": "7030b97d8806be460f8fa2225b4b1b8a2a7c4e3f5a4f3ca3353dfff7b1e7ff4f"
+  },
+  "score_at_24": {
+    "test": {
+      "oracle_true": 45,
+      "certificate": {
+        "correct": 29,
+        "wrong": 0,
+        "purchases": 122
+      },
+      "r73_shift_aware": {
+        "correct": 32,
+        "wrong": 0,
+        "purchases": 145,
+        "utility": 319
+      },
+      "r74_e_test": {
+        "correct": 14,
+        "wrong": 0,
+        "purchases": 410,
+        "utility": -342,
+        "ece": 0.080471,
+        "brier": 0.188925
+      },
+      "paired_lcb": {
+        "correct": 16,
+        "wrong": 0,
+        "purchases": 410
+      }
+    },
+    "ood_a": {
+      "oracle_true": 20,
+      "certificate": {
+        "correct": 0,
+        "wrong": 7,
+        "purchases": 79
+      },
+      "r73_shift_aware": {
+        "correct": 3,
+        "wrong": 5,
+        "purchases": 319,
+        "utility": -783
+      },
+      "r74_e_test": {
+        "correct": 3,
+        "wrong": 0,
+        "purchases": 465,
+        "utility": -639,
+        "ece": 0.082531,
+        "brier": 0.220842
+      },
+      "paired_lcb": {
+        "correct": 5,
+        "wrong": 0,
+        "purchases": 465
+      }
+    },
+    "ood_b": {
+      "oracle_true": 32,
+      "certificate": {
+        "correct": 0,
+        "wrong": 0,
+        "purchases": 44
+      },
+      "r73_shift_aware": {
+        "correct": 7,
+        "wrong": 1,
+        "purchases": 480,
+        "utility": -624
+      },
+      "r74_e_test": {
+        "correct": 2,
+        "wrong": 0,
+        "purchases": 470,
+        "utility": -666,
+        "ece": 0.040812,
+        "brier": 0.195745
+      },
+      "paired_lcb": {
+        "correct": 5,
+        "wrong": 0,
+        "purchases": 470
+      }
+    },
+    "ood_c": {
+      "oracle_true": 36,
+      "certificate": {
+        "correct": 0,
+        "wrong": 0,
+        "purchases": 54
+      },
+      "r73_shift_aware": {
+        "correct": 12,
+        "wrong": 1,
+        "purchases": 445,
+        "utility": -479
+      },
+      "r74_e_test": {
+        "correct": 3,
+        "wrong": 0,
+        "purchases": 465,
+        "utility": -639,
+        "ece": 0.052353,
+        "brier": 0.207351
+      },
+      "paired_lcb": {
+        "correct": 6,
+        "wrong": 0,
+        "purchases": 465
+      }
+    },
+    "ood_d": {
+      "oracle_true": 40,
+      "certificate": {
+        "correct": 0,
+        "wrong": 0,
+        "purchases": 49
+      },
+      "r73_shift_aware": {
+        "correct": 19,
+        "wrong": 0,
+        "purchases": 462,
+        "utility": -284
+      },
+      "r74_e_test": {
+        "correct": 0,
+        "wrong": 0,
+        "purchases": 480,
+        "utility": -720,
+        "ece": 0.129664,
+        "brier": 0.207962
+      },
+      "paired_lcb": {
+        "correct": 0,
+        "wrong": 0,
+        "purchases": 480
+      }
+    }
+  },
+  "gate": {
+    "stable_coverage_and_safety": true,
+    "ood_false_acceptance_nonworse_each": true,
+    "ood_strict_improvement_at_least_one": true,
+    "ood_coverage_two_families": true,
+    "ood_utility_nondecrease": false,
+    "all_purchases_within_caps": true
+  },
+  "total_ood_utility": {
+    "r73": -2170,
+    "r74": -2664
+  },
+  "known_failures": [
+    "R7.4 diagnostic groups 0/4/5 structurally exclude OOD-D reliable groups 2/3",
+    "e-process purchase cost consumes budget and lowers utility",
+    "single-seed not independent cross-family confirmation"
+  ],
+  "claims_not_supported": [
+    "OAIE achieved",
+    "global safety",
+    "independent holdout",
+    "formal safety under nonstationary or correlated real evaluations",
+    "exact-head GitHub CI"
+  ]
+}
