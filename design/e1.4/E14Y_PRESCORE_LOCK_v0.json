@@ -1,0 +1,17 @@
+{
+  "created_on": "2026-11-05",
+  "expected_arm_count": 400,
+  "prescore_bank_sha256": "c7dfa7c4758d5e43c649ea7679e0ad979da54e994245e888879dce20c47fe976",
+  "scientific_decision": "NOT_ASSESSED",
+  "sealed_independent_bank": false,
+  "source_sha256": {
+    "code/e14/e14y_bank.py": "afd833b7712112714d1f2e0173aae9b8b7d2ed8338dd8fab00a9788a0015aac6",
+    "code/e14/e14y_induction.py": "2a6eacad6dfc9c88bd4eeec49fdc3509ce52f0b2bd5d5affb90895136b5f5c1e",
+    "code/e14/e14y_study.py": "3c349fc80eb6602001afc4e4760c25933a62c448fda1741abf6ba30c4c14d7c9",
+    "code/e14/test_e14y_induction.py": "e4b61d4c7d8e3947eeb1b414c7078861113befe8b8fb88f718e93ac11771adb1",
+    "design/e1.4/E14Y_TRANSFER_DEVELOPMENT_PROTOCOL_v0.md": "bfa1ecefb0ff80b6921941efa0bb0b630829d1e29438df3ca8a959115eb78568",
+    "evidence/e14/e14y_prescore_bank_v0.json": "6664b75aac9e9989e3b6ccf75734188e300c269b21bd2063e0e17dba2cb3fa88"
+  },
+  "status": "PUBLIC_PRE-SCORE_ENGINEERING_LOCK",
+  "version": 1
+}
