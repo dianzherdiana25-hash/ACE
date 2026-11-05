@@ -1,0 +1,10 @@
+{
+  "sha256": {
+    "code/e14/e14s_run.py": "04c9b1ad1dfaa35fd821f62c09c710dc5780b38ebbeddea23249fd12bd9ab2f7",
+    "code/e14/e14s_worker.py": "6243ce1a96f6a19d356254ebc88ddf9905622ebd82b99dab75dc94bf80eefcc8",
+    "code/e14/test_e14s.py": "0d684932b0d5e0a0d0da85c91b563a2dc4654c3396d1248bd4fc8b366d477c79",
+    "design/e1.4/E14R_LOCK_v1.json": "a588d014849f38ed18710b82197cbdf38197b1d5d0fd2ebbd4277a418e8ca7af",
+    "design/e1.4/E14S_PROTOCOL_v1.md": "7fa95f879a543a41a105827596b3098b44195c6961a9fb288f79686ce3a246be"
+  },
+  "version": 1
+}

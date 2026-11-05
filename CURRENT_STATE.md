@@ -1,5 +1,9 @@
 # Keadaan ACE saat ini
 
+## E1.4s — checkpoint pra-penilaian
+
+Penjaga baru mempertahankan kandidat motif pendek yang masih cocok setelah satu label. Dengan batas dua atau tiga label, strategi membandingkan urutan prefiks/sufiks tetap dan pemilihan yang mencakup kandidat terbanyak. Protokol enumerasi grammar terbatas dan pemeriksaan isolasi beku, tes 2/2. [Protokol](design/e1.4/E14S_PROTOCOL_v1.md) · [Issue #12](https://github.com/dianzherdiana25-hash/ACE/issues/12).
+
 ## E1.4r — pemilihan interpretasi GO, ketahanan warisan HOLD
 
 Graf diagnostik memilih interpretasi yang benar pada 36/36 dunia yang mengikuti tiga interpretasi yang disediakan, dibanding 12/36 untuk rantai dan kalibrasi pasif. Dua metode diagnostik menahan prediksi pada semua 12 pergeseran komplemen. Pada motif lebih pendek dengan biaya sama, graf menerima 51 prediksi salah dari 120 probe. Audit lanjutan menemukan 217 dari 3.200 pasangan motif pendek–silsilah bisa meniru biaya suatu interpretasi. **Robust HOLD · NATURAL_HOLD.** Replay cocok, regresi 112/112. [Hasil](design/e1.4/E14R_RESULT_v1.md) · [Bukti](evidence/e14/e14r_verification_v1.json).

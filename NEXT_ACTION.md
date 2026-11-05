@@ -1,8 +1,16 @@
-# NEXT_ACTION — membedakan motif warisan dari penjelasan yang lebih pendek
+# NEXT_ACTION — enumerasi dan replay E1.4s
 
-1. Verifikasi HEAD GitHub dan baca [hasil E1.4r](design/e1.4/E14R_RESULT_v1.md). Bukti motif pendek yang meniru label biaya sudah tersimpan. Data yang dinilai dipakai untuk diagnosis saja.
-2. Implementasikan penjaga yang mempertahankan motif pendek yang cocok setelah label pertama. Pada bank publik baru, bandingkan abstain setelah satu label dengan pilihan satu label lanjutan yang menargetkan versi ambigu. Uji kapan jalur prefiks atau sufiks bisa membedakan motif panjang dari submotifnya dalam batas 16 sisi dan 16 node. Ukur pengurangan kesalahan, cakupan dan biaya secara terpisah. Bekukan kontrol, data dan ambang sebelum penilaian.
-3. Setelah ada bukti pemisahan yang cukup, uji apakah diagnosis, perbaikan representasi dan pewarisan bisa masuk dalam satu anggaran bersama tanpa oracle khusus tiap fase. Pertahankan batas DSL, kontrol kasus langka, dan distribusi yang dipisah. Gerbang E1.4o graf rantai, ketahanan warisan, dan NATURAL_HOLD tetap berlaku.
+1. Cocokkan HEAD GitHub dengan [protokol beku](design/e1.4/E14S_PROTOCOL_v1.md), lalu validasi Bubblewrap dan buat direktori WORK.
+2. Jalankan enumerasi serta replay dari ledger terpisah. Satu panjang sumber menjadi satu checkpoint. Jika timeout, lanjutkan dari ledger proses itu. Verifikasi keluaran kompresi identik dan simpan status serta log.
+3. Bandingkan keputusan dengan E1.4r. Catat batas grammar dan biaya label tambahan sebelum menyimpulkan nilai pemakaian ulang.
+
+## Reproduksi E1.4s
+
+```bash
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 120 --heartbeat 10 --log WORK/s-score.log -- python3 -m e14.e14s_run run WORK/s-score.sqlite WORK/s-score.json.gz
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 120 --heartbeat 10 --log WORK/s-replay.log -- python3 -m e14.e14s_run run WORK/s-replay.sqlite WORK/s-replay.json.gz
+cmp WORK/s-score.json.gz WORK/s-replay.json.gz
+```
 
 ## Pemulihan regresi publik
 
