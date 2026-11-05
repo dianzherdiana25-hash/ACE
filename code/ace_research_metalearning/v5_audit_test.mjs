@@ -1,0 +1,10 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {audit} from './v5_audit.mjs';
+const p=JSON.parse(readFileSync(new URL('./v5_prescore.json',import.meta.url),'utf8'));
+const r=JSON.parse(readFileSync(new URL('./v5_results.json',import.meta.url),'utf8'));
+const clone=x=>structuredClone(x);
+test('independent arithmetic audit passes frozen results',()=>assert.equal(audit(p,r).status,'PASS'));
+test('reject falsified aggregate even if primary unchanged',()=>{const y=clone(r);y.aggregate.scratch[4].balanced_accuracy+=.05;assert.throws(()=>audit(p,y),/AUDIT_FAIL/);});
+test('reject falsified family metric',()=>{const y=clone(r);y.per_seed[0].arms.joint.families.rotating_stencil.by_k[4].balanced_accuracy+=.01;assert.throws(()=>audit(p,y),/AUDIT_FAIL/);});
+test('reject false target label count',()=>{const y=clone(r);y.per_seed[0].arms.nearest.all_ood.target_purchases=0;assert.throws(()=>audit(p,y),/AUDIT_FAIL/);});
+test('reject falsified primary gate',()=>{const y=clone(r);y.primary.passed=true;assert.throws(()=>audit(p,y),/AUDIT_FAIL/);});
+test('reject altered prescore',()=>{const x=clone(p);x.primary.min_absolute_gain=0;assert.throws(()=>audit(x,r),/AUDIT_FAIL/);});
