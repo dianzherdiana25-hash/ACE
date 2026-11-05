@@ -1,8 +1,8 @@
-# NEXT_ACTION — E1.4o deteksi dan pemulihan otonom
+# NEXT_ACTION — E1.4p pewarisan bertipe ke graf bercabang
 
-1. Verifikasi HEAD GitHub. Baca [hasil E1.4n](design/e1.4/E14N_RESULT_v1.md) dan [runtime sprint](docs/ACE_SPRINT_RUNTIME.md). Jalur pengujian publik native sudah lolos di lingkungan sprint.
-2. Pada bank baru, gabungkan pencarian kontra-contoh E1.4m, perluasan bertipe E1.4n, dan pembelian label pembeda pasca-kontradiksi. Bandingkan perbaikan aktif, pasif, dan acak dengan bukti awal dan anggaran yang sama. Pisahkan deteksi, pemulihan, penahanan, dan biaya.
-3. Pertahankan Rare HOLD dan NATURAL_HOLD untuk transfer. Gunakan freeze baru sebelum penilaian dan simpan semua hasil.
+1. Verifikasi HEAD GitHub. Baca [hasil E1.4n](design/e1.4/E14N_RESULT_v1.md) dan [hasil E1.4o](design/e1.4/E14O_RESULT_v1.md). Loop graf E1.4o tetap HOLD. Pada graf rantai, label biner dan deteksi terlambat membatasi bukti perbaikan.
+2. Jalankan percobaan terpisah. Bangun artefak dari pendahulu simbol yang belajar dari label terjadwal, lalu impor hanya DSL bertipe ke penerus yang meminimalkan biaya jalur pada graf bercabang. Bandingkan cold, warisan, dan artefak kontrol pada anggaran target identik. Uji kecocokan dan mismatch yang tampak maupun tersembunyi.
+3. Pertahankan gerbang graf otonom dan NATURAL_HOLD terpisah dari hasil pewarisan.
 
 ## Reproduksi E1.4o
 

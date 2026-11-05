@@ -1,0 +1,470 @@
+{
+  "audit": {
+    "deterministic_sha256": "24113d5074741f6823f2833c36a76a97726f4486ba5714f959ec6c3a6253c479",
+    "replay_match": true,
+    "status": "COMPLETE",
+    "worlds": 48
+  },
+  "bank_sha256": "63c6c7b03b0e520322a6b7b1a89f5e2dd532e0832bd43012f23cb62fbc05304d",
+  "boundary": {
+    "binary": "/usr/bin/bwrap",
+    "checks": {
+      "autonomous_stage_without_evaluator": true,
+      "credential_env_absent": true,
+      "evaluator_module_absent": true,
+      "host_loopback_denied": true,
+      "private_file_denied": true,
+      "worker_mount_read_only": true
+    },
+    "native_elf": true,
+    "sha256": "573236e5328ac2ebb08f59ae3a9805b4f8d12bdef14be8af4450d5463294985f"
+  },
+  "compressed_sha256": {
+    "replay": "906d6909996b0a7dad80d1b707f0d1d3f0093a70791f0622f0ba57706e506d96",
+    "score": "18b631741ea866c2fe969025de91455187dea437769504319a6641953b5e05ea"
+  },
+  "freeze_commit": "0af0240948a059e5ece3e8ebd1fa167ead9dead0",
+  "interruption": {
+    "completed_before_timeout": 3,
+    "planned": 48
+  },
+  "plan_sha256": "cd31d1b9404858d4eb82715c5e21840b02d83adc19e124a4620ffb5716b593b6",
+  "posthoc_graph_budget": [
+    {
+      "block": "reachable:7",
+      "final_covered": 6,
+      "final_survivors": 2,
+      "first_trigger_label": 3,
+      "survivors_at_trigger": 5
+    },
+    {
+      "block": "reachable:8",
+      "final_covered": 6,
+      "final_survivors": 2,
+      "first_trigger_label": 3,
+      "survivors_at_trigger": 5
+    },
+    {
+      "block": "reachable:4",
+      "final_covered": 4,
+      "final_survivors": 3,
+      "first_trigger_label": 3,
+      "survivors_at_trigger": 6
+    },
+    {
+      "block": "reachable:0",
+      "final_covered": 8,
+      "final_survivors": 1,
+      "first_trigger_label": 2,
+      "survivors_at_trigger": 6
+    },
+    {
+      "block": "reachable:5",
+      "final_covered": 0,
+      "final_survivors": 62,
+      "first_trigger_label": null,
+      "survivors_at_trigger": null
+    },
+    {
+      "block": "reachable:3",
+      "final_covered": 4,
+      "final_survivors": 3,
+      "first_trigger_label": 3,
+      "survivors_at_trigger": 6
+    },
+    {
+      "block": "reachable:1",
+      "final_covered": 2,
+      "final_survivors": 3,
+      "first_trigger_label": 3,
+      "survivors_at_trigger": 5
+    },
+    {
+      "block": "reachable:2",
+      "final_covered": 6,
+      "final_survivors": 2,
+      "first_trigger_label": 3,
+      "survivors_at_trigger": 5
+    },
+    {
+      "block": "reachable:6",
+      "final_covered": 3,
+      "final_survivors": 3,
+      "first_trigger_label": 3,
+      "survivors_at_trigger": 6
+    }
+  ],
+  "summary": {
+    "autonomous_repair": "HOLD",
+    "cells": [
+      {
+        "arms": {
+          "active": {
+            "covered": 8,
+            "detected": 0,
+            "errors": 0,
+            "events": 288,
+            "expansion_fits": 0,
+            "full": 1,
+            "labels": 32,
+            "model_checks": 152704,
+            "repair_labels": 0
+          },
+          "passive": {
+            "covered": 8,
+            "detected": 0,
+            "errors": 0,
+            "events": 288,
+            "expansion_fits": 0,
+            "full": 1,
+            "labels": 32,
+            "model_checks": 152704,
+            "repair_labels": 0
+          },
+          "random": {
+            "covered": 8,
+            "detected": 0,
+            "errors": 0,
+            "events": 288,
+            "expansion_fits": 0,
+            "full": 1,
+            "labels": 32,
+            "model_checks": 152704,
+            "repair_labels": 0
+          }
+        },
+        "condition": "natural",
+        "family": "S",
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "active": {
+            "covered": 0,
+            "detected": 0,
+            "errors": 0,
+            "events": 126,
+            "expansion_fits": 0,
+            "full": 0,
+            "labels": 14,
+            "model_checks": 97230,
+            "repair_labels": 0
+          },
+          "passive": {
+            "covered": 0,
+            "detected": 0,
+            "errors": 0,
+            "events": 126,
+            "expansion_fits": 0,
+            "full": 0,
+            "labels": 14,
+            "model_checks": 97230,
+            "repair_labels": 0
+          },
+          "random": {
+            "covered": 0,
+            "detected": 0,
+            "errors": 0,
+            "events": 126,
+            "expansion_fits": 0,
+            "full": 0,
+            "labels": 14,
+            "model_checks": 97230,
+            "repair_labels": 0
+          }
+        },
+        "condition": "matched",
+        "family": "S",
+        "worlds": 4
+      },
+      {
+        "arms": {
+          "active": {
+            "covered": 70,
+            "detected": 9,
+            "errors": 0,
+            "events": 253,
+            "expansion_fits": 51,
+            "full": 8,
+            "labels": 30,
+            "model_checks": 128925,
+            "repair_labels": 10
+          },
+          "passive": {
+            "covered": 49,
+            "detected": 9,
+            "errors": 0,
+            "events": 180,
+            "expansion_fits": 23,
+            "full": 1,
+            "labels": 20,
+            "model_checks": 128877,
+            "repair_labels": 0
+          },
+          "random": {
+            "covered": 49,
+            "detected": 9,
+            "errors": 0,
+            "events": 283,
+            "expansion_fits": 59,
+            "full": 1,
+            "labels": 33,
+            "model_checks": 128979,
+            "repair_labels": 13
+          }
+        },
+        "condition": "reachable",
+        "family": "S",
+        "worlds": 9
+      },
+      {
+        "arms": {
+          "active": {
+            "covered": 0,
+            "detected": 0,
+            "errors": 0,
+            "events": 90,
+            "expansion_fits": 0,
+            "full": 0,
+            "labels": 10,
+            "model_checks": 75279,
+            "repair_labels": 0
+          },
+          "passive": {
+            "covered": 0,
+            "detected": 0,
+            "errors": 0,
+            "events": 90,
+            "expansion_fits": 0,
+            "full": 0,
+            "labels": 10,
+            "model_checks": 75279,
+            "repair_labels": 0
+          },
+          "random": {
+            "covered": 0,
+            "detected": 0,
+            "errors": 0,
+            "events": 90,
+            "expansion_fits": 0,
+            "full": 0,
+            "labels": 10,
+            "model_checks": 75279,
+            "repair_labels": 0
+          }
+        },
+        "condition": "rare",
+        "family": "S",
+        "worlds": 3
+      },
+      {
+        "arms": {
+          "active": {
+            "covered": 60,
+            "detected": 0,
+            "errors": 0,
+            "events": 288,
+            "expansion_fits": 0,
+            "full": 5,
+            "labels": 32,
+            "model_checks": 352,
+            "repair_labels": 0
+          },
+          "passive": {
+            "covered": 60,
+            "detected": 0,
+            "errors": 0,
+            "events": 288,
+            "expansion_fits": 0,
+            "full": 5,
+            "labels": 32,
+            "model_checks": 352,
+            "repair_labels": 0
+          },
+          "random": {
+            "covered": 60,
+            "detected": 0,
+            "errors": 0,
+            "events": 288,
+            "expansion_fits": 0,
+            "full": 5,
+            "labels": 32,
+            "model_checks": 352,
+            "repair_labels": 0
+          }
+        },
+        "condition": "natural",
+        "family": "G",
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "active": {
+            "covered": 2,
+            "detected": 0,
+            "errors": 0,
+            "events": 126,
+            "expansion_fits": 0,
+            "full": 0,
+            "labels": 14,
+            "model_checks": 6475,
+            "repair_labels": 0
+          },
+          "passive": {
+            "covered": 2,
+            "detected": 0,
+            "errors": 0,
+            "events": 126,
+            "expansion_fits": 0,
+            "full": 0,
+            "labels": 14,
+            "model_checks": 6475,
+            "repair_labels": 0
+          },
+          "random": {
+            "covered": 2,
+            "detected": 0,
+            "errors": 0,
+            "events": 126,
+            "expansion_fits": 0,
+            "full": 0,
+            "labels": 14,
+            "model_checks": 6475,
+            "repair_labels": 0
+          }
+        },
+        "condition": "matched",
+        "family": "G",
+        "worlds": 4
+      },
+      {
+        "arms": {
+          "active": {
+            "covered": 39,
+            "detected": 8,
+            "errors": 0,
+            "events": 314,
+            "expansion_fits": 100,
+            "full": 1,
+            "labels": 36,
+            "model_checks": 13001,
+            "repair_labels": 9
+          },
+          "passive": {
+            "covered": 21,
+            "detected": 8,
+            "errors": 0,
+            "events": 243,
+            "expansion_fits": 47,
+            "full": 0,
+            "labels": 27,
+            "model_checks": 12795,
+            "repair_labels": 0
+          },
+          "random": {
+            "covered": 21,
+            "detected": 8,
+            "errors": 0,
+            "events": 317,
+            "expansion_fits": 100,
+            "full": 0,
+            "labels": 36,
+            "model_checks": 13075,
+            "repair_labels": 9
+          }
+        },
+        "condition": "reachable",
+        "family": "G",
+        "worlds": 9
+      },
+      {
+        "arms": {
+          "active": {
+            "covered": 0,
+            "detected": 0,
+            "errors": 0,
+            "events": 108,
+            "expansion_fits": 0,
+            "full": 0,
+            "labels": 12,
+            "model_checks": 5723,
+            "repair_labels": 0
+          },
+          "passive": {
+            "covered": 0,
+            "detected": 0,
+            "errors": 0,
+            "events": 108,
+            "expansion_fits": 0,
+            "full": 0,
+            "labels": 12,
+            "model_checks": 5723,
+            "repair_labels": 0
+          },
+          "random": {
+            "covered": 0,
+            "detected": 0,
+            "errors": 0,
+            "events": 108,
+            "expansion_fits": 0,
+            "full": 0,
+            "labels": 12,
+            "model_checks": 5723,
+            "repair_labels": 0
+          }
+        },
+        "condition": "rare",
+        "family": "G",
+        "worlds": 3
+      }
+    ],
+    "false_triggers": 0,
+    "natural_decision": "NATURAL_HOLD",
+    "oracle_calls": 2444,
+    "rare_decision": "RARE_HOLD",
+    "worker_calls": 668,
+    "worlds": 48
+  },
+  "terminal": {
+    "audit": {
+      "elapsed_s": 13.125,
+      "exit_code": 0,
+      "log_file": "audit.log",
+      "status": "COMPLETE"
+    },
+    "interrupted": {
+      "elapsed_s": 3.001,
+      "exit_code": -15,
+      "log_file": "interrupted.log",
+      "status": "TIMEOUT"
+    },
+    "regression": {
+      "elapsed_s": 79.34,
+      "exit_code": 0,
+      "log_file": "../ace-sprint-o-reg.log",
+      "status": "COMPLETE"
+    },
+    "replay": {
+      "elapsed_s": 38.581,
+      "exit_code": 0,
+      "log_file": "replay.log",
+      "status": "COMPLETE"
+    },
+    "score": {
+      "elapsed_s": 35.787,
+      "exit_code": 0,
+      "log_file": "score.log",
+      "status": "COMPLETE"
+    }
+  },
+  "tests": {
+    "prescore": [
+      2,
+      2
+    ],
+    "recovered_regression": [
+      105,
+      105
+    ]
+  }
+}
