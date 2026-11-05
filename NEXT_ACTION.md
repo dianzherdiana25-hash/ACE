@@ -1,5 +1,16 @@
 # NEXT_ACTION — satu anggaran untuk diagnosis, perbaikan, dan pewarisan graf
 
+## ACTUAL NEXT GATES AFTER E1.5 (2026-11-05; do not restart from E1.4t)
+
+**Source of current code:** [draft PR #25](https://github.com/dianzherdiana25-hash/ACE/pull/25) on `research/e15-autonomous-research-loop`, stacked via [PR #24](https://github.com/dianzherdiana25-hash/ACE/pull/24) on Codex E1.4aa. Use GitHub HEAD readback and [E1.5 development report](evidence/e15/E15_DEVELOPMENT_SUMMARY_v0.json), not stale historic checkpoints. The **289/289** related tests are compatible-partial-checkout only. Keep `main`, Tod and frozen E1.4t/E1.4aa sources unchanged.
+
+1. **P0 exact-head integration:** run the complete unmodified GitHub repository regression on a clean checkout of PR #25, including historical E1.2/E1.3, and the nine E1.5 groups. Audit native isolation, E1.4aa prescore hash lock and CI results. Do not count absent checks as PASS.
+2. **P0 real operational adapter:** implement evaluator-owned exactly-once receipt escrow and explicit reconciliation for interrupted external oracle purchases; connect the typed E1.5 controller to actual E1.4aa research tasks in an isolated trusted evaluator. Do not auto-retry pending purchases or claim current simulated logical labels are externally paid.
+3. **P0 E1.4aa scoring:** execute its original prospectively frozen 192-arm public-development bank at exact locked sources under an approved environment with fresh journals. Preserve negative trials and independent rechecks; scientific status remains NOT_ASSESSED without confirmatory custody.
+4. **P1 source change experiments:** create isolated, reversible candidate-code mutation, baseline regression/holdout checks, and rollback, with resource accounting and explicit error states. The current E1.5 changes only typed strategy parameters, not architecture or source code.
+5. **P1 autonomous research continuation:** expand the controller from a finite policy catalog into a bounded multi-task proposal/evaluation queue with runtime and failure recovery, allowing evidence-based stopping/reallocation. Independent new data and strong baselines must precede claims of generalized self-improvement.
+6. **P2 governance:** keep draft PR stack, do not merge `main` or spend funds without owner authorization. Preserve research outcomes and scientific HOLD/NOT_ASSESSED labels. Codex is useful when full-repo/native runtime is genuinely blocked here, not required for each incremental change.
+
 ## New P0 after E1.4t — distinct primitive, semantic alias challenge and independent acceptance
 
 E1.4t **completed an engineering sprint** on [draft PR #15](https://github.com/dianzherdiana25-hash/ACE/pull/15): 69/69 locally available tests PASS, 48 new worlds, 240 scored and 240 replayed arms, 573 receipt labels rechecked per run, and an explicit [HOLD result](design/e1.4/E14T_RESULT_v1.md). The historical section below is retained for continuity; **do not rebuild the completed E1.4t scaffold or rescore the frozen bank to rescue the negative outcome**.
