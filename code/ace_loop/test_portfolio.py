@@ -27,6 +27,16 @@ class PortfolioTests(unittest.TestCase):
         self.assertEqual((self.root/'mixed_grammar'/'events.jsonl').read_bytes(),protected)
         self.assertEqual((self.root/'allocation.json').read_bytes(),allocated)
 
+    def test_no_positive_gain_pilot_is_resumable_and_idempotent(self):
+        first=run_portfolio(self.root,pilot_trials=2,total_trials=4)
+        self.assertIsNone(first['allocation']['selected'])
+        self.assertIsNone(first['selected_result'])
+        self.assertEqual(len(first['suspended_tracks']),2)
+        receipt=(self.root/'allocation.json').read_bytes()
+        reloaded=run_portfolio(self.root,pilot_trials=2,total_trials=4)
+        self.assertEqual(first,reloaded)
+        self.assertEqual(receipt,(self.root/'allocation.json').read_bytes())
+
     def test_tampered_allocation_rejected(self):
         run_portfolio(self.root,pilot_trials=8,total_trials=12)
         file=self.root/'allocation.json';row=json.loads(file.read_text());row['allocation']['selected']='mixed_grammar'
