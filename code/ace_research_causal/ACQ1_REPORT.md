@@ -19,7 +19,7 @@ PYTHONPATH=code python -m ace_research_causal.verify_acq1
 PYTHONPATH=code python -m ace_research_causal.acq1 --worlds 100 --output /tmp/acq1_replay.json
 ```
 
-The committed ACQ1 source and test Git blob checksums match the tested local files exactly. Local validation uses a transcription of the unchanged `invalid_iv.py` dependency's relevant functions because a clean private GitHub checkout was not accessible to the local runner; **full exact-HEAD dependency CI and independent reviewer execution have not been performed**. The full deterministic replay is against that local dependency transcription; reproduce in an independent clean checkout before accepting any scientific result.
+The committed ACQ1 source and test Git blob checksums match the tested local files exactly. Local validation was rerun with **byte-exact GitHub `invalid_iv.py`**, blob SHA `c27bd617496044a7f00b27d21e837523f0a54b89`, plus a local copy of the `stress.ols` function checked against its GitHub source. The **23/23 tests and byte-identical 500-world replay PASS** in this arrangement. However, this is still **not a complete clean exact-HEAD checkout, exact-head Actions CI, or independent reviewer execution**; reproduce independently before accepting any scientific claim.
 
 ## Identification & matched controls
 
