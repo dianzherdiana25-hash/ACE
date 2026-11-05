@@ -103,5 +103,39 @@
       "strict_diagnostic_false_positive_count": 9
     },
     "claim": "PUBLIC_DIAGNOSTIC_ONLY_NOT_CONFIRMED"
+  },
+  "checkpoint_6": {
+    "codex_branch_commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+    "original_summary_blob_sha1": "069b4ffdf2f0a5a363d81bcec6ddfc4f2a5e098a",
+    "source_selected_ast_ids_checked": 64,
+    "selected_unique_asts": 19,
+    "original_case_predictions_replayed": 192,
+    "original_correct_cases": 47,
+    "aggregated_replay_discrepancies": 0,
+    "distinct_original_holdout_input_pairs": 3,
+    "public_disjoint_stress_input_pairs": 16,
+    "stress_predictions": 1024,
+    "stress_correct_counts": {
+      "standard": {
+        "fixed": 17,
+        "fixed-list": 32,
+        "enumerate": 87,
+        "beam": 104
+      },
+      "tight": {
+        "fixed": 17,
+        "fixed-list": 32,
+        "enumerate": 21,
+        "beam": 21
+      }
+    },
+    "targeted_tests": {
+      "passed": 40,
+      "failed": 0,
+      "skipped": 0
+    },
+    "full_original_raw_python_cli": "NOT_RUN_LOCAL",
+    "full_exact_head_ci": "NOT_VERIFIED",
+    "scientific_claim": "NOT_CONFIRMED"
   }
 }

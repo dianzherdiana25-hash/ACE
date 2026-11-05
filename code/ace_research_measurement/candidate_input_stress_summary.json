@@ -1,0 +1,52 @@
+{
+  "schema": "ace.r8.public-input-stress-summary.v1",
+  "source_commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+  "source_git_blob": "069b4ffdf2f0a5a363d81bcec6ddfc4f2a5e098a",
+  "points": 16,
+  "task_families_public": 8,
+  "model_runs": 64,
+  "predictions": 1024,
+  "source_original_pairs_reused": 3,
+  "grid": {
+    "standard": {
+      "fixed": {
+        "solved": 0,
+        "correct": 17
+      },
+      "fixed-list": {
+        "solved": 1,
+        "correct": 32
+      },
+      "enumerate": {
+        "solved": 5,
+        "correct": 87
+      },
+      "beam": {
+        "solved": 6,
+        "correct": 104
+      }
+    },
+    "tight": {
+      "fixed": {
+        "solved": 0,
+        "correct": 17
+      },
+      "fixed-list": {
+        "solved": 1,
+        "correct": 32
+      },
+      "enumerate": {
+        "solved": 0,
+        "correct": 21
+      },
+      "beam": {
+        "solved": 0,
+        "correct": 21
+      }
+    }
+  },
+  "same_known_mechanisms": true,
+  "novel_input_values": true,
+  "external_confirmatory": false,
+  "scientific_claim": "NOT_CONFIRMED"
+}

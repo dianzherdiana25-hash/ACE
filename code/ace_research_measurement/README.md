@@ -144,3 +144,39 @@ Standard beam versus enumeration has **one discordant solved task** (1 win, 0 lo
 A separately assembled local R8 adapter prototype with the same paired-task validation logic completed **14/14 tests PASS**, including missing arms, invalid correctness, impossible zero error, over-cap work, false SHA labels and source-format normalization. The exact GitHub-committed adapter has **not yet run on a complete local checkout or exact-head CI**, and its full-blob mode is pending local access to original bytes; do not mislabel the prototype pass as exact-head verification.
 
 Scientific status: `PUBLIC_TASK_ANALYSIS=DESCRIPTIVE`; `INDEPENDENT_VERIFICATION=OPEN`; `OAIE=NOT_ESTABLISHED`.
+
+
+## Checkpoint 6: selected-program case replay and new-input stress (public development)
+
+Input source is **real recorded candidate output** from Codex PR #36 at commit `08da5702828285e0bd4d0f4dd8876f331ac89fe2` (original 64-run JSON Git blob `069b4ffdf2f0a5a363d81bcec6ddfc4f2a5e098a`; benchmark source Git blob `2638cce265508d641b530b1f1577b3f14afc91f9`). The 19 unique selected arithmetic ASTs, their SHA-256 candidate IDs and all 64 index references were **read directly from the original GitHub artifact**, saved as `candidate_selected_asts.json`, and checked against the original's frozen IDs and reported selected IDs: **64/64 identical**.
+
+`candidate_case_replay.py` implements its own closed, safe arithmetic AST interpreter, rejects unexpected operations, malformed structure, invalid types and over-limit complexity, hashes candidate identities and reproduces the exact public evaluation from the benchmark's fixed formulae and holdout coordinates. It re-computed **192 case-level predictions** over **64 runs**, found **47 predictions correct** and **0 mismatches** with all 64 reported correct-count/absolute-error pairs. One concrete diagnostic: the \`negative_linear\` task's standard-budget enumerate AST predicts `[19, -15, 18]`, while beam predicts `[26, -21, 15]`; the expected outcomes are `[26, -21, 15]`.
+
+**Dependence warning:** the 192 rows arise from only **three unique (x,y) evaluation coordinates** shared across tasks, modes and budgets. They do not represent 192 independent experimental trials. The public tasks are different known functions of shared inputs; without independent source/lineage verification they cannot be treated as independent OOD mechanisms.
+
+`candidate_input_stress.py` freezes these exact selected ASTs and runs a **new public input-disjoint bank of 16 (x,y) pairs** (none of the original 10 train/validation/holdout pairs). There are 64×16 = **1,024 more case predictions**, but these are *different values for the SAME eight human-written tasks*, not unseen task families. Results:
+
+| Mode | Standard: correct / 128, tasks fully solved | Tight: correct / 128, tasks fully solved |
+|---|---:|---:|
+| fixed | 17/128, 0/8 | 17/128, 0/8 |
+| fixed-list | 32/128, 1/8 | 32/128, 1/8 |
+| enumerate | 87/128, 5/8 | 21/128, 0/8 |
+| beam | **104/128, 6/8** | 21/128, 0/8 |
+
+The standard-budget results persist on new **input values**, not proven independent mechanisms. The tight-budget failure persists. These nonadaptive tests do not demonstrate learning from experience, novel primitive creation, or OAIE. They are *public supplementary diagnostics* and may be revisited without any claim to sealing.
+
+### Reproduction
+
+```sh
+PYTHONPATH=code python -m unittest ace_research_measurement.test_candidate_search_audit ace_research_measurement.test_candidate_case_replay ace_research_measurement.test_candidate_input_stress -v
+PYTHONPATH=code python -m ace_research_measurement.candidate_case_replay --output /tmp/r8-case-replay.json
+PYTHONPATH=code python -m ace_research_measurement.candidate_input_stress --output /tmp/r8-stress.json
+# Optional stronger source verification from a clean checkout with the Codex branch fetched:
+git show 08da5702828285e0bd4d0f4dd8876f331ac89fe2:code/ace_candidate_search/results/summary.json > /tmp/pinned-codex-summary.json
+PYTHONPATH=code python -m ace_research_measurement.candidate_case_replay \
+  --full-source /tmp/pinned-codex-summary.json --output /tmp/r8-replay-pinned.json
+```
+
+Local targeted run on source and tests byte-identical to the new Git tree: **40/40 tests PASS** (14 earlier task adapter, 16 replay, 10 new-input stress), zero skipped. The 64 AST ID and per-case aggregate checks were separately cross-checked inside the connected GitHub readback. The Python \`--full-source\` mode has **not** executed locally against the original 168 KB raw source; this is not the same as independently revalidating all 64 original journals. The prior 62 R8 tests were run at an earlier checkpoint, but **full exact-head combined regression/CI remains OPEN**.
+
+Scientific gates remain: \`SOURCE_PUBLIC=TRUE\`, \`REPLAY_SEMANTICS=CONSISTENT\`, \`TRUE_OOD_FAMILY_TRANSFER=NOT_ASSESSED\`, \`EXTERNAL_EVALUATOR=OPEN\`, \`OAIE=NOT_ESTABLISHED\`. Keep PR as draft; do not merge or alter Codex source.

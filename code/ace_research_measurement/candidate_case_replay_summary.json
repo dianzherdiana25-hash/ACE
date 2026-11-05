@@ -1,0 +1,51 @@
+{
+  "schema": "ace.r8.public-case-replay-summary.v1",
+  "source_commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+  "source_git_blob": "069b4ffdf2f0a5a363d81bcec6ddfc4f2a5e098a",
+  "unique_selected_asts": 19,
+  "runs_replayed": 64,
+  "case_predictions_replayed": 192,
+  "correct_predictions": 47,
+  "aggregate_mismatches": 0,
+  "holdout_coordinate_pairs": [
+    [
+      -7,
+      4
+    ],
+    [
+      6,
+      -3
+    ],
+    [
+      3,
+      7
+    ]
+  ],
+  "distinct_input_pairs": 3,
+  "illustrative_counterexample": {
+    "task": "negative_linear",
+    "budget": "standard",
+    "enumerate_predictions": [
+      19,
+      -15,
+      18
+    ],
+    "beam_predictions": [
+      26,
+      -21,
+      15
+    ],
+    "expected": [
+      26,
+      -21,
+      15
+    ]
+  },
+  "custody": "READ_FROM_PINNED_GITHUB_SOURCE_JAVASCRIPT_REPLAY_NOT_SEALED",
+  "scientific_claim": "NOT_CONFIRMED",
+  "notes": [
+    "192 evaluations repeat only 3 public holdout coordinates",
+    "Human-designed public generators, no independent unseen mechanisms",
+    "Full 64 journal archive replay not included here"
+  ]
+}
