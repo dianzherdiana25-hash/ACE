@@ -181,6 +181,27 @@ def live_snapshot(repo: str, token: str, opener=urllib.request.urlopen) -> dict:
                             'base': p['base']['ref'], 'files': names})
         except (TypeError, KeyError) as exc:
             raise AuditError('incomplete GitHub pull request response') from exc
+    # A multi-page read is not atomic: concurrent agents can change HEAD, base,
+    # open/close PRs, or add a PR while we are reading its changed-file pages.
+    # A second read prevents issuing an apparently safe stale-snapshot verdict.
+    # It cannot guarantee future stability after this command returns.
+    refreshed = all_pages(repo, 'pulls', token, opener)
+
+    def identity(pulls):
+        result = {}
+        for p in pulls:
+            try:
+                number = p['number']
+                value = (p['head']['ref'], p['head']['sha'], p['base']['ref'])
+                if type(number) is not int or number in result:
+                    raise AuditError('invalid/duplicate GitHub PR identity')
+                result[number] = value
+            except (TypeError, KeyError) as exc:
+                raise AuditError('incomplete GitHub PR identity') from exc
+        return result
+
+    if identity(pulls) != identity(refreshed):
+        raise AuditError('GitHub PR set, branch or HEAD changed during snapshot; retry from scratch')
     return validate_snapshot({'repository': repo, 'pull_requests': records})
 
 
@@ -188,6 +209,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo', required=True, help='owner/name; validated against offline snapshot if supplied')
     parser.add_argument('--snapshot', type=Path, help='existing offline JSON snapshot (no GitHub access)')
+    parser.add_argument('--require-pr', type=int, action='append', default=[], metavar='NUMBER',
+                        help='fail closed when this PR number is missing; repeatable')
     args = parser.parse_args(argv)
     try:
         if args.snapshot:
@@ -197,6 +220,14 @@ def main(argv: list[str] | None = None) -> int:
         else:
             snapshot = live_snapshot(args.repo, os.getenv('GITHUB_TOKEN', ''))
         report = audit(snapshot)
+        if any(type(n) is not int or n < 1 for n in args.require_pr):
+            raise AuditError('--require-pr values must be positive integers')
+        observed = {p['number'] for p in snapshot['pull_requests']}
+        missing = sorted(set(args.require_pr) - observed)
+        if missing:
+            raise AuditError(f'required PRs absent from snapshot: {missing}')
+        report['capture_method'] = ('OFFLINE_SNAPSHOT_NOT_PROVEN_COMPLETE' if args.snapshot
+                                    else 'LIVE_DOUBLE_READ_STABLE_AT_CAPTURE')
         print(json.dumps(report, sort_keys=True, indent=2))
         return 2 if report['decision'] == 'BLOCK_INTEGRATION' else 0
     except (AuditError, OSError, ValueError, AttributeError) as exc:
