@@ -1,0 +1,86 @@
+{
+  "status": "PASS",
+  "errors": [],
+  "protocol": "ACE_R2_V5_ARCHIVE_NOVELTY_PUBLIC",
+  "expected_seeds": 5,
+  "validated_seeds": 5,
+  "calibration_blocks": 240,
+  "known_blocks": 240,
+  "unrelated_blocks": 240,
+  "near_blocks": 240,
+  "shift_blocks": 240,
+  "logical_train_label_accesses": 2560,
+  "logical_calibration_label_accesses": 3840,
+  "logical_evaluation_support_accesses": 15360,
+  "logical_expert_prediction_calls": 70260,
+  "gates": {
+    "global_unrelated_gain": false,
+    "near_novelty": true,
+    "context_shift_control": true,
+    "preserved_known_accuracy": true,
+    "slot_beats_global": true
+  },
+  "paired_seeds": [
+    {
+      "seed": 5,
+      "slot_minus_global_unknown_tpr": 0.05208333333333337,
+      "global_minus_fixed_unrelated_tpr": 0.02083333333333337,
+      "global_known_fpr": 0.08333333333333333,
+      "slot_known_fpr": 0.041666666666666664
+    },
+    {
+      "seed": 17,
+      "slot_minus_global_unknown_tpr": 0.06250000000000006,
+      "global_minus_fixed_unrelated_tpr": -0.12499999999999994,
+      "global_known_fpr": 0.041666666666666664,
+      "slot_known_fpr": 0.08333333333333333
+    },
+    {
+      "seed": 31,
+      "slot_minus_global_unknown_tpr": 0.125,
+      "global_minus_fixed_unrelated_tpr": -0.10416666666666663,
+      "global_known_fpr": 0.10416666666666667,
+      "slot_known_fpr": 0.14583333333333334
+    },
+    {
+      "seed": 53,
+      "slot_minus_global_unknown_tpr": 0.13541666666666674,
+      "global_minus_fixed_unrelated_tpr": -0.02083333333333326,
+      "global_known_fpr": 0.10416666666666667,
+      "slot_known_fpr": 0.10416666666666667
+    },
+    {
+      "seed": 79,
+      "slot_minus_global_unknown_tpr": 0.01041666666666674,
+      "global_minus_fixed_unrelated_tpr": 0.2708333333333333,
+      "global_known_fpr": 0.08333333333333333,
+      "slot_known_fpr": 0.08333333333333333
+    }
+  ],
+  "descriptive": {
+    "slot_minus_global_unknown_tpr": {
+      "mean": 0.07708333333333338,
+      "seed_resample_low_95": 0.037500000000000054,
+      "seed_resample_high_95": 0.11666666666666672,
+      "n_seed": 5,
+      "caveat": "descriptive public synthetic seed bootstrap, not independent inferential CI"
+    },
+    "global_minus_fixed_unrelated_tpr": {
+      "mean": 0.00833333333333337,
+      "seed_resample_low_95": -0.09583333333333328,
+      "seed_resample_high_95": 0.14583333333333331,
+      "n_seed": 5,
+      "caveat": "descriptive public synthetic seed bootstrap, not independent inferential CI"
+    }
+  },
+  "limitations": [
+    "Independent arithmetic auditor reads stored result rows, not separate model weights or oracle implementations.",
+    "Evaluation support queries are repeated across methods on a common archive, so method scores are correlated; no independent test custody.",
+    "Unknown teacher near-variants differ by a single large coefficient sign; this is controlled synthetic novelty, not new natural-world capabilities.",
+    "Inference support labels are visible to the detector; this is not zero-shot recognition.",
+    "No task-ID oracle was available to the detector, but direct source review rather than this matrix audit is required to verify absence of leaks.",
+    "Head weights frozen by source-level hash, not by independent external process",
+    "Per-slot q90 is a precommitted comparator not a discovered generally superior algorithm.",
+    "No exact-head clean-checkout Node CI verified; scientific generalization remains HOLD."
+  ]
+}
