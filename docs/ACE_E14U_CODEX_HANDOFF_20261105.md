@@ -1,8 +1,8 @@
 # ACE E1.4u — Codex integration handoff (2026-11-05)
 
-**Engineering branch:** `codex/17-e14u-crossgrammar-audit`, based on PR #15 HEAD `cb295d2cf0413f2f1008307ed8d8b72ce3600049`.  
+**Engineering branch:** `codex/17-e14u-crossgrammar-audit`, merged with existing E1.4u PR #16 HEAD `518827c5b7635f1d8d097e1b927c5f4b96aedf45` (Codex branch merge commit `9ee25f958cb72764876a33ac6144ada1a1f83c24`).  
 **Task:** https://github.com/dianzherdiana25-hash/ACE/issues/17  
-**Parent:** https://github.com/dianzherdiana25-hash/ACE/pull/15  
+**Scientific experiment parent:** https://github.com/dianzherdiana25-hash/ACE/pull/16 (stacked on PR #15)  
 **Scope:** E1.4u nonconfirmatory engineering development; no scientific GO or OAIE claim.
 
 ## Source archive
@@ -27,11 +27,11 @@
 
 ## Codex acceptance tasks
 
-1. Compare archive with **fresh** current research/PR heads; integrate non-conflicting new code and tests to this branch with precise SHA and source provenance.
+1. Compare archive with **fresh** PR #16 head; the original E1.4u implementation is already in the branch. Integrate only non-conflicting **new ablation, union worker, rival-cost algebra, tests and reports** with precise SHA and source provenance; do not overwrite existing E1.4u code.
 2. Run complete historical+new regression on clean exact-head checkout; save logs and actual test counts and failures.
 3. Run real native Bubblewrap or fail **BLOCKED_ENV** with evidence; no silent downgrade to unshare/chroot as an equivalent security boundary.
 4. Verify worker target/probe/evaluator nonexposure, per-arm four-label shared cap, replay with *separate* oracle and source/demo/probe accounting; test corrupted receipts.
 5. Design a new prespecified, distinct experimental bank with non-target-aware source learning, alternative semantic operators not in the initial grammar, and strong equal-resource baselines. Freeze only **before** viewing target outcomes.
-6. Create draft PR to `codex/13-integrated-graph-loop`; **do not merge** without approval; preserve all E1.4t frozen source, score, bank and historical GO/HOLD decisions.
+6. Create draft PR to `research/e14u-two-route-primitive` (PR #16 head branch); **do not merge** without approval; preserve all E1.4t frozen source, score, bank and historical GO/HOLD decisions.
 
 Do not modify Tod, ACE `main`, sealed E1.3 confirmation, or pay for services.
