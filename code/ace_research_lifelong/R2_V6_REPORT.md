@@ -69,3 +69,14 @@ Compare `R2_V6_REPLAY.json` to `R2_V6_RESULTS.json`, then compare its audit outp
 ## Next scientific step
 
 An **explicitly budget-matched distillation-based merge** could preserve orthogonal skills better than blind weight averaging, but would require stored old exemplars or query/label budgets and independent training losses to justify that extra cost. Precommit exactly matched label+compute+memory budgets, and evaluate multiple *consecutive* novel tasks with capacity full after every admission. Require an independent task-family generator to check whether results transfer; do not reuse this public v6 score as confirmation.
+
+## Post-score diagnostic: severe per-skill forgetting (NOT an acceptance-gate rewrite)
+
+To avoid concealing catastrophic *individual* memory loss behind the .0536 average old-task drop, the separate `skill_loss_v6.js` auditor evaluated every historical task against its own before/after accuracy in the unchanged v6 result matrix. The diagnostic **20-percentage-point** definition of severe regression is **post-hoc** and must not be mistaken for a predeclared gate.
+
+- The R2 closest-pair merge suffers **10 / 80** severe individual old-task regressions, all in `orthogonal` cases (**10 / 40** orthogonal and **0 / 40** `related_pair` cases).
+- The worst case: seed 89, `orthogonal/unrelated`, task 0 falls from **.9140625** before novel training to **.46875** after (**-.4453125** absolute accuracy). This is a near-catastrophic loss of one existing capability despite excellent overall mean.
+- Baseline oldest-head eviction also has **10 / 80** severe regressions. Five-head capacity expansion has **0 / 80**; its added parameter budget makes it an upper-bound comparison, not a fair equal-capacity win.
+- In the `related_pair` family, old task mean performance *improves slightly* after merging (mean drop = **-.005664**), whereas `orthogonal` old task performance drops **.112891**. A single across-family mean therefore hides a structural dependence on old-task compatibility.
+
+The full post-hoc analysis, including the worst five task-level regressions per method, is in `R2_V6_SKILL_LOSS_AUDIT.json`, independently recomputable with `node skill_loss_v6.js R2_V6_RESULTS.json`. Its output-only test checks the recomputed mean forgetting against the original run summary and does not modify or retune the original v6 protocol or candidate. **Scientific status remains HOLD**, and future gates should precommit task-level worst-case retention in addition to mean accuracy.
