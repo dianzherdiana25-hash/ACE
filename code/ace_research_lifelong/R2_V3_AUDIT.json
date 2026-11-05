@@ -1,0 +1,79 @@
+{
+  "audit_id": "R2_V3_CORRECTED_INDEPENDENT_AGGREGATE_AUDIT_V1",
+  "rows_expected": 192,
+  "rows_validated": 192,
+  "groups": 48,
+  "logical_labels_recounted": 98304,
+  "gradient_updates_recounted": 99816,
+  "ewc_penalty_coordinates": 589824,
+  "ewc_fisher_coordinates": 589824,
+  "per_seed": [
+    {
+      "seed": 7,
+      "delta_capacity": 0.001736111111111105,
+      "delta_replay": 0.12065972222222221,
+      "ood_drop": 0.013454861111111069
+    },
+    {
+      "seed": 19,
+      "delta_capacity": -0.0017361111111110865,
+      "delta_replay": 0.10937500000000004,
+      "ood_drop": 0.013888888888888895
+    },
+    {
+      "seed": 43,
+      "delta_capacity": -0.006944444444444438,
+      "delta_replay": 0.0872395833333333,
+      "ood_drop": 0.007812499999999982
+    },
+    {
+      "seed": 91,
+      "delta_capacity": -0.002170138888888895,
+      "delta_replay": 0.08463541666666663,
+      "ood_drop": 0.009114583333333278
+    }
+  ],
+  "paired_descriptive": {
+    "selective_minus_matched_capacity": {
+      "mean": -0.0022786458333333287,
+      "cluster_seed_resampling_min95": -0.0056423611111111,
+      "cluster_seed_resampling_max95": 0.0007595486111111049,
+      "support_seeds": 4,
+      "method": "exact 4^4 seed bootstrap replicates (descriptive only)"
+    },
+    "selective_minus_replay": {
+      "mean": 0.10047743055555555,
+      "cluster_seed_resampling_min95": 0.08593749999999997,
+      "cluster_seed_resampling_max95": 0.11501736111111113,
+      "support_seeds": 4,
+      "method": "exact 4^4 seed bootstrap replicates (descriptive only)"
+    },
+    "selective_ood_drop": {
+      "mean": 0.011067708333333306,
+      "cluster_seed_resampling_min95": 0.00846354166666663,
+      "cluster_seed_resampling_max95": 0.013671874999999983,
+      "support_seeds": 4,
+      "method": "exact 4^4 seed bootstrap replicates (descriptive only)"
+    }
+  },
+  "groupwise_capacity_contrast": 0.0008680555555555802,
+  "seedwise_capacity_contrast": -0.0022786458333333287,
+  "gate_recorded": {
+    "mean_final": true,
+    "retention": true,
+    "equal_capacity_advantage": false,
+    "replay_advantage": true,
+    "context_shift_robustness": true
+  },
+  "decision_recorded": "HOLD_NO_VALIDATED_SUPERIORITY",
+  "limitations": [
+    "Gate's equal-capacity reference takes max of group means; seed-paired contrast takes max per seed and is a more stringent estimand.",
+    "Teacher weights are intentionally shared across train/test/ood for each seed/family/task, with disjoint data RNG streams. This corrects the earlier invalid v3.",
+    "4 seeds and synthetic teacher families are not an independent sample of real-world tasks. Bootstrap intervals are descriptive, not confirmatory.",
+    "Frozen learner's zero forgetting can be misleading because it barely acquires new tasks.",
+    "The task-ID oracle is privileged and not a deployable comparator.",
+    "No exact-head GitHub Actions CI or independent blinded holdout has been run."
+  ],
+  "findings": [],
+  "status": "PASS"
+}
