@@ -205,6 +205,29 @@ def live_snapshot(repo: str, token: str, opener=urllib.request.urlopen) -> dict:
     return validate_snapshot({'repository': repo, 'pull_requests': records})
 
 
+
+RACE_ERROR = 'GitHub PR set, branch or HEAD changed during snapshot; retry from scratch'
+
+
+def stable_live_snapshot(repo: str, token: str, opener=urllib.request.urlopen,
+                         max_attempts: int = 3) -> dict:
+    """Retry a TOCTOU failure only, always starting a *new* entire snapshot.
+
+    No partial changed-file pages or stale snapshots are reused. Other GitHub
+    failures are never retried here. Exhaustion raises AuditError, never PASS.
+    """
+    if type(max_attempts) is not int or not 1 <= max_attempts <= 3:
+        raise AuditError('max_attempts must be an integer between 1 and 3')
+    for _ in range(max_attempts):
+        try:
+            return live_snapshot(repo, token, opener)
+        except AuditError as exc:
+            if str(exc) != RACE_ERROR:
+                raise
+    raise AuditError(f'GitHub PR set remained unstable through {max_attempts} full captures; HALT')
+
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo', required=True, help='owner/name; validated against offline snapshot if supplied')
@@ -218,7 +241,7 @@ def main(argv: list[str] | None = None) -> int:
             if snapshot.get('repository') != args.repo:
                 raise AuditError('--repo differs from snapshot.repository')
         else:
-            snapshot = live_snapshot(args.repo, os.getenv('GITHUB_TOKEN', ''))
+            snapshot = stable_live_snapshot(args.repo, os.getenv('GITHUB_TOKEN', ''))
         report = audit(snapshot)
         if any(type(n) is not int or n < 1 for n in args.require_pr):
             raise AuditError('--require-pr values must be positive integers')
