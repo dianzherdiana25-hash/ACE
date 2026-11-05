@@ -31,3 +31,8 @@ node r2_v2.js > R2_V2_REPLAY.json
 node -e 'const {researchV2,testV2}=require("./r2_v2.js"); console.log(testV2(researchV2))'
 ```
 Diff the replay JSON against `R2_V2_RESULTS.json`, which has no deleted negative runs. R2 v1 remains untouched and reproducible.
+
+## Independent matrix audit and metric interpretation
+The separate `audit_v2.js` audit reads the checked-in results without rerunning any learner. It checked 160 unique (seed, regime, method) rows, 32 group means across key measures, 40 exact complement relationships for task-0 flip, label/update budgets, and the raw trajectories; all structural checks passed, as recorded in `R2_V2_AUDIT.json`. Across repeated method runs, **61,440 logical labels observed** and **62,700 gradient updates** were counted; these are not 61,440 independent unique labels, due to shared seeds and task definitions.
+
+**Interpretation warning:** Under `conflicting_flip`, the recorded `ood_accuracy` still uses *original task-0 labels*, not the latest flipped task-0 labels; thus it measures compatibility with the historical target and must **not** be marketed as current-target OOD generalization. For changed-task performance, use `final_latest` and `flip_task0_final`. For the other regimes, the OOD conditions do not include a changed label target. The audit is an independent *aggregation and consistency check* but is not an independent model execution or confirmatory scientific assessment.
