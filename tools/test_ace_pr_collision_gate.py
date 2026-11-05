@@ -3,15 +3,16 @@ from __future__ import annotations
 
 import io
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
 try:
-    from tools.ace_pr_collision_gate import AuditError, audit, canonical, live_snapshot, main
+    from tools.ace_pr_collision_gate import AuditError, audit, canonical, live_snapshot, stable_live_snapshot, main
 except ModuleNotFoundError:
-    from ace_pr_collision_gate import AuditError, audit, canonical, live_snapshot, main
+    from ace_pr_collision_gate import AuditError, audit, canonical, live_snapshot, stable_live_snapshot, main
 
 REPO = 'dianzherdiana25-hash/ACE'
 SHA = 'a' * 40
@@ -180,6 +181,34 @@ class CollisionGateTests(unittest.TestCase):
                                  json.loads(stdout.getvalue())['capture_method'])
             with patch('sys.stderr', new_callable=io.StringIO):
                 self.assertEqual(1, main(['--repo', REPO, '--snapshot', str(p), '--require-pr', '0']))
+
+    def test_transient_snapshot_race_retries_from_scratch(self):
+        result = snapshot(pr(26, 'base', 'a', ['x']))
+        module = sys.modules[stable_live_snapshot.__module__]
+        race = AuditError('GitHub PR set, branch or HEAD changed during snapshot; retry from scratch')
+        with patch.object(module, 'live_snapshot', side_effect=[race, result]) as fetch:
+            self.assertEqual(result, stable_live_snapshot(REPO, '', max_attempts=3))
+            self.assertEqual(2, fetch.call_count)
+
+    def test_persistent_snapshot_race_halts_after_three_attempts(self):
+        module = sys.modules[stable_live_snapshot.__module__]
+        race = AuditError('GitHub PR set, branch or HEAD changed during snapshot; retry from scratch')
+        with patch.object(module, 'live_snapshot', side_effect=race) as fetch:
+            with self.assertRaisesRegex(AuditError, 'remained unstable through 3'):
+                stable_live_snapshot(REPO, '', max_attempts=3)
+            self.assertEqual(3, fetch.call_count)
+
+    def test_unrelated_github_failure_is_not_retried(self):
+        module = sys.modules[stable_live_snapshot.__module__]
+        with patch.object(module, 'live_snapshot', side_effect=AuditError('rate limited')) as fetch:
+            with self.assertRaisesRegex(AuditError, 'rate limited'):
+                stable_live_snapshot(REPO, '', max_attempts=3)
+            self.assertEqual(1, fetch.call_count)
+
+    def test_retry_budget_guard(self):
+        for invalid in (0, 4, True, 1.5, '3'):
+            with self.subTest(value=invalid), self.assertRaisesRegex(AuditError, 'max_attempts'):
+                stable_live_snapshot(REPO, '', max_attempts=invalid)
 
     def test_github_malformed_response_fails_closed(self):
         class Response:
