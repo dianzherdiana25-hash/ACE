@@ -26,9 +26,10 @@ def inspect(root):
             if not isinstance(module, str) or not all(p.isidentifier() for p in module.split(".")):
                 raise ValueError("invalid module")
             path = Path(*module.split(".")).with_suffix(".py")
-            full = root / path
-            found = full.is_file() or (root / Path(*module.split(".")) / "__init__.py").is_file()
-            records.append({"group": group, "module": module, "path": str(path),
+            base = root if module.startswith("tools.") else root / "code"
+            full = base / path
+            found = full.is_file() or (base / Path(*module.split(".")) / "__init__.py").is_file()
+            records.append({"group": group, "module": module, "path": str(full.relative_to(root)),
                             "status": "PRESENT" if found else "MISSING"})
     missing = [x for x in records if x["status"] == "MISSING"]
     return {"decision": "BLOCK_MISSING_MODULES" if missing else "INVENTORY_COMPLETE_NOT_TESTED",
