@@ -1,20 +1,20 @@
-# NEXT_ACTION — enumerasi dan replay E1.4s
+# NEXT_ACTION — satu anggaran untuk diagnosis, perbaikan, dan pewarisan graf
 
-1. Cocokkan HEAD GitHub dengan [protokol beku](design/e1.4/E14S_PROTOCOL_v1.md), lalu validasi Bubblewrap dan buat direktori WORK.
-2. Jalankan enumerasi serta replay dari ledger terpisah. Satu panjang sumber menjadi satu checkpoint. Jika timeout, lanjutkan dari ledger proses itu. Verifikasi keluaran kompresi identik dan simpan status serta log.
-3. Bandingkan keputusan dengan E1.4r. Catat batas grammar dan biaya label tambahan sebelum menyimpulkan nilai pemakaian ulang.
+1. Verifikasi HEAD, baca [hasil E1.4o](design/e1.4/E14O_RESULT_v1.md) dan [hasil penjaga E1.4s](design/e1.4/E14S_RESULT_v1.md), lalu lanjutkan [issue #13](https://github.com/dianzherdiana25-hash/ACE/issues/13). Gerbang aktif graf rantai masih HOLD. Penjaga berhasil pada grammar terbatas tetapi dapat menghabiskan tiga label.
+2. Buat bank graf bercabang publik baru dan satu batas bersama empat label. Uji apakah satu label dapat sekaligus menggugurkan model lama dan memangkas versi setelah perluasan. Jalankan diagnosis, pemilihan perluasan, perbaikan, serta kualifikasi dan pemakaian ulang dengan pengukuran biaya dari awal hingga akhir. Pembanding memakai anggaran yang sama.
+3. Bekukan strata alami, terjangkau, langka dan luar grammar, pembanding serta ambang sebelum penilaian. Pertahankan negatif dan bandingkan coverage saat abstain. Jika perbaikan dan pewarisan bersama belum lulus, catat bottleneck secara terpisah.
 
 ## Reproduksi E1.4s
 
 ```bash
 PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 120 --heartbeat 10 --log WORK/s-score.log -- python3 -m e14.e14s_run run WORK/s-score.sqlite WORK/s-score.json.gz
 PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 120 --heartbeat 10 --log WORK/s-replay.log -- python3 -m e14.e14s_run run WORK/s-replay.sqlite WORK/s-replay.json.gz
-cmp WORK/s-score.json.gz WORK/s-replay.json.gz
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 60 --heartbeat 5 --log WORK/s-audit.log -- python3 -m e14.e14s_audit WORK/s-score.json.gz WORK/s-replay.json.gz
 ```
 
 ## Pemulihan regresi publik
 
-Gunakan [panduan eksekusi](docs/ACE_SPRINT_RUNTIME.md) untuk memulihkan fixture E1.4d–f ke snapshot sementara dan menjalankan suite 112 tes. Arahkan log ke direktori WORK dan pertahankan keluaran terminal.
+Gunakan [panduan eksekusi](docs/ACE_SPRINT_RUNTIME.md) untuk memulihkan fixture E1.4d–f ke snapshot sementara dan menjalankan suite 114 tes. Arahkan log ke direktori WORK dan pertahankan keluaran terminal.
 
 ## Reproduksi E1.4r
 

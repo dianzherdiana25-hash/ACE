@@ -1,0 +1,233 @@
+{
+  "audit": {
+    "cases": 888832,
+    "compressed_sha256": "1fe50a7365419f63099d0a0a034205fdf9eabc8d69ae57f9fa2d536ff85d40a5",
+    "lengths": [
+      7,
+      8,
+      9
+    ],
+    "replay_match": true,
+    "status": "COMPLETE"
+  },
+  "boundary": {
+    "binary": "/usr/bin/bwrap",
+    "checks": {
+      "credential_env_absent": true,
+      "evaluator_module_absent": true,
+      "host_loopback_denied": true,
+      "private_file_denied": true,
+      "qualification_stage_without_evaluator": true,
+      "worker_mount_read_only": true
+    },
+    "native_elf": true,
+    "sha256": "573236e5328ac2ebb08f59ae3a9805b4f8d12bdef14be8af4450d5463294985f",
+    "worker_calls_checked": 36
+  },
+  "compressed_sha256": "1fe50a7365419f63099d0a0a034205fdf9eabc8d69ae57f9fa2d536ff85d40a5",
+  "decision": "GO",
+  "freeze_commit": "613f09a024ad429bbaaef05c8fd236b615f5b65e",
+  "plan_sha256": "7b03b09389347287ffa77ff0e3b129092d63811c27bd33559fe5d4dcd7c00781",
+  "regression": {
+    "log_sha256": "59b676dd3a61bd2d1f7bed30a0e4bbebf437e86b348a26013079b09b18e9b186",
+    "passed": 114,
+    "restored_fixtures": 13,
+    "terminal": {
+      "elapsed_s": 84.043,
+      "exit_code": 0,
+      "log_file": "../ace-sprint-s-reg.log",
+      "status": "COMPLETE"
+    },
+    "total": 114
+  },
+  "rows": [
+    {
+      "block": "enumeration",
+      "correct": 1,
+      "episode": "7",
+      "family": "G",
+      "mapped": 384,
+      "null_receipts": 125234,
+      "pairs": 126976,
+      "policies": {
+        "active-2": {
+          "abstain": 126838,
+          "correct": 138,
+          "followup_edges": 12180,
+          "followup_nodes": 13920,
+          "labels": 128716,
+          "wrong": 0
+        },
+        "active-3": {
+          "abstain": 126592,
+          "correct": 384,
+          "followup_edges": 16464,
+          "followup_nodes": 18816,
+          "labels": 129328,
+          "wrong": 0
+        },
+        "fixed-2": {
+          "abstain": 126838,
+          "correct": 138,
+          "followup_edges": 12180,
+          "followup_nodes": 13920,
+          "labels": 128716,
+          "wrong": 0
+        },
+        "fixed-3": {
+          "abstain": 126592,
+          "correct": 384,
+          "followup_edges": 17276,
+          "followup_nodes": 19744,
+          "labels": 129444,
+          "wrong": 0
+        },
+        "receipt-1": {
+          "abstain": 125234,
+          "correct": 384,
+          "labels": 126976,
+          "wrong": 1358
+        }
+      },
+      "policy": "qualification",
+      "regime": "unrelated",
+      "seed_slot": 0,
+      "shorter_aliases": 1358,
+      "source_length": 7,
+      "status": "scored",
+      "total": 1
+    },
+    {
+      "block": "enumeration",
+      "correct": 1,
+      "episode": "8",
+      "family": "G",
+      "mapped": 768,
+      "null_receipts": 248736,
+      "pairs": 253952,
+      "policies": {
+        "active-2": {
+          "abstain": 253686,
+          "correct": 266,
+          "followup_edges": 41712,
+          "followup_nodes": 46926,
+          "labels": 259166,
+          "wrong": 0
+        },
+        "active-3": {
+          "abstain": 253184,
+          "correct": 768,
+          "followup_edges": 53568,
+          "followup_nodes": 60264,
+          "labels": 260648,
+          "wrong": 0
+        },
+        "fixed-2": {
+          "abstain": 253686,
+          "correct": 266,
+          "followup_edges": 41712,
+          "followup_nodes": 46926,
+          "labels": 259166,
+          "wrong": 0
+        },
+        "fixed-3": {
+          "abstain": 253184,
+          "correct": 768,
+          "followup_edges": 57392,
+          "followup_nodes": 64566,
+          "labels": 261126,
+          "wrong": 0
+        },
+        "receipt-1": {
+          "abstain": 248736,
+          "correct": 768,
+          "labels": 253952,
+          "wrong": 4448
+        }
+      },
+      "policy": "qualification",
+      "regime": "unrelated",
+      "seed_slot": 0,
+      "shorter_aliases": 4448,
+      "source_length": 8,
+      "status": "scored",
+      "total": 1
+    },
+    {
+      "block": "enumeration",
+      "correct": 1,
+      "episode": "9",
+      "family": "G",
+      "mapped": 1536,
+      "null_receipts": 493520,
+      "pairs": 507904,
+      "policies": {
+        "active-2": {
+          "abstain": 507382,
+          "correct": 522,
+          "followup_edges": 129438,
+          "followup_nodes": 143820,
+          "labels": 522286,
+          "wrong": 0
+        },
+        "active-3": {
+          "abstain": 506368,
+          "correct": 1536,
+          "followup_edges": 160542,
+          "followup_nodes": 178380,
+          "labels": 525742,
+          "wrong": 0
+        },
+        "fixed-2": {
+          "abstain": 507382,
+          "correct": 522,
+          "followup_edges": 129438,
+          "followup_nodes": 143820,
+          "labels": 522286,
+          "wrong": 0
+        },
+        "fixed-3": {
+          "abstain": 506368,
+          "correct": 1536,
+          "followup_edges": 173682,
+          "followup_nodes": 192980,
+          "labels": 527202,
+          "wrong": 0
+        },
+        "receipt-1": {
+          "abstain": 493520,
+          "correct": 1536,
+          "labels": 507904,
+          "wrong": 12848
+        }
+      },
+      "policy": "qualification",
+      "regime": "unrelated",
+      "seed_slot": 0,
+      "shorter_aliases": 12848,
+      "source_length": 9,
+      "status": "scored",
+      "total": 1
+    }
+  ],
+  "terminal": {
+    "audit": {
+      "elapsed_s": 0.201,
+      "exit_code": 0,
+      "log_file": "/workspace/scratch/6a567033693b/ACE-SPRINT/../ace-sprint-s.YezppP/audit.log",
+      "status": "COMPLETE"
+    },
+    "replay": {
+      "elapsed_s": 7.415,
+      "exit_code": 0,
+      "log_file": "replay.log",
+      "status": "COMPLETE"
+    },
+    "score": {
+      "elapsed_s": 7.624,
+      "exit_code": 0,
+      "log_file": "score.log",
+      "status": "COMPLETE"
+    }
+  }
+}
