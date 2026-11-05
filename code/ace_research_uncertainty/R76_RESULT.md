@@ -57,3 +57,14 @@ Utility was frozen before scoring: `20*true − 60*false − 2*abstain − onlin
 Test decision-theoretic label acquisition against a full-strength narrow control on completely new task mechanisms with independently held evaluator custody. Precommit risk/coverage curves, per-seed paired error margins and a cost-regret criterion; require non-inferiority to the best baseline, not merely to a weaker full-diagnostic strategy. If real ACE semantic-alias tasks are available, use their evaluator-owned decisions rather than treating these Bernoulli strata as evidence of actual ACE capability correctness.
 
 **Do not merge PR #43; maintain HOLD.**
+
+
+### Additional independent mathematical counterexample (no rescoring)
+
+For a group under the nominal null p=0.80, the single-observation e-multipliers are 0.99/0.80=1.2375 on success and 0.01/0.20=0.05 on failure. If two consecutive certificate outcomes are **the same** Bernoulli draw (perfect within-pair correlation), the expected e-multiplier over the pair is
+
+`0.80*(1.2375**2) + 0.20*(0.05**2) = 1.225625 > 1`.
+
+This is an explicit **paired-outcome null counterexample** to treating this non-i.i.d. product as a nonnegative supermartingale: the expected evidence can grow under a false capability. The R7.6 correlated-family observations therefore **cannot** inherit the nominal 10% conditional e-process false-acceptance bound. Lack of observed false acceptances in that family does not repair this mathematical defect.
+
+After final scoring, a compatibility-only local run of the historical R7.5 suite (23 tests) plus new R7.6 suite (13 tests) produced **36/36 PASS**. No R7.6 final scoring was rerun for this added analysis.
