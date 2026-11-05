@@ -27,7 +27,7 @@ GROUPS={
  'semantic':('tools.test_ace_e14t_semantic_audit',),
  'w_synthesis':('e14.test_e14w_synthesis','e14.test_e14w_integration'),
  'w_worker':('e14.test_e14w_worker',),
- 'x_identifiability':('e14.test_e14x_identifiability','e14.test_e14x_replay'),
+ 'x_identifiability':('e14.test_e14x_identifiability','e14.test_e14x_replay','e14.test_e14x_assumption_contract'),
 }
 
 

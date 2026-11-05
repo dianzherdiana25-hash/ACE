@@ -1,0 +1,23 @@
+{
+  "caveats": [
+    "conditional acceptance depends on author-supplied grammar being complete",
+    "open-world abstention sacrifices all coverage",
+    "countermodels chosen after original score"
+  ],
+  "cells": {
+    "bounded-dsl-assumed": {
+      "abstain": 72,
+      "accepted": 120
+    },
+    "open-world-unrestricted": {
+      "abstain": 192,
+      "accepted": 0
+    }
+  },
+  "scientific_decision": "NOT_ASSESSED",
+  "sha256": "0e5a38b951b77b36459d4ca0b3c74ac43d5a63a0b020c4489949955ee4e011b9",
+  "source_batches": 12,
+  "status": "POSTSCORE_ASSUMPTION_SCOPED_CLAIMS",
+  "version": 1,
+  "worlds": 192
+}

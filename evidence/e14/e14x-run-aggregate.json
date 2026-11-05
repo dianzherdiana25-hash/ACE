@@ -1,7 +1,7 @@
 {
   "complete_groups": 10,
   "local_checkout_only": true,
-  "passed_tests": 227,
+  "passed_tests": 236,
   "receipts": [
     {
       "elapsed_seconds": 3.306,
@@ -94,13 +94,13 @@
       "version": 1
     },
     {
-      "elapsed_seconds": 5.323,
+      "elapsed_seconds": 5.653,
       "exit_code": 0,
       "group": "x_identifiability",
-      "log_sha256": "0adad2dc4cc2a33970b8a36b9c1e80be6a4b93d65df794f6e8ea1e2a35338e3e",
+      "log_sha256": "90ac0ac725ab210994ffc68b3353306c7a94b110afa58600af7fee9a4b6f1069",
       "script_version": "2026-11-05-e14x",
       "status": "PASS",
-      "test_count": 12,
+      "test_count": 21,
       "version": 1
     }
   ],

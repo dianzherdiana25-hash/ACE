@@ -22,11 +22,23 @@
   "regression_local": {
     "full_GitHub_checkout": false,
     "groups": 10,
-    "tests": 227
+    "tests": 236
   },
   "replay_fail": 0,
   "replay_pass": 120,
   "scientific_decision": "NOT_ASSESSED",
+  "scope_contract": {
+    "bounded_dsl_assumed": {
+      "abstain": 72,
+      "accepted": 120
+    },
+    "new_labels_purchased": 0,
+    "new_tests": 9,
+    "open_world_unrestricted": {
+      "abstain": 192,
+      "accepted": 0
+    }
+  },
   "source_files": {
     "WORK/e14x-countermodel-replay.json": {
       "bytes": 22245,
@@ -50,7 +62,11 @@
     },
     "WORK/e14x-run-aggregate.json": {
       "bytes": 3133,
-      "sha256": "09894cb8dbfd72dfea766905e2a11ebb16c2ac1f410f97b5caa932fba12a09af"
+      "sha256": "12bdf6846bfb35722161a87be919fcdf1c149a3a0e3883d192198fdab74da959"
+    },
+    "evidence/e14/e14x_claim_scope_v0.json": {
+      "bytes": 610,
+      "sha256": "a8b4903143e1282715b5c2b14537f3c8d8e1cda5490b7e028acd33a13b32e13f"
     }
   },
   "status": "POSTSCORE_E14X_PUBLIC_DEVELOPMENT",

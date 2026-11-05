@@ -37,3 +37,7 @@ python3 tools/ace_e14x_regression.py --collect
 ```
 
 The complete nine + three new tests and long legacy ablation tests are run in **bounded groups** to avoid host-level timeouts. No historical frozen E1.4t data, ACE `main`, Tod or sealed E1.3 data are modified.
+
+## Postscore typed claim-interface intervention
+
+A follow-up software change exposes the assumption required by a finite-DLS acceptance rather than silently presenting it as universal. The evaluator checks the purchased receipt journal, graph resource counters, pair artifact type and the exact set of consistent DSL candidates before issuing either `accept_conditional` (when the user explicitly assumes this bounded grammar is complete) or `abstain` (when arbitrary unseen operator forms are permitted). The changed decision does not purchase a new target label, access oracle truth or inspect held-out probes. It is an **epistemic contract**, not a procedure that discovers unknown operator forms. Run the claim-interface postscore matrix on the original 192 public worlds; report both conditional coverage and unrestricted-world abstention.
