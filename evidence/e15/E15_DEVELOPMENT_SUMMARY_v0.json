@@ -5,13 +5,30 @@
     "WORK/e15_demo/final-mixed-v2.json": "0104065e6adaaf3e6639172f8225cf20df906b9b937819e691c7e3b6b04ae130",
     "WORK/e15_demo/portfolio-replay-v2.json": "d6ca826de963acf0207bac92d286ef3e4ebbc8f0e30904b33828e2981bab9c33",
     "WORK/e15_demo/portfolio-v2.json": "d6ca826de963acf0207bac92d286ef3e4ebbc8f0e30904b33828e2981bab9c33",
-    "WORK/e15_demo/test-e15.log": "6650f1cb2dc3e62eede14a556b8e4c36c23528fb620ad55bcb8aeede34796503",
-    "WORK/e15_demo/test-legacy.log": "2421bb66638ca56bb5ed7d3220ba30e71cc13d783287fa5919a0cf22eee78d0a",
     "WORK/e15_final_infamily_v2/events.jsonl": "9d319da8ccaf23be5149ea84bccefe85a3fac3a316844f765d860e87b2b25c88",
     "WORK/e15_final_mixed_v2/events.jsonl": "b29775ded4d789f9fe79ffdd013e1bbc340ff4336395e0c408b7dc4ebda4f102",
     "WORK/e15_portfolio_v2/allocation.json": "34cc12d2e3fa8165f7be9cdb9abdc39c5c387e17ddda0d4f3d6ae3116b75bb25",
     "WORK/e15_portfolio_v2/in_family/events.jsonl": "9d319da8ccaf23be5149ea84bccefe85a3fac3a316844f765d860e87b2b25c88",
     "WORK/e15_portfolio_v2/mixed_grammar/events.jsonl": "e0ee31a83181143e9bf5f8904bfe67a54508a2bef35eafcfb252cfd6522529c4",
+    "WORK/e15_verified/aggregate.json": "2cf06b62a3033f88cd5ca0177a9ba7e50618557e890f24f83b044f913dc8d2f3",
+    "WORK/e15_verified/e15.json": "aeb80d597eb82892a6963f606610a51cf928ba55b7741bd8a73b91b29e91cded",
+    "WORK/e15_verified/e15.log": "7680f9dcfc017e470b2213e5af7b4138963da098b06e80d4faa1b9ea3b44e671",
+    "WORK/e15_verified/legacy.json": "e3850165ae67d29b1871c0f8fe0b49ccad29576ce7daba3c560ad4d364d598b3",
+    "WORK/e15_verified/legacy.log": "8a5c8cfee73d43d754563f4682ca9202dd6dd85269c09c13a3db0317bb780414",
+    "WORK/e15_verified/t.json": "55624ccf03793e17d62eba30c798bcfcb6d26f452ade79e9fac7f9440a40a50c",
+    "WORK/e15_verified/t.log": "cfc1d9fe86a34228ae4b0424e962927c441ae4d4a2159e79e3745102abb9293f",
+    "WORK/e15_verified/tooling.json": "187b8429ccb73fa258b170ac3a019da0a2f103f33657b372e404768b208e3956",
+    "WORK/e15_verified/tooling.log": "3171e016dc5e3a55669c67aa4824a5ac8e6e96969dd0744ca7263f601dc92323",
+    "WORK/e15_verified/u-ablation.json": "0c8c9cbb8c5555e5e95765555cb8a1b22ac35bfd36e744da301dd671ad6d06ae",
+    "WORK/e15_verified/u-ablation.log": "97361894508fab5934caae5b713f161554dab2108233010b7dd0f57426f72f4b",
+    "WORK/e15_verified/u.json": "b2309b23a33c4b132ae6a4663ea831fa25b655d869dd98169a36248af6a090d8",
+    "WORK/e15_verified/u.log": "f490ab4ed9be859bf8d16afcbc1cd212cc40baf426e6caf7f1f7e6f51ff213a3",
+    "WORK/e15_verified/v.json": "0f4955a0b68c81883f543ff5392055de6cb6b05186ed2ea05c2d74193259078b",
+    "WORK/e15_verified/v.log": "f2571e97b9ea215f9dd7546932ee087de265e59f59a4d5f39bf560f1592ad712",
+    "WORK/e15_verified/w.json": "36116fd6d9c7ffd0d34659e26b3c335f9702d3f219907464f26ecf9b6a795cd5",
+    "WORK/e15_verified/w.log": "55659724de181ffa13fbfb37f852928cf6a36a2e81045aaeb176e7ecf33494d2",
+    "WORK/e15_verified/x.json": "122d0cd8db31aabe33297724a2f8ce8048ca45162e8e14336470990279dc762c",
+    "WORK/e15_verified/x.log": "0e4a716b231880df2ae845cd4e5c7a91b2591a92cbd635ca3f1cfa7a192d5a8c",
     "code/ace_loop/__init__.py": "27fe6c8b9d7c6c8cbf0e35ce49b69642162ab9a3c4e90cceec0fe7440e667b81",
     "code/ace_loop/cli.py": "729ce64dab48a1576c811207a8b0e32bda216c13204677dcf9a7d6f6cc77d3d5",
     "code/ace_loop/engine.py": "4d110dd3902d07575b914ef964622caa3a123281f977cec1d39d1cbb4d9667d0",
@@ -19,15 +36,20 @@
     "code/ace_loop/portfolio.py": "7c0f7aa1222513a40214ada1e22a0187b2c0e99784edc16a161aea33dfcad8dc",
     "code/ace_loop/test_engine.py": "13e4ffa931eaf5b9e3776b58eb73bfba30e8728be11b5f3e8dd14af5404588b2",
     "code/ace_loop/test_portfolio.py": "535910908a00f063aca25a0e6c47cf8daf8f142a9a1e47f0e205cb3719fec754",
-    "docs/ACE_E15_AUTONOMOUS_RESEARCH_HARNESS_DEV.md": "54150a4c834507d8aa7052cef555cd75e761899776f577d898ce1e1ec1ca18da"
+    "docs/ACE_E15_AUTONOMOUS_RESEARCH_HARNESS_DEV.md": "b8a34fb5dc60d0dd8522cd52a11a26117c4fd5acfb212ad8d94b9eef97968d55",
+    "evidence/e15/E15_REGRESSION_AGGREGATE.json": "2cf06b62a3033f88cd5ca0177a9ba7e50618557e890f24f83b044f913dc8d2f3",
+    "tools/ace_e15_regression.py": "d1c34fcd0f76a0782107f2f4a9a6290414a4d13cfde88804c92daa3581cc0ccd",
+    "tools/test_ace_e15_regression.py": "7b001349f1204227a6cf75f3be9234283de6a7703d6ff81a7b6a2a6a068419fc"
   },
+  "implementation": "finite policy research loop, two-track validation resource allocation, append-only resume",
   "limitations": [
-    "no independent new bank",
-    "no clean full repo regression",
-    "no external action escrow",
-    "no autonomous code mutation or OAIE",
-    "no native Bubblewrap acceptance"
+    "no clean full checkout",
+    "no native sandbox signoff",
+    "no paid oracle exactly-once",
+    "no open-ended architecture invention",
+    "no independently heldout natural benchmark"
   ],
+  "project": "ACE E1.5",
   "results": {
     "WORK/e15_demo/final-infamily-v2.json": {
       "baseline_validation": {
@@ -300,10 +322,12 @@
       ]
     }
   },
-  "source_count": 8,
-  "status": "PUBLIC_ENGINEERING_NOT_SCIENTIFIC_ACCEPTANCE",
-  "test_e15": 32,
-  "test_prior_components": 82,
-  "total_tests_passed": 114,
-  "version": 2
+  "scientific_decision": "NOT_ASSESSED",
+  "status": "ENGINEERING_PUBLIC_DEVELOPMENT",
+  "testing": {
+    "groups": 9,
+    "result": "PASS_COMPATIBLE_CHECKOUT_ONLY",
+    "total": 289
+  },
+  "version": 3
 }
