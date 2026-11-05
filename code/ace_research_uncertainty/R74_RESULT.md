@@ -11,7 +11,7 @@
 - Local `PYTHONPATH=code python -m unittest ace_research_uncertainty.test_experiment ace_research_uncertainty.test_r72_certification ace_research_uncertainty.test_r73_shift ace_research_uncertainty.test_r74_riskgate -q`: **51/51 PASS** (36 earlier + 15 new), Python **3.13.5**.
 - Validation-only: e-test accepted **5 correct/0 wrong** with 263 online purchases on 12 worlds vs R7.3 **18 correct/0 wrong** with 100 purchases; fixed protocol retained.
 - New final bank scored **once**, command `PYTHONPATH=code python -m ace_research_uncertainty.r74_riskgate --phase final > ACE_R74_locked_final_results.json`. Full pretty-printed JSON **79,597 bytes**, SHA256 `0f7e01fade89eab217e717ca44a89dd807972cfabbdbd3e115c99bfa059918ef` (download attachment in conversation; regenerate locally to compare).
-- Additional offline **JSON-only** audit read the saved result (not rerunning scoring): **120 arms × 4 caps × 6 methods over 5 splits**, 1,197 invariant checks, **0 fails**; arithmetic, hard budgets, oracle ceiling, decision conservation, paired acquisition, false-acceptance denominator and locked gate recomputation.
+- Additional offline **JSON-only** audit read the saved result (not rerunning scoring): **120 arms (5 splits × 4 caps × 6 methods)**, 1,197 invariant checks, **0 fails**; arithmetic, hard budgets, oracle ceiling, decision conservation, paired acquisition, false-acceptance denominator and locked gate recomputation.
 - Exact-head GitHub Actions **not run** (existing CI workflow only filters E1.5 core). No independent sealed scorer or real ACE semantic operator evaluation.
 
 ## Final outcomes (24 purchased labels maximum per world)
