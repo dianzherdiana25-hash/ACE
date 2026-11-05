@@ -92,3 +92,16 @@ Reproduce from repository root:
 PYTHONPATH=code python -m unittest ace_research_planning.test_planning ace_research_planning.test_study_v2 ace_research_planning.test_study_v3 ace_research_planning.test_study_v4 ace_research_planning.test_study_v5 -v
 PYTHONPATH=code python -m ace_research_planning.study_v5 --output /tmp/ace_r6_v5.json
 ```
+
+## v6 — calibrated edge risk does not imply profitable sensing (2026-11-06)
+
+**Status: NEGATIVE / HOLD.** New files `metareason_v6.py`, `study_v6.py`, `test_study_v6.py`, `RESEARCH_V6.md`, `results_v6_summary.json`, plus a backward-compatible optional callback to `online_v5.py` (default v5 unchanged). Learn per-class empirical-Bayes edge closure risk from 36 labelled public worlds; choose online probes by one-step estimated information value under the same operation cap. Compare with five predefined sensing rules on 24 validation worlds and three transfer banks of 36 worlds each (aligned risk, inverse risk on different mechanism families, and no shocks).
+
+Reproduce from repository root:
+
+```sh
+PYTHONPATH=code python -m unittest ace_research_planning.test_planning ace_research_planning.test_study_v2 ace_research_planning.test_study_v3 ace_research_planning.test_study_v4 ace_research_planning.test_study_v5 ace_research_planning.test_study_v6 -v
+PYTHONPATH=code python -m ace_research_planning.study_v6 --output /tmp/ace-r6-v6-summary.json
+```
+
+**72/72 local tests PASS; 2,016 deterministic rollouts**. IID Brier score improved over uniform risk (0.01057039 vs 0.01368174) but learned probe policy was *worse* than validation-selected fixed no-probe utility by **−0.956111**. On shifted risk with 300-work-unit cap, it completed 32/36 vs 36/36, mean utility delta **−133.890667**. At higher cap 900 the delta was −1.558333. Without shocks, learned probes were all wasted (−1.56 utility). The learned policy acts exactly like the predefined `salient` rule on all successful IID/shift900 cases, aside from greater metered overhead. `RESEARCH_V6.md` retains protocols, failure witnesses, cost caveats, and bootstrap descriptive uncertainty. **No independent blind holdout, CI, deployment, GO or OAIE claim.**

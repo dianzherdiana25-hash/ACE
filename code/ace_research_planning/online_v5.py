@@ -7,7 +7,7 @@ No external effects, network calls, generated executable code or agents.
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from typing import Optional
+from typing import Optional, Callable
 
 from .planning import (Meter, WorkBudgetExceeded, World, hierarchical_route,
                        search, xy_distance)
@@ -61,7 +61,8 @@ def should_probe(policy: OnlinePolicy, visible: World, u: int, v: int,
 
 
 def rollout(world: World, policy: OnlinePolicy, work_limit: int = 300,
-            expansion_limit: int = 1800) -> dict:
+            expansion_limit: int = 1800, *,
+            decision_fn: Optional[Callable[..., tuple[bool, int]]] = None) -> dict:
     """Execute bounded online decisions, discovering one hidden edge by action/probe.
 
     Work cost counts previous v4 instrumented planning work plus two charged
@@ -74,6 +75,8 @@ def rollout(world: World, policy: OnlinePolicy, work_limit: int = 300,
         raise ValueError("expansion_limit must be a positive integer")
     if not isinstance(policy, OnlinePolicy):
         raise ValueError("policy must be OnlinePolicy")
+    if decision_fn is not None and not callable(decision_fn):
+        raise ValueError("decision_fn must be callable")
     public = visible_world(world)
     hidden_shock: Optional[tuple[int, int]] = world.shock
     meter = Meter(expansion_limit, work_limit=work_limit)
@@ -84,6 +87,7 @@ def rollout(world: World, policy: OnlinePolicy, work_limit: int = 300,
     route: list[int] = []
     steps = paid_cost = probes = positive_probes = failures = discoveries = 0
     replans = switches = 0
+    decision_calls = 0
     trace: list[dict] = []
     status = "step_cap"
     last_method: Optional[str] = None
@@ -123,7 +127,24 @@ def rollout(world: World, policy: OnlinePolicy, work_limit: int = 300,
                 (public.requirement(u, v) and not (state[1] & public.requirement(u, v)))):
             status = "invalid_action"
             break
-        if should_probe(policy, public, u, v, steps, bool(discoveries), known_open):
+        if decision_fn is None:
+            chosen_probe = should_probe(policy, public, u, v, steps, bool(discoveries), known_open)
+        else:
+            # The callback only sees the redacted world and already observed edges.
+            # Its declared computation charge is included in the SAME work budget.
+            choice, extra_work = decision_fn(public, u, v, steps, bool(discoveries),
+                                             frozenset(known_open), frozenset(closed))
+            if (not isinstance(choice, bool) or isinstance(extra_work, bool) or
+                    not isinstance(extra_work, int) or extra_work < 0):
+                raise ValueError("invalid metareasoning decision result")
+            try:
+                meter.charge(1 + extra_work)
+            except WorkBudgetExceeded:
+                status = "work_budget"
+                break
+            decision_calls += 1
+            chosen_probe = choice and not discoveries and edge not in known_open
+        if chosen_probe:
             try:
                 meter.charge(PROBE_WORK_UNITS)
             except WorkBudgetExceeded:
@@ -146,6 +167,9 @@ def rollout(world: World, policy: OnlinePolicy, work_limit: int = 300,
             route = []
             continue
         route.pop(0)
+        if decision_fn is not None:
+            # Successful actions are evidence of an open edge in the one-shock model.
+            known_open.add(edge)
         mask = state[1]
         for i, node in enumerate(public.keys):
             if node == v:
@@ -156,7 +180,7 @@ def rollout(world: World, policy: OnlinePolicy, work_limit: int = 300,
     else:
         if state == (public.goal, public.all_keys):
             status = "success"
-    return dict(status=status, success=status == "success", travel_cost=paid_cost,
+    result = dict(status=status, success=status == "success", travel_cost=paid_cost,
                 steps=steps, probes=probes, positive_probes=positive_probes,
                 failed_actions=failures, discoveries=discoveries,
                 encountered=bool(discoveries), recovered=bool(discoveries) and status == "success",
@@ -164,3 +188,6 @@ def rollout(world: World, policy: OnlinePolicy, work_limit: int = 300,
                 heuristic_calls=meter.heuristic_calls, work_units=meter.work_units,
                 work_limit=work_limit, search_calls=meter.calls,
                 trace=trace)
+    if decision_fn is not None:
+        result["decision_calls"] = decision_calls
+    return result
