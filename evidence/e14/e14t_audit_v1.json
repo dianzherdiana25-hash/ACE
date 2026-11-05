@@ -1,0 +1,33 @@
+{
+  "comparison": {
+    "bank_sha256": "4ecc55df9b12fa3ce7ab7148d85c077529637a2e9f5a38e7a7f7d80834616ec8",
+    "deterministic_fields": 17,
+    "elapsed_time_fields_excluded": true,
+    "matched_arms": 240,
+    "status": "REPLAY_PASS"
+  },
+  "replay_audit": {
+    "all_label_caps_valid": true,
+    "all_receipt_digests_valid": true,
+    "all_resource_costs_valid": true,
+    "arms": 240,
+    "bank_sha256": "4ecc55df9b12fa3ce7ab7148d85c077529637a2e9f5a38e7a7f7d80834616ec8",
+    "fresh_oracle_audit_calls": 573,
+    "held_out_probe_labels": 1440,
+    "source_demo_labels": 725,
+    "status": "AUDIT_PASS"
+  },
+  "replay_file_sha256": "5f17d9230e9e11ff9cbc7a1f2df6659dc2474241cf1b44e12bcbb5332058d9f4",
+  "score_audit": {
+    "all_label_caps_valid": true,
+    "all_receipt_digests_valid": true,
+    "all_resource_costs_valid": true,
+    "arms": 240,
+    "bank_sha256": "4ecc55df9b12fa3ce7ab7148d85c077529637a2e9f5a38e7a7f7d80834616ec8",
+    "fresh_oracle_audit_calls": 573,
+    "held_out_probe_labels": 1440,
+    "source_demo_labels": 725,
+    "status": "AUDIT_PASS"
+  },
+  "score_file_sha256": "53a181c29cb20025c5740f3a93c61ee9beed8833b48d31817f294985e71e309b"
+}

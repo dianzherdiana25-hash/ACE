@@ -1,0 +1,502 @@
+{
+  "independence": "algorithmically separate from frozen worker; same author and public bank; NOT independent scientific signoff",
+  "interpretation": "one hindsight witness; never add to frozen prescore bank or rescue GO/HOLD",
+  "replay": {
+    "accepted_wrong_exact_cases": [
+      {
+        "arm": "rare:10:integrated",
+        "postscore_distinguishing_witness": {
+          "graph": {
+            "edges": [
+              [
+                0,
+                1,
+                0,
+                1
+              ],
+              [
+                1,
+                2,
+                0,
+                1
+              ],
+              [
+                2,
+                3,
+                1,
+                1
+              ],
+              [
+                3,
+                4,
+                1,
+                1
+              ],
+              [
+                4,
+                5,
+                0,
+                1
+              ],
+              [
+                5,
+                6,
+                1,
+                1
+              ],
+              [
+                6,
+                7,
+                1,
+                1
+              ],
+              [
+                7,
+                8,
+                0,
+                1
+              ]
+            ],
+            "goal": 8,
+            "nodes": 9,
+            "start": 0
+          },
+          "hypothesis_label": 8,
+          "postscore_counterfactual_oracle_calls": 2,
+          "query_sha256": "787f75eeab1eb900de8675bb94ec84e05ba720aba481179282e3e28f74478b8a",
+          "truth_label": null
+        },
+        "probe_errors": 0,
+        "stratum": "rare",
+        "undetected_by_probes": true
+      }
+    ],
+    "arms": 240,
+    "cells": {
+      "natural": {
+        "exhaustive": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        },
+        "fixed": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        },
+        "integrated": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        },
+        "no-inheritance": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        },
+        "sham": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        }
+      },
+      "out-of-grammar": {
+        "exhaustive": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 0,
+          "wrong_exact": 0
+        },
+        "fixed": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 0,
+          "wrong_exact": 0
+        },
+        "integrated": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 0,
+          "wrong_exact": 0
+        },
+        "no-inheritance": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 0,
+          "wrong_exact": 0
+        },
+        "sham": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 0,
+          "wrong_exact": 0
+        }
+      },
+      "rare": {
+        "exhaustive": {
+          "accepted": 4,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 4,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        },
+        "fixed": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 45,
+          "wrong_exact": 0
+        },
+        "integrated": {
+          "accepted": 1,
+          "ambiguous_probe_alias": 1,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 1
+        },
+        "no-inheritance": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        },
+        "sham": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        }
+      },
+      "reachable": {
+        "exhaustive": {
+          "accepted": 12,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 12,
+          "errors_on_probes": 0,
+          "labels": 24,
+          "wrong_exact": 0
+        },
+        "fixed": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 0,
+          "wrong_exact": 0
+        },
+        "integrated": {
+          "accepted": 12,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 12,
+          "errors_on_probes": 0,
+          "labels": 24,
+          "wrong_exact": 0
+        },
+        "no-inheritance": {
+          "accepted": 12,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 12,
+          "errors_on_probes": 0,
+          "labels": 24,
+          "wrong_exact": 0
+        },
+        "sham": {
+          "accepted": 12,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 12,
+          "errors_on_probes": 0,
+          "labels": 24,
+          "wrong_exact": 0
+        }
+      }
+    },
+    "postscore_counterfactual_oracle_calls": 2,
+    "probe_indistinguishable_wrong_exact": 1,
+    "scope": "postscore development audit; not independent scientific confirmation",
+    "status": "SEMANTIC_AUDIT_PASS",
+    "wrong_exact_total": 1
+  },
+  "replay_file_sha256": "5f17d9230e9e11ff9cbc7a1f2df6659dc2474241cf1b44e12bcbb5332058d9f4",
+  "same_wrong_exact_and_witness": true,
+  "score": {
+    "accepted_wrong_exact_cases": [
+      {
+        "arm": "rare:10:integrated",
+        "postscore_distinguishing_witness": {
+          "graph": {
+            "edges": [
+              [
+                0,
+                1,
+                0,
+                1
+              ],
+              [
+                1,
+                2,
+                0,
+                1
+              ],
+              [
+                2,
+                3,
+                1,
+                1
+              ],
+              [
+                3,
+                4,
+                1,
+                1
+              ],
+              [
+                4,
+                5,
+                0,
+                1
+              ],
+              [
+                5,
+                6,
+                1,
+                1
+              ],
+              [
+                6,
+                7,
+                1,
+                1
+              ],
+              [
+                7,
+                8,
+                0,
+                1
+              ]
+            ],
+            "goal": 8,
+            "nodes": 9,
+            "start": 0
+          },
+          "hypothesis_label": 8,
+          "postscore_counterfactual_oracle_calls": 2,
+          "query_sha256": "787f75eeab1eb900de8675bb94ec84e05ba720aba481179282e3e28f74478b8a",
+          "truth_label": null
+        },
+        "probe_errors": 0,
+        "stratum": "rare",
+        "undetected_by_probes": true
+      }
+    ],
+    "arms": 240,
+    "cells": {
+      "natural": {
+        "exhaustive": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        },
+        "fixed": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        },
+        "integrated": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        },
+        "no-inheritance": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        },
+        "sham": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        }
+      },
+      "out-of-grammar": {
+        "exhaustive": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 0,
+          "wrong_exact": 0
+        },
+        "fixed": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 0,
+          "wrong_exact": 0
+        },
+        "integrated": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 0,
+          "wrong_exact": 0
+        },
+        "no-inheritance": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 0,
+          "wrong_exact": 0
+        },
+        "sham": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 0,
+          "wrong_exact": 0
+        }
+      },
+      "rare": {
+        "exhaustive": {
+          "accepted": 4,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 4,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        },
+        "fixed": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 45,
+          "wrong_exact": 0
+        },
+        "integrated": {
+          "accepted": 1,
+          "ambiguous_probe_alias": 1,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 1
+        },
+        "no-inheritance": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        },
+        "sham": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 48,
+          "wrong_exact": 0
+        }
+      },
+      "reachable": {
+        "exhaustive": {
+          "accepted": 12,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 12,
+          "errors_on_probes": 0,
+          "labels": 24,
+          "wrong_exact": 0
+        },
+        "fixed": {
+          "accepted": 0,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 0,
+          "errors_on_probes": 0,
+          "labels": 0,
+          "wrong_exact": 0
+        },
+        "integrated": {
+          "accepted": 12,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 12,
+          "errors_on_probes": 0,
+          "labels": 24,
+          "wrong_exact": 0
+        },
+        "no-inheritance": {
+          "accepted": 12,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 12,
+          "errors_on_probes": 0,
+          "labels": 24,
+          "wrong_exact": 0
+        },
+        "sham": {
+          "accepted": 12,
+          "ambiguous_probe_alias": 0,
+          "correct_exact": 12,
+          "errors_on_probes": 0,
+          "labels": 24,
+          "wrong_exact": 0
+        }
+      }
+    },
+    "postscore_counterfactual_oracle_calls": 2,
+    "probe_indistinguishable_wrong_exact": 1,
+    "scope": "postscore development audit; not independent scientific confirmation",
+    "status": "SEMANTIC_AUDIT_PASS",
+    "wrong_exact_total": 1
+  },
+  "score_file_sha256": "53a181c29cb20025c5740f3a93c61ee9beed8833b48d31817f294985e71e309b",
+  "status": "POSTSCORE_SEMANTIC_AUDIT_PASS"
+}
