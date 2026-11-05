@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {D,N,SEEDS,SPLITS,makeBank,features,fit,freezeAll,scoreFrozen,evaluate,checks,SHA} from './v2_study.mjs';
+const seed=SEEDS[0];
+test('self-checks and OOD isolation in fit',()=>assert.equal(checks().pass,true));
+test('all feature vectors have finite dimension and finite values',()=>{for(let x=0;x<N;x++){assert.equal(features(x).length,D);assert.ok(features(x).every(Number.isFinite));}});
+test('family separation and unique task truth masks',()=>{const b=makeBank(seed), seen=new Set();for(const split of Object.keys(SPLITS))for(const t of b[split]){assert.equal(SPLITS[split][t.family]>0,true);assert.ok(!seen.has(t.mask));seen.add(t.mask);}assert.equal(seen.size,120);});
+test('target purchase cap and deterministic non-reused query positions',()=>{const b=makeBank(seed);for(const arm of ['scratch','static_transfer','pretrained_finetune','reptile','nearest']){const t=evaluate(b.validation[0],arm,Array(D).fill(0),.15,seed);assert.equal(t.purchased.length,arm==='static_transfer'?0:8);assert.equal(new Set(t.purchased).size,t.purchased.length);assert.deepEqual(t,evaluate(b.validation[0],arm,Array(D).fill(0),.15,seed));}});
+test('meta training never reads OOD partition',()=>{const b=makeBank(seed),block={train:b.train,validation:b.validation,ood:new Proxy([],{get(){throw Error('leak');}})};assert.equal(SHA(fit(block,seed)),SHA(fit(b,seed)));});
+test('freeze reproducibility and distinct bank digests',()=>{const one=freezeAll(),two=freezeAll();assert.equal(SHA(one),SHA(two));assert.equal(new Set(one.per_seed.map(e=>e.ood_sha256)).size,SEEDS.length);});
+test('replay rejects tampered learned initialization',()=>{const f=freezeAll();f.per_seed[0].fit.chosen.reptile.theta[0]+=0.25;assert.throws(()=>scoreFrozen(f),/fit integrity/);});
+test('replay rejects tampered test-bank digest',()=>{const f=freezeAll();f.per_seed[0].ood_sha256='0'.repeat(64);assert.throws(()=>scoreFrozen(f),/bank integrity/);});
+test('replay rejects changed protocol',()=>{const f=freezeAll();f.SPLITS.ood.periodic=13;assert.throws(()=>scoreFrozen(f),/protocol mismatch/);});
