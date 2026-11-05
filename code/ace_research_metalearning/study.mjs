@@ -180,11 +180,11 @@ if(process.argv[1] && import.meta.url===pathToFileURL(process.argv[1]).href){
  else if(action==='freeze'){
    if(!src||!dest)throw Error('usage: node study.mjs freeze SEED FILE');
    if(existsSync(dest))throw Error('refusing to overwrite frozen artifact');
-   writeFileSync(dest,JSON.stringify(freeze(Number(src)),null,2)+'\\n');
+   writeFileSync(dest,JSON.stringify(freeze(Number(src)),null,2)+'\n');
  }else if(action==='score'||action==='verify'){
    if(!src||!dest)throw Error('usage: node study.mjs score|verify FROZEN_FILE RESULTS_FILE');
    const result=scoreFrozen(JSON.parse(readFileSync(src,'utf8')));
    if(action==='verify'){if(JSON.stringify(result)!==JSON.stringify(JSON.parse(readFileSync(dest,'utf8'))))throw Error('replay mismatch');console.log('PASS semantic replay');}
-   else{if(existsSync(dest))throw Error('refusing to overwrite results');writeFileSync(dest,JSON.stringify(result,null,2)+'\\n');}
+   else{if(existsSync(dest))throw Error('refusing to overwrite results');writeFileSync(dest,JSON.stringify(result,null,2)+'\n');}
  }else throw Error('unknown action');
 }
