@@ -37,3 +37,11 @@ Before considering either branch for integration, obtain fresh PR metadata, all 
 Do not edit frozen E1.4 locks or overturn scientific HOLD/NOT_ASSESSED. This PR itself introduces no branch protection, workflow, or mandatory merge restriction; its BLOCK status is an advisory review gate until it is integrated into policy or CI.
 
 Path-based overlaps in transitive stacked PRs are suppressed when base ref matches another active PR head. Matches on unrelated base refs produce MANUAL_REVIEW_REQUIRED. A branch outside the open-PR set cannot be assumed as a known dependency. Avoid claiming scientific advancement from this tooling alone.
+
+## Coordinator hardening v2 (2026-11-05)
+
+Live capture now reads the complete open-PR metadata **twice**, around the changed-file page reads. If any PR is added/removed, moves base/head ref, or changes head commit SHA while the capture is in progress, the command returns `UNKNOWN_INCOMPLETE_EVIDENCE` (exit 1); it must be rerun. This minimizes time-of-check/time-of-use false green results, though GitHub does not guarantee atomicity after the second read.
+
+Use `--require-pr 26 --require-pr 27` when screening a named integration target: if either PR is missing (including from a partial/stale offline snapshot), fail closed. Offline output is tagged `OFFLINE_SNAPSHOT_NOT_PROVEN_COMPLETE`; live output is tagged `LIVE_DOUBLE_READ_STABLE_AT_CAPTURE`. A `NO_PATH_OVERLAP` value **never grants merge permission**, because semantic conflicts, CI failures, branch ancestry and independent science custody require separate review.
+
+Five new adversarial tests cover concurrent HEAD movement, PR addition/removal, missing required target and explicit offline capture scope. **21/21 stdlib unit tests PASS locally** at tested Git blob SHA `1d56378413cc12d5e7333f836395e0c469dd3a5b` (gate) and `679228ecc4111c227ca60ca86657d26c4349f97a` (tests). GitHub Actions exact-head run for this PR has not been verified.
