@@ -30,6 +30,7 @@ class R75Tests(unittest.TestCase):
         ids=[w.uid for bank in banks for w in bank]
         self.assertEqual(len(ids),18+12+7*3*24)
         self.assertEqual(len(ids),len(set(ids)))
+        self.assertTrue(all(uid.startswith('r75:') for uid in ids))
 
     def test_no_old_test_world_namespace(self):
         self.assertFalse(any('r74' in w.uid for w in r.worlds('test','new23',20261109,24)))
