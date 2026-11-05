@@ -1,0 +1,600 @@
+{
+  "protocol": "ACE-R4-v2-public",
+  "N": 32,
+  "D": 20,
+  "STEPS": [
+    0,
+    1,
+    2,
+    4,
+    8
+  ],
+  "SEEDS": [
+    101,
+    211,
+    307,
+    401
+  ],
+  "SPLITS": {
+    "train": {
+      "threshold": 24,
+      "interval": 24
+    },
+    "validation": {
+      "reverse_threshold": 12,
+      "outside_interval": 12
+    },
+    "ood": {
+      "periodic": 12,
+      "two_interval": 12,
+      "parity_band": 12,
+      "sparse": 12
+    }
+  },
+  "LR": [
+    0.05,
+    0.15,
+    0.4
+  ],
+  "OUTER": [
+    0.12,
+    0.4
+  ],
+  "EPOCHS": 8,
+  "SUPPORT": 8,
+  "HIT": 0.75,
+  "per_seed": [
+    {
+      "seed": 101,
+      "train_sha256": "4eec2d0a2cfa558ad4b0a38da4a774c98272cbdd670aba248b58a194960811b6",
+      "validation_sha256": "602061286501af7b6bf86d91cbcbaacbef13a5b89bd111293454f318b2f4a26d",
+      "ood_sha256": "fef21cd8eee57acba6996ac56e6a512756606edc9962c6c60499d7adce4b6b74",
+      "fit": {
+        "scratch_lr": 0.15,
+        "chosen": {
+          "reptile": {
+            "lr": 0.4,
+            "outer": 0.12,
+            "validation_balanced": 0.46796755622982444,
+            "theta": [
+              -0.0226268723811853,
+              1.0053680974173262,
+              -0.21207120170688035,
+              0.8701682611607858,
+              -0.36546324732708657,
+              -0.4445205549405187,
+              -0.14908247369294214,
+              -0.12172185897230808,
+              -0.624166016818624,
+              -0.11097024304872062,
+              -0.13363013270758003,
+              -0.12825176942513283,
+              -0.4987764806099909,
+              -0.21958761862994977,
+              0.06570692820914092,
+              -0.050288534231057024,
+              0.04315446742276035,
+              0.3219702300211955,
+              0.31061590694976715,
+              0.30129015295891737
+            ]
+          },
+          "joint": {
+            "lr": 0.4,
+            "outer": 0,
+            "validation_balanced": 0.4632660944971127,
+            "theta": [
+              0.4793825127163722,
+              1.8774030505702253,
+              -0.20998723946045228,
+              1.7401482836426627,
+              -0.4753151909292283,
+              -0.4635375616012363,
+              0.32133329146468076,
+              -0.009730509188760459,
+              -0.8433814796815494,
+              -0.18929706555708048,
+              -0.43024268256633497,
+              0.14825655375554803,
+              -0.5301386769165984,
+              0.26354435551938904,
+              0.7448421204615081,
+              -1.1260429929999547,
+              -1.120075677550116,
+              1.5257121554847872,
+              1.5387335011496304,
+              0.7926947028380423
+            ]
+          }
+        },
+        "candidate_trace": [
+          {
+            "method": "reptile",
+            "lr": 0.05,
+            "outer": 0.12,
+            "validation_balanced": 0.3909624377499218,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.05,
+            "outer": 0.4,
+            "validation_balanced": 0.35875356418361803,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.15,
+            "outer": 0.12,
+            "validation_balanced": 0.39775754193353297,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.15,
+            "outer": 0.4,
+            "validation_balanced": 0.3657724603103039,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.4,
+            "outer": 0.12,
+            "validation_balanced": 0.46796755622982444,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.4,
+            "outer": 0.4,
+            "validation_balanced": 0.4457831311038233,
+            "training_gradients": 3072
+          },
+          {
+            "method": "joint",
+            "lr": 0.05,
+            "outer": 0,
+            "validation_balanced": 0.34896189751695134,
+            "training_gradients": 3072
+          },
+          {
+            "method": "joint",
+            "lr": 0.15,
+            "outer": 0,
+            "validation_balanced": 0.37359745649467513,
+            "training_gradients": 3072
+          },
+          {
+            "method": "joint",
+            "lr": 0.4,
+            "outer": 0,
+            "validation_balanced": 0.4632660944971127,
+            "training_gradients": 3072
+          }
+        ],
+        "training_work_all_candidates": {
+          "gradient_steps": 27648,
+          "feature_multiplies": 1152000,
+          "predictions": 27648,
+          "nearest_pairs": 0
+        },
+        "source_unique_label_exposures": 384,
+        "validation_unique_label_exposures": 192
+      }
+    },
+    {
+      "seed": 211,
+      "train_sha256": "06f0bc582784ac73170fc10afde9009b0e26128419d3487072208e6e0d4cb622",
+      "validation_sha256": "0158b161abe91989eafafd0d08b4feeb14587ebf6a6fe90938be2164ea995309",
+      "ood_sha256": "a271e6fb6215624d5d3abafb5ebacbfffae17d5619f6d5e7cfa9f20af05ed370",
+      "fit": {
+        "scratch_lr": 0.4,
+        "chosen": {
+          "reptile": {
+            "lr": 0.4,
+            "outer": 0.12,
+            "validation_balanced": 0.5225520971757147,
+            "theta": [
+              -0.08835501420732346,
+              0.9018539850327344,
+              -0.22055147428382632,
+              0.7237808446670346,
+              -0.4495831041160214,
+              -0.4775892970237629,
+              -0.28250055395933227,
+              -0.1497732990910749,
+              -0.3977824283412903,
+              0.2325711780455416,
+              -0.08747647940601269,
+              0.07106592573391782,
+              -0.49320237515810433,
+              -0.32664364307129296,
+              -0.06304725487765808,
+              0.040694395506326204,
+              0.2614742691747113,
+              0.28421591104058636,
+              0.11473475464982759,
+              0.18138283654745987
+            ]
+          },
+          "joint": {
+            "lr": 0.4,
+            "outer": 0,
+            "validation_balanced": 0.4898722522833412,
+            "theta": [
+              0.024919431660765518,
+              1.5613376811642443,
+              -0.20375152134787924,
+              1.5433939179221046,
+              -0.09531586888638587,
+              -0.052110020756704095,
+              -0.23958000246263927,
+              0.2239851460423634,
+              -1.319222036549007,
+              -0.0718187889427408,
+              0.3271758376521722,
+              0.4921744187065468,
+              -0.5895508938824298,
+              -0.5746972566671091,
+              -0.12046916236914068,
+              0.1196413762931589,
+              0.9825982961252917,
+              0.15917938111606816,
+              -0.6478290558721541,
+              0.8953393042253414
+            ]
+          }
+        },
+        "candidate_trace": [
+          {
+            "method": "reptile",
+            "lr": 0.05,
+            "outer": 0.12,
+            "validation_balanced": 0.4586415265800038,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.05,
+            "outer": 0.4,
+            "validation_balanced": 0.4051334843099241,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.15,
+            "outer": 0.12,
+            "validation_balanced": 0.45553258054080425,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.15,
+            "outer": 0.4,
+            "validation_balanced": 0.413029629026721,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.4,
+            "outer": 0.12,
+            "validation_balanced": 0.5225520971757147,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.4,
+            "outer": 0.4,
+            "validation_balanced": 0.4742155564316606,
+            "training_gradients": 3072
+          },
+          {
+            "method": "joint",
+            "lr": 0.05,
+            "outer": 0,
+            "validation_balanced": 0.401478476119256,
+            "training_gradients": 3072
+          },
+          {
+            "method": "joint",
+            "lr": 0.15,
+            "outer": 0,
+            "validation_balanced": 0.4154435631367601,
+            "training_gradients": 3072
+          },
+          {
+            "method": "joint",
+            "lr": 0.4,
+            "outer": 0,
+            "validation_balanced": 0.4898722522833412,
+            "training_gradients": 3072
+          }
+        ],
+        "training_work_all_candidates": {
+          "gradient_steps": 27648,
+          "feature_multiplies": 1152000,
+          "predictions": 27648,
+          "nearest_pairs": 0
+        },
+        "source_unique_label_exposures": 384,
+        "validation_unique_label_exposures": 192
+      }
+    },
+    {
+      "seed": 307,
+      "train_sha256": "5063bcf323476ffbd0ec5987e31654005a9f6926c03e1dd907e6e9c468195d9a",
+      "validation_sha256": "ff4e6377e5a9f5a7b535103e07e397664127c9169fc82269307a370585105f7d",
+      "ood_sha256": "bf64d39af30b61fbed2f20c540d5645a0988a0495a01073b34743a04398fd4d5",
+      "fit": {
+        "scratch_lr": 0.4,
+        "chosen": {
+          "reptile": {
+            "lr": 0.4,
+            "outer": 0.12,
+            "validation_balanced": 0.5029623990407217,
+            "theta": [
+              -0.21992797796616498,
+              1.0102251438093124,
+              -0.2816201891666779,
+              0.8063426608052291,
+              -0.5346343491849552,
+              -0.37060237546892466,
+              -0.08009410895408751,
+              -0.2828558657527009,
+              -0.36523511513507695,
+              -0.08912403541178862,
+              -0.13264018078571302,
+              -0.17996356908157146,
+              -0.5329097898440016,
+              -0.4521743859302686,
+              -0.11290336552382439,
+              0.10728805639933926,
+              0.156407258621611,
+              0.06988407907421573,
+              0.2123599978726388,
+              0.42673937031503056
+            ]
+          },
+          "joint": {
+            "lr": 0.4,
+            "outer": 0,
+            "validation_balanced": 0.417675591627787,
+            "theta": [
+              -0.07542451007472081,
+              1.9240841542935783,
+              -0.47703918851532523,
+              1.342649824849932,
+              -1.4635109892271123,
+              -0.2854816721123846,
+              0.09289942058516208,
+              -0.4968397722546412,
+              -0.2927413390628755,
+              0.1566293978539851,
+              -0.7160826822995555,
+              -0.08441221348707287,
+              -0.6331232958512403,
+              -1.2821070239273789,
+              -0.5850900413125887,
+              0.5899952072958579,
+              0.8472595446738608,
+              -0.25881559147193833,
+              0.13185580291795493,
+              1.6367162169185177
+            ]
+          }
+        },
+        "candidate_trace": [
+          {
+            "method": "reptile",
+            "lr": 0.05,
+            "outer": 0.12,
+            "validation_balanced": 0.4634825980526318,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.05,
+            "outer": 0.4,
+            "validation_balanced": 0.4016430327128794,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.15,
+            "outer": 0.12,
+            "validation_balanced": 0.4606079610890361,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.15,
+            "outer": 0.4,
+            "validation_balanced": 0.4086964203295788,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.4,
+            "outer": 0.12,
+            "validation_balanced": 0.5029623990407217,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.4,
+            "outer": 0.4,
+            "validation_balanced": 0.4595887340355598,
+            "training_gradients": 3072
+          },
+          {
+            "method": "joint",
+            "lr": 0.05,
+            "outer": 0,
+            "validation_balanced": 0.39936807283496567,
+            "training_gradients": 3072
+          },
+          {
+            "method": "joint",
+            "lr": 0.15,
+            "outer": 0,
+            "validation_balanced": 0.41065128276697804,
+            "training_gradients": 3072
+          },
+          {
+            "method": "joint",
+            "lr": 0.4,
+            "outer": 0,
+            "validation_balanced": 0.417675591627787,
+            "training_gradients": 3072
+          }
+        ],
+        "training_work_all_candidates": {
+          "gradient_steps": 27648,
+          "feature_multiplies": 1152000,
+          "predictions": 27648,
+          "nearest_pairs": 0
+        },
+        "source_unique_label_exposures": 384,
+        "validation_unique_label_exposures": 192
+      }
+    },
+    {
+      "seed": 401,
+      "train_sha256": "d12da68e0a6ec9ad6974ad39cb65ef9dd3f8f94caba28f1965bc42a0e4b3edb7",
+      "validation_sha256": "48bc7bf74a698108cb958c70c91324bf136d68025addab12e47bc64e1c012aa1",
+      "ood_sha256": "a924ed180e85e54d0645c501a2b573e81723daae5ba7f53344a824a77bbab8b9",
+      "fit": {
+        "scratch_lr": 0.15,
+        "chosen": {
+          "reptile": {
+            "lr": 0.4,
+            "outer": 0.4,
+            "validation_balanced": 0.5969149215203039,
+            "theta": [
+              -0.39163848421916897,
+              1.4988711865405084,
+              -0.1662840853941869,
+              1.6521122272591415,
+              0.24725257458721195,
+              -0.16596388876761775,
+              -0.18670716881715704,
+              -0.2194525445293619,
+              0.15219955138869096,
+              -0.47013409176493137,
+              -0.1217787435735766,
+              0.2803425400500187,
+              -0.752301721605703,
+              -0.0685812278176137,
+              -0.13376236543030082,
+              -0.34474615902977,
+              0.06264722770302623,
+              -0.15128592816178096,
+              0.1016314586244038,
+              0.6529829292149971
+            ]
+          },
+          "joint": {
+            "lr": 0.4,
+            "outer": 0,
+            "validation_balanced": 0.5602318670510611,
+            "theta": [
+              -0.8189210845370841,
+              2.2829849220080067,
+              -0.10922422180370361,
+              2.601057746801057,
+              0.5038347646850313,
+              0.12272362471564112,
+              0.245806520504944,
+              -0.14548054888284698,
+              0.3361427100979286,
+              -1.1257847767756282,
+              -0.02020852276126105,
+              0.49579772811867984,
+              -1.113975292895388,
+              0.010309863966313646,
+              -0.5058790937697225,
+              -0.9366989891785169,
+              -0.0038019829049823275,
+              -0.4484384648893884,
+              0.28796553018945803,
+              1.24513432045765
+            ]
+          }
+        },
+        "candidate_trace": [
+          {
+            "method": "reptile",
+            "lr": 0.05,
+            "outer": 0.12,
+            "validation_balanced": 0.480820674172516,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.05,
+            "outer": 0.4,
+            "validation_balanced": 0.4268667984397866,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.15,
+            "outer": 0.12,
+            "validation_balanced": 0.5036971621146041,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.15,
+            "outer": 0.4,
+            "validation_balanced": 0.46492311079225535,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.4,
+            "outer": 0.12,
+            "validation_balanced": 0.5856153000478589,
+            "training_gradients": 3072
+          },
+          {
+            "method": "reptile",
+            "lr": 0.4,
+            "outer": 0.4,
+            "validation_balanced": 0.5969149215203039,
+            "training_gradients": 3072
+          },
+          {
+            "method": "joint",
+            "lr": 0.05,
+            "outer": 0,
+            "validation_balanced": 0.4283466743990676,
+            "training_gradients": 3072
+          },
+          {
+            "method": "joint",
+            "lr": 0.15,
+            "outer": 0,
+            "validation_balanced": 0.5007355277470984,
+            "training_gradients": 3072
+          },
+          {
+            "method": "joint",
+            "lr": 0.4,
+            "outer": 0,
+            "validation_balanced": 0.5602318670510611,
+            "training_gradients": 3072
+          }
+        ],
+        "training_work_all_candidates": {
+          "gradient_steps": 27648,
+          "feature_multiplies": 1152000,
+          "predictions": 27648,
+          "nearest_pairs": 0
+        },
+        "source_unique_label_exposures": 384,
+        "validation_unique_label_exposures": 192
+      }
+    }
+  ]
+}
