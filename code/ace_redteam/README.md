@@ -63,3 +63,27 @@ Combined **23 tests / 13 controls PASS / 10 known expected failures**. Two local
 ```bash
 PYTHONPATH=code:. python3 -m unittest ace_redteam.test_adversarial ace_redteam.test_adversarial_v2 ace_redteam.test_portfolio_redteam -v
 ```
+
+
+## Third adversarial pass: typed evidence, split leakage, and strict evidence gate (2026-11-05)
+
+This pass adds `test_adversarial_v3.py` (five tests) and `verify_expected_failures.py` (an independent result-signature gate) inside this red-team-owned directory only.
+
+**Executed locally on SHA-verified original GitHub E1.5 sources:** 28 tests, 15 positive controls, 13 known expected failures. Two runs reproduced identical failure identities. All three source blobs matched PR #27. Both newly uploaded v3 and verifier files match the locally executed Git blob SHA exactly. Earlier v2/portfolio test files in the local test copy remain semantically equivalent but differ by comments/whitespace from the GitHub versions; do not describe this as a clean exact-branch runner execution.
+
+Additional reproduced deficiencies:
+
+- **RT-11 / P2 — Typed journal evidence forgery:** replacing `trial.index: 1` with `true` and a metric count `3` with `3.0`, then recomputing a valid SHA chain, passes `SourceEvolution._expected()` because Python equates booleans and numerics. Repro: `test_rt11_rehashed_float_and_bool_evidence_must_be_rejected`. No execution privileges gained; it breaks strict evidence schema.
+- **RT-12 / P2 — No split-disjointness enforcement for supplied banks:** a monkeypatched public bank with the same three validation and holdout rows reaches `COMPLETE_PUBLIC_SOURCE_DEVELOPMENT` rather than halting for leakage. Repro: `test_rt12_overlap_validation_holdout_must_fail_before_experiment`. **The unmodified bank is disjoint** (positive control); this is a prospective guardrail failure, not proof that the real bank leaked.
+- **RT-13 / P3 — Corrupt portfolio allocation raises uncontrolled exception:** a digest-consistent but malformed allocation (`gains: null`) raises `TypeError: 'NoneType' object is not iterable` rather than the controlled `ResearchIntegrityError`. Repro: `test_rt13_corrupt_allocation_schema_must_raise_typed_integrity_error`.
+
+**Behavioral observation, not a newly counted defect:** the engine intentionally reaudits heldout results when reopening a completed session. A deterministic counting adapter observed 2 test-evaluation calls on completion, 2 more during a fresh constructor's integrity audit, and 2 more during `run()` on that instance (2→4→6). This requires explicit evaluator escrow and separate independent confirmatory custody before any paid or restricted oracle is connected.
+
+**Strict regression gate:** `verify_expected_failures.py` checks three source Git blob IDs, exactly 28 tests, each of 13 expected-failure identities and their terminal exception signatures, no incidental skips or unexpected successes. It also fails closed if the source changes. Negative self-tests confirmed that changing a pinned failure signature or a pinned source blob forces `gate=FAIL`. Passing the gate means **correct detection of 13 open safety defects**, not that the implementation is safe or scientific validation has been completed.
+
+```bash
+PYTHONPATH=code:. python3 -m unittest ace_redteam.test_adversarial ace_redteam.test_adversarial_v2 ace_redteam.test_portfolio_redteam ace_redteam.test_adversarial_v3 -v
+PYTHONPATH=code:. python3 -m ace_redteam.verify_expected_failures
+```
+
+The source base remains PR #27 head `965640786cbf2f8adcd89eb1d980945f78c2da77`. The red-team draft PR remains unmerged and is not yet verified by GitHub Actions on this HEAD. Future fixes belong in implementation-owner branches, not this one. Keep autonomous source promotion HOLD until evidence-integrity fixes are implemented and independently retested.
