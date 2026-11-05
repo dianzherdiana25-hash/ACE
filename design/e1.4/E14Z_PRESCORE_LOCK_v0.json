@@ -1,0 +1,14 @@
+{
+  "bank_sha256": "0f8f98389d55e4f40121325a911534fde4cee0019af92b38e8f1107c9331b5ae",
+  "expected_arms": 400,
+  "files_sha256": {
+    "code/e14/e14z_drift.py": "fb3cc5b4d7f6e5a9b5f279373d526787a4dcef03d3814b96394ee51a549e9165",
+    "code/e14/test_e14z_drift.py": "07219e7ff4e45d8acdc4ed97c2c85f98753fbfab91491452c33ed4101b22af61",
+    "design/e1.4/E14Z_SEMANTIC_DRIFT_PROTOCOL_DEV_v0.md": "61f8227e373cda6897b245b532971afcf3e8119cdc4bb14b98c69067104727dc",
+    "evidence/e14/e14z_prescore_drift_bank_v0.json": "9e75d2d1a74d13180cfca144864d5317ee8ce8f18ca14b4f1ce2a6c27199f7d1"
+  },
+  "previous_study": "E1.4y source, policy and source lock unchanged",
+  "scientific_decision": "NOT_ASSESSED",
+  "status": "PUBLIC_PRESCORE_DRIFT_LOCK",
+  "version": 1
+}
