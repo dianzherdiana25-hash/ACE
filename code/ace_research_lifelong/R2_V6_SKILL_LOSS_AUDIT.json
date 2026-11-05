@@ -1,0 +1,540 @@
+{
+  "audit_id": "ACE_R2_V6_SKILL_LEVEL_FORGETTING_CANARY",
+  "threshold_absolute_accuracy_drop": 0.2,
+  "by_method": {
+    "frozen4": {
+      "task_scenario_count": 80,
+      "severe_forgetting_count": 0,
+      "max_accuracy_drop": 0,
+      "largest_losses": [
+        {
+          "seed": 11,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 0,
+          "before": 0.921875,
+          "after": 0.921875,
+          "drop": 0
+        },
+        {
+          "seed": 11,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 1,
+          "before": 0.921875,
+          "after": 0.921875,
+          "drop": 0
+        },
+        {
+          "seed": 11,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 2,
+          "before": 0.9453125,
+          "after": 0.9453125,
+          "drop": 0
+        },
+        {
+          "seed": 11,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 3,
+          "before": 0.9375,
+          "after": 0.9375,
+          "drop": 0
+        },
+        {
+          "seed": 23,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 0,
+          "before": 0.90625,
+          "after": 0.90625,
+          "drop": 0
+        }
+      ],
+      "by_family": {
+        "related_pair": {
+          "old_skill_cases": 40,
+          "severe": 0,
+          "mean_change": 0
+        },
+        "orthogonal": {
+          "old_skill_cases": 40,
+          "severe": 0,
+          "mean_change": 0
+        }
+      },
+      "mean_accuracy_drop": 0
+    },
+    "evict_first": {
+      "task_scenario_count": 80,
+      "severe_forgetting_count": 10,
+      "max_accuracy_drop": 0.4765625,
+      "largest_losses": [
+        {
+          "seed": 47,
+          "family": "orthogonal",
+          "novelty": "near",
+          "task": 0,
+          "before": 0.96875,
+          "after": 0.4921875,
+          "drop": 0.4765625
+        },
+        {
+          "seed": 131,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 0,
+          "before": 0.953125,
+          "after": 0.484375,
+          "drop": 0.46875
+        },
+        {
+          "seed": 89,
+          "family": "orthogonal",
+          "novelty": "near",
+          "task": 0,
+          "before": 0.8984375,
+          "after": 0.4453125,
+          "drop": 0.453125
+        },
+        {
+          "seed": 23,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 0,
+          "before": 0.9375,
+          "after": 0.4921875,
+          "drop": 0.4453125
+        },
+        {
+          "seed": 89,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 0,
+          "before": 0.9140625,
+          "after": 0.46875,
+          "drop": 0.4453125
+        }
+      ],
+      "by_family": {
+        "related_pair": {
+          "old_skill_cases": 40,
+          "severe": 0,
+          "mean_change": 0.0029296875
+        },
+        "orthogonal": {
+          "old_skill_cases": 40,
+          "severe": 10,
+          "mean_change": 0.1060546875
+        }
+      },
+      "mean_accuracy_drop": 0.0544921875
+    },
+    "merge_random": {
+      "task_scenario_count": 80,
+      "severe_forgetting_count": 14,
+      "max_accuracy_drop": 0.46875,
+      "largest_losses": [
+        {
+          "seed": 131,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 0,
+          "before": 0.953125,
+          "after": 0.484375,
+          "drop": 0.46875
+        },
+        {
+          "seed": 23,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 1,
+          "before": 0.890625,
+          "after": 0.453125,
+          "drop": 0.4375
+        },
+        {
+          "seed": 47,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 1,
+          "before": 0.9375,
+          "after": 0.6171875,
+          "drop": 0.3203125
+        },
+        {
+          "seed": 89,
+          "family": "orthogonal",
+          "novelty": "near",
+          "task": 3,
+          "before": 0.96875,
+          "after": 0.6875,
+          "drop": 0.28125
+        },
+        {
+          "seed": 89,
+          "family": "related_pair",
+          "novelty": "near",
+          "task": 3,
+          "before": 0.9375,
+          "after": 0.6640625,
+          "drop": 0.2734375
+        }
+      ],
+      "by_family": {
+        "related_pair": {
+          "old_skill_cases": 40,
+          "severe": 1,
+          "mean_change": 0.0248046875
+        },
+        "orthogonal": {
+          "old_skill_cases": 40,
+          "severe": 13,
+          "mean_change": 0.11796875
+        }
+      },
+      "mean_accuracy_drop": 0.07138671875
+    },
+    "merge_closest": {
+      "task_scenario_count": 80,
+      "severe_forgetting_count": 10,
+      "max_accuracy_drop": 0.4453125,
+      "largest_losses": [
+        {
+          "seed": 89,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 0,
+          "before": 0.9140625,
+          "after": 0.46875,
+          "drop": 0.4453125
+        },
+        {
+          "seed": 11,
+          "family": "orthogonal",
+          "novelty": "near",
+          "task": 2,
+          "before": 0.890625,
+          "after": 0.5234375,
+          "drop": 0.3671875
+        },
+        {
+          "seed": 11,
+          "family": "orthogonal",
+          "novelty": "near",
+          "task": 3,
+          "before": 0.9375,
+          "after": 0.6015625,
+          "drop": 0.3359375
+        },
+        {
+          "seed": 47,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 1,
+          "before": 0.9375,
+          "after": 0.6328125,
+          "drop": 0.3046875
+        },
+        {
+          "seed": 23,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 1,
+          "before": 0.890625,
+          "after": 0.59375,
+          "drop": 0.296875
+        }
+      ],
+      "by_family": {
+        "related_pair": {
+          "old_skill_cases": 40,
+          "severe": 0,
+          "mean_change": -0.0056640625
+        },
+        "orthogonal": {
+          "old_skill_cases": 40,
+          "severe": 10,
+          "mean_change": 0.112890625
+        }
+      },
+      "mean_accuracy_drop": 0.05361328125
+    },
+    "expand5": {
+      "task_scenario_count": 80,
+      "severe_forgetting_count": 0,
+      "max_accuracy_drop": 0,
+      "largest_losses": [
+        {
+          "seed": 11,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 0,
+          "before": 0.921875,
+          "after": 0.921875,
+          "drop": 0
+        },
+        {
+          "seed": 11,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 1,
+          "before": 0.921875,
+          "after": 0.921875,
+          "drop": 0
+        },
+        {
+          "seed": 11,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 2,
+          "before": 0.9453125,
+          "after": 0.9453125,
+          "drop": 0
+        },
+        {
+          "seed": 11,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 3,
+          "before": 0.9375,
+          "after": 0.9375,
+          "drop": 0
+        },
+        {
+          "seed": 23,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 0,
+          "before": 0.90625,
+          "after": 0.90625,
+          "drop": 0
+        }
+      ],
+      "by_family": {
+        "related_pair": {
+          "old_skill_cases": 40,
+          "severe": 0,
+          "mean_change": 0
+        },
+        "orthogonal": {
+          "old_skill_cases": 40,
+          "severe": 0,
+          "mean_change": 0
+        }
+      },
+      "mean_accuracy_drop": 0
+    },
+    "oracle_merge": {
+      "task_scenario_count": 80,
+      "severe_forgetting_count": 10,
+      "max_accuracy_drop": 0.4453125,
+      "largest_losses": [
+        {
+          "seed": 89,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 0,
+          "before": 0.9140625,
+          "after": 0.46875,
+          "drop": 0.4453125
+        },
+        {
+          "seed": 11,
+          "family": "orthogonal",
+          "novelty": "near",
+          "task": 2,
+          "before": 0.890625,
+          "after": 0.5234375,
+          "drop": 0.3671875
+        },
+        {
+          "seed": 11,
+          "family": "orthogonal",
+          "novelty": "near",
+          "task": 3,
+          "before": 0.9375,
+          "after": 0.6015625,
+          "drop": 0.3359375
+        },
+        {
+          "seed": 47,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 1,
+          "before": 0.9375,
+          "after": 0.6328125,
+          "drop": 0.3046875
+        },
+        {
+          "seed": 23,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 1,
+          "before": 0.890625,
+          "after": 0.59375,
+          "drop": 0.296875
+        }
+      ],
+      "by_family": {
+        "related_pair": {
+          "old_skill_cases": 40,
+          "severe": 0,
+          "mean_change": -0.0056640625
+        },
+        "orthogonal": {
+          "old_skill_cases": 40,
+          "severe": 10,
+          "mean_change": 0.112890625
+        }
+      },
+      "mean_accuracy_drop": 0.05361328125
+    },
+    "shared_sgd": {
+      "task_scenario_count": 80,
+      "severe_forgetting_count": 24,
+      "max_accuracy_drop": 0.5,
+      "largest_losses": [
+        {
+          "seed": 47,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 3,
+          "before": 0.90625,
+          "after": 0.40625,
+          "drop": 0.5
+        },
+        {
+          "seed": 131,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 3,
+          "before": 0.8984375,
+          "after": 0.3984375,
+          "drop": 0.5
+        },
+        {
+          "seed": 131,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 3,
+          "before": 0.8515625,
+          "after": 0.375,
+          "drop": 0.4765625
+        },
+        {
+          "seed": 11,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 3,
+          "before": 0.90625,
+          "after": 0.515625,
+          "drop": 0.390625
+        },
+        {
+          "seed": 47,
+          "family": "related_pair",
+          "novelty": "near",
+          "task": 3,
+          "before": 0.8359375,
+          "after": 0.484375,
+          "drop": 0.3515625
+        }
+      ],
+      "by_family": {
+        "related_pair": {
+          "old_skill_cases": 40,
+          "severe": 13,
+          "mean_change": 0.0986328125
+        },
+        "orthogonal": {
+          "old_skill_cases": 40,
+          "severe": 11,
+          "mean_change": 0.1052734375
+        }
+      },
+      "mean_accuracy_drop": 0.101953125
+    },
+    "shared_replay": {
+      "task_scenario_count": 80,
+      "severe_forgetting_count": 14,
+      "max_accuracy_drop": 0.4453125,
+      "largest_losses": [
+        {
+          "seed": 11,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 3,
+          "before": 0.84375,
+          "after": 0.3984375,
+          "drop": 0.4453125
+        },
+        {
+          "seed": 131,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 3,
+          "before": 0.71875,
+          "after": 0.2890625,
+          "drop": 0.4296875
+        },
+        {
+          "seed": 47,
+          "family": "orthogonal",
+          "novelty": "unrelated",
+          "task": 3,
+          "before": 0.8125,
+          "after": 0.4453125,
+          "drop": 0.3671875
+        },
+        {
+          "seed": 89,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 3,
+          "before": 0.8828125,
+          "after": 0.6015625,
+          "drop": 0.28125
+        },
+        {
+          "seed": 131,
+          "family": "related_pair",
+          "novelty": "unrelated",
+          "task": 1,
+          "before": 0.671875,
+          "after": 0.3984375,
+          "drop": 0.2734375
+        }
+      ],
+      "by_family": {
+        "related_pair": {
+          "old_skill_cases": 40,
+          "severe": 9,
+          "mean_change": 0.0818359375
+        },
+        "orthogonal": {
+          "old_skill_cases": 40,
+          "severe": 5,
+          "mean_change": 0.051953125
+        }
+      },
+      "mean_accuracy_drop": 0.06689453125
+    }
+  },
+  "critical_findings": [],
+  "status": "PASS",
+  "comparison": {
+    "candidate_severe": 10,
+    "eviction_severe": 10,
+    "expanded_capacity_severe": 0,
+    "candidate_worst_drop": 0.4453125
+  },
+  "caveats": [
+    "Severe threshold 20 percentage points is a POST-HOC failure diagnostic, not one of the prescore acceptance gates.",
+    "80 old-task measurements per method represent 20 paired scenarios times four tasks, not independent samples.",
+    "This audit uses recorded accuracy and cannot independently rerun the learner or test every possible task boundary.",
+    "If max/mean forgetting diverge, safety assessment should not rely on mean-only acceptance."
+  ]
+}
