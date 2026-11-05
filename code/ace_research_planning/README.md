@@ -59,3 +59,15 @@ PYTHONPATH=code python -m unittest ace_research_planning.test_planning ace_resea
 PYTHONPATH=code python -m ace_research_planning.study_v3 --output /tmp/ace_r6_v3.json --n 24
 PYTHONPATH=code python -m ace_research_planning.profile_v3 --n 24 --repeats 5
 ```
+
+
+## v4 (public strategy learning and event-budget falsification)
+
+New `study_v4.py` learns a **bounded decision-stump selector** from train/validation outcomes before examining mechanism-shift transfer data. `Meter.work_limit` enforces a cumulative mixed-event proxy (expanded nodes, heuristic calls, relaxed-graph scans, heap pops); this is not FLOP/CPU equivalence. The default unlimited-work behavior of v1–v3 is unchanged. **Local v4 finding is negative:** under work cap 250, selector defaults to hierarchy on all transfer tasks, exactly matching fixed hierarchy (141/144 success). Under 2200 it collapses to fixed Dijkstra (144/144). Paired transfer utility delta versus the best validation-selected fixed planner is zero at both caps. No learned planning primitive, OAIE or independent blind claim.
+
+```sh
+PYTHONPATH=code python -m unittest ace_research_planning.test_planning ace_research_planning.test_study_v2 ace_research_planning.test_study_v3 ace_research_planning.test_study_v4 -v
+PYTHONPATH=code python -m ace_research_planning.study_v4 --output /tmp/r6_v4.json --n 24
+```
+
+See `RESEARCH_V4.md` for pre-declared environment splits, case-level accounting, policy freeze digests, caveats, negative controls, and exact reproduction.

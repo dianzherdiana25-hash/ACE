@@ -1,0 +1,1122 @@
+{
+  "budgets": [
+    250,
+    2200
+  ],
+  "candidate_count": 105,
+  "disclosure": "Author-generated PUBLIC transfer, not blind. Selector is a finite decision stump, not new primitive or autonomous reasoning. Work units count instrumented events (expanded states, heuristic calls, graph scans, heap pops) and are NOT FLOPs/CPU. Reference for surprises is hindsight lower bound; shock selection is route independent.",
+  "families": {
+    "train": [
+      "ordered_grid",
+      "free_grid",
+      "terminal_portal"
+    ],
+    "transfer": [
+      "interior_portals",
+      "gated_bypass",
+      "weight_shift"
+    ],
+    "validation": [
+      "ordered_grid",
+      "free_grid",
+      "terminal_portal"
+    ]
+  },
+  "methods": [
+    "hier_replan",
+    "astar",
+    "astar_metric",
+    "dijkstra",
+    "robust"
+  ],
+  "policies": {
+    "2200": {
+      "best_fixed": {
+        "false": "dijkstra",
+        "feature": null,
+        "true": "dijkstra"
+      },
+      "freeze_sha256": "71e55183e6c81a448ab393284560a6fb9c04f79a006ed60c9f061aa7d1aa45da",
+      "paired_delta_vs_val_selected_fixed": {
+        "bootstrap_draws": 999,
+        "caveat": "Descriptive cluster bootstrap on author-visible synthetic seeds; not blind inference",
+        "cluster_bootstrap_95pct": [
+          0.0,
+          0.0
+        ],
+        "mean_utility_delta": 0.0,
+        "observations": 144,
+        "seeds": 24
+      },
+      "selected_on": 144,
+      "selector": {
+        "false": "dijkstra",
+        "feature": null,
+        "true": "dijkstra"
+      },
+      "shortlist": [
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": null,
+            "true": "dijkstra"
+          },
+          "train_utility": 993.010378,
+          "validation_utility": 993.443093
+        },
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": "ordered",
+            "true": "robust"
+          },
+          "train_utility": 992.739962,
+          "validation_utility": 993.191704
+        },
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": "ordered",
+            "true": "hier_replan"
+          },
+          "train_utility": 992.716073,
+          "validation_utility": 993.188093
+        },
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": "ordered",
+            "true": "astar"
+          },
+          "train_utility": 992.523434,
+          "validation_utility": 992.99087
+        },
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": "geometric",
+            "true": "hier_replan"
+          },
+          "train_utility": 991.138698,
+          "validation_utility": 992.579926
+        },
+        {
+          "policy": {
+            "false": "astar",
+            "feature": "four_keys",
+            "true": "dijkstra"
+          },
+          "train_utility": 990.028578,
+          "validation_utility": 991.592298
+        },
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": "geometric",
+            "true": "robust"
+          },
+          "train_utility": 991.487878,
+          "validation_utility": 991.571888
+        },
+        {
+          "policy": {
+            "false": "astar",
+            "feature": "large",
+            "true": "dijkstra"
+          },
+          "train_utility": 990.330246,
+          "validation_utility": 990.92267
+        },
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": "four_keys",
+            "true": "hier_replan"
+          },
+          "train_utility": 991.485736,
+          "validation_utility": 984.254212
+        },
+        {
+          "policy": {
+            "false": "astar",
+            "feature": "dense",
+            "true": "dijkstra"
+          },
+          "train_utility": 990.627746,
+          "validation_utility": 984.176712
+        },
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": "geometric",
+            "true": "astar"
+          },
+          "train_utility": 991.27135,
+          "validation_utility": 984.147043
+        },
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": "four_keys",
+            "true": "astar"
+          },
+          "train_utility": 990.327149,
+          "validation_utility": 980.332316
+        }
+      ],
+      "support": {
+        "train": {
+          "n": 144,
+          "selected_methods": {
+            "astar": 0,
+            "astar_metric": 0,
+            "dijkstra": 144,
+            "hier_replan": 0,
+            "robust": 0
+          },
+          "true_feature": null
+        },
+        "transfer": {
+          "n": 144,
+          "selected_methods": {
+            "astar": 0,
+            "astar_metric": 0,
+            "dijkstra": 144,
+            "hier_replan": 0,
+            "robust": 0
+          },
+          "true_feature": null
+        },
+        "validation": {
+          "n": 144,
+          "selected_methods": {
+            "astar": 0,
+            "astar_metric": 0,
+            "dijkstra": 144,
+            "hier_replan": 0,
+            "robust": 0
+          },
+          "true_feature": null
+        }
+      },
+      "trained_on": 144
+    },
+    "250": {
+      "best_fixed": {
+        "false": "hier_replan",
+        "feature": null,
+        "true": "hier_replan"
+      },
+      "freeze_sha256": "a806499d433a0a6bdc378e61a17476631793b1ed495cc73efccd123dea50024f",
+      "paired_delta_vs_val_selected_fixed": {
+        "bootstrap_draws": 999,
+        "caveat": "Descriptive cluster bootstrap on author-visible synthetic seeds; not blind inference",
+        "cluster_bootstrap_95pct": [
+          0.0,
+          0.0
+        ],
+        "mean_utility_delta": 0.0,
+        "observations": 144,
+        "seeds": 24
+      },
+      "selected_on": 144,
+      "selector": {
+        "false": "hier_replan",
+        "feature": "ordered",
+        "true": "dijkstra"
+      },
+      "shortlist": [
+        {
+          "policy": {
+            "false": "hier_replan",
+            "feature": "ordered",
+            "true": "dijkstra"
+          },
+          "train_utility": 950.484643,
+          "validation_utility": 956.359778
+        },
+        {
+          "policy": {
+            "false": "hier_replan",
+            "feature": "ordered",
+            "true": "robust"
+          },
+          "train_utility": 950.214226,
+          "validation_utility": 956.108389
+        },
+        {
+          "policy": {
+            "false": "hier_replan",
+            "feature": null,
+            "true": "hier_replan"
+          },
+          "train_utility": 950.190337,
+          "validation_utility": 956.104778
+        },
+        {
+          "policy": {
+            "false": "hier_replan",
+            "feature": "ordered",
+            "true": "astar"
+          },
+          "train_utility": 928.34442,
+          "validation_utility": 948.6596
+        },
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": "four_keys",
+            "true": "hier_replan"
+          },
+          "train_utility": 803.566126,
+          "validation_utility": 876.184953
+        },
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": "geometric",
+            "true": "hier_replan"
+          },
+          "train_utility": 845.647448,
+          "validation_utility": 804.3465
+        },
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": "dense",
+            "true": "hier_replan"
+          },
+          "train_utility": 824.36559,
+          "validation_utility": 776.329842
+        },
+        {
+          "policy": {
+            "false": "dijkstra",
+            "feature": "large",
+            "true": "hier_replan"
+          },
+          "train_utility": 849.253877,
+          "validation_utility": 755.601732
+        },
+        {
+          "policy": {
+            "false": "astar",
+            "feature": "geometric",
+            "true": "hier_replan"
+          },
+          "train_utility": 808.686265,
+          "validation_utility": 717.096803
+        },
+        {
+          "policy": {
+            "false": "hier_replan",
+            "feature": "dense",
+            "true": "dijkstra"
+          },
+          "train_utility": 741.500923,
+          "validation_utility": 716.000067
+        },
+        {
+          "policy": {
+            "false": "astar",
+            "feature": "large",
+            "true": "hier_replan"
+          },
+          "train_utility": 783.694222,
+          "validation_utility": 668.490347
+        },
+        {
+          "policy": {
+            "false": "hier_replan",
+            "feature": "four_keys",
+            "true": "dijkstra"
+          },
+          "train_utility": 762.300387,
+          "validation_utility": 616.144956
+        }
+      ],
+      "support": {
+        "train": {
+          "n": 144,
+          "selected_methods": {
+            "astar": 0,
+            "astar_metric": 0,
+            "dijkstra": 48,
+            "hier_replan": 96,
+            "robust": 0
+          },
+          "true_feature": 48
+        },
+        "transfer": {
+          "n": 144,
+          "selected_methods": {
+            "astar": 0,
+            "astar_metric": 0,
+            "dijkstra": 0,
+            "hier_replan": 144,
+            "robust": 0
+          },
+          "true_feature": 0
+        },
+        "validation": {
+          "n": 144,
+          "selected_methods": {
+            "astar": 0,
+            "astar_metric": 0,
+            "dijkstra": 48,
+            "hier_replan": 96,
+            "robust": 0
+          },
+          "true_feature": 48
+        }
+      },
+      "trained_on": 144
+    }
+  },
+  "protocol": "ACE-R6-v4-public-decision-stump-transfer",
+  "sha256": "5ba666eea5ae256b5a8699566e76335b8d43d40a1aa686e641ccee9c24e4de44",
+  "split_seed_ranges": {
+    "train": [
+      22100,
+      22123
+    ],
+    "transfer": [
+      24100,
+      24123
+    ],
+    "validation": [
+      23100,
+      23123
+    ]
+  },
+  "summary": {
+    "2200/train/astar": {
+      "action_counts": {
+        "astar": 144,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 356.19,
+      "n": 144,
+      "ratio_success_only": 1.0277,
+      "recovered": 22,
+      "shock_encounters": 22,
+      "success": 144,
+      "utility": 987.345349
+    },
+    "2200/train/astar_metric": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 144,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 12,
+      "mean_work": 2197.03,
+      "n": 144,
+      "ratio_success_only": 1.0,
+      "recovered": 0,
+      "shock_encounters": 0,
+      "success": 2,
+      "utility": -79.357222
+    },
+    "2200/train/best_fixed_validation": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 144,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 228.33,
+      "n": 144,
+      "ratio_success_only": 1.0121,
+      "recovered": 22,
+      "shock_encounters": 22,
+      "success": 144,
+      "utility": 993.010378
+    },
+    "2200/train/dijkstra": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 144,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 228.33,
+      "n": 144,
+      "ratio_success_only": 1.0121,
+      "recovered": 22,
+      "shock_encounters": 22,
+      "success": 144,
+      "utility": 993.010378
+    },
+    "2200/train/hier_replan": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 144,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 126.4,
+      "n": 144,
+      "ratio_success_only": 1.0955,
+      "recovered": 24,
+      "shock_encounters": 24,
+      "success": 144,
+      "utility": 978.375337
+    },
+    "2200/train/learned": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 144,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 228.33,
+      "n": 144,
+      "ratio_success_only": 1.0121,
+      "recovered": 22,
+      "shock_encounters": 22,
+      "success": 144,
+      "utility": 993.010378
+    },
+    "2200/train/robust_v3": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 144
+      },
+      "failure_sample_count": 12,
+      "mean_work": 958.8,
+      "n": 144,
+      "ratio_success_only": 1.011,
+      "recovered": 18,
+      "shock_encounters": 18,
+      "success": 98,
+      "utility": 643.910332
+    },
+    "2200/transfer/astar": {
+      "action_counts": {
+        "astar": 144,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 1,
+      "mean_work": 498.08,
+      "n": 144,
+      "ratio_success_only": 1.0085,
+      "recovered": 10,
+      "shock_encounters": 11,
+      "success": 143,
+      "utility": 981.056224
+    },
+    "2200/transfer/astar_metric": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 144,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 12,
+      "mean_work": 2188.82,
+      "n": 144,
+      "ratio_success_only": 1.0,
+      "recovered": 0,
+      "shock_encounters": 0,
+      "success": 6,
+      "utility": -50.026389
+    },
+    "2200/transfer/best_fixed_validation": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 144,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 284.97,
+      "n": 144,
+      "ratio_success_only": 1.0026,
+      "recovered": 10,
+      "shock_encounters": 10,
+      "success": 144,
+      "utility": 993.789306
+    },
+    "2200/transfer/dijkstra": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 144,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 284.97,
+      "n": 144,
+      "ratio_success_only": 1.0026,
+      "recovered": 10,
+      "shock_encounters": 10,
+      "success": 144,
+      "utility": 993.789306
+    },
+    "2200/transfer/hier_replan": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 144,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 142.36,
+      "n": 144,
+      "ratio_success_only": 1.116,
+      "recovered": 10,
+      "shock_encounters": 10,
+      "success": 144,
+      "utility": 973.961634
+    },
+    "2200/transfer/hindsight_oracle": {
+      "mean_work": 197.5,
+      "n": 144,
+      "success": 144,
+      "utility": 995.515049,
+      "warning": "NONDEPLOYABLE: uses per-case terminal outcomes"
+    },
+    "2200/transfer/learned": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 144,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 284.97,
+      "n": 144,
+      "ratio_success_only": 1.0026,
+      "recovered": 10,
+      "shock_encounters": 10,
+      "success": 144,
+      "utility": 993.789306
+    },
+    "2200/transfer/robust_v3": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 144
+      },
+      "failure_sample_count": 12,
+      "mean_work": 1677.93,
+      "n": 144,
+      "ratio_success_only": 1.001,
+      "recovered": 3,
+      "shock_encounters": 3,
+      "success": 54,
+      "utility": 310.116717
+    },
+    "2200/validation/astar": {
+      "action_counts": {
+        "astar": 144,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 1,
+      "mean_work": 436.72,
+      "n": 144,
+      "ratio_success_only": 1.0277,
+      "recovered": 13,
+      "shock_encounters": 14,
+      "success": 143,
+      "utility": 978.481521
+    },
+    "2200/validation/astar_metric": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 144,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 12,
+      "mean_work": 2197.54,
+      "n": 144,
+      "ratio_success_only": 1.0,
+      "recovered": 0,
+      "shock_encounters": 0,
+      "success": 2,
+      "utility": -79.3675
+    },
+    "2200/validation/best_fixed_validation": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 144,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 276.15,
+      "n": 144,
+      "ratio_success_only": 1.0052,
+      "recovered": 13,
+      "shock_encounters": 13,
+      "success": 144,
+      "utility": 993.443093
+    },
+    "2200/validation/dijkstra": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 144,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 276.15,
+      "n": 144,
+      "ratio_success_only": 1.0052,
+      "recovered": 13,
+      "shock_encounters": 13,
+      "success": 144,
+      "utility": 993.443093
+    },
+    "2200/validation/hier_replan": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 144,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 127.88,
+      "n": 144,
+      "ratio_success_only": 1.1036,
+      "recovered": 15,
+      "shock_encounters": 15,
+      "success": 144,
+      "utility": 976.72876
+    },
+    "2200/validation/learned": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 144,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 0,
+      "mean_work": 276.15,
+      "n": 144,
+      "ratio_success_only": 1.0052,
+      "recovered": 13,
+      "shock_encounters": 13,
+      "success": 144,
+      "utility": 993.443093
+    },
+    "2200/validation/robust_v3": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 144
+      },
+      "failure_sample_count": 12,
+      "mean_work": 998.01,
+      "n": 144,
+      "ratio_success_only": 1.0059,
+      "recovered": 12,
+      "shock_encounters": 12,
+      "success": 98,
+      "utility": 643.813857
+    },
+    "250/train/astar": {
+      "action_counts": {
+        "astar": 144,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 12,
+      "mean_work": 203.6,
+      "n": 144,
+      "ratio_success_only": 1.0186,
+      "recovered": 6,
+      "shock_encounters": 12,
+      "success": 74,
+      "utility": 483.602463
+    },
+    "250/train/astar_metric": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 144,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 12,
+      "mean_work": 250,
+      "n": 144,
+      "ratio_success_only": null,
+      "recovered": 0,
+      "shock_encounters": 0,
+      "success": 0,
+      "utility": -55.0
+    },
+    "250/train/best_fixed_validation": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 144,
+        "robust": 0
+      },
+      "failure_sample_count": 4,
+      "mean_work": 125.93,
+      "n": 144,
+      "ratio_success_only": 1.0932,
+      "recovered": 24,
+      "shock_encounters": 24,
+      "success": 140,
+      "utility": 950.190337
+    },
+    "250/train/dijkstra": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 144,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 12,
+      "mean_work": 165.06,
+      "n": 144,
+      "ratio_success_only": 1.0145,
+      "recovered": 13,
+      "shock_encounters": 15,
+      "success": 92,
+      "utility": 615.676175
+    },
+    "250/train/hier_replan": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 144,
+        "robust": 0
+      },
+      "failure_sample_count": 4,
+      "mean_work": 125.93,
+      "n": 144,
+      "ratio_success_only": 1.0932,
+      "recovered": 24,
+      "shock_encounters": 24,
+      "success": 140,
+      "utility": 950.190337
+    },
+    "250/train/learned": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 48,
+        "hier_replan": 96,
+        "robust": 0
+      },
+      "failure_sample_count": 4,
+      "mean_work": 111.22,
+      "n": 144,
+      "ratio_success_only": 1.0932,
+      "recovered": 24,
+      "shock_encounters": 24,
+      "success": 140,
+      "utility": 950.484643
+    },
+    "250/train/robust_v3": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 144
+      },
+      "failure_sample_count": 12,
+      "mean_work": 207.28,
+      "n": 144,
+      "ratio_success_only": 1.012,
+      "recovered": 8,
+      "shock_encounters": 10,
+      "success": 54,
+      "utility": 338.704378
+    },
+    "250/transfer/astar": {
+      "action_counts": {
+        "astar": 144,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 12,
+      "mean_work": 225.72,
+      "n": 144,
+      "ratio_success_only": 1.0,
+      "recovered": 1,
+      "shock_encounters": 1,
+      "success": 32,
+      "utility": 178.818889
+    },
+    "250/transfer/astar_metric": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 144,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 12,
+      "mean_work": 250,
+      "n": 144,
+      "ratio_success_only": null,
+      "recovered": 0,
+      "shock_encounters": 0,
+      "success": 0,
+      "utility": -55.0
+    },
+    "250/transfer/best_fixed_validation": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 144,
+        "robust": 0
+      },
+      "failure_sample_count": 3,
+      "mean_work": 141.37,
+      "n": 144,
+      "ratio_success_only": 1.1143,
+      "recovered": 8,
+      "shock_encounters": 10,
+      "success": 141,
+      "utility": 952.918711
+    },
+    "250/transfer/dijkstra": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 144,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 12,
+      "mean_work": 202.26,
+      "n": 144,
+      "ratio_success_only": 1.0021,
+      "recovered": 3,
+      "shock_encounters": 3,
+      "success": 74,
+      "utility": 485.326703
+    },
+    "250/transfer/hier_replan": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 144,
+        "robust": 0
+      },
+      "failure_sample_count": 3,
+      "mean_work": 141.37,
+      "n": 144,
+      "ratio_success_only": 1.1143,
+      "recovered": 8,
+      "shock_encounters": 10,
+      "success": 141,
+      "utility": 952.918711
+    },
+    "250/transfer/hindsight_oracle": {
+      "mean_work": 143.53,
+      "n": 144,
+      "success": 143,
+      "utility": 982.465729,
+      "warning": "NONDEPLOYABLE: uses per-case terminal outcomes"
+    },
+    "250/transfer/learned": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 144,
+        "robust": 0
+      },
+      "failure_sample_count": 3,
+      "mean_work": 141.37,
+      "n": 144,
+      "ratio_success_only": 1.1143,
+      "recovered": 8,
+      "shock_encounters": 10,
+      "success": 141,
+      "utility": 952.918711
+    },
+    "250/transfer/robust_v3": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 144
+      },
+      "failure_sample_count": 12,
+      "mean_work": 250,
+      "n": 144,
+      "ratio_success_only": null,
+      "recovered": 0,
+      "shock_encounters": 0,
+      "success": 0,
+      "utility": -55.0
+    },
+    "250/validation/astar": {
+      "action_counts": {
+        "astar": 144,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 12,
+      "mean_work": 210.06,
+      "n": 144,
+      "ratio_success_only": 1.0008,
+      "recovered": 2,
+      "shock_encounters": 4,
+      "success": 62,
+      "utility": 397.808984
+    },
+    "250/validation/astar_metric": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 144,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 12,
+      "mean_work": 250,
+      "n": 144,
+      "ratio_success_only": null,
+      "recovered": 0,
+      "shock_encounters": 0,
+      "success": 0,
+      "utility": -55.0
+    },
+    "250/validation/best_fixed_validation": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 144,
+        "robust": 0
+      },
+      "failure_sample_count": 3,
+      "mean_work": 126.67,
+      "n": 144,
+      "ratio_success_only": 1.0995,
+      "recovered": 14,
+      "shock_encounters": 15,
+      "success": 141,
+      "utility": 956.104778
+    },
+    "250/validation/dijkstra": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 144,
+        "hier_replan": 0,
+        "robust": 0
+      },
+      "failure_sample_count": 12,
+      "mean_work": 176.73,
+      "n": 144,
+      "ratio_success_only": 1.0077,
+      "recovered": 6,
+      "shock_encounters": 7,
+      "success": 81,
+      "utility": 536.225131
+    },
+    "250/validation/hier_replan": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 144,
+        "robust": 0
+      },
+      "failure_sample_count": 3,
+      "mean_work": 126.67,
+      "n": 144,
+      "ratio_success_only": 1.0995,
+      "recovered": 14,
+      "shock_encounters": 15,
+      "success": 141,
+      "utility": 956.104778
+    },
+    "250/validation/learned": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 48,
+        "hier_replan": 96,
+        "robust": 0
+      },
+      "failure_sample_count": 3,
+      "mean_work": 113.92,
+      "n": 144,
+      "ratio_success_only": 1.0995,
+      "recovered": 14,
+      "shock_encounters": 15,
+      "success": 141,
+      "utility": 956.359778
+    },
+    "250/validation/robust_v3": {
+      "action_counts": {
+        "astar": 0,
+        "astar_metric": 0,
+        "dijkstra": 0,
+        "hier_replan": 0,
+        "robust": 144
+      },
+      "failure_sample_count": 12,
+      "mean_work": 205.12,
+      "n": 144,
+      "ratio_success_only": 1.0016,
+      "recovered": 3,
+      "shock_encounters": 4,
+      "success": 51,
+      "utility": 317.659718
+    }
+  }
+}

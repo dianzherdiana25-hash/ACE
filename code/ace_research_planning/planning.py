@@ -58,6 +58,21 @@ class Meter:
     metric_heap_pops: int = 0
     metric_edge_scans: int = 0
     metric_cache: dict[int, tuple[int, ...]] = field(default_factory=dict)
+    work_limit: Optional[int] = None
+    work_units: int = 0
+
+    def charge(self, units: int = 1) -> None:
+        """Deterministic instrumented-operation budget, NOT machine instructions/FLOPs."""
+        if self.work_limit is None:
+            return
+        if self.work_units + units > self.work_limit:
+            self.exhausted = True
+            raise WorkBudgetExceeded("instrumented operation budget exceeded")
+        self.work_units += units
+
+
+class WorkBudgetExceeded(Exception):
+    """Private abort signal caught only by the public rollout boundary."""
 
 
 @dataclass(frozen=True)
@@ -114,10 +129,12 @@ def _metric_distances(world: World, origin: int, meter: Meter) -> tuple[int, ...
     while q:
         d, u = heappop(q)
         meter.metric_heap_pops += 1
+        meter.charge()
         if d != distances[u]:
             continue
         for v in world.adjacency[u]:
             meter.metric_edge_scans += 1
+            meter.charge()
             nd = d + world.cost(u, v)
             if nd < distances[v]:
                 distances[v] = nd
@@ -173,6 +190,7 @@ def search(world: World, start: tuple[int, int], blocked: frozenset[tuple[int, i
 
     def h(st: tuple[int, int]) -> int:
         meter.heuristic_calls += 1
+        meter.charge()
         if mode == "astar_metric":
             return metric_heuristic(world, st[0], st[1], target, meter)
         return heuristic(world, st[0], st[1], target)
@@ -201,6 +219,7 @@ def search(world: World, start: tuple[int, int], blocked: frozenset[tuple[int, i
             return SearchResult(None, None)
         expanded_cost[st] = dist
         meter.expanded += 1
+        meter.charge()
         if done(st):
             route = []
             cur = st
@@ -297,7 +316,8 @@ def structural_route(world: World, state: tuple[int, int],
     return hierarchical_route(world, state, blocked, meter), "hierarchical_fallback"
 
 
-def simulate(world: World, method: str, limit: int = 1800) -> dict:
+def simulate(world: World, method: str, limit: int = 1800,
+             work_limit: Optional[int] = None) -> dict:
     """Single environment rollout with a TOTAL per-agent search expansion cap.
 
     `shock` is hidden to every planner. It removes a physical edge after a plan
@@ -306,7 +326,11 @@ def simulate(world: World, method: str, limit: int = 1800) -> dict:
     """
     if method not in {"bfs", "greedy", "astar", "astar_metric", "dijkstra", "hier_fixed", "hier_replan", "adaptive", "structural", "robust"}:
         raise ValueError("unknown method")
-    meter = Meter(limit)
+    if work_limit is not None and (isinstance(work_limit, bool)
+                                   or not isinstance(work_limit, int)
+                                   or work_limit < 1):
+        raise ValueError("work_limit must be a positive integer")
+    meter = Meter(limit, work_limit=work_limit)
     state = (0, 0)
     # Pickup at start is possible in general worlds, although generated keys avoid it.
     for i, node in enumerate(world.keys):
@@ -318,6 +342,12 @@ def simulate(world: World, method: str, limit: int = 1800) -> dict:
     paid_cost = 0
     structural_choices: list[str] = []
     terminated = "step_cap"
+    def bounded_plan(callback):
+        try:
+            return callback()
+        except WorkBudgetExceeded:
+            return None
+
     for _ in range(4 * world.width * world.height * (len(world.keys) + 1)):
         if state == (world.goal, world.all_keys):
             terminated = "success"
@@ -325,21 +355,38 @@ def simulate(world: World, method: str, limit: int = 1800) -> dict:
         if not pending:
             blocked = frozenset(revealed)
             if method == "structural":
-                plan, choice = structural_route(world, state, blocked, meter)
+                result = bounded_plan(lambda: structural_route(world, state, blocked, meter))
+                if result is None:
+                    terminated = "work_budget"
+                    break
+                plan, choice = result
                 if structural_choices and structural_choices[-1] != choice:
                     switches += 1
                 structural_choices.append(choice)
             elif method == "robust":
                 if geometric_lower_bound_certificate(world):
-                    plan, choice = structural_route(world, state, blocked, meter)
+                    result = bounded_plan(lambda: structural_route(world, state, blocked, meter))
+                    if result is None:
+                        terminated = "work_budget"
+                        break
+                    plan, choice = result
                     structural_choices.append("geometry_certified:" + choice)
                 else:
-                    plan = search(world, state, blocked, "astar_metric", meter)
+                    plan = bounded_plan(lambda: search(world, state, blocked, "astar_metric", meter))
+                    if plan is None:
+                        terminated = "work_budget"
+                        break
                     structural_choices.append("nonlocal:graph_metric_astar")
             elif method in {"hier_fixed", "hier_replan"} or (method == "adaptive" and switches == 0):
-                plan = hierarchical_route(world, state, blocked, meter)
+                plan = bounded_plan(lambda: hierarchical_route(world, state, blocked, meter))
+                if plan is None:
+                    terminated = "work_budget"
+                    break
             else:
-                plan = search(world, state, blocked, method if method in {"bfs", "greedy", "astar", "astar_metric", "dijkstra"} else "astar", meter)
+                plan = bounded_plan(lambda: search(world, state, blocked, method if method in {"bfs", "greedy", "astar", "astar_metric", "dijkstra"} else "astar", meter))
+                if plan is None:
+                    terminated = "work_budget"
+                    break
             if plan.route is None:
                 terminated = "budget" if meter.exhausted else "no_plan"
                 break
@@ -386,6 +433,10 @@ def simulate(world: World, method: str, limit: int = 1800) -> dict:
         output["metric_edge_scans"] = meter.metric_edge_scans
         output["metric_heap_pops"] = meter.metric_heap_pops
         output["metric_sources"] = len(meter.metric_cache)
+    if work_limit is not None:
+        output["work_limit"] = work_limit
+        output["work_units"] = meter.work_units
+        output["work_exceeded"] = terminated == "work_budget"
     return output
 
 
