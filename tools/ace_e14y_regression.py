@@ -37,6 +37,7 @@ GROUPS={
       'e14.test_e14x_assumption_contract'),
  'y':('e14.test_e14y_induction','e14.test_e14y_audit','e14.test_e14y_witness'),
  'semantic':('tools.test_ace_e14t_semantic_audit',),
+ 'z':('e14.test_e14z_drift','e14.test_e14z_audit','e14.test_e14z_detection_limits'),
 }
 
 

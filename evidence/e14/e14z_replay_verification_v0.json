@@ -1,0 +1,49 @@
+{
+  "arms": 400,
+  "batches": [
+    {
+      "arms": 100,
+      "batch": "00-04",
+      "raw_replay_sha256": "f6dbab9c5eeece849befebbaadaaba87a842ebba025ab2ffc1b8d6212b8afb0d",
+      "raw_score_sha256": "f6dbab9c5eeece849befebbaadaaba87a842ebba025ab2ffc1b8d6212b8afb0d",
+      "score_and_replay_byte_equal": true,
+      "score_canonical_sha256": "aba275073107e5c5108e9c9f3b1b625b90ad5cd5349306a9333fdc72d65551de",
+      "stored_gzip_sha256": "33bf491278a18ab902171f010543aefad95157fa8234589687b34fe7bb6486d2",
+      "stored_path": "evidence/e14/e14z_score_00-04_v0.json.gz"
+    },
+    {
+      "arms": 100,
+      "batch": "05-09",
+      "raw_replay_sha256": "78e87e9c825d9ffc0fc98e19641fe760eb57eca66e6aaba8468e89e6c07aacee",
+      "raw_score_sha256": "78e87e9c825d9ffc0fc98e19641fe760eb57eca66e6aaba8468e89e6c07aacee",
+      "score_and_replay_byte_equal": true,
+      "score_canonical_sha256": "695b7409d603909bc1e86009edcb304a35e66b811ff9d726b024fcbe8d13bf28",
+      "stored_gzip_sha256": "e59fe8243830a75b694a756e2cc22a352171af20593d4f1f7366bf1c3221b39c",
+      "stored_path": "evidence/e14/e14z_score_05-09_v0.json.gz"
+    },
+    {
+      "arms": 100,
+      "batch": "10-14",
+      "raw_replay_sha256": "2697de5831785f6cc4b9fd891f56e2df9d45cd6dfc1dcf06150c2046b42ad779",
+      "raw_score_sha256": "2697de5831785f6cc4b9fd891f56e2df9d45cd6dfc1dcf06150c2046b42ad779",
+      "score_and_replay_byte_equal": true,
+      "score_canonical_sha256": "76b0a10f8ccc9f3f4aeee97c43227c0985c6b9957dd3198faa68360526ebb6c7",
+      "stored_gzip_sha256": "9236877495f7b537fd9f8d7dbdd41c8fa28e7a1c03c9f40c5ed6e42384befbf9",
+      "stored_path": "evidence/e14/e14z_score_10-14_v0.json.gz"
+    },
+    {
+      "arms": 100,
+      "batch": "15-19",
+      "raw_replay_sha256": "1c102ec2dec5447f147723e7a549cc394c6a301475e96c7b11e9457d5e4ca3a9",
+      "raw_score_sha256": "1c102ec2dec5447f147723e7a549cc394c6a301475e96c7b11e9457d5e4ca3a9",
+      "score_and_replay_byte_equal": true,
+      "score_canonical_sha256": "4692169c10247559932c9eed44ca63c20858135f5c62a2643efae38df8d59ba8",
+      "stored_gzip_sha256": "016873e54d53be1c61188bbdc9f641d7f9008df6ffecf5acd4977d3ff0e31f3b",
+      "stored_path": "evidence/e14/e14z_score_15-19_v0.json.gz"
+    }
+  ],
+  "prescore_bank_sha256": "0f8f98389d55e4f40121325a911534fde4cee0019af92b38e8f1107c9331b5ae",
+  "scientific_decision": "NOT_ASSESSED",
+  "status": "400_400_FULL_REPLAY_IDENTICAL",
+  "version": 1
+}

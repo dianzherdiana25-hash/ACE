@@ -1,0 +1,200 @@
+{
+  "groups": [
+    {
+      "elapsed_s": 1.901,
+      "exit_code": 0,
+      "group": "t_engineering",
+      "log_file": "e14y-regression-t_engineering.log",
+      "log_sha256": "c1fa364ae81017f2f880368a80306947269c405c00c01fecee87654590897ec4",
+      "modules": [
+        "e14.test_e14_integrated_graph",
+        "e14.test_e14_integrated_policy",
+        "e14.test_e14_issue13_smoke"
+      ],
+      "status": "PASS",
+      "tests": 33,
+      "timeout": false
+    },
+    {
+      "elapsed_s": 12.754,
+      "exit_code": 0,
+      "group": "t_scored",
+      "log_file": "e14y-regression-t_scored.log",
+      "log_sha256": "b5ed00ead8cf99ae79d52155b7eecb458ed2228eae03846b5c3a36b303e83091",
+      "modules": [
+        "e14.test_e14t",
+        "e14.test_e14t_audit"
+      ],
+      "status": "PASS",
+      "tests": 36,
+      "timeout": false
+    },
+    {
+      "elapsed_s": 12.513,
+      "exit_code": 0,
+      "group": "u_core",
+      "log_file": "e14y-regression-u_core.log",
+      "log_sha256": "d9fe5d2db680085b92d5c0b8ca6d13db902c89393589a5915eb1286d5ba97b40",
+      "modules": [
+        "e14.test_e14u_primitive",
+        "e14.test_e14u_audit_worker"
+      ],
+      "status": "PASS",
+      "tests": 48,
+      "timeout": false
+    },
+    {
+      "elapsed_s": 23.307,
+      "exit_code": 0,
+      "group": "u_ablation_a",
+      "log_file": "e14y-regression-u_ablation_a.log",
+      "log_sha256": "01a2354d36df614e694b530c32a39ed04649e3f1bc782d9e99a620f82b96082b",
+      "modules": [
+        "e14.test_e14u_ablation.E14UAblationTests.test_all_five_conditions_and_pair_truths",
+        "e14.test_e14u_ablation.E14UAblationTests.test_conservative_grammar_union_has_no_wrong_exact_accept",
+        "e14.test_e14u_ablation.E14UAblationTests.test_invalid_range_fails",
+        "e14.test_e14u_ablation.E14UAblationTests.test_namespace_runner_batched_and_deterministic_metrics"
+      ],
+      "status": "PASS",
+      "tests": 4,
+      "timeout": false
+    },
+    {
+      "elapsed_s": 27.48,
+      "exit_code": 0,
+      "group": "u_ablation_b",
+      "log_file": "e14y-regression-u_ablation_b.log",
+      "log_sha256": "90150970bf076e30afaefc72aad2d16697173e921ae863e3dd1d8e5faaac75b3",
+      "modules": [
+        "e14.test_e14u_ablation.E14UAblationTests.test_no_budget_overdraft_and_receipts_replay",
+        "e14.test_e14u_ablation.E14UAblationTests.test_positive_only_does_not_prove_single_grammar",
+        "e14.test_e14u_ablation.E14UAblationTests.test_source_ablation_falsifies_premature_single_grammar_acceptance",
+        "e14.test_e14u_ablation.E14UAblationTests.test_worker_union_matches_independent_fitter_across_inputs"
+      ],
+      "status": "PASS",
+      "tests": 4,
+      "timeout": false
+    },
+    {
+      "elapsed_s": 3.557,
+      "exit_code": 0,
+      "group": "u_algebra",
+      "log_file": "e14y-regression-u_algebra.log",
+      "log_sha256": "e4cba80802c7690dadbab2926562dc46e19ddffa507331131151bf9919fff55f",
+      "modules": [
+        "e14.test_e14u_algebra_union"
+      ],
+      "status": "PASS",
+      "tests": 5,
+      "timeout": false
+    },
+    {
+      "elapsed_s": 4.185,
+      "exit_code": 0,
+      "group": "u_robust",
+      "log_file": "e14y-regression-u_robust.log",
+      "log_sha256": "4eaf1cb4db756bf15b1e28ac10ab9b2b82c372a74a7d3e4829f654268da3b6af",
+      "modules": [
+        "e14.test_e14u_robustness"
+      ],
+      "status": "PASS",
+      "tests": 2,
+      "timeout": false
+    },
+    {
+      "elapsed_s": 1.894,
+      "exit_code": 0,
+      "group": "v",
+      "log_file": "e14y-regression-v.log",
+      "log_sha256": "190f814d5f6d08ea95e24988779d9e6976aded0002b370421df664ade14ed30b",
+      "modules": [
+        "e14.test_e14v_operator",
+        "e14.test_e14v_topology",
+        "e14.test_e14v_topology_audit"
+      ],
+      "status": "PASS",
+      "tests": 26,
+      "timeout": false
+    },
+    {
+      "elapsed_s": 4.597,
+      "exit_code": 0,
+      "group": "w",
+      "log_file": "e14y-regression-w.log",
+      "log_sha256": "420b976a11213c35d5cbd437d5c00c6b1a3d11ec765c709d5f03144823b25f2a",
+      "modules": [
+        "e14.test_e14w_synthesis",
+        "e14.test_e14w_integration",
+        "e14.test_e14w_worker"
+      ],
+      "status": "PASS",
+      "tests": 46,
+      "timeout": false
+    },
+    {
+      "elapsed_s": 5.028,
+      "exit_code": 0,
+      "group": "x",
+      "log_file": "e14y-regression-x.log",
+      "log_sha256": "ebb928696dfed3e3eb87354e2403711c06cb00265b03c9327502f61f29df5051",
+      "modules": [
+        "e14.test_e14x_identifiability",
+        "e14.test_e14x_replay",
+        "e14.test_e14x_assumption_contract"
+      ],
+      "status": "PASS",
+      "tests": 21,
+      "timeout": false
+    },
+    {
+      "elapsed_s": 2.192,
+      "exit_code": 0,
+      "group": "y",
+      "log_file": "e14y-regression-y.log",
+      "log_sha256": "1636e3c0e053150c22e1031f2e68b8958101f2224f2ee48076a98483d7a3cb89",
+      "modules": [
+        "e14.test_e14y_induction",
+        "e14.test_e14y_audit",
+        "e14.test_e14y_witness"
+      ],
+      "status": "PASS",
+      "tests": 37,
+      "timeout": false
+    },
+    {
+      "elapsed_s": 1.658,
+      "exit_code": 0,
+      "group": "semantic",
+      "log_file": "e14y-regression-semantic.log",
+      "log_sha256": "43a6cdade13aff9e30c9f9702c37563ff06e665628bf205d013a333e72384995",
+      "modules": [
+        "tools.test_ace_e14t_semantic_audit"
+      ],
+      "status": "PASS",
+      "tests": 11,
+      "timeout": false
+    },
+    {
+      "elapsed_s": 3.451,
+      "exit_code": 0,
+      "group": "z",
+      "log_file": "e14y-regression-z.log",
+      "log_sha256": "496184df914d0f4a66212e9b6a80d1dcf26ccc583637f6940ca6bf026419a8aa",
+      "modules": [
+        "e14.test_e14z_drift",
+        "e14.test_e14z_audit",
+        "e14.test_e14z_detection_limits"
+      ],
+      "status": "PASS",
+      "tests": 26,
+      "timeout": false
+    }
+  ],
+  "groups_passed": 13,
+  "scientific_decision": "NOT_ASSESSED",
+  "scope": "partial compatible checkout; not full exact-head GitHub regression",
+  "sha256": "1f59bf8ba4b1259001dfaca422291d8a07f38ae8e2a76d4585345f29387b75cc",
+  "status": "LOCAL_COMPATIBLE_WORKSPACE_PASS",
+  "tests_passed": 299,
+  "total_group_count": 13
+}

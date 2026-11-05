@@ -1,0 +1,189 @@
+{
+  "drift_types": [
+    "near",
+    "far"
+  ],
+  "expected_arms": 400,
+  "modes": [
+    "transfer-direct",
+    "transfer-verify2",
+    "cold-new",
+    "cold-old",
+    "sham-transfer"
+  ],
+  "previous_score_operator_ids_excluded": true,
+  "rows": [
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 122,
+      "id": "z:000",
+      "near_disagreements": 14,
+      "near_target_program_id": 97,
+      "source_program_id": 25
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 121,
+      "id": "z:001",
+      "near_disagreements": 21,
+      "near_target_program_id": 98,
+      "source_program_id": 44
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 121,
+      "id": "z:002",
+      "near_disagreements": 18,
+      "near_target_program_id": 104,
+      "source_program_id": 50
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 121,
+      "id": "z:003",
+      "near_disagreements": 18,
+      "near_target_program_id": 107,
+      "source_program_id": 53
+    },
+    {
+      "far_disagreements": 105,
+      "far_target_program_id": 121,
+      "id": "z:004",
+      "near_disagreements": 23,
+      "near_target_program_id": 92,
+      "source_program_id": 62
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 122,
+      "id": "z:005",
+      "near_disagreements": 19,
+      "near_target_program_id": 97,
+      "source_program_id": 67
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 121,
+      "id": "z:006",
+      "near_disagreements": 15,
+      "near_target_program_id": 105,
+      "source_program_id": 75
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 121,
+      "id": "z:007",
+      "near_disagreements": 15,
+      "near_target_program_id": 107,
+      "source_program_id": 77
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 121,
+      "id": "z:008",
+      "near_disagreements": 12,
+      "near_target_program_id": 84,
+      "source_program_id": 114
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 121,
+      "id": "z:009",
+      "near_disagreements": 14,
+      "near_target_program_id": 0,
+      "source_program_id": 116
+    },
+    {
+      "far_disagreements": 94,
+      "far_target_program_id": 1,
+      "id": "z:010",
+      "near_disagreements": 11,
+      "near_target_program_id": 142,
+      "source_program_id": 136
+    },
+    {
+      "far_disagreements": 94,
+      "far_target_program_id": 1,
+      "id": "z:011",
+      "near_disagreements": 10,
+      "near_target_program_id": 146,
+      "source_program_id": 140
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 122,
+      "id": "z:012",
+      "near_disagreements": 8,
+      "near_target_program_id": 157,
+      "source_program_id": 151
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 121,
+      "id": "z:013",
+      "near_disagreements": 8,
+      "near_target_program_id": 159,
+      "source_program_id": 153
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 121,
+      "id": "z:014",
+      "near_disagreements": 8,
+      "near_target_program_id": 160,
+      "source_program_id": 154
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 121,
+      "id": "z:015",
+      "near_disagreements": 7,
+      "near_target_program_id": 167,
+      "source_program_id": 161
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 121,
+      "id": "z:016",
+      "near_disagreements": 7,
+      "near_target_program_id": 168,
+      "source_program_id": 162
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 122,
+      "id": "z:017",
+      "near_disagreements": 6,
+      "near_target_program_id": 169,
+      "source_program_id": 163
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 122,
+      "id": "z:018",
+      "near_disagreements": 6,
+      "near_target_program_id": 163,
+      "source_program_id": 169
+    },
+    {
+      "far_disagreements": 91,
+      "far_target_program_id": 121,
+      "id": "z:019",
+      "near_disagreements": 6,
+      "near_target_program_id": 168,
+      "source_program_id": 174
+    }
+  ],
+  "seed": 202611051639,
+  "source_pair_indices": [
+    0,
+    5,
+    10
+  ],
+  "status": "PUBLIC_PRESCORE_NEGATIVE_TRANSFER",
+  "target_pair_indices": [
+    18,
+    22
+  ],
+  "version": 1
+}
