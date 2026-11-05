@@ -1,5 +1,12 @@
 # NEXT_ACTION — satu anggaran untuk diagnosis, perbaikan, dan pewarisan graf
 
+## P0 — Codex implementation: integrate the one-budget graph loop
+
+A standalone, evaluator-side shared-purchase journal now exists in `code/e14/e14_shared_budget.py` with **12/12 local unit tests passing**; see [the full engineering and audit contract](docs/ACE_E14_SHARED_LABEL_CONTRACT_v1.md). **This is not the integrated experiment**; no new Issue #13 bank or scorer was frozen/scored.
+
+Codex should refresh HEAD, work on a separate `codex/13-integrated-graph-loop` branch, add a journal-backed orchestrator for diagnosis → representation repair → qualified inheritance, validate each purchased query's declared nodes/edges from trusted typed graph input, then implement a novel prescored public bank with strict gates, score/replay/audit and a PR to `research/e1.3-design`. Respect the common cap **4 target labels per world and arm** and reuse a purchased diagnosis label at no new charge only with its receipt ID. Budget reservation must be durably persisted before oracle use. Run full regression; the local 12/12 journal tests alone are not sufficient. Current evidence [Issue #13](https://github.com/dianzherdiana25-hash/ACE/issues/13) remains scientific **OPEN**.
+
+
 1. Verifikasi HEAD, baca [hasil E1.4o](design/e1.4/E14O_RESULT_v1.md) dan [hasil penjaga E1.4s](design/e1.4/E14S_RESULT_v1.md), lalu lanjutkan [issue #13](https://github.com/dianzherdiana25-hash/ACE/issues/13). Gerbang aktif graf rantai masih HOLD. Penjaga berhasil pada grammar terbatas tetapi dapat menghabiskan tiga label.
 2. Buat bank graf bercabang publik baru dan satu batas bersama empat label. Uji apakah satu label dapat sekaligus menggugurkan model lama dan memangkas versi setelah perluasan. Jalankan diagnosis, pemilihan perluasan, perbaikan, serta kualifikasi dan pemakaian ulang dengan pengukuran biaya dari awal hingga akhir. Pembanding memakai anggaran yang sama.
 3. Bekukan strata alami, terjangkau, langka dan luar grammar, pembanding serta ambang sebelum penilaian. Pertahankan negatif dan bandingkan coverage saat abstain. Jika perbaikan dan pewarisan bersama belum lulus, catat bottleneck secara terpisah.

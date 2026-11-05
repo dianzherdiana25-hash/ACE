@@ -1,5 +1,10 @@
 # Keadaan ACE saat ini
 
+## Issue #13 — shared four-label budget infrastructure (engineering-only)
+
+A new evaluator-side `SharedLabelBudget` reserve/settle/reuse journal and 12 focused Python unit tests were added. **12/12 local unit tests PASS on Python 3.13.5**, with Git blob byte-identity checked. This is only **engineering groundwork** for Issue #13: it does not integrate, score, replay or accept the new branching-graph experiment. The 114-test repository regression was not run in this host. [Engineering contract](docs/ACE_E14_SHARED_LABEL_CONTRACT_v1.md) · [module](code/e14/e14_shared_budget.py) · [tests](code/e14/test_e14_shared_budget.py). E1.4o graph HOLD, E1.4s NATURAL_HOLD, and all frozen historical decisions remain unchanged.
+
+
 ## E1.4s — kualifikasi warisan GO dalam grammar terbatas
 
 Pada 888.832 pasangan motif, satu label menerima 18.654 pasangan yang salah. Dengan maksimum tiga label, penjaga menerima seluruh 2.688 pasangan yang cocok dan tidak menerima motif yang salah. Pada dua label, penjaga menerima 926/2.688 dan menahan sisanya. Replay identik, audit terpisah cocok, regresi bersih 114/114. **NATURAL_HOLD.** Loop graf E1.4o masih HOLD. [Hasil](design/e1.4/E14S_RESULT_v1.md) · [Bukti](evidence/e14/e14s_verification_v1.json) · [Kelanjutan #13](https://github.com/dianzherdiana25-hash/ACE/issues/13).
