@@ -1,0 +1,79 @@
+{
+  "version": "ACE-R4-v6-audit-v1",
+  "status": "PASS",
+  "data_sha256": "e5eec3d6c06a2f3ee9e5d25d8c3bc93169813d3771e299c6f63ad5ed401659d5",
+  "prescore_sha256": "a1b1453dcbbf51ef50a085cf46ffa8acb96c0305f24bf6808e833cbf2acaeb39",
+  "count": 192,
+  "reference_ambiguity_fraction": 0.9988839285714287,
+  "flipped_predictions_k4": 0,
+  "cost": {
+    "scratch_blind": {
+      "feature_multiply": 61440,
+      "route_ops": 0,
+      "gradient_steps": 1536,
+      "purchases": 1536
+    },
+    "learned_blind": {
+      "feature_multiply": 61440,
+      "route_ops": 368640,
+      "gradient_steps": 1536,
+      "purchases": 1536
+    },
+    "stress_blind": {
+      "feature_multiply": 61440,
+      "route_ops": 368640,
+      "gradient_steps": 1536,
+      "purchases": 1536
+    },
+    "scratch_family_query": {
+      "feature_multiply": 61440,
+      "route_ops": 0,
+      "gradient_steps": 1536,
+      "purchases": 1536
+    }
+  },
+  "aggregate": {
+    "scratch_blind": {
+      "k4": {
+        "balanced_accuracy": 0.5508274468070499,
+        "unqueried_brier": 0.2501618778527327
+      },
+      "k8": {
+        "balanced_accuracy": 0.6199879253113799,
+        "unqueried_brier": 0.25323900324169546
+      }
+    },
+    "learned_blind": {
+      "k4": {
+        "balanced_accuracy": 0.5508274468070499,
+        "unqueried_brier": 0.2501618855885764
+      },
+      "k8": {
+        "balanced_accuracy": 0.6199879253113799,
+        "unqueried_brier": 0.2532389602914852
+      }
+    },
+    "stress_blind": {
+      "k4": {
+        "balanced_accuracy": 0.5562958904677108,
+        "unqueried_brier": 0.24953874138414456
+      },
+      "k8": {
+        "balanced_accuracy": 0.6222378149845553,
+        "unqueried_brier": 0.2518937392418608
+      }
+    },
+    "scratch_family_query": {
+      "k4": {
+        "balanced_accuracy": 0.5530883444534846,
+        "unqueried_brier": 0.2526716994886777
+      },
+      "k8": {
+        "balanced_accuracy": 0.6243434329563555,
+        "unqueried_brier": 0.2512140459263528
+      }
+    }
+  },
+  "scope": "PUBLIC_SYNTHETIC_NOT_INDEPENDENT",
+  "note": "Cost counters are incomplete: metric predictions not counted by underlying episode.work. No compute dominance claim."
+}

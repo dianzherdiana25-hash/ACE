@@ -1,0 +1,10 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {audit,readArchive} from './v4_audit.mjs';
+const freeze=JSON.parse(readFileSync(new URL('./v4_prescore.json',import.meta.url),'utf8'));
+const result=readArchive(new URL('./v4_results.json.gz.b64',import.meta.url));
+test('v4 postscore audit replays immutable source and evidence',()=>assert.equal(audit(freeze,result).pass,true));
+test('v4 postscore audit rejects forged primary pass',()=>{const data=structuredClone(result);data.primary.passed=true;assert.throws(()=>audit(freeze,data));});
+test('v4 postscore audit rejects tampered primary statistic',()=>{const data=structuredClone(result);data.primary.gain=0.09;assert.throws(()=>audit(freeze,data));});
+test('v4 postscore audit rejects swapped seed aggregate',()=>{const data=structuredClone(result);data.per_seed[1].seed=907;assert.throws(()=>audit(freeze,data));});
+test('v4 postscore audit rejects changed frozen beta',()=>{const f=structuredClone(freeze);f.per_seed[0].fit.learned.beta[1]+=0.01;assert.throws(()=>audit(f,result));});

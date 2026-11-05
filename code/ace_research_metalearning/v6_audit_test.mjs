@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {audit} from './v6_audit.mjs';
+const f=JSON.parse(readFileSync(new URL('v6_prescore.json',import.meta.url),'utf8'));
+const r=JSON.parse(readFileSync(new URL('v6_results.json',import.meta.url),'utf8'));
+test('all 192 tasks independently reaggregated and replayed',()=>{const a=audit(f,r);assert.equal(a.count,192);assert.equal(a.status,'PASS');});
+test('reject altered aggregate',()=>{const b=structuredClone(r);b.summaries.scratch_blind.k4.balanced_accuracy+=.01;assert.throws(()=>audit(f,b),/aggregate mismatch/);});
+test('reject altered per-task result',()=>{const b=structuredClone(r);b.per_seed[0].families.rotating_stencil[0].k4.learned_blind.balanced_accuracy+=.01;assert.throws(()=>audit(f,b),/episode metric mismatch/);});
+test('reject altered frozen seed',()=>{const b=structuredClone(f);b.seeds[0]=999;assert.throws(()=>audit(b,r),/provenance mismatch/);});
+test('reject fake skipped tasks',()=>{const b=structuredClone(r);b.per_seed[0].families.rotating_stencil.pop();assert.throws(()=>audit(f,b),/wrong family size/);});
