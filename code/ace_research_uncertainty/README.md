@@ -101,3 +101,19 @@ detection and direct ACE semantic-aliasing counterexamples under an
 independently custodied scorer.
 
 Decision remains **HOLD; no promotion, no merge**.
+
+
+## R7.5 — six-group candidate discovery
+
+**Status: HOLD / negative public-development gate.** All changes remain on PR #43 (draft). See [locked protocol](R75_PROTOCOL.md), [source](r75_coverage.py), [23 tests](test_r75_coverage.py), [read-only audit](r75_audit.py), [result](R75_RESULT.md), and [machine-readable receipt](R75_EVIDENCE.json).
+
+From the repository root (Python 3.13+):
+
+```bash
+PYTHONPATH=code python -m unittest ace_research_uncertainty.test_r75_coverage -q
+PYTHONPATH=code python -m ace_research_uncertainty.r75_coverage --phase validation
+PYTHONPATH=code python -m ace_research_uncertainty.r75_coverage --phase final > R75_FINAL.json
+PYTHONPATH=code python -m ace_research_uncertainty.r75_audit R75_FINAL.json
+```
+
+The final run is already scored; replay is only for byte reproducibility, **never** independent new-holdout evidence. 504 public synthetic worlds, 3 seeds, 7 families, 630 arms; offline JSON audit 7218/7218 PASS. At cap 24, new23 true accepted rises 0→29 over matched narrow control but five-family utility declines -10263→-10969 and overall locked gate **FAILS**. A timeout occurred before a completed final result; the deterministic scoring cache was fixed prior to the one completed final evaluation. No exact-head CI, scientific promotion, merge or OAIE claim.
