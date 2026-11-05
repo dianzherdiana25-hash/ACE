@@ -1,0 +1,90 @@
+{
+  "in_grammar": {
+    "adaptive": {
+      "accuracy": 1,
+      "labels": 600,
+      "repair_triggered": 0,
+      "zero_posterior": 0
+    },
+    "random": {
+      "accuracy": 0.95,
+      "labels": 600,
+      "repair_triggered": 0,
+      "zero_posterior": 0
+    },
+    "repair": {
+      "accuracy": 1,
+      "labels": 600,
+      "repair_triggered": 0,
+      "zero_posterior": 0
+    },
+    "static": {
+      "accuracy": 0.985,
+      "labels": 600,
+      "repair_triggered": 0,
+      "zero_posterior": 0
+    }
+  },
+  "meta": {
+    "base_hypotheses": 28,
+    "cpu_seconds": 0.085134,
+    "expanded_hypotheses": 30,
+    "labels_per_arm": 6,
+    "test_points": 4,
+    "total_train_labels": 7200,
+    "train_points": 12,
+    "worlds_per_stratum": 100
+  },
+  "noisy": {
+    "adaptive": {
+      "accuracy": 0.75,
+      "labels": 600,
+      "repair_triggered": 0,
+      "zero_posterior": 0
+    },
+    "random": {
+      "accuracy": 0.72,
+      "labels": 600,
+      "repair_triggered": 0,
+      "zero_posterior": 0
+    },
+    "repair": {
+      "accuracy": 0.75,
+      "labels": 600,
+      "repair_triggered": 0,
+      "zero_posterior": 0
+    },
+    "static": {
+      "accuracy": 0.745,
+      "labels": 600,
+      "repair_triggered": 0,
+      "zero_posterior": 0
+    }
+  },
+  "parity4": {
+    "adaptive": {
+      "accuracy": 0.2775,
+      "labels": 600,
+      "repair_triggered": 0,
+      "zero_posterior": 28
+    },
+    "random": {
+      "accuracy": 0.015,
+      "labels": 600,
+      "repair_triggered": 0,
+      "zero_posterior": 91
+    },
+    "repair": {
+      "accuracy": 0.5575,
+      "labels": 600,
+      "repair_triggered": 28,
+      "zero_posterior": 0
+    },
+    "static": {
+      "accuracy": 0.0125,
+      "labels": 600,
+      "repair_triggered": 0,
+      "zero_posterior": 94
+    }
+  }
+}
