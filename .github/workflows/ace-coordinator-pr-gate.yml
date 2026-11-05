@@ -1,0 +1,104 @@
+name: ACE coordinator PR collision gate regression
+
+on:
+  push:
+    branches:
+      - coordination/pr-integration-preflight-20261105
+    paths:
+      - 'tools/ace_pr_collision_gate.py'
+      - 'tools/test_ace_pr_collision_gate.py'
+      - '.github/workflows/ace-coordinator-pr-gate.yml'
+  pull_request:
+    paths:
+      - 'tools/ace_pr_collision_gate.py'
+      - 'tools/test_ace_pr_collision_gate.py'
+      - '.github/workflows/ace-coordinator-pr-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  coordinator-pr-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Exact source checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify exact commit
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          echo "Verified checkout: $EXPECTED_SHA" >> "$GITHUB_STEP_SUMMARY"
+      - name: Run fail-closed unit and adversarial regression
+        run: python -m unittest discover -s tools -p 'test_ace_pr_collision_gate.py' -v
+      - name: Assert historical sibling collision from frozen two-PR snapshot
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          import sys
+          command = [
+              sys.executable, "tools/ace_pr_collision_gate.py",
+              "--repo", "dianzherdiana25-hash/ACE",
+              "--snapshot", "evidence/coordination/pr26_pr27_snapshot_20261105.json",
+              "--require-pr", "26", "--require-pr", "27",
+          ]
+          result = subprocess.run(command, capture_output=True, text=True, check=False)
+          if result.returncode != 2:
+              raise SystemExit("FAIL: sibling overlap was not blocked (exit %d): %s" %
+                               (result.returncode, result.stderr))
+          report = json.loads(result.stdout)
+          assert report["decision"] == "BLOCK_INTEGRATION", report
+          assert report["capture_method"] == "OFFLINE_SNAPSHOT_NOT_PROVEN_COMPLETE", report
+          assert any(
+              row["prs"] == [26, 27] and
+              "code/ace_loop/source_evolution.py" in row["shared_paths"] and
+              "code/ace_loop/test_source_evolution.py" in row["shared_paths"]
+              for row in report["overlaps"]
+          ), report
+          print("PASS: observed sibling source conflicts were blocked at exact SHA")
+          PY
+      - name: Check live PR set without making changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from tools.ace_pr_collision_gate import AuditError, audit, live_snapshot
+          repo = "dianzherdiana25-hash/ACE"
+          snapshot = live_snapshot(repo, os.environ["GITHUB_TOKEN"])
+          report = audit(snapshot)
+          numbers = {r["number"] for r in snapshot["pull_requests"]}
+          if not {26, 27}.issubset(numbers):
+              raise AuditError("required PR #26 or #27 missing: investigate changed integration target")
+          report["capture_method"] = "LIVE_DOUBLE_READ_STABLE_AT_CAPTURE"
+          Path("ace-pr-collision-live.json").write_text(
+              json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print("decision:", report["decision"])
+          print("open PRs at capture:", report["open_pr_count"])
+          print("blocking sibling overlaps:", report["blocking_overlap_count"])
+          print("manual-review overlaps:", report["review_overlap_count"])
+          # A live BLOCK result is correct behavior, not a green integration approval.
+          if report["decision"] == "NO_PATH_OVERLAP":
+              raise AuditError("unexpected no-overlap outcome for current sibling source PRs")
+          PY
+      - name: Preserve machine-readable live audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-pr-collision-live
+          path: ace-pr-collision-live.json
+          if-no-files-found: ignore
