@@ -14,7 +14,7 @@ Controls shared the same training labels: exact prefix memorizer; suffix-3 major
 
 ## Local execution
 `cd code && PYTHONPATH=. python -m unittest ace_research_primitives.test_primitive_discovery -v`
-=> **13/13 PASS**, Python standard-library only. The run was made on source Git blob hashes identical to live GitHub files:
+=> **17/17 PASS**, Python standard-library only. The run was made on source Git blob hashes identical to live GitHub files:
 - implementation `48904d7f344bd0bce6d5c392ccdc015309479fd5`;
 - test file `44c794371b51777212d308e1d119ba8994020c2b`.
 
@@ -60,3 +60,27 @@ The fixed library already perfectly solves 7/9 regular targets. The overall gain
 
 ## Next falsifiers
 Third-party independently generated (precommitted) regular languages, higher alphabet diversity, transition noise, hard-to-distinguish DFA pairs, sparse-label regimes, and compute-matched strong baselines (SAT DFA induction / modern red-blue EDSM). Audit the generated DFA against an independent evaluator and test longer extrapolation. Require preregistered gate before assessing any subsequent bank.
+
+
+## R1 H2 — *new problems*, pre-score task-family expansion
+
+Registered **before scoring** in `RANDOM_DFA_PROTOCOL.md` at commit `6bdd28c05efcb41e7238710aa3aa12f379f90f16`. The bank consists of 24 independently seeded random DFA targets (6 each with nominally 2, 3, 4, 5 source states), generated using source-topology and train-only class-balance filters. No target transition table is supplied to the inducer; all source-state counts, RNG draws and class labels are retained in regenerated evidence.
+
+Each of 24 problems: 63 train observations, 192 diagnostic validation, 256 length-OOD holdout. 1,512 total learning labels, 12,264 synthetic evaluations across all splits; **299 attempted merges**. Controls and maximum cost unchanged. `python -m ace_research_primitives.random_dfa_bank --output /tmp/r1-h2.json` reproduces full per-case evidence.
+
+### Prespecified H2 outcome (local execution)
+
+- Induced mean holdout accuracy: **99.0072%** (6083/6144 correct).
+- Optimistic oracle-best-control-per-task mean: **86.6374%**.
+- Mean gain: **+12.3698 percentage points**; exceeds >=5pp gate.
+- **23/24** tasks >=90%; exceeds >=16/24 gate. **H2 passed on this second synthetic bank**.
+- Explicit failure: randomized target `task_id=18` (nominal 5 states) reached only **195/256 = 76.1719%** holdout while its best control reached 201/256 = 78.5156%. Counterexample `aababbaa` true=1, induced=0. The local task was still training-consistent.
+- This is *not* proof of general autonomous operator invention: the task generator samples the same regular-language family presupposed by the induction algorithm. Larger state machines, more symbols, sparse traces, noisy supervision, and task families beyond finite automata remain untested.
+
+### Verification update
+The expanded implementation source and tests were checked against **exact Git blob hashes** after upload:
+- primary learner: `48904d7f344bd0bce6d5c392ccdc015309479fd5`
+- new random target-bank runner: `9ba95560f68ed20f9114f54bd46e025dcd50ae3c`
+- expanded unit suite: `f21f27dd90baa1c6078baef5c7d1b0d7e1cf5bf7`
+
+Local stdlib Python run: **17/17 tests PASS** (13 H1 + 4 H2). Raw H2 evidence SHA256 `3de88bfd89aa6011c580209a4c8687002425f1e42d49b48d6da5d2505846c584`; no exact-head GitHub CI or independent adversarial rerun. Scientific status **NOT_ASSESSED**.
