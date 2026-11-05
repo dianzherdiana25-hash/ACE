@@ -1,0 +1,87 @@
+{
+  "accepted_heldout_predictions_rechecked": 1242,
+  "arms": 400,
+  "bank_sha256": "c7dfa7c4758d5e43c649ea7679e0ad979da54e994245e888879dce20c47fe976",
+  "files": [
+    {
+      "canonical_sha256": "02cfaf2319f8ddcd68c272ee0f00114936041854c64adffd8f1eb2177f8651c5",
+      "name": "e14y-score-00-09.json"
+    },
+    {
+      "canonical_sha256": "1b9f6bcb98b9e7bf3f3f82ee90793f96df5caa2588361d2e24b51a07be5d7cc6",
+      "name": "e14y-score-10-19.json"
+    },
+    {
+      "canonical_sha256": "ff201dcbe0be72b3a52384b6607e63be4a3de1f406db3bb2fa1e4f2cae68e79f",
+      "name": "e14y-score-20-29.json"
+    },
+    {
+      "canonical_sha256": "750a91efe1b73c6a20aff2e969ffd1a3a974002e79e5e5596b0afaa88690d639",
+      "name": "e14y-score-30-39.json"
+    }
+  ],
+  "limitations": [
+    "source raw purchased journals missing from first score; source independently rerun and aggregates compared",
+    "same author constructed bank and audit",
+    "not a sealed independent scientific benchmark"
+  ],
+  "scientific_decision": "NOT_ASSESSED",
+  "sha256": "34ac7d4dcb28b11be1a028c2511240d935398e2448973c3b28d933705358662a",
+  "source_labels_recomputed": 258,
+  "source_operators": 40,
+  "status": "POSTSCORE_INDEPENDENT_ROUTE_AND_SEMANTIC_REPLAY",
+  "summary": {
+    "cold-new": {
+      "abstain": 66,
+      "accepted": 14,
+      "accepted_probes": 84,
+      "exact": 12,
+      "probe_errors": 7,
+      "target_labels": 298,
+      "target_replayed": 298,
+      "wrong_accepted": 2
+    },
+    "cold-old": {
+      "abstain": 44,
+      "accepted": 36,
+      "accepted_probes": 216,
+      "exact": 0,
+      "probe_errors": 60,
+      "target_labels": 204,
+      "target_replayed": 204,
+      "wrong_accepted": 36
+    },
+    "sham-transfer": {
+      "abstain": 65,
+      "accepted": 15,
+      "accepted_probes": 90,
+      "exact": 0,
+      "probe_errors": 46,
+      "target_labels": 144,
+      "target_replayed": 144,
+      "wrong_accepted": 15
+    },
+    "transfer-direct": {
+      "abstain": 8,
+      "accepted": 72,
+      "accepted_probes": 432,
+      "exact": 68,
+      "probe_errors": 15,
+      "target_labels": 0,
+      "target_replayed": 0,
+      "wrong_accepted": 4
+    },
+    "transfer-verify2": {
+      "abstain": 10,
+      "accepted": 70,
+      "accepted_probes": 420,
+      "exact": 68,
+      "probe_errors": 10,
+      "target_labels": 144,
+      "target_replayed": 144,
+      "wrong_accepted": 2
+    }
+  },
+  "target_labels_independently_replayed": 790,
+  "version": 1
+}

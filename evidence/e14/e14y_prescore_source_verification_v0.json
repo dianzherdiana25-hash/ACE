@@ -1,0 +1,15 @@
+{
+  "bank_hash_valid": true,
+  "bank_sha256": "c7dfa7c4758d5e43c649ea7679e0ad979da54e994245e888879dce20c47fe976",
+  "scientific_decision": "NOT_ASSESSED",
+  "source_byte_identity": true,
+  "source_checks": {
+    "code/e14/e14y_bank.py": true,
+    "code/e14/e14y_induction.py": true,
+    "code/e14/e14y_study.py": true,
+    "code/e14/test_e14y_induction.py": true,
+    "design/e1.4/E14Y_TRANSFER_DEVELOPMENT_PROTOCOL_v0.md": true,
+    "evidence/e14/e14y_prescore_bank_v0.json": true
+  },
+  "status": "PRESCORE_LOCK_VALID"
+}
