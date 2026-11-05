@@ -175,7 +175,7 @@ function runV4() {
   else if(method==="context")k=contextHead(m,sup,true).k;
   else if(method==="oracle")k=rows[0].task;
   if(method==="frozen"&&m.train_updates>=P.train_per_episode)return;
-  const r=rand(rows[0].task*10007+m.seen*131+rows[0].uid.length*709+17);
+  const r=rand(m.seen*131+17); // No task ID or task-derived UID in non-oracle sampling.
   for(const p of rows){
    trainUpdate(m,p,k);
    if(method==="replay"){
