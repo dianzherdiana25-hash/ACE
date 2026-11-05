@@ -1,0 +1,141 @@
+{
+  "groups": 9,
+  "not_exact_head_full_repo": true,
+  "receipts": [
+    {
+      "exit_code": 0,
+      "group": "e15",
+      "log_bytes": 99,
+      "log_sha256": "7680f9dcfc017e470b2213e5af7b4138963da098b06e80d4faa1b9ea3b44e671",
+      "modules": [
+        "ace_loop.test_engine",
+        "ace_loop.test_portfolio"
+      ],
+      "python": "3.13.5",
+      "status": "PASS",
+      "tests_passed": 32,
+      "wall_seconds": 23.933
+    },
+    {
+      "exit_code": 0,
+      "group": "legacy",
+      "log_bytes": 98,
+      "log_sha256": "8a5c8cfee73d43d754563f4682ca9202dd6dd85269c09c13a3db0317bb780414",
+      "modules": [
+        "e14.test_e14y_induction",
+        "e14.test_e14y_audit",
+        "e14.test_e14z_drift",
+        "e14.test_e14z_audit",
+        "e14.test_e14_integrated_graph",
+        "e14.test_e14_integrated_policy"
+      ],
+      "python": "3.13.5",
+      "status": "PASS",
+      "tests_passed": 82,
+      "wall_seconds": 5.424
+    },
+    {
+      "exit_code": 0,
+      "group": "u",
+      "log_bytes": 98,
+      "log_sha256": "f490ab4ed9be859bf8d16afcbc1cd212cc40baf426e6caf7f1f7e6f51ff213a3",
+      "modules": [
+        "e14.test_e14u_primitive",
+        "e14.test_e14u_robustness",
+        "e14.test_e14u_algebra_union"
+      ],
+      "python": "3.13.5",
+      "status": "PASS",
+      "tests_passed": 31,
+      "wall_seconds": 8.43
+    },
+    {
+      "exit_code": 0,
+      "group": "v",
+      "log_bytes": 98,
+      "log_sha256": "f2571e97b9ea215f9dd7546932ee087de265e59f59a4d5f39bf560f1592ad712",
+      "modules": [
+        "e14.test_e14v_operator",
+        "e14.test_e14v_topology",
+        "e14.test_e14v_topology_audit"
+      ],
+      "python": "3.13.5",
+      "status": "PASS",
+      "tests_passed": 26,
+      "wall_seconds": 1.965
+    },
+    {
+      "exit_code": 0,
+      "group": "w",
+      "log_bytes": 98,
+      "log_sha256": "55659724de181ffa13fbfb37f852928cf6a36a2e81045aaeb176e7ecf33494d2",
+      "modules": [
+        "e14.test_e14w_synthesis",
+        "e14.test_e14w_integration",
+        "e14.test_e14w_worker"
+      ],
+      "python": "3.13.5",
+      "status": "PASS",
+      "tests_passed": 46,
+      "wall_seconds": 4.577
+    },
+    {
+      "exit_code": 0,
+      "group": "x",
+      "log_bytes": 98,
+      "log_sha256": "0e4a716b231880df2ae845cd4e5c7a91b2591a92cbd635ca3f1cfa7a192d5a8c",
+      "modules": [
+        "e14.test_e14x_identifiability",
+        "e14.test_e14x_replay",
+        "e14.test_e14x_assumption_contract"
+      ],
+      "python": "3.13.5",
+      "status": "PASS",
+      "tests_passed": 21,
+      "wall_seconds": 5.066
+    },
+    {
+      "exit_code": 0,
+      "group": "t",
+      "log_bytes": 99,
+      "log_sha256": "cfc1d9fe86a34228ae4b0424e962927c441ae4d4a2159e79e3745102abb9293f",
+      "modules": [
+        "e14.test_e14t",
+        "e14.test_e14t_audit",
+        "e14.test_e14_issue13_smoke"
+      ],
+      "python": "3.13.5",
+      "status": "PASS",
+      "tests_passed": 39,
+      "wall_seconds": 13.556
+    },
+    {
+      "exit_code": 0,
+      "group": "u-ablation",
+      "log_bytes": 98,
+      "log_sha256": "97361894508fab5934caae5b713f161554dab2108233010b7dd0f57426f72f4b",
+      "modules": [
+        "e14.test_e14u_ablation"
+      ],
+      "python": "3.13.5",
+      "status": "PASS",
+      "tests_passed": 8,
+      "wall_seconds": 29.353
+    },
+    {
+      "exit_code": 0,
+      "group": "tooling",
+      "log_bytes": 97,
+      "log_sha256": "3171e016dc5e3a55669c67aa4824a5ac8e6e96969dd0744ca7263f601dc92323",
+      "modules": [
+        "tools.test_ace_e15_regression"
+      ],
+      "python": "3.13.5",
+      "status": "PASS",
+      "tests_passed": 4,
+      "wall_seconds": 0.748
+    }
+  ],
+  "status": "PASS_COMPATIBLE_CHECKOUT_ONLY",
+  "tests": 289
+}
