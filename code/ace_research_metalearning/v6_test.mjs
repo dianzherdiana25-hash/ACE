@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {SEEDS,N,blindOrder,episode,versionSpace,freeze,validateFrozen,selfTest,sha} from './v6_diagnostic.mjs';
+import {bankForSeed} from './v5_study.mjs';
+test('guardrails and exact freeze',()=>assert.equal(selfTest().passed,7));
+test('family-blind acquisition matched across different family IDs',()=>{const t=bankForSeed(SEEDS[0]).ood;assert.equal(t[0].id,t[12].id);assert.notEqual(t[0].family,t[12].family);assert.deepEqual(blindOrder(SEEDS[0],t[0].id),blindOrder(SEEDS[0],t[12].id));});
+test('same target positions for all non-family arms',()=>{const task=bankForSeed(SEEDS[0]).ood[0],cfg={lr:.2,beta:[.1,.1,.1,.1,.1,.1]};const x=['scratch','learned','stress'].map(s=>episode(task,SEEDS[0],s,cfg.lr,cfg.beta));assert.deepEqual(x[0].purchases,x[1].purchases);assert.deepEqual(x[1].purchases,x[2].purchases);});
+test('task labels never consumed during freeze by fitted v5 parameters',()=>{const f=freeze();assert.equal(f.per_seed.length,4);assert.equal(f.per_seed[0].config.beta.length,6);assert.ok(f.per_seed.every(x=>!('outcomes' in x)));});
+test('tamper fails closed',()=>{const f=freeze();f.seeds[0]=2008;assert.throws(()=>validateFrozen(f),/prescore changed/);});
+test('version-space oracle is explicitly evaluator only',()=>{const task={mask:0b10101};const s=versionSpace(task,[0,1,2,3,4,5,6,7],4,[0b10101,0b110101,0b11000]);assert.equal(s.count,2);assert.ok(s.ambiguous_unqueried>0);});
+test('exact repeat is deterministic',()=>assert.equal(sha(freeze()),sha(freeze())));
