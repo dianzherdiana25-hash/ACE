@@ -1,0 +1,153 @@
+{
+  "kind": "S3_V2_INDEPENDENT_EXACT_HEAD_REPLAY",
+  "status": "PUBLIC_DEVELOPMENT_NOT_CONFIRMATORY",
+  "source_commit": "b702a7285cdacfa8a861c8402451122d3b141367",
+  "source_path": "code/ace_research_generalization/experiment_v2.py",
+  "source_git_blob_sha": "d2c0ea7db33c619d67590221df1c1149b1b48e3d",
+  "source_sha256": "ac397ce0c02e6ccf5d17a6489b1936b792a9a9becbb1a684b3f076bbe14a69f1",
+  "method": "Fetched committed source, reconstructed byte-identical locally; verified git blob SHA and byte length 2949; executed python stdlib runner on local interpreter; compared 24 trial tuples to pre-existing committed evidence.",
+  "preregistered_primary_gate": "intervention false acceptance <= baseline false acceptance - 6 and abstention <=12/24",
+  "observed_summary": {
+    "baseline_false_accept": 24,
+    "intervention_false_accept": 2,
+    "abstain": 22,
+    "hypothesis_accepted": false
+  },
+  "observed_trial_tuples": [
+    [
+      117,
+      null,
+      47
+    ],
+    [
+      104,
+      null,
+      55
+    ],
+    [
+      115,
+      null,
+      47
+    ],
+    [
+      110,
+      60,
+      56
+    ],
+    [
+      118,
+      null,
+      58
+    ],
+    [
+      113,
+      null,
+      58
+    ],
+    [
+      116,
+      null,
+      57
+    ],
+    [
+      113,
+      70,
+      65
+    ],
+    [
+      121,
+      null,
+      55
+    ],
+    [
+      122,
+      null,
+      67
+    ],
+    [
+      119,
+      null,
+      62
+    ],
+    [
+      118,
+      null,
+      62
+    ],
+    [
+      114,
+      null,
+      51
+    ],
+    [
+      112,
+      null,
+      59
+    ],
+    [
+      118,
+      null,
+      61
+    ],
+    [
+      119,
+      null,
+      55
+    ],
+    [
+      112,
+      null,
+      67
+    ],
+    [
+      115,
+      null,
+      59
+    ],
+    [
+      115,
+      null,
+      53
+    ],
+    [
+      113,
+      null,
+      58
+    ],
+    [
+      114,
+      null,
+      65
+    ],
+    [
+      115,
+      null,
+      55
+    ],
+    [
+      111,
+      null,
+      63
+    ],
+    [
+      114,
+      null,
+      60
+    ]
+  ],
+  "comparison": "24/24 tuples equal to evidence/research/generalization/s3_intervention_v2_local.json; primary summary and hypothesis_accepted equal; CPU differs and is not deterministic",
+  "observed_cpu_seconds": 0.057222,
+  "budget": {
+    "selection_labels_per_method": 1536,
+    "evaluation_labels_reporting_only": 3072,
+    "negative_control_labels": 768,
+    "selection_candidate_example_comparisons_per_method": 6144
+  },
+  "integrity_findings": [
+    "Source exact Git blob SHA matches PR #51 committed runner; no runner changes.",
+    "The test-label inversion diagnostic computes inverted marker errors but does not actually rerun selectors under inverted test labels; therefore it is not a complete holdout-leakage sentinel.",
+    "Negative control uses one 0.95-fidelity source and one 0.5-fidelity source, not two no-signal sources; interpreting it as a pure no-signal control would be incorrect.",
+    "All splits share the same parity label rule, hence disjoint topologies but not disjoint semantic grammars."
+  ],
+  "scientific_decision": "HOLD: preregistered gate rejected; no promotion; not independent scientific confirmation."
+}
