@@ -1,0 +1,239 @@
+{
+  "audit": {
+    "deterministic_sha256": "850d503e8d3d02fecf143cd7894d2aa907f447cbb75773ed22758f02c8f9ddd8",
+    "lineages": 12,
+    "replay_match": true,
+    "status": "COMPLETE"
+  },
+  "bank_sha256": "777bba1e51cb4ab302f355c7f8d3ab9e7062468fae3120b6a2d0e9010765e69f",
+  "boundary": {
+    "binary": "/usr/bin/bwrap",
+    "checks": {
+      "credential_env_absent": true,
+      "evaluator_module_absent": true,
+      "host_loopback_denied": true,
+      "private_file_denied": true,
+      "receipt_stage_without_evaluator": true,
+      "worker_mount_read_only": true
+    },
+    "native_elf": true,
+    "sha256": "573236e5328ac2ebb08f59ae3a9805b4f8d12bdef14be8af4450d5463294985f"
+  },
+  "clean_fixture_restore": {
+    "idempotent": true,
+    "prior_fixture_byte_match": true,
+    "rejects_git_checkout": true,
+    "restored": [
+      "code/e14/e14e_bank.py",
+      "code/e14/e14e_policy.py",
+      "code/e14/e14e_run.py",
+      "code/e14/e14f_audit.py",
+      "code/e14/e14f_bank.py",
+      "code/e14/e14f_run.py",
+      "code/e14/e14f_selector.py",
+      "code/e14/test_e14e.py",
+      "code/e14/test_e14f_prescore.py",
+      "design/e1.4/E14F_OPPORTUNITY_PRELOCK_v1.md",
+      "evidence/e14/e14d_public_development_v1.json",
+      "evidence/e14/e14e_public_development_v1.json",
+      "evidence/e14/e14f_public_development_v1.json"
+    ],
+    "status": "COMPLETE",
+    "terminal": {
+      "elapsed_s": 0.101,
+      "exit_code": 0,
+      "log_file": "../ace-sprint-clean-restore.log",
+      "status": "COMPLETE"
+    }
+  },
+  "compressed_sha256": {
+    "replay": "b7f6742bc164b47112aeb0a306f6aaa4884480bb6a4783f791bdb11518c5440f",
+    "score": "f3b16669816aef052a30146db43daf42b4f78a16d39f44c91c6dbf509ee605c9"
+  },
+  "freeze_commit": "ef3ff7ddbb49ecd09de90c8038472225b7b294ff",
+  "plan_sha256": "fc4a064417ec3f3765ef4cdb5fb8b6d8acfe5501e1381e5040d55680612b328b",
+  "regression": {
+    "clean": {
+      "passed": 112,
+      "sha256": "d205537b8387a8960813463ceb25614bf758d498378077c7c054e2b97b5a3042",
+      "terminal": {
+        "elapsed_s": 80.74,
+        "exit_code": 0,
+        "log_file": "../ace-sprint-clean-reg.log",
+        "status": "COMPLETE"
+      },
+      "total": 112
+    },
+    "r": {
+      "passed": 112,
+      "sha256": "8b4c4ad4f992490a933f52c30d07ac43cc102616ad179717f06a4945674fb1ec",
+      "terminal": {
+        "elapsed_s": 81.36,
+        "exit_code": 0,
+        "log_file": "../ace-sprint-r-reg.log",
+        "status": "COMPLETE"
+      },
+      "total": 112
+    }
+  },
+  "summary": {
+    "lineages": 12,
+    "mapped": "GO",
+    "robust": "HOLD",
+    "scores": {
+      "chain": {
+        "cells": {
+          "complement": {
+            "covered": 0,
+            "errors": 0,
+            "false_positive": 0,
+            "full": 0,
+            "selected": 0
+          },
+          "identity": {
+            "covered": 120,
+            "errors": 0,
+            "false_positive": 0,
+            "full": 12,
+            "selected": 12
+          },
+          "last_flip": {
+            "covered": 0,
+            "errors": 0,
+            "false_positive": 0,
+            "full": 0,
+            "selected": 0
+          },
+          "penultimate_flip": {
+            "covered": 0,
+            "errors": 0,
+            "false_positive": 0,
+            "full": 0,
+            "selected": 0
+          },
+          "shorter": {
+            "covered": 120,
+            "errors": 51,
+            "false_positive": 0,
+            "full": 0,
+            "selected": 12
+          }
+        },
+        "edges": 108,
+        "labels": 60,
+        "nodes": 120
+      },
+      "packed": {
+        "cells": {
+          "complement": {
+            "covered": 0,
+            "errors": 0,
+            "false_positive": 0,
+            "full": 0,
+            "selected": 0
+          },
+          "identity": {
+            "covered": 120,
+            "errors": 0,
+            "false_positive": 0,
+            "full": 12,
+            "selected": 12
+          },
+          "last_flip": {
+            "covered": 120,
+            "errors": 0,
+            "false_positive": 0,
+            "full": 12,
+            "selected": 12
+          },
+          "penultimate_flip": {
+            "covered": 120,
+            "errors": 0,
+            "false_positive": 0,
+            "full": 12,
+            "selected": 12
+          },
+          "shorter": {
+            "covered": 120,
+            "errors": 51,
+            "false_positive": 0,
+            "full": 0,
+            "selected": 12
+          }
+        },
+        "edges": 180,
+        "labels": 60,
+        "nodes": 168
+      },
+      "passive": {
+        "cells": {
+          "complement": {
+            "covered": 120,
+            "errors": 48,
+            "false_positive": 24,
+            "full": 0,
+            "selected": 12
+          },
+          "identity": {
+            "covered": 120,
+            "errors": 0,
+            "false_positive": 0,
+            "full": 12,
+            "selected": 12
+          },
+          "last_flip": {
+            "covered": 120,
+            "errors": 48,
+            "false_positive": 24,
+            "full": 0,
+            "selected": 12
+          },
+          "penultimate_flip": {
+            "covered": 120,
+            "errors": 48,
+            "false_positive": 24,
+            "full": 0,
+            "selected": 12
+          },
+          "shorter": {
+            "covered": 120,
+            "errors": 51,
+            "false_positive": 0,
+            "full": 0,
+            "selected": 12
+          }
+        },
+        "edges": 180,
+        "labels": 60,
+        "nodes": 168
+      }
+    },
+    "worlds": 60
+  },
+  "terminal": {
+    "audit": {
+      "elapsed_s": 0.802,
+      "exit_code": 0,
+      "log_file": "audit.log",
+      "status": "COMPLETE"
+    },
+    "post_score_alias": {
+      "elapsed_s": 0.301,
+      "exit_code": 0,
+      "log_file": "../ace-sprint-r-alias.log",
+      "status": "COMPLETE"
+    },
+    "replay": {
+      "elapsed_s": 8.74,
+      "exit_code": 0,
+      "log_file": "replay.log",
+      "status": "COMPLETE"
+    },
+    "score": {
+      "elapsed_s": 8.828,
+      "exit_code": 0,
+      "log_file": "score.log",
+      "status": "COMPLETE"
+    }
+  }
+}

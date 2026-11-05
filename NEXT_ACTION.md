@@ -1,8 +1,12 @@
-# NEXT_ACTION — reproduksi dan audit E1.4r
+# NEXT_ACTION — membedakan motif warisan dari penjelasan yang lebih pendek
 
-1. Verifikasi HEAD dan [protokol beku](design/e1.4/E14R_PROTOCOL_v1.md). Buat direktori WORK dan validasi Bubblewrap native dengan [preflight](docs/ACE_SPRINT_RUNTIME.md).
-2. Jalankan skor dan replay pada ledger terpisah, lalu audit. Jika timeout gunakan ulang ledger pada proses yang terputus. Jangan membuat ulang freeze pada checkout produksi.
-3. Catat dua gerbang dan kesalahan pada dunia motif pendek secara terpisah. Rekonsiliasi dengan kegagalan pewarisan E1.4p dan batas anggaran E1.4q.
+1. Verifikasi HEAD GitHub dan baca [hasil E1.4r](design/e1.4/E14R_RESULT_v1.md). Bukti motif pendek yang meniru label biaya sudah tersimpan. Data yang dinilai dipakai untuk diagnosis saja.
+2. Implementasikan penjaga yang mempertahankan motif pendek yang cocok setelah label pertama. Pada bank publik baru, bandingkan abstain setelah satu label dengan pilihan satu label lanjutan yang menargetkan versi ambigu. Uji kapan jalur prefiks atau sufiks bisa membedakan motif panjang dari submotifnya dalam batas 16 sisi dan 16 node. Ukur pengurangan kesalahan, cakupan dan biaya secara terpisah. Bekukan kontrol, data dan ambang sebelum penilaian.
+3. Setelah ada bukti pemisahan yang cukup, uji apakah diagnosis, perbaikan representasi dan pewarisan bisa masuk dalam satu anggaran bersama tanpa oracle khusus tiap fase. Pertahankan batas DSL, kontrol kasus langka, dan distribusi yang dipisah. Gerbang E1.4o graf rantai, ketahanan warisan, dan NATURAL_HOLD tetap berlaku.
+
+## Pemulihan regresi publik
+
+Gunakan [panduan eksekusi](docs/ACE_SPRINT_RUNTIME.md) untuk memulihkan fixture E1.4d–f ke snapshot sementara dan menjalankan suite 112 tes. Arahkan log ke direktori WORK dan pertahankan keluaran terminal.
 
 ## Reproduksi E1.4r
 

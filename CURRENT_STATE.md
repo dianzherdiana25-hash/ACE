@@ -1,6 +1,10 @@
 # Keadaan ACE saat ini
 
-## E1.4r — checkpoint pra-penilaian
+## E1.4r — pemilihan interpretasi GO, ketahanan warisan HOLD
+
+Graf diagnostik memilih interpretasi yang benar pada 36/36 dunia yang mengikuti tiga interpretasi yang disediakan, dibanding 12/36 untuk rantai dan kalibrasi pasif. Dua metode diagnostik menahan prediksi pada semua 12 pergeseran komplemen. Pada motif lebih pendek dengan biaya sama, graf menerima 51 prediksi salah dari 120 probe. Audit lanjutan menemukan 217 dari 3.200 pasangan motif pendek–silsilah bisa meniru biaya suatu interpretasi. **Robust HOLD · NATURAL_HOLD.** Replay cocok, regresi 112/112. [Hasil](design/e1.4/E14R_RESULT_v1.md) · [Bukti](evidence/e14/e14r_verification_v1.json).
+
+## E1.4r — checkpoint historis pra-penilaian
 
 Dua belas artefak E1.4p diaudit dan digunakan kembali pada 60 dunia target baru yang berpasangan. Satu label biaya membandingkan kalibrasi netral, rantai terarah, dan graf dengan tiga jalur bertarif berbeda. Gerbang interpretasi yang tersedia dipisahkan dari ketahanan terhadap motif yang lebih pendek dengan label sama. Tes 2/2. [Protokol](design/e1.4/E14R_PROTOCOL_v1.md) · [Issue #11](https://github.com/dianzherdiana25-hash/ACE/issues/11).
 

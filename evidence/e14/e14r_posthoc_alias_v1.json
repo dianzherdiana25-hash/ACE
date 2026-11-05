@@ -1,0 +1,95 @@
+{
+  "kind": "post_score_structural_audit",
+  "lineages": [
+    {
+      "alias_any": 11,
+      "alias_identity": 5,
+      "enumerated": 96,
+      "length": 7,
+      "lineage": 0
+    },
+    {
+      "alias_any": 18,
+      "alias_identity": 9,
+      "enumerated": 224,
+      "length": 8,
+      "lineage": 1
+    },
+    {
+      "alias_any": 11,
+      "alias_identity": 5,
+      "enumerated": 96,
+      "length": 7,
+      "lineage": 2
+    },
+    {
+      "alias_any": 11,
+      "alias_identity": 5,
+      "enumerated": 96,
+      "length": 7,
+      "lineage": 3
+    },
+    {
+      "alias_any": 26,
+      "alias_identity": 14,
+      "enumerated": 480,
+      "length": 9,
+      "lineage": 4
+    },
+    {
+      "alias_any": 9,
+      "alias_identity": 4,
+      "enumerated": 96,
+      "length": 7,
+      "lineage": 5
+    },
+    {
+      "alias_any": 25,
+      "alias_identity": 13,
+      "enumerated": 480,
+      "length": 9,
+      "lineage": 6
+    },
+    {
+      "alias_any": 26,
+      "alias_identity": 14,
+      "enumerated": 480,
+      "length": 9,
+      "lineage": 7
+    },
+    {
+      "alias_any": 18,
+      "alias_identity": 9,
+      "enumerated": 224,
+      "length": 8,
+      "lineage": 8
+    },
+    {
+      "alias_any": 18,
+      "alias_identity": 9,
+      "enumerated": 224,
+      "length": 8,
+      "lineage": 9
+    },
+    {
+      "alias_any": 26,
+      "alias_identity": 14,
+      "enumerated": 480,
+      "length": 9,
+      "lineage": 10
+    },
+    {
+      "alias_any": 18,
+      "alias_identity": 9,
+      "enumerated": 224,
+      "length": 8,
+      "lineage": 11
+    }
+  ],
+  "score_sha256": "f3b16669816aef052a30146db43daf42b4f78a16d39f44c91c6dbf509ee605c9",
+  "totals": {
+    "alias_any": 217,
+    "alias_identity": 110,
+    "enumerated": 3200
+  }
+}
