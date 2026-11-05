@@ -92,6 +92,7 @@ def estimate(examples, val, hold, fixed_preds):
     ]
     return {
         "states": model.reachable(),
+        "automaton": model.signature(),
         "attempts": trials,
         "fixed_predicate": fixed_name,
         "scores": score,
