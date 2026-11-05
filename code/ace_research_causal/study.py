@@ -193,8 +193,7 @@ def main():
     args=parser.parse_args()
     result=experiment(args.worlds)
     args.output.parent.mkdir(parents=True,exist_ok=True)
-    args.output.write_text(json.dumps(result,sort_keys=True,indent=2)+'
-')
+    args.output.write_text(json.dumps(result,sort_keys=True,indent=2)+'\n')
     print('Wrote',args.output,'worlds/cohort:',args.worlds)
 
 if __name__=='__main__':
