@@ -1,0 +1,262 @@
+{
+  "candidate_count": 175,
+  "rows": [
+    {
+      "family": "residual",
+      "id": "y:000",
+      "outsider": null,
+      "program_id": 5
+    },
+    {
+      "family": "residual",
+      "id": "y:001",
+      "outsider": null,
+      "program_id": 7
+    },
+    {
+      "family": "residual",
+      "id": "y:002",
+      "outsider": null,
+      "program_id": 18
+    },
+    {
+      "family": "residual",
+      "id": "y:003",
+      "outsider": null,
+      "program_id": 31
+    },
+    {
+      "family": "residual",
+      "id": "y:004",
+      "outsider": null,
+      "program_id": 34
+    },
+    {
+      "family": "residual",
+      "id": "y:005",
+      "outsider": null,
+      "program_id": 39
+    },
+    {
+      "family": "residual",
+      "id": "y:006",
+      "outsider": null,
+      "program_id": 47
+    },
+    {
+      "family": "residual",
+      "id": "y:007",
+      "outsider": null,
+      "program_id": 51
+    },
+    {
+      "family": "residual",
+      "id": "y:008",
+      "outsider": null,
+      "program_id": 56
+    },
+    {
+      "family": "residual",
+      "id": "y:009",
+      "outsider": null,
+      "program_id": 59
+    },
+    {
+      "family": "residual",
+      "id": "y:010",
+      "outsider": null,
+      "program_id": 63
+    },
+    {
+      "family": "residual",
+      "id": "y:011",
+      "outsider": null,
+      "program_id": 66
+    },
+    {
+      "family": "residual",
+      "id": "y:012",
+      "outsider": null,
+      "program_id": 68
+    },
+    {
+      "family": "residual",
+      "id": "y:013",
+      "outsider": null,
+      "program_id": 87
+    },
+    {
+      "family": "residual",
+      "id": "y:014",
+      "outsider": null,
+      "program_id": 96
+    },
+    {
+      "family": "residual",
+      "id": "y:015",
+      "outsider": null,
+      "program_id": 103
+    },
+    {
+      "family": "residual",
+      "id": "y:016",
+      "outsider": null,
+      "program_id": 105
+    },
+    {
+      "family": "residual",
+      "id": "y:017",
+      "outsider": null,
+      "program_id": 106
+    },
+    {
+      "family": "residual",
+      "id": "y:018",
+      "outsider": null,
+      "program_id": 108
+    },
+    {
+      "family": "residual",
+      "id": "y:019",
+      "outsider": null,
+      "program_id": 115
+    },
+    {
+      "family": "threshold",
+      "id": "y:020",
+      "outsider": null,
+      "program_id": 124
+    },
+    {
+      "family": "threshold",
+      "id": "y:021",
+      "outsider": null,
+      "program_id": 129
+    },
+    {
+      "family": "threshold",
+      "id": "y:022",
+      "outsider": null,
+      "program_id": 133
+    },
+    {
+      "family": "threshold",
+      "id": "y:023",
+      "outsider": null,
+      "program_id": 137
+    },
+    {
+      "family": "threshold",
+      "id": "y:024",
+      "outsider": null,
+      "program_id": 142
+    },
+    {
+      "family": "threshold",
+      "id": "y:025",
+      "outsider": null,
+      "program_id": 145
+    },
+    {
+      "family": "threshold",
+      "id": "y:026",
+      "outsider": null,
+      "program_id": 150
+    },
+    {
+      "family": "threshold",
+      "id": "y:027",
+      "outsider": null,
+      "program_id": 152
+    },
+    {
+      "family": "threshold",
+      "id": "y:028",
+      "outsider": null,
+      "program_id": 157
+    },
+    {
+      "family": "threshold",
+      "id": "y:029",
+      "outsider": null,
+      "program_id": 159
+    },
+    {
+      "family": "threshold",
+      "id": "y:030",
+      "outsider": null,
+      "program_id": 165
+    },
+    {
+      "family": "threshold",
+      "id": "y:031",
+      "outsider": null,
+      "program_id": 167
+    },
+    {
+      "family": "threshold",
+      "id": "y:032",
+      "outsider": null,
+      "program_id": 170
+    },
+    {
+      "family": "threshold",
+      "id": "y:033",
+      "outsider": null,
+      "program_id": 171
+    },
+    {
+      "family": "unrepresented",
+      "id": "y:034",
+      "outsider": "gap-mod-7",
+      "program_id": null
+    },
+    {
+      "family": "unrepresented",
+      "id": "y:036",
+      "outsider": "floor-half",
+      "program_id": null
+    },
+    {
+      "family": "unrepresented",
+      "id": "y:038",
+      "outsider": "square-gap",
+      "program_id": null
+    },
+    {
+      "family": "unrepresented",
+      "id": "y:040",
+      "outsider": "parity-lo",
+      "program_id": null
+    },
+    {
+      "family": "unrepresented",
+      "id": "y:042",
+      "outsider": "mod-11",
+      "program_id": null
+    },
+    {
+      "family": "unrepresented",
+      "id": "y:044",
+      "outsider": "odd-hi-times-two",
+      "program_id": null
+    }
+  ],
+  "seed": 202611051617,
+  "source_pair_indices": [
+    0,
+    5,
+    10
+  ],
+  "status": "PUBLIC_DEVELOPMENT_PRE-SCORE_DESIGN",
+  "strata_counts": {
+    "residual": 20,
+    "threshold": 14,
+    "unrepresented": 6
+  },
+  "target_pair_indices": [
+    18,
+    22
+  ],
+  "version": 1
+}
