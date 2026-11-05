@@ -71,3 +71,24 @@ PYTHONPATH=code python -m ace_research_planning.study_v4 --output /tmp/r6_v4.jso
 ```
 
 See `RESEARCH_V4.md` for pre-declared environment splits, case-level accounting, policy freeze digests, caveats, negative controls, and exact reproduction.
+
+
+## v5 — online probe/act/replan research (PUBLIC, HOLD)
+
+New `online_v5.py`, `study_v5.py`, `test_study_v5.py`, `RESEARCH_V5.md`,
+`results_v5_summary.json`. Offline, explicit observation boundary: the planner
+never sees the hidden closure before an action/probe reveals it. Eighteen
+human-authored online policies; shared 300/900 instrumented-work-unit budgets,
+separate training/validation/transfer seeds. In 13,608 simulated rollouts, the
+selected learned policy is identical to fixed hierarchical search at cap 300
+and to a predeclared hierarchy→Dijkstra-after-discovery policy at cap 900.
+Paid probes are not selected; no demonstrated autonomous reasoning gain.
+**56/56 local unit tests PASS.** Read `RESEARCH_V5.md` for the negative result,
+conditional recovery, seed counts, exact hash, fallbacks, and limitations.
+
+Reproduce from repository root:
+
+```sh
+PYTHONPATH=code python -m unittest ace_research_planning.test_planning ace_research_planning.test_study_v2 ace_research_planning.test_study_v3 ace_research_planning.test_study_v4 ace_research_planning.test_study_v5 -v
+PYTHONPATH=code python -m ace_research_planning.study_v5 --output /tmp/ace_r6_v5.json
+```
