@@ -49,6 +49,12 @@ def read_json(path, *, compressed=False):
 
 
 def _checked_receipts(snapshot):
+    # Python makes True == 1 and 1.0 == 1; scientific evidence requires exact
+    # numeric types even when an older ledger reconstructs equal snapshots.
+    if (type(snapshot) is not dict or any(
+            type(snapshot.get(key)) is not int
+            for key in ('version', 'shared_cap', 'purchased', 'remaining'))):
+        raise RecoveryAuditError('noninteger typed budget counter')
     try:
         book = SharedLabelBudget.from_snapshot(snapshot)
         data = book.snapshot()
@@ -167,6 +173,14 @@ def inspect(root):
 
     progress_path = root/'progress.json'
     progress = read_json(progress_path) if progress_path.exists() else None
+    if progress is not None:
+        if (type(progress) is not dict or set(progress) !=
+                {'status', 'sources', 'arms', 'expected'} or
+                progress.get('status') != 'RUNNING' or
+                any(type(progress.get(k)) is not int or progress[k] < 0
+                    for k in ('sources', 'arms', 'expected')) or
+                progress['arms'] > progress['expected']):
+            raise RecoveryAuditError('invalid typed progress checkpoint')
     report_path, summary_path = root/'report.json.gz', root/'summary.json'
     report = read_json(report_path, compressed=True) if report_path.exists() else None
     summary = read_json(summary_path) if summary_path.exists() else None
@@ -178,11 +192,11 @@ def inspect(root):
             raise RecoveryAuditError('completed report digest mismatch')
         if type(report.get('rows')) is not list or type(report.get('sources')) is not list:
             raise RecoveryAuditError('missing complete report row collections')
-        if report.get('arm_count') != len(report['rows']):
+        if type(report.get('arm_count')) is not int or report['arm_count'] != len(report['rows']):
             raise RecoveryAuditError('report arm count differs from rows')
         if summary is not None:
             without_rows = {k:v for k,v in report.items() if k not in ('rows','sources')}
-            if summary != without_rows:
+            if canonical(summary) != canonical(without_rows):
                 raise RecoveryAuditError('summary differs from completed report')
 
     pending = {arm:state['pending'] for arm,state in journals.items()
@@ -191,8 +205,10 @@ def inspect(root):
     source_bought = sum(s['snapshot']['purchased'] for k,s in journals.items() if ':source:' in k)
     target_bought = bought - source_bought
     if report is not None and summary is not None and not pending:
-        if (report.get('target_labels') != target_bought or
-                report.get('source_labels') != source_bought or
+        if (type(report.get('target_labels')) is not int or
+                type(report.get('source_labels')) is not int or
+                report['target_labels'] != target_bought or
+                report['source_labels'] != source_bought or
                 report.get('arm_count') != checked_targets or
                 len(report['sources']) != checked_sources):
             raise RecoveryAuditError('completed report/journal/count mismatch')

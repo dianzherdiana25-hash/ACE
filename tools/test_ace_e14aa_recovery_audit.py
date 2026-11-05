@@ -95,6 +95,25 @@ class E14AARecoveryTests(unittest.TestCase):
         with self.assertRaises(RecoveryAuditError):
             inspect(self.root)
 
+    def test_numeric_alias_counter_with_recomputed_digest_fails(self):
+        self.buy()
+        with sqlite3.connect(self.db) as db:
+            (payload,) = db.execute('SELECT payload FROM arm_budget').fetchone()
+            record = json.loads(payload)
+            record['purchased'] = True  # Python equality would accept True == 1.
+            changed = json.dumps(record, sort_keys=True, ensure_ascii=False, separators=(',', ':'))
+            checksum = hashlib.sha256(changed.encode()).hexdigest()
+            db.execute('UPDATE arm_budget SET payload=?,digest=?', (changed, checksum))
+        with self.assertRaisesRegex(RecoveryAuditError, 'noninteger typed'):
+            inspect(self.root)
+
+    def test_invalid_progress_checkpoint_rejected(self):
+        self.buy()
+        (self.root/'progress.json').write_text(json.dumps({
+            'status': 'RUNNING', 'sources': True, 'arms': 0, 'expected': 192}))
+        with self.assertRaisesRegex(RecoveryAuditError, 'typed progress'):
+            inspect(self.root)
+
     def test_wrong_arm_filename_rejected(self):
         self.buy()
         self.db.rename(self.root/'journals'/'wrong.sqlite')
