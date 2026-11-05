@@ -130,6 +130,7 @@ def execute_world(index: int, base: str, trigger: str, true_hypothesis: str, poo
 def execute_controls(pool: list[str]):
     controls = {'late_indistinguishable': [], 'misspecified_open_world': []}
     for index, base in enumerate(BASES):
+        # H0 and H1 agree on *every* legal oracle query, but true world is H1.
         qidx, disagreements = select_query(pool, base, 'aaaaa', 'active', index, 14)
         word = pool[qidx]
         h0 = mechanism(base, word, None)
@@ -139,6 +140,8 @@ def execute_controls(pool: list[str]):
         controls['late_indistinguishable'].append({
             'base': base, 'query': word, 'candidate_disagreements': disagreements,
             'oracle_label': int(oracle), 'decision': dec, 'abstained': dec is None})
+        # True target is third, unlisted mechanism (bbbbb). One Boolean query
+        # on which supplied candidates disagree cannot prove class completeness.
         qidx, disagreements = select_query(pool, base, 'aaaaa', 'active', index)
         word = pool[qidx]
         h0, h1 = truth_base(base, word), mechanism(base, word, 'aaaaa')
