@@ -1,0 +1,72 @@
+name: ACE historical source inventory audit (not a regression PASS)
+on:
+  push:
+    branches:
+      - coordination/e16-historical-source-inventory-20261105
+    paths:
+      - 'tools/ace_historical_coverage.py'
+      - 'tools/test_ace_historical_coverage.py'
+      - '.github/workflows/ace-coordinator-history-inventory.yml'
+  pull_request:
+    paths:
+      - 'tools/ace_historical_coverage.py'
+      - 'tools/test_ace_historical_coverage.py'
+      - '.github/workflows/ace-coordinator-history-inventory.yml'
+permissions:
+  contents: read
+jobs:
+  inventory-audit-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact source commit (no synthetic merge)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify exact HEAD
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+      - name: Test inventory integrity and fail-closed behavior
+        run: python -m unittest discover -s tools -p 'test_ace_historical_coverage.py' -v
+      - name: Record incomplete historical regression coverage, never certify it
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          REPORT_PATH: ${{ runner.temp }}/ace-history-coverage.json
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from tools.ace_historical_coverage import audit, write_atomic
+
+          report = audit(Path('.'), expected_head=os.environ['EXPECTED_HEAD'])
+          write_atomic(Path(os.environ['REPORT_PATH']), report)
+          actual_missing = sorted((item['module'], item['path'])
+              for group in report['groups'] for item in group['missing'])
+          expected_missing = [
+              ('e14.test_e14u_ablation', 'code/e14/test_e14u_ablation.py'),
+              ('e14.test_e14u_algebra_union', 'code/e14/test_e14u_algebra_union.py'),
+          ]
+          if actual_missing != expected_missing:
+              raise SystemExit(f'UNEXPECTED COVERAGE DRIFT: {actual_missing}')
+          if report['status'] != 'INCOMPLETE_HISTORICAL_COVERAGE':
+              raise SystemExit(f'UNEXPECTED FALSE COMPLETE: {report["status"]}')
+          if report['declared_test_module_count'] != 25:
+              raise SystemExit('TEST MANIFEST MODULE COUNT DRIFT')
+          if report['historical_tests_executed'] != 0 or report['historical_tests_passed'] != 0:
+              raise SystemExit('FALSE PASS COUNT')
+          print('AUDIT VERIFIED: 2 missing historic modules, 0 tests executed by preflight')
+          print('REGRESSION STATUS: INCOMPLETE; do not merge')
+          PY
+      - name: Archive source inventory receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-history-coverage-audit
+          path: ${{ runner.temp }}/ace-history-coverage.json
+          if-no-files-found: ignore
