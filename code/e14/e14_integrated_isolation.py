@@ -19,7 +19,7 @@ from .e14_shared_budget import BudgetContractError
 
 HERE = Path(__file__).resolve().parent
 WORKER_FILES = (
-    "e14_integrated_worker.py", "e14_integrated_policy.py",
+    "e14_integrated_policy.py",
     "e14r_worker.py", "e14s_worker.py", "e14p_worker.py",
 )
 # e14p_worker imports only e13.contract. No trusted evaluator code is copied.
@@ -44,9 +44,16 @@ def worker_stage():
 
 def worker_invoke(root, packet):
     script = (
-        "import sys; sys.path.insert(0, '/solver'); "
-        "from e14.e14_integrated_worker import main; "
-        f"sys.stderr.buffer.write({READY_MARKER!r}); sys.stderr.flush(); main()"
+        "import sys,resource; sys.path.insert(0, '/solver'); "
+        "from e13.contract import canonical_json,read_json,require_fields; "
+        "from e14.e14_integrated_policy import mapped_only_policy; "
+        "p=read_json(sys.stdin.buffer.read(65537),65536); "
+        "require_fields(p,'artifact','mode','view'); "
+        "a=mapped_only_policy(p['artifact'],p['mode'])(p['view']); "
+        "u=resource.getrusage(resource.RUSAGE_SELF); "
+        "r={'action':a,'cpu_us':round(1000000*(u.ru_utime+u.ru_stime)),"
+        "'rss_kib':u.ru_maxrss}; "
+        "sys.stdout.buffer.write(canonical_json(r))"
     )
     raw, wall = _sandbox_python(["-c", script], canonical_json(packet), solver=root)
     response = read_json(raw, 24_576)
