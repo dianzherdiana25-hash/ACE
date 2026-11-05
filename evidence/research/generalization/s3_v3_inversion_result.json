@@ -1,0 +1,30 @@
+{
+  "protocol": "s3_v3_inversion_precommitted",
+  "preregistered_commit": "ae3b3aebb24a380b10cdb616d0527f86ce11a433",
+  "runner_commit": "b4d7ce062dc95dc798d57a1a6750935903e82111",
+  "execution": "local Python 3 stdlib on locally constructed runner matching committed source text; GitHub exact-head independent replay NOT performed",
+  "status": "PUBLIC_DEVELOPMENT_NOT_CONFIRMATORY",
+  "hypothesis": "dual inversion changes intervention decision >=18/24",
+  "accepted": false,
+  "summary": {
+    "dual_changed": 4,
+    "chain_changed": 2,
+    "star_changed": 24,
+    "original_abstain": 22,
+    "dual_abstain": 22
+  },
+  "unique_source_labels": 1536,
+  "label_presentations": 6144,
+  "candidate_example_comparisons": 24576,
+  "cpu_seconds": 0.007164,
+  "local_output_sha256": "3dcb9fb5341c4867ff0be8d563c43a84fbe97e87bb04dafb5dd563ea994ca464",
+  "limitations": [
+    "This is an audit of selection-label sensitivity, not a generalization test",
+    "22/24 abstention makes the dual inversion sentinel insensitive to labels",
+    "star-only inversion 24/24 is evidence of conditional sensitivity, not evidence of no leakage",
+    "No disjoint grammar/holdout evaluation in this diagnostic",
+    "CPU timing is local and machine-dependent",
+    "No independent exact-head replay",
+    "Negative result retained, no scientific promotion"
+  ]
+}
