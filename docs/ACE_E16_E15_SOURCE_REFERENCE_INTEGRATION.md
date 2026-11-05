@@ -33,3 +33,10 @@ PYTHONPATH=code:. python -m unittest ace_loop.test_source_evolution_e15_referenc
 - This is **coexistence** and source provenance preservation, not unification of algorithms or permission to merge. Do not merge into main without explicit owner approval.
 
 No frozen E1.4 sources or existing E1.6 source-evolution code were modified.
+
+
+## Static historical regression inventory preflight (2026-11-05)
+
+New additive `tools/ace_regression_inventory.py` parses the existing `TESTS` literal in `tools/ace_e15_regression.py` via `ast.literal_eval`; it **does not import or execute** frozen modules. It resolves `e14.*` and `ace_loop.*` under `code/`, `tools.*` under the checkout root, and returns exit 2 with `BLOCK_MISSING_MODULES` when any declared file is missing. `INVENTORY_COMPLETE_NOT_TESTED` is explicitly **not** a successful regression test. Five adversarial tests cover missing paths, valid paths without import, nonliteral manifests, invalid names, and absent manifest.
+
+The exact-head CI step verifies that the missing historical set is precisely `u:e14.test_e14u_algebra_union` and `u-ablation:e14.test_e14u_ablation`, instead of silently deleting the requirements. If that set changes, CI fails pending review. This is **diagnostic engineering only**; no frozen test has been restored, no historical regression pass has been claimed, and native user-namespace isolation remains blocked.
