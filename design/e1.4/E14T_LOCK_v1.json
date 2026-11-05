@@ -1,0 +1,18 @@
+{
+  "bank_sha256": "4ecc55df9b12fa3ce7ab7148d85c077529637a2e9f5a38e7a7f7d80834616ec8",
+  "files_sha256": {
+    "code/e14/e14_integrated_graph.py": "e5ae493caf235f26a8fd39cec2db59d3607c549fdc2bbeed724a77ecdd5c115f",
+    "code/e14/e14_shared_budget.py": "56b885679114d805513616d5afd9340b41541ee2280be97be32be4a78748477a",
+    "code/e14/e14t_audit.py": "6f460b4e8a6b8a0a299880e015bd7adc510e957fae6d1ea4ed4155528fa452c1",
+    "code/e14/e14t_bank.py": "da177cf8d02b57d5bc1cd395d62571f0a9a8ff2c1fbd612868799409374232e6",
+    "code/e14/e14t_run.py": "f28f92955c6df0eaed2c1ad2cfd21ec9628668cf26ed4d7ba91f14eba1bd641a",
+    "code/e14/e14t_sandbox.py": "3d0100bffd20941d76b5810dac7d143cfc6ab6f06dae56da13d1874627d943c3",
+    "code/e14/e14t_worker.py": "586fcfc4597f14be6c6562f05b819f9f615fd01164f7130f4d1bbce3483b6ffe",
+    "code/e14/test_e14t.py": "1de3d578a956b010bf17a107b02fbaf22ef2da4fb49abd8264cc7c9970e7151d",
+    "code/e14/test_e14t_audit.py": "a3e1d07603ede34da531285a6950ae798662124b0afc0909a49bb0e86b97de72",
+    "design/e1.4/E14T_PROTOCOL_v1.md": "f349789f8a827b0bc9da6099499a0d4310ab2e0c7a238240ef40ba3258ee22b5"
+  },
+  "per_stratum": 12,
+  "seed": 2026110513,
+  "version": 1
+}
