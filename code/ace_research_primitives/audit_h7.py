@@ -133,6 +133,5 @@ def main():
     result['evidence_sha256']=hashlib.sha256(raw).hexdigest()
     print(json.dumps(result,sort_keys=True))
 
-
 if __name__=='__main__':
     main()
