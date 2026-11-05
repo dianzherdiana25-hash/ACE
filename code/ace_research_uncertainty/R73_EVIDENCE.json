@@ -1,0 +1,423 @@
+{
+  "schema": 1,
+  "experiment": "ACE_R7.3_SHIFT_AWARE",
+  "classification": "PUBLIC_SYNTHETIC_DEVELOPMENT",
+  "decision": "HOLD_NEGATIVE",
+  "protocol_commit": "fa1d5bb0029665cb2bbf05a9ae8e936fa6fd878a",
+  "seed": 20261107,
+  "source_git_blob": "c63b15e8bd36e2ec2888a59364b57817ba27a41b",
+  "test_git_blob": "1a9ae30bb0d319f62c84ac8bdd55d003acabc808",
+  "full_result": {
+    "filename": "ACE_R73_final_results.json",
+    "bytes": 23930,
+    "sha256": "ec2f902b324062e4f7bb63a23dfda830d4355c44457162bc2d1938e85fb6c5c8",
+    "command": "PYTHONPATH=code python -m ace_research_uncertainty.r73_shift --phase final",
+    "evaluated_once": true
+  },
+  "tests": {
+    "python": "3.13.5",
+    "count": 36,
+    "passed": 36,
+    "failed": 0,
+    "exact_head_actions": false
+  },
+  "worlds": {
+    "train": 30,
+    "validation": 12,
+    "test_stable": 24,
+    "ood_a": 24,
+    "ood_b": 24,
+    "groups_per_world": 6,
+    "offline_train_labels": 2160
+  },
+  "budgets": [
+    0,
+    6,
+    12,
+    24
+  ],
+  "result_format": "true_accepts/false_accepts/purchases/shift_detected_tasks",
+  "methods": [
+    "certificate",
+    "random_lcb",
+    "sentinel_control",
+    "shift_aware"
+  ],
+  "summary_at_each_cap": {
+    "test": {
+      "0": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "6": [
+        [
+          23,
+          0,
+          72,
+          0
+        ],
+        [
+          3,
+          0,
+          144,
+          0
+        ],
+        [
+          23,
+          0,
+          144,
+          0
+        ],
+        [
+          23,
+          0,
+          144,
+          0
+        ]
+      ],
+      "12": [
+        [
+          38,
+          0,
+          154,
+          0
+        ],
+        [
+          10,
+          0,
+          288,
+          0
+        ],
+        [
+          38,
+          0,
+          165,
+          0
+        ],
+        [
+          38,
+          0,
+          165,
+          0
+        ]
+      ],
+      "24": [
+        [
+          38,
+          0,
+          154,
+          0
+        ],
+        [
+          22,
+          0,
+          576,
+          0
+        ],
+        [
+          38,
+          0,
+          165,
+          0
+        ],
+        [
+          38,
+          0,
+          165,
+          0
+        ]
+      ]
+    },
+    "ood_a": {
+      "0": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "6": [
+        [
+          0,
+          5,
+          69,
+          0
+        ],
+        [
+          0,
+          1,
+          144,
+          0
+        ],
+        [
+          0,
+          5,
+          144,
+          0
+        ],
+        [
+          0,
+          3,
+          144,
+          9
+        ]
+      ],
+      "12": [
+        [
+          0,
+          7,
+          112,
+          0
+        ],
+        [
+          0,
+          4,
+          288,
+          0
+        ],
+        [
+          0,
+          8,
+          185,
+          0
+        ],
+        [
+          0,
+          5,
+          226,
+          9
+        ]
+      ],
+      "24": [
+        [
+          0,
+          7,
+          112,
+          0
+        ],
+        [
+          0,
+          2,
+          576,
+          0
+        ],
+        [
+          0,
+          8,
+          185,
+          0
+        ],
+        [
+          2,
+          5,
+          334,
+          9
+        ]
+      ]
+    },
+    "ood_b": {
+      "0": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "6": [
+        [
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          0,
+          0,
+          144,
+          0
+        ],
+        [
+          0,
+          0,
+          144,
+          0
+        ],
+        [
+          0,
+          0,
+          144,
+          23
+        ]
+      ],
+      "12": [
+        [
+          0,
+          0,
+          55,
+          0
+        ],
+        [
+          0,
+          0,
+          288,
+          0
+        ],
+        [
+          0,
+          0,
+          145,
+          0
+        ],
+        [
+          0,
+          0,
+          283,
+          23
+        ]
+      ],
+      "24": [
+        [
+          0,
+          0,
+          55,
+          0
+        ],
+        [
+          0,
+          0,
+          576,
+          0
+        ],
+        [
+          0,
+          0,
+          145,
+          0
+        ],
+        [
+          11,
+          2,
+          559,
+          23
+        ]
+      ]
+    }
+  },
+  "detailed_at_24": {
+    "test": {
+      "certificate": {
+        "ece": 0.051757,
+        "brier": 0.157442,
+        "utility": 394
+      },
+      "shift_aware": {
+        "ece": 0.051634,
+        "brier": 0.157443,
+        "utility": 383
+      },
+      "oracle_true": 58
+    },
+    "ood_a": {
+      "certificate": {
+        "ece": 0.328037,
+        "brier": 0.330221,
+        "utility": -806
+      },
+      "shift_aware": {
+        "ece": 0.226479,
+        "brier": 0.29117,
+        "utility": -868
+      },
+      "oracle_true": 24
+    },
+    "ood_b": {
+      "certificate": {
+        "ece": 0.501082,
+        "brier": 0.433088,
+        "utility": -343
+      },
+      "shift_aware": {
+        "ece": 0.056029,
+        "brier": 0.190825,
+        "utility": -721
+      },
+      "oracle_true": 33
+    }
+  },
+  "gate": {
+    "both_ood_false_accepts_improve": false,
+    "stable_coverage_80pct_and_no_new_errors": true,
+    "ood_nontrivial_and_utility_improve": false,
+    "hard_label_caps": true,
+    "passed": false
+  },
+  "limitations": [
+    "single synthetic seed",
+    "OOD mechanism families author-known",
+    "in-process evaluator only",
+    "no independent blinded holdout",
+    "no final CI check",
+    "normal LCB lacks guaranteed coverage",
+    "R7.3 final set cannot be reused as unseen test"
+  ]
+}

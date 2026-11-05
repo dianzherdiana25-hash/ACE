@@ -1,0 +1,197 @@
+{
+  "schema": 1,
+  "experiment": "R7.2 certificate-seeking active acquisition",
+  "status": "HOLD_NEGATIVE_OOD",
+  "success_gate_passed": false,
+  "before_final_score": {
+    "protocol_commit": "22ad8e21db6bcd8e770593e92718f03bd9b8271c",
+    "code_and_tests_commit": "a4f1cd200dd395e85bed46fcc89b1398c176e250",
+    "module_blob_sha": "8b96117e1834074a0cbed2d0038ae66c295906f8",
+    "tests_blob_sha": "b36febbfedd990740fc725c23e4a2155a9da3e4e"
+  },
+  "source": {
+    "parent_branch": "research/e15-source-evolution",
+    "baseline_R71": "development only",
+    "world_seed": 20261106,
+    "evaluator_reused_seed": 20261105,
+    "config": {
+      "prior_strength": 12,
+      "normal_LCB_z": 1,
+      "min_target_labels_to_accept": 3,
+      "acceptance_threshold": 0.8
+    }
+  },
+  "data": {
+    "source_tasks": 30,
+    "source_offline_labels": 2160,
+    "validation_tasks": 12,
+    "stable_test_tasks": 24,
+    "shifted_ood_tasks": 24,
+    "groups_per_task": 6,
+    "label_budgets": [
+      0,
+      6,
+      12,
+      24
+    ],
+    "oracle_true_test": 59,
+    "oracle_true_ood": 25
+  },
+  "verification": {
+    "python": "3.13.5",
+    "local_tests_passed": 23,
+    "local_tests_failed": 0,
+    "conservation_arms_verified": 32,
+    "full_final_output_bytes": 14081,
+    "full_final_output_sha256": "77221baa6be986f09e5e4b75437630460abe5e9dfe6cd48aa04ba4028716c7a9",
+    "exact_head_GitHub_Actions": false,
+    "independent_sealed_holdout": false
+  },
+  "metric_order": [
+    "true_accepts",
+    "false_accepts",
+    "abstentions",
+    "purchases",
+    "ece",
+    "brier",
+    "utility"
+  ],
+  "budget24": {
+    "test": {
+      "fixed": [
+        46,
+        16,
+        82,
+        576,
+        0.043186,
+        0.170259,
+        -780
+      ],
+      "random": [
+        35,
+        10,
+        99,
+        576,
+        0.052524,
+        0.177725,
+        -674
+      ],
+      "random_lcb": [
+        24,
+        0,
+        120,
+        576,
+        0.03569,
+        0.150515,
+        -336
+      ],
+      "certificate": [
+        41,
+        0,
+        103,
+        159,
+        0.054924,
+        0.150294,
+        455
+      ]
+    },
+    "ood": {
+      "fixed": [
+        18,
+        13,
+        113,
+        576,
+        0.056496,
+        0.215145,
+        -1222
+      ],
+      "random": [
+        11,
+        6,
+        127,
+        576,
+        0.043417,
+        0.21651,
+        -970
+      ],
+      "random_lcb": [
+        0,
+        4,
+        140,
+        576,
+        0.196627,
+        0.289327,
+        -1096
+      ],
+      "certificate": [
+        0,
+        8,
+        136,
+        96,
+        0.334062,
+        0.334228,
+        -848
+      ]
+    }
+  },
+  "budget6_cert": {
+    "test": [
+      23,
+      0,
+      121,
+      78,
+      0.058691,
+      0.150879,
+      140
+    ],
+    "ood": [
+      0,
+      8,
+      136,
+      72,
+      0.339449,
+      0.338844,
+      -824
+    ]
+  },
+  "budget12_cert": {
+    "test": [
+      41,
+      0,
+      103,
+      159,
+      0.054924,
+      0.150294,
+      455
+    ],
+    "ood": [
+      0,
+      8,
+      136,
+      96,
+      0.334062,
+      0.334228,
+      -848
+    ]
+  },
+  "precommitted_gate": {
+    "test": {
+      "safe_coverage_not_worse": true,
+      "false_acceptance_not_worse": true,
+      "strict_improvement": true,
+      "positive_coverage": true
+    },
+    "ood": {
+      "safe_coverage_not_worse": true,
+      "false_acceptance_not_worse": false,
+      "strict_improvement": false,
+      "positive_coverage": false
+    }
+  },
+  "negative_counterexample": "Under OOD, source-high reliability groups become unsafe while a source-low group becomes safe. Certificate acquisition accepted 8 unsafe and 0 safe strata, a 100 percent false share among accepted capabilities.",
+  "do_not_use_for_tuning": [
+    "R7.1 test and OOD",
+    "R7.2 test and OOD"
+  ],
+  "deployment_decision": "NO_PROMOTION_NO_MERGE"
+}
