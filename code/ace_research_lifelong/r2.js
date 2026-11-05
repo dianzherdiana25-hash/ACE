@@ -191,7 +191,7 @@ function tests(experiment) {
   }
   if(r.summary.identifiable.selective.retention_fraction<0.95)throw Error("retention mechanism failed");
   if(r.summary.collapsed.selective.mean_final>0.65)throw Error("negative control failed");
-  return {tests:10,status:"PASS"};
+  return {tests:11,status:"PASS"};
 }
 module.exports={experiment,tests};
 if (require.main===module) { const check=tests(experiment); console.error(JSON.stringify(check)); process.stdout.write(JSON.stringify(experiment(),null,2)+"\n"); }
