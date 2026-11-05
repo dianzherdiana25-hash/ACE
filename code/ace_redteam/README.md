@@ -36,3 +36,20 @@ On the original E1.5 GitHub `engine.py` blob `4ebef377e730e2e403c1d437903e04a202
 ## Unverified / further red-team gates
 
 The new suite is local and single-host. It does not prove behavior under power failure, full multiprocess stress, network filesystems, malicious untrusted candidate execution, memory isolation, persistent independent holdout custody, complete repository regression, or scientifically independent replication. It does not change the project's `NOT_ASSESSED` status. Run this suite in the designated trusted CI/reviewer environment before any source-mutating or autonomous deployment stage, and verify hardening at exact HEAD after future code changes. Focus fixes on journal file identity verification and directory locking, a strict alternating event state machine, trusted path resolution/openat controls, evaluator-owned immutable holdout, and AST revalidation at API boundaries.
+
+## Second adversarial pass — 2026-11-05
+
+Additional reproducible tests are in `test_adversarial_v2.py` (six tests: four known expected failures, two positive controls). Local test suite: **22 tests, 13 safety controls PASS, 9 documented expected failures**, zero errors, zero unexpected successes. Executed twice under Python 3.13.5 on exact GitHub source blobs for `engine.py` and `source_evolution.py`; both runs agreed on normalized outcomes. The locally executed v2 test module was semantically equivalent to its uploaded GitHub version but not byte-identical due to comment/format changes. **This is not a GitHub Actions run**, nor complete independent scientific evaluation.
+
+- **RT-06 / P1 — Shared-object concurrency corrupts a journal:** `HashLedger.append` builds the next sequence number outside the lock and updates `self.events` after unlocking. A deterministic two-thread schedule can make both appends return success while writing duplicate sequence numbers, preventing replay. `test_rt06_same_object_thread_race_must_not_corrupt_journal` uses a synchronized `os.open` hook and only temporary directories.
+- **RT-07 / P1 — Valid-prefix rollback repeats terminal holdout evaluation:** remove only a completed-event line, leaving a valid SHA256 prefix. `ResearchEngine` reopens and re-completes, querying `test` twice again (test read count **2 → 4**) and regenerating a byte-identical terminal journal. The missing property is an externally anchored durable chain head/terminal record. `test_rt07_valid_prefix_rollback_must_not_repeat_holdout`.
+- **RT-08 / P2 — Staged FIFO permits indefinite resume hang:** replacing `staged_candidate.py` with a FIFO causes `SourceEvolution._verify` to block inside `read_bytes()` on reopen. Confirmed by a subprocess with a two-second timeout. `test_rt08_staged_fifo_must_reject_without_hanging`.
+- **RT-09 / P3 — Generic type parameters are not rejected:** `parse_source('def predict[T](x, y): ...')` accepts Python 3.13 `FunctionDef.type_params` even though the documented accepted signature is plain `def predict(x, y)`. A direct API surface mismatch, not a demonstrated execution escape. `test_rt09_generic_type_params_must_be_rejected_by_parser`.
+
+Positive controls: intentionally short `os.write` is detected and preserved as truncated evidence (fail closed); zero-trial pause is inert and recovers. Repro:
+
+```bash
+PYTHONPATH=code:. python3 -m unittest ace_redteam.test_adversarial ace_redteam.test_adversarial_v2 -v
+```
+
+**Red-team disposition:** Keep self-improvement deployments/source mutation in HOLD until core owners address journal race, rollback anchoring, external file identity, trusted evaluator custody, and safe staging file types. No core fixes in this PR; no promotion, merge, or change to frozen research. An independent CI runner must execute this exact PR HEAD and check the nine assertions after core repairs.
