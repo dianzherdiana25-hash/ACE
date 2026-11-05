@@ -1,0 +1,51 @@
+{
+  "baseline": "invariant",
+  "baseline_false_accept": 0,
+  "baseline_test_error": 0,
+  "counterexample_test_index": 0,
+  "cpu_seconds": 0.001516,
+  "distinct_candidate_split_scores": 16,
+  "label_budget_selection": 64,
+  "negative_control_eligible": [],
+  "results": {
+    "constant": {
+      "test_errors": 67,
+      "train_errors": 14,
+      "validation_errors": 13
+    },
+    "edge": {
+      "test_errors": 67,
+      "train_errors": 17,
+      "validation_errors": 23
+    },
+    "invariant": {
+      "test_errors": 0,
+      "train_errors": 0,
+      "validation_errors": 0
+    },
+    "spurious": {
+      "test_errors": 116,
+      "train_errors": 0,
+      "validation_errors": 3
+    }
+  },
+  "robust": "invariant",
+  "robust_abstention": 0,
+  "robust_false_accept": 0,
+  "robust_regret_vs_invariant": 0,
+  "robust_test_error": 0,
+  "seed": 3157,
+  "splits": {
+    "train": 32,
+    "validation": 32,
+    "test": 128
+  },
+  "test_labels_reporting_only": 128,
+  "test_marker_fidelity": 0.1,
+  "topologies": [
+    "chain",
+    "star",
+    "branch"
+  ],
+  "train_marker_fidelity": 0.95
+}
