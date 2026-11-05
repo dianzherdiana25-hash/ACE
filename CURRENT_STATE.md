@@ -1,5 +1,16 @@
 # Keadaan ACE saat ini
 
+## E1.4t — integrated graph extension public development (2026-11-05)
+
+**ENGINEERING_PUBLIC_DEVELOPMENT / diagnostic HOLD / scientific NOT_ASSESSED.** [Draft PR #15](https://github.com/dianzherdiana25-hash/ACE/pull/15) on `codex/13-integrated-graph-loop` adds bounded length-8/9 synthesis from observed positive weighted branching-DAG examples, a per-arm durable SQLite four-label ledger, diagnosis receipt reuse, qualification, a namespace-isolated worker launcher with eight local canaries, five matched-cap controls, a prescore-locked 48-world bank and independently audited replay. **69/69 local tests PASS** on a partial compatible checkout; **full historical 114-test regression not run on exact PR head**.
+
+Frozen bank **48 worlds × 5 strategies = 240 scored arms and 240 fresh-ledger replay arms**, all deterministic fields matching (17 per arm). Score and replay each purchased **573 target labels**, with **573/573 oracle receipts externally rechecked** per run, **725 initial demo labels and 1,440 probe labels logically accounted per score run**. [E1.4t result](design/e1.4/E14T_RESULT_v1.md) · [Raw evidence](evidence/e14/e14t_result_summary_v1.json).
+
+**Reachable:** integrated 12/12 exactly recovered but exhaustive, no-inheritance and sham also 12/12; fixed grammar 0/12. **Natural:** 0/12 recovered, 48 labels spent, all abstained. **Rare:** integrated 0/12 exact, 48 labels spent; one non-identical motif was accepted despite no scored-probe errors; exhaustive 4/12. **Out-of-grammar:** all abstained, 0 labels. The strict development advantage gate failed. There is no independently demonstrated invention of new primitives, source learning, or OAIE. Prior E1.4o graph-chain HOLD, E1.4s bounded GO and NATURAL_HOLD remain unchanged.
+
+**Follow-up gate:** independent resource/security custody and full historical regression, disambiguating rare semantic aliases, source artifact learning with counted cost, and a genuinely new representation-primitive study. Preserve E1.4t score, bank, protocol and negative evidence; no post-score tuning or main merge.
+
+
 ## Issue #13 — shared four-label budget infrastructure (engineering-only)
 
 A new evaluator-side `SharedLabelBudget` reserve/settle/reuse journal and 12 focused Python unit tests were added. **12/12 local unit tests PASS on Python 3.13.5**, with Git blob byte-identity checked. This is only **engineering groundwork** for Issue #13: it does not integrate, score, replay or accept the new branching-graph experiment. The 114-test repository regression was not run in this host. [Engineering contract](docs/ACE_E14_SHARED_LABEL_CONTRACT_v1.md) · [module](code/e14/e14_shared_budget.py) · [tests](code/e14/test_e14_shared_budget.py). E1.4o graph HOLD, E1.4s NATURAL_HOLD, and all frozen historical decisions remain unchanged.
