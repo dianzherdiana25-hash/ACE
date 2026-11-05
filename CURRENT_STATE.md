@@ -1,5 +1,9 @@
 # Keadaan ACE saat ini
 
+## E1.4p — checkpoint pra-penilaian
+
+Dua belas pendahulu simbol, 30 dunia graf bercabang, dan satu label target. Artefak pewarisan bertipe diuji terhadap cold dan sham. Tes 3/3. [Protokol](design/e1.4/E14P_PROTOCOL_v1.md).
+
 ## E1.4o — loop aktif direproduksi, gerbang gabungan HOLD
 
 Simbol pulih penuh 8/9 dan graf 1/9 pada kasus terjangkau. Graf gagal ambang 5/9. Tidak ada pemicu keliru pada kasus dalam model. Uji timeout menyimpan tiga dunia dan melanjutkan ke 48 dunia, dengan replay cocok. [Hasil](design/e1.4/E14O_RESULT_v1.md) · [Bukti](evidence/e14/e14o_verification_v1.json).

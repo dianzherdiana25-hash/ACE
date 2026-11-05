@@ -4,6 +4,14 @@
 2. Jalankan percobaan terpisah. Bangun artefak dari pendahulu simbol yang belajar dari label terjadwal, lalu impor hanya DSL bertipe ke penerus yang meminimalkan biaya jalur pada graf bercabang. Bandingkan cold, warisan, dan artefak kontrol pada anggaran target identik. Uji kecocokan dan mismatch yang tampak maupun tersembunyi.
 3. Pertahankan gerbang graf otonom dan NATURAL_HOLD terpisah dari hasil pewarisan.
 
+## Reproduksi E1.4p
+
+```bash
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 120 --heartbeat 15 --log WORK/p-score.log -- python3 -m e14.e14p_run run WORK/p-score.sqlite WORK/p-score.json.gz
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 120 --heartbeat 15 --log WORK/p-replay.log -- python3 -m e14.e14p_run run WORK/p-replay.sqlite WORK/p-replay.json.gz
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 90 --heartbeat 10 --log WORK/p-audit.log -- python3 -m e14.e14p_audit WORK/p-score.json.gz WORK/p-replay.json.gz
+```
+
 ## Reproduksi E1.4o
 
 ```bash
