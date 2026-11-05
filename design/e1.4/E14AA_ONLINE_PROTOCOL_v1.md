@@ -29,6 +29,9 @@ broad perturbation starting at target turn three. The target query domain is
 The bank and split are public synthetic development; needles are chosen before
 scoring, not selected from subsequent misses. Target truth is stable within each
 turn. Delayed drift occurs before the third purchased observation and prediction.
+Source tasks may purchase coordinates in the target-heldout subset because they
+share a transferable source operator. Thus heldout means absent from target-stage
+queries, not globally unseen cost coordinates or independent source information.
 
 Four controls per target: frozen two-check inherited use, four-check online random
 monitor, four-check online disagreement monitor, and sham online inheritance.

@@ -161,6 +161,7 @@ class DurableGraphBudget:
             if _json(decoded) != row[1]:
                 raise BudgetContractError("noncanonical stored journal")
             budget = SharedLabelBudget.from_snapshot(decoded)
+            _validate_graph_receipts(budget)
         except (ValueError, TypeError, KeyError, OverflowError) as exc:
             raise BudgetContractError("invalid durable journal") from exc
         return _int(row[0], 0, 2**63-2, "journal revision"), budget
@@ -189,13 +190,14 @@ class DurableGraphBudget:
             return self._read_locked(db)[1].snapshot()
 
     def reserve(self, stage, graph, *, declared_cost=None):
-        actual = graph_cost(graph)
+        # Own one immutable-by-caller request before calculating or charging it.
+        checked = canonical_graph(deepcopy(graph))
+        actual = graph_cost(checked)
         if declared_cost is not None:
             if (type(declared_cost) is not dict or set(declared_cost) != set(actual)
                     or any(type(v) is not int for v in declared_cost.values())
                     or declared_cost != actual):
                 raise BudgetContractError("untrusted resource declaration differs from topology")
-        checked = canonical_graph(graph)
         return self._transition(lambda book: book.reserve(stage, checked, cost=actual))
 
     def settle(self, receipt_id, label):
@@ -216,11 +218,23 @@ class DurableGraphBudget:
 
 def purchase(journal, stage, graph, oracle, *, declared_cost=None):
     """Durably reserve, invoke trusted oracle once, settle; fail visibly on errors."""
-    receipt_id = journal.reserve(stage, graph, declared_cost=declared_cost)
+    checked = canonical_graph(deepcopy(graph))
+    receipt_id = journal.reserve(stage, checked, declared_cost=declared_cost)
     # Deliberately never retries an oracle exception. The reservation stays paid.
-    label = oracle(deepcopy(graph))
+    label = oracle(deepcopy(checked))
     journal.settle(receipt_id, label)
     return receipt_id, label
+
+
+def _validate_graph_receipts(book):
+    """Recovery validates graph-specific meaning as well as JSON/checksums."""
+    for row in book.snapshot()["receipts"]:
+        if canonical_graph(row["query"]) != row["query"]:
+            raise BudgetContractError("noncanonical purchased graph")
+        if graph_cost(row["query"]) != row["cost"]:
+            raise BudgetContractError("forged topology cost")
+        if row["status"] == "settled" and row["label"] is not None:
+            _int(row["label"], 0, 960, "oracle label")
 
 
 def audit_journal(snapshot, oracle=None):
@@ -230,6 +244,7 @@ def audit_journal(snapshot, oracle=None):
     interventions and must be accounted for independently in a research report.
     """
     book = SharedLabelBudget.from_snapshot(snapshot)
+    _validate_graph_receipts(book)
     checked = 0
     for row in book.snapshot()["receipts"]:
         if graph_cost(row["query"]) != row["cost"]:

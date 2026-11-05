@@ -27,7 +27,7 @@ def _canonical(value):
         # Prevent JSON-unsafe objects or unsupported non-string map keys.
         if json.loads(encoded) != value:
             raise BudgetContractError("noncanonical JSON value")
-    except (TypeError, ValueError, OverflowError) as exc:
+    except (TypeError, ValueError, OverflowError, RecursionError) as exc:
         raise BudgetContractError("non-JSON-compatible value") from exc
     return encoded
 
@@ -154,6 +154,8 @@ class SharedLabelBudget:
                     obj.reuse(new_id, stage)
             elif original["status"] != "pending" or original["label"] is not None or original["label_sha256"] is not None or original["reused_in"] != []:
                 raise BudgetContractError("invalid pending reservation")
-        if obj.snapshot() != data:
+        # Python equality aliases True, 1 and 1.0. Journal counters and resource
+        # declarations are typed; compare canonical bytes to retain that boundary.
+        if _canonical(obj.snapshot()) != _canonical(data):
             raise BudgetContractError("corrupted or noncanonical budget journal")
         return obj

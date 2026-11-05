@@ -1,0 +1,25 @@
+{
+  "base_sha": "988b077dc2ff12d01d1f93fd6b1dca94036cc579",
+  "files": {
+    "code/e14/e14_integrated_graph.py": "09ba72b4d21621e5a8b67147626068edd80e9babfcc9f1c65a0d81ccb38b73a4",
+    "code/e14/e14_shared_budget.py": "26b8f51ffcd81e45b0ef130673716d25136fa525d369b6cc15a61ab946d7bcc0",
+    "code/e14/e14aa_bank.py": "1ed698e2ea50bbd1846466a97d7f7bc2806f52e90a29ee500b61dabbd9e9a6c7",
+    "code/e14/e14aa_learning.py": "c16ae33a7ba95ffb39c817fc27d1e114645f6c398a7299460490f00e6c773978",
+    "code/e14/e14aa_online.py": "75a8c0183bd9bf1f7eb6a1a2f6bcfd8d3a25a93c9eae1b38e1834e02feded9db",
+    "code/e14/e14aa_oracle.py": "4616adb7da72a5136c892100abe174134c04c655ebc6269a0cb93762cd00d719",
+    "code/e14/e14aa_study.py": "c02d190241a7d855f6caed357893bebf2636536b775c3011e4a77db9f2009a05",
+    "code/e14/e14p_graph.py": "f8bdd75d75cbf8ce1bf453a369723bc0d8f3715f94e19c7e2da3547cc0d1bae5",
+    "code/e14/e14u_primitive.py": "9005e40330233d9cbb28079f710e7fbd8d3e4e431f3883b703e9773ccc898f0c",
+    "code/e14/e14v_operator.py": "7e1df5dec38bec636b8767c59dd163c2b34d27965437c8542dc2c362acdae777",
+    "code/e14/e14w_synthesis.py": "504a857607cf8ab391bee65b437d123957114666e35801f7f2824f24f84bc7e3",
+    "code/e14/e14x_identifiability.py": "41b867d76eddbb88b01c89d859156b479e80f49e7d0263ceed019e1ab82f78b9",
+    "code/e14/e14y_bank.py": "afd833b7712112714d1f2e0173aae9b8b7d2ed8338dd8fab00a9788a0015aac6",
+    "code/e14/e14y_induction.py": "2a6eacad6dfc9c88bd4eeec49fdc3509ce52f0b2bd5d5affb90895136b5f5c1e",
+    "code/e14/e14y_study.py": "3c349fc80eb6602001afc4e4760c25933a62c448fda1741abf6ba30c4c14d7c9",
+    "design/e1.4/E14AA_ONLINE_PROTOCOL_v1.md": "1b963358e7b14dc29c83f5b8a04a521ef1e4c0d5b3f862279d7c203c5181c15e",
+    "evidence/e14/e14aa/prescore_bank_v1.json": "571794289e6ecf918f071ca5e3e33419b005aa4c375e793dc161f9701f81006e"
+  },
+  "scope": "executable online-development core, direct imported graph and grammar dependencies, protocol and bank",
+  "status": "PRESCORE_LOCK",
+  "version": 1
+}
