@@ -1,0 +1,29 @@
+name: ACE E1.5 source-evolution checks
+on:
+  pull_request:
+    paths:
+      - 'code/ace_loop/**'
+      - '.github/workflows/ace-e15-source-evolution.yml'
+  push:
+    branches:
+      - 'research/e15-source-evolution'
+    paths:
+      - 'code/ace_loop/**'
+      - '.github/workflows/ace-e15-source-evolution.yml'
+permissions:
+  contents: read
+jobs:
+  source-evolution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Run bounded source evolution and E1.5 regression
+        env:
+          PYTHONPATH: code:.
+        run: |
+          python -m unittest ace_loop.test_source_evolution ace_loop.test_engine ace_loop.test_portfolio -v
