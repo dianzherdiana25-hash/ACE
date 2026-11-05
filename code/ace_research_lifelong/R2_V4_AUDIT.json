@@ -1,0 +1,101 @@
+{
+  "status": "PASS",
+  "issues": [],
+  "run_count": 135,
+  "unique_runs": 135,
+  "method_regime_groups": 27,
+  "logical_training_label_accesses_across_runs": 69120,
+  "logical_eval_support_label_accesses_across_runs": 53460,
+  "logical_eval_query_label_scores_across_runs": 414720,
+  "logical_gradient_updates_across_runs": 75825,
+  "specialist_router_prediction_calls_across_runs": 38880,
+  "paired_by_seed": [
+    {
+      "seed": 5,
+      "against_context": -0.05208333333333326,
+      "transfer_effect": 0,
+      "against_fast_adapt": -0.09635416666666663,
+      "evidence_accuracy": 0.6223958333333334,
+      "evidence_known_reject": 0.25,
+      "evidence_novel_reject": 0
+    },
+    {
+      "seed": 17,
+      "against_context": 0.33072916666666663,
+      "transfer_effect": 0.01041666666666663,
+      "against_fast_adapt": 0.296875,
+      "evidence_accuracy": 0.9010416666666666,
+      "evidence_known_reject": 0,
+      "evidence_novel_reject": 1
+    },
+    {
+      "seed": 31,
+      "against_context": 0.1796875,
+      "transfer_effect": 0.00520833333333337,
+      "against_fast_adapt": 0.12239583333333337,
+      "evidence_accuracy": 0.8098958333333334,
+      "evidence_known_reject": 0,
+      "evidence_novel_reject": 0
+    },
+    {
+      "seed": 53,
+      "against_context": 0.3437500000000001,
+      "transfer_effect": -0.01041666666666663,
+      "against_fast_adapt": 0.32552083333333337,
+      "evidence_accuracy": 0.9036458333333334,
+      "evidence_known_reject": 0,
+      "evidence_novel_reject": 0
+    },
+    {
+      "seed": 79,
+      "against_context": 0.23958333333333337,
+      "transfer_effect": -0.0078125,
+      "against_fast_adapt": 0.21614583333333326,
+      "evidence_accuracy": 0.8932291666666666,
+      "evidence_known_reject": 0,
+      "evidence_novel_reject": 0
+    }
+  ],
+  "paired_bootstrap_descriptive": {
+    "evidence_minus_context": {
+      "mean": 0.2083333333333334,
+      "seed_bootstrap_95_low": 0.07083333333333337,
+      "seed_bootstrap_95_high": 0.31770833333333337,
+      "seed_count": 5,
+      "interpretation": "descriptive resampling within author-visible synthetic seeds, NOT independent CI"
+    },
+    "evidence_minus_zero_transfer": {
+      "mean": -0.000520833333333326,
+      "seed_bootstrap_95_low": -0.007291666666666652,
+      "seed_bootstrap_95_high": 0.00625,
+      "seed_count": 5,
+      "interpretation": "descriptive resampling within author-visible synthetic seeds, NOT independent CI"
+    },
+    "evidence_minus_support_finetuning": {
+      "mean": 0.17291666666666666,
+      "seed_bootstrap_95_low": 0.028645833333333325,
+      "seed_bootstrap_95_high": 0.2921875,
+      "seed_count": 5,
+      "interpretation": "descriptive resampling within author-visible synthetic seeds, NOT independent CI"
+    }
+  },
+  "gates": {
+    "evidence_beats_context": true,
+    "transfer_beats_no_transfer": false,
+    "novel_rejection": false,
+    "known_false_rejection": true,
+    "evidence_beats_fast_adapt": true,
+    "absolute_accuracy": true
+  },
+  "decision": "HOLD_NO_VALIDATED_LIFELONG_GAIN",
+  "caveats": [
+    "No task ID is exposed to the evidence/context/SGD/EWC/replay/fast-adapt predictor, but source-level code review remains required.",
+    "The same x/y teachers and sample RNG are intentionally shared between regimes; the 135 method-regime-seed runs are NOT 135 independent task samples.",
+    "Each method is charged 396 evaluation-support label access events per run, of which 60 are unique per task-set regime; repeated checkpoint accesses do not constitute new labels.",
+    "The evidence candidate spends expert log-loss prediction work and up to 56 persistent scalars; plain SGD uses only 12. Compute and storage cannot be treated as matched for global comparisons.",
+    "The matched evidence_zero comparison isolates the effect of 0.20 weight-transfer initialization; it ties/slightly surpasses the candidate.",
+    "Novel fifth-task detection is author-visible and has one support block per synthetic seed; it is not proof of real-world anomaly detection.",
+    "Frozen near-zero forgetting is trivial without skill acquisition; evaluation loss cannot be treated as unbiased scientific confirmation.",
+    "No GitHub Actions exact-head CI and no independently sealed task bank was executed."
+  ]
+}
