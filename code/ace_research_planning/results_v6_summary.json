@@ -1,0 +1,1057 @@
+{
+  "counts": {
+    "iid_transfer": 36,
+    "no_shock_transfer": 36,
+    "shift_transfer": 36,
+    "train": 36,
+    "validation": 24
+  },
+  "disclosure": "Public researcher-defined risk distribution; beta-binomial risk fitted from complete TRAIN labels only. In-process freeze ordering, not independently escrowed/blinded. Information acquisition is a policy of risk-based probe decisions; no learned new reasoning operator, and no OAIE.",
+  "model": {
+    "risk_other": 0.0020100502512562816,
+    "risk_salient": 0.21875,
+    "shock_frequency": 0.8157894736842105,
+    "train_edge_counts": [
+      108,
+      1970
+    ],
+    "train_positive": 30,
+    "train_worlds": 36
+  },
+  "pretransfer_receipt_sha256": "e7a77cc2caddf5bf983b56a5a80c78e77bc55c198a83b82893aba7751666b5b3",
+  "protocol": "ACE-R6-v6-public-value-of-information",
+  "seed_ranges": {
+    "iid_transfer": [
+      54100,
+      54115
+    ],
+    "no_shock_transfer": [
+      56100,
+      56115
+    ],
+    "shift_transfer": [
+      55100,
+      55115
+    ],
+    "train": [
+      52100,
+      52119
+    ],
+    "validation": [
+      53100,
+      53113
+    ]
+  },
+  "selection": {
+    "300": {
+      "train": {
+        "always": {
+          "failures": 0,
+          "mean_utility": 975.118843,
+          "mean_work": 154.28,
+          "n": 36,
+          "positive_probes": 7,
+          "probes": 410,
+          "solved": 36,
+          "work_budget_exits": 0
+        },
+        "anti_salient": {
+          "failures": 6,
+          "mean_utility": 941.537985,
+          "mean_work": 167.69,
+          "n": 36,
+          "positive_probes": 1,
+          "probes": 387,
+          "solved": 35,
+          "work_budget_exits": 1
+        },
+        "global_voi": {
+          "failures": 7,
+          "mean_utility": 979.408843,
+          "mean_work": 160.22,
+          "n": 36,
+          "positive_probes": 0,
+          "probes": 0,
+          "solved": 36,
+          "work_budget_exits": 0
+        },
+        "learned_voi": {
+          "failures": 1,
+          "mean_utility": 947.677985,
+          "mean_work": 161.42,
+          "n": 36,
+          "positive_probes": 6,
+          "probes": 23,
+          "solved": 35,
+          "work_budget_exits": 1
+        },
+        "never": {
+          "failures": 7,
+          "mean_utility": 980.557732,
+          "mean_work": 131.5,
+          "n": 36,
+          "positive_probes": 0,
+          "probes": 0,
+          "solved": 36,
+          "work_budget_exits": 0
+        },
+        "salient": {
+          "failures": 1,
+          "mean_utility": 980.593843,
+          "mean_work": 147.61,
+          "n": 36,
+          "positive_probes": 6,
+          "probes": 23,
+          "solved": 36,
+          "work_budget_exits": 0
+        }
+      },
+      "validation": {
+        "always": {
+          "failures": 0,
+          "mean_utility": 977.187965,
+          "mean_work": 140.79,
+          "n": 24,
+          "positive_probes": 4,
+          "probes": 279,
+          "solved": 24,
+          "work_budget_exits": 0
+        },
+        "anti_salient": {
+          "failures": 4,
+          "mean_utility": 976.075465,
+          "mean_work": 153.5,
+          "n": 24,
+          "positive_probes": 0,
+          "probes": 260,
+          "solved": 24,
+          "work_budget_exits": 0
+        },
+        "global_voi": {
+          "failures": 4,
+          "mean_utility": 981.822131,
+          "mean_work": 145.25,
+          "n": 24,
+          "positive_probes": 0,
+          "probes": 0,
+          "solved": 24,
+          "work_budget_exits": 0
+        },
+        "learned_voi": {
+          "failures": 0,
+          "mean_utility": 982.362965,
+          "mean_work": 146.83,
+          "n": 24,
+          "positive_probes": 4,
+          "probes": 19,
+          "solved": 24,
+          "work_budget_exits": 0
+        },
+        "never": {
+          "failures": 4,
+          "mean_utility": 982.930465,
+          "mean_work": 117.54,
+          "n": 24,
+          "positive_probes": 0,
+          "probes": 0,
+          "solved": 24,
+          "work_budget_exits": 0
+        },
+        "salient": {
+          "failures": 0,
+          "mean_utility": 982.899631,
+          "mean_work": 133.42,
+          "n": 24,
+          "positive_probes": 4,
+          "probes": 19,
+          "solved": 24,
+          "work_budget_exits": 0
+        }
+      },
+      "validation_selected_fixed": "never"
+    },
+    "900": {
+      "train": {
+        "always": {
+          "failures": 0,
+          "mean_utility": 975.118843,
+          "mean_work": 154.28,
+          "n": 36,
+          "positive_probes": 7,
+          "probes": 410,
+          "solved": 36,
+          "work_budget_exits": 0
+        },
+        "anti_salient": {
+          "failures": 6,
+          "mean_utility": 973.896065,
+          "mean_work": 167.83,
+          "n": 36,
+          "positive_probes": 1,
+          "probes": 387,
+          "solved": 36,
+          "work_budget_exits": 0
+        },
+        "global_voi": {
+          "failures": 7,
+          "mean_utility": 979.408843,
+          "mean_work": 160.22,
+          "n": 36,
+          "positive_probes": 0,
+          "probes": 0,
+          "solved": 36,
+          "work_budget_exits": 0
+        },
+        "learned_voi": {
+          "failures": 1,
+          "mean_utility": 980.038288,
+          "mean_work": 161.5,
+          "n": 36,
+          "positive_probes": 6,
+          "probes": 23,
+          "solved": 36,
+          "work_budget_exits": 0
+        },
+        "never": {
+          "failures": 7,
+          "mean_utility": 980.557732,
+          "mean_work": 131.5,
+          "n": 36,
+          "positive_probes": 0,
+          "probes": 0,
+          "solved": 36,
+          "work_budget_exits": 0
+        },
+        "salient": {
+          "failures": 1,
+          "mean_utility": 980.593843,
+          "mean_work": 147.61,
+          "n": 36,
+          "positive_probes": 6,
+          "probes": 23,
+          "solved": 36,
+          "work_budget_exits": 0
+        }
+      },
+      "validation": {
+        "always": {
+          "failures": 0,
+          "mean_utility": 977.187965,
+          "mean_work": 140.79,
+          "n": 24,
+          "positive_probes": 4,
+          "probes": 279,
+          "solved": 24,
+          "work_budget_exits": 0
+        },
+        "anti_salient": {
+          "failures": 4,
+          "mean_utility": 976.075465,
+          "mean_work": 153.5,
+          "n": 24,
+          "positive_probes": 0,
+          "probes": 260,
+          "solved": 24,
+          "work_budget_exits": 0
+        },
+        "global_voi": {
+          "failures": 4,
+          "mean_utility": 981.822131,
+          "mean_work": 145.25,
+          "n": 24,
+          "positive_probes": 0,
+          "probes": 0,
+          "solved": 24,
+          "work_budget_exits": 0
+        },
+        "learned_voi": {
+          "failures": 0,
+          "mean_utility": 982.362965,
+          "mean_work": 146.83,
+          "n": 24,
+          "positive_probes": 4,
+          "probes": 19,
+          "solved": 24,
+          "work_budget_exits": 0
+        },
+        "never": {
+          "failures": 4,
+          "mean_utility": 982.930465,
+          "mean_work": 117.54,
+          "n": 24,
+          "positive_probes": 0,
+          "probes": 0,
+          "solved": 24,
+          "work_budget_exits": 0
+        },
+        "salient": {
+          "failures": 0,
+          "mean_utility": 982.899631,
+          "mean_work": 133.42,
+          "n": 24,
+          "positive_probes": 4,
+          "probes": 19,
+          "solved": 24,
+          "work_budget_exits": 0
+        }
+      },
+      "validation_selected_fixed": "never"
+    }
+  },
+  "sha256": "17201ce57393c15d59601e9b291b5b7130fad45f74457de25b7db2b86c1fc7a8",
+  "training_work": {
+    "300": {
+      "train_rollouts": 216,
+      "validation_rollouts": 144
+    },
+    "900": {
+      "train_rollouts": 216,
+      "validation_rollouts": 144
+    }
+  },
+  "transfer": {
+    "iid_transfer": {
+      "budgets": {
+        "300": {
+          "delta_vs_never": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -1.557222,
+              -0.282222
+            ],
+            "losses": 32,
+            "mean_utility_delta": -0.956111,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 4
+          },
+          "delta_vs_salient": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -0.787778,
+              -0.446667
+            ],
+            "losses": 34,
+            "mean_utility_delta": -0.604444,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 2,
+            "wins": 0
+          },
+          "delta_vs_validation_fixed": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -1.557222,
+              -0.282222
+            ],
+            "losses": 32,
+            "mean_utility_delta": -0.956111,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 4
+          },
+          "equivalent_to_salient": {
+            "equivalent": 36,
+            "non_equivalent": [],
+            "tested": 36
+          },
+          "scores": {
+            "always": {
+              "failures": 0,
+              "mean_utility": 982.77977,
+              "mean_work": 152.44,
+              "n": 36,
+              "positive_probes": 4,
+              "probes": 430,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "anti_salient": {
+              "failures": 4,
+              "mean_utility": 981.900326,
+              "mean_work": 166.44,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 405,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "global_voi": {
+              "failures": 4,
+              "mean_utility": 987.820881,
+              "mean_work": 159.06,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 0,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "learned_voi": {
+              "failures": 0,
+              "mean_utility": 988.08477,
+              "mean_work": 160.44,
+              "n": 36,
+              "positive_probes": 4,
+              "probes": 25,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "never": {
+              "failures": 4,
+              "mean_utility": 989.040881,
+              "mean_work": 128.56,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 0,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "salient": {
+              "failures": 0,
+              "mean_utility": 988.689215,
+              "mean_work": 145.33,
+              "n": 36,
+              "positive_probes": 4,
+              "probes": 25,
+              "solved": 36,
+              "work_budget_exits": 0
+            }
+          }
+        },
+        "900": {
+          "delta_vs_never": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -1.557222,
+              -0.282222
+            ],
+            "losses": 32,
+            "mean_utility_delta": -0.956111,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 4
+          },
+          "delta_vs_salient": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -0.787778,
+              -0.446667
+            ],
+            "losses": 34,
+            "mean_utility_delta": -0.604444,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 2,
+            "wins": 0
+          },
+          "delta_vs_validation_fixed": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -1.557222,
+              -0.282222
+            ],
+            "losses": 32,
+            "mean_utility_delta": -0.956111,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 4
+          },
+          "equivalent_to_salient": {
+            "equivalent": 36,
+            "non_equivalent": [],
+            "tested": 36
+          },
+          "scores": {
+            "always": {
+              "failures": 0,
+              "mean_utility": 982.77977,
+              "mean_work": 152.44,
+              "n": 36,
+              "positive_probes": 4,
+              "probes": 430,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "anti_salient": {
+              "failures": 4,
+              "mean_utility": 981.900326,
+              "mean_work": 166.44,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 405,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "global_voi": {
+              "failures": 4,
+              "mean_utility": 987.820881,
+              "mean_work": 159.06,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 0,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "learned_voi": {
+              "failures": 0,
+              "mean_utility": 988.08477,
+              "mean_work": 160.44,
+              "n": 36,
+              "positive_probes": 4,
+              "probes": 25,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "never": {
+              "failures": 4,
+              "mean_utility": 989.040881,
+              "mean_work": 128.56,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 0,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "salient": {
+              "failures": 0,
+              "mean_utility": 988.689215,
+              "mean_work": 145.33,
+              "n": 36,
+              "positive_probes": 4,
+              "probes": 25,
+              "solved": 36,
+              "work_budget_exits": 0
+            }
+          }
+        }
+      },
+      "calibration": {
+        "brier": 0.01057039,
+        "class_bins": {
+          "ordinary": {
+            "edges": 2054,
+            "empirical_rate": 0.0009737,
+            "mean_predicted": 0.0021221,
+            "positives": 2,
+            "predicted_mass": 4.35886
+          },
+          "salient": {
+            "edges": 108,
+            "empirical_rate": 0.2592593,
+            "mean_predicted": 0.23157,
+            "positives": 28,
+            "predicted_mass": 25.00956
+          }
+        },
+        "global_brier": 0.01368174,
+        "labelled_edges": 2162,
+        "positives": 30
+      }
+    },
+    "no_shock_transfer": {
+      "budgets": {
+        "300": {
+          "delta_vs_never": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -1.738889,
+              -1.373889
+            ],
+            "losses": 36,
+            "mean_utility_delta": -1.56,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 0
+          },
+          "delta_vs_salient": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -0.637778,
+              -0.463333
+            ],
+            "losses": 36,
+            "mean_utility_delta": -0.548889,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 0
+          },
+          "delta_vs_validation_fixed": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -1.738889,
+              -1.373889
+            ],
+            "losses": 36,
+            "mean_utility_delta": -1.56,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 0
+          },
+          "equivalent_to_salient": {
+            "equivalent": 36,
+            "non_equivalent": [],
+            "tested": 36
+          },
+          "scores": {
+            "always": {
+              "failures": 0,
+              "mean_utility": 977.162362,
+              "mean_work": 155.08,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 429,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "anti_salient": {
+              "failures": 0,
+              "mean_utility": 976.989028,
+              "mean_work": 168.44,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 403,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "global_voi": {
+              "failures": 0,
+              "mean_utility": 982.932917,
+              "mean_work": 159.78,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 0,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "learned_voi": {
+              "failures": 0,
+              "mean_utility": 982.514028,
+              "mean_work": 161.22,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 26,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "never": {
+              "failures": 0,
+              "mean_utility": 984.074028,
+              "mean_work": 131.25,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 0,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "salient": {
+              "failures": 0,
+              "mean_utility": 983.062917,
+              "mean_work": 147.5,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 26,
+              "solved": 36,
+              "work_budget_exits": 0
+            }
+          }
+        },
+        "900": {
+          "delta_vs_never": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -1.738889,
+              -1.373889
+            ],
+            "losses": 36,
+            "mean_utility_delta": -1.56,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 0
+          },
+          "delta_vs_salient": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -0.637778,
+              -0.463333
+            ],
+            "losses": 36,
+            "mean_utility_delta": -0.548889,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 0
+          },
+          "delta_vs_validation_fixed": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -1.738889,
+              -1.373889
+            ],
+            "losses": 36,
+            "mean_utility_delta": -1.56,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 0
+          },
+          "equivalent_to_salient": {
+            "equivalent": 36,
+            "non_equivalent": [],
+            "tested": 36
+          },
+          "scores": {
+            "always": {
+              "failures": 0,
+              "mean_utility": 977.162362,
+              "mean_work": 155.08,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 429,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "anti_salient": {
+              "failures": 0,
+              "mean_utility": 976.989028,
+              "mean_work": 168.44,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 403,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "global_voi": {
+              "failures": 0,
+              "mean_utility": 982.932917,
+              "mean_work": 159.78,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 0,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "learned_voi": {
+              "failures": 0,
+              "mean_utility": 982.514028,
+              "mean_work": 161.22,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 26,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "never": {
+              "failures": 0,
+              "mean_utility": 984.074028,
+              "mean_work": 131.25,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 0,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "salient": {
+              "failures": 0,
+              "mean_utility": 983.062917,
+              "mean_work": 147.5,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 26,
+              "solved": 36,
+              "work_budget_exits": 0
+            }
+          }
+        }
+      },
+      "calibration": {
+        "brier": 0.00284099,
+        "class_bins": {
+          "ordinary": {
+            "edges": 1962,
+            "empirical_rate": 0.0,
+            "mean_predicted": 0.0021361,
+            "positives": 0,
+            "predicted_mass": 4.19095
+          },
+          "salient": {
+            "edges": 108,
+            "empirical_rate": 0.0,
+            "mean_predicted": 0.2331247,
+            "positives": 0,
+            "predicted_mass": 25.17747
+          }
+        },
+        "global_brier": 0.00020511,
+        "labelled_edges": 2070,
+        "positives": 0
+      }
+    },
+    "shift_transfer": {
+      "budgets": {
+        "300": {
+          "delta_vs_never": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -233.79571,
+              -34.623376
+            ],
+            "losses": 36,
+            "mean_utility_delta": -133.890667,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 0
+          },
+          "delta_vs_salient": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -199.637672,
+              -0.574444
+            ],
+            "losses": 34,
+            "mean_utility_delta": -99.925364,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 2,
+            "wins": 0
+          },
+          "delta_vs_validation_fixed": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -233.79571,
+              -34.623376
+            ],
+            "losses": 36,
+            "mean_utility_delta": -133.890667,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 0
+          },
+          "equivalent_to_salient": {
+            "equivalent": 33,
+            "non_equivalent": [
+              {
+                "family": "weight_shift",
+                "seed": 55100
+              },
+              {
+                "family": "gated_bypass",
+                "seed": 55101
+              },
+              {
+                "family": "weight_shift",
+                "seed": 55110
+              }
+            ],
+            "tested": 36
+          },
+          "scores": {
+            "always": {
+              "failures": 0,
+              "mean_utility": 934.186487,
+              "mean_work": 178.81,
+              "n": 36,
+              "positive_probes": 6,
+              "probes": 452,
+              "solved": 35,
+              "work_budget_exits": 1
+            },
+            "anti_salient": {
+              "failures": 1,
+              "mean_utility": 834.658345,
+              "mean_work": 191.25,
+              "n": 36,
+              "positive_probes": 5,
+              "probes": 416,
+              "solved": 32,
+              "work_budget_exits": 4
+            },
+            "global_voi": {
+              "failures": 6,
+              "mean_utility": 839.907234,
+              "mean_work": 183.64,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 0,
+              "solved": 32,
+              "work_budget_exits": 4
+            },
+            "learned_voi": {
+              "failures": 5,
+              "mean_utility": 839.59279,
+              "mean_work": 185.25,
+              "n": 36,
+              "positive_probes": 1,
+              "probes": 30,
+              "solved": 32,
+              "work_budget_exits": 4
+            },
+            "never": {
+              "failures": 6,
+              "mean_utility": 973.483457,
+              "mean_work": 154.08,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 0,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "salient": {
+              "failures": 5,
+              "mean_utility": 939.518154,
+              "mean_work": 170.86,
+              "n": 36,
+              "positive_probes": 1,
+              "probes": 31,
+              "solved": 35,
+              "work_budget_exits": 1
+            }
+          }
+        },
+        "900": {
+          "delta_vs_never": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -1.898889,
+              -1.193889
+            ],
+            "losses": 35,
+            "mean_utility_delta": -1.558333,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 1
+          },
+          "delta_vs_salient": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -0.721111,
+              -0.505556
+            ],
+            "losses": 35,
+            "mean_utility_delta": -0.605556,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 1,
+            "wins": 0
+          },
+          "delta_vs_validation_fixed": {
+            "descriptive_cluster_bootstrap_95pct": [
+              -1.898889,
+              -1.193889
+            ],
+            "losses": 35,
+            "mean_utility_delta": -1.558333,
+            "pairs": 36,
+            "seed_clusters": 12,
+            "ties": 0,
+            "wins": 1
+          },
+          "equivalent_to_salient": {
+            "equivalent": 36,
+            "non_equivalent": [],
+            "tested": 36
+          },
+          "scores": {
+            "always": {
+              "failures": 0,
+              "mean_utility": 967.201235,
+              "mean_work": 179.19,
+              "n": 36,
+              "positive_probes": 6,
+              "probes": 452,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "anti_salient": {
+              "failures": 1,
+              "mean_utility": 966.914013,
+              "mean_work": 192.97,
+              "n": 36,
+              "positive_probes": 5,
+              "probes": 421,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "global_voi": {
+              "failures": 6,
+              "mean_utility": 972.257901,
+              "mean_work": 184.72,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 0,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "learned_voi": {
+              "failures": 5,
+              "mean_utility": 971.925124,
+              "mean_work": 186.44,
+              "n": 36,
+              "positive_probes": 1,
+              "probes": 31,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "never": {
+              "failures": 6,
+              "mean_utility": 973.483457,
+              "mean_work": 154.08,
+              "n": 36,
+              "positive_probes": 0,
+              "probes": 0,
+              "solved": 36,
+              "work_budget_exits": 0
+            },
+            "salient": {
+              "failures": 5,
+              "mean_utility": 972.530679,
+              "mean_work": 171.31,
+              "n": 36,
+              "positive_probes": 1,
+              "probes": 31,
+              "solved": 36,
+              "work_budget_exits": 0
+            }
+          }
+        }
+      },
+      "calibration": {
+        "brier": 0.01663475,
+        "class_bins": {
+          "ordinary": {
+            "edges": 2074,
+            "empirical_rate": 0.0139826,
+            "mean_predicted": 0.00212,
+            "positives": 29,
+            "predicted_mass": 4.39683
+          },
+          "salient": {
+            "edges": 108,
+            "empirical_rate": 0.0277778,
+            "mean_predicted": 0.2312184,
+            "positives": 3,
+            "predicted_mass": 24.97159
+          }
+        },
+        "global_brier": 0.01444839,
+        "labelled_edges": 2182,
+        "positives": 32
+      }
+    }
+  },
+  "validation_calibration": {
+    "brier": 0.01130217,
+    "class_bins": {
+      "ordinary": {
+        "edges": 1260,
+        "empirical_rate": 0.0007937,
+        "mean_predicted": 0.0021464,
+        "positives": 1,
+        "predicted_mass": 2.70443
+      },
+      "salient": {
+        "edges": 72,
+        "empirical_rate": 0.2638889,
+        "mean_predicted": 0.2343683,
+        "positives": 19,
+        "predicted_mass": 16.87452
+      }
+    },
+    "global_brier": 0.01478519,
+    "labelled_edges": 1332,
+    "positives": 20
+  }
+}

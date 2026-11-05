@@ -1,0 +1,1340 @@
+{
+  "budgets": [
+    60,
+    120,
+    1800
+  ],
+  "conditions": [
+    "static",
+    "policy_targeted",
+    "neutral"
+  ],
+  "disclosure": "Public author-chosen nonblinded study; prior v1 OOD was already examined. Neutral edge sampling does not select for any planner's intended route. Post-change oracle is a hindsight lower bound. Equal node caps are NOT equal FLOPs.",
+  "methods": [
+    "bfs",
+    "greedy",
+    "astar",
+    "hier_fixed",
+    "hier_replan",
+    "adaptive",
+    "structural"
+  ],
+  "protocol": "ace-r6-v2-exploratory",
+  "seeds": {
+    "dev2": [
+      2000,
+      2001,
+      2002,
+      2003,
+      2004,
+      2005,
+      2006,
+      2007,
+      2008,
+      2009,
+      2010,
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "transfer2": [
+      9500,
+      9501,
+      9502,
+      9503,
+      9504,
+      9505,
+      9506,
+      9507,
+      9508,
+      9509,
+      9510,
+      9511,
+      9512,
+      9513,
+      9514,
+      9515,
+      9516,
+      9517,
+      9518,
+      9519,
+      9520,
+      9521,
+      9522,
+      9523
+    ]
+  },
+  "sha256": "6ae6b52754bd844a4e01295ca3fa02ff008e3edd196f11867535b874ec750873",
+  "summary": {
+    "dev2/neutral/cap120/adaptive": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0033,
+      "mean_expanded": 21.62,
+      "mean_heuristics": 28.46,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap120/astar": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0033,
+      "mean_expanded": 23.96,
+      "mean_heuristics": 30.79,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap120/bfs": {
+      "conditional_recovery": 5,
+      "encounter": 5,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1011,
+      "mean_expanded": 27.33,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap120/greedy": {
+      "conditional_recovery": 4,
+      "encounter": 4,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0888,
+      "mean_expanded": 11.08,
+      "mean_heuristics": 19.21,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap120/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 16.67,
+      "mean_heuristics": 22.29,
+      "n": 24,
+      "success": 17
+    },
+    "dev2/neutral/cap120/hier_replan": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0033,
+      "mean_expanded": 21.46,
+      "mean_heuristics": 28.54,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap120/structural": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0033,
+      "mean_expanded": 21.71,
+      "mean_heuristics": 28.79,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap1800/adaptive": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0033,
+      "mean_expanded": 21.62,
+      "mean_heuristics": 28.46,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap1800/astar": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0033,
+      "mean_expanded": 23.96,
+      "mean_heuristics": 30.79,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap1800/bfs": {
+      "conditional_recovery": 5,
+      "encounter": 5,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1011,
+      "mean_expanded": 27.33,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap1800/greedy": {
+      "conditional_recovery": 4,
+      "encounter": 4,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0888,
+      "mean_expanded": 11.08,
+      "mean_heuristics": 19.21,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap1800/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 16.67,
+      "mean_heuristics": 22.29,
+      "n": 24,
+      "success": 17
+    },
+    "dev2/neutral/cap1800/hier_replan": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0033,
+      "mean_expanded": 21.46,
+      "mean_heuristics": 28.54,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap1800/structural": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0033,
+      "mean_expanded": 21.71,
+      "mean_heuristics": 28.79,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap60/adaptive": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0033,
+      "mean_expanded": 21.62,
+      "mean_heuristics": 28.46,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap60/astar": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0033,
+      "mean_expanded": 23.96,
+      "mean_heuristics": 30.79,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap60/bfs": {
+      "conditional_recovery": 5,
+      "encounter": 5,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1011,
+      "mean_expanded": 27.33,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap60/greedy": {
+      "conditional_recovery": 4,
+      "encounter": 4,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0888,
+      "mean_expanded": 11.08,
+      "mean_heuristics": 19.21,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap60/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 16.67,
+      "mean_heuristics": 22.29,
+      "n": 24,
+      "success": 17
+    },
+    "dev2/neutral/cap60/hier_replan": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0033,
+      "mean_expanded": 21.46,
+      "mean_heuristics": 28.54,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/neutral/cap60/structural": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0033,
+      "mean_expanded": 21.71,
+      "mean_heuristics": 28.79,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap120/adaptive": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1106,
+      "mean_expanded": 28.42,
+      "mean_heuristics": 34.67,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap120/astar": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1106,
+      "mean_expanded": 43.08,
+      "mean_heuristics": 52.17,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap120/bfs": {
+      "conditional_recovery": 11,
+      "encounter": 11,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.2324,
+      "mean_expanded": 37.83,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap120/greedy": {
+      "conditional_recovery": 10,
+      "encounter": 10,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.2293,
+      "mean_expanded": 16.88,
+      "mean_heuristics": 26.71,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap120/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": null,
+      "mean_expanded": 8.79,
+      "mean_heuristics": 10.5,
+      "n": 24,
+      "success": 0
+    },
+    "dev2/policy_targeted/cap120/hier_replan": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1106,
+      "mean_expanded": 27.79,
+      "mean_heuristics": 34.96,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap120/structural": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1106,
+      "mean_expanded": 28.79,
+      "mean_heuristics": 35.96,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap1800/adaptive": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1106,
+      "mean_expanded": 28.42,
+      "mean_heuristics": 34.67,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap1800/astar": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1106,
+      "mean_expanded": 43.08,
+      "mean_heuristics": 52.17,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap1800/bfs": {
+      "conditional_recovery": 11,
+      "encounter": 11,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.2324,
+      "mean_expanded": 37.83,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap1800/greedy": {
+      "conditional_recovery": 10,
+      "encounter": 10,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.2293,
+      "mean_expanded": 16.88,
+      "mean_heuristics": 26.71,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap1800/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": null,
+      "mean_expanded": 8.79,
+      "mean_heuristics": 10.5,
+      "n": 24,
+      "success": 0
+    },
+    "dev2/policy_targeted/cap1800/hier_replan": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1106,
+      "mean_expanded": 27.79,
+      "mean_heuristics": 34.96,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap1800/structural": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1106,
+      "mean_expanded": 28.79,
+      "mean_heuristics": 35.96,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap60/adaptive": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1106,
+      "mean_expanded": 28.42,
+      "mean_heuristics": 34.67,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap60/astar": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1106,
+      "mean_expanded": 43.08,
+      "mean_heuristics": 52.17,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap60/bfs": {
+      "conditional_recovery": 11,
+      "encounter": 11,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.2324,
+      "mean_expanded": 37.83,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap60/greedy": {
+      "conditional_recovery": 10,
+      "encounter": 10,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.2293,
+      "mean_expanded": 16.88,
+      "mean_heuristics": 26.71,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap60/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": null,
+      "mean_expanded": 8.79,
+      "mean_heuristics": 10.5,
+      "n": 24,
+      "success": 0
+    },
+    "dev2/policy_targeted/cap60/hier_replan": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1106,
+      "mean_expanded": 27.79,
+      "mean_heuristics": 34.96,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/policy_targeted/cap60/structural": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1106,
+      "mean_expanded": 28.79,
+      "mean_heuristics": 35.96,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap120/adaptive": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 18.67,
+      "mean_heuristics": 25.08,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap120/astar": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 19,
+      "mean_heuristics": 24.62,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap120/bfs": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1131,
+      "mean_expanded": 23.67,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap120/greedy": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1131,
+      "mean_expanded": 9.67,
+      "mean_heuristics": 16.83,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap120/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 18.67,
+      "mean_heuristics": 25.08,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap120/hier_replan": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 18.67,
+      "mean_heuristics": 25.08,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap120/structural": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 18.92,
+      "mean_heuristics": 25.33,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap1800/adaptive": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 18.67,
+      "mean_heuristics": 25.08,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap1800/astar": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 19,
+      "mean_heuristics": 24.62,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap1800/bfs": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1131,
+      "mean_expanded": 23.67,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap1800/greedy": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1131,
+      "mean_expanded": 9.67,
+      "mean_heuristics": 16.83,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap1800/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 18.67,
+      "mean_heuristics": 25.08,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap1800/hier_replan": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 18.67,
+      "mean_heuristics": 25.08,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap1800/structural": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 18.92,
+      "mean_heuristics": 25.33,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap60/adaptive": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 18.67,
+      "mean_heuristics": 25.08,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap60/astar": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 19,
+      "mean_heuristics": 24.62,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap60/bfs": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1131,
+      "mean_expanded": 23.67,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap60/greedy": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1131,
+      "mean_expanded": 9.67,
+      "mean_heuristics": 16.83,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap60/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 18.67,
+      "mean_heuristics": 25.08,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap60/hier_replan": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 18.67,
+      "mean_heuristics": 25.08,
+      "n": 24,
+      "success": 24
+    },
+    "dev2/static/cap60/structural": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 18.92,
+      "mean_heuristics": 25.33,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/neutral/cap120/adaptive": {
+      "conditional_recovery": 5,
+      "encounter": 6,
+      "failed_due_budget": 1,
+      "mean_cost_over_offline_lower_bound": 1.0592,
+      "mean_expanded": 58.92,
+      "mean_heuristics": 84.58,
+      "n": 24,
+      "success": 23
+    },
+    "transfer2/neutral/cap120/astar": {
+      "conditional_recovery": 3,
+      "encounter": 4,
+      "failed_due_budget": 12,
+      "mean_cost_over_offline_lower_bound": 1.0155,
+      "mean_expanded": 92.21,
+      "mean_heuristics": 123.25,
+      "n": 24,
+      "success": 12
+    },
+    "transfer2/neutral/cap120/bfs": {
+      "conditional_recovery": 2,
+      "encounter": 2,
+      "failed_due_budget": 12,
+      "mean_cost_over_offline_lower_bound": 1.1037,
+      "mean_expanded": 100.12,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 12
+    },
+    "transfer2/neutral/cap120/greedy": {
+      "conditional_recovery": 5,
+      "encounter": 5,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.189,
+      "mean_expanded": 25.75,
+      "mean_heuristics": 45.04,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/neutral/cap120/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 6,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.059,
+      "mean_expanded": 46.54,
+      "mean_heuristics": 67,
+      "n": 24,
+      "success": 18
+    },
+    "transfer2/neutral/cap120/hier_replan": {
+      "conditional_recovery": 6,
+      "encounter": 6,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0567,
+      "mean_expanded": 54.33,
+      "mean_heuristics": 77.88,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/neutral/cap120/structural": {
+      "conditional_recovery": 6,
+      "encounter": 6,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0567,
+      "mean_expanded": 54.5,
+      "mean_heuristics": 78.08,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/neutral/cap1800/adaptive": {
+      "conditional_recovery": 6,
+      "encounter": 6,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0567,
+      "mean_expanded": 69.25,
+      "mean_heuristics": 96.12,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/neutral/cap1800/astar": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0125,
+      "mean_expanded": 178.54,
+      "mean_heuristics": 219.92,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/neutral/cap1800/bfs": {
+      "conditional_recovery": 5,
+      "encounter": 5,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1255,
+      "mean_expanded": 226.75,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/neutral/cap1800/greedy": {
+      "conditional_recovery": 5,
+      "encounter": 5,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.189,
+      "mean_expanded": 25.75,
+      "mean_heuristics": 45.04,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/neutral/cap1800/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 6,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.059,
+      "mean_expanded": 46.54,
+      "mean_heuristics": 67,
+      "n": 24,
+      "success": 18
+    },
+    "transfer2/neutral/cap1800/hier_replan": {
+      "conditional_recovery": 6,
+      "encounter": 6,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0567,
+      "mean_expanded": 54.33,
+      "mean_heuristics": 77.88,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/neutral/cap1800/structural": {
+      "conditional_recovery": 7,
+      "encounter": 7,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0125,
+      "mean_expanded": 159.92,
+      "mean_heuristics": 200.54,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/neutral/cap60/adaptive": {
+      "conditional_recovery": 2,
+      "encounter": 6,
+      "failed_due_budget": 8,
+      "mean_cost_over_offline_lower_bound": 1.0236,
+      "mean_expanded": 51.25,
+      "mean_heuristics": 75.42,
+      "n": 24,
+      "success": 16
+    },
+    "transfer2/neutral/cap60/astar": {
+      "conditional_recovery": 0,
+      "encounter": 2,
+      "failed_due_budget": 19,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 57.54,
+      "mean_heuristics": 81.79,
+      "n": 24,
+      "success": 5
+    },
+    "transfer2/neutral/cap60/bfs": {
+      "conditional_recovery": 0,
+      "encounter": 2,
+      "failed_due_budget": 24,
+      "mean_cost_over_offline_lower_bound": null,
+      "mean_expanded": 60,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 0
+    },
+    "transfer2/neutral/cap60/greedy": {
+      "conditional_recovery": 5,
+      "encounter": 5,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.189,
+      "mean_expanded": 25.75,
+      "mean_heuristics": 45.04,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/neutral/cap60/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 6,
+      "failed_due_budget": 4,
+      "mean_cost_over_offline_lower_bound": 1.0169,
+      "mean_expanded": 45.58,
+      "mean_heuristics": 66.04,
+      "n": 24,
+      "success": 14
+    },
+    "transfer2/neutral/cap60/hier_replan": {
+      "conditional_recovery": 3,
+      "encounter": 6,
+      "failed_due_budget": 7,
+      "mean_cost_over_offline_lower_bound": 1.0222,
+      "mean_expanded": 50.38,
+      "mean_heuristics": 73.62,
+      "n": 24,
+      "success": 17
+    },
+    "transfer2/neutral/cap60/structural": {
+      "conditional_recovery": 2,
+      "encounter": 6,
+      "failed_due_budget": 8,
+      "mean_cost_over_offline_lower_bound": 1.0218,
+      "mean_expanded": 50.42,
+      "mean_heuristics": 73.75,
+      "n": 24,
+      "success": 16
+    },
+    "transfer2/policy_targeted/cap120/adaptive": {
+      "conditional_recovery": 14,
+      "encounter": 24,
+      "failed_due_budget": 10,
+      "mean_cost_over_offline_lower_bound": 1.0132,
+      "mean_expanded": 93.12,
+      "mean_heuristics": 121.92,
+      "n": 24,
+      "success": 14
+    },
+    "transfer2/policy_targeted/cap120/astar": {
+      "conditional_recovery": 6,
+      "encounter": 13,
+      "failed_due_budget": 18,
+      "mean_cost_over_offline_lower_bound": 1.0185,
+      "mean_expanded": 112.38,
+      "mean_heuristics": 147,
+      "n": 24,
+      "success": 6
+    },
+    "transfer2/policy_targeted/cap120/bfs": {
+      "conditional_recovery": 1,
+      "encounter": 8,
+      "failed_due_budget": 19,
+      "mean_cost_over_offline_lower_bound": 1.0599,
+      "mean_expanded": 111.67,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 5
+    },
+    "transfer2/policy_targeted/cap120/greedy": {
+      "conditional_recovery": 17,
+      "encounter": 17,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1513,
+      "mean_expanded": 41.71,
+      "mean_heuristics": 70,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/policy_targeted/cap120/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": null,
+      "mean_expanded": 10.5,
+      "mean_heuristics": 13.5,
+      "n": 24,
+      "success": 0
+    },
+    "transfer2/policy_targeted/cap120/hier_replan": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0485,
+      "mean_expanded": 61.88,
+      "mean_heuristics": 85.08,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/policy_targeted/cap120/structural": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0485,
+      "mean_expanded": 60.67,
+      "mean_heuristics": 83.96,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/policy_targeted/cap1800/adaptive": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0077,
+      "mean_expanded": 164.08,
+      "mean_heuristics": 197.83,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/policy_targeted/cap1800/astar": {
+      "conditional_recovery": 23,
+      "encounter": 23,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0077,
+      "mean_expanded": 312,
+      "mean_heuristics": 376.12,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/policy_targeted/cap1800/bfs": {
+      "conditional_recovery": 16,
+      "encounter": 16,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1006,
+      "mean_expanded": 344.29,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/policy_targeted/cap1800/greedy": {
+      "conditional_recovery": 17,
+      "encounter": 17,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1513,
+      "mean_expanded": 41.71,
+      "mean_heuristics": 70,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/policy_targeted/cap1800/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": null,
+      "mean_expanded": 10.5,
+      "mean_heuristics": 13.5,
+      "n": 24,
+      "success": 0
+    },
+    "transfer2/policy_targeted/cap1800/hier_replan": {
+      "conditional_recovery": 24,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0485,
+      "mean_expanded": 61.88,
+      "mean_heuristics": 85.08,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/policy_targeted/cap1800/structural": {
+      "conditional_recovery": 23,
+      "encounter": 23,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0077,
+      "mean_expanded": 261.21,
+      "mean_heuristics": 319.08,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/policy_targeted/cap60/adaptive": {
+      "conditional_recovery": 5,
+      "encounter": 24,
+      "failed_due_budget": 19,
+      "mean_cost_over_offline_lower_bound": 1.0222,
+      "mean_expanded": 58.79,
+      "mean_heuristics": 81.88,
+      "n": 24,
+      "success": 5
+    },
+    "transfer2/policy_targeted/cap60/astar": {
+      "conditional_recovery": 0,
+      "encounter": 6,
+      "failed_due_budget": 24,
+      "mean_cost_over_offline_lower_bound": null,
+      "mean_expanded": 60,
+      "mean_heuristics": 85.12,
+      "n": 24,
+      "success": 0
+    },
+    "transfer2/policy_targeted/cap60/bfs": {
+      "conditional_recovery": 0,
+      "encounter": 1,
+      "failed_due_budget": 23,
+      "mean_cost_over_offline_lower_bound": 1.0571,
+      "mean_expanded": 59.79,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 1
+    },
+    "transfer2/policy_targeted/cap60/greedy": {
+      "conditional_recovery": 12,
+      "encounter": 17,
+      "failed_due_budget": 5,
+      "mean_cost_over_offline_lower_bound": 1.1287,
+      "mean_expanded": 40.38,
+      "mean_heuristics": 68.21,
+      "n": 24,
+      "success": 19
+    },
+    "transfer2/policy_targeted/cap60/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 24,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": null,
+      "mean_expanded": 10.5,
+      "mean_heuristics": 13.5,
+      "n": 24,
+      "success": 0
+    },
+    "transfer2/policy_targeted/cap60/hier_replan": {
+      "conditional_recovery": 11,
+      "encounter": 24,
+      "failed_due_budget": 13,
+      "mean_cost_over_offline_lower_bound": 1.017,
+      "mean_expanded": 55.17,
+      "mean_heuristics": 78.88,
+      "n": 24,
+      "success": 11
+    },
+    "transfer2/policy_targeted/cap60/structural": {
+      "conditional_recovery": 12,
+      "encounter": 24,
+      "failed_due_budget": 12,
+      "mean_cost_over_offline_lower_bound": 1.0155,
+      "mean_expanded": 54.67,
+      "mean_heuristics": 78.54,
+      "n": 24,
+      "success": 12
+    },
+    "transfer2/static/cap120/adaptive": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0452,
+      "mean_expanded": 50.21,
+      "mean_heuristics": 72.29,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap120/astar": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 11,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 86.88,
+      "mean_heuristics": 115.75,
+      "n": 24,
+      "success": 13
+    },
+    "transfer2/static/cap120/bfs": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 12,
+      "mean_cost_over_offline_lower_bound": 1.093,
+      "mean_expanded": 97.25,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 12
+    },
+    "transfer2/static/cap120/greedy": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1871,
+      "mean_expanded": 23.25,
+      "mean_heuristics": 40.38,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap120/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0452,
+      "mean_expanded": 50.21,
+      "mean_heuristics": 72.29,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap120/hier_replan": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0452,
+      "mean_expanded": 50.21,
+      "mean_heuristics": 72.29,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap120/structural": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0452,
+      "mean_expanded": 50.38,
+      "mean_heuristics": 72.5,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap1800/adaptive": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0452,
+      "mean_expanded": 50.21,
+      "mean_heuristics": 72.29,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap1800/astar": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 151.96,
+      "mean_heuristics": 185.79,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap1800/bfs": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.115,
+      "mean_expanded": 210.08,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap1800/greedy": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1871,
+      "mean_expanded": 23.25,
+      "mean_heuristics": 40.38,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap1800/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0452,
+      "mean_expanded": 50.21,
+      "mean_heuristics": 72.29,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap1800/hier_replan": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0452,
+      "mean_expanded": 50.21,
+      "mean_heuristics": 72.29,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap1800/structural": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 145.79,
+      "mean_heuristics": 181.17,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap60/adaptive": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 5,
+      "mean_cost_over_offline_lower_bound": 1.0137,
+      "mean_expanded": 48.96,
+      "mean_heuristics": 71.08,
+      "n": 24,
+      "success": 19
+    },
+    "transfer2/static/cap60/astar": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 17,
+      "mean_cost_over_offline_lower_bound": 1.0,
+      "mean_expanded": 56.96,
+      "mean_heuristics": 80.62,
+      "n": 24,
+      "success": 7
+    },
+    "transfer2/static/cap60/bfs": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 22,
+      "mean_cost_over_offline_lower_bound": 1.1029,
+      "mean_expanded": 59.75,
+      "mean_heuristics": 0,
+      "n": 24,
+      "success": 2
+    },
+    "transfer2/static/cap60/greedy": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 0,
+      "mean_cost_over_offline_lower_bound": 1.1871,
+      "mean_expanded": 23.25,
+      "mean_heuristics": 40.38,
+      "n": 24,
+      "success": 24
+    },
+    "transfer2/static/cap60/hier_fixed": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 5,
+      "mean_cost_over_offline_lower_bound": 1.0137,
+      "mean_expanded": 48.96,
+      "mean_heuristics": 71.08,
+      "n": 24,
+      "success": 19
+    },
+    "transfer2/static/cap60/hier_replan": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 5,
+      "mean_cost_over_offline_lower_bound": 1.0137,
+      "mean_expanded": 48.96,
+      "mean_heuristics": 71.08,
+      "n": 24,
+      "success": 19
+    },
+    "transfer2/static/cap60/structural": {
+      "conditional_recovery": 0,
+      "encounter": 0,
+      "failed_due_budget": 5,
+      "mean_cost_over_offline_lower_bound": 1.0137,
+      "mean_expanded": 49.04,
+      "mean_heuristics": 71.21,
+      "n": 24,
+      "success": 19
+    }
+  }
+}
