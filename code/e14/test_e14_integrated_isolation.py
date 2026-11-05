@@ -1,5 +1,7 @@
 """Issue #13 worker mount and fail-closed isolation adapter tests."""
 import tempfile
+import subprocess
+import sys
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -26,6 +28,17 @@ class WorkerMountTests(unittest.TestCase):
             self.assertFalse((root/"e14/e14_integrated_isolation.py").exists())
             self.assertEqual({p.name for p in (root/"e13").iterdir()},
                              {"__init__.py", "contract.py"})
+
+    def test_worker_stage_imports_policy_without_evaluator(self):
+        # Functional import smoke only, not an isolation security claim.
+        with worker_stage() as root:
+            code = ("import sys;sys.path.insert(0,sys.argv[1]);"
+                    "from e14.e14_integrated_policy import mapped_only_policy;"
+                    "assert callable(mapped_only_policy)")
+            result = subprocess.run([sys.executable, "-I", "-B", "-S", "-c",
+                                     code, str(root)], capture_output=True, text=True,
+                                    timeout=10, check=False)
+            self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_isolated_execution_requires_native_boundary(self):
         with tempfile.TemporaryDirectory() as temp:

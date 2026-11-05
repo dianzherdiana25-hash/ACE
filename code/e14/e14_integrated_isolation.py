@@ -19,7 +19,7 @@ from .e14_shared_budget import BudgetContractError
 
 HERE = Path(__file__).resolve().parent
 WORKER_FILES = (
-    "e14_integrated_policy.py",
+    "e14_integrated_policy.py", "e14_shared_budget.py",
     "e14r_worker.py", "e14s_worker.py", "e14p_worker.py",
 )
 # e14p_worker imports only e13.contract. No trusted evaluator code is copied.
