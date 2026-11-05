@@ -77,9 +77,9 @@ jobs:
           import json
           import os
           from pathlib import Path
-          from tools.ace_pr_collision_gate import AuditError, audit, live_snapshot
+          from tools.ace_pr_collision_gate import AuditError, audit, stable_live_snapshot
           repo = "dianzherdiana25-hash/ACE"
-          snapshot = live_snapshot(repo, os.environ["GITHUB_TOKEN"])
+          snapshot = stable_live_snapshot(repo, os.environ["GITHUB_TOKEN"], max_attempts=3)
           report = audit(snapshot)
           numbers = {r["number"] for r in snapshot["pull_requests"]}
           if not {26, 27}.issubset(numbers):
