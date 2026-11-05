@@ -140,8 +140,7 @@ def main():
     args = parser.parse_args()
     result = run()
     if args.output:
-        args.output.write_text(json.dumps(result, sort_keys=True, indent=2)+'
-')
+        args.output.write_text(json.dumps(result, sort_keys=True, indent=2)+'\n')
     print(json.dumps(result['summary'], sort_keys=True))
 
 
