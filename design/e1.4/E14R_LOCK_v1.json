@@ -1,0 +1,13 @@
+{
+  "sha256": {
+    "code/e14/e14r_audit.py": "a4642048f97074456375ac4d30c06b6e5c82548c76d25217c7695aeabce12ea2",
+    "code/e14/e14r_run.py": "0f591a90477101bc0a6af09abeed9e3534e25fb01cefd424bf69d7c3d9ec4906",
+    "code/e14/e14r_worker.py": "ef603551257084d8b9125b4f935ae923f4b444a47e1bb778ceadbd04e3626e3e",
+    "code/e14/test_e14r.py": "8486941c93dabbb676f4d84ca89fa87f6c31de39ce34439545ad90dbc4724a13",
+    "design/e1.4/E14Q_LOCK_v1.json": "36090f1c165c120e05342544f575c5b26db6890c63de557062c0590a4a19d516",
+    "design/e1.4/E14R_PROTOCOL_v1.md": "9c0dc96947823c4b0696c4d13bcde8aa14f025eac767e2e29893521ba2587170",
+    "evidence/e14/e14p_public_development_v1.json.gz": "a10531550102c4e5c8ba4f309b9f11b7dd0e8987b3bcabfa7aeee0763396de81",
+    "evidence/e14/e14r_public_bank_v1.json.gz": "24a2ae2cc0c0c0f3f6f67d125d464e009f63f50f1b301dc5d536f08b3f41930b"
+  },
+  "version": 1
+}

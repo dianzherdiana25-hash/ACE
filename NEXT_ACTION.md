@@ -1,8 +1,16 @@
-# NEXT_ACTION — E1.4r verifikasi warisan sebelum dipakai
+# NEXT_ACTION — reproduksi dan audit E1.4r
 
-1. Verifikasi HEAD dan baca [hasil pewarisan](design/e1.4/E14P_RESULT_v1.md) serta [hasil pertanyaan graf](design/e1.4/E14Q_RESULT_v1.md).
-2. Uji satu label diagnostik untuk memilih interpretasi artefak yang cocok. Pakai target publik baru dan pembanding kalibrasi pasif serta rantai terarah. Uji salah waris di luar menu dan label yang sama untuk motif berbeda.
-3. Pertahankan HOLD untuk loop aktif graf rantai, generalisasi alami, dan pergeseran warisan yang belum terdeteksi.
+1. Verifikasi HEAD dan [protokol beku](design/e1.4/E14R_PROTOCOL_v1.md). Buat direktori WORK dan validasi Bubblewrap native dengan [preflight](docs/ACE_SPRINT_RUNTIME.md).
+2. Jalankan skor dan replay pada ledger terpisah, lalu audit. Jika timeout gunakan ulang ledger pada proses yang terputus. Jangan membuat ulang freeze pada checkout produksi.
+3. Catat dua gerbang dan kesalahan pada dunia motif pendek secara terpisah. Rekonsiliasi dengan kegagalan pewarisan E1.4p dan batas anggaran E1.4q.
+
+## Reproduksi E1.4r
+
+```bash
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 120 --heartbeat 10 --log WORK/r-score.log -- python3 -m e14.e14r_run run WORK/r-score.sqlite WORK/r-score.json.gz
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 120 --heartbeat 10 --log WORK/r-replay.log -- python3 -m e14.e14r_run run WORK/r-replay.sqlite WORK/r-replay.json.gz
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 90 --heartbeat 10 --log WORK/r-audit.log -- python3 -m e14.e14r_audit WORK/r-score.json.gz WORK/r-replay.json.gz
+```
 
 ## Reproduksi E1.4q
 
