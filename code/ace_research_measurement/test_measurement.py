@@ -69,6 +69,18 @@ class MeasurementTests(unittest.TestCase):
         self.assertEqual(semantic_fingerprint({"x": 2, "a": 1}),
                          semantic_fingerprint({"a": 1, "x": 2}))
 
+    def test_no_unsupervised_adaptation_claim_from_handcoded_solver(self):
+        result = measure(self.rows)
+        self.assertIn("ADAPTATION_PROTOCOL_NOT_ESTABLISHED", result["signals"])
+        self.assertEqual(result["evaluation"]["all"]["pre_post_difference_descriptive_only"], 0.75)
+        self.assertEqual(result["claim_gate"], "NOT_CONFIRMED")
+
+    def test_unequal_operations_do_not_count_as_efficiency_improvement(self):
+        result = measure(self.rows)
+        self.assertIn("UNMATCHED_OPERATION_COST", result["signals"])
+        self.assertGreater(result["evaluation"]["all"]["candidate_ops"],
+                           result["evaluation"]["all"]["baseline_ops"])
+
     def test_new_family_does_not_imply_confirmatory_claim(self):
         self.assertEqual(measure(self.rows)["status"], "PUBLIC_SYNTHETIC_DIAGNOSTIC_ONLY")
 

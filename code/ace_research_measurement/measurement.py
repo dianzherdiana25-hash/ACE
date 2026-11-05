@@ -9,7 +9,6 @@ from collections import defaultdict
 from dataclasses import dataclass
 import hashlib
 import json
-import math
 import random
 from typing import Iterable
 
@@ -100,7 +99,7 @@ def _rates(rows: list[Record]) -> dict:
         "candidate_ops": sum(r.candidate_ops for r in rows),
         "baseline_labels": sum(r.baseline_labels for r in rows),
         "candidate_labels": sum(r.candidate_labels for r in rows),
-        "post_minus_pre": sum(int(r.post_correct) - int(r.pre_correct) for r in rows) / len(rows),
+        "pre_post_difference_descriptive_only": sum(int(r.post_correct) - int(r.pre_correct) for r in rows) / len(rows),
     }
 
 
@@ -136,6 +135,14 @@ def measure(records: Iterable[Record]) -> dict:
         signals.append("INSUFFICIENT_COMPOSITIONAL_FAMILY_COVERAGE")
     if ci is None or ci[0] <= 0:
         signals.append("NO_POSITIVE_EXPLORATORY_FAMILY_CI")
+    if overall["candidate_ops"] != overall["baseline_ops"]:
+        signals.append("UNMATCHED_OPERATION_COST")
+    if overall["candidate_labels"] != overall["baseline_labels"]:
+        signals.append("UNMATCHED_LABEL_COST")
+    # A descriptive pre/post difference is not evidence of learning unless
+    # intervention, exposure sequence and evaluator custody were established.
+    if any(r.pre_correct != r.post_correct for r in evaluation):
+        signals.append("ADAPTATION_PROTOCOL_NOT_ESTABLISHED")
     if overall["candidate_ops"] > 2 * max(1, overall["baseline_ops"]):
         signals.append("OVER_2X_OPERATION_BUDGET")
     dev_families = sorted({r.family for r in rows if r.split == "development"})
@@ -152,6 +159,7 @@ def measure(records: Iterable[Record]) -> dict:
             "All splits and task generators in this package are public; evaluation is NOT sealed.",
             "Records must originate from trusted evaluator and independently verified semantics.",
             "CPU operations and evaluator labels are separate units; no equivalent wall-clock cap is claimed.",
+            "Pre/post difference is descriptive, never interpreted as learning without a protocol.",
             "Exploratory CIs do not account for experiment selection or researcher degrees of freedom.",
         ],
     }

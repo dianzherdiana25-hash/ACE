@@ -17,7 +17,10 @@
       "compositional_delta": 1,
       "base_ops": 640,
       "candidate_ops": 768,
-      "signal": []
+      "signal": [
+        "UNMATCHED_OPERATION_COST",
+        "ADAPTATION_PROTOCOL_NOT_ESTABLISHED"
+      ]
     },
     {
       "name": "exact_instance_memorizer_negative_control",
@@ -43,10 +46,27 @@
       "candidate_ops": 1440,
       "signal": [
         "GOODHART_MICRO_MACRO_INVERSION",
-        "NO_POSITIVE_EXPLORATORY_FAMILY_CI"
+        "NO_POSITIVE_EXPLORATORY_FAMILY_CI",
+        "ADAPTATION_PROTOCOL_NOT_ESTABLISHED"
       ]
     }
   ],
   "claim_gate": "NOT_CONFIRMED",
-  "caveat": "Engineered validity probes, not actual ACE cognitive growth or independent confirmation."
+  "caveat": "Engineered validity probes, not actual ACE cognitive growth or independent confirmation.",
+  "followup": {
+    "local_tests": "25 total; 24 passed; 1 full checkout source test skipped",
+    "e15_pinned_blob": "2561d8ee47f84a85388cbd4c7de7737f1266342b",
+    "e15_in_family": {
+      "validation_delta_utility": 42,
+      "holdout_delta_utility": -13,
+      "correct_delta": 1,
+      "labels_delta": 35
+    },
+    "e15_mixed_grammar": {
+      "validation_delta_utility": 0,
+      "holdout_delta_utility": 0
+    },
+    "e15_exact_archive_execution": "NOT_RUN_LOCAL",
+    "candidate_claim": "NOT_ASSESSED"
+  }
 }

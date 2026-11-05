@@ -42,3 +42,23 @@ The Goodhart control is a deliberately generated counterexample; its frequency i
 5. Require blind independent replication before any scientific claim. E1.4 frozen artifacts, main, security red team and S5 open-ended exploration are out of scope.
 
 Decision: METHOD_DEVELOPMENT_PROBE_PASS, SCIENTIFIC_ACE_CAPABILITY_GROWTH=NOT_ASSESSED, OAIE=NOT_ESTABLISHED.
+
+
+## R8 follow-up: E1.5 aggregate-readback adapter and adaptation audit
+
+The archive `evidence/e15/E15_DEVELOPMENT_SUMMARY_v0.json` (Git blob SHA `2561d8ee47f84a85388cbd4c7de7737f1266342b` at `research/e15-source-evolution` SHA `965640786cbf2f8adcd89eb1d980945f78c2da77`) contains real **public-development** outcomes from the ACE E1.5 loop. R8 now provides a standalone, **read-only** audit of that source. It checks byte identity before parsing, rejects duplicate JSON keys, recalculates E1.5 utility from the actual acceptance/abstention/label-cost scoring rule, checks paired aggregate denominators, cross-checks archived delta and verifies non-promotion/reversion decisions. It does not modify the source.
+
+From an exact ACE checkout containing historical `evidence/`:
+
+```sh
+PYTHONPATH=code python -m ace_research_measurement.e15_audit --output /tmp/ace-r8-e15-audit.json
+PYTHONPATH=code python -m unittest ace_research_measurement.test_measurement ace_research_measurement.test_e15_audit -v
+```
+
+The **in_family** archived validation increase is +42 utility units (−36 to +6). On holdout the chosen policy has one more correct acceptance (0→1), spends +35 labels (18→53), and has **−13** utility units relative to baseline (−54→−67). The **mixed_grammar** track has zero utility delta. These totals support a cost-sensitive validation→holdout reversal, **not** a measurement of cross-family intelligence growth. The archive exposes aggregate outcomes but no evaluator-custodied per-case structure labels; R8 explicitly refuses to invent compositional, OOD, novelty or family-cluster scores from aggregates.
+
+In local R8-only staging, the source archive is absent: the exact-byte archive test is **skipped**, while synthetic audit invariants run; the historical values were separately read from GitHub, but **the pin-verified CLI still needs an actual full checkout**. Thus `PINNED_ARCHIVE_EXECUTION=NOT_RUN_LOCAL` and `HISTORICAL_RECORDS_AUDITED_AGGREGATE_ONLY` (not independent semantic confirmation). The command above will fail closed if the source is absent/tampered. Do not report this as an independent sealed holdout replication.
+
+### Method correction
+
+The earlier generic pre/post metric could be misread as "adaptation speed" even where the generator records no actual label acquisition. R8 now uses the key `pre_post_difference_descriptive_only` and emits `ADAPTATION_PROTOCOL_NOT_ESTABLISHED` when such a difference occurs. It flags **any** unmatched operation/label budget (in addition to the >2× warning), rather than treating modest extra compute as free. A causal adaptation claim requires documented intervention, pre/post timing, controlled exposure, correct task identity and matched compute. Claim gate remains `NOT_CONFIRMED`.
