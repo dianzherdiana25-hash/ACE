@@ -9,7 +9,7 @@
   "protocol_commit": "2eccd3c38593048cda743c52ec8032cf05ce137c",
   "source_after_timeout_cache_commit": "8fa02b8365f5c097972359da099fdeb30d1f9450",
   "source_blob_sha": "26988e3e65c1aebd0001094f7087e69decb9413f",
-  "test_blob_sha": "34acc9fdda48eb0043fcfd854a9b993439913697",
+  "test_blob_sha": "f4a16ca5ebc6a7e5222abae311f3bb03165f59bc",
   "audit_code_blob_sha": "8df3249b88f7776128e2fa971916e8df973fb01d",
   "environment": {
     "python": "3.13.5",
@@ -20,7 +20,8 @@
   "tests": {
     "local_passed": 23,
     "local_failed": 0,
-    "exact_head_github_actions": false
+    "exact_head_github_actions": false,
+    "command": "PYTHONPATH=code python -m unittest ace_research_uncertainty.test_r75_coverage -q"
   },
   "execution": {
     "first_final_attempt": "TIMEOUT_INCOMPLETE",
