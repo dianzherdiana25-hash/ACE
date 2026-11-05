@@ -108,3 +108,39 @@ PYTHONPATH=code python -m ace_research_measurement.growth_falsifiers --output /t
 Observed on local R8 staging with verified full E1.5 public aggregate archive: **62/62 PASS, 0 skip, 0 fail** (Python 3.13.5). Source and tests match GitHub Git blob IDs. The entire historical ACE regression and exact-head Actions CI have **not** been performed. No frozen E1.4, main, S5, or other agent's directories were modified.
 
 Next required scientific gates: third-party evaluator-custodied per-case ACE outputs and exposure receipts, pre-registered sealed bank and multiplicity control, compute/evaluator-label matched baseline, and blind replication on truly disjoint mechanisms. `OAIE` and general intelligence growth remain **NOT_ESTABLISHED**.
+
+
+## R8 checkpoint 5 — cross-PR task-level audit of actual ACE search results
+
+This checkpoint audits **real recorded ACE development experiments**, not just new contrived R8 null simulations. The input is the Codex team's *public synthetic* candidate search summary from draft PR #36 (`codex/ace-candidate-search` at exact commit `08da5702828285e0bd4d0f4dd8876f331ac89fe2`), path `code/ace_candidate_search/results/summary.json`, Git blob SHA-1 `069b4ffdf2f0a5a363d81bcec6ddfc4f2a5e098a`. The original summary includes 64 runs (8 researcher-designed tasks × 2 budgets × 4 search modes). It contains per-task holdout aggregates (3 cases/task), **not evaluator-custodied individual-case predictions** or independent mechanism-lineage attestations.
+
+The adapter `candidate_search_audit.py` evaluates a derived, compact 64-run snapshot with strict task/mode/budget completeness, numerical invariants, declared resource ceilings, input provenance and task-paired comparisons. It can additionally load the **original entire JSON** from a separate checkout, verify the exact pinned Git blob hash before parsing, regenerate the snapshot and refuse any discrepancy. Without `--full-source`, the output must be labeled `DERIVED_SNAPSHOT_ONLY`: the source identity recorded inside the snapshot is not by itself a cryptographic verification of the original bytes.
+
+Reproduce from ACE full checkout **plus** a local fetched copy of the pinned Codex PR #36 summary:
+```sh
+PYTHONPATH=code python -m unittest ace_research_measurement.test_candidate_search_audit -v
+PYTHONPATH=code python -m ace_research_measurement.candidate_search_audit --output /tmp/ace-r8-task-audit.json
+PYTHONPATH=code python -m ace_research_measurement.candidate_search_audit \
+  --full-source /path/to/pinned/codex/summary.json \
+  --output /tmp/ace-r8-task-audit-verified.json
+```
+
+
+### Observed recorded task-level results
+
+| Maximum budget | Fixed | Fixed-list | Enumerate | Beam |
+|---|---:|---:|---:|---:|
+| Standard, task solved (all 3 holdout) | 0/8 | 1/8 | 5/8 | 6/8 |
+| Tight, task solved (all 3 holdout) | 0/8 | 1/8 | 0/8 | 0/8 |
+| Standard actual logical work, all eight | 240 | 1,632 | 440,866 | 286,707 |
+| Tight actual logical work, all eight | 240 | 1,632 | 304 | 304 |
+
+Standard beam versus enumeration has **one discordant solved task** (1 win, 0 losses, 7 ties), giving exploratory one-sided task-paired sign **p=0.5**. A visual 6/8 vs 5/8 lead is not statistically established superiority. Beam's standard logical work is ~175.7× the fixed-list control, even though both share the same *maximum* work ceiling: shared ceilings do not mean cost-matched comparisons. Under the tight ceiling beam solves 0/8 versus fixed-list 1/8. Beam does not transfer across budgets as a reliably dominant choice in this public pilot.
+
+`candidate_search_snapshot.json` is an extracted 64-cell diagnostic input, not raw journals. The separate PR #36 includes its own journal verification; **R8 has not independently reproduced all 64 journals**. The original underlying task-generators are human-designed and public; no sealed confirmatory bank is available. The new R8 task-level adapter **cannot** measure novel primitives, independent OOD families, true sample-efficient adaptation, or general intelligence. Treat all nominal p-values as exploratory, uncorrected for multiplicity, and questionable under nonindependence of tasks. No changes to Codex source, main, frozen E1.4, or S5.
+
+### Test status
+
+A separately assembled local R8 adapter prototype with the same paired-task validation logic completed **14/14 tests PASS**, including missing arms, invalid correctness, impossible zero error, over-cap work, false SHA labels and source-format normalization. The exact GitHub-committed adapter has **not yet run on a complete local checkout or exact-head CI**, and its full-blob mode is pending local access to original bytes; do not mislabel the prototype pass as exact-head verification.
+
+Scientific status: `PUBLIC_TASK_ANALYSIS=DESCRIPTIVE`; `INDEPENDENT_VERIFICATION=OPEN`; `OAIE=NOT_ESTABLISHED`.

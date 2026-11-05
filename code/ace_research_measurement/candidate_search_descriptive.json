@@ -1,0 +1,79 @@
+{
+  "schema": "ace.r8.candidate-search-descriptive.v1",
+  "source": {
+    "repo": "dianzherdiana25-hash/ACE",
+    "commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+    "blob": "069b4ffdf2f0a5a363d81bcec6ddfc4f2a5e098a",
+    "path": "code/ace_candidate_search/results/summary.json"
+  },
+  "status": "DERIVED_PUBLIC_SYNTHETIC_TASK_AGGREGATES",
+  "task_count": 8,
+  "holdout_cases_per_task": 3,
+  "arms": {
+    "standard": {
+      "fixed": {
+        "solved": 0,
+        "work": 240
+      },
+      "fixed-list": {
+        "solved": 1,
+        "work": 1632
+      },
+      "enumerate": {
+        "solved": 5,
+        "work": 440866
+      },
+      "beam": {
+        "solved": 6,
+        "work": 286707
+      }
+    },
+    "tight": {
+      "fixed": {
+        "solved": 0,
+        "work": 240
+      },
+      "fixed-list": {
+        "solved": 1,
+        "work": 1632
+      },
+      "enumerate": {
+        "solved": 0,
+        "work": 304
+      },
+      "beam": {
+        "solved": 0,
+        "work": 304
+      }
+    }
+  },
+  "pairwise": {
+    "standard_beam_vs_enumerate": {
+      "wins": 1,
+      "losses": 0,
+      "ties": 7,
+      "nominal_one_sided_sign_p": 0.5
+    },
+    "standard_beam_vs_fixed_list": {
+      "wins": 5,
+      "losses": 0,
+      "ties": 3,
+      "nominal_one_sided_sign_p": 0.03125,
+      "actual_work_ratio": 175.67830882352942
+    },
+    "tight_beam_vs_fixed_list": {
+      "wins": 0,
+      "losses": 1,
+      "ties": 7,
+      "nominal_one_sided_sign_p": 1
+    }
+  },
+  "claim": "NOT_CONFIRMED",
+  "limitations": [
+    "public human-defined tasks",
+    "aggregated per-task holdout, not case-level predictions",
+    "no independent task lineage or evaluator custody",
+    "not cost matched across arms",
+    "nominal exploratory pairwise significance unadjusted for multiple testing"
+  ]
+}
