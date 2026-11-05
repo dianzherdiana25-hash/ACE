@@ -30,6 +30,7 @@ def audit(source: bytes) -> dict:
     check(rec.get('offline_training_labels') == 2160, 'offline cost')
     results = rec['results']
     check(set(results) == set(SPLITS), 'split names')
+    check(len(rec['split_id_hashes']) == len(SPLITS) and len(set(rec['split_id_hashes'].values())) == len(SPLITS), 'split manifest hashes')
     for split in SPLITS:
         bank = results[split]
         check(set(bank) == {'0', '6', '12', '24', 'oracle_ceiling'}, 'cap inventory')
