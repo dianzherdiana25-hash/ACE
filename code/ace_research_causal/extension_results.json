@@ -60,21 +60,21 @@
         },
         "observational_oracle_direction": {
           "ate_x_delta_sq_error": 11.353252,
-          "direction_correct": 1,
+          "direction_correct": 1.0,
           "mse": 3.88073,
           "planning_regret": 0.636325,
           "single_intervention_mse": 3.460105
         },
         "observational_shift_adapt": {
           "ate_x_delta_sq_error": 11.535355,
-          "direction_correct": 1,
+          "direction_correct": 1.0,
           "mse": 3.921825,
           "planning_regret": 0.446466,
           "single_intervention_mse": 3.34069
         },
         "observational_shift_static": {
           "ate_x_delta_sq_error": 23.118793,
-          "direction_correct": 0,
+          "direction_correct": 0.0,
           "mse": 8.245496,
           "planning_regret": 2.243736,
           "single_intervention_mse": 12.189638
@@ -148,21 +148,21 @@
         },
         "observational_oracle_direction": {
           "ate_x_delta_sq_error": 8.10975,
-          "direction_correct": 1,
+          "direction_correct": 1.0,
           "mse": 3.58028,
           "planning_regret": 0.703704,
           "single_intervention_mse": 2.18312
         },
         "observational_shift_adapt": {
           "ate_x_delta_sq_error": 8.630226,
-          "direction_correct": 1,
+          "direction_correct": 1.0,
           "mse": 3.549512,
           "planning_regret": 0.549593,
           "single_intervention_mse": 2.207907
         },
         "observational_shift_static": {
           "ate_x_delta_sq_error": 16.125279,
-          "direction_correct": 0,
+          "direction_correct": 0.0,
           "mse": 4.939258,
           "planning_regret": 1.182013,
           "single_intervention_mse": 4.901077
@@ -236,21 +236,21 @@
         },
         "observational_oracle_direction": {
           "ate_x_delta_sq_error": 0.089678,
-          "direction_correct": 1,
+          "direction_correct": 1.0,
           "mse": 0.140154,
           "planning_regret": 0.004307,
           "single_intervention_mse": 0.043161
         },
         "observational_shift_adapt": {
           "ate_x_delta_sq_error": 0.071949,
-          "direction_correct": 1,
+          "direction_correct": 1.0,
           "mse": 0.148988,
           "planning_regret": 0.004976,
           "single_intervention_mse": 0.04567
         },
         "observational_shift_static": {
           "ate_x_delta_sq_error": 7.490449,
-          "direction_correct": 0,
+          "direction_correct": 0.0,
           "mse": 1.55591,
           "planning_regret": 1.331353,
           "single_intervention_mse": 2.874674
