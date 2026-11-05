@@ -55,6 +55,9 @@ class Meter:
     peak_frontier: int = 0
     calls: int = 0
     exhausted: bool = False
+    metric_heap_pops: int = 0
+    metric_edge_scans: int = 0
+    metric_cache: dict[int, tuple[int, ...]] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -84,6 +87,72 @@ def heuristic(world: World, pos: int, mask: int, target: Optional[int]) -> int:
     return nearest + mst
 
 
+
+def geometric_lower_bound_certificate(world: World) -> bool:
+    """Sufficient guard for original Manhattan-based heuristic admissibility.
+
+    Every edge must cost at least its Manhattan separation; thus any walk
+    costs at least the Manhattan distance between its endpoints. Valid for
+    arbitrary graph connectivity, positive weights, and relaxed gate rules.
+    """
+    return all(c >= xy_distance(world, u, v) for u, v, c in world.weights)
+
+
+def _metric_distances(world: World, origin: int, meter: Meter) -> tuple[int, ...]:
+    """Shortest paths in observable physical graph; relax all locks and shocks.
+
+    Work is accounted exactly as heap pops and neighbor scans. Cache is scoped
+    to a single rollout via Meter; no future shock knowledge enters search.
+    """
+    if origin in meter.metric_cache:
+        return meter.metric_cache[origin]
+    n = world.width * world.height
+    inf = 10**15
+    distances = [inf] * n
+    distances[origin] = 0
+    q = [(0, origin)]
+    while q:
+        d, u = heappop(q)
+        meter.metric_heap_pops += 1
+        if d != distances[u]:
+            continue
+        for v in world.adjacency[u]:
+            meter.metric_edge_scans += 1
+            nd = d + world.cost(u, v)
+            if nd < distances[v]:
+                distances[v] = nd
+                heappush(q, (nd, v))
+    meter.metric_cache[origin] = tuple(distances)
+    return meter.metric_cache[origin]
+
+
+def metric_heuristic(world: World, pos: int, mask: int,
+                     target: Optional[int], meter: Meter) -> int:
+    """Admissible graph-metric lower bound even with cheap nonlocal shortcuts.
+
+    Targeted distance, or nearest-unvisited + graph-metric MST. The relaxed
+    graph ignores all gates and hidden closures, thus cannot overestimate the
+    cost of any physically legal remaining route. The MST lower-bounds the
+    cost of the connected walk visiting every outstanding terminal.
+    """
+    dist = _metric_distances(world, pos, meter)
+    if target is not None:
+        return dist[target]
+    points = [world.keys[i] for i in range(len(world.keys)) if not mask & (1 << i)]
+    points.append(world.goal)
+    nearest = min(dist[p] for p in points)
+    if len(points) == 1:
+        return nearest
+    sources = [_metric_distances(world, p, meter) for p in points]
+    seen = {0}
+    total = 0
+    while len(seen) < len(points):
+        value, nxt = min((sources[i][points[j]], j)
+                         for i in seen for j in range(len(points)) if j not in seen)
+        seen.add(nxt)
+        total += value
+    return nearest + total
+
 def search(world: World, start: tuple[int, int], blocked: frozenset[tuple[int, int]],
            mode: str, meter: Meter, target: Optional[int] = None) -> SearchResult:
     """Find an action route. `target=None` means all keys + final goal.
@@ -91,7 +160,7 @@ def search(world: World, start: tuple[int, int], blocked: frozenset[tuple[int, i
     Targeted search can collect intermediate keys. Search's own only information
     is World minus observed blocked edges, never World.shock.
     """
-    if mode not in {"astar", "greedy", "bfs", "dijkstra"}:
+    if mode not in {"astar", "astar_metric", "greedy", "bfs", "dijkstra"}:
         raise ValueError("unknown algorithm")
     if meter.limit < 0:
         raise ValueError("negative budget")
@@ -104,6 +173,8 @@ def search(world: World, start: tuple[int, int], blocked: frozenset[tuple[int, i
 
     def h(st: tuple[int, int]) -> int:
         meter.heuristic_calls += 1
+        if mode == "astar_metric":
+            return metric_heuristic(world, st[0], st[1], target, meter)
         return heuristic(world, st[0], st[1], target)
 
     if done(start):
@@ -114,7 +185,7 @@ def search(world: World, start: tuple[int, int], blocked: frozenset[tuple[int, i
     if mode == "bfs":
         frontier = deque([(start, 0)])
     else:
-        priority = h(start) if mode in {"astar", "greedy"} else 0
+        priority = h(start) if mode in {"astar", "astar_metric", "greedy"} else 0
         frontier = [(priority, serial, start, 0)]
     expanded_cost: dict[tuple[int, int], int] = {}
     while frontier:
@@ -165,7 +236,7 @@ def search(world: World, start: tuple[int, int], blocked: frozenset[tuple[int, i
                 frontier.append((ns, nd))
             else:
                 serial += 1
-                score = nd if mode == "dijkstra" else (nd + h(ns) if mode == "astar" else h(ns))
+                score = nd if mode == "dijkstra" else (nd + h(ns) if mode in {"astar", "astar_metric"} else h(ns))
                 heappush(frontier, (score, serial, ns, nd))
     return SearchResult(None, None)
 
@@ -197,7 +268,10 @@ def forced_key_order_certificate(world: World) -> bool:
     k = len(world.keys)
     return (0 < k < world.width
             and tuple(range(k)) == (tuple(range(k)) if world.locks is None else world.locks)
-            and all(node % world.width == i for i, node in enumerate(world.keys)))
+            and all(node % world.width == i for i, node in enumerate(world.keys))
+            # A nonlocal edge could skip locked column boundaries while the
+            # World transition checks only its endpoint boundary.
+            and all(xy_distance(world, u, v) == 1 for u, v, _ in world.weights))
 
 
 def structural_route(world: World, state: tuple[int, int],
@@ -230,7 +304,7 @@ def simulate(world: World, method: str, limit: int = 1800) -> dict:
     is constructed; only failed attempted actions expose it. Full-state oracle
     and benchmark generation never pass shock information to search.
     """
-    if method not in {"bfs", "greedy", "astar", "hier_fixed", "hier_replan", "adaptive", "structural"}:
+    if method not in {"bfs", "greedy", "astar", "astar_metric", "dijkstra", "hier_fixed", "hier_replan", "adaptive", "structural", "robust"}:
         raise ValueError("unknown method")
     meter = Meter(limit)
     state = (0, 0)
@@ -255,10 +329,17 @@ def simulate(world: World, method: str, limit: int = 1800) -> dict:
                 if structural_choices and structural_choices[-1] != choice:
                     switches += 1
                 structural_choices.append(choice)
+            elif method == "robust":
+                if geometric_lower_bound_certificate(world):
+                    plan, choice = structural_route(world, state, blocked, meter)
+                    structural_choices.append("geometry_certified:" + choice)
+                else:
+                    plan = search(world, state, blocked, "astar_metric", meter)
+                    structural_choices.append("nonlocal:graph_metric_astar")
             elif method in {"hier_fixed", "hier_replan"} or (method == "adaptive" and switches == 0):
                 plan = hierarchical_route(world, state, blocked, meter)
             else:
-                plan = search(world, state, blocked, method if method in {"bfs", "greedy", "astar"} else "astar", meter)
+                plan = search(world, state, blocked, method if method in {"bfs", "greedy", "astar", "astar_metric", "dijkstra"} else "astar", meter)
             if plan.route is None:
                 terminated = "budget" if meter.exhausted else "no_plan"
                 break
@@ -299,8 +380,12 @@ def simulate(world: World, method: str, limit: int = 1800) -> dict:
                   frontier_peak=meter.peak_frontier, search_calls=meter.calls,
                   budget=limit, collected=state[1].bit_count(),
                   shock_encountered=failures > 0)
-    if method == "structural":
+    if method in {"structural", "robust"}:
         output["strategy_trace"] = structural_choices
+    if method in {"astar_metric", "robust"}:
+        output["metric_edge_scans"] = meter.metric_edge_scans
+        output["metric_heap_pops"] = meter.metric_heap_pops
+        output["metric_sources"] = len(meter.metric_cache)
     return output
 
 

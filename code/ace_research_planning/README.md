@@ -41,3 +41,21 @@ Exact deterministic main-run report digest (canonical JSON with the `sha256` key
 ## Exploratory v2 follow-on (2026-11-05)
 
 `RESEARCH_V2.md` documents the unchanged v1 receipt alongside a structural-key-order certificate, new `structural` policy, separately chosen neutral edge closures, a separately implemented finite-state Dijkstra reference, 3,024 synthetic runs at multiple budgets, 8 new independent focused tests, and negative low-budget outcomes. Run `PYTHONPATH=code python -m ace_research_planning.study_v2 --output /tmp/r6_v2.json --n 24`. No independent blinded validation, no autonomous learning, and no scientific GO.
+
+
+## R6-v3 public mechanism-shift falsification (exploratory / HOLD)
+
+`study_v3.py` compares the previous grid-only methods against cheap nonlocal
+shortcuts that invalidate the Manhattan admissibility assumption. It adds
+`astar_metric` (graph-metric MST heuristic with separately accounted physical
+edge scans and heap pops), a manually specified geometry-certified `robust`
+selector, and a corrected forced-key-order certificate which rejects bypass
+portals. **R6 v3 is not learned reasoning or OAIE.** Original v1/v2 results and
+programs remain reproducible. New v3 canonical digest and negative timing
+evidence are in `RESEARCH_V3.md` and `results_v3_summary.json`.
+
+```sh
+PYTHONPATH=code python -m unittest ace_research_planning.test_planning ace_research_planning.test_study_v2 ace_research_planning.test_study_v3 -v
+PYTHONPATH=code python -m ace_research_planning.study_v3 --output /tmp/ace_r6_v3.json --n 24
+PYTHONPATH=code python -m ace_research_planning.profile_v3 --n 24 --repeats 5
+```
