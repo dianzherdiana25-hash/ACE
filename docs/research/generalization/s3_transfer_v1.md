@@ -1,0 +1,15 @@
+# S3 public synthetic cross-topology transfer v1
+
+Base main SHA: 5b0059b85055404a46adcdef305de81f5257486c. Public synthetic DEVELOPMENT only.
+
+**Falsifiable hypothesis (specified before viewing results):** Requiring at most 3/32 errors in both chain training and star validation rejects the spurious marker and improves branch-test error relative to a training-only empirical-risk baseline at the same label budget. **Accept only if** robust test error is at least 10/128 lower than baseline with no increase in false acceptance; otherwise reject.
+
+Four fixed candidate programs: parity of five node bits (invariant), marker correlated with labels (spurious), parity of topology edge interactions (nuisance), constant zero. Chain training seed 3157, star validation seed 3158, branch test seed 3159. Marker fidelity .95 in train and validation, .10 in test. Training-only baseline chooses minimum train errors. Robust selector accepts candidates with <=3 errors in BOTH train and validation, choosing lowest total errors. Both have 64 selection labels available; baseline deliberately ignores validation. Fixed candidate order resolves ties. The branch test is consulted only after decisions. Negative control flips all validation labels; counterexample must be reachable in test. No external or E1.4 data.
+
+Metrics: test mistakes, false acceptance (accepted candidate with >12/128 test errors), abstention, regret against invariant oracle, candidate scoring and CPU. Oracle is for post-selection evaluation only. 64 development labels, 128 test labels reporting only, 16 distinct candidate/split scores (train, validation, negative control, test). CPU uses process_time and varies by environment. No holdout data influences candidate selection by code structure; no independent hidden-holdout audit.
+
+**Observed, single seed:** Baseline and robust both chose invariant and both made 0/128 errors; preregistered improvement criterion FAILED. Spurious had 0/32 train errors, 3/32 validation errors, and 116/128 test errors. Thus spurious passed the robustness eligibility threshold; robust selection succeeded only because invariant had lower total error. Flipped-validation negative control admitted zero candidates. Reachable spurious counterexample at test index 0. Robust false acceptance=0, abstention=0, regret=0; these values do NOT establish OOD generalization.
+
+Limitations: one seed, tiny hand-designed grammar, deterministic public benchmark, no confidence intervals, no truly disjoint semantic grammars, no independent confirmatory evaluation. Next falsifiable hypothesis: intervention-based marker exclusion using >=3 independently shifted source environments will reject spurious candidates under a fixed 64-label and 16-score budget, measured across 20+ new public seeds and generator families.
+
+Reproduce with python3 code/ace_research_generalization/experiment.py from a clean checkout. Compare output with evidence/research/generalization/s3_transfer_v1.json, ignoring nondeterministic cpu_seconds. No CI changes.
