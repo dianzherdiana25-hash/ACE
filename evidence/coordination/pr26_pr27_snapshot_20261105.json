@@ -1,0 +1,40 @@
+{
+  "repository": "dianzherdiana25-hash/ACE",
+  "pull_requests": [
+    {
+      "number": 26,
+      "title": "ACE E1.6: real bounded source mutation, durable oracle escrow, full-checkout CI gates",
+      "head": "research/e16-source-evolution-and-escrow",
+      "base": "research/e15-autonomous-research-loop",
+      "head_sha": "aba67d6c7572550b84ff464eba850cf2b6fdccc7",
+      "files": [
+        ".github/workflows/ace-e16-pr-verification.yml",
+        "code/ace_loop/cli.py",
+        "code/ace_loop/mission.py",
+        "code/ace_loop/portfolio.py",
+        "code/ace_loop/receipt_escrow.py",
+        "code/ace_loop/source_evolution.py",
+        "code/ace_loop/test_mission.py",
+        "code/ace_loop/test_portfolio.py",
+        "code/ace_loop/test_receipt_escrow.py",
+        "code/ace_loop/test_source_evolution.py",
+        "docs/ACE_E16_SOURCE_EVOLUTION_AND_ESCROW_DEV.md",
+        "evidence/e16/E16_LOCAL_ENGINEERING_REPORT_v0.json",
+        "evidence/e16/E16_MISSION_INTEGRATION_STATUS_v1.json"
+      ]
+    },
+    {
+      "number": 27,
+      "title": "ACE E1.5: bounded source evolution with staged code and crash-safe evidence",
+      "head": "research/e15-source-evolution",
+      "base": "research/e15-autonomous-research-loop",
+      "head_sha": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+      "files": [
+        ".github/workflows/ace-e15-source-evolution.yml",
+        "code/ace_loop/source_evolution.py",
+        "code/ace_loop/test_source_evolution.py",
+        "docs/ACE_E15_SOURCE_EVOLUTION_DEV.md"
+      ]
+    }
+  ]
+}
