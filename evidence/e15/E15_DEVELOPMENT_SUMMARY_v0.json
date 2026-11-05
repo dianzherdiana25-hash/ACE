@@ -1,47 +1,35 @@
 {
-  "controls": {
-    "frozen_bank_edit": "NOT_PERFORMED",
-    "main_merge": "NOT_PERFORMED",
-    "tod_edit": "NOT_PERFORMED"
-  },
-  "created_date": "2026-11-05",
-  "files_sha256": {
-    "WORK/e15_demo/final-infamily.json": "cfc9a646247cc371e9dcdc7470576ef572b8d076869c4908d7135f75b8083ff7",
-    "WORK/e15_demo/final-mixed.json": "bf940e0237c921e03369a9a96294dd1958db8cae3b4991dd78a80710f9b51737",
-    "WORK/e15_demo/portfolio-replay.json": "b477331552567b6a87ab23e05b14b69ae192252dc2c5ddc8748b58931ef70c32",
-    "WORK/e15_demo/portfolio.json": "b477331552567b6a87ab23e05b14b69ae192252dc2c5ddc8748b58931ef70c32",
-    "WORK/e15_demo/test-e15.log": "7688b853a780314a0ac974290bcb7db96c1513bd63ce322e84077c2e3b3d2129",
-    "WORK/e15_demo/test-legacy.log": "9fa4b52cb4bd5cc66c8c6635f55106788e146491a053adc2e52060c3bb12b712",
-    "WORK/e15_final_infamily/events.jsonl": "02d653d307f295e7adcae61715d7df2697d1fa2319229e726c41d43fb809de1f",
-    "WORK/e15_final_mixed/events.jsonl": "c9f4a34026392ee7f8a4e5387ae1c6802618b6a01f3de387784075a0f20b691f",
-    "WORK/e15_portfolio/allocation.json": "34cc12d2e3fa8165f7be9cdb9abdc39c5c387e17ddda0d4f3d6ae3116b75bb25",
-    "WORK/e15_portfolio/in_family/events.jsonl": "02d653d307f295e7adcae61715d7df2697d1fa2319229e726c41d43fb809de1f",
-    "WORK/e15_portfolio/mixed_grammar/events.jsonl": "e0ee31a83181143e9bf5f8904bfe67a54508a2bef35eafcfb252cfd6522529c4",
+  "date": "2026-11-05",
+  "file_sha256": {
+    "WORK/e15_demo/final-infamily-v2.json": "c262add5880a3e008c3def1966321e7bac8f8b6f1023fd745d043c51adcba996",
+    "WORK/e15_demo/final-mixed-v2.json": "0104065e6adaaf3e6639172f8225cf20df906b9b937819e691c7e3b6b04ae130",
+    "WORK/e15_demo/portfolio-replay-v2.json": "d6ca826de963acf0207bac92d286ef3e4ebbc8f0e30904b33828e2981bab9c33",
+    "WORK/e15_demo/portfolio-v2.json": "d6ca826de963acf0207bac92d286ef3e4ebbc8f0e30904b33828e2981bab9c33",
+    "WORK/e15_demo/test-e15.log": "6650f1cb2dc3e62eede14a556b8e4c36c23528fb620ad55bcb8aeede34796503",
+    "WORK/e15_demo/test-legacy.log": "2421bb66638ca56bb5ed7d3220ba30e71cc13d783287fa5919a0cf22eee78d0a",
+    "WORK/e15_final_infamily_v2/events.jsonl": "9d319da8ccaf23be5149ea84bccefe85a3fac3a316844f765d860e87b2b25c88",
+    "WORK/e15_final_mixed_v2/events.jsonl": "b29775ded4d789f9fe79ffdd013e1bbc340ff4336395e0c408b7dc4ebda4f102",
+    "WORK/e15_portfolio_v2/allocation.json": "34cc12d2e3fa8165f7be9cdb9abdc39c5c387e17ddda0d4f3d6ae3116b75bb25",
+    "WORK/e15_portfolio_v2/in_family/events.jsonl": "9d319da8ccaf23be5149ea84bccefe85a3fac3a316844f765d860e87b2b25c88",
+    "WORK/e15_portfolio_v2/mixed_grammar/events.jsonl": "e0ee31a83181143e9bf5f8904bfe67a54508a2bef35eafcfb252cfd6522529c4",
     "code/ace_loop/__init__.py": "27fe6c8b9d7c6c8cbf0e35ce49b69642162ab9a3c4e90cceec0fe7440e667b81",
     "code/ace_loop/cli.py": "729ce64dab48a1576c811207a8b0e32bda216c13204677dcf9a7d6f6cc77d3d5",
-    "code/ace_loop/engine.py": "666bddb5dd9a66447a04de2850507bfb8648f42a1f915893a68ffcc96acea6c3",
+    "code/ace_loop/engine.py": "4d110dd3902d07575b914ef964622caa3a123281f977cec1d39d1cbb4d9667d0",
     "code/ace_loop/operators.py": "52df70792f53ad40ceb7fc2a542f8d2c4615460a0a948cd41411de5972e20356",
     "code/ace_loop/portfolio.py": "7c0f7aa1222513a40214ada1e22a0187b2c0e99784edc16a161aea33dfcad8dc",
-    "code/ace_loop/test_engine.py": "f6c698b825c2b3d79c55558c0e7ec997e20b30940caf55d9e460a1cfd60fd389",
+    "code/ace_loop/test_engine.py": "13e4ffa931eaf5b9e3776b58eb73bfba30e8728be11b5f3e8dd14af5404588b2",
     "code/ace_loop/test_portfolio.py": "535910908a00f063aca25a0e6c47cf8daf8f142a9a1e47f0e205cb3719fec754",
-    "docs/ACE_E15_AUTONOMOUS_RESEARCH_HARNESS_DEV.md": "0304fd68e0242f473f6916409476dd728925d9d6605194a64325446ec63d3b04"
+    "docs/ACE_E15_AUTONOMOUS_RESEARCH_HARNESS_DEV.md": "54150a4c834507d8aa7052cef555cd75e761899776f577d898ce1e1ec1ca18da"
   },
   "limitations": [
-    "public author-visible bank",
-    "no clean exact-head regression",
-    "no native Bubblewrap",
-    "no arbitrary code self-modification",
-    "no autonomous background operation"
+    "no independent new bank",
+    "no clean full repo regression",
+    "no external action escrow",
+    "no autonomous code mutation or OAIE",
+    "no native Bubblewrap acceptance"
   ],
-  "local_tests": {
-    "e15": 32,
-    "related_e14": 82,
-    "status": "PASS in two bounded groups",
-    "sum": 114
-  },
-  "project": "ACE E1.5 PUBLIC ENGINEERING DEVELOPMENT",
   "results": {
-    "WORK/e15_demo/final-infamily.json": {
+    "WORK/e15_demo/final-infamily-v2.json": {
       "baseline_validation": {
         "abstained": 12,
         "accepted_correct": 0,
@@ -51,6 +39,7 @@
         "utility_units": -36,
         "worlds": 12
       },
+      "candidate_policy_promoted": false,
       "champion": {
         "label_cap": 3,
         "min_evidence": 1,
@@ -65,6 +54,7 @@
         "utility_units": 6,
         "worlds": 12
       },
+      "deployment_decision": "REVERT_TYPED_POLICY_TO_BASELINE",
       "generalization_gate": "NO_VALIDATED_GAIN",
       "holdout": {
         "abstained": 17,
@@ -87,11 +77,16 @@
       "holdout_delta_utility": -13,
       "holdout_recorded_once_per_policy_and_reaudited_on_replay": true,
       "note": "finite policy optimization; no autonomous code/architecture invention",
+      "safe_default_policy": {
+        "label_cap": 1,
+        "min_evidence": 1,
+        "selector": "fixed"
+      },
       "scientific_decision": "NOT_ASSESSED",
       "status": "COMPLETE_PUBLIC_DEVELOPMENT",
       "trials": 12
     },
-    "WORK/e15_demo/final-mixed.json": {
+    "WORK/e15_demo/final-mixed-v2.json": {
       "baseline_validation": {
         "abstained": 12,
         "accepted_correct": 0,
@@ -101,6 +96,7 @@
         "utility_units": -36,
         "worlds": 12
       },
+      "candidate_policy_promoted": false,
       "champion": {
         "label_cap": 1,
         "min_evidence": 1,
@@ -115,6 +111,7 @@
         "utility_units": -36,
         "worlds": 12
       },
+      "deployment_decision": "REVERT_TYPED_POLICY_TO_BASELINE",
       "generalization_gate": "NO_VALIDATED_GAIN",
       "holdout": {
         "abstained": 18,
@@ -137,11 +134,16 @@
       "holdout_delta_utility": 0,
       "holdout_recorded_once_per_policy_and_reaudited_on_replay": true,
       "note": "finite policy optimization; no autonomous code/architecture invention",
+      "safe_default_policy": {
+        "label_cap": 1,
+        "min_evidence": 1,
+        "selector": "fixed"
+      },
       "scientific_decision": "NOT_ASSESSED",
       "status": "COMPLETE_PUBLIC_DEVELOPMENT",
       "trials": 12
     },
-    "WORK/e15_demo/portfolio-replay.json": {
+    "WORK/e15_demo/portfolio-replay-v2.json": {
       "allocation": {
         "gains": {
           "in_family": 42,
@@ -168,6 +170,7 @@
           "utility_units": -36,
           "worlds": 12
         },
+        "candidate_policy_promoted": false,
         "champion": {
           "label_cap": 3,
           "min_evidence": 1,
@@ -182,6 +185,7 @@
           "utility_units": 6,
           "worlds": 12
         },
+        "deployment_decision": "REVERT_TYPED_POLICY_TO_BASELINE",
         "generalization_gate": "NO_VALIDATED_GAIN",
         "holdout": {
           "abstained": 17,
@@ -204,6 +208,11 @@
         "holdout_delta_utility": -13,
         "holdout_recorded_once_per_policy_and_reaudited_on_replay": true,
         "note": "finite policy optimization; no autonomous code/architecture invention",
+        "safe_default_policy": {
+          "label_cap": 1,
+          "min_evidence": 1,
+          "selector": "fixed"
+        },
         "scientific_decision": "NOT_ASSESSED",
         "status": "COMPLETE_PUBLIC_DEVELOPMENT",
         "trials": 12
@@ -212,7 +221,7 @@
         "mixed_grammar"
       ]
     },
-    "WORK/e15_demo/portfolio.json": {
+    "WORK/e15_demo/portfolio-v2.json": {
       "allocation": {
         "gains": {
           "in_family": 42,
@@ -239,6 +248,7 @@
           "utility_units": -36,
           "worlds": 12
         },
+        "candidate_policy_promoted": false,
         "champion": {
           "label_cap": 3,
           "min_evidence": 1,
@@ -253,6 +263,7 @@
           "utility_units": 6,
           "worlds": 12
         },
+        "deployment_decision": "REVERT_TYPED_POLICY_TO_BASELINE",
         "generalization_gate": "NO_VALIDATED_GAIN",
         "holdout": {
           "abstained": 17,
@@ -275,6 +286,11 @@
         "holdout_delta_utility": -13,
         "holdout_recorded_once_per_policy_and_reaudited_on_replay": true,
         "note": "finite policy optimization; no autonomous code/architecture invention",
+        "safe_default_policy": {
+          "label_cap": 1,
+          "min_evidence": 1,
+          "selector": "fixed"
+        },
         "scientific_decision": "NOT_ASSESSED",
         "status": "COMPLETE_PUBLIC_DEVELOPMENT",
         "trials": 12
@@ -284,7 +300,10 @@
       ]
     }
   },
-  "scientific_decision": "NOT_ASSESSED",
-  "scope": "finite policy search, no real paid oracle",
-  "version": 1
+  "source_count": 8,
+  "status": "PUBLIC_ENGINEERING_NOT_SCIENTIFIC_ACCEPTANCE",
+  "test_e15": 32,
+  "test_prior_components": 82,
+  "total_tests_passed": 114,
+  "version": 2
 }

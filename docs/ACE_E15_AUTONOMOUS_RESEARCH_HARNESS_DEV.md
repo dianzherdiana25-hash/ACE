@@ -28,7 +28,7 @@ PYTHONPATH=code:. python3 -m ace_loop.cli portfolio --root WORK/e15-portfolio --
 | In-family | -36 (0/12 correct) | +6 (3/12 correct) | -54 (0/18 correct) | -67 (1/18 correct) | `NO_VALIDATED_GAIN` on heldout; do not promote broadly |
 | Mixed with unseen operator types | -36 | -36 (no safe adoption) | -54 | -54 | No improvement; stop/reallocate |
 
-The 12-hypothesis search makes **no claim of invented operator syntax or automatic architecture revision**. The in-family selected policy has worse holdout utility (-13) despite improved validation (+42), a **negative generalization finding**. In the portfolio pilot the validation gain was +42 for in-family and 0 for mixed; the controller selected the in-family track and preserved the mixed checkpoint unchanged. Two back-to-back portfolio invocations reproduced identical JSON results and no additional events.
+The 12-hypothesis search makes **no claim of invented operator syntax or automatic architecture revision**. The in-family selected policy has worse holdout utility (-13) despite improved validation (+42), a **negative generalization finding**. The terminal gate sets `candidate_policy_promoted=false` and `deployment_decision=REVERT_TYPED_POLICY_TO_BASELINE`; this is a policy-state decision, not a claim that any live service or source code was deployed or rolled back. In the portfolio pilot the validation gain was +42 for in-family and 0 for mixed; the controller selected the in-family track and preserved the mixed checkpoint unchanged. Two back-to-back portfolio invocations reproduced identical JSON results and no additional events.
 
 ## Tests and known limitations
 

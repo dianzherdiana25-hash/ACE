@@ -95,6 +95,8 @@ class RunTests(unittest.TestCase):
         self.assertEqual(r['status'],'COMPLETE_PUBLIC_DEVELOPMENT')
         self.assertEqual(r['scientific_decision'],'NOT_ASSESSED')
         self.assertEqual(r['holdout']['worlds'],5)
+        self.assertFalse(r['candidate_policy_promoted'])
+        self.assertEqual(r['safe_default_policy'],Policy('fixed',1,1).json())
         self.assertEqual(sum(x['kind']=='completed' for x in e.ledger.events),1)
 
     def test_repeat_idempotent(self):

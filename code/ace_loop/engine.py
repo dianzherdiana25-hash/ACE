@@ -247,6 +247,10 @@ class ResearchEngine:
                 'holdout_baseline':baseline_test,
                 'holdout':selected_test,
                 'holdout_delta_utility':delta,
+                'candidate_policy_promoted':False,
+                'deployment_decision':('REVERT_TYPED_POLICY_TO_BASELINE' if delta<=0 else
+                                      'HOLD_PENDING_INDEPENDENT_CONFIRMATION'),
+                'safe_default_policy':Policy('fixed',1,1).json(),
                 'holdout_recorded_once_per_policy_and_reaudited_on_replay':True,
                 'note':'finite policy optimization; no autonomous code/architecture invention'}
 
