@@ -332,6 +332,5 @@ def main():
     args.output.write_text(json.dumps(result,indent=2,sort_keys=True)+'\n',encoding='utf-8')
     print(f'Finished: {args.worlds} worlds/cohort -> {args.output}')
 
-
 if __name__ == '__main__':
     main()
