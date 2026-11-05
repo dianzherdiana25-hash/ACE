@@ -86,5 +86,22 @@
     "naive_false_progress": 257,
     "repetitions": 512,
     "claim_gate": "NOT_CONFIRMED"
+  },
+  "checkpoint_4": {
+    "source_archive_git_blob_sha1": "2561d8ee47f84a85388cbd4c7de7737f1266342b",
+    "source_sha": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+    "e15_archive_executed_and_verified": true,
+    "local_tests": {
+      "passed": 62,
+      "skipped": 0,
+      "failed": 0
+    },
+    "null_screen": {
+      "runs": 512,
+      "known_true_effect": 0,
+      "naive_false_positive_count": 42,
+      "strict_diagnostic_false_positive_count": 9
+    },
+    "claim": "PUBLIC_DIAGNOSTIC_ONLY_NOT_CONFIRMED"
   }
 }

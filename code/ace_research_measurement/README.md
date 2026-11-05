@@ -87,3 +87,24 @@ Negative controls include renamed generator reuse, same mechanism under new gene
 Reproduction: `PYTHONPATH=code python -m unittest ace_research_measurement.test_measurement ace_research_measurement.test_e15_audit ace_research_measurement.test_selection_bias ace_research_measurement.test_lineage -v`.
 
 Actual R8-only local staging after this change: **45 tests, 44 PASS, 1 SKIP** (pinned full E1.5 archive unavailable). The published selection simulation JSON is independently replay-checked by a unit test. The archive readback was verified through the GitHub connector, but the pinned on-disk archive test remains open, and no full-checkout exact-head CI run is claimed.
+
+
+## R8 checkpoint 4 — family-cluster growth screen and pinned E1.5 audit
+
+The previously skipped E1.5 pin-verification test **now passes locally**. The exact source `evidence/e15/E15_DEVELOPMENT_SUMMARY_v0.json` was obtained through the authenticated GitHub connector from fixed commit `965640786cbf2f8adcd89eb1d980945f78c2da77`, reconstructed byte-identically, and reverified as Git blob SHA-1 `2561d8ee47f84a85388cbd4c7de7737f1266342b` before executing `e15_audit.py`. Result in `results_e15_verified.json`. This is **public development archive** evidence, not a sealed holdout or fresh ACE agent run.
+
+`growth_gate.py` adds a fail-closed *diagnostic* screen requiring a sufficient number of task families, distinct evaluator-claimed mechanisms, disjoint lineage, paired baseline/candidate outcomes, sufficient novel and compositional families, explicit costs, no extra candidate operations/labels per case, and no material family regression. An exact one-sided family sign-flip nominal p-value is calculated (up to 16 families). This assumes independent, symmetric family effects; the hashes do not establish this. The public plan is not preregistered or sealed. Even a positive outcome remains `PASS_PUBLIC_SCREEN_ONLY` with `scientific_claim=NOT_CONFIRMED`.
+
+Under the **known-zero-effect** synthetic falsifier (`growth_falsifiers.py`), 512 seeded trials with 8 families and 12 cases per family yielded 42/512 (8.20%) naive +10 percentage-point micro-score passes versus 9/512 (1.76%) stricter family-screen passes. The stricter screen reduces, but does **not eliminate**, false positives under *this particular null*. These are *observed simulation frequencies*, not independently calibrated Type-I error across adaptive trials or distribution shift. Retain negative result; see `results_growth_null.json`.
+
+### Reproduce with Python standard library
+
+```sh
+PYTHONPATH=code python -m unittest ace_research_measurement.test_measurement ace_research_measurement.test_e15_audit ace_research_measurement.test_selection_bias ace_research_measurement.test_lineage ace_research_measurement.test_growth_gate ace_research_measurement.test_growth_falsifiers -v
+PYTHONPATH=code python -m ace_research_measurement.e15_audit --output /tmp/ace-r8-e15-audit.json
+PYTHONPATH=code python -m ace_research_measurement.growth_falsifiers --output /tmp/ace-r8-growth-null.json
+```
+
+Observed on local R8 staging with verified full E1.5 public aggregate archive: **62/62 PASS, 0 skip, 0 fail** (Python 3.13.5). Source and tests match GitHub Git blob IDs. The entire historical ACE regression and exact-head Actions CI have **not** been performed. No frozen E1.4, main, S5, or other agent's directories were modified.
+
+Next required scientific gates: third-party evaluator-custodied per-case ACE outputs and exposure receipts, pre-registered sealed bank and multiplicity control, compute/evaluator-label matched baseline, and blind replication on truly disjoint mechanisms. `OAIE` and general intelligence growth remain **NOT_ESTABLISHED**.
