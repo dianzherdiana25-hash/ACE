@@ -20,7 +20,7 @@ Python 3.10+ and POSIX (`flock`, directory fsync); stdlib only, no service or AP
 From the repository root:
 
 ```sh
-PYTHONPATH=code:. python -m unittest ace_candidate_search.test_search ace_loop.test_source_evolution ace_loop.test_engine ace_loop.test_portfolio -v
+PYTHONPATH=code:. python -m unittest ace_candidate_search.test_search ace_candidate_search.test_verify_results ace_loop.test_source_evolution ace_loop.test_engine ace_loop.test_portfolio -v
 PYTHONPATH=code python -m ace_candidate_search.benchmark --output /tmp/ace-search-new-run
 PYTHONPATH=code python -m ace_candidate_search.verify_results
 ```
@@ -181,3 +181,29 @@ deployment, merge, or OAIE claim is made.
 
 `ENGINEERING_GATE = PASS` for this tested bounded module.
 `RESEARCH_HYPOTHESIS = NOT_ASSESSED`.
+
+
+## Follow-up: bind summary claims to receipts
+
+A follow-up review of draft PR #36 reproduced a verifier gap: changing only the
+summary's search cost, frozen AST, and `candidate_promoted=false` to integer `0`
+was accepted, even though those summary claims disagreed with the valid journals.
+The original implementation checked journal semantics fully but compared only
+selected summary fields and used Python equality for the final result.
+
+The verifier now binds the search-stop receipt, entire freeze receipt, entire
+final result, chain head and journal digest using canonical bytes. This also
+rejects boolean/integer aliases inside nested summary objects. Missing/extra
+record fields and malformed, negative or non-finite timing values fail visibly.
+Timing is an external measurement: valid timing values are checked structurally,
+without claiming historical accuracy or cryptographic attestation.
+
+Ten focused adversarial regression tests cover this gap and the valid
+no-candidate case. `results/followup-tests.log` records the combined **78-test**
+acceptance run (32 module tests + 46 existing tests), and
+`results/followup-verification.log` records replay of all **64 archived journals**.
+The before-fix reproduction is preserved in `results/followup-reproduction.log`.
+Original benchmark summaries, compressed receipts, manifests and initial test
+logs remain unchanged from commit `a0bbe12bbb076004e98ab87f5468ace09113cde5`.
+Search/interpreter behavior and the benchmark results above are unchanged; no
+benchmark tuning or additional holdout search was performed for this fix.

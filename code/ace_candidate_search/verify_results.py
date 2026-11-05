@@ -5,10 +5,49 @@ import argparse
 import gzip
 import hashlib
 import json
+import math
 import tempfile
 from .benchmark import TASKS, bank
 from .journal import _read, events
 from .model import Grammar, Limits, IntegrityError, canonical, digest
+
+
+
+def _verify_record(record: dict, rows: list[dict], content: bytes) -> None:
+    """Bind every derived summary field to the already-verified receipt.
+
+    Timing is measured outside the deterministic journal: only its shape and
+    finite nonnegative values can be checked, not its historical accuracy.
+    """
+    fields = {'budget', 'task', 'mode', 'result', 'search', 'timing',
+              'chain_head', 'frozen_candidate', 'journal_sha256'}
+    if type(record) is not dict or set(record) != fields:
+        raise IntegrityError('summary record schema mismatch')
+    bound = {
+        'result': rows[-1]['payload'],
+        'search': next(r['payload'] for r in rows if r['kind'] == 'search_stop'),
+        'frozen_candidate': next((r['payload'] for r in rows if r['kind'] == 'freeze'), None),
+        'chain_head': rows[-1]['sha256'],
+        'journal_sha256': hashlib.sha256(content).hexdigest(),
+    }
+    for field, expected in bound.items():
+        # Python equality aliases False/0 and True/1, including in nested dicts.
+        try:
+            matches = canonical(record[field]) == canonical(expected)
+        except (ValueError, TypeError) as exc:
+            raise IntegrityError('invalid summary field: ' + field) from exc
+        if not matches:
+            raise IntegrityError('summary receipt mismatch: ' + field)
+    timing = record['timing']
+    if type(timing) is not dict or set(timing) != {'cpu_seconds', 'wall_seconds'}:
+        raise IntegrityError('summary timing schema mismatch')
+    for value in timing.values():
+        try:
+            valid = type(value) in (int, float) and value >= 0 and math.isfinite(value)
+        except OverflowError:
+            valid = False
+        if not valid:
+            raise IntegrityError('invalid summary timing')
 
 
 def verify(root: Path) -> int:
@@ -53,10 +92,7 @@ def verify(root: Path) -> int:
                 actual = [(r['kind'],r['payload']) for r in rows]
                 if canonical(expected) != canonical(actual):
                     raise IntegrityError('archived semantic replay mismatch: '+name)
-                record = records[name]
-                if (rows[-1]['payload'] != record['result'] or rows[-1]['sha256'] != record['chain_head'] or
-                        hashlib.sha256(receipt.read_bytes()).hexdigest() != record['journal_sha256']):
-                    raise IntegrityError('summary receipt mismatch')
+                _verify_record(records[name], rows, receipt.read_bytes())
         if seen != expected_paths:
             raise IntegrityError('missing receipts')
     return len(seen)
