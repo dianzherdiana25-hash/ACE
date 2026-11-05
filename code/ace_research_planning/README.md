@@ -37,3 +37,7 @@ PYTHONPATH=code python -m ace_research_planning.benchmark --output /tmp/r6.json 
 **Design limitations:** Researcher-designed graph generator, heuristics and surprise selection; no learned skill induction or natural-language compositional reasoning; no stochastic action model; OOD family chosen in advance but openly inspectable; shock selection favors the fixed hierarchical trajectory; per-state expansions not equal FLOPs; optimistic replanning under hidden closure can incur wasted moves; no fully independent reviewer or CI verification. Some designs guarantee solvability and impose artificial key ordering; these are not evidence of open-ended adaptation.
 
 Exact deterministic main-run report digest (canonical JSON with the `sha256` key omitted before digest): `d13e42e05f2385075218d9dab9f659c3425898381fd61cb93bd1143f96cc909f`.
+
+## Exploratory v2 follow-on (2026-11-05)
+
+`RESEARCH_V2.md` documents the unchanged v1 receipt alongside a structural-key-order certificate, new `structural` policy, separately chosen neutral edge closures, a separately implemented finite-state Dijkstra reference, 3,024 synthetic runs at multiple budgets, 8 new independent focused tests, and negative low-budget outcomes. Run `PYTHONPATH=code python -m ace_research_planning.study_v2 --output /tmp/r6_v2.json --n 24`. No independent blinded validation, no autonomous learning, and no scientific GO.

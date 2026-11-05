@@ -187,6 +187,42 @@ def hierarchical_route(world: World, state: tuple[int, int],
     return SearchResult(None, None)
 
 
+def forced_key_order_certificate(world: World) -> bool:
+    """Sufficient (not necessary) structural certificate for ordered subgoals.
+
+    Every key i is in column i and boundary i is gated by key i.
+    Starting at column zero, key j cannot be reached before keys < j.
+    Does not claim that a hierarchical policy is optimal for arbitrary graphs.
+    """
+    k = len(world.keys)
+    return (0 < k < world.width
+            and tuple(range(k)) == (tuple(range(k)) if world.locks is None else world.locks)
+            and all(node % world.width == i for i, node in enumerate(world.keys)))
+
+
+def structural_route(world: World, state: tuple[int, int],
+                     blocked: frozenset[tuple[int, int]], meter: Meter) -> tuple[SearchResult, str]:
+    """Use forced-dependency structure, otherwise guard expensive global A*.
+
+    This is a fixed researcher-written policy, not a learned reasoning system.
+    The gate is conservative, keeping a feasible hierarchical search available
+    under small caps. The threshold is set from a public state-space bound,
+    not from test or OOD results.
+    """
+    if forced_key_order_certificate(world):
+        missing = next((i for i in range(len(world.keys))
+                        if not state[1] & (1 << i)), None)
+        target = world.goal if missing is None else world.keys[missing]
+        return search(world, state, blocked, "astar", meter, target), "certified_subgoal"
+    remaining = meter.limit - meter.expanded
+    upper_states = world.width * world.height * (1 << len(world.keys))
+    # Deterministic resource rule. Never attempt costly full-state A* if the
+    # remaining budget is small relative to the finite state space.
+    if remaining >= 2 * upper_states:
+        return search(world, state, blocked, "astar", meter), "global_astar"
+    return hierarchical_route(world, state, blocked, meter), "hierarchical_fallback"
+
+
 def simulate(world: World, method: str, limit: int = 1800) -> dict:
     """Single environment rollout with a TOTAL per-agent search expansion cap.
 
@@ -194,7 +230,7 @@ def simulate(world: World, method: str, limit: int = 1800) -> dict:
     is constructed; only failed attempted actions expose it. Full-state oracle
     and benchmark generation never pass shock information to search.
     """
-    if method not in {"bfs", "greedy", "astar", "hier_fixed", "hier_replan", "adaptive"}:
+    if method not in {"bfs", "greedy", "astar", "hier_fixed", "hier_replan", "adaptive", "structural"}:
         raise ValueError("unknown method")
     meter = Meter(limit)
     state = (0, 0)
@@ -206,6 +242,7 @@ def simulate(world: World, method: str, limit: int = 1800) -> dict:
     pending: list[int] = []
     actions = failures = replans = switches = 0
     paid_cost = 0
+    structural_choices: list[str] = []
     terminated = "step_cap"
     for _ in range(4 * world.width * world.height * (len(world.keys) + 1)):
         if state == (world.goal, world.all_keys):
@@ -213,7 +250,12 @@ def simulate(world: World, method: str, limit: int = 1800) -> dict:
             break
         if not pending:
             blocked = frozenset(revealed)
-            if method in {"hier_fixed", "hier_replan"} or (method == "adaptive" and switches == 0):
+            if method == "structural":
+                plan, choice = structural_route(world, state, blocked, meter)
+                if structural_choices and structural_choices[-1] != choice:
+                    switches += 1
+                structural_choices.append(choice)
+            elif method in {"hier_fixed", "hier_replan"} or (method == "adaptive" and switches == 0):
                 plan = hierarchical_route(world, state, blocked, meter)
             else:
                 plan = search(world, state, blocked, method if method in {"bfs", "greedy", "astar"} else "astar", meter)
@@ -251,12 +293,15 @@ def simulate(world: World, method: str, limit: int = 1800) -> dict:
     else:
         if state == (world.goal, world.all_keys):
             terminated = "success"
-    return dict(status=terminated, success=terminated == "success", cost=paid_cost,
-                actions=actions, failed_actions=failures, replans=replans, switches=switches,
-                expanded=meter.expanded, heuristics=meter.heuristic_calls,
-                frontier_peak=meter.peak_frontier, search_calls=meter.calls,
-                budget=limit, collected=state[1].bit_count(),
-                shock_encountered=failures > 0)
+    output = dict(status=terminated, success=terminated == "success", cost=paid_cost,
+                  actions=actions, failed_actions=failures, replans=replans, switches=switches,
+                  expanded=meter.expanded, heuristics=meter.heuristic_calls,
+                  frontier_peak=meter.peak_frontier, search_calls=meter.calls,
+                  budget=limit, collected=state[1].bit_count(),
+                  shock_encountered=failures > 0)
+    if method == "structural":
+        output["strategy_trace"] = structural_choices
+    return output
 
 
 def oracle_cost(world: World, blocked: frozenset[tuple[int, int]] = frozenset()) -> Optional[int]:
