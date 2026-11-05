@@ -30,6 +30,24 @@ jobs:
           echo "checked_out_head=$(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
           test -s code/ace_loop/source_evolution_e15_reference.py
           test -s code/ace_loop/source_evolution.py
+      - name: Verify regression manifest inventory without importing frozen tests
+        env:
+          PYTHONPATH: code:.
+        run: |
+          python -m unittest tools.test_ace_regression_inventory -v
+          python - <<'PY'
+          from tools.ace_regression_inventory import inspect
+          from pathlib import Path
+          report = inspect(Path('.').resolve())
+          missing = {(r['group'], r['module']) for r in report['records'] if r['status'] == 'MISSING'}
+          expected = {('u', 'e14.test_e14u_algebra_union'), ('u-ablation', 'e14.test_e14u_ablation')}
+          print('Inventory:', report['decision'], 'checked:', report['checked'], 'missing:', report['missing'])
+          print('Missing:', sorted(missing))
+          if missing != expected:
+              raise SystemExit('Regression inventory changed: independent review required')
+          if report['decision'] != 'BLOCK_MISSING_MODULES':
+              raise SystemExit('Missing historical tests were incorrectly accepted')
+          PY
       - name: Run both E1.5 and E1.6 source evolution tests
         env:
           PYTHONPATH: code:.
