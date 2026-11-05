@@ -1,0 +1,5880 @@
+{
+  "bank_sha256": "5ae9bbb41e657cac6d0d72be35ac199b03da381baa59ab493065730a0f23dffc",
+  "base_sha": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+  "budgets": {
+    "standard": {
+      "beam_width": 20,
+      "max_candidates": 2000,
+      "max_depth": 3,
+      "max_operations": 3,
+      "max_work": 200000,
+      "shortlist": 5
+    },
+    "tight": {
+      "beam_width": 20,
+      "max_candidates": 5,
+      "max_depth": 3,
+      "max_operations": 3,
+      "max_work": 300,
+      "shortlist": 5
+    }
+  },
+  "grammar": {
+    "constants": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "operations": [
+      "add",
+      "sub",
+      "mul"
+    ]
+  },
+  "python": "3.12.14",
+  "results": [
+    {
+      "budget": "standard",
+      "chain_head": "b0767eb24ab91cc06dc4cc248bc303afee08b0442ad1bdec20d71a34754482dc",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 20,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "87db736847dfcc372e279c6b43ceee4899e6a7d763ccbdd145f75efa86a2c047",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 32,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "original_linear",
+      "timing": {
+        "cpu_seconds": 0.0019058320000000031,
+        "wall_seconds": 0.004560120999940409
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "402f239f6c6605588d8ce32af41e6a0723c3099ab26a42c433c9f62108715f91",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  3,
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ],
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "y",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "ae337c0834ab4406031c4a492c12db2c8e1f2184e50cec57ab8c49f85cd8a772",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 102,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+        "status": "complete",
+        "total_work": 210
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 108
+      },
+      "task": "original_linear",
+      "timing": {
+        "cpu_seconds": 0.001750084000000006,
+        "wall_seconds": 0.003936679000048571
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "000f97eb8c0bad7f6567431b40be6bc3138472a915f8d7b251425bcc3c9b8282",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "add",
+              null,
+              [
+                [
+                  "var",
+                  "y",
+                  []
+                ],
+                [
+                  "var",
+                  "y",
+                  []
+                ]
+              ]
+            ],
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  3,
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "da748ec4ec5309b32107e0f685a251c19ba038d5933383a27c0efae892780231",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c01bb0f9e2822022c7dc810fbb23dfe5e2ff15c88b22b738d874d385f0392208",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "dce400a72fda4a290f1c464b78a0958bf6a20d474510d0d9f3f59a77d507b651",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d40f80eb10abd6d48f33f4e13b7f48e0f71385be7622b82ed42014bdbb91bc03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "74af851417c5b2896b7a18e9350e8f48e96485146b991aa93ba1316736abde02",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "da748ec4ec5309b32107e0f685a251c19ba038d5933383a27c0efae892780231",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "7cf24b038d5cd802f7fe482b5c7e75c225c652bc26d95d0786a8887a75160f27",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 126,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 55013,
+        "selected_id": "da748ec4ec5309b32107e0f685a251c19ba038d5933383a27c0efae892780231",
+        "status": "complete",
+        "total_work": 55139
+      },
+      "search": {
+        "bound_rejections": 36,
+        "candidates": 2000,
+        "commutative_or_duplicate_skips": 1415,
+        "composition_attempts": 3445,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 55013
+      },
+      "task": "original_linear",
+      "timing": {
+        "cpu_seconds": 0.6985939,
+        "wall_seconds": 0.7410846099999162
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "20a53aa8174925b75daf7843d41b376a51fa3361b9b0018ffb86a5d1adc283e2",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "add",
+              null,
+              [
+                [
+                  "mul",
+                  null,
+                  [
+                    [
+                      "const",
+                      3,
+                      []
+                    ],
+                    [
+                      "var",
+                      "x",
+                      []
+                    ]
+                  ]
+                ],
+                [
+                  "var",
+                  "y",
+                  []
+                ]
+              ]
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "8654e338c639e9afd56231fe033d914fd0c566fdd92e05462ac8cdca3032b9d5",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "37f64a070b07a4a98ee8b6c9801da361fc7478b551621ca9614732a22d04797f",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "7f053e519ab9458d5b72abeac627f07919d1f6e0cce7fbaeaa1a220a616575ec",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d241f1e5b5f20caff77e5b320e08a78f79fd0f1f5d7bc826cf6695afc25ebe65",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "8654e338c639e9afd56231fe033d914fd0c566fdd92e05462ac8cdca3032b9d5",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "7865cd2b4167179d28bdbc24ae0bc305114dfc72d9fdbc55c7d443bae80762fa",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 114,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 33375,
+        "selected_id": "8654e338c639e9afd56231fe033d914fd0c566fdd92e05462ac8cdca3032b9d5",
+        "status": "complete",
+        "total_work": 33489
+      },
+      "search": {
+        "bound_rejections": 1668,
+        "candidates": 1221,
+        "commutative_or_duplicate_skips": 576,
+        "composition_attempts": 3459,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "frontier_exhausted",
+        "search_work": 33375
+      },
+      "task": "original_linear",
+      "timing": {
+        "cpu_seconds": 0.3036038579999999,
+        "wall_seconds": 0.32540143199992144
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "cebf1e9b0db302811331387f09911866aefdb2b092e7a572eae8622e5fa3fc15",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 44,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "c44b53cab1ec6a26ee4d3b1844c7791e01d7ba4de2e2436360ab65efd83075c0",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 58,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "negative_linear",
+      "timing": {
+        "cpu_seconds": 0.002088104000000035,
+        "wall_seconds": 0.006920148999938647
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "8bfb91736c0834a3be1095ff576ac63bc0448be366d9cc285f5044b0aec05a15",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ],
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "y",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+        "validation": {
+          "absolute_error": 42,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "5803c23d3d61a5baf223a0dea2a8a3ef26c29c42a5af0525d0978ae3fb73b74e",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 102,
+        "holdout": {
+          "absolute_error": 64,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+        "status": "complete",
+        "total_work": 210
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 108
+      },
+      "task": "negative_linear",
+      "timing": {
+        "cpu_seconds": 0.0024524350000001416,
+        "wall_seconds": 0.0038772510000626426
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "ed766e09ae90db2c7b82f383d3adb5deba56c68a5a1419c51d7854d09734ce7b",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "add",
+              null,
+              [
+                [
+                  "var",
+                  "y",
+                  []
+                ],
+                [
+                  "var",
+                  "y",
+                  []
+                ]
+              ]
+            ],
+            [
+              "sub",
+              null,
+              [
+                [
+                  "var",
+                  "y",
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "653d7ed4406138a129ecc873c9b135e0b8558194991e749a1d57f5834ad6ee09",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "81575a46356d2e38b8e35b1fa6e5ec3c7bbaa132256d9aa0e091c7f344744c3f",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "3f27ad0f4799482e772caf1eec85aa709d9a4a43de7ec9418e1bd94be0a89097",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "768a1d7ec7cd896603113d6d7e9cbc5c62349ef18965f0656b19a635498176b9",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "5a503e8291425f3f1ce2aa29b82dd205db46b699fd03d5f1d5276d022d6282e8",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "768a1d7ec7cd896603113d6d7e9cbc5c62349ef18965f0656b19a635498176b9",
+        "validation": {
+          "absolute_error": 10,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "12226ef6cd6131147c94b4333d0d33da5f14a69bf1a8741c693b4afd51e34774",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 126,
+        "holdout": {
+          "absolute_error": 16,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 55013,
+        "selected_id": "768a1d7ec7cd896603113d6d7e9cbc5c62349ef18965f0656b19a635498176b9",
+        "status": "complete",
+        "total_work": 55139
+      },
+      "search": {
+        "bound_rejections": 36,
+        "candidates": 2000,
+        "commutative_or_duplicate_skips": 1415,
+        "composition_attempts": 3445,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 55013
+      },
+      "task": "negative_linear",
+      "timing": {
+        "cpu_seconds": 0.581663883,
+        "wall_seconds": 0.6164685270000518
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "b72c7fd2ceae9a908f8f525882b7e99287f51c25631eae0daefc0747eb71cb1b",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "sub",
+                  null,
+                  [
+                    [
+                      "var",
+                      "y",
+                      []
+                    ],
+                    [
+                      "var",
+                      "x",
+                      []
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "9861a8426773dcac94c80bd89646516c84d957ab5f2c6cc100b75569c0b89a21",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "6fc9f8ed21ba8923f3a938ab87051659b2a08a79bfdf5cc0adea700f4f4f9c3e",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "84cfc473488042143e81bbd069f0a1de3ffdf690c87e3f8bd2c21aaecab4e69d",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "afb2b22dc7465a0954441e4f24ef47629591f5ff347c56ebd16ab214fdcc54b7",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "653d7ed4406138a129ecc873c9b135e0b8558194991e749a1d57f5834ad6ee09",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "9861a8426773dcac94c80bd89646516c84d957ab5f2c6cc100b75569c0b89a21",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "0fd4824c20aad9a32a144971cd0aa2a1fce4636f01ed801f45c98d015a651451",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 120,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 30372,
+        "selected_id": "9861a8426773dcac94c80bd89646516c84d957ab5f2c6cc100b75569c0b89a21",
+        "status": "complete",
+        "total_work": 30492
+      },
+      "search": {
+        "bound_rejections": 1956,
+        "candidates": 1116,
+        "commutative_or_duplicate_skips": 522,
+        "composition_attempts": 3588,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "frontier_exhausted",
+        "search_work": 30372
+      },
+      "task": "negative_linear",
+      "timing": {
+        "cpu_seconds": 0.27557258100000004,
+        "wall_seconds": 0.2934975819999863
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "1536eda8d7036f3eda9032fbb3c10d48ea8ca82872b336e17c6fc51b962ec5d2",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 20,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "1fad5a9c1be2a7b7c686b97428ca19d00d2c69ae1800881bab4905374aaa3b9a",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 28,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "difference",
+      "timing": {
+        "cpu_seconds": 0.0015450669999999,
+        "wall_seconds": 0.0037646029999223174
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "b44c69132c2766fbd8b805e1c6b6cbaf263ff3dc82aecfe50de53a3d01b5db21",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+        "validation": {
+          "absolute_error": 12,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "aaa6bc2e1c9090ae6cb77d48c91735e736a7e7ade1ceb7ccff9a3932b299bdce",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 96,
+        "holdout": {
+          "absolute_error": 18,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+        "status": "complete",
+        "total_work": 204
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 108
+      },
+      "task": "difference",
+      "timing": {
+        "cpu_seconds": 0.001850171000000067,
+        "wall_seconds": 0.004172429999925953
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "d50a14400602b19dda0c317f5a141b12cf9b0404b53bcb8224ee84f1b716bdf1",
+      "frozen_candidate": {
+        "ast": [
+          "sub",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "96913d105b46286ba387193c9c9d976773fd1a37836b93ba48998c48f878eae1",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "a4052364cf952a9d6c5bb6a56d8f909baef2e2813fce9138834dd68d398539bc",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "69c3fef98c5b64b5f8f7b9fd45776e3bf28cefc41ce8208041ced4e71d7d3e82",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "5ea8f7694bbf59b7f1b3d978fa112b4d1f65b13d7433628333bdc5d7770832e4",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "bf73fa43042e372fbe74db63ede9f8147eab7b138f57dd56fa5e286355a73def",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "96913d105b46286ba387193c9c9d976773fd1a37836b93ba48998c48f878eae1",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "8e160e8f80e49210776b861370d45b9d6658179b85eb26dc2d8648ba82eddce5",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 96,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 55013,
+        "selected_id": "96913d105b46286ba387193c9c9d976773fd1a37836b93ba48998c48f878eae1",
+        "status": "complete",
+        "total_work": 55109
+      },
+      "search": {
+        "bound_rejections": 36,
+        "candidates": 2000,
+        "commutative_or_duplicate_skips": 1415,
+        "composition_attempts": 3445,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 55013
+      },
+      "task": "difference",
+      "timing": {
+        "cpu_seconds": 0.572078302,
+        "wall_seconds": 0.6055110050000394
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "3753647319a042fe9fa59e6855993139dfd01cf45a59c24c7296957a728a6d52",
+      "frozen_candidate": {
+        "ast": [
+          "sub",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "96913d105b46286ba387193c9c9d976773fd1a37836b93ba48998c48f878eae1",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "a4052364cf952a9d6c5bb6a56d8f909baef2e2813fce9138834dd68d398539bc",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "b4c8b240ba83463b5a0b7ba38c2e4b757bc2ad29a64108d02e9c35f5b30e6944",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "9b32fbc11ce3286b7f9f5f4b69738d6055c383e56941319efe286edc7a50f05c",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "9b87cb9d58001a48c70f4bd8f5e4745091879300ad9697d81ec11e75e75d0bec",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "96913d105b46286ba387193c9c9d976773fd1a37836b93ba48998c48f878eae1",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "13671a1a88fac69aeaf1d92bd6e33994798844afc9598a3447a93f8363d5a81e",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 78,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 37488,
+        "selected_id": "96913d105b46286ba387193c9c9d976773fd1a37836b93ba48998c48f878eae1",
+        "status": "complete",
+        "total_work": 37566
+      },
+      "search": {
+        "bound_rejections": 1848,
+        "candidates": 1374,
+        "commutative_or_duplicate_skips": 648,
+        "composition_attempts": 3864,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "frontier_exhausted",
+        "search_work": 37488
+      },
+      "task": "difference",
+      "timing": {
+        "cpu_seconds": 0.3416244239999999,
+        "wall_seconds": 0.364093969999999
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "4e868ad1f70364e2c7c23c5f98e12b258c19d3e16414715dfc0d8f53376bf41c",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 20,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "f242b4327b604ce04662d99daaf69301a1bbb81a47f6d022967b70404410a7e7",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 55,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "product_offset",
+      "timing": {
+        "cpu_seconds": 0.0028783350000001207,
+        "wall_seconds": 0.011329996999961622
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "cb8e2f3b414dbbd1bd398f0cebaa5805037dd008e7b51263866ed465f78bf87a",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+        "validation": {
+          "absolute_error": 18,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "3818b342db62e411a87a65b821ef3df49900c51aafa92f2a51fdec8ac3aceaaf",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 96,
+        "holdout": {
+          "absolute_error": 51,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+        "status": "complete",
+        "total_work": 204
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 108
+      },
+      "task": "product_offset",
+      "timing": {
+        "cpu_seconds": 0.0019195739999999795,
+        "wall_seconds": 0.006556677000048694
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "3a4532225c8c6697fd8fa060cd647243611fea780de06dd9f0746f9e39b497c3",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "const",
+              2,
+              []
+            ],
+            [
+              "mul",
+              null,
+              [
+                [
+                  "var",
+                  "x",
+                  []
+                ],
+                [
+                  "var",
+                  "y",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "f96353f7d774b67b07e14f18f2c9ea8f036b5337753ad26e53e18e7fadee57d4",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "b1529ebea0aebd0706644005a776dc765f307e5089979987ecf2ea4747307bd9",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "6e485af6a75f977857a49f6ed180b85f69dd508013f8cb1b59fb0620fb942091",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d3dacc2f1889ef0254a1cb305860d09594ff942d137164d25fe8d6e0d682cde5",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "5ca6d1bc502fb8929037e297d2d22e5cbcc307d7cbc6a46c161f9b595308b592",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "f96353f7d774b67b07e14f18f2c9ea8f036b5337753ad26e53e18e7fadee57d4",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "6dcf7fb533c411aaaf3d69a48ea9faccb4efa1734f7be3ae357f6f73c83d144f",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 102,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 55013,
+        "selected_id": "f96353f7d774b67b07e14f18f2c9ea8f036b5337753ad26e53e18e7fadee57d4",
+        "status": "complete",
+        "total_work": 55115
+      },
+      "search": {
+        "bound_rejections": 36,
+        "candidates": 2000,
+        "commutative_or_duplicate_skips": 1415,
+        "composition_attempts": 3445,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 55013
+      },
+      "task": "product_offset",
+      "timing": {
+        "cpu_seconds": 0.6302593729999999,
+        "wall_seconds": 0.6688248460000068
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "8cea25af876e873ac89069eb18593f1a4ba512d41dfe6ec7347da667f03f74b6",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "const",
+              2,
+              []
+            ],
+            [
+              "mul",
+              null,
+              [
+                [
+                  "var",
+                  "x",
+                  []
+                ],
+                [
+                  "var",
+                  "y",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "f96353f7d774b67b07e14f18f2c9ea8f036b5337753ad26e53e18e7fadee57d4",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "b1529ebea0aebd0706644005a776dc765f307e5089979987ecf2ea4747307bd9",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "6e485af6a75f977857a49f6ed180b85f69dd508013f8cb1b59fb0620fb942091",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "bc0f07e20ac0f390e0505edaee7efdddf3f489c6a8670079cbc46178cb367cdb",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "6cd72089fa1772a202536cc9e043df28836437a1b7f2ee9c84c89a98163280a7",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "f96353f7d774b67b07e14f18f2c9ea8f036b5337753ad26e53e18e7fadee57d4",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "b2364c12534cf965df2bf3302cb1876a98a22452c67f85ae6083487f46cc4b82",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 114,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 30372,
+        "selected_id": "f96353f7d774b67b07e14f18f2c9ea8f036b5337753ad26e53e18e7fadee57d4",
+        "status": "complete",
+        "total_work": 30486
+      },
+      "search": {
+        "bound_rejections": 1956,
+        "candidates": 1116,
+        "commutative_or_duplicate_skips": 522,
+        "composition_attempts": 3588,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "frontier_exhausted",
+        "search_work": 30372
+      },
+      "task": "product_offset",
+      "timing": {
+        "cpu_seconds": 0.2936803379999997,
+        "wall_seconds": 0.3128015160000359
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "127e3e481413bb5cf55d17b6fc866c25ca7527ea94cfac20777f474c56801623",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 42,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "d463e53269f39e624f4f229157255426aaf30661103eb926af7d27cb0e99e020",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 92,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "quadratic",
+      "timing": {
+        "cpu_seconds": 0.0019889779999999746,
+        "wall_seconds": 0.004306759999963106
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "383f9308c523846dbf254561e332b58bb4a01f160604759a43eed4de67b5a524",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 42,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "5d3fe23011d283d19a4854a1f19a6c3bb6c9c8842794442d41d7e3e59db1c379",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 90,
+        "holdout": {
+          "absolute_error": 92,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 198
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 108
+      },
+      "task": "quadratic",
+      "timing": {
+        "cpu_seconds": 0.0022006199999999865,
+        "wall_seconds": 0.0038722529999404287
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "1aa3cc71a96042c88cea8505c712bbdbf2d91881fe193920b61365d07f4a72d7",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "add",
+              null,
+              [
+                [
+                  "const",
+                  0,
+                  []
+                ],
+                [
+                  "var",
+                  "y",
+                  []
+                ]
+              ]
+            ],
+            [
+              "mul",
+              null,
+              [
+                [
+                  "var",
+                  "x",
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "0a1eb323a107030b3a136f668b6feff52e93d755fc9c7e9745b35027c7bd1bdf",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "ae084a0b8f43002db37e42d3e381707d6799d634e026da7d112422b51378d233",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "3a981725e0c0dc4777a1f1bcfdbe8582ed55417eb88c81679bfe5c64b61be777",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "a07dd6604496aeced96cafe56d40eefad158de8261835e4a2e8340d6df101b5b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "639de134f54b9d93bef5010cc4e38debe70f1b3e27bddc117dcf80fc5390d35d",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "0a1eb323a107030b3a136f668b6feff52e93d755fc9c7e9745b35027c7bd1bdf",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "c8152d8181916b8132a7e4265c305fbc4f52f2623535a84a2eefe567b1d54698",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 102,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 55013,
+        "selected_id": "0a1eb323a107030b3a136f668b6feff52e93d755fc9c7e9745b35027c7bd1bdf",
+        "status": "complete",
+        "total_work": 55115
+      },
+      "search": {
+        "bound_rejections": 36,
+        "candidates": 2000,
+        "commutative_or_duplicate_skips": 1415,
+        "composition_attempts": 3445,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 55013
+      },
+      "task": "quadratic",
+      "timing": {
+        "cpu_seconds": 0.6100315880000005,
+        "wall_seconds": 0.6948600429999487
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "70ed411dc2b7efab581f7dd7c0b9584674832fab7c9e9f216d9868812ccb408a",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "var",
+                  "x",
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "b5d4e8cbfa4e955a943967dd0a411dc0e7ed85919067998ea60b730723437ba9",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "1d7606dd2fabca712c65b4214fa12140a346599a51d83e647d335076cdcb73c0",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ce42db7f2171c199a596006b7d78e6b91435463edfff52d1edbc0093992e0163",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "58db723764eea8a0ae37ce4d6473361874602e677670ba8b4b578dbce0a1e525",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "1466092f101ef04c2554deddd2a0fe61d8ce2b42b976634bb81bcd6f7d2e8d8d",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "b5d4e8cbfa4e955a943967dd0a411dc0e7ed85919067998ea60b730723437ba9",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "52a32b8cb65e295f10adc4db23228ac723b3d8b11c7392a3374c28da3f82a30d",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 114,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 38160,
+        "selected_id": "b5d4e8cbfa4e955a943967dd0a411dc0e7ed85919067998ea60b730723437ba9",
+        "status": "complete",
+        "total_work": 38274
+      },
+      "search": {
+        "bound_rejections": 1812,
+        "candidates": 1398,
+        "commutative_or_duplicate_skips": 660,
+        "composition_attempts": 3864,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "frontier_exhausted",
+        "search_work": 38160
+      },
+      "task": "quadratic",
+      "timing": {
+        "cpu_seconds": 0.4228513379999992,
+        "wall_seconds": 0.44589144999997643
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "ae4c1b946a1af08f60605cc5c8f0edcb85bdfe3e95071f136e2c6943247b58e5",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 9,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "13268e28dffd54d142db7269b823fa32521bd5d5de1a5a87d7d8c99deb0ff5f2",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 13,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "constant",
+      "timing": {
+        "cpu_seconds": 0.0015875109999994308,
+        "wall_seconds": 0.003756871000064166
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "7551914183929045a2fe064a5eead65ffb716f34f0700f848cde3617eb9bfb7e",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 9,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "707b28bc36003cae7f6ebbb8897929698953c796dd9587bbf020480bc92d7616",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 90,
+        "holdout": {
+          "absolute_error": 13,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 198
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 108
+      },
+      "task": "constant",
+      "timing": {
+        "cpu_seconds": 0.0016804290000003164,
+        "wall_seconds": 0.0036795759999677102
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "da7cb87de796baa842d8417b53455157c7fe681267a3841c8695c957b9822f90",
+      "frozen_candidate": {
+        "ast": [
+          "const",
+          3,
+          []
+        ],
+        "decisions": [
+          {
+            "id": "7ca71a56421d4881021c8cccf5e242ba394246617217930837bfc566009d4398",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "941a25ac816aed0a5d847b633162c5f31b51358338ebd99683986651df3b515b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "2a6dca571db480f75266322521faa7259a913dea4ee06ba8207dc7f6277423ce",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "e504222c7aa533020026416058d47d3e697b948de4fd85778f0ae88e78e258d7",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "f2793b341a28f8bee912ea3e62e756e511ac52b3a1781ff83113830d1db8d05b",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "7ca71a56421d4881021c8cccf5e242ba394246617217930837bfc566009d4398",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "df501c18e5d39005bec068571ab1ab6353c021b101c08a3004cc613955ff966a",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 42,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 55013,
+        "selected_id": "7ca71a56421d4881021c8cccf5e242ba394246617217930837bfc566009d4398",
+        "status": "complete",
+        "total_work": 55055
+      },
+      "search": {
+        "bound_rejections": 36,
+        "candidates": 2000,
+        "commutative_or_duplicate_skips": 1415,
+        "composition_attempts": 3445,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 55013
+      },
+      "task": "constant",
+      "timing": {
+        "cpu_seconds": 0.5823586770000002,
+        "wall_seconds": 0.6157258619999766
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "2d13b1e8399d906b76b2c20a08ee0808313f1cc8125f2bbe630625f333d32677",
+      "frozen_candidate": {
+        "ast": [
+          "const",
+          3,
+          []
+        ],
+        "decisions": [
+          {
+            "id": "7ca71a56421d4881021c8cccf5e242ba394246617217930837bfc566009d4398",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "941a25ac816aed0a5d847b633162c5f31b51358338ebd99683986651df3b515b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "2a6dca571db480f75266322521faa7259a913dea4ee06ba8207dc7f6277423ce",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "e504222c7aa533020026416058d47d3e697b948de4fd85778f0ae88e78e258d7",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "f2793b341a28f8bee912ea3e62e756e511ac52b3a1781ff83113830d1db8d05b",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "7ca71a56421d4881021c8cccf5e242ba394246617217930837bfc566009d4398",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "a7d7ad684302cda075481cee739b734837e217749cc502e38d7746b6fafcc0e2",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 42,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 42039,
+        "selected_id": "7ca71a56421d4881021c8cccf5e242ba394246617217930837bfc566009d4398",
+        "status": "complete",
+        "total_work": 42081
+      },
+      "search": {
+        "bound_rejections": 1443,
+        "candidates": 1542,
+        "commutative_or_duplicate_skips": 732,
+        "composition_attempts": 3711,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "frontier_exhausted",
+        "search_work": 42039
+      },
+      "task": "constant",
+      "timing": {
+        "cpu_seconds": 0.44169729000000046,
+        "wall_seconds": 0.4751095119999036
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "d13a9e5bc80346ba7702754ffde8a7855ef80b775c9027dd755e8964ab2247ac",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 7,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "e65be4fe4a76d7f6f8dca0eeeb1ff6ed7d745785e4074e5472493d75fd1762f2",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 13,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "outside_grammar_floor_division",
+      "timing": {
+        "cpu_seconds": 0.0016493229999996473,
+        "wall_seconds": 0.003885673000013412
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "9a215ec984c0414dfb8d942ba4f0eb6f0e2f905c530216a8af751c7dcbadc549",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 7,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "e4e73c3d4467d7b4cc653cd33d8b8caab3b0f4c8cbcf31c2f9749f75eb1c9cd3",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 90,
+        "holdout": {
+          "absolute_error": 13,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 198
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 108
+      },
+      "task": "outside_grammar_floor_division",
+      "timing": {
+        "cpu_seconds": 0.0017704130000000262,
+        "wall_seconds": 0.0035298930000635664
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "d275f25c4511195c621c0eeea042e5ae1262a9bf4a7d1a671a5bbdb1fb9119f0",
+      "frozen_candidate": {
+        "ast": [
+          "var",
+          "x",
+          []
+        ],
+        "decisions": [
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "5967ab41e85231a2cae6fa7c9765437e014e317d958557b62007fa4741dbeb7c",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d3a355bc414000ee99ff8a8871cdfab18eb3f1b22d54617a24c1226906a2d91d",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "665e3367aefb09f299cb0fbb0145800917887945ba7be226824744f212b9fc26",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+        "validation": {
+          "absolute_error": 7,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "42e565833264c058ea18152c8ae0c320a664ae96c1f5cf35df5aa07c49f2a5df",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 42,
+        "holdout": {
+          "absolute_error": 13,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 55013,
+        "selected_id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+        "status": "complete",
+        "total_work": 55055
+      },
+      "search": {
+        "bound_rejections": 36,
+        "candidates": 2000,
+        "commutative_or_duplicate_skips": 1415,
+        "composition_attempts": 3445,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 55013
+      },
+      "task": "outside_grammar_floor_division",
+      "timing": {
+        "cpu_seconds": 0.5740447050000004,
+        "wall_seconds": 0.6092177320000474
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "987804f131058d01bb6d60539480e4c59653de5422f0c43245a204c553280463",
+      "frozen_candidate": {
+        "ast": [
+          "var",
+          "x",
+          []
+        ],
+        "decisions": [
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "5967ab41e85231a2cae6fa7c9765437e014e317d958557b62007fa4741dbeb7c",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d3a355bc414000ee99ff8a8871cdfab18eb3f1b22d54617a24c1226906a2d91d",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "665e3367aefb09f299cb0fbb0145800917887945ba7be226824744f212b9fc26",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+        "validation": {
+          "absolute_error": 7,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "3502713bbfc17d764c56023ae11861df836c84a3b253320517d48c38db349aef",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 42,
+        "holdout": {
+          "absolute_error": 13,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 41367,
+        "selected_id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+        "status": "complete",
+        "total_work": 41409
+      },
+      "search": {
+        "bound_rejections": 1479,
+        "candidates": 1518,
+        "commutative_or_duplicate_skips": 720,
+        "composition_attempts": 3711,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "frontier_exhausted",
+        "search_work": 41367
+      },
+      "task": "outside_grammar_floor_division",
+      "timing": {
+        "cpu_seconds": 0.32176311999999996,
+        "wall_seconds": 0.3465663939999786
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "f197497e43c8f3f3585452ec3d32f6a89d1c8d86e1715d9ad59ef1293a3625d0",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 1598,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "8cf9bfc92df0870b1bd7b41a7938b17bf0be8f8d34bff6fa3ccc591ccb4b2727",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 6506,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "outside_budget_polynomial",
+      "timing": {
+        "cpu_seconds": 0.0018144280000003121,
+        "wall_seconds": 0.0043092329999581125
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "bc3f8bbd8896f3d60588858d591844ab7314f8c61d3ec992b204619411d890c2",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ],
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "y",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+        "validation": {
+          "absolute_error": 1592,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "fb46b75a0c6025ababfcc2fb221cb5610996b32f422aa40763095cc017027b67",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 102,
+        "holdout": {
+          "absolute_error": 6496,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+        "status": "complete",
+        "total_work": 210
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 108
+      },
+      "task": "outside_budget_polynomial",
+      "timing": {
+        "cpu_seconds": 0.002344755000000198,
+        "wall_seconds": 0.00401017799993042
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "6d6f0c342abf31f0c0e32220d53a87f91d0a555420fd8b1e73361cd8c3647d9b",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "add",
+              null,
+              [
+                [
+                  "const",
+                  3,
+                  []
+                ],
+                [
+                  "const",
+                  3,
+                  []
+                ]
+              ]
+            ],
+            [
+              "mul",
+              null,
+              [
+                [
+                  "var",
+                  "x",
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "c7c17333fdf44f184f3d9496bae7ed7c49067521560d8203950549159a215fb3",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d76733681c4e2deb1b623179ac46c910b0f3d723ea86e8d66713a89dbe29e27b",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "821188bd9e5cc2b95878e7152b6520be250905d4fae2e4d3edf54c35152de437",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "7a66e69c5c9f0bc5600ebdcb1a9b69f93e9ac5bdc4d05d69957d206a661d891c",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "68d7400cf4318fd0eada64950d14a9c548d06f6d95dfed759cea1ea4bfa3aee4",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "d76733681c4e2deb1b623179ac46c910b0f3d723ea86e8d66713a89dbe29e27b",
+        "validation": {
+          "absolute_error": 1544,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "cef0f5b488ba53b02f09276849b8074c89d810ef9ee642f1c2a9409ecc281493",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 126,
+        "holdout": {
+          "absolute_error": 6404,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 55013,
+        "selected_id": "d76733681c4e2deb1b623179ac46c910b0f3d723ea86e8d66713a89dbe29e27b",
+        "status": "complete",
+        "total_work": 55139
+      },
+      "search": {
+        "bound_rejections": 36,
+        "candidates": 2000,
+        "commutative_or_duplicate_skips": 1415,
+        "composition_attempts": 3445,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 55013
+      },
+      "task": "outside_budget_polynomial",
+      "timing": {
+        "cpu_seconds": 0.5817167740000002,
+        "wall_seconds": 0.6525685550000162
+      }
+    },
+    {
+      "budget": "standard",
+      "chain_head": "926fd1679eb7162663c52b85185334a65badcd51dbd28c38e2abe597b8c34552",
+      "frozen_candidate": {
+        "ast": [
+          "mul",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "var",
+                  "x",
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ],
+            [
+              "mul",
+              null,
+              [
+                [
+                  "var",
+                  "x",
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49202f49cbee8e93cab630192ce40f334bb5fd0f814abd0d1790494908a4cb41",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "e29b4aa7b7f8ac9e0ba06ac3dc670873f322755e310c624c32967b4136d4cfd2",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "077e5d2cbf8724a1a0249cde9fc183deacb760bf4479fe3ae8f1bbb042b0eebc",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "0fe2b90a49f524fc9036308ff0ef3f65946a5656f01580995f2a4dd207e52b02",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "f77880935ae528d8d99f6475d59b75a4351cf6b54b0dc35ef46699428b003d3a",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "49202f49cbee8e93cab630192ce40f334bb5fd0f814abd0d1790494908a4cb41",
+        "validation": {
+          "absolute_error": 722,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "cd19e4ddabeac697b895ec1dbd3d7b49ebd289bf7144be51631c0889775d6c9f",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 126,
+        "holdout": {
+          "absolute_error": 2738,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 32784,
+        "selected_id": "49202f49cbee8e93cab630192ce40f334bb5fd0f814abd0d1790494908a4cb41",
+        "status": "complete",
+        "total_work": 32910
+      },
+      "search": {
+        "bound_rejections": 2100,
+        "candidates": 1206,
+        "commutative_or_duplicate_skips": 564,
+        "composition_attempts": 3864,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 2000,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 199874,
+          "shortlist": 5
+        },
+        "reason": "frontier_exhausted",
+        "search_work": 32784
+      },
+      "task": "outside_budget_polynomial",
+      "timing": {
+        "cpu_seconds": 0.31018528700000036,
+        "wall_seconds": 0.33310225799993987
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "b5553591ca7fb9833e44f403d3b7c8187cd4c967b4daf6b881737bc20f0a43dc",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 20,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "63c46f513bbf76232085661c94e82fd601f5e6842f32f7f959f1ad4920c4c910",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 32,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "original_linear",
+      "timing": {
+        "cpu_seconds": 0.0015865910000005812,
+        "wall_seconds": 0.003781698000011602
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "741b61b00baaee98b4a0de75f2b6eaca7fe4398ad2ed43cb9b0f253d2de431f4",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  3,
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ],
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "y",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+        "validation": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "175bb5fa3bd997dda24fea8ac76c0df59632640cf765ae7af46dca6a7cc0e4c2",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 102,
+        "holdout": {
+          "absolute_error": 0,
+          "correct": 3,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+        "status": "complete",
+        "total_work": 210
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 108
+      },
+      "task": "original_linear",
+      "timing": {
+        "cpu_seconds": 0.0018202140000003197,
+        "wall_seconds": 0.005472393999980341
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "25cd0cbb3e4a55222cf14d230bb7e23d46aed580dfc547fc02dda06a20bad0d8",
+      "frozen_candidate": {
+        "ast": [
+          "var",
+          "x",
+          []
+        ],
+        "decisions": [
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+        "validation": {
+          "absolute_error": 20,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "bdf29bc145d7e085066543bfe7b490010d710974912b6f455f2d9c2ceb80ae2c",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 32,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "original_linear",
+      "timing": {
+        "cpu_seconds": 0.001867886999999513,
+        "wall_seconds": 0.009725531999947634
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "cdf8a979b5186115a1702f44e4d0e1200676817d77cb9c06d8c00209c92db4e5",
+      "frozen_candidate": {
+        "ast": [
+          "var",
+          "x",
+          []
+        ],
+        "decisions": [
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+        "validation": {
+          "absolute_error": 20,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "63416d83219861fb60f55afac55924d4163f03fe027382589ec2a3f930177f72",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 32,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "original_linear",
+      "timing": {
+        "cpu_seconds": 0.0014164979999993221,
+        "wall_seconds": 0.003305109000052653
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "d3103552fbb447210087dedf6bb17403f6a755ac7457a9d410d1affd022e60fc",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 44,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "098bbc24aaeeccc44f9bf9fff0bb21ec2d55fe620e0b7ccbb73c97007ae2aa60",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 58,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "negative_linear",
+      "timing": {
+        "cpu_seconds": 0.0012421970000016103,
+        "wall_seconds": 0.0031802229999584597
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "81ddf07ac348fb2524221fe4470b89c94395feecff3dfe0b72ac38dd44e9aeb2",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ],
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "y",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+        "validation": {
+          "absolute_error": 42,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "57493db7fae34998c119311073a99278eb2901b3384a434128fd9864e080e28a",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 102,
+        "holdout": {
+          "absolute_error": 64,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+        "status": "complete",
+        "total_work": 210
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 108
+      },
+      "task": "negative_linear",
+      "timing": {
+        "cpu_seconds": 0.0017174940000010963,
+        "wall_seconds": 0.003328001999989283
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "e604555f2cf95ec676be574747670e1f5b8448e99be7754412384da68a9e142d",
+      "frozen_candidate": {
+        "ast": [
+          "var",
+          "y",
+          []
+        ],
+        "decisions": [
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+        "validation": {
+          "absolute_error": 36,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "bd39cc55a4356a809b7856feb557aa6f92f1f8897a853da137e3cb4c09c95a53",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 48,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "negative_linear",
+      "timing": {
+        "cpu_seconds": 0.0018254019999996984,
+        "wall_seconds": 0.0035750540000663023
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "0693c09410a7f26eb5fb9355916fd310e49e2739fa9446baf86b494795915800",
+      "frozen_candidate": {
+        "ast": [
+          "var",
+          "y",
+          []
+        ],
+        "decisions": [
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+        "validation": {
+          "absolute_error": 36,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "56a94f1cc3542badc9e28ee93a056f5232d551960da0ca5b344c68e15b08c459",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 48,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "negative_linear",
+      "timing": {
+        "cpu_seconds": 0.0014444190000002521,
+        "wall_seconds": 0.003305118000071161
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "f8286ba3354c20fae2cc4576a4ce53fa74904c0fb9382e7499769d387462c4d4",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 20,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "8b9cc8283c77fcddb041744b32edc57fe59a622916c803d46b7195c0a54d9155",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 28,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "difference",
+      "timing": {
+        "cpu_seconds": 0.0014945549999989538,
+        "wall_seconds": 0.0035191629999644647
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "162dfb73b8d9361c89e32967d13bce036459d09a463e5b829fca08897f10e40c",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+        "validation": {
+          "absolute_error": 12,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "f9fc825e660f06a2ca69fb30a5b98b249fed0b6186e3a67db1cbfb0cd26c37a9",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 96,
+        "holdout": {
+          "absolute_error": 18,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+        "status": "complete",
+        "total_work": 204
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 108
+      },
+      "task": "difference",
+      "timing": {
+        "cpu_seconds": 0.001777024000000793,
+        "wall_seconds": 0.0033900249999305743
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "f3d3103a305fb20310ca8bca74c9c7cedabb0ff8178a03da8913b08ca9244be8",
+      "frozen_candidate": {
+        "ast": [
+          "var",
+          "x",
+          []
+        ],
+        "decisions": [
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+        "validation": {
+          "absolute_error": 10,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "41a060a140b40dc8a7347eda46b559a8f862f3336e1f83971a72f0d3c915889d",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 14,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "difference",
+      "timing": {
+        "cpu_seconds": 0.0019093479999998664,
+        "wall_seconds": 0.0035821709999481754
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "613d614f7aeb6acc82044bb783b2104f4de3fe336cd01a15167cf1f8c05210ce",
+      "frozen_candidate": {
+        "ast": [
+          "var",
+          "x",
+          []
+        ],
+        "decisions": [
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+        "validation": {
+          "absolute_error": 10,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "352acf019dea78cbae963f08dec6e136f3da27a302616f1a3fb0dfdf241ec94c",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 14,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "difference",
+      "timing": {
+        "cpu_seconds": 0.0017145970000012056,
+        "wall_seconds": 0.003600673000050847
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "5f9ebe2209d72969ebc5e5beec6b4f44e774766810420c386cc3d3d49229a804",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 20,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "bee0c205f9d6e6c5f00b8e2251d60197b7a5249af3d8c992e17d1ed7cca40798",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 55,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "product_offset",
+      "timing": {
+        "cpu_seconds": 0.0015543730000011635,
+        "wall_seconds": 0.0031219259999488713
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "df511ee606da5602fbc88aa1b705a2e7e9ce723729060694cb1719af20641f84",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+        "validation": {
+          "absolute_error": 18,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "1d48f8ea9daa3377b1fab95ad471bc7ef4e11d1906b66fd73fa72035bba9fe2e",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 96,
+        "holdout": {
+          "absolute_error": 51,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+        "status": "complete",
+        "total_work": 204
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 108
+      },
+      "task": "product_offset",
+      "timing": {
+        "cpu_seconds": 0.0023980100000002835,
+        "wall_seconds": 0.003784502000030443
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "9ed85b2df00e8b98a653ff6918da02d03d643ace0538c9c3e56ddcb3b4b01102",
+      "frozen_candidate": {
+        "ast": [
+          "var",
+          "y",
+          []
+        ],
+        "decisions": [
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+        "validation": {
+          "absolute_error": 22,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "283ce30b15aa292c0cb505bf43b4493f3441f243719cfb33925acaf792e652c9",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 59,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "product_offset",
+      "timing": {
+        "cpu_seconds": 0.0016893420000005932,
+        "wall_seconds": 0.0029959379999127123
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "e904458f97c710d4d99fc6b85529bd3c9401652ae60f96d88cba99128fce7608",
+      "frozen_candidate": {
+        "ast": [
+          "var",
+          "y",
+          []
+        ],
+        "decisions": [
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+        "validation": {
+          "absolute_error": 22,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "d98485f7b1e83c4eb188d40690ad09fad2515697b65c5f23b91bb9052ed7bda5",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 59,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "product_offset",
+      "timing": {
+        "cpu_seconds": 0.0018586540000011809,
+        "wall_seconds": 0.003479136999999355
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "d7ff9474edc8c97d7570599c4aa57a79ecbbba04c712eb07b04bb709eac9d110",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 42,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "9d95cffa749415b9a3440fa9c8fc68bb46fad0fca3e5d41079bde1d2d0ff782c",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 92,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "quadratic",
+      "timing": {
+        "cpu_seconds": 0.0014497279999989843,
+        "wall_seconds": 0.0036492910001015844
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "ead1a599ea9c12638cdbf252f0b49743240c079a14274ee20475d4d7c6312d37",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 42,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "26dff980814764eef1f4c03238692435cee9b7267b6253bf0e88a418cb214229",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 90,
+        "holdout": {
+          "absolute_error": 92,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 198
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 108
+      },
+      "task": "quadratic",
+      "timing": {
+        "cpu_seconds": 0.0021694239999998643,
+        "wall_seconds": 0.00416189400004896
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "6dcd36ccd8f91d5574e54e8b646952b149d3fb19ee8c17bbfb525b16c774ceab",
+      "frozen_candidate": {
+        "ast": [
+          "const",
+          2,
+          []
+        ],
+        "decisions": [
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+        "validation": {
+          "absolute_error": 42,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "35067679f7c99ce5a22e3565c9ef77f53e8a298bbdde8cf0f9976c92dd553cbe",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 96,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "quadratic",
+      "timing": {
+        "cpu_seconds": 0.0018406750000004024,
+        "wall_seconds": 0.00365274600005705
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "6c24524c8c9976037580d00468faa2f99b5c3c81cf6cfff57ca61ecc0b209e9d",
+      "frozen_candidate": {
+        "ast": [
+          "const",
+          2,
+          []
+        ],
+        "decisions": [
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+        "validation": {
+          "absolute_error": 42,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "370f322cce310b1cdf3c97876a786854eed4356c5d2ecfea05bad58604c504f2",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 96,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "quadratic",
+      "timing": {
+        "cpu_seconds": 0.0018533370000000104,
+        "wall_seconds": 0.004578805000051034
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "386ba24e58e4c5cf684d46a95175c2907f25d1574b047ec484bee1ab60d090ef",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 9,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "2146892d1cd171b68df68532eca5f8771a4fbccfe5c30b663cf80b05a1fd73ff",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 13,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "constant",
+      "timing": {
+        "cpu_seconds": 0.0015328219999997117,
+        "wall_seconds": 0.0032224660000110816
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "3ad6b7a1e758f978073c7277729c81e832d1fb9964ff154c910e7f3bb6b573c1",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 9,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "5ef49cebdd45c96c17b6e3774ac95cf282ae018df6ff74c72e02285cbe87f98f",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 90,
+        "holdout": {
+          "absolute_error": 13,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 198
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 108
+      },
+      "task": "constant",
+      "timing": {
+        "cpu_seconds": 0.0022311039999998172,
+        "wall_seconds": 0.004122615000028418
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "3de492a3aa7685c880f9c0a094eeae798f60348b4df5af76508836bd55f5a4d3",
+      "frozen_candidate": {
+        "ast": [
+          "const",
+          2,
+          []
+        ],
+        "decisions": [
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+        "validation": {
+          "absolute_error": 3,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "d44a80979894482ef6b45b50dd9dd7c87f3b38dfbdfd6c93b9a3a9f1f3651975",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 3,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "constant",
+      "timing": {
+        "cpu_seconds": 0.001756301999998655,
+        "wall_seconds": 0.003443034000042644
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "3ec872f1fa660e166263659b1a4265dc43bb0f601262a1e3cef5323686e918f9",
+      "frozen_candidate": {
+        "ast": [
+          "const",
+          2,
+          []
+        ],
+        "decisions": [
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+        "validation": {
+          "absolute_error": 3,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "d0d8cb6a36d304f5c30e834c6ebd95d3eea77af4e4ac218cd3fb6a84b45a1f5b",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 3,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "constant",
+      "timing": {
+        "cpu_seconds": 0.001901299000000023,
+        "wall_seconds": 0.0034029949999876408
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "132238d5df841e892bbe1931f9c2a4fdacf0d5a4ae9f786d284a0809b547396c",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 7,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "8ad970590102fd44184d59f21fdeae271bbe38e3d7a686ca5a4f67c4b90583ee",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 13,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "outside_grammar_floor_division",
+      "timing": {
+        "cpu_seconds": 0.001741789999998744,
+        "wall_seconds": 0.003828458000043611
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "baf40ffd557e867f68c9f4e69aa1a51c50389f23adba72ad9f347b77c39d7bb7",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 7,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "81bfd2d88a3b7156b2ec5a380de3cde7082945f04e6f301ec1948a2e7faa2fd3",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 90,
+        "holdout": {
+          "absolute_error": 13,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 198
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 108
+      },
+      "task": "outside_grammar_floor_division",
+      "timing": {
+        "cpu_seconds": 0.0022277389999985076,
+        "wall_seconds": 0.0039697370000340015
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "c7f5a75d78e1f6bd294433f40a42cadd6a37fdbcedd8deca2622d331c993bede",
+      "frozen_candidate": {
+        "ast": [
+          "const",
+          0,
+          []
+        ],
+        "decisions": [
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+        "validation": {
+          "absolute_error": 3,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "c11d9f575c7b962af67bf5168f54cd8f8e75dfb26f88b3cbf51e0e7c1bc1acb4",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 3,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "outside_grammar_floor_division",
+      "timing": {
+        "cpu_seconds": 0.00205891000000058,
+        "wall_seconds": 0.0036532569999963016
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "896a3b2d34383882638c426419f169617beb6f73dff013b6f71f0ec66cefcf36",
+      "frozen_candidate": {
+        "ast": [
+          "const",
+          0,
+          []
+        ],
+        "decisions": [
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+        "validation": {
+          "absolute_error": 3,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "cb0322ca3527516dae10fde2120e481744decbccd16070bdbcdbed3a0c1238aa",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 3,
+          "correct": 1,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "outside_grammar_floor_division",
+      "timing": {
+        "cpu_seconds": 0.0019741139999993607,
+        "wall_seconds": 0.003894485999921926
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "308c6f8e32cf541e8ef175601bec04a054c3bb6f9d22e58b1c9de7387e09fa89",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "var",
+              "x",
+              []
+            ],
+            [
+              "var",
+              "y",
+              []
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": true
+          }
+        ],
+        "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "validation": {
+          "absolute_error": 1598,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "3a48a26e1e31b97fb56a9e62805351c74d16d64cad543c6ca3dee9d7f74e9f55",
+      "mode": "fixed",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 6506,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 12,
+        "selected_id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+        "status": "complete",
+        "total_work": 30
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 1,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "grammar_exhausted",
+        "search_work": 12
+      },
+      "task": "outside_budget_polynomial",
+      "timing": {
+        "cpu_seconds": 0.0014746030000001298,
+        "wall_seconds": 0.0031001539999806482
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "dc2a0da4735b21eef304bf757a04c02ced490754931517dc4e226da93fbbb40a",
+      "frozen_candidate": {
+        "ast": [
+          "add",
+          null,
+          [
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "x",
+                  []
+                ]
+              ]
+            ],
+            [
+              "mul",
+              null,
+              [
+                [
+                  "const",
+                  2,
+                  []
+                ],
+                [
+                  "var",
+                  "y",
+                  []
+                ]
+              ]
+            ]
+          ]
+        ],
+        "decisions": [
+          {
+            "id": "49ef4ea774c00fb105c1ffc6bde50902de5466cc2a18635b0292939e062492ef",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "60379893b01624503000c3c0d9c856ea141ee4831a4f5ec6cb73fddc9034ad21",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c7397b38f60dd24196a0fa45842625991ef16dfc1a19fa781c9f54a93157330b",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "d895dc5734514cae663e55adf76f025beef657a7d875e7093fcbcf1b5fab77be",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+        "validation": {
+          "absolute_error": 1592,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "5b84b696a86787ec49e41400deb981042a0a19a5fda184b3904a855b7c90bad5",
+      "mode": "fixed-list",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 102,
+        "holdout": {
+          "absolute_error": 6496,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 108,
+        "selected_id": "72104adc6a8d8ce780debd8f4c7b0f990fe2dcf2bf41e1b70433c31cad96054a",
+        "status": "complete",
+        "total_work": 210
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 108
+      },
+      "task": "outside_budget_polynomial",
+      "timing": {
+        "cpu_seconds": 0.002149946999999486,
+        "wall_seconds": 0.0038095290000228488
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "17f1190d304bb053e1499ae162a7165b822898087a02d950650fc331738cdd2a",
+      "frozen_candidate": {
+        "ast": [
+          "const",
+          2,
+          []
+        ],
+        "decisions": [
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+        "validation": {
+          "absolute_error": 1598,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "e2cdb771af4c3f05ceb53df3335e870ac433ddb65617fb2fd3a392f0cfbda715",
+      "mode": "enumerate",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 6510,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "outside_budget_polynomial",
+      "timing": {
+        "cpu_seconds": 0.0017910549999999859,
+        "wall_seconds": 0.003686635999997634
+      }
+    },
+    {
+      "budget": "tight",
+      "chain_head": "9f2f4a2f5369b57119e1e18eaaa5c021885cb85b03b266545502608b979fa300",
+      "frozen_candidate": {
+        "ast": [
+          "const",
+          2,
+          []
+        ],
+        "decisions": [
+          {
+            "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+            "reason": "validation_rank",
+            "selected": true
+          },
+          {
+            "id": "c14eec55df13e9c362ec79b7f9f8b38811bf94f5f46b49563d0dfa9a9d030518",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "ed2f22dd2ed175b61bc9f835a0d1f90440b5d7ce973092209d8529d79a7af056",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "a3d1f259db99c8e339536e0a2d6f80f35a5634266e53a4f5ff1201b8ada5bf03",
+            "reason": "validation_rank",
+            "selected": false
+          },
+          {
+            "id": "55af469df2994b56cdd602c839433442c3e15e748e3ead83766ba5c1aed50a64",
+            "reason": "validation_rank",
+            "selected": false
+          }
+        ],
+        "id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+        "validation": {
+          "absolute_error": 1598,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        }
+      },
+      "journal_sha256": "9dc9428c72af40f7e01f9e0ee9c747ba8a39fd1d09dff2cd76045af68ce9d1af",
+      "mode": "beam",
+      "result": {
+        "candidate_promoted": false,
+        "evaluation_work": 18,
+        "holdout": {
+          "absolute_error": 6510,
+          "correct": 0,
+          "count": 3,
+          "status": "ok"
+        },
+        "scientific_decision": "NOT_ASSESSED",
+        "search_work": 20,
+        "selected_id": "fc3f00fc8a88e9d032027ae317fbff1c124bc2ce9f5b112f34ecd7c36f902ff4",
+        "status": "complete",
+        "total_work": 38
+      },
+      "search": {
+        "bound_rejections": 0,
+        "candidates": 5,
+        "commutative_or_duplicate_skips": 0,
+        "composition_attempts": 0,
+        "limits": {
+          "beam_width": 20,
+          "max_candidates": 5,
+          "max_depth": 3,
+          "max_operations": 3,
+          "max_work": 174,
+          "shortlist": 5
+        },
+        "reason": "candidate_limit",
+        "search_work": 20
+      },
+      "task": "outside_budget_polynomial",
+      "timing": {
+        "cpu_seconds": 0.0015541290000005148,
+        "wall_seconds": 0.0032273830000804082
+      }
+    }
+  ],
+  "schema": 1,
+  "scientific_decision": "NOT_ASSESSED",
+  "status": "PUBLIC_SYNTHETIC_DEVELOPMENT_ONLY"
+}

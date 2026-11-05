@@ -1,0 +1,6 @@
+Before fix: forged search cost, frozen AST, and false-to-0 type alias accepted: 64 journals
+Original committed benchmark evidence was not modified.
+After fix: search forgery REJECTED: summary receipt mismatch: search
+After fix: frozen_candidate forgery REJECTED: summary receipt mismatch: frozen_candidate
+After fix: result forgery REJECTED: summary receipt mismatch: result
+After-fix integration reproductions: 3/3 rejected; original evidence unchanged.
