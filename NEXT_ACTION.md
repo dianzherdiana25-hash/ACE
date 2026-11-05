@@ -1,8 +1,8 @@
-# NEXT_ACTION — reproduksi dan audit E1.4q
+# NEXT_ACTION — E1.4r verifikasi warisan sebelum dipakai
 
-1. Verifikasi HEAD GitHub dan [protokol beku](design/e1.4/E14Q_PROTOCOL_v1.md). Validasi Bubblewrap native dengan [preflight](docs/ACE_SPRINT_RUNTIME.md). Gunakan direktori WORK yang sudah dibuat dan ledger terpisah untuk skor dan replay.
-2. Jalankan tiga perintah di bawah. Jika timeout, gunakan ulang ledger yang sama untuk proses yang terputus. Jangan membuat ulang bank atau manifest di checkout produksi.
-3. Simpan skor, replay, audit, biaya struktural, serta keputusan pada branch penelitian. Laporkan strata prefiks campuran terpisah dari gerbang utama.
+1. Verifikasi HEAD dan baca [hasil pewarisan](design/e1.4/E14P_RESULT_v1.md) serta [hasil pertanyaan graf](design/e1.4/E14Q_RESULT_v1.md).
+2. Uji satu label diagnostik untuk memilih interpretasi artefak yang cocok. Pakai target publik baru dan pembanding kalibrasi pasif serta rantai terarah. Uji salah waris di luar menu dan label yang sama untuk motif berbeda.
+3. Pertahankan HOLD untuk loop aktif graf rantai, generalisasi alami, dan pergeseran warisan yang belum terdeteksi.
 
 ## Reproduksi E1.4q
 

@@ -1,0 +1,130 @@
+{
+  "audit": {
+    "blocks": 12,
+    "deterministic_sha256": "4cebc697beac5da06c8de5ceb2dab0be2cd0910a0596d7ae3f0f1a3c89087ccd",
+    "replay_match": true,
+    "status": "COMPLETE"
+  },
+  "bank_sha256": "8a9f5e6a9aba6100596649365987e1aa7e9b0e04cb8e5543f93d16c19182896d",
+  "boundary": {
+    "binary": "/usr/bin/bwrap",
+    "checks": {
+      "credential_env_absent": true,
+      "evaluator_module_absent": true,
+      "host_loopback_denied": true,
+      "private_file_denied": true,
+      "query_stage_without_evaluator": true,
+      "worker_mount_read_only": true
+    },
+    "native_elf": true,
+    "sha256": "573236e5328ac2ebb08f59ae3a9805b4f8d12bdef14be8af4450d5463294985f"
+  },
+  "compressed_sha256": {
+    "replay": "d60b759cd5656c468d380f13b9ab96157f4a624e2483ad23b89630205bc9dbc5",
+    "score": "f6d2bf18a5891a3c9a9c9154b71ad33d7a977fa0e62e6b021e571f2b24514cdd"
+  },
+  "freeze_commit": "5966f7d506e15be4e51a42c5e52fdb91ca348ea0",
+  "plan_sha256": "5a8ff4f5ebacc6794233f24dd145179a0e9105ae95a6eaca23d90049474201a3",
+  "regression": {
+    "log_sha256": "a3a71266daa79a86c3dcd39652785b690cf03fbe1b70005e3b2c735ba1fe094b",
+    "passed": 110,
+    "terminal": {
+      "elapsed_s": 79.23,
+      "exit_code": 0,
+      "log_file": "../ace-sprint-q-reg.log",
+      "status": "COMPLETE"
+    },
+    "total": 110
+  },
+  "summary": {
+    "blocks": 12,
+    "cells": {
+      "mixed": {
+        "chain": {
+          "all_four_blocks": 0,
+          "covered": 84,
+          "edges": 192,
+          "errors": 0,
+          "full": 6,
+          "labels": 24,
+          "nodes": 216,
+          "offers": 24
+        },
+        "packed": {
+          "all_four_blocks": 0,
+          "covered": 144,
+          "edges": 384,
+          "errors": 0,
+          "full": 12,
+          "labels": 24,
+          "nodes": 384,
+          "offers": 36
+        },
+        "random": {
+          "all_four_blocks": 0,
+          "covered": 56,
+          "edges": 256,
+          "errors": 0,
+          "full": 4,
+          "labels": 16,
+          "nodes": 240,
+          "offers": 48
+        }
+      },
+      "shared": {
+        "chain": {
+          "all_four_blocks": 0,
+          "covered": 84,
+          "edges": 192,
+          "errors": 0,
+          "full": 6,
+          "labels": 24,
+          "nodes": 216,
+          "offers": 24
+        },
+        "packed": {
+          "all_four_blocks": 6,
+          "covered": 192,
+          "edges": 384,
+          "errors": 0,
+          "full": 24,
+          "labels": 24,
+          "nodes": 360,
+          "offers": 48
+        },
+        "random": {
+          "all_four_blocks": 0,
+          "covered": 66,
+          "edges": 256,
+          "errors": 0,
+          "full": 5,
+          "labels": 16,
+          "nodes": 240,
+          "offers": 48
+        }
+      }
+    },
+    "packed_query": "GO",
+    "worlds": 48
+  },
+  "terminal": {
+    "audit": {
+      "elapsed_s": 0.702,
+      "exit_code": 0,
+      "log_file": "audit.log",
+      "status": "COMPLETE"
+    },
+    "replay": {
+      "elapsed_s": 1.906,
+      "exit_code": 0,
+      "log_file": "replay.log",
+      "status": "COMPLETE"
+    },
+    "score": {
+      "elapsed_s": 1.912,
+      "exit_code": 0,
+      "log_file": "score.log",
+      "status": "COMPLETE"
+    }
+  }
+}

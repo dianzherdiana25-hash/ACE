@@ -1,6 +1,10 @@
 # Keadaan ACE saat ini
 
-## E1.4q — checkpoint pra-penilaian
+## E1.4q — pertanyaan graf bercabang GO dalam kondisi terkontrol
+
+Pada awalan bersama, satu label biaya memisahkan keempat hipotesis pada 6/6 blok. Kasus lengkap 24/24, dibanding 6/24 untuk rantai dan 5/24 untuk graf acak. Awalan campuran hanya 12/24 dengan graf terarah. Per query terarah perlu 16 sisi dibanding delapan pada rantai. Himpunan hipotesis disediakan. HOLD loop rantai E1.4o dan NATURAL_HOLD tetap berlaku. Replay cocok, audit 12 blok, regresi 110/110. [Hasil](design/e1.4/E14Q_RESULT_v1.md) · [Bukti](evidence/e14/e14q_verification_v1.json).
+
+## E1.4q — checkpoint historis pra-penilaian
 
 Bank publik baru terdiri dari 12 blok dan 48 dunia berpasangan. Satu label biaya graf membandingkan pertanyaan bercabang terarah, rantai tunggal, dan cabang acak. Dua tes pra-penilaian lulus. [Protokol](design/e1.4/E14Q_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14Q_LOCK_v1.json).
 
