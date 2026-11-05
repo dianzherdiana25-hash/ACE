@@ -68,5 +68,23 @@
     },
     "e15_exact_archive_execution": "NOT_RUN_LOCAL",
     "candidate_claim": "NOT_ASSESSED"
+  },
+  "followup_3": {
+    "study": "null multiple-selection optimizer + evaluator lineage contamination falsifiers",
+    "tests": {
+      "local_total": 45,
+      "pass": 44,
+      "skip": 1,
+      "failed": 0
+    },
+    "selection_bias_report": "results_selection_bias.json",
+    "selection_seed": 14005,
+    "selected_validation_mean": 0.7257486979166666,
+    "selected_evaluation_mean": 0.509765625,
+    "selected_evaluation_minus_fixed": -0.0008951822916666297,
+    "naive_validation_gains": 452,
+    "naive_false_progress": 257,
+    "repetitions": 512,
+    "claim_gate": "NOT_CONFIRMED"
   }
 }

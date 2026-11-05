@@ -1,6 +1,8 @@
 """Controls for evaluator false-positive measurement under researcher selection."""
 from __future__ import annotations
 import unittest
+import json
+from pathlib import Path
 from .selection_bias import experiment
 
 
@@ -11,6 +13,10 @@ class SelectionBiasTests(unittest.TestCase):
 
     def test_deterministic(self):
         self.assertEqual(self.result, experiment())
+
+    def test_published_json_is_byte_replayable(self):
+        saved = json.loads(Path(__file__).with_name('results_selection_bias.json').read_text())
+        self.assertEqual(saved, self.result)
 
     def test_null_population_declared(self):
         self.assertEqual(self.result['design']['ground_truth_candidate_accuracy'], 0.5)
