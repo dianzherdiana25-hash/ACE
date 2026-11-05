@@ -62,3 +62,18 @@ In local R8-only staging, the source archive is absent: the exact-byte archive t
 ### Method correction
 
 The earlier generic pre/post metric could be misread as "adaptation speed" even where the generator records no actual label acquisition. R8 now uses the key `pre_post_difference_descriptive_only` and emits `ADAPTATION_PROTOCOL_NOT_ESTABLISHED` when such a difference occurs. It flags **any** unmatched operation/label budget (in addition to the >2× warning), rather than treating modest extra compute as free. A causal adaptation claim requires documented intervention, pre/post timing, controlled exposure, correct task identity and matched compute. Claim gate remains `NOT_CONFIRMED`.
+
+## R8 follow-up: winner's-curse / adaptive benchmark selection falsifier
+
+`selection_bias.py` simulates a **known-null** research selection problem: 48 independent Bernoulli(0.5) candidate policies, 24 validation and 24 separate evaluation cases, 512 seeded repetitions (`seed=14005`). In every repetition, all 48 candidates are compared on validation, the candidate index is frozen with deterministic tie-break, and only selected and fixed-baseline arms receive post-freeze evaluation scores (same receipt reused if they are the same arm). This is a **simulation** of separate evaluation, not a sealed third-party scorer.
+
+Execute:
+
+```sh
+PYTHONPATH=code python -m unittest ace_research_measurement.test_measurement ace_research_measurement.test_e15_audit ace_research_measurement.test_selection_bias -v
+PYTHONPATH=code python -m ace_research_measurement.selection_bias --output /tmp/r8_selection_bias.json
+```
+
+Actual local run: **34 tests / 33 PASS / 1 SKIP** (pinned E1.5 archive still absent from R8-only local staging). The selected arm's average validation score **0.725749** falls to **0.509766** on new evaluation; the fixed baseline's evaluation score is **0.510661**. Selection optimism = **+0.215983**. A naive +0.10 relative-to-baseline validation rule would accept **452/512** null experiments; **257/512** of all experiments meet that validation rule and show **no holdout gain**. A +0.10 single evaluation threshold still fires in **118/512** trials under this null, so merely observing a threshold excess is **not** a calibrated independent statistical significance test.
+
+No actual ACE policy was run, no new intelligence demonstrated, and the public simulated evaluation is not sealed. The negative result motivates prespecified effect sizes, post-selection correction, evaluator-only fresh banks, exposure logs, confirmatory clustered intervals and disclosure of all tested candidate arms. See `results_selection_bias.json`. This study is independent of the S5 open-ended exploration mechanism.

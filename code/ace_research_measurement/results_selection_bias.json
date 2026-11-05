@@ -1,0 +1,35 @@
+{
+  "claim_gate": "NOT_ASSESSED",
+  "counts": {
+    "independent_evaluation_wins": 118,
+    "naive_false_progress": 257,
+    "naive_validation_wins": 452,
+    "selected_worse_on_evaluation": 218
+  },
+  "design": {
+    "arms": 48,
+    "evaluation_cases": 24,
+    "ground_truth_candidate_accuracy": 0.5,
+    "promotion_threshold": 0.1,
+    "repetitions": 512,
+    "seed": 14005,
+    "validation_cases": 24
+  },
+  "interpretation": "Post-selection validation is optimistic under a pure null. Public simulated evaluation is not independent external confirmation.",
+  "means": {
+    "fixed_evaluation": 0.5106608072916666,
+    "fixed_validation": 0.4954427083333333,
+    "selected_evaluation": 0.509765625,
+    "selected_evaluation_minus_fixed_evaluation": -0.0008951822916666297,
+    "selected_validation": 0.7257486979166666,
+    "validation_selection_optimism": 0.21598307291666663
+  },
+  "rates": {
+    "independent_evaluation_gain_at_least_threshold": 0.23046875,
+    "naive_validation_gain_at_least_threshold": 0.8828125,
+    "naive_wins_but_evaluation_no_gain": 0.501953125,
+    "selected_worse_than_fixed_on_evaluation": 0.42578125
+  },
+  "schema": "ace.r8.selection-bias-public.v1",
+  "selected_indices_sha256": "afe5907ce59bc1368174bd2f204438041e15f10096ca88da59b66b1cd869ad41"
+}
