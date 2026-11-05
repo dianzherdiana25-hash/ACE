@@ -110,5 +110,41 @@ class R1Tests(unittest.TestCase):
             self.assertEqual(m.signature(), reversed_model.signature(), name)
 
 
+class H2RandomDfaTests(unittest.TestCase):
+    def test_random_bank_is_preseeded_and_disjoint(self):
+        from . import random_dfa_bank as h2
+        rows = h2.new_tasks()
+        self.assertEqual(len(rows), 24)
+        self.assertEqual([n for n, _, _ in rows], [2]*6 + [3]*6 + [4]*6 + [5]*6)
+        self.assertEqual(rows, h2.new_tasks())
+        signatures = [tuple(h2.run_target(target, s) for s in d.training_words())
+                      for _, _, target in rows]
+        self.assertEqual(len(set(signatures)), 24)
+
+    def test_random_holdout_disjoint(self):
+        for i in range(24):
+            sample = d.heldout_regular(100+i)
+            self.assertEqual(len(sample), 256)
+            self.assertFalse(set(sample) & set(d.training_words()+d.validation_words()))
+
+    def test_h2_results_and_negative_counterexample(self):
+        from . import random_dfa_bank as h2
+        report = h2.run_h2()
+        self.assertEqual(report['total_all_labels'], 12264)
+        self.assertTrue(report['primary']['h2_passed'])
+        self.assertEqual(report['primary']['tasks_at_90'], 23)
+        self.assertEqual(report['tasks'][18]['scores']['induced']['holdout']['correct'], 195)
+        self.assertIsNotNone(report['tasks'][18]['induced_counterexample'])
+
+    def test_new_task_inference_uses_examples_only(self):
+        from . import random_dfa_bank as h2
+        for _, _, target in h2.new_tasks():
+            examples = [(s, h2.run_target(target, s)) for s in d.training_words()]
+            m, attempts = d.infer(examples)
+            self.assertLessEqual(m.reachable(), 63)
+            self.assertLess(attempts, d.MAX_MERGES)
+            self.assertTrue(all(m.run(s) == y for s, y in examples))
+
+
 if __name__ == "__main__":
     unittest.main()
