@@ -52,11 +52,11 @@ function runV3() {
     }
     return rules[t];
   }
-  function bank(seed,family,regime,episode,task,split){
-    const r=rand(seed*131071+C.families.indexOf(family)*7919+C.regimes.indexOf(regime)*601+
+  function bank(ruleSeed,drawSeed,family,regime,episode,task,split){
+    const r=rand(drawSeed*131071+C.families.indexOf(family)*7919+C.regimes.indexOf(regime)*601+
       task*10007+episode*2221+(split==="train"?1:split==="ood"?900001:400001));
     const n=split==="train"?C.examples_per_episode:C.eval_examples_per_task;
-    const w=teacher(seed,family,task);
+    const w=teacher(ruleSeed,family,task);
     const cen=(regime==="separated"?C.center:C.overlap_center)[task];
     const jitter=regime==="separated"?0.03:0.23;
     const ans=[];
@@ -65,7 +65,7 @@ function runV3() {
       const f=phi(x),v=w.reduce((s,wi,j)=>s+wi*f[j],0);
       const y=((v>=0?1:0)^(r()<C.noise_prob?1:0));
       const c=cen+(r()*2-1)*jitter+(split==="ood"?C.eval_shift:0);
-      ans.push({f,c,y,task});
+      ans.push({f,c,y,task,rule_seed:ruleSeed});
     }
     return ans;
   }
@@ -145,12 +145,13 @@ function runV3() {
   }
   function trial(seed,family,regime,method){
     const m=init(method,regime);
-    const test=Array.from({length:4},(_,t)=>bank(seed+200,family,regime,0,t,"test"));
-    const ood=Array.from({length:4},(_,t)=>bank(seed+300,family,regime,0,t,"ood"));
+    const test=Array.from({length:4},(_,t)=>bank(seed,seed+200,family,regime,0,t,"test"));
+    const ood=Array.from({length:4},(_,t)=>bank(seed,seed+300,family,regime,0,t,"ood"));
     const records=[],rng=rand(seed*7717+71),first=Array(4).fill(null),zeroShot=Array(4).fill(null);
-    const snapshots=[];
+    const snapshots=[],trainRuleSeeds=[];
     for(let ep=0;ep<C.episodes.length;ep++){
-      const task=C.episodes[ep],train=bank(seed,family,regime,ep,task,"train");
+      const task=C.episodes[ep],train=bank(seed,seed,family,regime,ep,task,"train");
+      trainRuleSeeds.push(train[0].rule_seed);
       if(first[task]===null)zeroShot[task]=accuracy(m,test[task]);
       if(method!=="frozen"||ep===0) {
         for(const p of train) {
@@ -185,6 +186,7 @@ function runV3() {
       average_forgetting:forget,backward_transfer:bwt,forward_transfer:fwt,
       ood_accuracy:avg(ood.map(b=>accuracy(m,b))),final_by_task:final,first_by_task:first,
       trajectory:records,
+      provenance:{train_rule_seeds:trainRuleSeeds,test_rule_seeds:test.map(b=>b[0].rule_seed),ood_rule_seeds:ood.map(b=>b[0].rule_seed)},
       costs:{new_labels:C.episodes.length*C.examples_per_episode,updates:m.updates,
         coordinate_ops:m.coordinate_ops,penalty_ops:m.penalty_ops,fisher_ops:m.fisher_ops,
         replay_examples:m.buffer.length,persistent_scalars:memoryScalars,
@@ -235,6 +237,7 @@ function testV3(f){
     const id=[x.family,x.regime,x.seed,x.method].join("/");
     guard(!ids.has(id),"duplicate "+id);ids.add(id);
     guard(x.trajectory.length===p.episodes.length,"episode trajectory");
+    guard(x.provenance.train_rule_seeds.every(z=>z===x.seed)&&x.provenance.test_rule_seeds.every(z=>z===x.seed)&&x.provenance.ood_rule_seeds.every(z=>z===x.seed),"split rule identity mismatch");
     guard(x.trajectory.every((row,i)=>row.episode===i&&row.task===p.episodes[i]),"episode leakage");
     guard(x.costs.new_labels===p.episodes.length*p.examples_per_episode,"labels");
     guard(x.costs.updates===(
@@ -258,7 +261,7 @@ function testV3(f){
       guard(Math.abs(mean-a.summary[family+"/"+regime][method][k])<1e-12,"aggregation "+k);
     }
   }
-  return {status:"PASS",invariant_categories:16,run_count:a.results.length,notes:"direct same-isolate replay; not GitHub exact-head CI"};
+  return {status:"PASS",invariant_categories:17,run_count:a.results.length,notes:"direct same-isolate replay; not GitHub exact-head CI"};
 }
 module.exports={runV3,testV3};
 if(require.main===module){console.error(JSON.stringify(testV3(runV3)));process.stdout.write(JSON.stringify(runV3(),null,2)+"\n");}
