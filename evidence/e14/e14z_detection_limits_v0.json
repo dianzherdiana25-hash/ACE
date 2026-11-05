@@ -1,0 +1,753 @@
+{
+  "bank_sha256": "0f8f98389d55e4f40121325a911534fde4cee0019af92b38e8f1107c9331b5ae",
+  "cases": [
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 6,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6765942390942391,
+      "miss_probability_two_random_queries": 0.8251748251748252,
+      "source_world": "z:000",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 6,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6765942390942391,
+      "miss_probability_two_random_queries": 0.8251748251748252,
+      "source_world": "z:000",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 9,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.5480769230769231,
+      "miss_probability_two_random_queries": 0.7440559440559441,
+      "source_world": "z:001",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 9,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.5480769230769231,
+      "miss_probability_two_random_queries": 0.7440559440559441,
+      "source_world": "z:001",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 6,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6765942390942391,
+      "miss_probability_two_random_queries": 0.8251748251748252,
+      "source_world": "z:002",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 6,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6765942390942391,
+      "miss_probability_two_random_queries": 0.8251748251748252,
+      "source_world": "z:002",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 6,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6765942390942391,
+      "miss_probability_two_random_queries": 0.8251748251748252,
+      "source_world": "z:003",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 6,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6765942390942391,
+      "miss_probability_two_random_queries": 0.8251748251748252,
+      "source_world": "z:003",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 9,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.5480769230769231,
+      "miss_probability_two_random_queries": 0.7440559440559441,
+      "source_world": "z:004",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 9,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.5480769230769231,
+      "miss_probability_two_random_queries": 0.7440559440559441,
+      "source_world": "z:004",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 7,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6314879564879565,
+      "miss_probability_two_random_queries": 0.7976689976689977,
+      "source_world": "z:005",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 7,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6314879564879565,
+      "miss_probability_two_random_queries": 0.7976689976689977,
+      "source_world": "z:005",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 5,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.7240745365745366,
+      "miss_probability_two_random_queries": 0.8531468531468531,
+      "source_world": "z:006",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 5,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.7240745365745366,
+      "miss_probability_two_random_queries": 0.8531468531468531,
+      "source_world": "z:006",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 5,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.7240745365745366,
+      "miss_probability_two_random_queries": 0.8531468531468531,
+      "source_world": "z:007",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 5,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.7240745365745366,
+      "miss_probability_two_random_queries": 0.8531468531468531,
+      "source_world": "z:007",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 3,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.826486013986014,
+      "miss_probability_two_random_queries": 0.9104895104895104,
+      "source_world": "z:008",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 3,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.826486013986014,
+      "miss_probability_two_random_queries": 0.9104895104895104,
+      "source_world": "z:008",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 6,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6765942390942391,
+      "miss_probability_two_random_queries": 0.8251748251748252,
+      "source_world": "z:009",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 6,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6765942390942391,
+      "miss_probability_two_random_queries": 0.8251748251748252,
+      "source_world": "z:009",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 7,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6314879564879565,
+      "miss_probability_two_random_queries": 0.7976689976689977,
+      "source_world": "z:010",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 7,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6314879564879565,
+      "miss_probability_two_random_queries": 0.7976689976689977,
+      "source_world": "z:010",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 6,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6765942390942391,
+      "miss_probability_two_random_queries": 0.8251748251748252,
+      "source_world": "z:011",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 6,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.6765942390942391,
+      "miss_probability_two_random_queries": 0.8251748251748252,
+      "source_world": "z:011",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 4,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.7740107115107115,
+      "miss_probability_two_random_queries": 0.8815850815850815,
+      "source_world": "z:012",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 4,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.7740107115107115,
+      "miss_probability_two_random_queries": 0.8815850815850815,
+      "source_world": "z:012",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 4,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.7740107115107115,
+      "miss_probability_two_random_queries": 0.8815850815850815,
+      "source_world": "z:013",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 4,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.7740107115107115,
+      "miss_probability_two_random_queries": 0.8815850815850815,
+      "source_world": "z:013",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 4,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.7740107115107115,
+      "miss_probability_two_random_queries": 0.8815850815850815,
+      "source_world": "z:014",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 4,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.7740107115107115,
+      "miss_probability_two_random_queries": 0.8815850815850815,
+      "source_world": "z:014",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 3,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.826486013986014,
+      "miss_probability_two_random_queries": 0.9104895104895104,
+      "source_world": "z:015",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 3,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.826486013986014,
+      "miss_probability_two_random_queries": 0.9104895104895104,
+      "source_world": "z:015",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 3,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.826486013986014,
+      "miss_probability_two_random_queries": 0.9104895104895104,
+      "source_world": "z:016",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 3,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.826486013986014,
+      "miss_probability_two_random_queries": 0.9104895104895104,
+      "source_world": "z:016",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 2,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.8815850815850815,
+      "miss_probability_two_random_queries": 0.9398601398601398,
+      "source_world": "z:017",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 2,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.8815850815850815,
+      "miss_probability_two_random_queries": 0.9398601398601398,
+      "source_world": "z:017",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 2,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.8815850815850815,
+      "miss_probability_two_random_queries": 0.9398601398601398,
+      "source_world": "z:018",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 2,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.8815850815850815,
+      "miss_probability_two_random_queries": 0.9398601398601398,
+      "source_world": "z:018",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 2,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.8815850815850815,
+      "miss_probability_two_random_queries": 0.9398601398601398,
+      "source_world": "z:019",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 2,
+      "drift": "near",
+      "miss_probability_four_random_queries": 0.8815850815850815,
+      "miss_probability_two_random_queries": 0.9398601398601398,
+      "source_world": "z:019",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:000",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:000",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:001",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:001",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:002",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:002",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:003",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:003",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 55,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.0004578754578754579,
+      "miss_probability_two_random_queries": 0.02564102564102564,
+      "source_world": "z:004",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 55,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.0004578754578754579,
+      "miss_probability_two_random_queries": 0.02564102564102564,
+      "source_world": "z:004",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:005",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:005",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:006",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:006",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:007",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:007",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:008",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:008",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:009",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:009",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 48,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.004245754245754246,
+      "miss_probability_two_random_queries": 0.07132867132867132,
+      "source_world": "z:010",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 48,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.004245754245754246,
+      "miss_probability_two_random_queries": 0.07132867132867132,
+      "source_world": "z:010",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 48,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.004245754245754246,
+      "miss_probability_two_random_queries": 0.07132867132867132,
+      "source_world": "z:011",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 48,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.004245754245754246,
+      "miss_probability_two_random_queries": 0.07132867132867132,
+      "source_world": "z:011",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:012",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:012",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:013",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:013",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:014",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:014",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:015",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:015",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:016",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 1,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:016",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:017",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:017",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:018",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:018",
+      "target_pair": 22
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:019",
+      "target_pair": 18
+    },
+    {
+      "actual_wrong_accept": 0,
+      "disagreement_points": 45,
+      "drift": "far",
+      "miss_probability_four_random_queries": 0.008304195804195804,
+      "miss_probability_two_random_queries": 0.0979020979020979,
+      "source_world": "z:019",
+      "target_pair": 22
+    }
+  ],
+  "scientific_decision": "NOT_ASSESSED",
+  "sha256": "3a861c394e663da586066df2b6331e73bda6dfd9b95c10d2812603fa1deae8d0",
+  "status": "POSTSCORE_HYPERGEOMETRIC_MISS_ANALYSIS",
+  "summary": {
+    "far": {
+      "actual_false_accepts_random_2": 3,
+      "expected_false_accepts_random_2": 3.6652680652680654,
+      "expected_false_accepts_random_4": 0.3002414252414251,
+      "legal_query_disagreement_points_max": 55,
+      "legal_query_disagreement_points_min": 45,
+      "source_operator_count": 20,
+      "target_worlds": 40,
+      "target_worlds_with_no_query_distinction": 0
+    },
+    "near": {
+      "actual_false_accepts_random_2": 36,
+      "expected_false_accepts_random_2": 34.222843822843835,
+      "expected_false_accepts_random_4": 29.272990897990905,
+      "legal_query_disagreement_points_max": 9,
+      "legal_query_disagreement_points_min": 2,
+      "source_operator_count": 20,
+      "target_worlds": 40,
+      "target_worlds_with_no_query_distinction": 0
+    }
+  },
+  "target_query_domain_size": 66,
+  "version": 1,
+  "warning": "expectations assume uniform random draws, not deterministic future experiment or OOD guarantee"
+}

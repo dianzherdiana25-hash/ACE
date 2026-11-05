@@ -1,0 +1,138 @@
+{
+  "accepted_heldout_predictions_rechecked": 1092,
+  "arms": 400,
+  "bank_sha256": "0f8f98389d55e4f40121325a911534fde4cee0019af92b38e8f1107c9331b5ae",
+  "batch_digests": [
+    {
+      "canonical_sha256": "aba275073107e5c5108e9c9f3b1b625b90ad5cd5349306a9333fdc72d65551de",
+      "name": "e14z-score-00-04.json"
+    },
+    {
+      "canonical_sha256": "695b7409d603909bc1e86009edcb304a35e66b811ff9d726b024fcbe8d13bf28",
+      "name": "e14z-score-05-09.json"
+    },
+    {
+      "canonical_sha256": "76b0a10f8ccc9f3f4aeee97c43227c0985c6b9957dd3198faa68360526ebb6c7",
+      "name": "e14z-score-10-14.json"
+    },
+    {
+      "canonical_sha256": "4692169c10247559932c9eed44ca63c20858135f5c62a2643efae38df8d59ba8",
+      "name": "e14z-score-15-19.json"
+    }
+  ],
+  "caveats": [
+    "same author selected near/far extreme signature pairs",
+    "source raw original SQLite journals not archived",
+    "independent-from-worker DFS cost oracle but same-author audit",
+    "no full checkout or native Bubblewrap proof"
+  ],
+  "scientific_decision": "NOT_ASSESSED",
+  "sha256": "23a48e850ce82e703a60ccf15091b8323b93f38879277d94868a934cc712d7ed",
+  "source_labels_independently_recomputed": 138,
+  "source_operators": 20,
+  "status": "POSTSCORE_NEGATIVE_TRANSFER_INDEPENDENT_AUDIT",
+  "summary": {
+    "cold-new": {
+      "far": {
+        "abstain": 36,
+        "accepted": 4,
+        "accepted_probes": 24,
+        "exact": 4,
+        "probe_errors": 0,
+        "target_labels": 160,
+        "wrong_accepted": 0
+      },
+      "near": {
+        "abstain": 40,
+        "accepted": 0,
+        "accepted_probes": 0,
+        "exact": 0,
+        "probe_errors": 0,
+        "target_labels": 160,
+        "wrong_accepted": 0
+      }
+    },
+    "cold-old": {
+      "far": {
+        "abstain": 40,
+        "accepted": 0,
+        "accepted_probes": 0,
+        "exact": 0,
+        "probe_errors": 0,
+        "target_labels": 70,
+        "wrong_accepted": 0
+      },
+      "near": {
+        "abstain": 4,
+        "accepted": 36,
+        "accepted_probes": 216,
+        "exact": 2,
+        "probe_errors": 48,
+        "target_labels": 118,
+        "wrong_accepted": 34
+      }
+    },
+    "sham-transfer": {
+      "far": {
+        "abstain": 36,
+        "accepted": 4,
+        "accepted_probes": 24,
+        "exact": 0,
+        "probe_errors": 17,
+        "target_labels": 80,
+        "wrong_accepted": 4
+      },
+      "near": {
+        "abstain": 21,
+        "accepted": 19,
+        "accepted_probes": 114,
+        "exact": 0,
+        "probe_errors": 49,
+        "target_labels": 80,
+        "wrong_accepted": 19
+      }
+    },
+    "transfer-direct": {
+      "far": {
+        "abstain": 0,
+        "accepted": 40,
+        "accepted_probes": 240,
+        "exact": 0,
+        "probe_errors": 200,
+        "target_labels": 0,
+        "wrong_accepted": 40
+      },
+      "near": {
+        "abstain": 0,
+        "accepted": 40,
+        "accepted_probes": 240,
+        "exact": 0,
+        "probe_errors": 29,
+        "target_labels": 0,
+        "wrong_accepted": 40
+      }
+    },
+    "transfer-verify2": {
+      "far": {
+        "abstain": 37,
+        "accepted": 3,
+        "accepted_probes": 18,
+        "exact": 0,
+        "probe_errors": 16,
+        "target_labels": 80,
+        "wrong_accepted": 3
+      },
+      "near": {
+        "abstain": 4,
+        "accepted": 36,
+        "accepted_probes": 216,
+        "exact": 0,
+        "probe_errors": 27,
+        "target_labels": 80,
+        "wrong_accepted": 36
+      }
+    }
+  },
+  "target_labels_independently_replayed": 828,
+  "version": 1
+}
