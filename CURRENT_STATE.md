@@ -1,5 +1,13 @@
 # Keadaan ACE saat ini
 
+## E1.5 — first runnable evidence-driven research controller (2026-11-05)
+
+**ENGINEERING_PUBLIC_DEVELOPMENT / scientific NOT_ASSESSED; NOT OAIE.** [Draft PR #25](https://github.com/dianzherdiana25-hash/ACE/pull/25) stacked on E1.4aa recovery [PR #24](https://github.com/dianzherdiana25-hash/ACE/pull/24) adds `code/ace_loop/` and `tools/ace_e15_regression.py`: one bounded multi-cycle research loop with frozen typed hypotheses, distinct training/validation/heldout, automatic candidate acceptance/rejection, fsynced SHA256 journal and interrupt-safe local replay; a portfolio controller allocates residual research trials to better validated tracks and explicitly suspends the other. This is a **finite policy-settings optimizer**, not a system capable of freely inventing/running new code or architectures.
+
+**Observed development result:** 12 policy trials on each public synthetic track. In-grammar validation 0/12 → 3/12 correct accepted, but final heldout utility deteriorates -54 → -67. The deployment gate **reverts typed policy to baseline** (nothing live was deployed); mixed-grammar track has no safe gain and keeps baseline. Portfolio pilot uses validation gains +42 vs 0 and pauses the second track. Both negative/positive records retained. Nine bounded regression groups produced **289/289 PASS** with individual SHA256 receipts on a compatible local checkout, **NOT** full clean exact-head GitHub CI or native Bubblewrap. Evidence and limitations in [E1.5 report](evidence/e15/E15_DEVELOPMENT_SUMMARY_v0.json), [docs](docs/ACE_E15_AUTONOMOUS_RESEARCH_HARNESS_DEV.md) and PR #25.
+
+**Codex E1.4aa continuity:** original prescore lock matched 17/17 source hashes at `4cbe8630f21db7ae58a64018fcf07547d8bcdb30`. Its 192-arm bank scoring and external oracle escrow remain open. E1.4aa frozen files, E1.4t evidence, main and Tod were not altered. E1.5 has no live remote actions, no background autonomy, no independent confirmatory evaluation, and no evidence of OAIE. **Do not merge or declare scientific GO.**
+
 ## E1.4t — integrated graph extension public development (2026-11-05)
 
 **ENGINEERING_PUBLIC_DEVELOPMENT / diagnostic HOLD / scientific NOT_ASSESSED.** [Draft PR #15](https://github.com/dianzherdiana25-hash/ACE/pull/15) on `codex/13-integrated-graph-loop` adds bounded length-8/9 synthesis from observed positive weighted branching-DAG examples, a per-arm durable SQLite four-label ledger, diagnosis receipt reuse, qualification, a namespace-isolated worker launcher with eight local canaries, five matched-cap controls, a prescore-locked 48-world bank and independently audited replay. **69/69 local tests PASS** on a partial compatible checkout; **full historical 114-test regression not run on exact PR head**.
