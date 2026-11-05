@@ -1,0 +1,240 @@
+{
+  "audit": {
+    "deterministic_sha256": "5efdcdc83bea6584da3f248d8460cfe62eb79d7e08748e50abb9290e1ad2fb2d",
+    "lineages": 12,
+    "replay_match": true,
+    "status": "COMPLETE"
+  },
+  "bank_sha256": "37d7cc2bb247d5f90daf69966147cb5001aece5e555d799f87bb2c64ca21388c",
+  "boundary": {
+    "binary": "/usr/bin/bwrap",
+    "checks": {
+      "credential_env_absent": true,
+      "evaluator_module_absent": true,
+      "host_loopback_denied": true,
+      "private_file_denied": true,
+      "successor_stage_without_evaluator": true,
+      "worker_mount_read_only": true
+    },
+    "native_elf": true,
+    "sha256": "573236e5328ac2ebb08f59ae3a9805b4f8d12bdef14be8af4450d5463294985f"
+  },
+  "compressed_sha256": {
+    "replay": "5b64a27bff9e7445c3c1c74e7707eaf077c232a4eaf6218b5c2e4bc663446585",
+    "score": "a10531550102c4e5c8ba4f309b9f11b7dd0e8987b3bcabfa7aeee0763396de81"
+  },
+  "freeze_commit": "9fe13a1b7e8087c2b0e2f3b1209f4f8d6499605b",
+  "plan_sha256": "e70a5ab8405f6371672654283a95bcef2bdb31e22d7f86699f521697421f6003",
+  "regression": {
+    "log_sha256": "9aa6f02cac57c7af1af80cff4d7f804d012b91ad925d8030685a60c31378f907",
+    "passed": 108,
+    "terminal": {
+      "elapsed_s": 79.27,
+      "exit_code": 0,
+      "log_file": "../ace-sprint-p-reg.log",
+      "status": "COMPLETE"
+    },
+    "total": 108
+  },
+  "summary": {
+    "aligned_transfer": "GO",
+    "cells": {
+      "aligned": {
+        "arms": {
+          "0": {
+            "cold": {
+              "artifact_used": 0,
+              "candidate_fits": 10752,
+              "covered": 0,
+              "errors": 0,
+              "false_positive": 0,
+              "full": 0
+            },
+            "inherited": {
+              "artifact_used": 12,
+              "candidate_fits": 12,
+              "covered": 96,
+              "errors": 0,
+              "false_positive": 0,
+              "full": 12
+            },
+            "sham": {
+              "artifact_used": 12,
+              "candidate_fits": 12,
+              "covered": 96,
+              "errors": 47,
+              "false_positive": 1,
+              "full": 0
+            }
+          },
+          "1": {
+            "cold": {
+              "artifact_used": 0,
+              "candidate_fits": 10752,
+              "covered": 49,
+              "errors": 0,
+              "false_positive": 0,
+              "full": 1
+            },
+            "inherited": {
+              "artifact_used": 12,
+              "candidate_fits": 12,
+              "covered": 96,
+              "errors": 0,
+              "false_positive": 0,
+              "full": 12
+            },
+            "sham": {
+              "artifact_used": 1,
+              "candidate_fits": 9868,
+              "covered": 53,
+              "errors": 2,
+              "false_positive": 0,
+              "full": 1
+            }
+          }
+        },
+        "worlds": 12
+      },
+      "shift_hidden": {
+        "arms": {
+          "0": {
+            "cold": {
+              "artifact_used": 0,
+              "candidate_fits": 5376,
+              "covered": 0,
+              "errors": 0,
+              "false_positive": 0,
+              "full": 0
+            },
+            "inherited": {
+              "artifact_used": 6,
+              "candidate_fits": 6,
+              "covered": 48,
+              "errors": 48,
+              "false_positive": 24,
+              "full": 0
+            },
+            "sham": {
+              "artifact_used": 6,
+              "candidate_fits": 6,
+              "covered": 48,
+              "errors": 26,
+              "false_positive": 2,
+              "full": 0
+            }
+          },
+          "1": {
+            "cold": {
+              "artifact_used": 0,
+              "candidate_fits": 5376,
+              "covered": 0,
+              "errors": 0,
+              "false_positive": 0,
+              "full": 0
+            },
+            "inherited": {
+              "artifact_used": 6,
+              "candidate_fits": 6,
+              "covered": 48,
+              "errors": 48,
+              "false_positive": 24,
+              "full": 0
+            },
+            "sham": {
+              "artifact_used": 6,
+              "candidate_fits": 6,
+              "covered": 48,
+              "errors": 26,
+              "false_positive": 2,
+              "full": 0
+            }
+          }
+        },
+        "worlds": 6
+      },
+      "shift_visible": {
+        "arms": {
+          "0": {
+            "cold": {
+              "artifact_used": 0,
+              "candidate_fits": 10752,
+              "covered": 0,
+              "errors": 0,
+              "false_positive": 0,
+              "full": 0
+            },
+            "inherited": {
+              "artifact_used": 12,
+              "candidate_fits": 12,
+              "covered": 96,
+              "errors": 96,
+              "false_positive": 48,
+              "full": 0
+            },
+            "sham": {
+              "artifact_used": 12,
+              "candidate_fits": 12,
+              "covered": 96,
+              "errors": 52,
+              "false_positive": 4,
+              "full": 0
+            }
+          },
+          "1": {
+            "cold": {
+              "artifact_used": 0,
+              "candidate_fits": 10752,
+              "covered": 4,
+              "errors": 0,
+              "false_positive": 0,
+              "full": 0
+            },
+            "inherited": {
+              "artifact_used": 0,
+              "candidate_fits": 10764,
+              "covered": 4,
+              "errors": 0,
+              "false_positive": 0,
+              "full": 0
+            },
+            "sham": {
+              "artifact_used": 10,
+              "candidate_fits": 1804,
+              "covered": 80,
+              "errors": 40,
+              "false_positive": 0,
+              "full": 0
+            }
+          }
+        },
+        "worlds": 12
+      }
+    },
+    "lineages": 12,
+    "natural_decision": "NATURAL_HOLD",
+    "source_observation_labels": 40,
+    "target_worlds": 30,
+    "worker_calls": 192
+  },
+  "terminal": {
+    "audit": {
+      "elapsed_s": 2.005,
+      "exit_code": 0,
+      "log_file": "audit.log",
+      "status": "COMPLETE"
+    },
+    "replay": {
+      "elapsed_s": 9.427,
+      "exit_code": 0,
+      "log_file": "replay.log",
+      "status": "COMPLETE"
+    },
+    "score": {
+      "elapsed_s": 9.368,
+      "exit_code": 0,
+      "log_file": "score.log",
+      "status": "COMPLETE"
+    }
+  }
+}

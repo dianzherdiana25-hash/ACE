@@ -1,6 +1,10 @@
 # Keadaan ACE saat ini
 
-## E1.4p — checkpoint pra-penilaian
+## E1.4p — pewarisan selaras GO, pergeseran tersembunyi belum teratasi
+
+Pendahulu simbol menghasilkan 12/12 artefak bertipe yang dapat dipakai kembali pada tugas biaya minimum graf bercabang dengan pemetaan yang disediakan. Satu label target menghasilkan 12/12 kasus selaras lengkap versus 1/12 untuk cold dan sham. Label diagnostik menolak artefak salah pada 12/12 pergeseran yang tampak. Pada pergeseran tersembunyi, warisan menerima 48/48 prediksi salah. **NATURAL_HOLD.** Replay dan audit cocok, regresi 108/108. [Hasil](design/e1.4/E14P_RESULT_v1.md) · [Bukti](evidence/e14/e14p_verification_v1.json).
+
+## E1.4p — checkpoint historis pra-penilaian
 
 Dua belas pendahulu simbol, 30 dunia graf bercabang, dan satu label target. Artefak pewarisan bertipe diuji terhadap cold dan sham. Tes 3/3. [Protokol](design/e1.4/E14P_PROTOCOL_v1.md).
 

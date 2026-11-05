@@ -1,8 +1,8 @@
-# NEXT_ACTION — E1.4p pewarisan bertipe ke graf bercabang
+# NEXT_ACTION — E1.4q observasi graf yang membedakan hipotesis
 
-1. Verifikasi HEAD GitHub. Baca [hasil E1.4n](design/e1.4/E14N_RESULT_v1.md) dan [hasil E1.4o](design/e1.4/E14O_RESULT_v1.md). Loop graf E1.4o tetap HOLD. Pada graf rantai, label biner dan deteksi terlambat membatasi bukti perbaikan.
-2. Jalankan percobaan terpisah. Bangun artefak dari pendahulu simbol yang belajar dari label terjadwal, lalu impor hanya DSL bertipe ke penerus yang meminimalkan biaya jalur pada graf bercabang. Bandingkan cold, warisan, dan artefak kontrol pada anggaran target identik. Uji kecocokan dan mismatch yang tampak maupun tersembunyi.
-3. Pertahankan gerbang graf otonom dan NATURAL_HOLD terpisah dari hasil pewarisan.
+1. Verifikasi HEAD dan baca [hasil loop aktif](design/e1.4/E14O_RESULT_v1.md) serta [hasil pewarisan](design/e1.4/E14P_RESULT_v1.md).
+2. Bekukan eksperimen publik terpisah dengan hipotesis graf yang diberikan dan bandingkan satu label dari graf bercabang terarah, graf rantai, dan graf bercabang acak. Hitung biaya struktur, cakupan, dan kesalahan secara terpisah.
+3. Pertahankan HOLD untuk loop aktif pada graf rantai, generalisasi alami, dan pergeseran warisan yang belum terdeteksi.
 
 ## Reproduksi E1.4p
 
