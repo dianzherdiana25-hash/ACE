@@ -1,0 +1,60 @@
+{
+  "caveats": [
+    "hindsight point-patch operator, not in original DSL",
+    "same-author evaluator and source archive",
+    "assumes unrestricted true operator class",
+    "no certified native Bubblewrap",
+    "not a full historical GitHub checkout regression"
+  ],
+  "date": "2026-11-05",
+  "finite_grid_points": 120,
+  "original_development_audit": {
+    "pair_sources": 12,
+    "probe_oracle_calls": 6912,
+    "source_oracle_replay": 34,
+    "target_oracle_replay": 1999
+  },
+  "original_purchased_cost_pairs_per_case": {
+    "max": 3,
+    "min": 3
+  },
+  "original_scanned_safe_arms": 192,
+  "regression_local": {
+    "full_GitHub_checkout": false,
+    "groups": 10,
+    "tests": 227
+  },
+  "replay_fail": 0,
+  "replay_pass": 120,
+  "scientific_decision": "NOT_ASSESSED",
+  "source_files": {
+    "WORK/e14x-countermodel-replay.json": {
+      "bytes": 22245,
+      "sha256": "9f29142965f278703f22ce22106e16ebb92fbc862e096fdeb61355646122365b"
+    },
+    "WORK/e14x-identifiability-main.json": {
+      "bytes": 179502,
+      "sha256": "024973f23f6d6eddca1114848515b34cc59eeb1d95bd46f9a878c430e5098c52"
+    },
+    "WORK/e14x-independently-audited-batch0.json": {
+      "bytes": 2047,
+      "sha256": "98321116aebbd9d905257dab07b6232563cfa00170a14af6752449834eb860b6"
+    },
+    "WORK/e14x-independently-audited-batch1.json": {
+      "bytes": 2049,
+      "sha256": "8940ba317d12b65bc7433ffa46df77f995142d5cbb56c8fa065b686acf1e9272"
+    },
+    "WORK/e14x-independently-audited-batch2.json": {
+      "bytes": 2048,
+      "sha256": "8d496c300783194d4fee78a9c402af5e352329c2a426deb9ed41c54d2b9d1953"
+    },
+    "WORK/e14x-run-aggregate.json": {
+      "bytes": 3133,
+      "sha256": "09894cb8dbfd72dfea766905e2a11ebb16c2ac1f410f97b5caa932fba12a09af"
+    }
+  },
+  "status": "POSTSCORE_E14X_PUBLIC_DEVELOPMENT",
+  "unmeasured_cost_pairs_per_case": 117,
+  "version": 1,
+  "witness_certificates": 120
+}

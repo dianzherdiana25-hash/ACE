@@ -1,0 +1,77 @@
+{
+  "batches": 4,
+  "files": [
+    {
+      "arms": 96,
+      "path": "e14w-batch-08.json",
+      "sha256": "0e6ff367077dcf6214d7b25b57d42ef7d48e37e304b49c663eb5147666fa4252",
+      "worlds": 16
+    },
+    {
+      "arms": 96,
+      "path": "e14w-batch-09.json",
+      "sha256": "b9f9bdbf0be61835ce677871e3cb804e032f2396a6893bc5ef3e562f3b560746",
+      "worlds": 16
+    },
+    {
+      "arms": 96,
+      "path": "e14w-batch-10.json",
+      "sha256": "89c7c4530be7250ad02996371a3eeb7d6523e2c164c31a749b84edef86dabafd",
+      "worlds": 16
+    },
+    {
+      "arms": 96,
+      "path": "e14w-batch-11.json",
+      "sha256": "65daf03f8cb3ef8a2c4b394ca817da0307a78f6890e3a68c815bf1fe8763c8fc",
+      "worlds": 16
+    }
+  ],
+  "pair_sources": 4,
+  "policy_summary": {
+    "compact-safe:arms": 64,
+    "compact-safe:correct": 6,
+    "compact-safe:covered": 36,
+    "compact-safe:errors": 0,
+    "compact-safe:wrong": 0,
+    "known-pair-upper:arms": 64,
+    "known-pair-upper:correct": 48,
+    "known-pair-upper:covered": 288,
+    "known-pair-upper:errors": 0,
+    "known-pair-upper:wrong": 0,
+    "random-safe:arms": 64,
+    "random-safe:correct": 36,
+    "random-safe:covered": 216,
+    "random-safe:errors": 0,
+    "random-safe:wrong": 0,
+    "sham-pair:arms": 64,
+    "sham-pair:correct": 0,
+    "sham-pair:covered": 0,
+    "sham-pair:errors": 0,
+    "sham-pair:wrong": 0,
+    "synthesis-eager:arms": 64,
+    "synthesis-eager:correct": 36,
+    "synthesis-eager:covered": 270,
+    "synthesis-eager:errors": 44,
+    "synthesis-eager:wrong": 9,
+    "synthesis-safe:arms": 64,
+    "synthesis-safe:correct": 36,
+    "synthesis-safe:covered": 216,
+    "synthesis-safe:errors": 0,
+    "synthesis-safe:wrong": 0
+  },
+  "probe_oracle_calls": 2304,
+  "scientific_decision": "NOT_ASSESSED",
+  "source_cost": {
+    "edges": 224,
+    "events": 168,
+    "nodes": 196
+  },
+  "source_oracle_replay": 14,
+  "status": "POSTSCORE_INDEPENDENT_DEVELOPMENT_AUDIT",
+  "target_cost": {
+    "edges": 4968,
+    "events": 3726,
+    "nodes": 4968
+  },
+  "target_oracle_replay": 621
+}
