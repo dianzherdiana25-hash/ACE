@@ -86,10 +86,12 @@ class R1Tests(unittest.TestCase):
     def test_noisy_label_can_break_generalization(self):
         # Negative: a synthetic label corruption can force a noncanonical DFA.
         examples = [(s, s.count("a") % 2 == 0) for s in d.training_words()]
-        flipped = [(s, not y if s == "aa" else y) for s, y in examples]
+        flipped = [(s, not y if s == "aabba" else y) for s, y in examples]
         model, _ = d.infer(flipped)
         self.assertTrue(all(model.run(s) == y for s, y in flipped))
         self.assertGreater(model.reachable(), 2)
+        holdout = [(s, s.count("a") % 2 == 0) for s in d.heldout_regular(0)]
+        self.assertLess(d.metric(model.run, holdout)["correct"], 256)
 
     def test_budget_halts_closed(self):
         examples = [(s, s.count("a") % 2 == 0) for s in d.training_words()]
