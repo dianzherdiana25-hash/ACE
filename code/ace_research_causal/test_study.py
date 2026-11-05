@@ -23,8 +23,16 @@ class StudyTests(unittest.TestCase):
         self.assertAlmostEqual(yp-y,2*(w.b+w.c*w.a))
 
     def test_observational_nonidentifiability(self):
-        self.assertEqual([(-1,-1),(1,1)],[(-1,-1),(1,1)])
-        self.assertNotEqual(1,0)  # do(X=1): X -> Y vs U -> Y
+        def scm_a(u, intervention=None):
+            x = u if intervention is None else intervention
+            return x, x  # X -> Y
+        def scm_b(u, intervention=None):
+            x = u if intervention is None else intervention
+            return x, u  # U -> Y only
+        self.assertEqual([scm_a(u) for u in (-1, 1)],
+                         [scm_b(u) for u in (-1, 1)])
+        self.assertNotEqual([scm_a(u, intervention=1) for u in (-1, 1)],
+                            [scm_b(u, intervention=1) for u in (-1, 1)])
 
     def test_budget_hard_stop(self):
         q=s.Sampler(s.World(1,1,1,1),1,2)
