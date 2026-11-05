@@ -1,0 +1,41 @@
+name: ACE automation exact-head CI
+on:
+  pull_request:
+    paths:
+      - 'code/ace_loop/**'
+      - 'tools/ace_ci_*.py'
+      - '.github/workflows/ace-automation-ci*.yml'
+  workflow_dispatch:
+    inputs:
+      expected_sha:
+        description: 'Full 40-character commit SHA to verify'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  exact-head:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.expected_sha }}
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Run fail-closed regression and record provenance
+        env:
+          EXPECTED_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || inputs.expected_sha }}
+        run: |
+          python tools/ace_ci_exact_head.py --expected-sha "$EXPECTED_SHA"
+      - name: Upload CI provenance even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-exact-head-report
+          path: ace-ci-report.json
+          if-no-files-found: warn
