@@ -1,0 +1,207 @@
+{
+  "schema": 1,
+  "project": "ACE R7",
+  "iteration": "R7.5",
+  "status": "PUBLIC_SYNTHETIC_DEVELOPMENT_HOLD",
+  "pr_number": 43,
+  "pr_base": "research/e15-source-evolution",
+  "branch": "research/chat-r7-uncertainty",
+  "protocol_commit": "2eccd3c38593048cda743c52ec8032cf05ce137c",
+  "source_after_timeout_cache_commit": "8fa02b8365f5c097972359da099fdeb30d1f9450",
+  "source_blob_sha": "26988e3e65c1aebd0001094f7087e69decb9413f",
+  "test_blob_sha": "34acc9fdda48eb0043fcfd854a9b993439913697",
+  "audit_code_blob_sha": "8df3249b88f7776128e2fa971916e8df973fb01d",
+  "environment": {
+    "python": "3.13.5",
+    "external_evaluator": "none",
+    "paid_label_cost": 0,
+    "scientific_custody": "not_independent"
+  },
+  "tests": {
+    "local_passed": 23,
+    "local_failed": 0,
+    "exact_head_github_actions": false
+  },
+  "execution": {
+    "first_final_attempt": "TIMEOUT_INCOMPLETE",
+    "first_output_bytes": 0,
+    "fix": "cache deterministic scorer probes, no change to purchased labels or scoring samples",
+    "successful_final_runs": 1,
+    "success_elapsed_seconds": 5.64,
+    "successful_final_command": "python r75_coverage.py --phase final > R75_FINAL.json"
+  },
+  "results_file": {
+    "name": "R75_FINAL.json",
+    "bytes": 433500,
+    "sha256": "239a7949ea271c8f7c5392a5c87f87e85b1d3e10afc0748212d34ba04ad48409"
+  },
+  "audit_receipt": {
+    "name": "R75_AUDIT.json",
+    "sha256": "976d46a1559bb72a243cbddcb5e083f3789ab693be2e8547f6fdc86b3cff7857",
+    "arms": 630,
+    "checks_passed": 7218,
+    "checks_failed": 0,
+    "reran_evaluator": false
+  },
+  "data": {
+    "seeds": [
+      20261109,
+      20261110,
+      20261111
+    ],
+    "final_task_count": 504,
+    "groups_per_task": 6,
+    "offline_source_labels": 1296,
+    "online_caps": [
+      0,
+      6,
+      12,
+      18,
+      24
+    ]
+  },
+  "metric_order": [
+    "correct_accepts",
+    "false_accepts",
+    "online_labels_purchased",
+    "utility"
+  ],
+  "at_cap24": {
+    "stable": {
+      "full099": [
+        41,
+        0,
+        1687,
+        -1649
+      ],
+      "narrow099": [
+        41,
+        0,
+        1441,
+        -1403
+      ]
+    },
+    "swap": {
+      "full099": [
+        4,
+        0,
+        1724,
+        -2500
+      ],
+      "narrow099": [
+        8,
+        0,
+        1672,
+        -2360
+      ]
+    },
+    "reverse": {
+      "full099": [
+        4,
+        2,
+        1722,
+        -2614
+      ],
+      "narrow099": [
+        27,
+        0,
+        1539,
+        -1809
+      ]
+    },
+    "new01": {
+      "full099": [
+        16,
+        1,
+        1711,
+        -2281
+      ],
+      "narrow099": [
+        17,
+        0,
+        1609,
+        -2099
+      ]
+    },
+    "new23": {
+      "full099": [
+        29,
+        0,
+        1699,
+        -1925
+      ],
+      "narrow099": [
+        0,
+        0,
+        1728,
+        -2592
+      ]
+    },
+    "all_null": {
+      "full099": [
+        0,
+        3,
+        1725,
+        -2763
+      ],
+      "narrow099": [
+        0,
+        3,
+        1707,
+        -2745
+      ]
+    },
+    "correlated": {
+      "full099": [
+        58,
+        0,
+        1670,
+        -1258
+      ],
+      "narrow099": [
+        58,
+        0,
+        1322,
+        -910
+      ]
+    }
+  },
+  "ordinary_family_total": {
+    "full099": [
+      94,
+      3,
+      8543,
+      -10969
+    ],
+    "narrow099": [
+      93,
+      0,
+      7989,
+      -10263
+    ],
+    "utility_difference": -706
+  },
+  "locked_gate": {
+    "new23_correct_better": true,
+    "coverage_nondecrease_3_of_4": false,
+    "all_null_wrong_nondecrease": true,
+    "five_family_utility_nondecrease": false,
+    "online_caps_and_one_certificate": true,
+    "passed": false
+  },
+  "counterexamples": [
+    "all-null iid: 3 false certificates in 72 tasks despite nominal per-candidate alpha 0.10",
+    "two diagnostic labels per group are insufficient for reliable selection under reverse/new01 shifts",
+    "six-group full096 ablation cannot reach evidence threshold with only 12 certification labels",
+    "correlated outcome setting violates the conditional IID assumption, even when observed errors are zero"
+  ],
+  "scientific_decision": "HOLD_NO_PROMOTION_NO_MERGE",
+  "limitations": [
+    "no exact-head CI",
+    "same-process evaluator not independently custodied",
+    "families and seeds public and authored",
+    "do not reuse final bank as new holdout",
+    "not OAIE",
+    "not global false-acceptance control"
+  ]
+}
