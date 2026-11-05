@@ -29,7 +29,7 @@ class IndependentDfaIntakeTests(unittest.TestCase):
             self.assertTrue(.2 <= sum(sig)/63 <= .8)
             self.assertNotIn(sig,sigs)
             sigs.add(sig)
-            self.assertLess(r["target_draw_attempt"],s.MAX_DRAWS)
+            self.assertLess(r["draw_attempt"],s.MAX_DRAWS)
 
     def test_holdout_is_new_and_repeatable(self):
         for i in range(24):
