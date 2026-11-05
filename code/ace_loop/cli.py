@@ -10,7 +10,7 @@ from .operators import OperatorAdapter
 
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action',choices=('run','status','portfolio'))
+    parser.add_argument('action',choices=('run','status','portfolio','evolve','evolve-status'))
     parser.add_argument('--root',type=Path,required=True)
     parser.add_argument('--cycles',type=int,default=12)
     parser.add_argument('--patience',type=int,default=12)
@@ -20,7 +20,18 @@ def main(argv=None):
     parser.add_argument('--stop-after-trials',type=int)
     args=parser.parse_args(argv)
     try:
-        if args.action=='portfolio':
+        if args.action in ('evolve','evolve-status'):
+            from .source_evolution import SourceAdapter, SourceEvolution
+            adapter=SourceAdapter(OperatorAdapter(seed=args.seed, outsiders_per_split=args.outsiders_per_split))
+            engine=SourceEvolution(args.root,adapter,max_cycles=args.cycles,patience=args.patience)
+            if args.action=='evolve':
+                response=engine.run(stop_after=args.stop_after_trials)
+            else:
+                events=engine.ledger.events
+                response={'status':events[-1]['kind'], 'trials':sum(e['kind']=='trial' for e in events),
+                          'chain_head':events[-1]['sha256'],
+                          'completed':events[-1]['kind']=='completed'}
+        elif args.action=='portfolio':
             from .portfolio import run_portfolio
             response=run_portfolio(args.root,pilot_trials=args.pilot_trials,total_trials=args.cycles)
         else:
