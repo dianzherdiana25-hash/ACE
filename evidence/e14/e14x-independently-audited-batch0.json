@@ -1,0 +1,77 @@
+{
+  "batches": 4,
+  "files": [
+    {
+      "arms": 96,
+      "path": "e14w-batch-00.json",
+      "sha256": "84878a1143fa987da59dbf7f48a289d671f4124466eb839dd00e8d8689a77a4d",
+      "worlds": 16
+    },
+    {
+      "arms": 96,
+      "path": "e14w-batch-01.json",
+      "sha256": "3dabd06b906433ec8798f83c98c2b7d6377ea31e4e06553d522d0360964a5e21",
+      "worlds": 16
+    },
+    {
+      "arms": 96,
+      "path": "e14w-batch-02.json",
+      "sha256": "3e48c62064353c17905f730e11741678febdcb0d2ed4611bbecd757c65557dbc",
+      "worlds": 16
+    },
+    {
+      "arms": 96,
+      "path": "e14w-batch-03.json",
+      "sha256": "c0f5fefeac8ace97053af7d78cb530a270b5770f43789d3fed3ecd2c9d226cf4",
+      "worlds": 16
+    }
+  ],
+  "pair_sources": 4,
+  "policy_summary": {
+    "compact-safe:arms": 64,
+    "compact-safe:correct": 6,
+    "compact-safe:covered": 36,
+    "compact-safe:errors": 0,
+    "compact-safe:wrong": 0,
+    "known-pair-upper:arms": 64,
+    "known-pair-upper:correct": 48,
+    "known-pair-upper:covered": 288,
+    "known-pair-upper:errors": 0,
+    "known-pair-upper:wrong": 0,
+    "random-safe:arms": 64,
+    "random-safe:correct": 36,
+    "random-safe:covered": 216,
+    "random-safe:errors": 0,
+    "random-safe:wrong": 0,
+    "sham-pair:arms": 64,
+    "sham-pair:correct": 0,
+    "sham-pair:covered": 0,
+    "sham-pair:errors": 0,
+    "sham-pair:wrong": 0,
+    "synthesis-eager:arms": 64,
+    "synthesis-eager:correct": 36,
+    "synthesis-eager:covered": 270,
+    "synthesis-eager:errors": 47,
+    "synthesis-eager:wrong": 9,
+    "synthesis-safe:arms": 64,
+    "synthesis-safe:correct": 36,
+    "synthesis-safe:covered": 216,
+    "synthesis-safe:errors": 0,
+    "synthesis-safe:wrong": 0
+  },
+  "probe_oracle_calls": 2304,
+  "scientific_decision": "NOT_ASSESSED",
+  "source_cost": {
+    "edges": 144,
+    "events": 108,
+    "nodes": 126
+  },
+  "source_oracle_replay": 9,
+  "status": "POSTSCORE_INDEPENDENT_DEVELOPMENT_AUDIT",
+  "target_cost": {
+    "edges": 4984,
+    "events": 3738,
+    "nodes": 4984
+  },
+  "target_oracle_replay": 623
+}

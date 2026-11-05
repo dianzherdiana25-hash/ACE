@@ -1,0 +1,111 @@
+{
+  "complete_groups": 10,
+  "local_checkout_only": true,
+  "passed_tests": 236,
+  "receipts": [
+    {
+      "elapsed_seconds": 3.306,
+      "exit_code": 0,
+      "group": "foundation",
+      "log_sha256": "023b65dd6c49b94b3943cecfa435046e431097d43d2ccc48843373979e548811",
+      "script_version": "2026-11-05-e14x",
+      "status": "PASS",
+      "test_count": 59,
+      "version": 1
+    },
+    {
+      "elapsed_seconds": 12.758,
+      "exit_code": 0,
+      "group": "e14t",
+      "log_sha256": "156f2b39474b0044b84e184818c6bc1174fb19c649a444fc72f50cd3411b149f",
+      "script_version": "2026-11-05-e14x",
+      "status": "PASS",
+      "test_count": 36,
+      "version": 1
+    },
+    {
+      "elapsed_seconds": 16.857,
+      "exit_code": 0,
+      "group": "e14u",
+      "log_sha256": "156bc91156b0a36e1e26d7c5e0de04ba7a9cecbd54cdb9d838f28c5fc160052f",
+      "script_version": "2026-11-05-e14x",
+      "status": "PASS",
+      "test_count": 50,
+      "version": 1
+    },
+    {
+      "elapsed_seconds": 24.604,
+      "exit_code": 0,
+      "group": "ablation_a",
+      "log_sha256": "0b85fa2dfad73d0f708e45c8e79e11bf9da6aa76569406d0db4f42643c6b1070",
+      "script_version": "2026-11-05-e14x",
+      "status": "PASS",
+      "test_count": 4,
+      "version": 1
+    },
+    {
+      "elapsed_seconds": 28.843,
+      "exit_code": 0,
+      "group": "ablation_b",
+      "log_sha256": "2c9ac3da7d39fda308d8bffae7f573129f31f22891489197cd0829d97d89bc51",
+      "script_version": "2026-11-05-e14x",
+      "status": "PASS",
+      "test_count": 4,
+      "version": 1
+    },
+    {
+      "elapsed_seconds": 3.672,
+      "exit_code": 0,
+      "group": "algebra",
+      "log_sha256": "901964b76a1f55f892fc2c8bb4d84ea15c709a06862eecf68ce0208898526251",
+      "script_version": "2026-11-05-e14x",
+      "status": "PASS",
+      "test_count": 5,
+      "version": 1
+    },
+    {
+      "elapsed_seconds": 1.88,
+      "exit_code": 0,
+      "group": "semantic",
+      "log_sha256": "84af26f947a0be93f5d30a92d1d1cffa8ec90067b8694b6a8166050617499b0d",
+      "script_version": "2026-11-05-e14x",
+      "status": "PASS",
+      "test_count": 11,
+      "version": 1
+    },
+    {
+      "elapsed_seconds": 2.217,
+      "exit_code": 0,
+      "group": "w_synthesis",
+      "log_sha256": "2c9b00c6edddab86af59891d27039d3b642bedb92e5dfd04352fc82f352e0b61",
+      "script_version": "2026-11-05-e14x",
+      "status": "PASS",
+      "test_count": 33,
+      "version": 1
+    },
+    {
+      "elapsed_seconds": 3.032,
+      "exit_code": 0,
+      "group": "w_worker",
+      "log_sha256": "511eb10c940b3f975ba186ed9edd21ff517123b89e8f5ae1c3358eb7e2301f8c",
+      "script_version": "2026-11-05-e14x",
+      "status": "PASS",
+      "test_count": 13,
+      "version": 1
+    },
+    {
+      "elapsed_seconds": 5.653,
+      "exit_code": 0,
+      "group": "x_identifiability",
+      "log_sha256": "90ac0ac725ab210994ffc68b3353306c7a94b110afa58600af7fee9a4b6f1069",
+      "script_version": "2026-11-05-e14x",
+      "status": "PASS",
+      "test_count": 21,
+      "version": 1
+    }
+  ],
+  "required_groups": 10,
+  "scientific_decision": "NOT_ASSESSED",
+  "status": "PASS",
+  "version": 1
+}
