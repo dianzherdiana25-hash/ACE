@@ -1,0 +1,18 @@
+{
+  "audit_id": "R2_V2_INDEPENDENT_RESULT_MATRIX_AUDIT_V1",
+  "checked_groupings": 32,
+  "expected_trials": 160,
+  "found_trials": 160,
+  "distinct_trials": 160,
+  "logical_labels_across_method_runs": 61440,
+  "logical_gradient_steps_across_method_runs": 62700,
+  "flip_complement_checks": 40,
+  "metric_warning": "Under conflicting_flip, ood_accuracy uses original task-0 labels, not newest flipped labels. Treat as original-target compatibility diagnostic; do not interpret as latest-target OOD generalization.",
+  "semantic_limitations": [
+    "Comparators with fixed slots have a task-context prior and are not blinded to context locations.",
+    "Flat sign tasks saturate in separated contexts. This study cannot establish a novel continual-learning mechanism.",
+    "Numerical replay validates a same-origin public dataset, not an independent evaluator or unseen family."
+  ],
+  "issues": [],
+  "status": "PASS"
+}
