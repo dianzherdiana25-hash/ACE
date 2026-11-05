@@ -1,0 +1,84 @@
+name: ACE research engineering exact-head verification
+on:
+  pull_request:
+    paths:
+      - 'code/**'
+      - 'tools/**'
+      - 'design/**'
+      - 'evidence/**'
+      - '.github/workflows/ace-e16-pr-verification.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prescore-and-new-code:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: E1.4aa frozen source integrity
+        run: PYTHONPATH=code:. python tools/ace_e14aa_prescore_gate.py --repo . --lock design/e1.4/E14AA_PRESCORE_LOCK_v1.json
+      - name: E1.6 source mutation, receipts and E1.5 engine
+        run: PYTHONPATH=code:. python -m unittest ace_loop.test_source_evolution ace_loop.test_receipt_escrow ace_loop.test_mission ace_loop.test_engine ace_loop.test_portfolio -v
+      - name: E1.4aa Codex online semantic core
+        run: PYTHONPATH=code:. python -m unittest e14.test_e14aa_learning e14.test_e14aa_online e14.test_e14aa_oracle e14.test_e14aa_study -v
+      - name: Native sandbox availability (not automatic certification)
+        shell: bash
+        run: |
+          if command -v bwrap >/dev/null 2>&1; then
+            echo 'Bubblewrap binary exists; threat-model security validation remains a separate gate' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Native Bubblewrap security NOT VERIFIED on this runner' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  portable-historical-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Bounded E1.4/E1.5 historical groups with SHA256 test receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH=code:.
+          for group in e15 legacy u v w x t u-ablation tooling; do
+            python tools/ace_e15_regression.py --group "$group" --root . --output "$RUNNER_TEMP/ace-regression" --timeout 200
+          done
+          python tools/ace_e15_regression.py --collect --output "$RUNNER_TEMP/ace-regression"
+      - name: E1.6 mission / source evolution / receipt escrow adversarial regression
+        run: PYTHONPATH=code:. python -m unittest ace_loop.test_mission ace_loop.test_source_evolution ace_loop.test_receipt_escrow -v
+
+  historical-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Native security prerequisites (fail visibly if environment unavailable)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v bwrap >/dev/null || ! command -v unshare >/dev/null; then
+            echo 'BLOCKED_ENVIRONMENT: bwrap or unshare missing. Native security tests must not be bypassed.' >&2
+            exit 78
+          fi
+          if ! unshare --user --map-root-user --net -- /bin/true; then
+            echo 'BLOCKED_ENVIRONMENT: kernel denies user/network namespaces. Requires a suitable isolated Linux runner.' >&2
+            exit 78
+          fi
+      - name: Historical E1.2/E1.3/E1.4 and new E1.6 full discovery
+        run: |
+          PYTHONPATH=code:. python -m unittest discover -s code -t code -p 'test_*.py' -v
+      - name: Historical non-code tooling regression
+        run: |
+          PYTHONPATH=code:. python -m unittest tools.test_ace_e15_regression tools.test_ace_e14aa_prescore_gate tools.test_ace_e14aa_recovery_audit -v

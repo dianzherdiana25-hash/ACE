@@ -1,0 +1,80 @@
+{
+  "base_e16_report_sha256": "666e5a95ca70906b387a415ac9e1b6ad07d9f71de906304ff86e87fadcf3f0f7",
+  "code_hashes": {
+    ".github/workflows/ace-e16-pr-verification.yml": "866080ab47ee9a459d5cc6ad6aa83c574a51738adbc200cdc3d731941ff7001a",
+    "code/ace_loop/cli.py": "1f1712cdeec52349b54d5c6ca855629f62a6ebac2fa6269517916d4e6b66b41c",
+    "code/ace_loop/mission.py": "e27c659931e7dea7c9e9a858d8db7128838dff806cb581bd716f271b42115320",
+    "code/ace_loop/portfolio.py": "dc2fc756ba696b6e6f7c97f572c248471f9e225c3d5f34c1f5d9462fc47fbcfb",
+    "code/ace_loop/test_mission.py": "99d2139d7fe637895d87c195ffa04b960d55b2d0de1995d16545854c3315334e",
+    "code/ace_loop/test_portfolio.py": "c0e8521f597324393132d5f3a4129306a8fb183b076286650af9d6d19ac935c2"
+  },
+  "date": "2026-11-05",
+  "full_mission": {
+    "candidate_code_deployed": false,
+    "evidence_sha256": "7ebba57c37673d605cf042b5c129c8233fd15536cb51233c689186aba100c8e8",
+    "external_purchase_count": 0,
+    "next_gate": "clean full checkout, native isolation, authentic external receipt custody",
+    "oaie_achieved": false,
+    "policy_heldout_delta": -13,
+    "policy_selected_track": "in_family",
+    "policy_suspended_tracks": [
+      "mixed_grammar"
+    ],
+    "scientific_decision": "NOT_ASSESSED",
+    "source_deployment_decision": "REVERT_UNPROMOTED_SOURCE",
+    "source_heldout_delta": 0,
+    "source_trials": 5,
+    "status": "COMPLETE_BOUNDED_RESEARCH_MISSION"
+  },
+  "full_mission_replay_byte_identical": true,
+  "kind": "integrated implementation + exact-head CI blocker readback",
+  "main_unchanged": true,
+  "mission_journal_sha256": "a4e9c8fd2c133424a112f6e544510a296a5c1c05e53d5a3e75aaf52be2a23cfe",
+  "new_implementation": [
+    "code/ace_loop/mission.py",
+    "code/ace_loop/test_mission.py",
+    "code/ace_loop/portfolio.py",
+    "code/ace_loop/test_portfolio.py",
+    "code/ace_loop/cli.py",
+    ".github/workflows/ace-e16-pr-verification.yml"
+  ],
+  "not_yet_done": [
+    "native Bubblewrap/unshare historical tests on eligible Linux worker",
+    "E1.4aa prescore 192-arm scoring",
+    "external backend receipt authentication and anti-replay proof",
+    "actual self-modification beyond researcher-authored arithmetic templates",
+    "independent new benchmark",
+    "OAIE"
+  ],
+  "paid_oracle_calls": 0,
+  "portable_regression": {
+    "groups": 9,
+    "new_e16_tests_pass": 40,
+    "new_tests_sha256": "6824d48cbfe11336dfb027fcb7a1d3f5e28fb1cb3839f1bf41e134aea71bb82d",
+    "old_aggregate_sha256": "1f57bdcfa77bbfd25ff384247f7365c3152f1f15347ece5ee091f8edb3e25e4b",
+    "old_modules_tests_pass": 290,
+    "scope": "compatible local partial repository and independent process groups; not full historical GitHub CI",
+    "status": "PASS_COMPATIBLE_CHECKOUT_ONLY",
+    "total_pass": 330
+  },
+  "portfolio_resume_bug": {
+    "fixed": "explicit None is valid HOLD; preserve all suspended checkpoints",
+    "old": "selected=None incorrectly raised unknown allocated track on resumed zero-gain run",
+    "tests": "test_no_positive_gain_pilot_is_resumable_and_idempotent"
+  },
+  "previous_ci": {
+    "errors": 49,
+    "failures": 1,
+    "full_discovery_tests": 548,
+    "full_historical_discovery": "BLOCKED_BY_NATIVE_NAMESPACE_RUNTIME",
+    "head": "ba0948933238a333cc9932a9a34775c9599230da",
+    "interpretation": "native isolation unavailable; must not unsandbox tests or claim clean full historical PASS",
+    "prescore_new_engine_job": "SUCCESS",
+    "root_error": "unshare: write failed /proc/self/uid_map: Operation not permitted",
+    "run_url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42030132789",
+    "skipped": 4
+  },
+  "project": "ACE — Autonomous Capability Evolution",
+  "scientific_decision": "NOT_ASSESSED",
+  "tod_unchanged": true
+}

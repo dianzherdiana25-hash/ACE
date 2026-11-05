@@ -1,0 +1,99 @@
+{
+  "base_branch": "research/e15-autonomous-research-loop",
+  "base_sha_last_known": "1359ebbea0cc0e3e21aa9b4380347025d9a8165d",
+  "code_sha256": {
+    ".github/workflows/ace-e16-pr-verification.yml": "6c9bf5b34024739bd8a3b98043614a76bd6de460d29bb1a39ee2971ef7379c58",
+    "code/ace_loop/cli.py": "75b5b06ecff98f0e0ebb3f151de38d251934560e8a0c8f9ab534dacea94f5dc0",
+    "code/ace_loop/receipt_escrow.py": "4b49368561c0c0124300948b79f1e287f4a64fecb31bf7e375a817de04d431c3",
+    "code/ace_loop/source_evolution.py": "5afb510cf95708ea570cc09f9f76d2a610b6508222c526667569e014122dae55",
+    "code/ace_loop/test_receipt_escrow.py": "383d9320a5a5650ccc6b7b61903c2d7dc7c35ded3e607263ceb15ee83d695678",
+    "code/ace_loop/test_source_evolution.py": "a02472a73a13b7296c12a21622375332f56cd9e0d4de4198c50b99814a9d4ed7",
+    "docs/ACE_E16_SOURCE_EVOLUTION_AND_ESCROW_DEV.md": "e3ba2e2bfadbe30c2db9e30e2dfa1ccc9ee7d8ab51d9553fc104dbdcbe8ff04e"
+  },
+  "date": "2026-11-05",
+  "direct_source_evolution": {
+    "baseline_validation": {
+      "abstained": 8,
+      "accepted_correct": 3,
+      "accepted_wrong": 1,
+      "logical_labels": 35,
+      "probe_errors": 56,
+      "utility_units": -31,
+      "worlds": 12
+    },
+    "candidate_code_deployed": false,
+    "deployment_decision": "REVERT_UNPROMOTED_SOURCE",
+    "heldout_baseline": {
+      "abstained": 17,
+      "accepted_correct": 1,
+      "accepted_wrong": 0,
+      "logical_labels": 53,
+      "probe_errors": 0,
+      "utility_units": -67,
+      "worlds": 18
+    },
+    "heldout_candidate": {
+      "abstained": 17,
+      "accepted_correct": 1,
+      "accepted_wrong": 0,
+      "logical_labels": 53,
+      "probe_errors": 0,
+      "utility_units": -67,
+      "worlds": 18
+    },
+    "heldout_delta_utility": 0,
+    "limits": "trusted grammar; local synthetic oracle; no new primitive; no independent custody",
+    "scientific_decision": "NOT_ASSESSED",
+    "status": "COMPLETE_PUBLIC_DEVELOPMENT",
+    "trials": 5,
+    "winner_gene": {
+      "balance": 0,
+      "diversity": 0,
+      "gap": -1,
+      "modulus": 3,
+      "rotation": 0,
+      "sign": 1
+    },
+    "winner_source_sha256": "18e2cf662a84e773fe85de4b7d9f03adca9f81f53a7334cff8fadaadc1038205",
+    "winner_validation": {
+      "abstained": 8,
+      "accepted_correct": 3,
+      "accepted_wrong": 1,
+      "logical_labels": 35,
+      "probe_errors": 56,
+      "utility_units": -31,
+      "worlds": 12
+    }
+  },
+  "interpretation": "Five synthetic source-ranked query proposals tested with stop on non-improving validation. No source deployed; 1 incorrect baseline acceptance remains; failure preserved.",
+  "local_targeted_regression": {
+    "all_status": "PASS_COMPATIBLE_CHECKOUT_ONLY",
+    "groups": 9,
+    "new_tests_log_sha256": "6c3a32de7e72054c7c7bef110ba2915fdb1878704cb41421e30891fdc1830d5e",
+    "new_tests_passed": 32,
+    "old_tests_passed": 289,
+    "report_sha256": "3f03ea2d824a50f6871927d0044e56f1d4f8b1260f182aa4daa8eb6b8d51f55b",
+    "total_passed": 321
+  },
+  "not_yet_verified": [
+    "clean exact-head complete GitHub CI",
+    "native Bubblewrap isolation and adversarial code execution",
+    "E1.4aa frozen 192-arm prospective scoring",
+    "external provider callback/reconciliation cryptography",
+    "independent confirmatory heldout",
+    "arbitrary source/architecture invention",
+    "OAIE"
+  ],
+  "scientific_decision": "NOT_ASSESSED",
+  "source_files_sha256": {
+    "mutation_000.py": "234ee16713ba8c9e8b764249580ebf633bf194b38e812b9e534e92f149077b59",
+    "mutation_001.py": "8655fe6cb0601e1dc53e7170db8e086bd1e09bceedad1ee32021cf17d71330e4",
+    "mutation_002.py": "5d94f0294a62f954908f139bfd3d9d23728578ee35c97a1f1d3420b6abb149b8",
+    "mutation_003.py": "582d44467f7572300ff55cabe94c750922b8c938ab1f49ebc11c66a63109ceee",
+    "mutation_004.py": "baf262b947dbf76d22139cb6292fd81319c1bdd383fdeb6b0bccdeeb52acb144"
+  },
+  "source_journal_sha256": "2e9e314f126f8d85488da8060fb2045632189133b6b0273d643965997da091ff",
+  "source_replay_byte_identical": true,
+  "source_trial_count": 5,
+  "status": "ENGINEERING_PUBLIC_DEVELOPMENT"
+}

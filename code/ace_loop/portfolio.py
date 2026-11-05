@@ -34,7 +34,8 @@ def run_portfolio(root,*,pilot_trials=8,total_trials=12):
         if allocation['pilot_trials']!=pilot_trials or allocation['total_trials']!=total_trials:
             raise ResearchIntegrityError('portfolio policy changed')
         selected=allocation['selected']
-        if selected not in engines:raise ResearchIntegrityError('unknown allocated track')
+        if selected is not None and selected not in engines:
+            raise ResearchIntegrityError('unknown allocated track')
         if set(allocation['gains'])!=set(engines) or set(allocation['pilot_heads'])!=set(engines):
             raise ResearchIntegrityError('invalid allocation track set')
         gains={}
