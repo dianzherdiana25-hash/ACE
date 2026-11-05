@@ -1,6 +1,12 @@
 # Keadaan ACE saat ini
 
-### E1.4n Linux namespace capability probe (4 November 2026)
+## E1.4n — pemulihan bersyarat selesai dan direproduksi
+
+**Repair GO.** Terarah dan enumerasi berhasil pada 18/18 dunia dengan label yang disediakan. Fixed-7 berhasil 6/18. Terarah mempertahankan kandidat identik dengan enumerasi sambil memeriksa 540 kandidat dibanding 879.810 pada strata repair. Semua delapan kasus tanpa solusi menahan prediksi. **Rare HOLD · NATURAL_HOLD.**
+
+HEAD `2438eeb` dipulihkan dengan tree identik. Scoring dan replay memakai freeze `fb9ac72` dan worker Bubblewrap native yang lolos canary serta verifikasi batas proses. [Hasil](design/e1.4/E14N_RESULT_v1.md) · [Bukti](evidence/e14/e14n_verification_v1.json) · [Runtime sprint](docs/ACE_SPRINT_RUNTIME.md).
+
+### Catatan historis E1.4n Linux namespace capability probe (4 November 2026)
 
 A **separate** host-level canary executed inside real Linux user/mount/net/PID namespaces with read-only solver, private rootfs, and scrubbed environment. **Six of six** canary checks passed, including private evaluator-file and host-loopback denial. [Source](tools/ace_namespace_capacity_probe.py) · [Observed result](evidence/e14/e14n_namespace_capacity_v1.json) · [Limitations](docs/ACE_E14N_NAMESPACE_CAPACITY_v1.md). This **does not** establish equivalence to the frozen Bubblewrap worker or complete ACE evaluator confidentiality. E1.4n remains **PRE-SCORE / BLOCKED_ENV in this local host**; no scoring or replay was run.
 

@@ -1,3 +1,11 @@
+# NEXT_ACTION — E1.4o deteksi dan pemulihan otonom
+
+1. Verifikasi HEAD GitHub. Baca [hasil E1.4n](design/e1.4/E14N_RESULT_v1.md) dan [runtime sprint](docs/ACE_SPRINT_RUNTIME.md). Jalur pengujian publik native sudah lolos di lingkungan sprint.
+2. Pada bank baru, gabungkan pencarian kontra-contoh E1.4m, perluasan bertipe E1.4n, dan pembelian label pembeda pasca-kontradiksi. Bandingkan perbaikan aktif, pasif, dan acak dengan bukti awal dan anggaran yang sama. Pisahkan deteksi, pemulihan, penahanan, dan biaya.
+3. Pertahankan Rare HOLD dan NATURAL_HOLD untuk transfer. Gunakan freeze baru sebelum penilaian dan simpan semua hasil.
+
+## Catatan pemulihan historis
+
 # ACE E1.4n — recover from latest pre-score freeze
 
 ## Host sandbox capability development (independent of E1.4n score)

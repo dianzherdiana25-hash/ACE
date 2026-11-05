@@ -1,0 +1,748 @@
+{
+  "audit": {
+    "deterministic_sha256": "880b7485031d37245f667f05f740c7e7f1ff8560642c415bd6c46263188d07f2",
+    "replay_match": true,
+    "status": "completed",
+    "worlds": 72
+  },
+  "bank_sha256": "b1f996f672cd080c24bf69aa0299a5748d30ebc71c3bc611a9601e4b4017ce8e",
+  "checkout_shallow_boundary": "fb9ac72c9c6b039f402a1905b3635f2a4efbecdb",
+  "checkout_tracked_files": 286,
+  "compressed_sha256": {
+    "replay": "a9fcaad56dff21bf700add32bbb2052a102bafbb8a32a013f5a058c2e1391bde",
+    "score": "d1c8ae6c944c1f2491e0cb124b6c071e55d94907d162947c7870b07b71beea3e"
+  },
+  "freeze_commit": "fb9ac72c9c6b039f402a1905b3635f2a4efbecdb",
+  "freeze_tree": "57324458a00037d986016f496c3ba808228178aa",
+  "plan_sha256": "7f169be1111d0dbab1c8c6be76bd713f0fe7d8e05d0f577fcd2ac2ee55e0d5c2",
+  "preflight": {
+    "bank_sha256": "b1f996f672cd080c24bf69aa0299a5748d30ebc71c3bc611a9601e4b4017ce8e",
+    "boundary": {
+      "binary": "/usr/bin/bwrap",
+      "checks": {
+        "credential_env_absent": true,
+        "evaluator_module_absent": true,
+        "host_loopback_denied": true,
+        "private_file_denied": true,
+        "worker_mount_read_only": true
+      },
+      "native_elf": true,
+      "sha256": "573236e5328ac2ebb08f59ae3a9805b4f8d12bdef14be8af4450d5463294985f"
+    },
+    "bubblewrap_version": "bubblewrap 0.12.0",
+    "frozen_sha256_objects": 8,
+    "status": "COMPLETE",
+    "worker_mount_and_limits": {
+      "checks": {
+        "actual_worker_importable": true,
+        "evaluator_import_denied": true,
+        "private_shadow_absent": true,
+        "proc_host_absent": true
+      },
+      "cpu_limit": [
+        1,
+        1
+      ],
+      "memory_limit": [
+        134217728,
+        134217728
+      ]
+    }
+  },
+  "recovery_parent": "2438eeb61fc237c71fad2d87421fd7ee95309bfe",
+  "recovery_tree": "3b98faf1e0fc1160e6accfa9edaf5a0c7a253299",
+  "resume_byte_identical": true,
+  "runner_smoke": {
+    "blocked_env": {
+      "elapsed_s": 0.001,
+      "exit_code": 125,
+      "log_file": "runner-blocked-env.log",
+      "reason": "FileNotFoundError",
+      "status": "BLOCKED_ENV"
+    },
+    "failed": {
+      "elapsed_s": 0.101,
+      "exit_code": 7,
+      "log_file": "runner-failed.log",
+      "status": "FAILED"
+    },
+    "success": {
+      "elapsed_s": 0.101,
+      "exit_code": 0,
+      "log_file": "runner-success.log",
+      "status": "COMPLETE"
+    },
+    "timeout": {
+      "elapsed_s": 0.252,
+      "exit_code": -15,
+      "log_file": "runner-timeout.log",
+      "status": "TIMEOUT"
+    }
+  },
+  "summary": {
+    "base_comparisons": 3668580,
+    "cells": [
+      {
+        "arms": {
+          "directed": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 2,
+            "selective_covered": 16,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          },
+          "enumerate": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 2,
+            "selective_covered": 16,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          },
+          "fixed7": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 2,
+            "selective_covered": 16,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          },
+          "hold": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 2,
+            "selective_covered": 16,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          }
+        },
+        "condition": "natural",
+        "contradictions": 0,
+        "expanded_worlds": 0,
+        "family": "S",
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "directed": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          },
+          "enumerate": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          },
+          "fixed7": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          },
+          "hold": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          }
+        },
+        "condition": "matched",
+        "contradictions": 0,
+        "expanded_worlds": 0,
+        "family": "S",
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "directed": {
+            "anchor_checks": 450,
+            "candidate_fits": 90,
+            "comparison_calls": 3078,
+            "full_probe_success": 9,
+            "selective_covered": 72,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 9
+          },
+          "enumerate": {
+            "anchor_checks": 0,
+            "candidate_fits": 852930,
+            "comparison_calls": 855918,
+            "full_probe_success": 9,
+            "selective_covered": 72,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 9
+          },
+          "fixed7": {
+            "anchor_checks": 0,
+            "candidate_fits": 65610,
+            "comparison_calls": 66609,
+            "full_probe_success": 3,
+            "selective_covered": 24,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 3
+          },
+          "hold": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 0
+          }
+        },
+        "condition": "repair",
+        "contradictions": 9,
+        "expanded_worlds": 9,
+        "family": "S",
+        "worlds": 9
+      },
+      {
+        "arms": {
+          "directed": {
+            "anchor_checks": 45,
+            "candidate_fits": 9,
+            "comparison_calls": 297,
+            "full_probe_success": 0,
+            "selective_covered": 13,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 3
+          },
+          "enumerate": {
+            "anchor_checks": 0,
+            "candidate_fits": 85293,
+            "comparison_calls": 85581,
+            "full_probe_success": 0,
+            "selective_covered": 13,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 3
+          },
+          "fixed7": {
+            "anchor_checks": 0,
+            "candidate_fits": 6561,
+            "comparison_calls": 6657,
+            "full_probe_success": 1,
+            "selective_covered": 24,
+            "selective_errors": 4,
+            "selective_false_positive": 4,
+            "solved": 3
+          },
+          "hold": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 0
+          }
+        },
+        "condition": "ambiguous",
+        "contradictions": 3,
+        "expanded_worlds": 3,
+        "family": "S",
+        "worlds": 3
+      },
+      {
+        "arms": {
+          "directed": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 4
+          },
+          "enumerate": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 4
+          },
+          "fixed7": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 4
+          },
+          "hold": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 4
+          }
+        },
+        "condition": "no_trigger",
+        "contradictions": 0,
+        "expanded_worlds": 0,
+        "family": "S",
+        "worlds": 4
+      },
+      {
+        "arms": {
+          "directed": {
+            "anchor_checks": 60,
+            "candidate_fits": 12,
+            "comparison_calls": 48,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 0
+          },
+          "enumerate": {
+            "anchor_checks": 0,
+            "candidate_fits": 113724,
+            "comparison_calls": 113760,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 0
+          },
+          "fixed7": {
+            "anchor_checks": 0,
+            "candidate_fits": 8748,
+            "comparison_calls": 8760,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 0
+          },
+          "hold": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 0
+          }
+        },
+        "condition": "outside",
+        "contradictions": 4,
+        "expanded_worlds": 4,
+        "family": "S",
+        "worlds": 4
+      },
+      {
+        "arms": {
+          "directed": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 7,
+            "selective_covered": 63,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          },
+          "enumerate": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 7,
+            "selective_covered": 63,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          },
+          "fixed7": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 7,
+            "selective_covered": 63,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          },
+          "hold": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 7,
+            "selective_covered": 63,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          }
+        },
+        "condition": "natural",
+        "contradictions": 0,
+        "expanded_worlds": 0,
+        "family": "G",
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "directed": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          },
+          "enumerate": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          },
+          "fixed7": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          },
+          "hold": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 8
+          }
+        },
+        "condition": "matched",
+        "contradictions": 0,
+        "expanded_worlds": 0,
+        "family": "G",
+        "worlds": 8
+      },
+      {
+        "arms": {
+          "directed": {
+            "anchor_checks": 450,
+            "candidate_fits": 450,
+            "comparison_calls": 15234,
+            "full_probe_success": 9,
+            "selective_covered": 72,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 9
+          },
+          "enumerate": {
+            "anchor_checks": 0,
+            "candidate_fits": 26880,
+            "comparison_calls": 41664,
+            "full_probe_success": 9,
+            "selective_covered": 72,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 9
+          },
+          "fixed7": {
+            "anchor_checks": 0,
+            "candidate_fits": 3840,
+            "comparison_calls": 9762,
+            "full_probe_success": 3,
+            "selective_covered": 24,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 3
+          },
+          "hold": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 0
+          }
+        },
+        "condition": "repair",
+        "contradictions": 9,
+        "expanded_worlds": 9,
+        "family": "G",
+        "worlds": 9
+      },
+      {
+        "arms": {
+          "directed": {
+            "anchor_checks": 45,
+            "candidate_fits": 45,
+            "comparison_calls": 1485,
+            "full_probe_success": 0,
+            "selective_covered": 4,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 3
+          },
+          "enumerate": {
+            "anchor_checks": 0,
+            "candidate_fits": 2688,
+            "comparison_calls": 4128,
+            "full_probe_success": 0,
+            "selective_covered": 4,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 3
+          },
+          "fixed7": {
+            "anchor_checks": 0,
+            "candidate_fits": 384,
+            "comparison_calls": 960,
+            "full_probe_success": 0,
+            "selective_covered": 4,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 3
+          },
+          "hold": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 0
+          }
+        },
+        "condition": "ambiguous",
+        "contradictions": 3,
+        "expanded_worlds": 3,
+        "family": "G",
+        "worlds": 3
+      },
+      {
+        "arms": {
+          "directed": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 4
+          },
+          "enumerate": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 4
+          },
+          "fixed7": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 4
+          },
+          "hold": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 4
+          }
+        },
+        "condition": "no_trigger",
+        "contradictions": 0,
+        "expanded_worlds": 0,
+        "family": "G",
+        "worlds": 4
+      },
+      {
+        "arms": {
+          "directed": {
+            "anchor_checks": 60,
+            "candidate_fits": 60,
+            "comparison_calls": 190,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 0
+          },
+          "enumerate": {
+            "anchor_checks": 0,
+            "candidate_fits": 3584,
+            "comparison_calls": 3714,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 0
+          },
+          "fixed7": {
+            "anchor_checks": 0,
+            "candidate_fits": 512,
+            "comparison_calls": 559,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 0
+          },
+          "hold": {
+            "anchor_checks": 0,
+            "candidate_fits": 0,
+            "comparison_calls": 0,
+            "full_probe_success": 0,
+            "selective_covered": 0,
+            "selective_errors": 0,
+            "selective_false_positive": 0,
+            "solved": 0
+          }
+        },
+        "condition": "outside",
+        "contradictions": 4,
+        "expanded_worlds": 4,
+        "family": "G",
+        "worlds": 4
+      }
+    ],
+    "directed_equals_enumeration": true,
+    "natural_decision": "NATURAL_HOLD_CARRIED_FORWARD",
+    "oracle_calls": 3014,
+    "outside_abstention_pass": true,
+    "rare_decision": "RARE_HOLD_CARRIED_FORWARD",
+    "repair": "GO",
+    "trigger_control_pass": true,
+    "worker_calls": 206,
+    "worlds": 72
+  },
+  "terminal": {
+    "audit": {
+      "elapsed_s": 6.51,
+      "exit_code": 0,
+      "log_file": "audit.log",
+      "status": "COMPLETE"
+    },
+    "current-preflight": {
+      "elapsed_s": 0.301,
+      "exit_code": 0,
+      "log_file": "current-preflight.log",
+      "status": "COMPLETE"
+    },
+    "handoff": {
+      "elapsed_s": 0.101,
+      "exit_code": 0,
+      "log_file": "handoff.log",
+      "status": "COMPLETE"
+    },
+    "prescore": {
+      "elapsed_s": 1.044,
+      "exit_code": 0,
+      "log_file": "prescore.log",
+      "status": "COMPLETE"
+    },
+    "regression": {
+      "elapsed_s": 77.371,
+      "exit_code": 0,
+      "log_file": "ace-sprint-n-reg.log",
+      "status": "COMPLETE"
+    },
+    "replay": {
+      "elapsed_s": 11.866,
+      "exit_code": 0,
+      "log_file": "replay.log",
+      "status": "COMPLETE"
+    },
+    "resume": {
+      "elapsed_s": 0.201,
+      "exit_code": 0,
+      "log_file": "resume.log",
+      "status": "COMPLETE"
+    },
+    "score": {
+      "elapsed_s": 11.678,
+      "exit_code": 0,
+      "log_file": "score.log",
+      "status": "COMPLETE"
+    }
+  },
+  "tests": {
+    "historical_handoff": [
+      45,
+      45
+    ],
+    "prescore": [
+      4,
+      4
+    ],
+    "recovered_regression": [
+      103,
+      103
+    ]
+  }
+}
