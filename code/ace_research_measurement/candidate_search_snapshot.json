@@ -1,0 +1,390 @@
+{
+  "schema": "ace.r8.candidate-search-task-snapshot.v1",
+  "source": {
+    "repository": "dianzherdiana25-hash/ACE",
+    "commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+    "path": "code/ace_candidate_search/results/summary.json",
+    "git_blob_sha1": "069b4ffdf2f0a5a363d81bcec6ddfc4f2a5e098a",
+    "status": "PUBLIC_SYNTHETIC_DEVELOPMENT_ONLY",
+    "scientific_decision": "NOT_ASSESSED"
+  },
+  "holdout_cases_per_task": 3,
+  "tasks": [
+    "original_linear",
+    "negative_linear",
+    "difference",
+    "product_offset",
+    "quadratic",
+    "constant",
+    "outside_grammar_floor_division",
+    "outside_budget_polynomial"
+  ],
+  "budgets": {
+    "standard": {
+      "beam_width": 20,
+      "max_candidates": 2000,
+      "max_depth": 3,
+      "max_operations": 3,
+      "max_work": 200000,
+      "shortlist": 5
+    },
+    "tight": {
+      "beam_width": 20,
+      "max_candidates": 5,
+      "max_depth": 3,
+      "max_operations": 3,
+      "max_work": 300,
+      "shortlist": 5
+    }
+  },
+  "arms": {
+    "standard": {
+      "fixed": {
+        "correct": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "absolute_error": [
+          32,
+          58,
+          28,
+          55,
+          92,
+          13,
+          13,
+          6506
+        ],
+        "total_work": [
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30
+        ],
+        "candidates": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "cpu_seconds_total": 0.015457577999999424
+      },
+      "fixed-list": {
+        "correct": [
+          3,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "absolute_error": [
+          0,
+          64,
+          18,
+          51,
+          92,
+          13,
+          13,
+          6496
+        ],
+        "total_work": [
+          210,
+          210,
+          204,
+          204,
+          198,
+          198,
+          198,
+          210
+        ],
+        "candidates": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "cpu_seconds_total": 0.01596848100000072
+      },
+      "enumerate": {
+        "correct": [
+          3,
+          0,
+          3,
+          3,
+          3,
+          3,
+          0,
+          0
+        ],
+        "absolute_error": [
+          0,
+          16,
+          0,
+          0,
+          0,
+          0,
+          13,
+          6404
+        ],
+        "total_work": [
+          55139,
+          55139,
+          55109,
+          55115,
+          55115,
+          55055,
+          55055,
+          55139
+        ],
+        "candidates": [
+          2000,
+          2000,
+          2000,
+          2000,
+          2000,
+          2000,
+          2000,
+          2000
+        ],
+        "cpu_seconds_total": 4.830747202000001
+      },
+      "beam": {
+        "correct": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          0,
+          0
+        ],
+        "absolute_error": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          13,
+          2738
+        ],
+        "total_work": [
+          33489,
+          30492,
+          37566,
+          30486,
+          38274,
+          42081,
+          41409,
+          32910
+        ],
+        "candidates": [
+          1221,
+          1116,
+          1374,
+          1116,
+          1398,
+          1542,
+          1518,
+          1206
+        ],
+        "cpu_seconds_total": 2.7109782359999994
+      }
+    },
+    "tight": {
+      "fixed": {
+        "correct": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "absolute_error": [
+          32,
+          58,
+          28,
+          55,
+          92,
+          13,
+          13,
+          6506
+        ],
+        "total_work": [
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30
+        ],
+        "candidates": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "cpu_seconds_total": 0.012076658999999879
+      },
+      "fixed-list": {
+        "correct": [
+          3,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "absolute_error": [
+          0,
+          64,
+          18,
+          51,
+          92,
+          13,
+          13,
+          6496
+        ],
+        "total_work": [
+          210,
+          210,
+          204,
+          204,
+          198,
+          198,
+          198,
+          210
+        ],
+        "candidates": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "cpu_seconds_total": 0.016490956000000168
+      },
+      "enumerate": {
+        "correct": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "absolute_error": [
+          32,
+          48,
+          14,
+          59,
+          96,
+          3,
+          3,
+          6510
+        ],
+        "total_work": [
+          38,
+          38,
+          38,
+          38,
+          38,
+          38,
+          38,
+          38
+        ],
+        "candidates": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "cpu_seconds_total": 0.014738920999999294
+      },
+      "beam": {
+        "correct": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "absolute_error": [
+          32,
+          48,
+          14,
+          59,
+          96,
+          3,
+          3,
+          6510
+        ],
+        "total_work": [
+          38,
+          38,
+          38,
+          38,
+          38,
+          38,
+          38,
+          38
+        ],
+        "candidates": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "cpu_seconds_total": 0.01371704700000187
+      }
+    }
+  }
+}

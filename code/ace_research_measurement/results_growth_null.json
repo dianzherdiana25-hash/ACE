@@ -1,0 +1,36 @@
+{
+  "claim": "PUBLIC_NULL_DIAGNOSTIC_ONLY_NO_REAL_ACE",
+  "counts": {
+    "naive_delta_at_least_10pp": 42,
+    "public_screen_pass": 9
+  },
+  "design": {
+    "all_generator_specs_public": true,
+    "cases_per_family": 12,
+    "families": 8,
+    "known_true_delta": 0,
+    "runs": 512,
+    "seed": 8492
+  },
+  "limitations": [
+    "Exact p-value is family sign-flip nominal, not adjusted for selection.",
+    "Synthetic independent Bernoulli clusters do not represent all real task correlations.",
+    "No authentication of evaluator lineage by the module."
+  ],
+  "mean_observed_micro_delta": -0.0016682942708333335,
+  "schema": "ace.r8.growth-null.v1",
+  "top_hold_reasons": [
+    [
+      "NO_NOMINAL_NOVEL_FAMILY_SIGNFLIP_SUPPORT",
+      498
+    ],
+    [
+      "MATERIAL_FAMILY_REGRESSION",
+      478
+    ],
+    [
+      "INSUFFICIENT_NOVEL_TRANSFER_EFFECT",
+      470
+    ]
+  ]
+}

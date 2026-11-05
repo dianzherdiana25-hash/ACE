@@ -1,0 +1,44 @@
+{
+  "cannot_infer": [
+    "task-level paired deltas",
+    "new primitive discovery",
+    "cross-family transfer",
+    "compositional novelty",
+    "statistical significance",
+    "independent holdout",
+    "OAIE"
+  ],
+  "claim_gate": "NOT_ASSESSED",
+  "schema": "ace.r8.e15-aggregate-audit.v1",
+  "scope": "PINNED_PUBLIC_DEVELOPMENT_AGGREGATES_ONLY",
+  "source": {
+    "git_blob_sha1": "2561d8ee47f84a85388cbd4c7de7737f1266342b",
+    "path": "evidence/e15/E15_DEVELOPMENT_SUMMARY_v0.json",
+    "ref": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+    "repo": "dianzherdiana25-hash/ACE"
+  },
+  "tracks": {
+    "in_family": {
+      "holdout_delta_accepted_correct": 1,
+      "holdout_delta_logical_labels": 35,
+      "holdout_delta_utility": -13,
+      "holdout_worlds": 18,
+      "signals": [
+        "VALIDATION_HOLDOUT_UTILITY_REVERSAL",
+        "MORE_CORRECT_BUT_LOWER_NET_UTILITY",
+        "GREATER_HOLDOUT_LABEL_COST"
+      ],
+      "validation_delta_utility": 42,
+      "validation_worlds": 12
+    },
+    "mixed_grammar": {
+      "holdout_delta_accepted_correct": 0,
+      "holdout_delta_logical_labels": 0,
+      "holdout_delta_utility": 0,
+      "holdout_worlds": 18,
+      "signals": [],
+      "validation_delta_utility": 0,
+      "validation_worlds": 12
+    }
+  }
+}
