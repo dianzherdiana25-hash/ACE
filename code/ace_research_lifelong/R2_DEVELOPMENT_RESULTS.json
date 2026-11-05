@@ -1,0 +1,2665 @@
+{
+  "protocol": {
+    "id": "R2_PUBLIC_DEVELOPMENT_V1",
+    "seeds": [
+      11,
+      23,
+      47,
+      89,
+      131
+    ],
+    "tasks": 4,
+    "train_per_task": 96,
+    "test_per_task": 192,
+    "slopes": [
+      1,
+      1,
+      -1,
+      -1
+    ],
+    "contexts": [
+      -0.75,
+      -0.25,
+      0.25,
+      0.75
+    ],
+    "modes": [
+      "identifiable",
+      "collapsed"
+    ],
+    "methods": [
+      "frozen",
+      "sgd",
+      "ewc",
+      "replay",
+      "selective",
+      "fixed_slots"
+    ],
+    "thresholds": {
+      "retention_min": 0.95,
+      "ood_min": 0.9,
+      "margin_above_best_non_oracle": 0.03,
+      "negative_control_max": 0.65
+    },
+    "eval_note": "Public author-visible deterministic development benchmark, not independent confirmation"
+  },
+  "summary": {
+    "identifiable": {
+      "frozen": {
+        "mean_final": 0.5,
+        "mean_old_final": 0.6666666666666666,
+        "retention_fraction": 1,
+        "backward_transfer": 0,
+        "forward_transfer": -0.16666666666666666,
+        "ood_mean_final": 0.5,
+        "mean_gradient_updates": 96,
+        "mean_memory_scalars": 3,
+        "replay_examples": 0,
+        "experts": 0
+      },
+      "sgd": {
+        "mean_final": 0.75,
+        "mean_old_final": 0.6666666666666666,
+        "retention_fraction": 0.6666666666666666,
+        "backward_transfer": -0.3333333333333333,
+        "forward_transfer": 0.16666666666666666,
+        "ood_mean_final": 0.7309895833333333,
+        "mean_gradient_updates": 384,
+        "mean_memory_scalars": 3,
+        "replay_examples": 0,
+        "experts": 0
+      },
+      "ewc": {
+        "mean_final": 1,
+        "mean_old_final": 1,
+        "retention_fraction": 1.403780456331189,
+        "backward_transfer": 0.28229166666666666,
+        "forward_transfer": 0.16666666666666666,
+        "ood_mean_final": 1,
+        "mean_gradient_updates": 384,
+        "mean_memory_scalars": 9,
+        "replay_examples": 0,
+        "experts": 0
+      },
+      "replay": {
+        "mean_final": 1,
+        "mean_old_final": 1,
+        "retention_fraction": 1,
+        "backward_transfer": 0,
+        "forward_transfer": 0.16666666666666666,
+        "ood_mean_final": 0.8557291666666667,
+        "mean_gradient_updates": 767,
+        "mean_memory_scalars": 3,
+        "replay_examples": 64,
+        "experts": 0
+      },
+      "selective": {
+        "mean_final": 1,
+        "mean_old_final": 1,
+        "retention_fraction": 1,
+        "backward_transfer": 0,
+        "forward_transfer": 0.16666666666666666,
+        "ood_mean_final": 1,
+        "mean_gradient_updates": 384,
+        "mean_memory_scalars": 12,
+        "replay_examples": 0,
+        "experts": 4
+      },
+      "fixed_slots": {
+        "mean_final": 1,
+        "mean_old_final": 1,
+        "retention_fraction": 1,
+        "backward_transfer": 0,
+        "forward_transfer": -0.006249999999999989,
+        "ood_mean_final": 1,
+        "mean_gradient_updates": 384,
+        "mean_memory_scalars": 12,
+        "replay_examples": 0,
+        "experts": 4
+      }
+    },
+    "collapsed": {
+      "frozen": {
+        "mean_final": 0.5,
+        "mean_old_final": 0.6666666666666666,
+        "retention_fraction": 1,
+        "backward_transfer": 0,
+        "forward_transfer": -0.16666666666666666,
+        "ood_mean_final": 0.5,
+        "mean_gradient_updates": 96,
+        "mean_memory_scalars": 3,
+        "replay_examples": 0,
+        "experts": 0
+      },
+      "sgd": {
+        "mean_final": 0.5,
+        "mean_old_final": 0.3333333333333333,
+        "retention_fraction": 0.3333333333333333,
+        "backward_transfer": -0.6666666666666666,
+        "forward_transfer": 0.16666666666666666,
+        "ood_mean_final": 0.5,
+        "mean_gradient_updates": 384,
+        "mean_memory_scalars": 3,
+        "replay_examples": 0,
+        "experts": 0
+      },
+      "ewc": {
+        "mean_final": 0.5,
+        "mean_old_final": 0.6666666666666666,
+        "retention_fraction": 1,
+        "backward_transfer": 0,
+        "forward_transfer": -0.16666666666666666,
+        "ood_mean_final": 0.5,
+        "mean_gradient_updates": 384,
+        "mean_memory_scalars": 9,
+        "replay_examples": 0,
+        "experts": 0
+      },
+      "replay": {
+        "mean_final": 0.5,
+        "mean_old_final": 0.3333333333333333,
+        "retention_fraction": 0.3333333333333333,
+        "backward_transfer": -0.6666666666666666,
+        "forward_transfer": 0.16666666666666666,
+        "ood_mean_final": 0.5,
+        "mean_gradient_updates": 767,
+        "mean_memory_scalars": 3,
+        "replay_examples": 64,
+        "experts": 0
+      },
+      "selective": {
+        "mean_final": 0.5,
+        "mean_old_final": 0.3333333333333333,
+        "retention_fraction": 0.3333333333333333,
+        "backward_transfer": -0.6666666666666666,
+        "forward_transfer": 0.16666666666666666,
+        "ood_mean_final": 0.5,
+        "mean_gradient_updates": 384,
+        "mean_memory_scalars": 3,
+        "replay_examples": 0,
+        "experts": 1
+      },
+      "fixed_slots": {
+        "mean_final": 0.5,
+        "mean_old_final": 0.3333333333333333,
+        "retention_fraction": 0.3333333333333333,
+        "backward_transfer": -0.6666666666666666,
+        "forward_transfer": 0.16666666666666666,
+        "ood_mean_final": 0.5,
+        "mean_gradient_updates": 384,
+        "mean_memory_scalars": 12,
+        "replay_examples": 0,
+        "experts": 4
+      }
+    }
+  },
+  "gate": {
+    "retention": true,
+    "ood": true,
+    "superiority": false,
+    "negative_control": true
+  },
+  "scientific_gate": "HOLD_NO_SUPERIORITY",
+  "results": [
+    {
+      "seed": 11,
+      "mode": "identifiable",
+      "method": "frozen",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.4947916666666667,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 96,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 11,
+      "mode": "identifiable",
+      "method": "sgd",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4947916666666667,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.75,
+      "old_final": 0.6666666666666666,
+      "old_learned": 1,
+      "retention_fraction": 0.6666666666666666,
+      "backward_transfer": -0.3333333333333333,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.75,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 11,
+      "mode": "identifiable",
+      "method": "ewc",
+      "first_learned": [
+        1,
+        1,
+        0,
+        1
+      ],
+      "prelearn": [
+        0.4947916666666667,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1.5,
+      "backward_transfer": 0.3333333333333333,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 1152,
+        "ewc_fisher_samples": 384
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 9,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 11,
+      "mode": "identifiable",
+      "method": "replay",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4947916666666667,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.9921875,
+      "compute": {
+        "gradient_updates": 767,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 64,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 11,
+      "mode": "identifiable",
+      "method": "selective",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4947916666666667,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 11,
+      "mode": "identifiable",
+      "method": "fixed_slots",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4947916666666667,
+        0.453125,
+        0.453125,
+        0.46875
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.041666666666666664,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 23,
+      "mode": "identifiable",
+      "method": "frozen",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.5104166666666666,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 96,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 23,
+      "mode": "identifiable",
+      "method": "sgd",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.5104166666666666,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.75,
+      "old_final": 0.6666666666666666,
+      "old_learned": 1,
+      "retention_fraction": 0.6666666666666666,
+      "backward_transfer": -0.3333333333333333,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.69921875,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 23,
+      "mode": "identifiable",
+      "method": "ewc",
+      "first_learned": [
+        1,
+        1,
+        0.3385416666666667,
+        1
+      ],
+      "prelearn": [
+        0.5104166666666666,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 0.7795138888888888,
+      "retention_fraction": 1.2828507795100224,
+      "backward_transfer": 0.22048611111111108,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 1152,
+        "ewc_fisher_samples": 384
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 9,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 23,
+      "mode": "identifiable",
+      "method": "replay",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.5104166666666666,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.75,
+      "compute": {
+        "gradient_updates": 767,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 64,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 23,
+      "mode": "identifiable",
+      "method": "selective",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.5104166666666666,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 23,
+      "mode": "identifiable",
+      "method": "fixed_slots",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.5104166666666666,
+        0.5416666666666666,
+        0.4635416666666667,
+        0.5208333333333334
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": 0.008680555555555561,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 47,
+      "mode": "identifiable",
+      "method": "frozen",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.5364583333333334,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 96,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 47,
+      "mode": "identifiable",
+      "method": "sgd",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.5364583333333334,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.75,
+      "old_final": 0.6666666666666666,
+      "old_learned": 1,
+      "retention_fraction": 0.6666666666666666,
+      "backward_transfer": -0.3333333333333333,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.7057291666666666,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 47,
+      "mode": "identifiable",
+      "method": "ewc",
+      "first_learned": [
+        1,
+        1,
+        0,
+        1
+      ],
+      "prelearn": [
+        0.5364583333333334,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1.5,
+      "backward_transfer": 0.3333333333333333,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 1152,
+        "ewc_fisher_samples": 384
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 9,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 47,
+      "mode": "identifiable",
+      "method": "replay",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.5364583333333334,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.7864583333333333,
+      "compute": {
+        "gradient_updates": 767,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 64,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 47,
+      "mode": "identifiable",
+      "method": "selective",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.5364583333333334,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 47,
+      "mode": "identifiable",
+      "method": "fixed_slots",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.5364583333333334,
+        0.46875,
+        0.5260416666666666,
+        0.5677083333333334
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": 0.020833333333333332,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 89,
+      "mode": "identifiable",
+      "method": "frozen",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.46875,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 96,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 89,
+      "mode": "identifiable",
+      "method": "sgd",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.46875,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.75,
+      "old_final": 0.6666666666666666,
+      "old_learned": 1,
+      "retention_fraction": 0.6666666666666666,
+      "backward_transfer": -0.3333333333333333,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.75,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 89,
+      "mode": "identifiable",
+      "method": "ewc",
+      "first_learned": [
+        1,
+        1,
+        0,
+        1
+      ],
+      "prelearn": [
+        0.46875,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1.5,
+      "backward_transfer": 0.3333333333333333,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 1152,
+        "ewc_fisher_samples": 384
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 9,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 89,
+      "mode": "identifiable",
+      "method": "replay",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.46875,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 767,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 64,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 89,
+      "mode": "identifiable",
+      "method": "selective",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.46875,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 89,
+      "mode": "identifiable",
+      "method": "fixed_slots",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.46875,
+        0.5052083333333334,
+        0.46875,
+        0.5052083333333334
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.00694444444444442,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 131,
+      "mode": "identifiable",
+      "method": "frozen",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.4739583333333333,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 96,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 131,
+      "mode": "identifiable",
+      "method": "sgd",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4739583333333333,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.75,
+      "old_final": 0.6666666666666666,
+      "old_learned": 1,
+      "retention_fraction": 0.6666666666666666,
+      "backward_transfer": -0.3333333333333333,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.75,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 131,
+      "mode": "identifiable",
+      "method": "ewc",
+      "first_learned": [
+        1,
+        1,
+        0.4270833333333333,
+        1
+      ],
+      "prelearn": [
+        0.4739583333333333,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 0.8090277777777778,
+      "retention_fraction": 1.2360515021459226,
+      "backward_transfer": 0.19097222222222224,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 1152,
+        "ewc_fisher_samples": 384
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 9,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 131,
+      "mode": "identifiable",
+      "method": "replay",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4739583333333333,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.75,
+      "compute": {
+        "gradient_updates": 767,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 64,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 131,
+      "mode": "identifiable",
+      "method": "selective",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4739583333333333,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 131,
+      "mode": "identifiable",
+      "method": "fixed_slots",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4739583333333333,
+        0.5208333333333334,
+        0.421875,
+        0.5208333333333334
+      ],
+      "final": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_final": 1,
+      "old_final": 1,
+      "old_learned": 1,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.012152777777777754,
+      "ood_mean_final": 1,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 11,
+      "mode": "collapsed",
+      "method": "frozen",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.5520833333333334,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 96,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 11,
+      "mode": "collapsed",
+      "method": "sgd",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.5520833333333334,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 11,
+      "mode": "collapsed",
+      "method": "ewc",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.5520833333333334,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 1152,
+        "ewc_fisher_samples": 384
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 9,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 11,
+      "mode": "collapsed",
+      "method": "replay",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.5520833333333334,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 767,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 64,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 11,
+      "mode": "collapsed",
+      "method": "selective",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.5520833333333334,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 1
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 11,
+      "mode": "collapsed",
+      "method": "fixed_slots",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.5520833333333334,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 23,
+      "mode": "collapsed",
+      "method": "frozen",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.515625,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 96,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 23,
+      "mode": "collapsed",
+      "method": "sgd",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.515625,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 23,
+      "mode": "collapsed",
+      "method": "ewc",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.515625,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 1152,
+        "ewc_fisher_samples": 384
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 9,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 23,
+      "mode": "collapsed",
+      "method": "replay",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.515625,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 767,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 64,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 23,
+      "mode": "collapsed",
+      "method": "selective",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.515625,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 1
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 23,
+      "mode": "collapsed",
+      "method": "fixed_slots",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.515625,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 47,
+      "mode": "collapsed",
+      "method": "frozen",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.546875,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 96,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 47,
+      "mode": "collapsed",
+      "method": "sgd",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.546875,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 47,
+      "mode": "collapsed",
+      "method": "ewc",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.546875,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 1152,
+        "ewc_fisher_samples": 384
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 9,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 47,
+      "mode": "collapsed",
+      "method": "replay",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.546875,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 767,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 64,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 47,
+      "mode": "collapsed",
+      "method": "selective",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.546875,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 1
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 47,
+      "mode": "collapsed",
+      "method": "fixed_slots",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.546875,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 89,
+      "mode": "collapsed",
+      "method": "frozen",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.4270833333333333,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 96,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 89,
+      "mode": "collapsed",
+      "method": "sgd",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4270833333333333,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 89,
+      "mode": "collapsed",
+      "method": "ewc",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.4270833333333333,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 1152,
+        "ewc_fisher_samples": 384
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 9,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 89,
+      "mode": "collapsed",
+      "method": "replay",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4270833333333333,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 767,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 64,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 89,
+      "mode": "collapsed",
+      "method": "selective",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4270833333333333,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 1
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 89,
+      "mode": "collapsed",
+      "method": "fixed_slots",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4270833333333333,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 131,
+      "mode": "collapsed",
+      "method": "frozen",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.4947916666666667,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 96,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 131,
+      "mode": "collapsed",
+      "method": "sgd",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4947916666666667,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 131,
+      "mode": "collapsed",
+      "method": "ewc",
+      "first_learned": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "prelearn": [
+        0.4947916666666667,
+        1,
+        0,
+        0
+      ],
+      "final": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.6666666666666666,
+      "old_learned": 0.6666666666666666,
+      "retention_fraction": 1,
+      "backward_transfer": 0,
+      "forward_transfer": -0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 1152,
+        "ewc_fisher_samples": 384
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 9,
+        "replay_examples": 0,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 131,
+      "mode": "collapsed",
+      "method": "replay",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4947916666666667,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 767,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 64,
+        "expert_count": 0
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 131,
+      "mode": "collapsed",
+      "method": "selective",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4947916666666667,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 3,
+        "replay_examples": 0,
+        "expert_count": 1
+      },
+      "observed_train_labels": 384
+    },
+    {
+      "seed": 131,
+      "mode": "collapsed",
+      "method": "fixed_slots",
+      "first_learned": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "prelearn": [
+        0.4947916666666667,
+        1,
+        0,
+        1
+      ],
+      "final": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "mean_final": 0.5,
+      "old_final": 0.3333333333333333,
+      "old_learned": 1,
+      "retention_fraction": 0.3333333333333333,
+      "backward_transfer": -0.6666666666666666,
+      "forward_transfer": 0.16666666666666666,
+      "ood_mean_final": 0.5,
+      "compute": {
+        "gradient_updates": 384,
+        "penalty_coord_ops": 0,
+        "ewc_fisher_samples": 0
+      },
+      "memory": {
+        "weight_and_metadata_scalars": 12,
+        "replay_examples": 0,
+        "expert_count": 4
+      },
+      "observed_train_labels": 384
+    }
+  ]
+}
