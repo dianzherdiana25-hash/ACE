@@ -1,0 +1,159 @@
+{
+  "protocol_sha": "946b2d70db53aae9c0092c87f974c3c8500be32a",
+  "implementation_commit": "9b821986886840e1fa7fb3df54afebc5f400e988",
+  "execution": "local Python stdlib, precommit protocol saved before execution; GitHub-committed runner reconstructed from local script with equivalent semantics, exact-head replay NOT VERIFIED",
+  "seed_formula": "51000+11*i, i=0..23",
+  "trial_columns": [
+    "baseline_test_errors",
+    "intervention_test_errors_or_null",
+    "best_candidate_test_errors"
+  ],
+  "trials": [
+    [
+      117,
+      null,
+      47
+    ],
+    [
+      104,
+      null,
+      55
+    ],
+    [
+      115,
+      null,
+      47
+    ],
+    [
+      110,
+      60,
+      56
+    ],
+    [
+      118,
+      null,
+      58
+    ],
+    [
+      113,
+      null,
+      58
+    ],
+    [
+      116,
+      null,
+      57
+    ],
+    [
+      113,
+      70,
+      65
+    ],
+    [
+      121,
+      null,
+      55
+    ],
+    [
+      122,
+      null,
+      67
+    ],
+    [
+      119,
+      null,
+      62
+    ],
+    [
+      118,
+      null,
+      62
+    ],
+    [
+      114,
+      null,
+      51
+    ],
+    [
+      112,
+      null,
+      59
+    ],
+    [
+      118,
+      null,
+      61
+    ],
+    [
+      119,
+      null,
+      55
+    ],
+    [
+      112,
+      null,
+      67
+    ],
+    [
+      115,
+      null,
+      59
+    ],
+    [
+      115,
+      null,
+      53
+    ],
+    [
+      113,
+      null,
+      58
+    ],
+    [
+      114,
+      null,
+      65
+    ],
+    [
+      115,
+      null,
+      55
+    ],
+    [
+      111,
+      null,
+      63
+    ],
+    [
+      114,
+      null,
+      60
+    ]
+  ],
+  "summary": {
+    "baseline_false_accept": 24,
+    "intervention_false_accept": 2,
+    "abstain": 22,
+    "hypothesis_accepted": false,
+    "intervention_selected": [
+      "constant",
+      "bit0"
+    ],
+    "negative_no_signal_selected_trial_3": "marker"
+  },
+  "budget": {
+    "selection_labels_per_method": 1536,
+    "test_labels_reporting_only": 3072,
+    "negative_control_labels": 768,
+    "selection_candidate_example_comparisons_per_method": 6144
+  },
+  "cpu_seconds_local": 0.021637,
+  "limitations": [
+    "public development only",
+    "no exact-head replay of committed runner",
+    "candidate set excludes true invariant",
+    "source and evaluation grammar share parity semantics",
+    "abstention is not success",
+    "single machine CPU time not portable"
+  ]
+}
