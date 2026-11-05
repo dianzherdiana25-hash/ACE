@@ -1,0 +1,13 @@
+{
+  "sha256": {
+    "code/e14/e14q_audit.py": "80231e84c7bf134eb9cba6eb1312de432c738c66c6ed9a41f8e3436add02c59f",
+    "code/e14/e14q_run.py": "cd5ba985f5e67c3843a973a79f68567fbb5d72205f9cbb82d713e462d3179f28",
+    "code/e14/e14q_worker.py": "bee82dc036cc1dd5d35b3530902b9360bce75b6722192fabaaaeec896f5e4d15",
+    "code/e14/test_e14q.py": "fb6768d771e4079563dc91ef124b3a7d3ba79a8c9a23ac15c9e1a6b5532ec189",
+    "design/e1.4/E14P_LOCK_v1.json": "b852c4dd8c29c64eb8fcbb28594605935e6305ddf7390f7378dad3dffc506b6a",
+    "design/e1.4/E14Q_PROTOCOL_v1.md": "034c2bacd20be90f5bb29b3b7c15e03ea9c4a8f6559f0c707ff63141c189a12b",
+    "evidence/e14/e14q_public_bank_v1.json.gz": "1f5bc0e472483fd47703d583dd9a17145b2af659e150b341899ab13891fad792",
+    "tools/ace_sprint_runner.py": "38ac9e9be5445acf7152b8a7b6dc55391bffba86b7c4779b1cb4bd8a517edb94"
+  },
+  "version": 1
+}

@@ -1,5 +1,9 @@
 # Keadaan ACE saat ini
 
+## E1.4q — checkpoint pra-penilaian
+
+Bank publik baru terdiri dari 12 blok dan 48 dunia berpasangan. Satu label biaya graf membandingkan pertanyaan bercabang terarah, rantai tunggal, dan cabang acak. Dua tes pra-penilaian lulus. [Protokol](design/e1.4/E14Q_PROTOCOL_v1.md) · [Manifest](design/e1.4/E14Q_LOCK_v1.json).
+
 ## E1.4p — pewarisan selaras GO, pergeseran tersembunyi belum teratasi
 
 Pendahulu simbol menghasilkan 12/12 artefak bertipe yang dapat dipakai kembali pada tugas biaya minimum graf bercabang dengan pemetaan yang disediakan. Satu label target menghasilkan 12/12 kasus selaras lengkap versus 1/12 untuk cold dan sham. Label diagnostik menolak artefak salah pada 12/12 pergeseran yang tampak. Pada pergeseran tersembunyi, warisan menerima 48/48 prediksi salah. **NATURAL_HOLD.** Replay dan audit cocok, regresi 108/108. [Hasil](design/e1.4/E14P_RESULT_v1.md) · [Bukti](evidence/e14/e14p_verification_v1.json).

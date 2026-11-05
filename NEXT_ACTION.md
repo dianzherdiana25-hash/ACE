@@ -1,8 +1,16 @@
-# NEXT_ACTION — E1.4q observasi graf yang membedakan hipotesis
+# NEXT_ACTION — reproduksi dan audit E1.4q
 
-1. Verifikasi HEAD dan baca [hasil loop aktif](design/e1.4/E14O_RESULT_v1.md) serta [hasil pewarisan](design/e1.4/E14P_RESULT_v1.md).
-2. Bekukan eksperimen publik terpisah dengan hipotesis graf yang diberikan dan bandingkan satu label dari graf bercabang terarah, graf rantai, dan graf bercabang acak. Hitung biaya struktur, cakupan, dan kesalahan secara terpisah.
-3. Pertahankan HOLD untuk loop aktif pada graf rantai, generalisasi alami, dan pergeseran warisan yang belum terdeteksi.
+1. Verifikasi HEAD GitHub dan [protokol beku](design/e1.4/E14Q_PROTOCOL_v1.md). Validasi Bubblewrap native dengan [preflight](docs/ACE_SPRINT_RUNTIME.md). Gunakan direktori WORK yang sudah dibuat dan ledger terpisah untuk skor dan replay.
+2. Jalankan tiga perintah di bawah. Jika timeout, gunakan ulang ledger yang sama untuk proses yang terputus. Jangan membuat ulang bank atau manifest di checkout produksi.
+3. Simpan skor, replay, audit, biaya struktural, serta keputusan pada branch penelitian. Laporkan strata prefiks campuran terpisah dari gerbang utama.
+
+## Reproduksi E1.4q
+
+```bash
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 120 --heartbeat 10 --log WORK/q-score.log -- python3 -m e14.e14q_run run WORK/q-score.sqlite WORK/q-score.json.gz
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 120 --heartbeat 10 --log WORK/q-replay.log -- python3 -m e14.e14q_run run WORK/q-replay.sqlite WORK/q-replay.json.gz
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 90 --heartbeat 10 --log WORK/q-audit.log -- python3 -m e14.e14q_audit WORK/q-score.json.gz WORK/q-replay.json.gz
+```
 
 ## Reproduksi E1.4p
 
