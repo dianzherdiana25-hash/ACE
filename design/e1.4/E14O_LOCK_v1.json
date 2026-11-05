@@ -1,0 +1,14 @@
+{
+  "sha256": {
+    "code/e14/e14o_audit.py": "cdd3b61de27f10fd4171906df6ae40bd06e4f02281fd2beb1863b9d34849156c",
+    "code/e14/e14o_bank.py": "96e2f9975b79f7b66671df63ed7a406fa9993ac449dd70a543814a74f4218857",
+    "code/e14/e14o_run.py": "4ba6928f8f1053353586bb0f54ccd1ba69343699bbbb171c973499583e5ff84b",
+    "code/e14/e14o_worker.py": "6b05e3cd8eea3dc0470477719c7888beb0d3a33a32d3fb7d6d1537867a8481d6",
+    "code/e14/test_e14o.py": "747cd85aa1de1f5b376f00a3729d7541fb851c79edcbde953a6079e5d8143b2e",
+    "design/e1.4/E14N_LOCK_v1.json": "35e203d97c4398bf817ca382c7b08d463ffa9815acd7cf1abd99ed7315e96b23",
+    "design/e1.4/E14O_PROTOCOL_v1.md": "d511d5bd32cb366e51bc456914805858f0b6f1b7468d08212ac3803ec565276e",
+    "evidence/e14/e14o_public_bank_v1.json.gz": "bc416b61f15e1fb25c358c4386bc3aa4cb0313db84e160f543c11e2f3e26c6da",
+    "tools/ace_sprint_runner.py": "38ac9e9be5445acf7152b8a7b6dc55391bffba86b7c4779b1cb4bd8a517edb94"
+  },
+  "version": 1
+}

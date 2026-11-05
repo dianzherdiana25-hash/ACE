@@ -1,5 +1,9 @@
 # Keadaan ACE saat ini
 
+## E1.4o — checkpoint pra-penilaian
+
+Bank baru 40 blok, 48 dunia. Rangkaian aktif E1.4m dan E1.4n memakai batas bersama empat label. Tes 2/2. [Protokol](design/e1.4/E14O_PROTOCOL_v1.md).
+
 ## E1.4n — pemulihan bersyarat selesai dan direproduksi
 
 **Repair GO.** Terarah dan enumerasi berhasil pada 18/18 dunia dengan label yang disediakan. Fixed-7 berhasil 6/18. Terarah mempertahankan kandidat identik dengan enumerasi sambil memeriksa 540 kandidat dibanding 879.810 pada strata repair. Semua delapan kasus tanpa solusi menahan prediksi. **Rare HOLD · NATURAL_HOLD.**

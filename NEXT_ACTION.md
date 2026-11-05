@@ -4,6 +4,14 @@
 2. Pada bank baru, gabungkan pencarian kontra-contoh E1.4m, perluasan bertipe E1.4n, dan pembelian label pembeda pasca-kontradiksi. Bandingkan perbaikan aktif, pasif, dan acak dengan bukti awal dan anggaran yang sama. Pisahkan deteksi, pemulihan, penahanan, dan biaya.
 3. Pertahankan Rare HOLD dan NATURAL_HOLD untuk transfer. Gunakan freeze baru sebelum penilaian dan simpan semua hasil.
 
+## Reproduksi E1.4o
+
+```bash
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 120 --heartbeat 15 --log WORK/o-score.log -- python3 -m e14.e14o_run run WORK/o-score.sqlite WORK/o-score.json.gz
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 120 --heartbeat 15 --log WORK/o-replay.log -- python3 -m e14.e14o_run run WORK/o-replay.sqlite WORK/o-replay.json.gz
+PYTHONPATH=code python3 tools/ace_sprint_runner.py --timeout 90 --heartbeat 10 --log WORK/o-audit.log -- python3 -m e14.e14o_audit WORK/o-score.json.gz WORK/o-replay.json.gz
+```
+
 ## Catatan pemulihan historis
 
 # ACE E1.4n — recover from latest pre-score freeze
