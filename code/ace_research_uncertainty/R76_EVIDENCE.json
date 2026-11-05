@@ -1,0 +1,195 @@
+{
+  "schema": 1,
+  "project": "ACE",
+  "research_lane": "R7",
+  "phase": "R7.6",
+  "classification": "PUBLIC_SYNTHETIC_DEVELOPMENT",
+  "scientific_decision": "HOLD_NO_INDEPENDENT_CONFIRMATION",
+  "preregistration": {
+    "commit": "af8024b96aa0da8219b4c7aafb2e318aca9a020e",
+    "path": "code/ace_research_uncertainty/R76_PROTOCOL.md",
+    "before_code": true,
+    "before_final_scoring": true
+  },
+  "source": {
+    "path": "code/ace_research_uncertainty/r76_adaptive.py",
+    "git_blob_sha": "38d1e3f864fa2531b49b17c8c0d2baa7f2d9617b",
+    "test_path": "code/ace_research_uncertainty/test_r76_adaptive.py",
+    "test_blob_sha": "464c8e38987362e1172a306e6994a9718a08dd9f",
+    "auditor_path": "code/ace_research_uncertainty/r76_audit.py",
+    "auditor_blob_sha": "e54218d7513ccd6c7b53c2bbc6635005eac17f56"
+  },
+  "local_tests": {
+    "passed": 13,
+    "failed": 0,
+    "used_python_stdlib": true,
+    "exact_head_github_actions": false
+  },
+  "validation_only": {
+    "worlds": 12,
+    "adaptive10": {
+      "true_accepts": 10,
+      "false_accepts": 0,
+      "purchases": 258
+    },
+    "broad6": {
+      "true_accepts": 10,
+      "false_accepts": 0,
+      "purchases": 218
+    },
+    "full12": {
+      "true_accepts": 10,
+      "false_accepts": 0,
+      "purchases": 278
+    },
+    "narrow6": {
+      "true_accepts": 10,
+      "false_accepts": 0,
+      "purchases": 218
+    }
+  },
+  "final": {
+    "seeds": [
+      20261112,
+      20261113,
+      20261114,
+      20261115
+    ],
+    "families": [
+      "stable",
+      "swap",
+      "reverse",
+      "new01",
+      "new23",
+      "all_null",
+      "correlated",
+      "near_boundary"
+    ],
+    "worlds_per_family_per_seed": 20,
+    "total_worlds": 640,
+    "methods": 6,
+    "label_caps": [
+      0,
+      6,
+      12,
+      18,
+      24
+    ],
+    "arms": 960,
+    "source_training_labels": 1296,
+    "command": "PYTHONPATH=code python -m ace_research_uncertainty.r76_adaptive --phase final > R76_FINAL.json",
+    "scored_successfully_once": true,
+    "output_sha256": "e9fdefbf3a5cf111ed97ae367ea7a5ef10a5b10a2a22c6af35fa7cfec01e99d4",
+    "elapsed_seconds": 7.06,
+    "maxrss_kb": 100684,
+    "offline_audit": {
+      "command": "PYTHONPATH=code python -m ace_research_uncertainty.r76_audit R76_FINAL.json",
+      "arms": 960,
+      "checks": 12410,
+      "failed": 0,
+      "scoring_rerun": false,
+      "receipt_sha256": "3f25d1a9fcf208f607d5f917cc36676f62f3484bf2133363bcf5ac86eb2ef3dc"
+    }
+  },
+  "metric_definition": "20*true_accepts-60*false_accepts-2*abstentions-online_purchases",
+  "primary_five_families": {
+    "narrow6": {
+      "true_accepts": 117,
+      "false_accepts": 2,
+      "purchases": 8767,
+      "utility": -11109
+    },
+    "full12": {
+      "true_accepts": 136,
+      "false_accepts": 2,
+      "purchases": 9462,
+      "utility": -11386
+    },
+    "broad6": {
+      "true_accepts": 85,
+      "false_accepts": 1,
+      "purchases": 8998,
+      "utility": -11986
+    },
+    "adaptive10": {
+      "true_accepts": 124,
+      "false_accepts": 1,
+      "purchases": 9225,
+      "utility": -11355
+    }
+  },
+  "adaptive10_result_by_family": {
+    "stable": {
+      "true_accepts": 56,
+      "false_accepts": 0,
+      "purchases": 1752
+    },
+    "swap": {
+      "true_accepts": 5,
+      "false_accepts": 1,
+      "purchases": 1902
+    },
+    "reverse": {
+      "true_accepts": 11,
+      "false_accepts": 0,
+      "purchases": 1887
+    },
+    "new01": {
+      "true_accepts": 18,
+      "false_accepts": 0,
+      "purchases": 1866
+    },
+    "new23": {
+      "true_accepts": 34,
+      "false_accepts": 0,
+      "purchases": 1818
+    },
+    "all_null": {
+      "true_accepts": 0,
+      "false_accepts": 2,
+      "purchases": 1914
+    },
+    "correlated": {
+      "true_accepts": 68,
+      "false_accepts": 0,
+      "purchases": 1716
+    },
+    "near_boundary": {
+      "true_accepts": 8,
+      "false_accepts": 1,
+      "purchases": 1893
+    }
+  },
+  "preregistered_gate": {
+    "new23_exceeds_narrow": true,
+    "stable_coverage_and_safety": true,
+    "risk_not_higher": true,
+    "utility_at_least_full": true,
+    "utility_at_least_broad": true,
+    "budget_and_certificate": true,
+    "passed": true
+  },
+  "counterevidence": {
+    "best_core_utility_is_narrow6": true,
+    "adaptive10_utility_vs_narrow6": -246,
+    "adaptive10_utility_vs_full12": 31,
+    "paired_seed_delta_utility_adaptive_vs_full12": [
+      -74,
+      75,
+      -14,
+      44
+    ],
+    "all_null_wrong_acceptances": 2,
+    "correlated_invalidates_iid_bound": true
+  },
+  "limitations": [
+    "not a sealed or independently scored evaluation",
+    "source and family mechanisms author-visible",
+    "single-world conditional i.i.d. Bernoulli assumption only",
+    "no family-wise risk guarantee",
+    "no exact-head GitHub CI",
+    "R7.6 final bank now development-visible; cannot be reused as new holdout",
+    "no ACE real-world semantic-operator false acceptance test"
+  ],
+  "merge_authorized": false
+}
