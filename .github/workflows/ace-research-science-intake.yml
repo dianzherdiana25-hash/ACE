@@ -1,0 +1,122 @@
+name: ACE coordinator research science intake
+
+on:
+  push:
+    branches:
+      - coordination/research-science-intake-20261105
+  pull_request:
+    paths:
+      - 'tools/ace_research_intake_screen.py'
+      - 'tools/test_ace_research_intake_screen.py'
+      - 'docs/ACE_RESEARCH_INTAKE_PRESCORE_V1.md'
+      - '.github/workflows/ace-research-science-intake.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r1-independent-public-transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout coordinator exact head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Checkout R1 exact pinned source without modifying research branch
+        uses: actions/checkout@v4
+        with:
+          repository: dianzherdiana25-hash/ACE
+          ref: cf8948144919d41a70d1da6f3fb289d1dc818e36
+          path: _lane/r1
+          persist-credentials: false
+      - name: Prove source custody and immutable coordinator prescore
+        shell: bash
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          test "$(git -C _lane/r1 rev-parse HEAD)" = "cf8948144919d41a70d1da6f3fb289d1dc818e36"
+          git show b8d9c1123933f7cb21ea832cc2a58c24505eca65:docs/ACE_RESEARCH_INTAKE_PRESCORE_V1.md > /tmp/ace-intake-prescore.md
+          cmp /tmp/ace-intake-prescore.md docs/ACE_RESEARCH_INTAKE_PRESCORE_V1.md
+          echo "R1 exact pinned SHA and pre-score lock verified" >> "$GITHUB_STEP_SUMMARY"
+      - name: Run coordinator independent R1 task generator and controls
+        env:
+          PYTHONPATH: _lane/r1/code:.
+        run: |
+          set -euo pipefail
+          python -m unittest tools.test_ace_research_intake_screen -v
+          mkdir -p _intake
+          python tools/ace_research_intake_screen.py --output _intake/r1_new_tasks.json > _intake/r1_summary.json
+          python tools/ace_research_intake_screen.py --output _intake/r1_replay.json > _intake/r1_replay_summary.json
+          cmp _intake/r1_new_tasks.json _intake/r1_replay.json
+          sha256sum _intake/r1_new_tasks.json
+          cat _intake/r1_summary.json
+      - name: Preserve public source and negative-evidence receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-r1-independent-public-intake
+          path: |
+            _intake/r1_new_tasks.json
+            _intake/r1_summary.json
+          if-no-files-found: warn
+
+  r8-public-null-canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout coordinator exact head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Checkout R8 pinned exact source
+        uses: actions/checkout@v4
+        with:
+          repository: dianzherdiana25-hash/ACE
+          ref: 9fa4cb8ec3896ea157ad135d75d241da3a4cb6c1
+          path: _lane/r8
+          persist-credentials: false
+      - name: Verify frozen source HEADs
+        shell: bash
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          test "$(git -C _lane/r8 rev-parse HEAD)" = "9fa4cb8ec3896ea157ad135d75d241da3a4cb6c1"
+      - name: Reproduce R8 public null false-progress canary
+        env:
+          PYTHONPATH: _lane/r8/code:.
+        run: |
+          set -euo pipefail
+          python -m unittest ace_research_measurement.test_measurement ace_research_measurement.test_e15_audit ace_research_measurement.test_selection_bias ace_research_measurement.test_lineage ace_research_measurement.test_growth_gate ace_research_measurement.test_growth_falsifiers -v
+          mkdir -p _intake
+          python -m ace_research_measurement.growth_falsifiers --output _intake/r8_growth_null.json
+          cmp _intake/r8_growth_null.json _lane/r8/code/ace_research_measurement/results_growth_null.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('_intake/r8_growth_null.json').read_text())
+          assert report['design']['known_true_delta'] == 0
+          assert report['counts'] == {'naive_delta_at_least_10pp':42, 'public_screen_pass':9}
+          assert report['claim'] == 'PUBLIC_NULL_DIAGNOSTIC_ONLY_NO_REAL_ACE'
+          print('R8 null confirmed: 42/512 naive false progress, 9/512 diagnostic false passes')
+          PY
+          sha256sum _intake/r8_growth_null.json
+      - name: Preserve measurement-canary receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-r8-public-null-intake
+          path: _intake/r8_growth_null.json
+          if-no-files-found: warn
