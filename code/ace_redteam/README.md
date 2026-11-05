@@ -39,7 +39,7 @@ The new suite is local and single-host. It does not prove behavior under power f
 
 ## Second adversarial pass — 2026-11-05
 
-Additional reproducible tests are in `test_adversarial_v2.py` (six tests: four known expected failures, two positive controls). Local test suite: **22 tests, 13 safety controls PASS, 9 documented expected failures**, zero errors, zero unexpected successes. Executed twice under Python 3.13.5 on exact GitHub source blobs for `engine.py` and `source_evolution.py`; both runs agreed on normalized outcomes. The locally executed v2 test module was semantically equivalent to its uploaded GitHub version but not byte-identical due to comment/format changes. **This is not a GitHub Actions run**, nor complete independent scientific evaluation.
+Additional reproducible tests are in `test_adversarial_v2.py` (six tests: four known expected failures, two positive controls; plus one portfolio negative-path test in `test_portfolio_redteam.py`). Local test suite with portfolio addition: **23 tests, 13 safety controls PASS, 10 documented expected failures**, zero errors, zero unexpected successes. Executed twice under Python 3.13.5 on exact GitHub source blobs for `engine.py` and `source_evolution.py`; both runs agreed on normalized outcomes. The original `portfolio.py` Git blob `274fb494e127a25c7b5ecf4523e246fdf0f23501` was also verified in the local reproduction. The locally executed v2/portfolio test modules were semantically equivalent to their uploaded GitHub versions but not byte-identical due to comment/format changes. **This is not a GitHub Actions run**, nor complete independent scientific evaluation.
 
 - **RT-06 / P1 — Shared-object concurrency corrupts a journal:** `HashLedger.append` builds the next sequence number outside the lock and updates `self.events` after unlocking. A deterministic two-thread schedule can make both appends return success while writing duplicate sequence numbers, preventing replay. `test_rt06_same_object_thread_race_must_not_corrupt_journal` uses a synchronized `os.open` hook and only temporary directories.
 - **RT-07 / P1 — Valid-prefix rollback repeats terminal holdout evaluation:** remove only a completed-event line, leaving a valid SHA256 prefix. `ResearchEngine` reopens and re-completes, querying `test` twice again (test read count **2 → 4**) and regenerating a byte-identical terminal journal. The missing property is an externally anchored durable chain head/terminal record. `test_rt07_valid_prefix_rollback_must_not_repeat_holdout`.
@@ -53,3 +53,13 @@ PYTHONPATH=code:. python3 -m unittest ace_redteam.test_adversarial ace_redteam.t
 ```
 
 **Red-team disposition:** Keep self-improvement deployments/source mutation in HOLD until core owners address journal race, rollback anchoring, external file identity, trusted evaluator custody, and safe staging file types. No core fixes in this PR; no promotion, merge, or change to frozen research. An independent CI runner must execute this exact PR HEAD and check the nine assertions after core repairs.
+
+### Third negative-path discovery
+
+- **RT-10 / P2 — Valid no-gain portfolio allocation cannot resume:** `run_portfolio` correctly records a fully valid allocation with `selected: null` when no track has positive validation gain; replay then fails in `if selected not in engines: raise ResearchIntegrityError('unknown allocated track')`. Reproduced on GitHub-exact `portfolio.py` using a deterministic, constant-score `OperatorAdapter` stub only (the production E1.4 oracle need not be changed). First run returns `all_tracks_paused_no_gain`; second raises the specified integrity error. See `test_portfolio_redteam.py`. This is an engine liveness/false integrity alarm on an explicitly supported negative-evidence branch, not a demonstrated data corruption.
+
+Combined **23 tests / 13 controls PASS / 10 known expected failures**. Two local repeat executions produced matching failure identities. The new red-team tests have **not** run in GitHub Actions; exact source bytes (engine, source_evolution, portfolio) were checked against GitHub and the proposed test files were uploaded separately. No merge or changes outside `code/ace_redteam/`.
+
+```bash
+PYTHONPATH=code:. python3 -m unittest ace_redteam.test_adversarial ace_redteam.test_adversarial_v2 ace_redteam.test_portfolio_redteam -v
+```
