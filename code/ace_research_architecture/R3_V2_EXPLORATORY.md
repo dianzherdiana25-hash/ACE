@@ -45,5 +45,17 @@ The near-zero additional-task difference versus greedy is consistent with both a
 ## Interpretation
 Neutral stepping stones alone lose to greedy in *both* banks. Neutral + validation coverage is worse than greedy by 18.25 percentage points in development, but ahead by only 0.79 points on the additional public bank, with greater measured gate-work and a lower number of perfect solutions. Neither positive nor negative split warrants population-level extrapolation. This does **not** meet the gate for scientific superiority, autonomous runtime self-modification or OAIE. The author-visible additional bank is not an independent holdout. A common per-case ceiling is not equal actual cost.
 
+## Separate GitHub-committed JavaScript R3-v2 pilot (exact-source V8 readback)
+
+Unlike the locally packaged Python study above, this second, smaller **four-input JS experiment is committed in this PR** as `experiment_v2.js`, `results_v2_js.json` and `test_v2.js`. It must not be conflated with the five-input Python study. It has 6 arms (fixed, config, random, evolve, neutral, neutral_coverage), 4 gate maximum, 120 candidates and 1,200 proposals per case, 8/4/4 train/validation/test, 6 seeds, and 2 publicly authored tasks in each of 3 banks. All 216 full records were computed by re-running the actual GitHub-readback JS source in a V8 isolate. Seven built-in self-tests passed. The committed Node harness provides a replay check but has **not** been executed in GitHub Actions or in a clean checkout.
+
+| Four-input JS bank | Config accuracy | Greedy accuracy | Neutral + coverage accuracy | Config gate ops | Neutral + coverage gate ops |
+|---|---:|---:|---:|---:|---:|
+| Development (12 cases/arm) | 75.00% | 50.00% | 54.17% | 9,648 | 28,416 |
+| Original public confirmation (12 cases/arm) | 60.42% | 39.58% | 62.50% | 9,648 | 28,336 |
+| Two additional public tasks (12 cases/arm) | 56.25% | 58.33% | **35.42%** | 9,648 | 28,356 |
+
+**Outcome:** Neutral + coverage has a small +2.08 pp edge over config on the original confirmation bank, at about 2.94 times measured gate operations. It loses by -20.83 pp on two additional public tasks and is worse on development. This is a **negative generalization result**, not a robust improvement. The record is exploratory, author-visible, and not a sealed evaluation. Equal maximum scored candidates is not equal compute. The committed JS v2 is independent of the Python pilot and does not claim the Python findings as exact-head GitHub evidence.
+
 ## Constraints
-Do not merge, promote or integrate R3 based on this result. Do not change `main`, frozen E1.4, S4 or other agent directories. V2 code and evidence require separate exact-head commit + CI/replay verification if this research is advanced. The existing JS pilot in this PR remains the only runnable committed implementation at this point.
+Do not merge, promote or integrate R3 based on this result. Do not change `main`, frozen E1.4, S4 or other agent directories. V2 code and evidence require separate exact-head commit + CI/replay verification if this research is advanced. Both JS v1 and JS v2 are now committed and runnable offline; the distinct Python v2 package remains conversation-local and is not part of the PR.
