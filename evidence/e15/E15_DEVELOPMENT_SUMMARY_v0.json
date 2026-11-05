@@ -1,0 +1,290 @@
+{
+  "controls": {
+    "frozen_bank_edit": "NOT_PERFORMED",
+    "main_merge": "NOT_PERFORMED",
+    "tod_edit": "NOT_PERFORMED"
+  },
+  "created_date": "2026-11-05",
+  "files_sha256": {
+    "WORK/e15_demo/final-infamily.json": "cfc9a646247cc371e9dcdc7470576ef572b8d076869c4908d7135f75b8083ff7",
+    "WORK/e15_demo/final-mixed.json": "bf940e0237c921e03369a9a96294dd1958db8cae3b4991dd78a80710f9b51737",
+    "WORK/e15_demo/portfolio-replay.json": "b477331552567b6a87ab23e05b14b69ae192252dc2c5ddc8748b58931ef70c32",
+    "WORK/e15_demo/portfolio.json": "b477331552567b6a87ab23e05b14b69ae192252dc2c5ddc8748b58931ef70c32",
+    "WORK/e15_demo/test-e15.log": "7688b853a780314a0ac974290bcb7db96c1513bd63ce322e84077c2e3b3d2129",
+    "WORK/e15_demo/test-legacy.log": "9fa4b52cb4bd5cc66c8c6635f55106788e146491a053adc2e52060c3bb12b712",
+    "WORK/e15_final_infamily/events.jsonl": "02d653d307f295e7adcae61715d7df2697d1fa2319229e726c41d43fb809de1f",
+    "WORK/e15_final_mixed/events.jsonl": "c9f4a34026392ee7f8a4e5387ae1c6802618b6a01f3de387784075a0f20b691f",
+    "WORK/e15_portfolio/allocation.json": "34cc12d2e3fa8165f7be9cdb9abdc39c5c387e17ddda0d4f3d6ae3116b75bb25",
+    "WORK/e15_portfolio/in_family/events.jsonl": "02d653d307f295e7adcae61715d7df2697d1fa2319229e726c41d43fb809de1f",
+    "WORK/e15_portfolio/mixed_grammar/events.jsonl": "e0ee31a83181143e9bf5f8904bfe67a54508a2bef35eafcfb252cfd6522529c4",
+    "code/ace_loop/__init__.py": "27fe6c8b9d7c6c8cbf0e35ce49b69642162ab9a3c4e90cceec0fe7440e667b81",
+    "code/ace_loop/cli.py": "729ce64dab48a1576c811207a8b0e32bda216c13204677dcf9a7d6f6cc77d3d5",
+    "code/ace_loop/engine.py": "666bddb5dd9a66447a04de2850507bfb8648f42a1f915893a68ffcc96acea6c3",
+    "code/ace_loop/operators.py": "52df70792f53ad40ceb7fc2a542f8d2c4615460a0a948cd41411de5972e20356",
+    "code/ace_loop/portfolio.py": "7c0f7aa1222513a40214ada1e22a0187b2c0e99784edc16a161aea33dfcad8dc",
+    "code/ace_loop/test_engine.py": "f6c698b825c2b3d79c55558c0e7ec997e20b30940caf55d9e460a1cfd60fd389",
+    "code/ace_loop/test_portfolio.py": "535910908a00f063aca25a0e6c47cf8daf8f142a9a1e47f0e205cb3719fec754",
+    "docs/ACE_E15_AUTONOMOUS_RESEARCH_HARNESS_DEV.md": "0304fd68e0242f473f6916409476dd728925d9d6605194a64325446ec63d3b04"
+  },
+  "limitations": [
+    "public author-visible bank",
+    "no clean exact-head regression",
+    "no native Bubblewrap",
+    "no arbitrary code self-modification",
+    "no autonomous background operation"
+  ],
+  "local_tests": {
+    "e15": 32,
+    "related_e14": 82,
+    "status": "PASS in two bounded groups",
+    "sum": 114
+  },
+  "project": "ACE E1.5 PUBLIC ENGINEERING DEVELOPMENT",
+  "results": {
+    "WORK/e15_demo/final-infamily.json": {
+      "baseline_validation": {
+        "abstained": 12,
+        "accepted_correct": 0,
+        "accepted_wrong": 0,
+        "logical_labels": 12,
+        "probe_errors": 0,
+        "utility_units": -36,
+        "worlds": 12
+      },
+      "champion": {
+        "label_cap": 3,
+        "min_evidence": 1,
+        "selector": "fixed"
+      },
+      "champion_validation": {
+        "abstained": 9,
+        "accepted_correct": 3,
+        "accepted_wrong": 0,
+        "logical_labels": 36,
+        "probe_errors": 0,
+        "utility_units": 6,
+        "worlds": 12
+      },
+      "generalization_gate": "NO_VALIDATED_GAIN",
+      "holdout": {
+        "abstained": 17,
+        "accepted_correct": 1,
+        "accepted_wrong": 0,
+        "logical_labels": 53,
+        "probe_errors": 0,
+        "utility_units": -67,
+        "worlds": 18
+      },
+      "holdout_baseline": {
+        "abstained": 18,
+        "accepted_correct": 0,
+        "accepted_wrong": 0,
+        "logical_labels": 18,
+        "probe_errors": 0,
+        "utility_units": -54,
+        "worlds": 18
+      },
+      "holdout_delta_utility": -13,
+      "holdout_recorded_once_per_policy_and_reaudited_on_replay": true,
+      "note": "finite policy optimization; no autonomous code/architecture invention",
+      "scientific_decision": "NOT_ASSESSED",
+      "status": "COMPLETE_PUBLIC_DEVELOPMENT",
+      "trials": 12
+    },
+    "WORK/e15_demo/final-mixed.json": {
+      "baseline_validation": {
+        "abstained": 12,
+        "accepted_correct": 0,
+        "accepted_wrong": 0,
+        "logical_labels": 12,
+        "probe_errors": 0,
+        "utility_units": -36,
+        "worlds": 12
+      },
+      "champion": {
+        "label_cap": 1,
+        "min_evidence": 1,
+        "selector": "fixed"
+      },
+      "champion_validation": {
+        "abstained": 12,
+        "accepted_correct": 0,
+        "accepted_wrong": 0,
+        "logical_labels": 12,
+        "probe_errors": 0,
+        "utility_units": -36,
+        "worlds": 12
+      },
+      "generalization_gate": "NO_VALIDATED_GAIN",
+      "holdout": {
+        "abstained": 18,
+        "accepted_correct": 0,
+        "accepted_wrong": 0,
+        "logical_labels": 18,
+        "probe_errors": 0,
+        "utility_units": -54,
+        "worlds": 18
+      },
+      "holdout_baseline": {
+        "abstained": 18,
+        "accepted_correct": 0,
+        "accepted_wrong": 0,
+        "logical_labels": 18,
+        "probe_errors": 0,
+        "utility_units": -54,
+        "worlds": 18
+      },
+      "holdout_delta_utility": 0,
+      "holdout_recorded_once_per_policy_and_reaudited_on_replay": true,
+      "note": "finite policy optimization; no autonomous code/architecture invention",
+      "scientific_decision": "NOT_ASSESSED",
+      "status": "COMPLETE_PUBLIC_DEVELOPMENT",
+      "trials": 12
+    },
+    "WORK/e15_demo/portfolio-replay.json": {
+      "allocation": {
+        "gains": {
+          "in_family": 42,
+          "mixed_grammar": 0
+        },
+        "holdout_used_for_allocation": false,
+        "pilot_heads": {
+          "in_family": "927402215cc5711ddd342fbbee8d4e4a9894990b6d6029a32ad6e0da558a29ea",
+          "mixed_grammar": "f438bfd9746cc192a95907a3c6bc10e07a2654d25c88606d7cf140a1e74c0667"
+        },
+        "pilot_trials": 8,
+        "reason": "validation_gain_reallocation",
+        "selected": "in_family",
+        "total_trials": 12
+      },
+      "scientific_decision": "NOT_ASSESSED",
+      "selected_result": {
+        "baseline_validation": {
+          "abstained": 12,
+          "accepted_correct": 0,
+          "accepted_wrong": 0,
+          "logical_labels": 12,
+          "probe_errors": 0,
+          "utility_units": -36,
+          "worlds": 12
+        },
+        "champion": {
+          "label_cap": 3,
+          "min_evidence": 1,
+          "selector": "fixed"
+        },
+        "champion_validation": {
+          "abstained": 9,
+          "accepted_correct": 3,
+          "accepted_wrong": 0,
+          "logical_labels": 36,
+          "probe_errors": 0,
+          "utility_units": 6,
+          "worlds": 12
+        },
+        "generalization_gate": "NO_VALIDATED_GAIN",
+        "holdout": {
+          "abstained": 17,
+          "accepted_correct": 1,
+          "accepted_wrong": 0,
+          "logical_labels": 53,
+          "probe_errors": 0,
+          "utility_units": -67,
+          "worlds": 18
+        },
+        "holdout_baseline": {
+          "abstained": 18,
+          "accepted_correct": 0,
+          "accepted_wrong": 0,
+          "logical_labels": 18,
+          "probe_errors": 0,
+          "utility_units": -54,
+          "worlds": 18
+        },
+        "holdout_delta_utility": -13,
+        "holdout_recorded_once_per_policy_and_reaudited_on_replay": true,
+        "note": "finite policy optimization; no autonomous code/architecture invention",
+        "scientific_decision": "NOT_ASSESSED",
+        "status": "COMPLETE_PUBLIC_DEVELOPMENT",
+        "trials": 12
+      },
+      "suspended_tracks": [
+        "mixed_grammar"
+      ]
+    },
+    "WORK/e15_demo/portfolio.json": {
+      "allocation": {
+        "gains": {
+          "in_family": 42,
+          "mixed_grammar": 0
+        },
+        "holdout_used_for_allocation": false,
+        "pilot_heads": {
+          "in_family": "927402215cc5711ddd342fbbee8d4e4a9894990b6d6029a32ad6e0da558a29ea",
+          "mixed_grammar": "f438bfd9746cc192a95907a3c6bc10e07a2654d25c88606d7cf140a1e74c0667"
+        },
+        "pilot_trials": 8,
+        "reason": "validation_gain_reallocation",
+        "selected": "in_family",
+        "total_trials": 12
+      },
+      "scientific_decision": "NOT_ASSESSED",
+      "selected_result": {
+        "baseline_validation": {
+          "abstained": 12,
+          "accepted_correct": 0,
+          "accepted_wrong": 0,
+          "logical_labels": 12,
+          "probe_errors": 0,
+          "utility_units": -36,
+          "worlds": 12
+        },
+        "champion": {
+          "label_cap": 3,
+          "min_evidence": 1,
+          "selector": "fixed"
+        },
+        "champion_validation": {
+          "abstained": 9,
+          "accepted_correct": 3,
+          "accepted_wrong": 0,
+          "logical_labels": 36,
+          "probe_errors": 0,
+          "utility_units": 6,
+          "worlds": 12
+        },
+        "generalization_gate": "NO_VALIDATED_GAIN",
+        "holdout": {
+          "abstained": 17,
+          "accepted_correct": 1,
+          "accepted_wrong": 0,
+          "logical_labels": 53,
+          "probe_errors": 0,
+          "utility_units": -67,
+          "worlds": 18
+        },
+        "holdout_baseline": {
+          "abstained": 18,
+          "accepted_correct": 0,
+          "accepted_wrong": 0,
+          "logical_labels": 18,
+          "probe_errors": 0,
+          "utility_units": -54,
+          "worlds": 18
+        },
+        "holdout_delta_utility": -13,
+        "holdout_recorded_once_per_policy_and_reaudited_on_replay": true,
+        "note": "finite policy optimization; no autonomous code/architecture invention",
+        "scientific_decision": "NOT_ASSESSED",
+        "status": "COMPLETE_PUBLIC_DEVELOPMENT",
+        "trials": 12
+      },
+      "suspended_tracks": [
+        "mixed_grammar"
+      ]
+    }
+  },
+  "scientific_decision": "NOT_ASSESSED",
+  "scope": "finite policy search, no real paid oracle",
+  "version": 1
+}
