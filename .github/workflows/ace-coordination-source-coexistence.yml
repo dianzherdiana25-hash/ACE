@@ -1,0 +1,36 @@
+name: ACE coordinator E1.5/E1.6 coexistence smoke
+on:
+  push:
+    branches:
+      - coordination/e16-e15-source-reference-20261105
+    paths:
+      - 'code/ace_loop/source_evolution_e15_reference.py'
+      - 'code/ace_loop/test_source_evolution_e15_reference.py'
+      - '.github/workflows/ace-coordination-source-coexistence.yml'
+  pull_request:
+    paths:
+      - 'code/ace_loop/source_evolution_e15_reference.py'
+      - 'code/ace_loop/test_source_evolution_e15_reference.py'
+      - '.github/workflows/ace-coordination-source-coexistence.yml'
+permissions:
+  contents: read
+jobs:
+  coexistence-exact-head:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Record exact checkout SHA
+        run: |
+          echo "checked_out_head=$(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+          test -s code/ace_loop/source_evolution_e15_reference.py
+          test -s code/ace_loop/source_evolution.py
+      - name: Run both E1.5 and E1.6 source evolution tests
+        env:
+          PYTHONPATH: code:.
+        run: python -m unittest ace_loop.test_source_evolution_e15_reference ace_loop.test_source_evolution ace_loop.test_engine ace_loop.test_portfolio -v
