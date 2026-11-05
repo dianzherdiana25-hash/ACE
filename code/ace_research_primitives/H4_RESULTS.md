@@ -50,6 +50,16 @@ The special target `late_flip_equal` has **identical labels to `#a==#b` across a
 
 The model cannot distinguish these worlds from training data. This falsifies strong claims that training-consistent representation synthesis ensures true semantic identification or safe OOD acceptance.
 
+## Additional postscore identifiability diagnostic (not part of H4 gate)
+
+A direct **training-only** ratio probe checked equality `#a=k#b` on the unchanged 63 length-0..5 training words:
+- `k=3`: 5 positive training strings; constructed `(w_a,w_b)=(1,-3)`.
+- `k=4`: 6 positive training strings; constructed `(1,-4)`.
+- `k=5`: only 1 positive training string (the empty word); **abstained**.
+- `k=6`: only 1 positive training string (the empty word); **abstained**.
+
+This is a **postscore exploratory negative result**, not an unseen prespecified H4 benchmark: even within the researcher-authored counter class, finite short observations may not identify a valid register. No additional holdout claims are made.
+
 ## Integrity, reproducibility and evidence
 
 Commands from repository root:
@@ -62,7 +72,7 @@ PYTHONPATH=. python -m ace_research_primitives.audit_h4 /tmp/r1-h4.json
 sha256sum /tmp/r1-h4.json
 ```
 
-Full local result **58,095 bytes**, SHA256 `afaf6d4465c141d10e58a454ae46f3a21e5f2647fb94f8087786b674498e2dcb`. The raw JSON contains all 12 outcomes, original and constructed model representations, 7 model scores ×3 splits, hashes of word banks, feature construction attempts and 4 holdout counterexamples per model. It is provided as a downloadable conversation artifact, not committed as a GitHub JSON blob; it can be deterministically regenerated.
+Full local result **58,095 bytes**, SHA256 `afaf6d4465c141d10e58a454ae46f3a21e5f2647fb94f8087786b674498e2dcb`. The raw JSON contains all 12 outcomes, original and constructed model representations, 7 model scores ×3 splits, hashes of word banks, feature construction attempts and up to four selected-model holdout counterexamples per task. It is provided as a downloadable conversation artifact, not committed as a GitHub JSON blob; it can be deterministically regenerated.
 
 Independent within-team audit: **12 tasks, 3,636 label recomputations, 252 model×task×split score cells reconciled**; tampering with scores, learned guard, RPNI state, holdout digest or acceptance aggregate is detected by unit tests. All 41/41 local tests PASS.
 
