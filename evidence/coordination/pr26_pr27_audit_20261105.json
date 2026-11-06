@@ -1,0 +1,28 @@
+{
+  "blocking_overlap_count": 1,
+  "decision": "BLOCK_INTEGRATION",
+  "dependencies": [],
+  "disclaimer": "Path-level preflight only; no semantic conflict, SHA ancestry, CI or mergeability verification.",
+  "open_pr_count": 2,
+  "overlaps": [
+    {
+      "base_refs": [
+        "research/e15-autonomous-research-loop",
+        "research/e15-autonomous-research-loop"
+      ],
+      "prs": [
+        26,
+        27
+      ],
+      "severity": "BLOCK_SIBLING_OVERLAP",
+      "shared_paths": [
+        "code/ace_loop/source_evolution.py",
+        "code/ace_loop/test_source_evolution.py"
+      ]
+    }
+  ],
+  "repository": "dianzherdiana25-hash/ACE",
+  "review_overlap_count": 0,
+  "schema_version": 1,
+  "snapshot_sha256": "24a7a2416bb8fe5b60507cde865aef980f9882e9889ee8575ca48b3912fc2d60"
+}
