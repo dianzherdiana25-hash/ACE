@@ -1,0 +1,3 @@
+# S1-J — Public synthetic semantic novelty diagnostic
+
+Protocol set before local execution. H1: random 8-point signature novelty precision >=95% over 100 evaluation worlds. H2: syntax-only false novelty >=20% on equivalent expressions. 100 development and 100 disjoint evaluation seeds, 64 proposals/world (32 equivalent identities, 32 single-input flips). Compare random8, static8, full64 oracle (reporting only), and syntax. Label budget random/static matched at eight input locations per proposal; full64 is deliberately NOT budget-matched. CPU and label presentations counted. See result evidence. No sealed holdout or scientific promotion.
