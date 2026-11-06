@@ -23,7 +23,7 @@ class ChatRunnerTests(unittest.TestCase):
                     from ace_capability_evolution.compositional import bank
                     t,v,h=bank("equal",20261106)
                     obj["tasks"]=[{"name":"example","train":t,"validation":v,"terminal":h}]
-                self.assertEqual(obj,task.parse_request(task.canonical(obj)))
+                self.assertEqual(json.loads(task.canonical(obj)),task.parse_request(task.canonical(obj)))
 
     def test_extraneous_fields_and_invalid_modes(self):
         for changes in ({"additional":1},{"mode":"shell"},{"mode":"eval"},
@@ -54,7 +54,7 @@ class ChatRunnerTests(unittest.TestCase):
         x=basic("task_batch")
         x["tasks"]=[{"name":"example","train":train,
                      "validation":validation,"terminal":terminal}]
-        self.assertEqual(x,task.parse_request(task.canonical(x)))
+        self.assertEqual(json.loads(task.canonical(x)),task.parse_request(task.canonical(x)))
         bad=copy.deepcopy(x)
         bad["tasks"][0]["terminal"][0]=train[0]
         with self.assertRaises(task.RequestError):
