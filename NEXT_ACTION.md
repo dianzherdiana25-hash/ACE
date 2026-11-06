@@ -1,5 +1,11 @@
 # ACE next focused research step
 
+Operational generation v1 is implemented: run `python3 ace.py demo --workspace
+./ace-work`. CLI intake, validated inheritance, reports, prediction, separate
+evaluation, transactional restart and concurrent workers are integrated. Preserve
+that contract while extending research capability. The binary representation
+grammar and FIFO task agenda remain explicit limits; OAIE is not completed.
+
 The public v0.3 experiment is completed; preserve its protocol, amendment and raw
 result. Do not retune on this evidence and call the result independent progress.
 
