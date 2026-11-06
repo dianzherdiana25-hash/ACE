@@ -1,0 +1,5607 @@
+{
+  "protocol": {
+    "id": "ACE-R3-JS-V2-NEUTRAL-EXPLORATORY",
+    "inputs": 4,
+    "max_gates": 4,
+    "candidates_per_search": 120,
+    "max_proposals": 1200,
+    "beam": 12,
+    "shortlist": 12,
+    "regularizer": 0.015,
+    "train_validation_test": [
+      8,
+      4,
+      4
+    ],
+    "seeds": 6,
+    "closed_ops": [
+      "AND",
+      "OR",
+      "XOR"
+    ],
+    "note": "author-visible synthetic tasks; not independent evidence, no arbitrary code execution"
+  },
+  "tests": {
+    "checks": [
+      "invalid op/edge/output rejection",
+      "500 structural mutations",
+      "deterministic repeat",
+      "holdout label flip preserves selected architecture",
+      "bounded candidates and proposals",
+      "disjoint splits",
+      "neutral coverage holdout-blind selection"
+    ],
+    "passed": 7
+  },
+  "development": {
+    "summary": {
+      "fixed": {
+        "cases": 12,
+        "accuracy": 0.604167,
+        "perfect": 3,
+        "candidates": 12,
+        "gate_ops": 576,
+        "mean_gate_count": 3
+      },
+      "config": {
+        "cases": 12,
+        "accuracy": 0.75,
+        "perfect": 5,
+        "candidates": 324,
+        "gate_ops": 9648,
+        "mean_gate_count": 3
+      },
+      "random": {
+        "cases": 12,
+        "accuracy": 0.541667,
+        "perfect": 1,
+        "candidates": 1440,
+        "gate_ops": 28764,
+        "mean_gate_count": 0.75
+      },
+      "evolve": {
+        "cases": 12,
+        "accuracy": 0.5,
+        "perfect": 0,
+        "candidates": 1440,
+        "gate_ops": 18944,
+        "mean_gate_count": 1.0833
+      },
+      "neutral": {
+        "cases": 12,
+        "accuracy": 0.541667,
+        "perfect": 2,
+        "candidates": 1440,
+        "gate_ops": 28352,
+        "mean_gate_count": 1.25
+      },
+      "neutral_coverage": {
+        "cases": 12,
+        "accuracy": 0.541667,
+        "perfect": 1,
+        "candidates": 1440,
+        "gate_ops": 28416,
+        "mean_gate_count": 1.1667
+      }
+    },
+    "rows": [
+      {
+        "task": "masked_xor",
+        "seed": 0,
+        "arm": "fixed",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "masked_xor",
+        "seed": 0,
+        "arm": "config",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "OR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "masked_xor",
+        "seed": 0,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 154,
+        "gate_ops": 2400
+      },
+      {
+        "task": "masked_xor",
+        "seed": 0,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 4
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 120,
+        "proposals": 215,
+        "gate_ops": 1908
+      },
+      {
+        "task": "masked_xor",
+        "seed": 0,
+        "arm": "neutral",
+        "train_error": 0.125,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 156,
+        "gate_ops": 2296
+      },
+      {
+        "task": "masked_xor",
+        "seed": 0,
+        "arm": "neutral_coverage",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 2
+            },
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 120,
+        "proposals": 147,
+        "gate_ops": 2336
+      },
+      {
+        "task": "masked_xor",
+        "seed": 1,
+        "arm": "fixed",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "masked_xor",
+        "seed": 1,
+        "arm": "config",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "masked_xor",
+        "seed": 1,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 3,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 154,
+        "gate_ops": 2340
+      },
+      {
+        "task": "masked_xor",
+        "seed": 1,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 0
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 207,
+        "gate_ops": 1428
+      },
+      {
+        "task": "masked_xor",
+        "seed": 1,
+        "arm": "neutral",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 4
+            },
+            {
+              "op": "XOR",
+              "a": 5,
+              "b": 2
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 6
+            }
+          ],
+          "out": 7
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2372
+      },
+      {
+        "task": "masked_xor",
+        "seed": 1,
+        "arm": "neutral_coverage",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 0
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 149,
+        "gate_ops": 2440
+      },
+      {
+        "task": "masked_xor",
+        "seed": 2,
+        "arm": "fixed",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "masked_xor",
+        "seed": 2,
+        "arm": "config",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "masked_xor",
+        "seed": 2,
+        "arm": "random",
+        "train_error": 0.125,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 2
+        },
+        "candidates": 120,
+        "proposals": 159,
+        "gate_ops": 2452
+      },
+      {
+        "task": "masked_xor",
+        "seed": 2,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 196,
+        "gate_ops": 1620
+      },
+      {
+        "task": "masked_xor",
+        "seed": 2,
+        "arm": "neutral",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 153,
+        "gate_ops": 2316
+      },
+      {
+        "task": "masked_xor",
+        "seed": 2,
+        "arm": "neutral_coverage",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 149,
+        "gate_ops": 2344
+      },
+      {
+        "task": "masked_xor",
+        "seed": 3,
+        "arm": "fixed",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "masked_xor",
+        "seed": 3,
+        "arm": "config",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "masked_xor",
+        "seed": 3,
+        "arm": "random",
+        "train_error": 0,
+        "validation_error": 0.5,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 3,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 147,
+        "gate_ops": 2540
+      },
+      {
+        "task": "masked_xor",
+        "seed": 3,
+        "arm": "evolve",
+        "train_error": 0,
+        "validation_error": 0.5,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 220,
+        "gate_ops": 1604
+      },
+      {
+        "task": "masked_xor",
+        "seed": 3,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 0
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 150,
+        "gate_ops": 2320
+      },
+      {
+        "task": "masked_xor",
+        "seed": 3,
+        "arm": "neutral_coverage",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 4
+            },
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 0
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 120,
+        "proposals": 163,
+        "gate_ops": 2360
+      },
+      {
+        "task": "masked_xor",
+        "seed": 4,
+        "arm": "fixed",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "masked_xor",
+        "seed": 4,
+        "arm": "config",
+        "train_error": 0.5,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "masked_xor",
+        "seed": 4,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 2
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2288
+      },
+      {
+        "task": "masked_xor",
+        "seed": 4,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 204,
+        "gate_ops": 1536
+      },
+      {
+        "task": "masked_xor",
+        "seed": 4,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 153,
+        "gate_ops": 2348
+      },
+      {
+        "task": "masked_xor",
+        "seed": 4,
+        "arm": "neutral_coverage",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 151,
+        "gate_ops": 2448
+      },
+      {
+        "task": "masked_xor",
+        "seed": 5,
+        "arm": "fixed",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "masked_xor",
+        "seed": 5,
+        "arm": "config",
+        "train_error": 0.5,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "masked_xor",
+        "seed": 5,
+        "arm": "random",
+        "train_error": 0.125,
+        "validation_error": 0.75,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [],
+          "out": 2
+        },
+        "candidates": 120,
+        "proposals": 146,
+        "gate_ops": 2556
+      },
+      {
+        "task": "masked_xor",
+        "seed": 5,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0.5,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 2
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 4
+            }
+          ],
+          "out": 5
+        },
+        "candidates": 120,
+        "proposals": 195,
+        "gate_ops": 1640
+      },
+      {
+        "task": "masked_xor",
+        "seed": 5,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 154,
+        "gate_ops": 2460
+      },
+      {
+        "task": "masked_xor",
+        "seed": 5,
+        "arm": "neutral_coverage",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 2
+            }
+          ],
+          "out": 5
+        },
+        "candidates": 120,
+        "proposals": 157,
+        "gate_ops": 2372
+      },
+      {
+        "task": "and_pairs",
+        "seed": 0,
+        "arm": "fixed",
+        "train_error": 0.75,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "and_pairs",
+        "seed": 0,
+        "arm": "config",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "and_pairs",
+        "seed": 0,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 143,
+        "gate_ops": 2388
+      },
+      {
+        "task": "and_pairs",
+        "seed": 0,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 206,
+        "gate_ops": 1560
+      },
+      {
+        "task": "and_pairs",
+        "seed": 0,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 163,
+        "gate_ops": 2376
+      },
+      {
+        "task": "and_pairs",
+        "seed": 0,
+        "arm": "neutral_coverage",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 2
+            },
+            {
+              "op": "AND",
+              "a": 3,
+              "b": 4
+            }
+          ],
+          "out": 5
+        },
+        "candidates": 120,
+        "proposals": 163,
+        "gate_ops": 2372
+      },
+      {
+        "task": "and_pairs",
+        "seed": 1,
+        "arm": "fixed",
+        "train_error": 0.75,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "and_pairs",
+        "seed": 1,
+        "arm": "config",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "and_pairs",
+        "seed": 1,
+        "arm": "random",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 0
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 146,
+        "gate_ops": 2292
+      },
+      {
+        "task": "and_pairs",
+        "seed": 1,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 215,
+        "gate_ops": 1652
+      },
+      {
+        "task": "and_pairs",
+        "seed": 1,
+        "arm": "neutral",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 152,
+        "gate_ops": 2324
+      },
+      {
+        "task": "and_pairs",
+        "seed": 1,
+        "arm": "neutral_coverage",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2400
+      },
+      {
+        "task": "and_pairs",
+        "seed": 2,
+        "arm": "fixed",
+        "train_error": 0.875,
+        "validation_error": 0.5,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "and_pairs",
+        "seed": 2,
+        "arm": "config",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "and_pairs",
+        "seed": 2,
+        "arm": "random",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 0
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 5,
+              "b": 2
+            }
+          ],
+          "out": 5
+        },
+        "candidates": 120,
+        "proposals": 153,
+        "gate_ops": 2496
+      },
+      {
+        "task": "and_pairs",
+        "seed": 2,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0.25,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 221,
+        "gate_ops": 1504
+      },
+      {
+        "task": "and_pairs",
+        "seed": 2,
+        "arm": "neutral",
+        "train_error": 0.125,
+        "validation_error": 0.25,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 151,
+        "gate_ops": 2412
+      },
+      {
+        "task": "and_pairs",
+        "seed": 2,
+        "arm": "neutral_coverage",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 2
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2340
+      },
+      {
+        "task": "and_pairs",
+        "seed": 3,
+        "arm": "fixed",
+        "train_error": 0.875,
+        "validation_error": 1,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "and_pairs",
+        "seed": 3,
+        "arm": "config",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "and_pairs",
+        "seed": 3,
+        "arm": "random",
+        "train_error": 0.125,
+        "validation_error": 0.75,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 136,
+        "gate_ops": 2288
+      },
+      {
+        "task": "and_pairs",
+        "seed": 3,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0.75,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 211,
+        "gate_ops": 1508
+      },
+      {
+        "task": "and_pairs",
+        "seed": 3,
+        "arm": "neutral",
+        "train_error": 0.125,
+        "validation_error": 0.5,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 4
+            }
+          ],
+          "out": 5
+        },
+        "candidates": 120,
+        "proposals": 149,
+        "gate_ops": 2396
+      },
+      {
+        "task": "and_pairs",
+        "seed": 3,
+        "arm": "neutral_coverage",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 2
+        },
+        "candidates": 120,
+        "proposals": 146,
+        "gate_ops": 2300
+      },
+      {
+        "task": "and_pairs",
+        "seed": 4,
+        "arm": "fixed",
+        "train_error": 0.625,
+        "validation_error": 0.75,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "and_pairs",
+        "seed": 4,
+        "arm": "config",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "and_pairs",
+        "seed": 4,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 151,
+        "gate_ops": 2320
+      },
+      {
+        "task": "and_pairs",
+        "seed": 4,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 242,
+        "gate_ops": 1484
+      },
+      {
+        "task": "and_pairs",
+        "seed": 4,
+        "arm": "neutral",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 153,
+        "gate_ops": 2360
+      },
+      {
+        "task": "and_pairs",
+        "seed": 4,
+        "arm": "neutral_coverage",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 155,
+        "gate_ops": 2380
+      },
+      {
+        "task": "and_pairs",
+        "seed": 5,
+        "arm": "fixed",
+        "train_error": 0.625,
+        "validation_error": 0.75,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "and_pairs",
+        "seed": 5,
+        "arm": "config",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "and_pairs",
+        "seed": 5,
+        "arm": "random",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 141,
+        "gate_ops": 2404
+      },
+      {
+        "task": "and_pairs",
+        "seed": 5,
+        "arm": "evolve",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 245,
+        "gate_ops": 1500
+      },
+      {
+        "task": "and_pairs",
+        "seed": 5,
+        "arm": "neutral",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 160,
+        "gate_ops": 2372
+      },
+      {
+        "task": "and_pairs",
+        "seed": 5,
+        "arm": "neutral_coverage",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 147,
+        "gate_ops": 2324
+      }
+    ]
+  },
+  "confirmation": {
+    "summary": {
+      "fixed": {
+        "cases": 12,
+        "accuracy": 0.375,
+        "perfect": 1,
+        "candidates": 12,
+        "gate_ops": 576,
+        "mean_gate_count": 3
+      },
+      "config": {
+        "cases": 12,
+        "accuracy": 0.604167,
+        "perfect": 3,
+        "candidates": 324,
+        "gate_ops": 9648,
+        "mean_gate_count": 3
+      },
+      "random": {
+        "cases": 12,
+        "accuracy": 0.375,
+        "perfect": 0,
+        "candidates": 1440,
+        "gate_ops": 28472,
+        "mean_gate_count": 0.75
+      },
+      "evolve": {
+        "cases": 12,
+        "accuracy": 0.395833,
+        "perfect": 1,
+        "candidates": 1440,
+        "gate_ops": 19172,
+        "mean_gate_count": 1
+      },
+      "neutral": {
+        "cases": 12,
+        "accuracy": 0.395833,
+        "perfect": 0,
+        "candidates": 1440,
+        "gate_ops": 28364,
+        "mean_gate_count": 0.9167
+      },
+      "neutral_coverage": {
+        "cases": 12,
+        "accuracy": 0.625,
+        "perfect": 2,
+        "candidates": 1440,
+        "gate_ops": 28336,
+        "mean_gate_count": 1.1667
+      }
+    },
+    "rows": [
+      {
+        "task": "cross_parity",
+        "seed": 0,
+        "arm": "fixed",
+        "train_error": 0.625,
+        "validation_error": 0.75,
+        "test_error": 1,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "cross_parity",
+        "seed": 0,
+        "arm": "config",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "XOR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "cross_parity",
+        "seed": 0,
+        "arm": "random",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 156,
+        "gate_ops": 2344
+      },
+      {
+        "task": "cross_parity",
+        "seed": 0,
+        "arm": "evolve",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 216,
+        "gate_ops": 1604
+      },
+      {
+        "task": "cross_parity",
+        "seed": 0,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0.75,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 157,
+        "gate_ops": 2336
+      },
+      {
+        "task": "cross_parity",
+        "seed": 0,
+        "arm": "neutral_coverage",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 4,
+              "b": 2
+            },
+            {
+              "op": "XOR",
+              "a": 5,
+              "b": 3
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 120,
+        "proposals": 153,
+        "gate_ops": 2344
+      },
+      {
+        "task": "cross_parity",
+        "seed": 1,
+        "arm": "fixed",
+        "train_error": 0.875,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "cross_parity",
+        "seed": 1,
+        "arm": "config",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "XOR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "cross_parity",
+        "seed": 1,
+        "arm": "random",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 0
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 160,
+        "gate_ops": 2384
+      },
+      {
+        "task": "cross_parity",
+        "seed": 1,
+        "arm": "evolve",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 0
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 202,
+        "gate_ops": 1492
+      },
+      {
+        "task": "cross_parity",
+        "seed": 1,
+        "arm": "neutral",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 0
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 163,
+        "gate_ops": 2316
+      },
+      {
+        "task": "cross_parity",
+        "seed": 1,
+        "arm": "neutral_coverage",
+        "train_error": 0.625,
+        "validation_error": 0.5,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 2
+        },
+        "candidates": 120,
+        "proposals": 147,
+        "gate_ops": 2380
+      },
+      {
+        "task": "cross_parity",
+        "seed": 2,
+        "arm": "fixed",
+        "train_error": 0.75,
+        "validation_error": 0.75,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "cross_parity",
+        "seed": 2,
+        "arm": "config",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "XOR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "cross_parity",
+        "seed": 2,
+        "arm": "random",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 145,
+        "gate_ops": 2376
+      },
+      {
+        "task": "cross_parity",
+        "seed": 2,
+        "arm": "evolve",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 248,
+        "gate_ops": 1368
+      },
+      {
+        "task": "cross_parity",
+        "seed": 2,
+        "arm": "neutral",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2404
+      },
+      {
+        "task": "cross_parity",
+        "seed": 2,
+        "arm": "neutral_coverage",
+        "train_error": 0.125,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 4
+            },
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2344
+      },
+      {
+        "task": "cross_parity",
+        "seed": 3,
+        "arm": "fixed",
+        "train_error": 0.75,
+        "validation_error": 0.5,
+        "test_error": 1,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "cross_parity",
+        "seed": 3,
+        "arm": "config",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "cross_parity",
+        "seed": 3,
+        "arm": "random",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 3,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 142,
+        "gate_ops": 2268
+      },
+      {
+        "task": "cross_parity",
+        "seed": 3,
+        "arm": "evolve",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 199,
+        "gate_ops": 1552
+      },
+      {
+        "task": "cross_parity",
+        "seed": 3,
+        "arm": "neutral",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2416
+      },
+      {
+        "task": "cross_parity",
+        "seed": 3,
+        "arm": "neutral_coverage",
+        "train_error": 0.5,
+        "validation_error": 0.25,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 1
+        },
+        "candidates": 120,
+        "proposals": 157,
+        "gate_ops": 2324
+      },
+      {
+        "task": "cross_parity",
+        "seed": 4,
+        "arm": "fixed",
+        "train_error": 0.875,
+        "validation_error": 0.25,
+        "test_error": 1,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "cross_parity",
+        "seed": 4,
+        "arm": "config",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "cross_parity",
+        "seed": 4,
+        "arm": "random",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 2
+        },
+        "candidates": 120,
+        "proposals": 146,
+        "gate_ops": 2380
+      },
+      {
+        "task": "cross_parity",
+        "seed": 4,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0.5,
+        "test_error": 1,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 216,
+        "gate_ops": 1548
+      },
+      {
+        "task": "cross_parity",
+        "seed": 4,
+        "arm": "neutral",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 2
+        },
+        "candidates": 120,
+        "proposals": 163,
+        "gate_ops": 2268
+      },
+      {
+        "task": "cross_parity",
+        "seed": 4,
+        "arm": "neutral_coverage",
+        "train_error": 0.5,
+        "validation_error": 0.5,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 153,
+        "gate_ops": 2364
+      },
+      {
+        "task": "cross_parity",
+        "seed": 5,
+        "arm": "fixed",
+        "train_error": 0.75,
+        "validation_error": 0.75,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "cross_parity",
+        "seed": 5,
+        "arm": "config",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "OR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "XOR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "cross_parity",
+        "seed": 5,
+        "arm": "random",
+        "train_error": 0.5,
+        "validation_error": 0.25,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 131,
+        "gate_ops": 2392
+      },
+      {
+        "task": "cross_parity",
+        "seed": 5,
+        "arm": "evolve",
+        "train_error": 0.5,
+        "validation_error": 0.5,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 227,
+        "gate_ops": 1588
+      },
+      {
+        "task": "cross_parity",
+        "seed": 5,
+        "arm": "neutral",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 2
+            },
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 4
+            },
+            {
+              "op": "OR",
+              "a": 5,
+              "b": 3
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 120,
+        "proposals": 155,
+        "gate_ops": 2460
+      },
+      {
+        "task": "cross_parity",
+        "seed": 5,
+        "arm": "neutral_coverage",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 4,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 2,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 120,
+        "proposals": 157,
+        "gate_ops": 2360
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 0,
+        "arm": "fixed",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 0,
+        "arm": "config",
+        "train_error": 0.5,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 0,
+        "arm": "random",
+        "train_error": 0.5,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 145,
+        "gate_ops": 2344
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 0,
+        "arm": "evolve",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 206,
+        "gate_ops": 1628
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 0,
+        "arm": "neutral",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 144,
+        "gate_ops": 2384
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 0,
+        "arm": "neutral_coverage",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 4
+            },
+            {
+              "op": "XOR",
+              "a": 5,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 6,
+              "b": 6
+            }
+          ],
+          "out": 7
+        },
+        "candidates": 120,
+        "proposals": 159,
+        "gate_ops": 2420
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 1,
+        "arm": "fixed",
+        "train_error": 0.25,
+        "validation_error": 0.75,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 1,
+        "arm": "config",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "OR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "XOR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 1,
+        "arm": "random",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 134,
+        "gate_ops": 2452
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 1,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 219,
+        "gate_ops": 1644
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 1,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2288
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 1,
+        "arm": "neutral_coverage",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 154,
+        "gate_ops": 2336
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 2,
+        "arm": "fixed",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 2,
+        "arm": "config",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 2,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 1,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 151,
+        "gate_ops": 2560
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 2,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 1,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 218,
+        "gate_ops": 1552
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 2,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 1,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 157,
+        "gate_ops": 2448
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 2,
+        "arm": "neutral_coverage",
+        "train_error": 0.625,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 154,
+        "gate_ops": 2420
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 3,
+        "arm": "fixed",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 3,
+        "arm": "config",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "XOR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 3,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0.5,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 3,
+              "b": 2
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 156,
+        "gate_ops": 2284
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 3,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 3
+            },
+            {
+              "op": "XOR",
+              "a": 4,
+              "b": 1
+            }
+          ],
+          "out": 5
+        },
+        "candidates": 120,
+        "proposals": 186,
+        "gate_ops": 1900
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 3,
+        "arm": "neutral",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 155,
+        "gate_ops": 2256
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 3,
+        "arm": "neutral_coverage",
+        "train_error": 0.5,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 142,
+        "gate_ops": 2268
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 4,
+        "arm": "fixed",
+        "train_error": 0.5,
+        "validation_error": 0.5,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 4,
+        "arm": "config",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "OR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 4,
+        "arm": "random",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 156,
+        "gate_ops": 2292
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 4,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 205,
+        "gate_ops": 1724
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 4,
+        "arm": "neutral",
+        "train_error": 0.125,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2384
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 4,
+        "arm": "neutral_coverage",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2404
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 5,
+        "arm": "fixed",
+        "train_error": 0.25,
+        "validation_error": 0.5,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 5,
+        "arm": "config",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 5,
+        "arm": "random",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 3,
+              "b": 0
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 0
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 156,
+        "gate_ops": 2396
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 5,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 0
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 3
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 120,
+        "proposals": 232,
+        "gate_ops": 1572
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 5,
+        "arm": "neutral",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 157,
+        "gate_ops": 2404
+      },
+      {
+        "task": "mixed_xor",
+        "seed": 5,
+        "arm": "neutral_coverage",
+        "train_error": 0.5,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 159,
+        "gate_ops": 2372
+      }
+    ]
+  },
+  "new_public_tasks": {
+    "summary": {
+      "fixed": {
+        "cases": 12,
+        "accuracy": 0.75,
+        "perfect": 3,
+        "candidates": 12,
+        "gate_ops": 576,
+        "mean_gate_count": 3
+      },
+      "config": {
+        "cases": 12,
+        "accuracy": 0.5625,
+        "perfect": 0,
+        "candidates": 324,
+        "gate_ops": 9648,
+        "mean_gate_count": 3
+      },
+      "random": {
+        "cases": 12,
+        "accuracy": 0.604167,
+        "perfect": 2,
+        "candidates": 1440,
+        "gate_ops": 28532,
+        "mean_gate_count": 1.25
+      },
+      "evolve": {
+        "cases": 12,
+        "accuracy": 0.583333,
+        "perfect": 1,
+        "candidates": 1440,
+        "gate_ops": 19564,
+        "mean_gate_count": 0.9167
+      },
+      "neutral": {
+        "cases": 12,
+        "accuracy": 0.5625,
+        "perfect": 1,
+        "candidates": 1440,
+        "gate_ops": 28340,
+        "mean_gate_count": 0.8333
+      },
+      "neutral_coverage": {
+        "cases": 12,
+        "accuracy": 0.354167,
+        "perfect": 0,
+        "candidates": 1440,
+        "gate_ops": 28356,
+        "mean_gate_count": 0.5833
+      }
+    },
+    "rows": [
+      {
+        "task": "xor3and",
+        "seed": 0,
+        "arm": "fixed",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "xor3and",
+        "seed": 0,
+        "arm": "config",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "XOR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "xor3and",
+        "seed": 0,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 142,
+        "gate_ops": 2308
+      },
+      {
+        "task": "xor3and",
+        "seed": 0,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0.5,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 201,
+        "gate_ops": 1564
+      },
+      {
+        "task": "xor3and",
+        "seed": 0,
+        "arm": "neutral",
+        "train_error": 0.125,
+        "validation_error": 0.5,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2320
+      },
+      {
+        "task": "xor3and",
+        "seed": 0,
+        "arm": "neutral_coverage",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 1,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 1
+        },
+        "candidates": 120,
+        "proposals": 166,
+        "gate_ops": 2340
+      },
+      {
+        "task": "xor3and",
+        "seed": 1,
+        "arm": "fixed",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "xor3and",
+        "seed": 1,
+        "arm": "config",
+        "train_error": 0,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "xor3and",
+        "seed": 1,
+        "arm": "random",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 4
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 150,
+        "gate_ops": 2448
+      },
+      {
+        "task": "xor3and",
+        "seed": 1,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 229,
+        "gate_ops": 1492
+      },
+      {
+        "task": "xor3and",
+        "seed": 1,
+        "arm": "neutral",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 163,
+        "gate_ops": 2320
+      },
+      {
+        "task": "xor3and",
+        "seed": 1,
+        "arm": "neutral_coverage",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 0
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 159,
+        "gate_ops": 2352
+      },
+      {
+        "task": "xor3and",
+        "seed": 2,
+        "arm": "fixed",
+        "train_error": 0.25,
+        "validation_error": 0.5,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "xor3and",
+        "seed": 2,
+        "arm": "config",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "XOR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "xor3and",
+        "seed": 2,
+        "arm": "random",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 2
+            },
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 4
+            },
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 0
+            }
+          ],
+          "out": 5
+        },
+        "candidates": 120,
+        "proposals": 155,
+        "gate_ops": 2316
+      },
+      {
+        "task": "xor3and",
+        "seed": 2,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0.5,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 195,
+        "gate_ops": 1724
+      },
+      {
+        "task": "xor3and",
+        "seed": 2,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0.5,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 163,
+        "gate_ops": 2304
+      },
+      {
+        "task": "xor3and",
+        "seed": 2,
+        "arm": "neutral_coverage",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 4
+            }
+          ],
+          "out": 5
+        },
+        "candidates": 120,
+        "proposals": 153,
+        "gate_ops": 2348
+      },
+      {
+        "task": "xor3and",
+        "seed": 3,
+        "arm": "fixed",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "xor3and",
+        "seed": 3,
+        "arm": "config",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "xor3and",
+        "seed": 3,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 147,
+        "gate_ops": 2316
+      },
+      {
+        "task": "xor3and",
+        "seed": 3,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 208,
+        "gate_ops": 1712
+      },
+      {
+        "task": "xor3and",
+        "seed": 3,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2388
+      },
+      {
+        "task": "xor3and",
+        "seed": 3,
+        "arm": "neutral_coverage",
+        "train_error": 0.625,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 2
+        },
+        "candidates": 120,
+        "proposals": 153,
+        "gate_ops": 2324
+      },
+      {
+        "task": "xor3and",
+        "seed": 4,
+        "arm": "fixed",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "xor3and",
+        "seed": 4,
+        "arm": "config",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "xor3and",
+        "seed": 4,
+        "arm": "random",
+        "train_error": 0.125,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 147,
+        "gate_ops": 2480
+      },
+      {
+        "task": "xor3and",
+        "seed": 4,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 183,
+        "gate_ops": 1640
+      },
+      {
+        "task": "xor3and",
+        "seed": 4,
+        "arm": "neutral",
+        "train_error": 0,
+        "validation_error": 0.5,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 0
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 157,
+        "gate_ops": 2396
+      },
+      {
+        "task": "xor3and",
+        "seed": 4,
+        "arm": "neutral_coverage",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 163,
+        "gate_ops": 2372
+      },
+      {
+        "task": "xor3and",
+        "seed": 5,
+        "arm": "fixed",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "xor3and",
+        "seed": 5,
+        "arm": "config",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "xor3and",
+        "seed": 5,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 3,
+              "b": 2
+            },
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 140,
+        "gate_ops": 2388
+      },
+      {
+        "task": "xor3and",
+        "seed": 5,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 0
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 215,
+        "gate_ops": 1496
+      },
+      {
+        "task": "xor3and",
+        "seed": 5,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 0
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 137,
+        "gate_ops": 2356
+      },
+      {
+        "task": "xor3and",
+        "seed": 5,
+        "arm": "neutral_coverage",
+        "train_error": 0.625,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 0
+        },
+        "candidates": 120,
+        "proposals": 155,
+        "gate_ops": 2332
+      },
+      {
+        "task": "shared_mix",
+        "seed": 0,
+        "arm": "fixed",
+        "train_error": 0.5,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "shared_mix",
+        "seed": 0,
+        "arm": "config",
+        "train_error": 0.5,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "shared_mix",
+        "seed": 0,
+        "arm": "random",
+        "train_error": 0.125,
+        "validation_error": 0.25,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 151,
+        "gate_ops": 2368
+      },
+      {
+        "task": "shared_mix",
+        "seed": 0,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 233,
+        "gate_ops": 1700
+      },
+      {
+        "task": "shared_mix",
+        "seed": 0,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 152,
+        "gate_ops": 2388
+      },
+      {
+        "task": "shared_mix",
+        "seed": 0,
+        "arm": "neutral_coverage",
+        "train_error": 0.5,
+        "validation_error": 0,
+        "test_error": 1,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 2
+        },
+        "candidates": 120,
+        "proposals": 148,
+        "gate_ops": 2388
+      },
+      {
+        "task": "shared_mix",
+        "seed": 1,
+        "arm": "fixed",
+        "train_error": 0.125,
+        "validation_error": 0.75,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "shared_mix",
+        "seed": 1,
+        "arm": "config",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "OR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "shared_mix",
+        "seed": 1,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 140,
+        "gate_ops": 2396
+      },
+      {
+        "task": "shared_mix",
+        "seed": 1,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 228,
+        "gate_ops": 1724
+      },
+      {
+        "task": "shared_mix",
+        "seed": 1,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 150,
+        "gate_ops": 2396
+      },
+      {
+        "task": "shared_mix",
+        "seed": 1,
+        "arm": "neutral_coverage",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 155,
+        "gate_ops": 2356
+      },
+      {
+        "task": "shared_mix",
+        "seed": 2,
+        "arm": "fixed",
+        "train_error": 0.25,
+        "validation_error": 0.5,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "shared_mix",
+        "seed": 2,
+        "arm": "config",
+        "train_error": 0.5,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "OR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "shared_mix",
+        "seed": 2,
+        "arm": "random",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 1,
+              "b": 2
+            },
+            {
+              "op": "OR",
+              "a": 3,
+              "b": 1
+            }
+          ],
+          "out": 5
+        },
+        "candidates": 120,
+        "proposals": 147,
+        "gate_ops": 2236
+      },
+      {
+        "task": "shared_mix",
+        "seed": 2,
+        "arm": "evolve",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 217,
+        "gate_ops": 1544
+      },
+      {
+        "task": "shared_mix",
+        "seed": 2,
+        "arm": "neutral",
+        "train_error": 0.375,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 154,
+        "gate_ops": 2444
+      },
+      {
+        "task": "shared_mix",
+        "seed": 2,
+        "arm": "neutral_coverage",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 153,
+        "gate_ops": 2408
+      },
+      {
+        "task": "shared_mix",
+        "seed": 3,
+        "arm": "fixed",
+        "train_error": 0.5,
+        "validation_error": 0.5,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "shared_mix",
+        "seed": 3,
+        "arm": "config",
+        "train_error": 0.375,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "OR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "shared_mix",
+        "seed": 3,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 3,
+              "b": 0
+            },
+            {
+              "op": "OR",
+              "a": 3,
+              "b": 1
+            }
+          ],
+          "out": 5
+        },
+        "candidates": 120,
+        "proposals": 150,
+        "gate_ops": 2440
+      },
+      {
+        "task": "shared_mix",
+        "seed": 3,
+        "arm": "evolve",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 208,
+        "gate_ops": 1556
+      },
+      {
+        "task": "shared_mix",
+        "seed": 3,
+        "arm": "neutral",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 163,
+        "gate_ops": 2328
+      },
+      {
+        "task": "shared_mix",
+        "seed": 3,
+        "arm": "neutral_coverage",
+        "train_error": 0.125,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 154,
+        "gate_ops": 2408
+      },
+      {
+        "task": "shared_mix",
+        "seed": 4,
+        "arm": "fixed",
+        "train_error": 0.375,
+        "validation_error": 0.5,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "shared_mix",
+        "seed": 4,
+        "arm": "config",
+        "train_error": 0.5,
+        "validation_error": 0.25,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "AND",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "shared_mix",
+        "seed": 4,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0,
+        "exact_test": 1,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 3,
+              "b": 1
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 139,
+        "gate_ops": 2388
+      },
+      {
+        "task": "shared_mix",
+        "seed": 4,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 1,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 205,
+        "gate_ops": 1676
+      },
+      {
+        "task": "shared_mix",
+        "seed": 4,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 1,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 164,
+        "gate_ops": 2344
+      },
+      {
+        "task": "shared_mix",
+        "seed": 4,
+        "arm": "neutral_coverage",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 1,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 155,
+        "gate_ops": 2336
+      },
+      {
+        "task": "shared_mix",
+        "seed": 5,
+        "arm": "fixed",
+        "train_error": 0.5,
+        "validation_error": 0.25,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "XOR",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "XOR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "AND",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 1,
+        "proposals": 1,
+        "gate_ops": 48
+      },
+      {
+        "task": "shared_mix",
+        "seed": 5,
+        "arm": "config",
+        "train_error": 0.5,
+        "validation_error": 0,
+        "test_error": 0.25,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "AND",
+              "a": 0,
+              "b": 1
+            },
+            {
+              "op": "OR",
+              "a": 2,
+              "b": 3
+            },
+            {
+              "op": "OR",
+              "a": 4,
+              "b": 5
+            }
+          ],
+          "out": 6
+        },
+        "candidates": 27,
+        "proposals": 27,
+        "gate_ops": 804
+      },
+      {
+        "task": "shared_mix",
+        "seed": 5,
+        "arm": "random",
+        "train_error": 0.25,
+        "validation_error": 0.25,
+        "test_error": 0.75,
+        "exact_test": 0,
+        "selected": {
+          "gates": [],
+          "out": 3
+        },
+        "candidates": 120,
+        "proposals": 149,
+        "gate_ops": 2448
+      },
+      {
+        "task": "shared_mix",
+        "seed": 5,
+        "arm": "evolve",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 192,
+        "gate_ops": 1736
+      },
+      {
+        "task": "shared_mix",
+        "seed": 5,
+        "arm": "neutral",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 144,
+        "gate_ops": 2356
+      },
+      {
+        "task": "shared_mix",
+        "seed": 5,
+        "arm": "neutral_coverage",
+        "train_error": 0.25,
+        "validation_error": 0,
+        "test_error": 0.5,
+        "exact_test": 0,
+        "selected": {
+          "gates": [
+            {
+              "op": "OR",
+              "a": 1,
+              "b": 3
+            }
+          ],
+          "out": 4
+        },
+        "candidates": 120,
+        "proposals": 149,
+        "gate_ops": 2392
+      }
+    ]
+  }
+}
