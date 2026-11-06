@@ -176,3 +176,65 @@ jobs:
             _intake/h7_new_gram_tasks.json
             _intake/h7_summary.json
           if-no-files-found: warn
+
+  coordinator-science-admission:
+    name: fail-closed science admission (not a release approval)
+    needs: [r1-independent-public-transfer, r8-public-null-canary, r1-h7-independent-class-transfer]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Exact HEAD coordinator code checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Retrieve H7 independent raw terminal evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: ace-r1-h7-independent-crossclass
+          path: _intake_h7
+      - name: Retrieve R1 high-state negative-evidence receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: ace-r1-independent-public-intake
+          path: _intake_r1
+      - name: Retrieve R8 known-zero-effect false-progress canary
+        uses: actions/download-artifact@v4
+        with:
+          name: ace-r8-public-null-intake
+          path: _intake_r8
+      - name: Assert independent scores and fail-closed promotion policy
+        env:
+          ACE_H7_EVIDENCE: _intake_h7/h7_new_gram_tasks.json
+          ACE_R1_EVIDENCE: _intake_r1/r1_new_tasks.json
+          ACE_R8_EVIDENCE: _intake_r8/r8_growth_null.json
+        run: |
+          set -euo pipefail
+          python -m unittest tools.test_ace_science_release_gate -v
+          mkdir -p _release
+          python tools/ace_science_release_gate.py \
+            --h7 "$ACE_H7_EVIDENCE" \
+            --r1 "$ACE_R1_EVIDENCE" \
+            --r8 "$ACE_R8_EVIDENCE" > _release/science_admission.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('_release/science_admission.json').read_text())
+          assert r['engineering_evidence']=='PASS_INDEPENDENT_PUBLIC_REPLAY'
+          assert r['promotion_decision']=='BLOCK_RELEASE'
+          assert r['scientific_decision']=='NOT_ASSESSED'
+          assert r['r8_null_diagnostic']=='NONZERO_FALSE_PASSES_9_OF_512'
+          assert r['h7']['h7_terminal_predictions_recomputed']==12288
+          print('SCIENCE_INTEGRITY_VERIFIED: YES; RELEASE_ALLOWED: NO')
+          PY
+          cat _release/science_admission.json
+      - name: Preserve science admission report without allowing promotion
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-science-admission-hold
+          path: _release/science_admission.json
+          if-no-files-found: warn
