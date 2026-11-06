@@ -1,0 +1,81 @@
+name: ACE Capability Evolution Loop — bounded pilot
+
+on:
+  push:
+    branches:
+      - coordination/capability-evolution-pilot-20261106
+  pull_request:
+    paths:
+      - 'code/ace_capability_evolution/**'
+      - 'docs/ACE_CAPABILITY_EVOLUTION_PILOT_*'
+      - '.github/workflows/ace-capability-evolution-pilot.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cross-lane-generation-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout coordinator exact commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Checkout pinned R1 actual source
+        uses: actions/checkout@v4
+        with:
+          repository: dianzherdiana25-hash/ACE
+          ref: 8952c8ac55613e61b362841f4722c66a5aa990b3
+          path: _lane/r1
+          persist-credentials: false
+      - name: Checkout pinned S2 actual source
+        uses: actions/checkout@v4
+        with:
+          repository: dianzherdiana25-hash/ACE
+          ref: 08da5702828285e0bd4d0f4dd8876f331ac89fe2
+          path: _lane/s2
+          persist-credentials: false
+      - name: Verify exact source and pre-score ancestry
+        shell: bash
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          test "$(git -C _lane/r1 rev-parse HEAD)" = "8952c8ac55613e61b362841f4722c66a5aa990b3"
+          test "$(git -C _lane/s2 rev-parse HEAD)" = "08da5702828285e0bd4d0f4dd8876f331ac89fe2"
+          test "$(git -C _lane/r1 hash-object code/ace_research_primitives/primitive_discovery.py)" = "48904d7f344bd0bce6d5c392ccdc015309479fd5"
+          test -f _lane/s2/code/ace_candidate_search/search.py
+          git show 4f6f8b5cfa7b3728d21d723696111652d4d85969:docs/ACE_CAPABILITY_EVOLUTION_PILOT_PRESCORE_V1.md > /tmp/ace-capability-prescore-locked.md
+          cmp /tmp/ace-capability-prescore-locked.md docs/ACE_CAPABILITY_EVOLUTION_PILOT_PRESCORE_V1.md
+          echo "Two frozen source SHAs and prescore locked before runner" >> "$GITHUB_STEP_SUMMARY"
+      - name: Execute generational pilot, adversarial tests and canonical replay
+        env:
+          PYTHONPATH: '_lane/r1/code:_lane/s2/code:code:.'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest ace_capability_evolution.test_pilot -v
+          mkdir -p _capability_pilot
+          python -m ace_capability_evolution.pilot --output _capability_pilot/evolution-v0.json | tee _capability_pilot/summary.json
+          python -m ace_capability_evolution.pilot --output _capability_pilot/evolution-v0-replay.json > _capability_pilot/second-summary.json
+          cmp _capability_pilot/evolution-v0.json _capability_pilot/evolution-v0-replay.json
+          python -m ace_capability_evolution.verify _capability_pilot/evolution-v0.json | tee _capability_pilot/verify.json
+          sha256sum _capability_pilot/evolution-v0.json
+      - name: Preserve all public results including negative drift
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-capability-evolution-v0-public
+          path: |
+            _capability_pilot/evolution-v0.json
+            _capability_pilot/summary.json
+            _capability_pilot/verify.json
+          if-no-files-found: warn
