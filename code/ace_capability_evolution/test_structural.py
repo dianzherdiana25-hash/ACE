@@ -83,6 +83,27 @@ class StructuralResearchTests(unittest.TestCase):
                     "validation_gain_over_best_finite"):
             self.assertEqual(original["report"][key],shifted["report"][key])
 
+    def test_terminal_relabel_does_not_change_stage_or_candidate(self):
+        source_bank=s.bank("three_to_one",3)
+        original=s.fit("three_to_one",3,self.r1,self.model)["report"]
+        relabeled=copy.deepcopy(source_bank)
+        relabeled["terminal"]=[(word,not label) for word,label in source_bank["terminal"]]
+        with patch.object(s,"bank",return_value=relabeled):
+            changed=s.fit("three_to_one",3,self.r1,self.model)["report"]
+        for key in ("staged","selected_model_sha256","selected_weights",
+                    "validation_gain_over_best_finite","selected_val_correct",
+                    "terminal_inputs_sha256"):
+            self.assertEqual(original[key],changed[key])
+
+    def test_retention_nonvacuous_and_safe_gate_false(self):
+        older=self.result["generations"][1]["retention"]
+        newer=self.result["generations"][2]["retention"]
+        self.assertGreaterEqual(len(older),2)
+        self.assertTrue(all(row in newer for row in older))
+        self.assertIs(self.result["gates"]["S5_hidden_semantic_shift_safely_detected"],False)
+        self.assertIs(self.result["hidden_drift"]["false_accepted_semantic_transfer"],True)
+        self.assertIs(self.result["hidden_drift"]["observationally_indistinguishable"],True)
+
     def test_no_terminal_truth_in_staging_record(self):
         for row in self.result["tasks"]:
             self.assertEqual(64,len(row["selected_model_sha256"]))
