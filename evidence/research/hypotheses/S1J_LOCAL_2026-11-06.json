@@ -1,0 +1,66 @@
+{
+  "status": "EXPLORATORY_NOT_ASSESSED",
+  "main_sha": "5b0059b85055404a46adcdef305de81f5257486c",
+  "protocol_commit": "ecc8059f261cc00492de6b52e888fc2c6065dbbc",
+  "source_commit": "282b8f1d9953c641569aa1eb453c7eba7f3eb448",
+  "provenance": "Local protocol written before local execution; GitHub protocol committed AFTER local execution. Not GitHub-precommitted; committed source NOT exact-head replayed.",
+  "dev": {
+    "random8": {
+      "tp": 390,
+      "fp": 0,
+      "fn": 2810,
+      "tn": 3200
+    },
+    "static8": {
+      "tp": 359,
+      "fp": 0,
+      "fn": 2841,
+      "tn": 3200
+    },
+    "full64": {
+      "tp": 3200,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3200
+    },
+    "syntax": {
+      "tp": 3200,
+      "fp": 3200,
+      "fn": 0,
+      "tn": 0
+    }
+  },
+  "evaluation": {
+    "random8": {
+      "tp": 390,
+      "fp": 0,
+      "fn": 2810,
+      "tn": 3200
+    },
+    "static8": {
+      "tp": 420,
+      "fp": 0,
+      "fn": 2780,
+      "tn": 3200
+    },
+    "full64": {
+      "tp": 3200,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3200
+    },
+    "syntax": {
+      "tp": 3200,
+      "fp": 3200,
+      "fn": 0,
+      "tn": 0
+    }
+  },
+  "label_presentations": {
+    "development": 1024000,
+    "evaluation": 1024000
+  },
+  "cpu_seconds_local": 0.167109928,
+  "interpretation": "Random8 precision 1.0 but recall 0.121875: precision-only criterion misleading; static8 recall 0.13125. Full64 oracle NOT budget matched. Syntax false novelty 100% on equivalent controls. No actual hypothesis generation or mutual information estimate.",
+  "scientific_decision": "H1 formal PASS but misleading due low recall; H2 PASS; autonomous discovery NOT_ASSESSED"
+}
