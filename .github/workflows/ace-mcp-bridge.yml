@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - integration/ace-mcp-bridge-20261106
+    paths:
+      - 'code/ace_mcp/**'
+      - 'docs/ACE_MCP_BRIDGE_*'
+      - '.github/workflows/ace-mcp-bridge.yml'
   pull_request:
     paths:
       - 'code/ace_mcp/**'
