@@ -1,0 +1,5 @@
+{
+  "name": "equal_counts_example",
+  "train": [["", true], ["a", false], ["b", false], ["ab", true], ["ba", true], ["aa", false], ["bb", false]],
+  "validation": [["aabb", true], ["abab", true], ["aaab", false], ["abbb", false]]
+}

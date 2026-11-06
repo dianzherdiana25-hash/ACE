@@ -1,2 +1,6 @@
 __pycache__/
 *.py[cod]
+ace-work/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm

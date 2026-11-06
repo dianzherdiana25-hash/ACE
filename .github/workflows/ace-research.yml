@@ -36,6 +36,8 @@ jobs:
           ace_capability_evolution.test_pilot
           ace_capability_evolution.test_structural
           ace_capability_evolution.test_compositional
+          ace_runtime.test_engine
+          ace_runtime.test_cli
           -v
       - name: Verify deterministic composition replay
         run: |
@@ -44,3 +46,7 @@ jobs:
           cmp /tmp/composition.json /tmp/composition-replay.json
           gzip -dc evidence/composition/v03.json.gz > /tmp/committed-composition.json
           cmp /tmp/composition.json /tmp/committed-composition.json
+      - name: Verify operational demo receipt
+        run: |
+          python ace.py demo --workspace "$RUNNER_TEMP/ace-runtime" > "$RUNNER_TEMP/ace-runtime-demo.json"
+          cmp "$RUNNER_TEMP/ace-runtime-demo.json" evidence/runtime/v1-demo.json
