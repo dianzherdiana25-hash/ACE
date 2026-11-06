@@ -1,0 +1,47 @@
+{
+  "status": "PUBLIC DEVELOPMENT — NOT CONFIRMATORY",
+  "protocol_commit": "ace6dcea813f880a73dced8695e4d9b3dc6ef529",
+  "runner_commit": "fa6be114a85fb4dcc620e37b02203bd4f34b963e",
+  "execution": "Local Python stdlib run of equivalent pre-upload implementation; exact GitHub HEAD replay not independently verified",
+  "decision": "REJECT",
+  "trials": 24,
+  "seeds": "6000..6023",
+  "selection_labels_per_arm_per_trial": 64,
+  "selection_label_presentations_total": 3072,
+  "unique_source_rows_total": 2304,
+  "evaluation_labels_reporting_only": 3072,
+  "random_label_negative_control_labels": 3072,
+  "candidates": 67,
+  "selection_candidate_row_evaluations": 617472,
+  "oracle_reporting_candidate_row_evaluations": 205824,
+  "process_cpu_seconds_local": 0.485961,
+  "arms": {
+    "single": {
+      "false_accept": 0,
+      "abstain": 0,
+      "mean_regret": 0,
+      "mean_penalized_regret": 0,
+      "random_label_mean_errors": 63.5,
+      "inversion_changed": 24,
+      "order_changed": 0,
+      "leakage_sentinel_failures": 0
+    },
+    "dual": {
+      "false_accept": 0,
+      "abstain": 0,
+      "mean_regret": 0,
+      "mean_penalized_regret": 0,
+      "random_label_mean_errors": 63.5,
+      "inversion_changed": 24,
+      "order_changed": 0,
+      "leakage_sentinel_failures": 0
+    }
+  },
+  "interpretation": "H1 rejected: dual-source does not reduce false acceptance by required 4/24; both source arms recover XOR mask in this easy synthetic family. Random-label negative controls near chance. Leakage sentinel is structural (source-only API), not an independent information-flow audit. Exact-head replay and independent replication pending.",
+  "limitations": [
+    "No raw per-seed results uploaded; local full output available only in execution workspace.",
+    "True target is within the finite candidate XOR grammar; no claim of autonomous discovery.",
+    "CPU time is local process_time, environment-dependent.",
+    "Label accounting distinguishes unique source rows, per-arm presentations, and reporting-only labels."
+  ]
+}
