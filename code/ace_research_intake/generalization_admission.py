@@ -211,7 +211,7 @@ def experiment():
             if nominal[key]!=shifted[key]:
                 raise RuntimeError("HALT_SHIFT_CONTROL_NOT_IDENTICAL")
         for arm in ARMS:
-            if nominal["arms"][arm]["program_id"]!=shifted["arms"][arm]["program_id"]:
+            if nominal["arms"][arm]["terminal"]["program_id"]!=shifted["arms"][arm]["terminal"]["program_id"]:
                 raise RuntimeError("HALT_SHIFT_CHANGED_MODEL_SELECTION")
     gates={"G1_real_source_deterministic_execution":True,
            "G2_runtime_coverage_and_staged_accuracy":len(nominal_staged)>=4 and
