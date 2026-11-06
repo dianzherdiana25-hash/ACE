@@ -154,7 +154,8 @@ def fit_arithmetic(task,index,source,model):
             contenders.append((validation_result["absolute_error"],
                                training_result["absolute_error"],
                                expr.operations,expr.depth,expr.key,expr))
-    winner=min(contenders,key=lambda row:row[:5])[-1] if contenders else None
+    selected=min(contenders,key=lambda row:row[:5]) if contenders else None
+    winner=selected[-1] if selected is not None else None
     winner_val=expr_score(winner,val,model,source) if winner is not None else None
     accepted=bool(winner_val and winner_val["status"]=="ok"
                   and winner_val["absolute_error"]==0
@@ -170,7 +171,7 @@ def fit_arithmetic(task,index,source,model):
            "baseline_ast":baseline.data(),
            "model_ast":winner.data() if winner is not None else None,
            "model_fingerprint":winner.identity if winner is not None else None,
-           "training_candidate_abs_error":contenders[0][1] if winner is not None else None,
+           "training_candidate_abs_error":selected[1] if selected is not None else None,
            "validation_candidate_abs_error":winner_val["absolute_error"] if winner_val else None,
            "validation_baseline_abs_error":baseline_val["absolute_error"],
            "validation_total":len(val),
@@ -274,7 +275,7 @@ def run_pilot(r1, s2search, s2model):
       "scientific_status":"NOT_ASSESSED",
       "release_decision":"BLOCK_RELEASE",
       "candidate_deployed":False,
-      "aoie_not_established":True,
+      "oaie_not_established":True,
       "interpretation":"Fixed authored algorithms reused on new task-specific instances; no general self-created algorithm or architecture."}
 
 
