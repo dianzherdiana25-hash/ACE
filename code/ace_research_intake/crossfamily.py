@@ -82,7 +82,7 @@ def run():
     losses=[{"index":i,"family":t["family"],"retained":terminal_score(t["retained"]),
              "fresh":terminal_score(t["fresh"])}
             for i,t in enumerate(targets) if (coverage(t["retained"])<coverage(t["fresh"]) or
-            (coverage(t["retained"]) and coverage(t["fresh"]) and terminal_score(t["retained"])<terminal_score(t["fresh"])) ]
+            (coverage(t["retained"]) and coverage(t["fresh"]) and terminal_score(t["retained"])<terminal_score(t["fresh"]))) ]
     false_accepts=sum(bool(t["results"][-1]["staged"] and
                            t["results"][-1]["terminal"]["correct"]<116) for t in controls)
     summary={"targets":len(targets),"reuse_validated":reuse,
