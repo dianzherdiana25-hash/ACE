@@ -279,12 +279,16 @@ def evaluate(r1,model):
             bytask["three_to_one"]["validation_gain_over_fixed_counter"]>=39)
     g3=(not bytask["contains_ab"]["staged"] and
         all(not r["staged"] for r in outclass))
-    g4=bool(all(row["retrained"] is False for row in history[-1]["retention"])
+    earlier=history[1]["retention"]
+    later=history[-1]["retention"]
+    g4=bool(len(earlier)>=2 and all(row in later for row in earlier)
+            and all(row["retrained"] is False for row in later)
             and all(row["validation_correct"]==bytask[row["task"]]["selected_val_correct"]
-                    for row in history[-1]["retention"]))
-    g5=not drift["report"]["staged"] and drift["report"]["terminal"]["counter_correct"]==0
-    # The hidden-shift observation is a *falsifier*, not a safety win:
-    # even if it stages as apparently successful, no safe release is possible.
+                    and row["fingerprint"]==bytask[row["task"]]["selected_model_sha256"]
+                    for row in later))
+    # Current interface never returns a prediction-level semantic abstention.
+    # A refusal to stage a feature would not by itself make open-world use safe.
+    g5=False
     return {"schema":"ace.capability_evolution.structural.public.v02",
             "protocol_commit":PRESCORE_COMMIT,
             "source_heads":{"R1":R1_HEAD,"S2":S2_HEAD},
@@ -293,7 +297,10 @@ def evaluate(r1,model):
                       "terminal_labels_not_available_to_selection":1792,
                       "max_counter_candidates":7,"max_counter_shortlist":3},
             "generations":history,"tasks":all_public,
-            "hidden_drift":drift["report"],
+            "hidden_drift":{**drift["report"],
+                            "observationally_indistinguishable":True,
+                            "false_accepted_semantic_transfer":bool(drift["report"]["staged"]
+                                and drift["report"]["terminal"]["counter_correct"]==0)},
             "gates":{"S1_initial_counter_transition":g1,
                      "S2_new_ratio_instance_over_fixed_counter":g2,
                      "S3_out_of_grammar_controls_not_staged":g3,
