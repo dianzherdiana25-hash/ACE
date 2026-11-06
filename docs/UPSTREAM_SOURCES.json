@@ -1,0 +1,106 @@
+{
+  "schema": "ace.source-integration.v1",
+  "scope": "Selected research modules only; historical ACE suites are not included.",
+  "files": {
+    "code/ace_capability_evolution/structural.py": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "7a66107af3671e98a82622238317faab206f2301"
+    },
+    "docs/ACE_CAPABILITY_STRUCTURAL_V02_RESULTS_20261106.md": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "071e6382456734964eb9d1a9ec2905564bcae728"
+    },
+    "docs/ACE_CAPABILITY_EVOLUTION_PILOT_RESULTS_20261106.md": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "7518de29b14c5a2fb5fc294330e02f9c884f9ca4"
+    },
+    "code/ace_candidate_search/benchmark.py": {
+      "upstream_commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+      "git_blob": "2638cce265508d641b530b1f1577b3f14afc91f9"
+    },
+    "code/ace_capability_evolution/verify_structural.py": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "f303e7e256a492d653651b2c6daf1c55925e725a"
+    },
+    "docs/ACE_CAPABILITY_EVOLUTION_PILOT_PRESCORE_V1.md": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "7e4f7fc375cd40f6c83b74f72d53628e42d61346"
+    },
+    "PROJECT_CHARTER.md": {
+      "upstream_commit": "aba67d6c7572550b84ff464eba850cf2b6fdccc7",
+      "git_blob": "ad4d63681742c24abfa0e739528bfe0555cf48ba"
+    },
+    "code/ace_capability_evolution/pilot.py": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "b25d877737c4675becf09daf0eda6dbd63673dcd"
+    },
+    "code/ace_capability_evolution/test_structural.py": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "b23585d36b4a7d6af9ef3ee6e5d5dd122a89471e"
+    },
+    "code/ace_candidate_search/verify_results.py": {
+      "upstream_commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+      "git_blob": "bfc90aef3f8d3f1a2082f90dad867e9940262ddb"
+    },
+    "code/ace_candidate_search/__init__.py": {
+      "upstream_commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+      "git_blob": "3708f0471688ccb35ed3aaf73a3c71a393e9bb41"
+    },
+    "code/ace_capability_evolution/__init__.py": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "c5c4eb413396b60afa2eec97ded1e62772a0f0e2"
+    },
+    "code/ace_capability_evolution/test_pilot.py": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "ca2f83cb7d316b553f21cb05067448fb2f05f9d3"
+    },
+    "code/ace_research_primitives/test_primitive_discovery.py": {
+      "upstream_commit": "8952c8ac55613e61b362841f4722c66a5aa990b3",
+      "git_blob": "f11baf40840268668f9616f2f0566c5cf8deeea0"
+    },
+    "code/ace_capability_evolution/README.md": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "8d9e28bc84a280ce06e844c300e8ce3c2d5f9aa4"
+    },
+    "code/ace_candidate_search/test_verify_results.py": {
+      "upstream_commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+      "git_blob": "76a7c1e7c6cf1de09050454edef2a1614e8bf19f"
+    },
+    "code/ace_capability_evolution/verify.py": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "b7b50400cdd2d117c3972edf600b565ac916e7b8"
+    },
+    "code/ace_capability_evolution/README_STRUCTURAL_V02.md": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "330fe4ec9863cfa8c638fdbf595ba757a262318f"
+    },
+    "code/ace_research_primitives/primitive_discovery.py": {
+      "upstream_commit": "8952c8ac55613e61b362841f4722c66a5aa990b3",
+      "git_blob": "48904d7f344bd0bce6d5c392ccdc015309479fd5"
+    },
+    "code/ace_candidate_search/journal.py": {
+      "upstream_commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+      "git_blob": "02bb722509bd4c7ba2a4c0f55d097cc62cdf1b5d"
+    },
+    "code/ace_candidate_search/test_search.py": {
+      "upstream_commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+      "git_blob": "6c9717083e94be4940eca1e5943087bfdf2a9273"
+    },
+    "code/ace_candidate_search/model.py": {
+      "upstream_commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+      "git_blob": "9ce2363929fb03a0ec2977c328db4a64decca7a7"
+    },
+    "code/ace_candidate_search/search.py": {
+      "upstream_commit": "08da5702828285e0bd4d0f4dd8876f331ac89fe2",
+      "git_blob": "4dac0c09016c0e28e331240207c6e85cdd3d9d40"
+    },
+    "docs/ACE_CAPABILITY_STRUCTURAL_V02_PRESCORE_20261106.md": {
+      "upstream_commit": "8118cd6547f2543a8669402d8e5232cdd11083d4",
+      "git_blob": "0fd6dd2923ba5c17e74817d7d9e5881032bc4957"
+    },
+    "code/ace_research_primitives/random_dfa_bank.py": {
+      "upstream_commit": "8952c8ac55613e61b362841f4722c66a5aa990b3",
+      "git_blob": "9ba95560f68ed20f9114f54bd46e025dcd50ae3c"
+    }
+  }
+}
