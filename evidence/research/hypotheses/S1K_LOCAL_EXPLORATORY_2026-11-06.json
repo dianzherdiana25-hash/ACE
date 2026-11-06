@@ -1,0 +1,51 @@
+{
+  "status": "REJECT_EXPLORATORY_NOT_ASSESSED",
+  "protocol_commit": "d86b88c2213fa6f79c1089c6af7a1ec591276247",
+  "code_commit": "4f71d4d6baa33d51eab65601067eabe2d1a32db4",
+  "main_sha_at_start": "a69f713d894db760d8a63bc332ba68bd8b0c2d1d",
+  "metrics": {
+    "evaluation_xor": {
+      "guided": 0.644165,
+      "random": 0.642822,
+      "static": 0.919189
+    },
+    "evaluation_and": {
+      "guided": 1,
+      "random": 0.813843,
+      "static": 0.400146
+    },
+    "evaluation_parity3": {
+      "guided": 0.400269,
+      "random": 0.401855,
+      "static": 0.396362
+    },
+    "dev_xor": {
+      "guided": 0.637207,
+      "random": 0.585938,
+      "static": 0.88916
+    },
+    "dev_and": {
+      "guided": 1,
+      "random": 0.793457,
+      "static": 0.395508
+    },
+    "dev_parity3": {
+      "guided": 0.402832,
+      "random": 0.406738,
+      "static": 0.403809
+    }
+  },
+  "worlds": 960,
+  "train_labels_unique_per_arm": 30720,
+  "candidate_scores_per_arm": 11520,
+  "candidate_example_checks_all_arms": 1290240,
+  "cpu_seconds_local": 0.261982157,
+  "source_sha256_local": "338c28f3799d4a041f50e3ed5a56844ff69057e0aea64e48129eeb79ab67472c",
+  "caveats": [
+    "Protocol says 32 candidate-score allowance, implementation scores 12; preregistration mismatch, results exploratory only.",
+    "Guided uses 192 additional association comparisons per world: not compute matched.",
+    "No calibrated information gain per label, no random-label negative control; acceptance invalid.",
+    "No exact-head GitHub replay; source manually transcribed to GitHub and may differ in bytes.",
+    "Only fixed XOR/AND grammar compositions; not autonomous operator-class discovery."
+  ]
+}
