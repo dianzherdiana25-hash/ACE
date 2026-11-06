@@ -1,0 +1,82 @@
+name: ACE Capability Evolution — v0.2 structural mutation
+
+on:
+  push:
+    branches:
+      - coordination/capability-structural-mutation-v02-20261106
+  pull_request:
+    paths:
+      - 'code/ace_capability_evolution/structural.py'
+      - 'code/ace_capability_evolution/test_structural.py'
+      - 'code/ace_capability_evolution/verify_structural.py'
+      - 'docs/ACE_CAPABILITY_STRUCTURAL_V02_*'
+      - '.github/workflows/ace-capability-structural-v02.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  structural-cross-representation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Exact source checkout with prescore ancestry
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Frozen R1 finite-state source
+        uses: actions/checkout@v4
+        with:
+          repository: dianzherdiana25-hash/ACE
+          ref: 8952c8ac55613e61b362841f4722c66a5aa990b3
+          path: _lane/r1
+          persist-credentials: false
+      - name: Frozen S2 typed AST source
+        uses: actions/checkout@v4
+        with:
+          repository: dianzherdiana25-hash/ACE
+          ref: 08da5702828285e0bd4d0f4dd8876f331ac89fe2
+          path: _lane/s2
+          persist-credentials: false
+      - name: Verify exact code hashes and immutable pre-score protocol
+        shell: bash
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          test "$(git -C _lane/r1 rev-parse HEAD)" = "8952c8ac55613e61b362841f4722c66a5aa990b3"
+          test "$(git -C _lane/s2 rev-parse HEAD)" = "08da5702828285e0bd4d0f4dd8876f331ac89fe2"
+          test "$(git -C _lane/r1 hash-object code/ace_research_primitives/primitive_discovery.py)" = "48904d7f344bd0bce6d5c392ccdc015309479fd5"
+          git show 03fb48b0e346252799a4a7cf313cff2478e7c75e:docs/ACE_CAPABILITY_STRUCTURAL_V02_PRESCORE_20261106.md > /tmp/ace-structural-prescore.md
+          cmp /tmp/ace-structural-prescore.md docs/ACE_CAPABILITY_STRUCTURAL_V02_PRESCORE_20261106.md
+          echo 'Exact pinned source and pre-score lock verified' >> "$GITHUB_STEP_SUMMARY"
+      - name: Run v0.1 regression plus v0.2 structural/adversarial tests
+        env:
+          PYTHONPATH: '_lane/r1/code:_lane/s2/code:code:.'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest ace_capability_evolution.test_pilot ace_capability_evolution.test_structural -v
+          mkdir -p _structural
+          python -m ace_capability_evolution.structural --output _structural/evolution-v02.json | tee _structural/summary.json
+          python -m ace_capability_evolution.structural --output _structural/evolution-v02-replay.json > _structural/summary-replay.json
+          cmp _structural/evolution-v02.json _structural/evolution-v02-replay.json
+          python -m ace_capability_evolution.verify_structural _structural/evolution-v02.json | tee _structural/verification.json
+          sha256sum _structural/evolution-v02.json
+      - name: Preserve complete public evidence including negative controls
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-capability-structural-v02-public
+          path: |
+            _structural/evolution-v02.json
+            _structural/summary.json
+            _structural/verification.json
+          if-no-files-found: warn
