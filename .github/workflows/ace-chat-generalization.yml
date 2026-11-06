@@ -1,0 +1,72 @@
+name: ACE Chat Research — length-shift generalization
+
+on:
+  push:
+    branches:
+      - research/chat-generalization-admission-20261106
+  pull_request:
+    paths:
+      - 'code/ace_research_intake/**'
+      - 'docs/ACE_CHAT_GENERALIZATION_*'
+      - '.github/workflows/ace-chat-generalization.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-generalization:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: code
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Exact HEAD, pre-score chronology and untouched ACE source bytes
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          git merge-base --is-ancestor 96d714bcf8709c0f88f85ca3254f1cef97eaee18 HEAD
+          git show 96d714bcf8709c0f88f85ca3254f1cef97eaee18:docs/ACE_CHAT_GENERALIZATION_PRESCORE_20261106.md > /tmp/prescore.txt
+          cmp /tmp/prescore.txt docs/ACE_CHAT_GENERALIZATION_PRESCORE_20261106.md
+          for item in code/ace_runtime/engine.py code/ace_capability_evolution/compositional.py code/ace_capability_evolution/structural.py code/ace_research_primitives/primitive_discovery.py code/ace_candidate_search/model.py; do
+            git show "80104ce50ecbcea21080bed8c0eabce88d47ccb5:$item" > /tmp/ace-verified-source
+            cmp /tmp/ace-verified-source "$item"
+          done
+          python tools/verify_sources.py
+      - name: Run real ACE runtime and source baseline/adversarial tests
+        run: |
+          set -euo pipefail
+          python -m unittest ace_research_intake.test_generalization -v
+          python -m unittest ace_runtime.test_engine -v
+      - name: Freeze full observations, double replay and independently recalc
+        run: |
+          set -euo pipefail
+          mkdir -p _generalization
+          python -m ace_research_intake.generalization_admission --output _generalization/report.json | tee _generalization/summary.json
+          python -m ace_research_intake.generalization_admission --output _generalization/replay.json > _generalization/replay-summary.json
+          cmp _generalization/report.json _generalization/replay.json
+          python -m ace_research_intake.verify_generalization _generalization/report.json | tee _generalization/verify.json
+          sha256sum _generalization/report.json
+      - name: Preserve negative controls and exact raw data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-chat-generalization-public
+          path: |
+            _generalization/report.json
+            _generalization/summary.json
+            _generalization/verify.json
+          if-no-files-found: warn
+          retention-days: 30
