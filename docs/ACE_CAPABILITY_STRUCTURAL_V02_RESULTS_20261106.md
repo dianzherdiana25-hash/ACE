@@ -6,8 +6,8 @@
 
 - The [v0.2 frozen protocol](ACE_CAPABILITY_STRUCTURAL_V02_PRESCORE_20261106.md) was committed at **`03fb48b0e346252799a4a7cf313cff2478e7c75e` before implementation, tests and scoring.** CI asserts byte identity to that Git commit; all later changes are additive.
 - The stack is based on existing ACE v0.1 coordinator [draft PR #54](https://github.com/dianzherdiana25-hash/ACE/pull/54) at `52bfd4889c172f318274e2f0ba9e546b834d0bba`. Research R1 code pinned `8952c8ac55613e61b362841f4722c66a5aa990b3`; S2 typed AST pinned `08da5702828285e0bd4d0f4dd8876f331ac89fe2`. Both research sources imported unmodified.
-- [GitHub Actions run #42162138514](https://github.com/dianzherdiana25-hash/ACE/actions/runs/42162138514) **SUCCESS** on coordinator HEAD `a22b148594b75928d0ca4c4c57c52db42deaedfb`, running **29/29 scoped tests** (13 inherited v0.1 plus 16 new v0.2) and two **byte-identical full v0.2 runs**. Exact source and pre-score SHA checked before testing.
-- The complete v0.2 canonical JSON is **66,479 bytes**, SHA256 `205587a875e4ed5a516ee7991c09327f3a662fd86a7465106fb47c56e28b694f`. Independent replay verifier returns `PASS_PUBLIC_EXACT_REPLAY_NOT_SCIENTIFIC_GO`. GitHub Actions artifact `ace-capability-structural-v02-public`, ID **13477601002**, ZIP SHA256 `b2942579b9e94e46e0d367e23be008c0b546d9cae28fe8b55bb2ce282fca724c`. Coordinator downloaded the ZIP, confirmed three files and independently hashed raw JSON; schema/gates and each trial were parsed from the downloaded artifact.
+- [GitHub Actions run #42162466833](https://github.com/dianzherdiana25-hash/ACE/actions/runs/42162138514) **SUCCESS** on coordinator HEAD `df1c23576393db77d8d633957e7bf650b471d5a2`, running **31/31 scoped tests** (13 inherited v0.1 plus 16 new v0.2) and two **byte-identical full v0.2 runs**. Exact source and pre-score SHA checked before testing.
+- The complete v0.2 canonical JSON is **66,572 bytes**, SHA256 `f68c75af8efefeb99150f6ad81364b1f460996030bfa9317697b2d7678692c48`. Independent replay verifier returns `PASS_PUBLIC_EXACT_REPLAY_NOT_SCIENTIFIC_GO`. GitHub Actions artifact `ace-capability-structural-v02-public`, ID **13477068878**, ZIP SHA256 `bc3fd1b4a541eaf09ac6421a6c96c6128853731e769eb8fe823e03c4897f6906`. Coordinator downloaded the ZIP, confirmed three files and independently hashed raw JSON; schema/gates and each trial were parsed from the downloaded artifact.
 
 ## Mechanism
 
@@ -50,7 +50,7 @@ The `three_to_one_late_flip` control is **observationally indistinguishable** fr
 | S3: reject regular/outclass structural false admissions | `contains_ab`, `four_to_one`, guarded equality all NO_MUTATION | PASS |
 | S4: G1 immutable retention | Model hashes and validation retained without refit | PASS |
 | S5: safe handling of indistinguishable semantic drift | Hidden drift stages; terminal 0/256 | **FAIL** |
-| S6: reproducible provenance, evidence and adversarial tests | 29/29 tests, two exact JSON replays, source SHA lock | PASS within public scope |
+| S6: reproducible provenance, evidence and adversarial tests | 31/31 tests, two exact JSON replays, source SHA lock | PASS within public scope |
 
 A green workflow is engineering reproducibility, **not** all gates passed. Scientific and release decisions stay respectively `NOT_ASSESSED` and `BLOCK_RELEASE`.
 
@@ -67,3 +67,7 @@ It is mathematically impossible for any fixed finite-state automaton to recogniz
 Next go beyond `w_a count_a + w_b count_b == 0`: require ACE to propose a representation-class composition from **unseen structural counterexamples** rather than being handed a new counter class, test on ordering/nesting/two-register mechanisms and nonbinary symbols with an independently held evaluator, charge all search/label/architecture costs and compare against strong fixed library controls. Require evidence of real method-level transfer across future tasks/generations and explicit semantic abstention when observations are insufficient. Never tune against these now-public datasets and call the replay a new blind study.
 
 **No main merge, no frozen science mutation, no source execution/deployment or paid calls.**
+
+## Post-score engineering hardening (no changed scientific outcomes)
+
+An exact-head source correction required retention to be **non-vacuous** (verify the original two G1 artifact identities still exist among G2 retained artifacts), and marked the current interface's hidden-drift safety gate permanently **FALSE** because it has no semantic prediction abstention even if it declines to stage. Two added tests prove that flipping *terminal labels only* cannot change the selected architecture/weights and that G1 retention is non-vacuous. Retested [Actions #42162466833](https://github.com/dianzherdiana25-hash/ACE/actions/runs/42162466833) on `df1c23576393db77d8d633957e7bf650b471d5a2`: **31/31 tests, PASS**, identical two full canonical outputs, strict verifier PASS. Rehashed artifact values above reflect this corrected engineering snapshot, NOT the superseded 29-test report. Scientific findings and gate decisions unchanged; the hidden-drift false-acceptance marker is explicit in raw evidence. No benchmark adaptation or threshold change after prescore.
