@@ -119,11 +119,15 @@ jobs:
           ace_research_discovery.test_discovery
           ace_research_agenda.test_agenda
           ace_integration_redteam.test_integration_redteam
+          ace_host_controller.test_host_controller
+          ace_research_f12.test_f12_research
           -v
       - name: Verify hypothesis synthesis evidence artifact
         run: python -m ace_research_hypgen.verify --artifact evidence/hypgen/f10_hypothesis_synthesis_v1.json.gz
       - name: Verify generations growth evidence artifact
         run: python -m ace_research_generations.verify_growth --artifact evidence/generations/ace_generations_growth_v1.json.gz
+      - name: Verify F12 causal research evidence artifact
+        run: python -m ace_research_f12.verify --artifact evidence/f12/ace_f12_causal_research_v1.json.gz
       - name: Execute Red Team full integration suite
         run: python -m ace_integration_redteam.redteam_suite
 
