@@ -1,0 +1,83 @@
+name: ACE Autonomous Software Researcher (V0.3 Bootstrap)
+
+on:
+  schedule:
+    # Run daily at 03:00 UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      max_cycles:
+        description: 'Maximum research cycles to execute'
+        required: false
+        default: '1'
+      auto_pr:
+        description: 'Automatically create Git branch and PR upon promotion'
+        required: false
+        default: 'true'
+      author_type:
+        description: 'Author provenance tag'
+        required: false
+        default: 'ACE_AUTONOMOUS_V03'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ace-autonomous-v03-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  execute-autonomous-researcher:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: code
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 10
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+
+      - name: Verify source integrity
+        run: |
+          set -euo pipefail
+          python tools/verify_sources.py
+
+      - name: Run ACE Code Agent Unit & Operational Tests
+        run: |
+          set -euo pipefail
+          python -m unittest ace_code_agent.test_operational_proof -v
+
+      - name: Execute Autonomous Software Researcher Step
+        run: |
+          set -euo pipefail
+          AUTO_PR_FLAG=""
+          if [ "${{ github.event.inputs.auto_pr || 'true' }}" = "true" ]; then
+            AUTO_PR_FLAG="--auto-pr"
+          fi
+          python -m ace_code_agent.cli --autonomous --max-cycles ${{ github.event.inputs.max_cycles || '1' }} $AUTO_PR_FLAG
+
+      - name: Verify Self-Dev Continuity & Invariants
+        run: |
+          set -euo pipefail
+          python tools/verify_self_dev.py
+
+      - name: Archive Receipts & Research State
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-v03-researcher-receipts
+          path: |
+            checkpoints/self_dev/v03_researcher_state.json
+            checkpoints/self_dev/research_state.json
+            evidence/self_dev/
+          if-no-files-found: warn
+          retention-days: 7

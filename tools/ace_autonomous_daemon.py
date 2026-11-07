@@ -147,12 +147,12 @@ def run_daemon_loop(batch_size: int = 2, sleep_seconds: int = 15):
                         f"Task={tid}, Gain={gain:+.4f}, Holdout={holdout:.4f}, Decision={dec}, Promoted={promoted}, ActiveHead={head}"
                     )
 
-                    # Halt redundant evaluations and prevent uninformative commits
-                    should_commit = res.get("should_commit", True)
-                    if not should_commit or dec in ("STAGNATED", "BLOCKED", "STALLED"):
-                        log(f"Cycle {cid} was halted/uninformative ({dec}). Skipping git commit to prevent repository clutter.")
-                    else:
+                    # Halt redundant git commits on rejected/duplicate cycles to prevent repository bloat
+                    is_milestone = (cid is not None and cid % 50 == 0)
+                    if promoted or is_milestone:
                         git_commit_and_push(cid, dec, tid)
+                    else:
+                        log(f"Cycle {cid} ({dec}) persisted to local state. Skipping redundant git commit to maintain clean git history.")
 
                     next_strat = res.get("next_agenda_priority", {}).get("strategy")
                     if next_strat == "SEARCH_SPACE_EXHAUSTED":

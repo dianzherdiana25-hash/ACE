@@ -1,0 +1,1267 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-11-07T20:35:24Z",
+  "total_artifacts": 252,
+  "artifacts": {
+    "ace_self_dev_v01_cycle_0001.json.gz": {
+      "sha256": "9d2ccb0302f0328755d8ce2036631978e752dd7a637e31c4fb09ce93b148dafd",
+      "size_bytes": 2059,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0001.json.gz": {
+      "sha256": "a5cbc2690aa3027502e3e86b2d2da190a5e9ec6bd01d6c324af8eee3227f3435",
+      "size_bytes": 2459,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0002.json.gz": {
+      "sha256": "1d27c3a028acf36277d89a6adfeef842aa3e54dcc4c9af5a7a9acee8f5d6e8a1",
+      "size_bytes": 2498,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0003.json.gz": {
+      "sha256": "43b321f1473f55aa2e446c8cb81a4fae925ff62f6bca5458395d577c124e04d4",
+      "size_bytes": 2464,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0004.json.gz": {
+      "sha256": "95bd11a89b9083dd6d3dccc0ea42dad498c53333d07db263034715ece9134dba",
+      "size_bytes": 2498,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0005.json.gz": {
+      "sha256": "622554cbb007f47905139dd447e6f9cdebe1eae824e9fc8796e953e987eda7cb",
+      "size_bytes": 2459,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0006.json.gz": {
+      "sha256": "3e0991bf7718ab7d4c509a591c40acc943fb83364e14e09505f741395f0ee2a1",
+      "size_bytes": 2500,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0007.json.gz": {
+      "sha256": "4423f19c6a7519780251131ce3c79f7601046e853a45fb91f971deb33bcf8e2c",
+      "size_bytes": 2459,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0008.json.gz": {
+      "sha256": "78f9735682f6fdc1fc56f9573990553bda367fa806ddcb66f1cd2f883a21def4",
+      "size_bytes": 2493,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0009.json.gz": {
+      "sha256": "f9eef63fa8443352cb0930827fde2711b8574b8f407a76c76e8acb693d813523",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0010.json.gz": {
+      "sha256": "8ffbe0db0410c58e8fb013334956636706b1c19f4236d2fd71f9b11556774b4f",
+      "size_bytes": 2592,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0011.json.gz": {
+      "sha256": "5029ea3b0adad1403289b5f47e35d321b6eb7d9c73af53e457b962ca3805c49a",
+      "size_bytes": 2595,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0012.json.gz": {
+      "sha256": "f0ed59b2b211ac374b4ee3249db4e536dceb2dbd02a39746408220f0c02764ce",
+      "size_bytes": 2604,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0013.json.gz": {
+      "sha256": "63d8a232cce275c3cb0ab144af54d3392055e337fe8deda6abe84a16d1252940",
+      "size_bytes": 2604,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0014.json.gz": {
+      "sha256": "6de8d8010827c6dcb12f95a6a9b15c26ac0a9803d2680da48a7c33225d93ec8c",
+      "size_bytes": 2602,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0015.json.gz": {
+      "sha256": "360241313ee4db18d7e2bfef289d820e1c3568f3b7d9043ee3933dc6c6195653",
+      "size_bytes": 2598,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0016.json.gz": {
+      "sha256": "fd70b9563593545d6609fa6df8055d6fc0402629f5493d80de9512e67e90b217",
+      "size_bytes": 2596,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0017.json.gz": {
+      "sha256": "29c780a1fb0c83d07353a41709bfdb69c8e20d9af48366c93a73709c34c34a02",
+      "size_bytes": 2570,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0018.json.gz": {
+      "sha256": "72ddf5ff0b092255f9a1c715233a4e779735bd94abb3399a824f6f08340e57c1",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0019.json.gz": {
+      "sha256": "a8ae6e35fbafa3ea7aaa9767c425bc12c6ef29d189cbdfce22a1f91afebecc00",
+      "size_bytes": 2574,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0020.json.gz": {
+      "sha256": "f0966d90b1ffcd7a70e57eced4e95cd6521889fff5a467f3434bf4fbd0b51c16",
+      "size_bytes": 2590,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0021.json.gz": {
+      "sha256": "00911268e20c79b2439dc9634edeade4a505e4066132888f8f1e534db9bc267a",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0022.json.gz": {
+      "sha256": "dfa8ccd5c06cc0216249f504e1cc2a56bdc3a35a181fe7363ca99df5bec80bd7",
+      "size_bytes": 2591,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0023.json.gz": {
+      "sha256": "0a90155908365e77b634b6be0324075af07b09312a276fc33cd015eef47a2675",
+      "size_bytes": 2575,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0024.json.gz": {
+      "sha256": "cdcd813e3edd1cba9821bbc74122689a2251ee70c36848bfc865b26c701f4090",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0025.json.gz": {
+      "sha256": "be4c4af568066f0e331620fcba82510ee695b45f845dddee40f0d7f865215753",
+      "size_bytes": 2578,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0026.json.gz": {
+      "sha256": "aeef5604614ff12c2c2e14206270f49691b24b724fa8cb0494d2727be63a9859",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0027.json.gz": {
+      "sha256": "4cd3e53134ee58f5574a91121998fd0f0f280e263f3b0bae7a0f9290e08f8b8e",
+      "size_bytes": 2575,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0028.json.gz": {
+      "sha256": "bcd8f4114b1e3ed9b2e554214aadbdf3f85ab0045703e2c354143c4fbe93b25b",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0029.json.gz": {
+      "sha256": "623d8f88e6012179c4d34fe4918c25039ad12cf4336639e660d5463cc89b1e64",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0030.json.gz": {
+      "sha256": "e0e7adca9fdeb086f55b2a2e2470684273096105e498ccdde73c64595e40864f",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0031.json.gz": {
+      "sha256": "61cb8cb884058152540ec4c81dcfd293adbaa8c0264356060dbc0b078a385318",
+      "size_bytes": 2575,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0032.json.gz": {
+      "sha256": "aa4dbbb5a1c7831e89a98b46ec0363b592ca9801f9191375a964772efa0528a8",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0033.json.gz": {
+      "sha256": "0ecfc3ee980253573094fca6b38f8ee1b33c6acbcdaf0dabc50ed2459340c26f",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0034.json.gz": {
+      "sha256": "01170284c7169e871f12f565f499ff6b95a07880fb6bb8ce962929f61a456763",
+      "size_bytes": 2580,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0035.json.gz": {
+      "sha256": "68a82fd28c2cff6da42371552e0efc54e979ce9a224ff7beae839bcf1d09d4a9",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0036.json.gz": {
+      "sha256": "4092a06865fac13615c8c1d1e9cd35c27be0ab1536feeddf8c58a94e59a6d6aa",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0037.json.gz": {
+      "sha256": "d17fd6976a8064784e670972b9269e58cbcd2760185675fde1b81000800d25f6",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0038.json.gz": {
+      "sha256": "f8c66c95cce54d0cb18ee0c7e97eb56245d655911de0447548fae050e8f6777d",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0039.json.gz": {
+      "sha256": "6d3f589e42c88f22c69dbff87ee189749bddd0a6b3e1fa6b1c9108849517a79d",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0040.json.gz": {
+      "sha256": "4e6c96a9754d81552bddc0cb8cd48cefec620cac3458c16ca3f2e1ae4f64278b",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0041.json.gz": {
+      "sha256": "87b1098e5048e150711b4f2a0e44a60769d2e905ed40cd0390db4446739558f5",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0042.json.gz": {
+      "sha256": "80a9bb8047ef7c4d5891bc6ac470d4b7ebfa633736c17672eaf5d201e34a15f2",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0043.json.gz": {
+      "sha256": "e01e9fbf3e730632a024ca2379b0eb9dea49673f694477d65ec5d095aedc32ca",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0044.json.gz": {
+      "sha256": "591622cd5667424a6818d34340521ca63651724b48d26be14495529e44c827ce",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0045.json.gz": {
+      "sha256": "30255133c09244f3dd556ceb1b1731e0b7b4762aad7929e89cbdf72825510064",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0046.json.gz": {
+      "sha256": "08b3faaba77f0cea0f2b224023c66b1c60a2c23ba00cc315aacd5ca3298f3683",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0047.json.gz": {
+      "sha256": "6fa454ea64b5a05b5e50ce5028ed21e57129b3b898f9ce3190d44944c4f34d64",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0048.json.gz": {
+      "sha256": "69b3e884b6946a30d5cba74b662a06a3e14501aedcc056c5fd186f7557eb1f0c",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0049.json.gz": {
+      "sha256": "7766a4df4261bd5ba78f7b28279debea209be83cb2edfa12354e8ef51e6c816f",
+      "size_bytes": 2576,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0050.json.gz": {
+      "sha256": "a6bd92a204e14bb17f1fa8090242c5a9e97310a44ccfa4cfd1e1bca53fd4b207",
+      "size_bytes": 2591,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0051.json.gz": {
+      "sha256": "dca483f825dbb659c39f19def3cbbb37c66143b13da93b78167dd0eeab6b42de",
+      "size_bytes": 2577,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0052.json.gz": {
+      "sha256": "f45ea2dc12e932d297b5f27db753c7af042be2228c92d2b08e97f493dfecf4b9",
+      "size_bytes": 2576,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0053.json.gz": {
+      "sha256": "0739fb8313a2b34c273dee52698b4a1337003f082202c07a182b3d4f95f68304",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0054.json.gz": {
+      "sha256": "e53b02276097ae561db14e6c2925f2c440203fbc34b918643d15bf0f0cc1a597",
+      "size_bytes": 2579,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0055.json.gz": {
+      "sha256": "4d11b03aaf549e029311e275761b5c5be36428143e4d433668ed3b4e4ef4b133",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0056.json.gz": {
+      "sha256": "ffe68e8995ceaa4c1913bc17b7b0c2afb9b4e3e133f0c98bf3b33b52299a5bf9",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0057.json.gz": {
+      "sha256": "62ff39e0fd30f5f0fd5e3b5cc2dbf7ab48cf119bf3c3d6ce6435a7c0d4729f14",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0058.json.gz": {
+      "sha256": "058994fcf80deb54bb818dbf683f38160c71b9173b52fe7be22c8f93ee10d304",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0059.json.gz": {
+      "sha256": "821aa8fb5226ab5bf65f3877a9cd19dcf984848ab3ad36ed699ae85229e98e94",
+      "size_bytes": 2580,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0060.json.gz": {
+      "sha256": "0c660f7bb300a1ec034032c1371af2de8d4b31e36621b76eda6d22c3f1e0cd03",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0061.json.gz": {
+      "sha256": "49fd49f09fa0a3deede9c5d1da494af7f3ab75c042fcafc8a7e12e6a703d3ab1",
+      "size_bytes": 2577,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0062.json.gz": {
+      "sha256": "7a2d56e066cc8c062d45edd8284071edad3a06cc7e40ec25759d4709fe6fb0d9",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0063.json.gz": {
+      "sha256": "571ff2aa0821ccf9767a43e528a3b5deb8a2c4a2eda766109e561c75cd235436",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0064.json.gz": {
+      "sha256": "ed84c6af9167dd042f419dbc5c77cbf94b64fd10bb635f7b7b37e39af8e23bec",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0065.json.gz": {
+      "sha256": "d9d894f6a6d514acee85b96c8f694a6be02c4ba86373c8d171c8a168ad668c6e",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0066.json.gz": {
+      "sha256": "9a1c01fbea9fd0be32a2b3e3ec3bd7204cab6fa24f2d09ffdf610839e8f51f35",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0067.json.gz": {
+      "sha256": "d32d7a0092631128b10174cd5d2aed69ed72fd4fe467909180a586cf39ae2b46",
+      "size_bytes": 2580,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0068.json.gz": {
+      "sha256": "4e9db97371efd8bfe9971e139e6560ac5e505b977b1d8e61b3be775cc4074bb8",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0069.json.gz": {
+      "sha256": "c2c938149538c7c9152be3d4ba88ff93638d6bdafe24b046724be370ee6467ec",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0070.json.gz": {
+      "sha256": "2e715e2f91beeb3ac4c853405c7b65b142c0f9dab8c8992b2a0ae4e392f5dca4",
+      "size_bytes": 2580,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0071.json.gz": {
+      "sha256": "97a8b46fedf630b810aa66136d78fcbdd0134b131054a2803628ceca57d610b9",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0072.json.gz": {
+      "sha256": "176a234cfd83bdeaecfa407258f89c0551a6183f9da3ffa25b5def33242e925c",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0073.json.gz": {
+      "sha256": "4b647edf8613b8096af84dc749c1dbb2d5ff05f44a0a28299de8088e948e63b3",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0074.json.gz": {
+      "sha256": "0d7237780843cb329c1d3f3b8f2af3fad2e78b806e766288f4502cfe001ae96b",
+      "size_bytes": 2579,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0075.json.gz": {
+      "sha256": "e0acf6e7c5eb0a43b8877c00a105302b8599c083609e13969255f4322c690552",
+      "size_bytes": 2577,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0076.json.gz": {
+      "sha256": "997e6efbd23d595fc194ce04af5bd573e0c24caae7723df5a5f6ca3031ec5640",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0077.json.gz": {
+      "sha256": "597b14f70c1be1125ac48eea76712e267b79eb122eeb78487d436fe9e55ad595",
+      "size_bytes": 2579,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0078.json.gz": {
+      "sha256": "7b1d28d48720fc98c3459baf3afbb135ad255644c124414649e7474e18d8ab06",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0079.json.gz": {
+      "sha256": "f6b133a3bb1b2464e6c1ea5867cc36aa2d8a7e2efe006ab8095071a385f5551c",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0080.json.gz": {
+      "sha256": "921bb6fe8c91cc2eb48e64bf16af6c44aa68fcd4eb706b11488ec5b09cb1becc",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0081.json.gz": {
+      "sha256": "3a8a65b0614ed598e9b225a9d029bb37391d4fade17c7f786637aa7a968fd650",
+      "size_bytes": 2579,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0082.json.gz": {
+      "sha256": "332465f3d7e9db35440c525c70a055829c02383f37d1bf063f6c4c2900f0a883",
+      "size_bytes": 2579,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0083.json.gz": {
+      "sha256": "cd24af5122483b319987590f70bce96d752ed91bcd71334eb026ed79f047948d",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0084.json.gz": {
+      "sha256": "ec29125008197f4e6a92d2d6c20a58dd62136b00b25c283970b5d12ebe03c64b",
+      "size_bytes": 2580,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0085.json.gz": {
+      "sha256": "f5adf0e26c0f26011ee5db17720299dd261808bbbcd2d197d9b0d828d206190d",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0086.json.gz": {
+      "sha256": "ec4c1a308e3bb29a5c2f0a941a2f91feaa5ed9a1f5a4cdaea8fa8c589d1aedab",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0087.json.gz": {
+      "sha256": "ed453701ed9ed823758294f60f4a1ede4c9e6d3d6a20f17a81cb62ee5784d841",
+      "size_bytes": 2577,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0088.json.gz": {
+      "sha256": "efd4da9eeed5b220dd2eed8aac08c9fe054223c1770d1e52dc332e6e69741cac",
+      "size_bytes": 2578,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0089.json.gz": {
+      "sha256": "16477b17be7ccc7678243059595ed81601f8d72c4f00102c61a8b5bac8f226f9",
+      "size_bytes": 2578,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0090.json.gz": {
+      "sha256": "ecc072213c81295ea26f4e4e7b38a0a26fdd8fb533b30101afe733c518cd795f",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0091.json.gz": {
+      "sha256": "617fc4522571319e63e8108decc10979c8e2e78f1cca5ca2470cc2f71113593c",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0092.json.gz": {
+      "sha256": "140e0d9a775712790e0cf0ed98adb9c2100cd8b080b99691ff5da386bdb2a23c",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0093.json.gz": {
+      "sha256": "1bcea593109992d4a736612afb3913363c78c9bd4213a424393322a6db626248",
+      "size_bytes": 2578,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0094.json.gz": {
+      "sha256": "a26448a4fdf0152c3361cb5bf27daea6885478059073f5976fb452c9d09172a1",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0095.json.gz": {
+      "sha256": "60b36bea83603baa0a50aeb7d44cfff8f2570f2bc0eb0d093b9c04b36f4ddfe7",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0096.json.gz": {
+      "sha256": "84caa975c6b07b3efa508820a5b6bb7c41b5af94f6d37c7f8e9352d344bd96d3",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0097.json.gz": {
+      "sha256": "b56084fc4fa15031a8ab2970748a19ca9ec668acfbef5d17ccd7702ea19ff861",
+      "size_bytes": 2580,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0098.json.gz": {
+      "sha256": "c9b8904f33d344133d0f6f8ee0c8aab6d92b2f5a9bafd6f9f0e148431de20c79",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0099.json.gz": {
+      "sha256": "4871eafafc5be3379d37e8145c61fa4d2c57091fa1d8a37135864c32f79d3496",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0100.json.gz": {
+      "sha256": "a007beb8cc68592e8007c01f9a5b7576fe618ba4b21a06b0fe9dbdd0623334d9",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0101.json.gz": {
+      "sha256": "3c4e7ef5eb0c727c4ca00c291cfabf8e349187c87949da2259f24f585a329a88",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0102.json.gz": {
+      "sha256": "68cc286a5a048c44c642b699bda007bf8a262695456073ca27685b3e900df8c2",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0103.json.gz": {
+      "sha256": "dde66930319650432fc58ba9b81c4941526e55555661ae50f69856c6d8ef8e2b",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0104.json.gz": {
+      "sha256": "b4f6b3889390de29bf87f02a996f8401f5d442d07a03a1e755b3afb9b0a0ff92",
+      "size_bytes": 2579,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0105.json.gz": {
+      "sha256": "a694791044f48774c79bb078308646ed34f4ba623e02a5793a0bebe9dac8d857",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0106.json.gz": {
+      "sha256": "c5e3d1466c1191d6b82605c9def5d6650a3eb33011fec70f711080edba924702",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0107.json.gz": {
+      "sha256": "460873edbaa36f859a3676b9087c28d2434f8cf7448e11194880c5165dde98a2",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0108.json.gz": {
+      "sha256": "761d6d6e17b14ed2b1aee9ac50e4319dc3ec8332ac1c07d3ecdab8697bc441d6",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0109.json.gz": {
+      "sha256": "08d59faaf7fd13cb74f6da588489403d3dbcc8930771ac24932bc4e2a39fa136",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0110.json.gz": {
+      "sha256": "e112db237ad34b33f5fa20d3876bec570685cbe72e2afce511f39630e85fc7eb",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0111.json.gz": {
+      "sha256": "79320d843ed4892e4598980700a2061875630cbe6bb65de7e9adbf181188e79b",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0112.json.gz": {
+      "sha256": "dc95c3c49519e528cfcb4f26d8fb1a8f7458bcf1343dd05864871273c20ce639",
+      "size_bytes": 2580,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0113.json.gz": {
+      "sha256": "f3bf3b82bf6b74e19c187515b9e0a33f739871098dd63b0d76ebc8e86071665e",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0114.json.gz": {
+      "sha256": "7dbe5ac00ac71abbafcca4cee980a649d036bd86d7504d0c80859513f05849d9",
+      "size_bytes": 2580,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0115.json.gz": {
+      "sha256": "0d698a5cb9f7d086c9910255865fb42ae665edf2cf7a97f61ed4488f3c9726c4",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0116.json.gz": {
+      "sha256": "0c6fb0ebdbd594c5d8943e695aa41500c2f5d537da1cf609d7429444dd3bb16a",
+      "size_bytes": 2580,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0117.json.gz": {
+      "sha256": "3cc8966f8ca475e66c3a26d851c0e4aca0b9cef2ce300b649b3233bb9de4d7b5",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0118.json.gz": {
+      "sha256": "dbcf6af8edf09f138bfdd70ce96f291160dc31e61fd9bb30fa018b3da4c7e59b",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0119.json.gz": {
+      "sha256": "c45ee948341ab52c442df788b4f736e100dfcd9cdfb01b432d5d50db5dd8d075",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0120.json.gz": {
+      "sha256": "6033c3d94b7458966aa0d02abc15eefaaf711f5e1281e3f960edc226f38da115",
+      "size_bytes": 2589,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0121.json.gz": {
+      "sha256": "624469d2e65e09914fabc109a0a353f8b0326ac66eb2d1567c96d9112cab4b63",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0122.json.gz": {
+      "sha256": "e4151546d25f0ee79ca523fc58f6d65f4a2d2c23245139f9d71e903fa7482fc6",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0123.json.gz": {
+      "sha256": "b30b1ed8790a7fb91f1b2f075d33a1a14f07d80f02660625bdea3feee9d1d10d",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0124.json.gz": {
+      "sha256": "bad7fb9116f92323738dc1d7871fc42f78c7c23161d6f8247697a8f569c4145a",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0125.json.gz": {
+      "sha256": "55ec393119ef546461221c8e1777b1a8e30a883c6a0778feba90f76bef1d9529",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0126.json.gz": {
+      "sha256": "3b37e9239b90fccd4bf42c749830dbe67eaa230d663445e12a01a7f9e1603a8b",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0127.json.gz": {
+      "sha256": "4a270cf6470184b2cd4d39d402966ed3f4e81db7e2f22471da2b13c45f6ead0c",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0128.json.gz": {
+      "sha256": "710ac97a128272f38c71b9773693fa413d4669d772581be241a8969a2b4890f2",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0129.json.gz": {
+      "sha256": "3026399808c4b2a88475be2e39f80626ff85c1a1533f243923bddb674e81d537",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0130.json.gz": {
+      "sha256": "e56508e4f7c97fad870b8b353b13011e463781b7fce71f781bdd43bc3d2e0af8",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0131.json.gz": {
+      "sha256": "90f9b423035d11ebd3ea21c798432109d6fd1efc5cc473dc84a6eb4c1713ce66",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0132.json.gz": {
+      "sha256": "2775764af44c46a8c5928a2b7527a13752d77411bc1e312d08ea3ea3b522411f",
+      "size_bytes": 2592,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0133.json.gz": {
+      "sha256": "b1695074ee65b6cef2964e65cc7a7ea109c9b7025dee96b98c1f9e111b381075",
+      "size_bytes": 2589,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0134.json.gz": {
+      "sha256": "e04a71ebf6442cce8429f275b6a7ac86634fcfe527c6f7f739aec1b11f05b97f",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0135.json.gz": {
+      "sha256": "39a9e68e05cbbc43497ae9c3505e137a53e4b4db065a94c68ec6190bb6dbccd6",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0136.json.gz": {
+      "sha256": "f6ab416425f9890afa68662f988fcd36a1dcfd3d18652c8670606cce3eebc5f9",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0137.json.gz": {
+      "sha256": "fb7beb165ff762fb8e5dc3cfe97cd73fe34e541e7cc921ad262220ff5e7048ce",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0138.json.gz": {
+      "sha256": "114434e9649059ff836b9a71b2ba4b9a95cb278bc41860f7804fba8fd9a3bc51",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0139.json.gz": {
+      "sha256": "9fe99efecac93bc61757799d478e6aaa7767bb05b92d143e930e6e7db78dd7ad",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0140.json.gz": {
+      "sha256": "32693f315193bc46a88ab8f56abb788e1bd6593689bf369ee0fb405dfb92c2eb",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0141.json.gz": {
+      "sha256": "0f45f0a74c7d8f59f46f4805e1c536f9b338dd8315855bf42fc9ef887099cf8e",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0142.json.gz": {
+      "sha256": "bfe618fccd99575bb7f94c799432324c454679b82d9200f66b204e2a6fee2908",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0143.json.gz": {
+      "sha256": "74ed8a3eb71cafa34c6e89aa607bf2316f481e3782a812c6bf9fc917c03e174e",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0144.json.gz": {
+      "sha256": "c8e0b6eee2e693442e02bbf72dccfca42a886a84db261e8f8575a263f0d25fa9",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0145.json.gz": {
+      "sha256": "a74046ee3e26f0469c8b10dcbc2ff4e1ba0cc64859f9afab6c96d2c7cdda8034",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0146.json.gz": {
+      "sha256": "f54aa485a0b4b2b0dac91561731a418439d6c670d3a9d074fd38dbe41923acad",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0147.json.gz": {
+      "sha256": "e561cd69c7ebfba5eea43dfaacec9f4e2d157902d4f9f26079bb42049dbb3334",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0148.json.gz": {
+      "sha256": "3f7543bfe54601a0fcb4890e3caa8632e788b30a557d3a38f285bfbe1ac1c9c0",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0149.json.gz": {
+      "sha256": "b290b1ed95d0803d03d359354e4757b366f92f05aeee3d86466f4ef0f32cfef0",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0150.json.gz": {
+      "sha256": "c66c3e59abf569be0220e22ac99d9638215d29c8b50dfbf96b41f807943fe0c3",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0151.json.gz": {
+      "sha256": "4352fee7f3fbbeeeae06a96491d8a9b6e07ac8e0838834bbd8db8b5aac6aa0ea",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0152.json.gz": {
+      "sha256": "0cdfd57d6eabd31561cd7a8a9b920ff6cd5066fad9d14de1cb72c0b533d82334",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0153.json.gz": {
+      "sha256": "1294eba47f71b5383eeb4e64cc5071821c311f36c820658f1428755fe7f122be",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0154.json.gz": {
+      "sha256": "56de253dae217feaa8dc8c88c8ba9cc3fd9336ae3015d647957ca235563ff7d6",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0155.json.gz": {
+      "sha256": "acffedd94a6231c429cb3959e8f78ec20a9c3d8736438d1e07baa7768b8fb9e4",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0156.json.gz": {
+      "sha256": "fda13d8058ad74022e53d8da9f98037456314ce591f3c6eceaa005c216fad7b2",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0157.json.gz": {
+      "sha256": "68c63dce2f62d778d697b835b986d625c76fc61cae717723d6cd914bcbecd3a9",
+      "size_bytes": 2590,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0158.json.gz": {
+      "sha256": "389f18539753b1ab02041174c77e227a8b1b25c040fd3c0ee6ccaa1846386fa2",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0159.json.gz": {
+      "sha256": "eac35f9d29bb0ef60024618905073d3cb69dc5666e86c3777ef61e66ea91f0f2",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0160.json.gz": {
+      "sha256": "e6c6f11097c9f1761df20081626601a60911369f5d5da74174a9dfabf82a948d",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0161.json.gz": {
+      "sha256": "650a789e1ab09f9458af6989376f159595df8df89a1ae6bd998f947020fb4f4e",
+      "size_bytes": 2591,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0162.json.gz": {
+      "sha256": "49c078c4840a22716b4ec124f5442e740808f44e6fc13f7335049e6c0537d53f",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0163.json.gz": {
+      "sha256": "e2d5bb4efc30e6cf25c8ff8c56412cb0e28c3d112661c528ea907e7db6de367c",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0164.json.gz": {
+      "sha256": "22175abd5740989bc0e6804bf9ce9a38f47430825f58ef5807f1364b5e06346a",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0165.json.gz": {
+      "sha256": "59cf5013bdbd0d184e8cdc3a0393ad0b42f10dc45fcf5ec97bb8b04366733ebb",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0166.json.gz": {
+      "sha256": "defa38101a2890c3b28487810616d983f4afdc30877439916b9eec083cbe1e98",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0167.json.gz": {
+      "sha256": "63860fc7d99997451dba31b0a60d92affa120bb02e0f0665d3223abc2b449862",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0168.json.gz": {
+      "sha256": "2f1f0f13c9789cbbda1080ca0a0f66e681c39b96f3a21185575e645c3cf19151",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0169.json.gz": {
+      "sha256": "5fead6bfd82644ae6a6ef94280fbec648733c158948ef7ba7e95a277c4b990d8",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0170.json.gz": {
+      "sha256": "52209c1fa6ea2f6d1dc4d20db559365f3da6cbcff85faef6c26105fa26c62456",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0171.json.gz": {
+      "sha256": "163d74cd4696f9d65d944437aa46814b266e5a66ab23bf50724981f0f34a447e",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0172.json.gz": {
+      "sha256": "fda2f6be33456fafdb07b42bd29c7dc4a9a46b21c0149ef2518304dd31e22185",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0173.json.gz": {
+      "sha256": "b0b04ad01747875e02e3446dd840273f1b2e904867d399c14e424767c92eece0",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0174.json.gz": {
+      "sha256": "c6c4acf2ff245926cd1449b3625b07871ebc2bfae9c9b342d9a68804383c3ae6",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0175.json.gz": {
+      "sha256": "732b33f890ea6ebf0d2b16bfc625b9eccd409d29aa645ffc9a89a88ca242b712",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0176.json.gz": {
+      "sha256": "7194297e8b73a43740f8b5e091796ec8e5e7247032910150138132de3021eb31",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0177.json.gz": {
+      "sha256": "03946866738eb6dafb9d996124836a2d7c173264e0dd9126c6aceffbeadfab3a",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0178.json.gz": {
+      "sha256": "64f08c2ab9589edd895c748eabee393dd80242f2286c353bdacf6622c559e1cb",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0179.json.gz": {
+      "sha256": "31ad3c3e7f6ebbcc640f693b4bb2f57a228a2e498e17ae155744d19bfaa54657",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0180.json.gz": {
+      "sha256": "1e7d93a09f5d0edf0c9c88d0179f9b7df552d6c4ff5a06ba4924241b9804ea14",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0181.json.gz": {
+      "sha256": "ab78ba66dc54465bcd9a7d9f8b607f825a67f49642162a22432d74ac791d212c",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0182.json.gz": {
+      "sha256": "ae01ce9a00b4d1596cba9f30a899bb8ac63ee8a99f1a31d9123b10c175bbee81",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0183.json.gz": {
+      "sha256": "01ef74aaad8553548399068ec452bbe524ac43c90ca4a6c8eb7b6802ab9c54c5",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0184.json.gz": {
+      "sha256": "8834d6d51052d1df62a3fe94139b841719c0c7471e0542335bdc5a70395d99dc",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0185.json.gz": {
+      "sha256": "6eb404c3e8f066314d2e1fb4c1df2a926f41ec49cc41cf2a507dd8bf87a61c3d",
+      "size_bytes": 2589,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0186.json.gz": {
+      "sha256": "3960ea120b16c134e56ba9deef3d4732df05d2680fa1e148803fdc85a42a58d9",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0187.json.gz": {
+      "sha256": "6eb6b614250706e671a7bfd4f1b7ad2e12b4bd86aacbdf781f2ab609f0621924",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0188.json.gz": {
+      "sha256": "1350ba3cf1188e45039179e480f28f884c7b95a9937d918ad6f6a85655fbf150",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0189.json.gz": {
+      "sha256": "a42b9d46ad9448fe01a163528b923dffe513504f2e6177018ebc5feff3f62982",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0190.json.gz": {
+      "sha256": "12473085aa81eedca6ae7cc22e8b00323d5cd7e45b1cac0c08279e9fab317b29",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0191.json.gz": {
+      "sha256": "28eef58c02164ee1f795a4bce56d1a2c47c764b86747b59ba45e0a6d96d5431f",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0192.json.gz": {
+      "sha256": "05476affa87478dad47cafcffefa50ab09feed17b55150dfe4f7a05574e2d785",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0193.json.gz": {
+      "sha256": "c660eae5965e28ef7f5a5a773e41c4cd2953a0d94bdbd161b6fb662f72a6ccc5",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0194.json.gz": {
+      "sha256": "bdb001209eed401ab8c380066cda9cb6601e435b3b8d706814f7220332cd3675",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0195.json.gz": {
+      "sha256": "4275b4b2ce9d748a56f02d510234f1700e7a3a9e4b3b0bcf64c779f172e9f661",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0196.json.gz": {
+      "sha256": "6d9608f686a642616ff186feb8ec72602d19db55ab0799e19c98cbced8b094ff",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0197.json.gz": {
+      "sha256": "371250eb245c817272d8de9281c04b057ba81adfc1955bacb603f3562341fcaa",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0198.json.gz": {
+      "sha256": "2baf72380fba1ae7c710961b65ca7b347cc82ed7ef1651963760add7b7bf664d",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0199.json.gz": {
+      "sha256": "c1b59a734d27b137937e33aa76007021aeec1cf132e50448239763be07ac08f6",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0200.json.gz": {
+      "sha256": "92538aa2d695d8a8ecbd250bbcd8e4ef2f1b29cabd818fd08f38714a03cb7877",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0201.json.gz": {
+      "sha256": "0682b3a0bf1b12a35eaec34e43b8d8767b4c5ca64e78f6daa30934bb70f8cf00",
+      "size_bytes": 2580,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0202.json.gz": {
+      "sha256": "9962552e50ba35093f85676899eb599b4d58de7c2d89b61b7be03e24ebbaae4b",
+      "size_bytes": 2580,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0203.json.gz": {
+      "sha256": "782f76fd4fffa630ab37228fb5ce0a268cc60efc0d4ed60aa96ecd3261729d5c",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0204.json.gz": {
+      "sha256": "5a896a30c56c16c065b5df16b1750b642961edda08a27719cc4c10d39d4eb29f",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0205.json.gz": {
+      "sha256": "c6d6d5b25cbbb155fc32c984505a5791c0ac0abd9d49ffdba9546c56cb114e07",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0206.json.gz": {
+      "sha256": "aa0c6b0b1d1c8e909bfb6379fa5208ea60916b77c798476d379bd1966bf29180",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0207.json.gz": {
+      "sha256": "b6511b15d3efc8f545c4e860b71f124ea39f0970a4108b3ce23860279edead02",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0208.json.gz": {
+      "sha256": "1a00a7745f73c99d41552fbbb5d8a52668d4b1616d9ed3d2b5a704cef6a2610c",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0209.json.gz": {
+      "sha256": "1b3df9b02c24b7198fd99f02e7013b3345751eda1c7fd4904284f1acdcd544b9",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0210.json.gz": {
+      "sha256": "06bc24bffe8ca0bd83528788bf4f3ff4e135a6b122e623332cc5cee87cab7f59",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0211.json.gz": {
+      "sha256": "cb8fee0ca52fc7c485c3b2e447e2ff2fa8661b78524c060b19f1a1e96714156c",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0212.json.gz": {
+      "sha256": "d9095e418f52c909bb4c5451ffc12f10f84585f250aed7dced4a0df6356de3d4",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0213.json.gz": {
+      "sha256": "f04fc9936c15fafb1141849da0df879b0dd6ee709413d97ab338d063e4a6f31b",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0214.json.gz": {
+      "sha256": "835738d4df1134a1289a9ad64eea8edc8d3f274aab8d084720da15cf68b0d72f",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0215.json.gz": {
+      "sha256": "821c7423c9a7a2616f375b83ea1f8aff580c0532e466aae467e61a156e273346",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0216.json.gz": {
+      "sha256": "e4025ea7a5c7e8c504a57df966dd38cdbdaae31479de44041549b60adea9caf5",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0217.json.gz": {
+      "sha256": "a50b743e2feca3930ec8aff741793564969ffd63b63c0b8f862f1be3f0e6d1a4",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0218.json.gz": {
+      "sha256": "dd2032b51e37ed150809fe50046e4612f8aa9fda5145e5ff81a8595bfb31278f",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0219.json.gz": {
+      "sha256": "b9f272a7197aef5e0da0eb40acf549e171b51500cfd7f5342fe7b89d2c6f003e",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0220.json.gz": {
+      "sha256": "75b8d3a4178fea288c0297e18fee6bd4dfc29a5c73f8cd16629ecd41c0d3a625",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0221.json.gz": {
+      "sha256": "254b663ab08978bd4dfc8cc55247c80a5142f985bedaa19ec9bff9ae29e11457",
+      "size_bytes": 2589,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0222.json.gz": {
+      "sha256": "c8f9233639eba784efdd7db156ee08ea4d3014e8e54b1893ccccee4944983682",
+      "size_bytes": 2580,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0223.json.gz": {
+      "sha256": "66ab8e720d0bd651560760b1bb679f000a6c1b05bfcc8ba9cfaacde0c1a13233",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0224.json.gz": {
+      "sha256": "ab59f8c9e65eb76137db313b56f893d9fce74a1a7c66202e35f4c58eb30512e1",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0225.json.gz": {
+      "sha256": "677f872ee7e6ba204f4d915fc9802a2c80191e485da0520ed650c628c5ab21bf",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0226.json.gz": {
+      "sha256": "26f3d5193ddad5625b4a83d09f2210c849ac57e075237154487e8a607485cf69",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0227.json.gz": {
+      "sha256": "f5a76193bbb6821af60f3581a407088e466b4ef869a87c2b9a85e167b555bbfc",
+      "size_bytes": 2581,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0228.json.gz": {
+      "sha256": "0af5b94b85657a167bcd9b7e5d00c4882aac8fbb85d07c34979786b7870c3dad",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0229.json.gz": {
+      "sha256": "3722b18ad2208f549780a7a6c82bc76f6689f7e4a045d619ef64870db933d41e",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0230.json.gz": {
+      "sha256": "016a6df1a3e5173da7b35e34d4eb90a4c5cb6b05a508725ea17ae1a745bc12c4",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0231.json.gz": {
+      "sha256": "e3d54203c5d87bf113699ef57ced68931ece45646c501f1902d3a33df58a50e8",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0232.json.gz": {
+      "sha256": "21058c3c05b4439d0942fd972c563f840b6dac8ebb8cb9ad3ba89b23744b6a45",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0233.json.gz": {
+      "sha256": "c93fc723b12d7b1a162e3d1b7a7a32153964069172f84657b15b3e444f26dce0",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0234.json.gz": {
+      "sha256": "bc279a1fd23172f85a5bb1b114273bfbc525fe026b33da2a2c0bc94c0181ecfa",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0235.json.gz": {
+      "sha256": "ecc9547774710ee59ba5f4e2a8edecc8467916a9133b4aa68818acb555c8574e",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0236.json.gz": {
+      "sha256": "e69c58b54adb816568bd81be91731b6ec2616bfebd903edd2e25398a0019d9dd",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0237.json.gz": {
+      "sha256": "a958e6958daa2141d4c818aa569df42938c3a930d87e200e084d98d77591c24a",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0238.json.gz": {
+      "sha256": "5f32b8777aaf7e27d656c1c100d6cfb9285625054636564026395f6975ccaf64",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0239.json.gz": {
+      "sha256": "bbd95b9d9cb15e13257a1f1aea8e7083f95584aaf6fac37edf21107e04ecd8e0",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0240.json.gz": {
+      "sha256": "fd39e5dcbcec164028605be0acc7ac58fe5a54cf4c10024e0b2f7f6bbddf8285",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0241.json.gz": {
+      "sha256": "b339d89c89ca1a8a6a7ef44b8cad57921c37dea9f63595c3fbb7be64703c0e62",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0242.json.gz": {
+      "sha256": "a2aa144fa36ee363012a55d0e3ca09997e252463d628c28ac7a8fad7eac990f1",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0243.json.gz": {
+      "sha256": "6ed9de1f19f7aa659642a2c1e600fa45d2c451405ad63c2f8234a9a826756379",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0244.json.gz": {
+      "sha256": "5b922576733b77c6e324107da9882cc73fc1ca8a71f0e0b0fc0524020a120ab2",
+      "size_bytes": 2588,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0245.json.gz": {
+      "sha256": "c9877649c5b7accff67ddbe74721e476d9c60e8597e07edc55de0e1a810a2942",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0246.json.gz": {
+      "sha256": "42149a06999d380a984a2a3d4bbd38dbb3d0a7dc9da9f16650187896f03dc513",
+      "size_bytes": 2584,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0247.json.gz": {
+      "sha256": "dfde6789901ccbd47b80cc3163a770d534067109d53d01d7afa40aa162ddd215",
+      "size_bytes": 2586,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0248.json.gz": {
+      "sha256": "226f01c8e3fc093707802948f39f72c46da4bbe88bd072f55651f863a5686af6",
+      "size_bytes": 2582,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0249.json.gz": {
+      "sha256": "c01063bb942fe0a73ab4293a92839c905ec2c6cc092808bae06b3b657ba1b3c6",
+      "size_bytes": 2583,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0250.json.gz": {
+      "sha256": "5e17a6c5a6ee3533f10819ea112098b347f2f8a44a6d601d48b76215dcca44c1",
+      "size_bytes": 2587,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    },
+    "ace_self_dev_v02_cycle_0251.json.gz": {
+      "sha256": "83fd80eb7a2794dd66cec8eb227c23d415719439ede2f4899d03dde3c0540307",
+      "size_bytes": 2585,
+      "indexed_timestamp": "2026-11-07T20:35:24Z"
+    }
+  }
+}
