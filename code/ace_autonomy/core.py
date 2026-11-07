@@ -45,7 +45,7 @@ def validate_goal(goal):
     if type(steps) is not list or not 1 <= len(steps) <= MAX_STEPS:
         raise PolicyError("invalid step budget")
     for item in steps:
-        if type(item) is not dict or "tool" not in item or item["tool"] not in ALLOWED_TOOLS:
+        if type(item) is not dict or type(item.get("tool")) is not str or item["tool"] not in ALLOWED_TOOLS:
             raise PolicyError("unauthorized tool")
         if item["tool"] == "inspect_file":
             if set(item) != {"tool", "path"} or type(item["path"]) is not str or not item["path"]:
