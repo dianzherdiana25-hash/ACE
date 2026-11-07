@@ -1,6 +1,7 @@
 """Unit tests for ACE F14 Autonomous Mechanism Discovery."""
 from __future__ import annotations
 
+import json
 import unittest
 
 from ace_host_controller import (
@@ -79,11 +80,14 @@ class TestF14Discovery(unittest.TestCase):
         diag = diagnoser.analyze(lambda w: False, failures)
         self.assertGreater(diag.stride_signal, 0.5)
 
-    def test_generational_discovery_progression(self):
-        suite = create_f12_task_suite()
+    def test_generational_discovery_on_terminal_suite(self):
+        """Verify empirical G0 initialization, G1 acceptance, and G2 rejection on terminal suite."""
+        from ace_research_f14.terminal_tasks import create_f14_terminal_suite
+
+        suite = create_f14_terminal_suite(task_generation_seed=42)
         holdout_banks = {t.task_id: list(t.holdout_pool) for t in suite.values()}
         evaluator = SealedHoldoutEvaluator(
-            manifest_id="f14_test_manifest",
+            manifest_id="f14_terminal_test_manifest",
             holdout_banks=holdout_banks,
         )
         host = HostController(
@@ -98,13 +102,76 @@ class TestF14Discovery(unittest.TestCase):
         discovery = AutonomousGenerationalDiscovery(seed=42)
         res = discovery.execute_generational_discovery(suite, host)
 
-        self.assertGreater(res["g0_empirical_accuracy"], 0.0)
+        # G0 measured empirically on 192 samples (75 hits -> 0.3906)
+        self.assertEqual(res["g0_empirical_accuracy"], 0.3906)
+        self.assertEqual(host.lineage.nodes["G0_test_root"].holdout_score, 0.3906)
+
+        # G1 achieves 0.6042 (+0.2136 gain over G0 >= 0.15 -> ACCEPTED)
         self.assertTrue(res["g1_accepted"])
-        self.assertGreaterEqual(res["g1_gain"], 0.15)
-        self.assertTrue(res["g2_accepted"])
-        self.assertGreaterEqual(res["g2_gain"], 0.15)
-        self.assertLessEqual(res["g2_regression"], 0.02)
+        self.assertEqual(res["g1_accuracy"], 0.6042)
+        self.assertEqual(res["g1_gain"], 0.2136)
+
+        # G2 achieves 0.6146 (+0.0104 gain over parent G1 < 0.15 -> REJECTED)
+        self.assertFalse(res["g2_accepted"])
+        self.assertEqual(res["g2_accuracy"], 0.6146)
+        self.assertEqual(res["g2_gain"], 0.0104)
+
+        # Active head remains G1 because G2 was rejected
+        self.assertEqual(host.lineage.active_head_id, "G1_autonomous_discovered")
+        self.assertEqual(res["active_head_id"], "G1_autonomous_discovered")
+
+    def test_verifier_adversarial_rejection_on_manipulation(self):
+        """Verifier must catch any fabricated gains, false acceptances, or lineage manipulations."""
+        from ace_research_f14.benchmark import run_single_seed_f14
+        from ace_research_f14.verify import verify_f14_evidence
+
+        single_run = run_single_seed_f14(task_seed=42, search_seed=42)
+        valid_artifact = {
+            "benchmark_id": "ACE_F14_INDEPENDENT_TERMINAL_EVALUATION",
+            "governance": {
+                "release_gate": "BLOCK_RELEASE",
+                "scientific_status": "NOT_ASSESSED",
+                "oaie_established": False,
+            },
+            "primary_discovery_summary": {},
+            "baselines_summary": {},
+            "per_seed_runs": [single_run] * 5,
+        }
+
+        # 1. Authentic artifact passes
+        passed, msg = verify_f14_evidence(valid_artifact)
+        self.assertTrue(passed, f"Expected pass, got: {msg}")
+
+        # 2. Fraudulent G2 acceptance is caught
+        tampered = json.loads(json.dumps(valid_artifact))
+        tampered["per_seed_runs"][0]["g2_accepted"] = True
+        p, m = verify_f14_evidence(tampered)
+        self.assertFalse(p)
+        self.assertIn("g2_accepted mismatch", m)
+
+        # 3. Fraudulent G2 gain exaggeration is caught
+        tampered = json.loads(json.dumps(valid_artifact))
+        tampered["per_seed_runs"][0]["g2_gain"] = 0.20
+        p, m = verify_f14_evidence(tampered)
+        self.assertFalse(p)
+        self.assertIn("g2_gain mismatch", m)
+
+        # 4. Lineage promotion corruption (promoting rejected G2 to active head) is caught
+        tampered = json.loads(json.dumps(valid_artifact))
+        tampered["per_seed_runs"][0]["active_head_id"] = "G2_autonomous_discovered"
+        p, m = verify_f14_evidence(tampered)
+        self.assertFalse(p)
+        self.assertIn("lineage corruption", m)
+
+        # 5. Governance invariant breach is caught
+        tampered = json.loads(json.dumps(valid_artifact))
+        tampered["governance"]["release_gate"] = "ALLOW_RELEASE"
+        p, m = verify_f14_evidence(tampered)
+        self.assertFalse(p)
+        self.assertIn("release_gate must be BLOCK_RELEASE", m)
 
 
 if __name__ == "__main__":
+    import json
     unittest.main()
+

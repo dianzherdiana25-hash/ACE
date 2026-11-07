@@ -26,8 +26,9 @@ EXPECTED_PRESCORE_HASHES = {
 
 EXPECTED_EVIDENCE_HASHES = {
     "evidence/f13/ace_f13_causal_memory_v1.json.gz": "efa00a78db2d6ab43f1635f6402adaa7049c82be59146268f91e29266324dd03",
-    "evidence/f14/ace_f14_mechanism_discovery_v1.json.gz": "3d97c401131d9335860bbd1d587945a248214b69ccacea3d428c33d70cb783fc",
+    "evidence/f14/ace_f14_mechanism_discovery_v1.json.gz": "4cc363b9ff0fb17f84bc960bc4e94573c10ba038e525d2f7f5fcfd86141a3062",
 }
+
 
 
 def compute_sha256(rel_path: str) -> str:

@@ -319,12 +319,12 @@ class AutonomousGenerationalDiscovery:
         default_ast = ModEqPred(src=LengthOp(src=inp), mod=3, target=0)
         g0_fn, g0_code = compile_ast_to_callable(default_ast)
 
-        # Measure empirical G0 starting accuracy across all holdouts
-        all_holdouts = [h for t in task_suites.values() for h in t.holdout_pool]
-        g0_hits = sum(1 for w, lbl in all_holdouts if g0_fn(w) == lbl)
-        g0_empirical_acc = round(g0_hits / max(1, len(all_holdouts)), 4)
-
+        # 1. Initialize root score empirically via trusted evaluator
         root_id = host_controller.lineage.active_head_id
+        if host_controller.lineage.nodes[root_id].holdout_score == 0.0:
+            g0_empirical_acc = host_controller.initialize_root_score(g0_fn)
+        else:
+            g0_empirical_acc = host_controller.lineage.nodes[root_id].holdout_score
 
         # Determine G1 vs G2 tasks from task metadata or split
         if any(hasattr(t, "generation_target") for t in task_suites.values()):
@@ -349,7 +349,7 @@ class AutonomousGenerationalDiscovery:
         g1_dispatch_fn, g1_code = _build_multi_task_candidate(g1_solvers, default_ast)
         g1_sha = hashlib.sha256(g1_code.encode("utf-8")).hexdigest()
 
-        # Submit G1 to Host Controller
+        # Submit G1 to Host Controller (parent is empirical root G0)
         dec_g1 = host_controller.evaluate_and_gate(
             candidate_id="G1_autonomous_discovered",
             parent_id=root_id,
@@ -388,10 +388,11 @@ class AutonomousGenerationalDiscovery:
         g2_dispatch_fn, g2_code = _build_multi_task_candidate(g2_solvers, default_ast)
         g2_sha = hashlib.sha256(g2_code.encode("utf-8")).hexdigest()
 
-        # Submit G2 to Host Controller
+        # Submit G2 to Host Controller (parent must be G1 if G1 accepted, or root_id)
+        parent_for_g2 = "G1_autonomous_discovered" if dec_g1.status == "ACCEPTED" else root_id
         dec_g2 = host_controller.evaluate_and_gate(
             candidate_id="G2_autonomous_discovered",
-            parent_id="G1_autonomous_discovered" if dec_g1.status == "ACCEPTED" else root_id,
+            parent_id=parent_for_g2,
             generation=2,
             source_sha=g2_sha,
             candidate_fn=lambda w, tid: g2_dispatch_fn(w, tid),
@@ -400,6 +401,17 @@ class AutonomousGenerationalDiscovery:
                 "ast_signatures": {tid: node.signature() for tid, node in g2_solvers.items()},
             },
         )
+
+        # Collect raw predictions and raw labels across all holdout samples
+        raw_samples: List[Tuple[str, str, bool]] = [
+            (tid, w, lbl) for tid, t in task_suites.items() for w, lbl in t.holdout_pool
+        ]
+        raw_labels = [lbl for _, _, lbl in raw_samples]
+        raw_preds = {
+            "g0": [bool(g0_fn(w)) for _, w, _ in raw_samples],
+            "g1": [bool(g1_dispatch_fn(w, tid)) for tid, w, _ in raw_samples],
+            "g2": [bool(g2_dispatch_fn(w, tid)) for tid, w, _ in raw_samples],
+        }
 
         g1_ast_vals = list(g1_solvers.values())
         g2_ast_vals = list(g2_solvers.values())
@@ -419,6 +431,10 @@ class AutonomousGenerationalDiscovery:
             "g2_ast_family_c": g2_solvers.get("task_c1_split_eq_mod2", g2_ast_vals[-1] if g2_ast_vals else default_ast).signature(),
             "g1_solvers_signatures": {tid: node.signature() for tid, node in g1_solvers.items()},
             "g2_solvers_signatures": {tid: node.signature() for tid, node in g2_solvers.items()},
+            "active_head_id": host_controller.lineage.active_head_id,
+            "raw_labels": raw_labels,
+            "raw_predictions": raw_preds,
             "decisions": [dec_g1, dec_g2],
         }
+
 

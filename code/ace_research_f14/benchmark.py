@@ -33,7 +33,13 @@ from .discovery_engine import (
 from .grammar import compile_ast_to_callable
 from .terminal_tasks import create_f14_terminal_suite
 
-PRE_REGISTERED_SEEDS = [42, 137, 256, 512, 1024]
+PRE_REGISTERED_PAIRED_CONFIGS = [
+    {"task_seed": 42, "search_seed": 42},
+    {"task_seed": 101, "search_seed": 137},
+    {"task_seed": 202, "search_seed": 256},
+    {"task_seed": 303, "search_seed": 512},
+    {"task_seed": 404, "search_seed": 1024},
+]
 
 
 def _mean(values: List[float]) -> float:
@@ -61,31 +67,39 @@ def _confidence_interval_95(values: List[float]) -> Tuple[float, float]:
 
 
 def run_single_seed_f14(
-    seed: int,
-    suite_factory: Callable[[], Dict[str, Any]] = create_f14_terminal_suite,
+    seed: int = 42,
+    task_seed: Optional[int] = None,
+    search_seed: Optional[int] = None,
+    suite_factory: Callable[..., Dict[str, Any]] = create_f14_terminal_suite,
 ) -> Dict[str, Any]:
-    """Run single seed discovery and matched baselines."""
-    suite = suite_factory()
+    """Run single paired seed discovery and matched baselines."""
+    t_seed = seed if task_seed is None else task_seed
+    s_seed = seed if search_seed is None else search_seed
+
+    try:
+        suite = suite_factory(task_generation_seed=t_seed)
+    except TypeError:
+        suite = suite_factory()
+
     holdout_banks = {t.task_id: list(t.holdout_pool) for t in suite.values()}
 
-    def _make_host(candidate_root: str) -> HostController:
-        evaluator = SealedHoldoutEvaluator(
-            manifest_id="f14_independent_terminal_manifest_v1",
-            holdout_banks=holdout_banks,
-        )
-        return HostController(
-            evaluator=evaluator,
-            budget=ExecutionBudget(max_execution_seconds=120.0, max_queries=1000, max_candidates=50),
-            sandbox_gate=HostSandboxGate(enforce_os_containment=False),
-            root_candidate_id=candidate_root,
-            root_source_sha=f"root_sha_f14_s{seed}",
-            min_gain=0.15,
-            max_regression=0.02,
-        )
+    evaluator = SealedHoldoutEvaluator(
+        manifest_id=f"f14_independent_terminal_manifest_ts{t_seed}",
+        holdout_banks=holdout_banks,
+    )
+    candidate_root = f"G0_autonomous_root_ts{t_seed}_ss{s_seed}"
+    host_primary = HostController(
+        evaluator=evaluator,
+        budget=ExecutionBudget(max_execution_seconds=120.0, max_queries=1000, max_candidates=50),
+        sandbox_gate=HostSandboxGate(enforce_os_containment=False),
+        root_candidate_id=candidate_root,
+        root_source_sha=f"root_sha_f14_ts{t_seed}_ss{s_seed}",
+        min_gain=0.15,
+        max_regression=0.02,
+    )
 
     # 1. Primary: ACE F14 Autonomous Discovery Engine
-    host_primary = _make_host(f"G0_autonomous_root_s{seed}")
-    discovery = AutonomousGenerationalDiscovery(seed=seed)
+    discovery = AutonomousGenerationalDiscovery(seed=s_seed)
     primary_res = discovery.execute_generational_discovery(suite, host_primary)
 
     # 2. Baseline B1: Empirical Domain Reference (executed empirically on all holdout samples)
@@ -99,7 +113,7 @@ def run_single_seed_f14(
     b1_accuracy = round(b1_hits / max(1, total_b1), 4)
 
     # 3. Baseline B2: Random AST Search (N=50 uniform candidates without error diagnosis)
-    searcher = GrammarSearchEngine(seed=seed)
+    searcher = GrammarSearchEngine(seed=s_seed)
     b2_hits = 0
     total_evals = 0
     for tid, task in suite.items():
@@ -150,7 +164,9 @@ def run_single_seed_f14(
     b5_accuracy = primary_res["g0_empirical_accuracy"]
 
     return {
-        "seed": seed,
+        "task_seed": t_seed,
+        "search_seed": s_seed,
+        "evaluator_manifest_digest": evaluator.manifest.manifest_digest,
         "g0_accuracy": b5_accuracy,
         "g1_accuracy": primary_res["g1_accuracy"],
         "g1_gain": primary_res["g1_gain"],
@@ -159,24 +175,34 @@ def run_single_seed_f14(
         "g2_gain": primary_res["g2_gain"],
         "g2_regression": primary_res["g2_regression"],
         "g2_accepted": primary_res["g2_accepted"],
+        "active_head_id": primary_res.get("active_head_id", host_primary.lineage.active_head_id),
         "b1_accuracy": b1_accuracy,
         "b2_accuracy": b2_accuracy,
         "b3_accuracy": b3_accuracy,
         "b4_accuracy": b4_accuracy,
         "b5_accuracy": b5_accuracy,
+        "candidate_budget_spent": len(host_primary.lineage.nodes),
+        "execution_seconds": round(host_primary.budget.used_seconds, 4),
+        "raw_labels": primary_res.get("raw_labels", []),
+        "raw_predictions": primary_res.get("raw_predictions", {}),
         "g1_solvers_signatures": primary_res.get("g1_solvers_signatures", {}),
         "g2_solvers_signatures": primary_res.get("g2_solvers_signatures", {}),
     }
 
 
 def run_f14_discovery_benchmark(
-    seeds: List[int] = PRE_REGISTERED_SEEDS,
-    suite_factory: Callable[[], Dict[str, Any]] = create_f14_terminal_suite,
+    paired_configs: Optional[List[Dict[str, int]]] = None,
+    suite_factory: Callable[..., Dict[str, Any]] = create_f14_terminal_suite,
 ) -> Dict[str, Any]:
     """Run full pre-registered multi-seed benchmark across independent terminal tasks."""
+    configs = paired_configs or PRE_REGISTERED_PAIRED_CONFIGS
     per_seed_runs: List[Dict[str, Any]] = []
-    for s in seeds:
-        res = run_single_seed_f14(seed=s, suite_factory=suite_factory)
+    for cfg in configs:
+        res = run_single_seed_f14(
+            task_seed=cfg["task_seed"],
+            search_seed=cfg["search_seed"],
+            suite_factory=suite_factory,
+        )
         per_seed_runs.append(res)
 
     # Aggregate metrics
@@ -230,7 +256,7 @@ def run_f14_discovery_benchmark(
     final_results = {
         "benchmark_id": "ACE_F14_INDEPENDENT_TERMINAL_EVALUATION",
         "timestamp": "2026-11-07T13:30:00Z",
-        "seeds": seeds,
+        "paired_configs": configs,
         "evaluation_task_suite": "code/ace_research_f14/terminal_tasks.py",
         "disjoint_task_families": ["family_d", "family_e", "family_f"],
         "primary_discovery_summary": {
@@ -298,7 +324,7 @@ def run_f14_discovery_benchmark(
                 "passed": crit_8_ref_ratio,
             },
             "all_criteria_met": all_criteria_met,
-            "scientific_status": "EMPIRICALLY_VALIDATED" if all_criteria_met else "FALSIFIED_OR_INCONCLUSIVE",
+            "scientific_status": "EMPIRICALLY_VALIDATED" if all_criteria_met else "INCONCLUSIVE_G2_REJECTED",
         },
         "governance": {
             "release_gate": "BLOCK_RELEASE",
@@ -322,3 +348,4 @@ def save_evidence_f14(
     with gzip.open(p, "wb") as f:
         f.write(payload)
     return str(p)
+
