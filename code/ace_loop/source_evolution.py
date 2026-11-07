@@ -204,8 +204,29 @@ GATED_MUTATIONS: Tuple[Tuple[int, int, int, int], ...] = (
 )
 
 
-def gene_from_dict(d: Dict[str, Any]) -> Union[TypedGene, CompositeGene, GatedGene]:
-    """Reconstruct TypedGene, CompositeGene, or GatedGene from dict representation."""
+def gene_from_dict(d: Dict[str, Any]) -> Union[TypedGene, CompositeGene, GatedGene, RelationalGene, DispatchGene]:
+    """Reconstruct TypedGene, CompositeGene, GatedGene, RelationalGene, or DispatchGene from dict representation."""
+    if d.get("is_dispatch", False):
+        return DispatchGene(
+            ordinal=d.get("ordinal", 1),
+            split_len=d.get("split_len", 5),
+            mod_a=d.get("mod_a", 2),
+            mod_b=d.get("mod_b", 3),
+            stride_scale=d.get("stride_scale", 1),
+            true_val=d.get("true_val", 0),
+            false_val=d.get("false_val", 1),
+        )
+    if d.get("is_relational", False):
+        return RelationalGene(
+            ordinal=d.get("ordinal", 1),
+            min_length=d.get("min_length", 4),
+            stride_weight=d.get("stride_weight", 2),
+            density_weight=d.get("density_weight", -1),
+            modulus=d.get("modulus", 0),
+            op=d.get("op", "EQ_ZERO"),
+            true_val=d.get("true_val", 0),
+            false_val=d.get("false_val", 1),
+        )
     if d.get("is_gated", False):
         return GatedGene(
             min_length=d.get("min_length", 4),
@@ -273,6 +294,64 @@ def mutate_gated_gene(ordinal: int) -> GatedGene:
     )
 
 
+RELATIONAL_GENE_RULES: Tuple[Tuple[int, int, int, int, str], ...] = (
+    (4, 2, -1, 0, "EQ_ZERO"),
+    (3, 1, -1, 0, "EQ_ZERO"),
+    (4, 1, 1, 2, "MOD_EQ"),
+    (3, 2, 0, 3, "MOD_EQ"),
+    (4, 1, -1, 3, "MOD_EQ"),
+    (5, 3, -1, 2, "MOD_EQ"),
+    (4, 2, 1, 3, "MOD_EQ"),
+    (3, 0, 1, 2, "MOD_EQ"),
+    (4, 1, 2, 3, "MOD_EQ"),
+    (3, 2, -2, 3, "MOD_EQ"),
+    (4, 1, 0, 2, "MOD_EQ"),
+    (5, 1, -1, 2, "MOD_EQ"),
+)
+
+DISPATCH_GENE_RULES: Tuple[Tuple[int, int, int, int], ...] = (
+    (5, 2, 3, 1),
+    (6, 3, 2, 2),
+    (4, 2, 2, 1),
+    (5, 3, 3, 2),
+    (4, 2, 3, 1),
+    (6, 2, 3, 2),
+    (5, 3, 2, 1),
+    (4, 2, 2, 2),
+)
+
+
+def mutate_relational_gene(ordinal: int) -> RelationalGene:
+    """Deterministically synthesize a relational multi-clause gene."""
+    _check_int(ordinal, 0, 100000, "ordinal")
+    rule = RELATIONAL_GENE_RULES[(ordinal - 1) % len(RELATIONAL_GENE_RULES)]
+    return RelationalGene(
+        ordinal=ordinal,
+        min_length=rule[0],
+        stride_weight=rule[1],
+        density_weight=rule[2],
+        modulus=rule[3],
+        op=rule[4],
+        true_val=0,
+        false_val=1,
+    )
+
+
+def mutate_dispatch_gene(ordinal: int) -> DispatchGene:
+    """Deterministically synthesize a multi-task dispatch gene."""
+    _check_int(ordinal, 0, 100000, "ordinal")
+    rule = DISPATCH_GENE_RULES[(ordinal - 1) % len(DISPATCH_GENE_RULES)]
+    return DispatchGene(
+        ordinal=ordinal,
+        split_len=rule[0],
+        mod_a=rule[1],
+        mod_b=rule[2],
+        stride_scale=rule[3],
+        true_val=0,
+        false_val=1,
+    )
+
+
 def _render_atomic_expr(g: TypedGene) -> str:
     return (
         f"{g.sign} * ("
@@ -284,10 +363,43 @@ def _render_atomic_expr(g: TypedGene) -> str:
 
 
 def generate_source(
-    gene: Union[TypedGene, CompositeGene, GatedGene],
+    gene: Union[TypedGene, CompositeGene, GatedGene, RelationalGene, DispatchGene],
     function_name: str = "evaluate_mechanism",
 ) -> bytes:
     """Generate typed, bounded Python source code from a validated Gene."""
+    if isinstance(gene, DispatchGene):
+        branch_true = f"(0 if ((density % {gene.mod_a}) == 0) else 1)"
+        branch_false = f"(0 if (((stride_val * {gene.stride_scale}) % {gene.mod_b}) == 0) else 1)"
+        code_text = (
+            f"def {function_name}(length: int, density: int, stride_val: int) -> int:\n"
+            f"    return {branch_true} if (length >= {gene.split_len}) else {branch_false}\n"
+        )
+        return code_text.encode("utf-8")
+
+    if isinstance(gene, RelationalGene):
+        if gene.op == "EQ_ZERO":
+            if gene.density_weight < 0:
+                inner_expr = f"((stride_val * {gene.stride_weight}) - (density * {abs(gene.density_weight)}))"
+            else:
+                inner_expr = f"((stride_val * {gene.stride_weight}) + (density * {gene.density_weight}))"
+            cond_expr = f"((length >= {gene.min_length}) and ({inner_expr} == 0))"
+        else:
+            if gene.density_weight < 0:
+                inner_expr = f"((stride_val * {gene.stride_weight}) - (density * {abs(gene.density_weight)}))"
+            elif gene.density_weight == 0:
+                inner_expr = f"(stride_val * {gene.stride_weight})"
+            elif gene.stride_weight == 0:
+                inner_expr = f"(density * {gene.density_weight})"
+            else:
+                inner_expr = f"((stride_val * {gene.stride_weight}) + (density * {gene.density_weight}))"
+            cond_expr = f"((length >= {gene.min_length}) and (({inner_expr} % {gene.modulus}) == 0))"
+
+        code_text = (
+            f"def {function_name}(length: int, density: int, stride_val: int) -> int:\n"
+            f"    return {gene.true_val} if {cond_expr} else {gene.false_val}\n"
+        )
+        return code_text.encode("utf-8")
+
     if isinstance(gene, GatedGene):
         code_text = (
             f"def {function_name}(length: int, density: int, stride_val: int) -> int:\n"
@@ -323,7 +435,7 @@ def generate_source(
         )
         return code_text.encode("utf-8")
 
-    raise SourceEvolutionError("TypedGene, CompositeGene, or GatedGene instance required")
+    raise SourceEvolutionError("TypedGene, CompositeGene, GatedGene, RelationalGene, or DispatchGene required")
 
 
 ALLOWED_AST_NODES = (
