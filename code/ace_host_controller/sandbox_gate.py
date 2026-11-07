@@ -108,21 +108,17 @@ class HostSandboxGate:
         if not self.enforce_os_containment:
             return GateResult(allowed=True, reason="CONTAINMENT_BYPASS_FOR_TESTING")
 
-        # In standard unprivileged Linux process without bwrap/seccomp sandbox,
-        # executing raw untrusted code is unconfined.
-        has_bwrap = os.path.exists("/usr/bin/bwrap")
-        has_docker = os.path.exists("/.dockerenv")
-        has_bubblewrap = os.path.exists("/usr/bin/bubblewrap")
-        
-        # If in a non-containerized standard user environment running uncontained code:
-        # We enforce AST-only safe execution or fail closed.
-        if not (has_bwrap or has_docker or has_bubblewrap):
+        from .boundary import SealingStatus, detect_os_sealing
+
+        sealing = detect_os_sealing()
+        if sealing == SealingStatus.NOT_SEALED:
             return GateResult(
                 allowed=False,
                 reason="BLOCKED_ENVIRONMENT",
-                violations=["No OS sandbox (bwrap/seccomp/container) found for untrusted raw process execution"],
+                violations=["Certified OS process containment (bwrap/nsjail/container) absent; untrusted candidate execution blocked"],
             )
-        return GateResult(allowed=True, reason="CONTAINMENT_VERIFIED")
+        return GateResult(allowed=True, reason=f"CONTAINMENT_VERIFIED_{sealing.value}")
+
 
     def audit_ast(self, code_str: str) -> GateResult:
         """Audit candidate Python code AST for unsafe imports, calls, or attribute traversals."""

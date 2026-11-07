@@ -224,8 +224,29 @@ class HostController:
                 prior_score=parent_score,
                 regression=receipt.prior_regression,
             )
+            # Internalize baseline updating: compute per-task accuracies inside trusted evaluator without leaking to search
+            if hasattr(self.evaluator, "_holdout_banks"):
+                new_baselines: dict[str, float] = {}
+                for tid, bank in self.evaluator._holdout_banks.items():
+                    hits = 0
+                    for inp, expected in bank:
+                        try:
+                            try:
+                                pred = bool(candidate_fn(inp, tid))
+                            except TypeError:
+                                pred = bool(candidate_fn(inp))
+                            if pred == expected:
+                                hits += 1
+                        except Exception:
+                            pass
+                    new_baselines[tid] = round(hits / max(1, len(bank)), 4)
+                if hasattr(self.evaluator, "update_baseline_scores"):
+                    self.evaluator.update_baseline_scores(new_baselines)
+                else:
+                    self.evaluator._prior_baseline_scores = new_baselines
         else:
             status = "REJECTED"
+
             self.lineage.update_status(
                 candidate_id=candidate_id,
                 status="REJECTED",
