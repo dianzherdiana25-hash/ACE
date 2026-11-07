@@ -38,7 +38,11 @@ jobs:
           ace_capability_evolution.test_compositional
           ace_runtime.test_engine
           ace_runtime.test_cli
+          ace_research_repair.test_repair
+          ace_research_repair.test_repair_sandbox
           -v
+      - name: Verify repair evidence artifact
+        run: python -m ace_research_repair.verify --artifact evidence/repair/ace_repair_v1.json.gz
       - name: Verify deterministic composition replay
         run: |
           python -m ace_capability_evolution.compositional --output /tmp/composition.json

@@ -148,6 +148,17 @@ class SandboxSecurityTests(unittest.TestCase):
         self.assertFalse(res["all_passed"])
         self.assertEqual(res["cases"][0]["exception_type"], "SystemExit")
 
+    def test_ast_deny_by_default_blocks_getattr_and_attribute_calls(self) -> None:
+        """Dynamic getattr on forbidden attributes and attribute method calls are blocked."""
+        for src in (
+            "def solve(x):\n    return getattr(x, '__subclasses__')()\n",
+            "def solve(x):\n    return getattr(x, 'eval')('1+1')\n",
+            "def solve(x):\n    return x.eval('1+1')\n",
+        ):
+            ast_ok, err = audit_candidate_ast(src)
+            self.assertFalse(ast_ok)
+            self.assertIn("Forbidden", str(err))
+
 
 if __name__ == "__main__":
     unittest.main()

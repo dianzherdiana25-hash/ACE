@@ -52,6 +52,7 @@ FORBIDDEN_CALLS = frozenset({
 FORBIDDEN_ATTRS = frozenset({
     "__subclasses__", "__bases__", "__globals__", "__builtins__",
     "__code__", "__closure__", "__func__", "__self__",
+    "__class__", "__mro__", "__dict__",
 })
 
 
@@ -110,6 +111,12 @@ def audit_candidate_ast(source_code: str) -> tuple[bool, str | None]:
         elif isinstance(node, ast.Call):
             if isinstance(node.func, ast.Name) and node.func.id in FORBIDDEN_CALLS:
                 return False, f"ForbiddenCall:{node.func.id}"
+            if isinstance(node.func, ast.Attribute) and node.func.attr in FORBIDDEN_CALLS:
+                return False, f"ForbiddenAttributeCall:{node.func.attr}"
+            if isinstance(node.func, ast.Name) and node.func.id in {"getattr", "setattr", "delattr"}:
+                if len(node.args) >= 2 and isinstance(node.args[1], ast.Constant):
+                    if str(node.args[1].value) in FORBIDDEN_ATTRS or str(node.args[1].value) in FORBIDDEN_CALLS:
+                        return False, f"ForbiddenDynamicAttribute:{node.args[1].value}"
         elif isinstance(node, ast.Attribute):
             if node.attr in FORBIDDEN_ATTRS:
                 return False, f"ForbiddenAttribute:{node.attr}"
