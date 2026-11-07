@@ -11,6 +11,7 @@ from ace_loop.source_evolution import (
     DispatchGene,
     GatedGene,
     RelationalGene,
+    RelationalGatedGene,
     SEED_GENE,
     TypedGene,
     compile_function,
@@ -21,6 +22,7 @@ from ace_loop.source_evolution import (
     mutate_dispatch_gene,
     mutate_gated_gene,
     mutate_gene,
+    mutate_relational_gated_gene,
     mutate_relational_gene,
     validate_ast,
 )
@@ -52,25 +54,28 @@ class SourceGenerator:
             strat == "MULTI_TASK_DISPATCH"
             or "dispatch" in hypothesis.statement.lower()
         )
-        is_relational = (
-            strat == "RELATIONAL_MULTI_CLAUSE"
+        is_relational_gated = (
+            strat in ("SYNTHESIZE_RELATIONAL_MULTI_CLAUSE", "RELATIONAL_GATED", "RELATIONAL_MULTI_CLAUSE")
+            or "relational gated" in hypothesis.statement.lower()
             or "relational" in hypothesis.statement.lower()
             or "multi-clause" in hypothesis.statement.lower()
+            or "conjunction" in hypothesis.statement.lower()
+            or "disjunction" in hypothesis.statement.lower()
         )
         is_gated = (
             strat == "SYNTHESIZE_GATED_EXPRESSION_TREE"
             or "gated" in hypothesis.statement.lower()
             or "expression tree" in hypothesis.statement.lower()
-        )
+        ) and not is_relational_gated
         is_composite = (
             strat == "SYNTHESIZE_COMPOSITE_MECHANISM"
             or "composite" in hypothesis.statement.lower()
-        )
+        ) and not is_relational_gated
 
         if is_dispatch:
             mutated_gene = mutate_dispatch_gene(ordinal=ordinal)
-        elif is_relational:
-            mutated_gene = mutate_relational_gene(ordinal=ordinal)
+        elif is_relational_gated:
+            mutated_gene = mutate_relational_gated_gene(ordinal=ordinal)
         elif is_gated:
             mutated_gene = mutate_gated_gene(ordinal=ordinal)
         elif is_composite:
@@ -78,7 +83,7 @@ class SourceGenerator:
             if isinstance(base_gene, CompositeGene):
                 gene_a = base_gene.gene_a
                 gene_b = base_gene.gene_b
-            elif isinstance(base_gene, (GatedGene, RelationalGene, DispatchGene)):
+            elif isinstance(base_gene, (GatedGene, RelationalGene, RelationalGatedGene, DispatchGene)):
                 gene_a = SEED_GENE
                 gene_b = mutate_gene(SEED_GENE, ordinal + 2)
             else:
@@ -87,7 +92,7 @@ class SourceGenerator:
             mutated_gene = mutate_composite_gene(gene_a, gene_b, ordinal=ordinal)
         else:
             parent_gene = gene_from_dict(parent_candidate.gene_dict) if parent_candidate else SEED_GENE
-            if isinstance(parent_gene, (CompositeGene, GatedGene, RelationalGene, DispatchGene)):
+            if isinstance(parent_gene, (CompositeGene, GatedGene, RelationalGene, RelationalGatedGene, DispatchGene)):
                 parent_gene = SEED_GENE
             mutated_gene = mutate_gene(parent_gene, ordinal=ordinal)
 

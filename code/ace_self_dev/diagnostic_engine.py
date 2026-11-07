@@ -19,17 +19,27 @@ class DiagnosticEngine:
     ) -> SystemDiagnosis:
         """Run diagnostic pass across tasks' train pools to identify lowest-performing capability."""
         task_scores: Dict[str, float] = {}
+        train_scores: Dict[str, float] = {}
+        val_scores: Dict[str, float] = {}
         task_cues: Dict[str, str] = {}
 
         for tid, task in tasks.items():
-            hits = sum(1 for w, lbl in task.train_pool if baseline_fn(w) == lbl)
-            acc = round(hits / max(1, len(task.train_pool)), 4)
-            task_scores[tid] = acc
+            train_hits = sum(1 for w, lbl in task.train_pool if baseline_fn(w) == lbl)
+            train_acc = round(train_hits / max(1, len(task.train_pool)), 4)
+            train_scores[tid] = train_acc
+
+            val_hits = sum(1 for w, lbl in task.validation_pool if baseline_fn(w) == lbl)
+            val_acc = round(val_hits / max(1, len(task.validation_pool)), 4)
+            val_scores[tid] = val_acc
+
+            # Strategy selection relies on combined train and validation metrics
+            composite_acc = round(0.5 * train_acc + 0.5 * val_acc, 4)
+            task_scores[tid] = composite_acc
 
             # Analyze error patterns on train pool
             false_pos = sum(1 for w, lbl in task.train_pool if baseline_fn(w) and not lbl)
             false_neg = sum(1 for w, lbl in task.train_pool if not baseline_fn(w) and lbl)
-            task_cues[tid] = f"acc={acc}, fp={false_pos}, fn={false_neg}"
+            task_cues[tid] = f"train={train_acc}, val={val_acc}, fp={false_pos}, fn={false_neg}"
 
         # Identify weakest task
         weakest_tid = min(task_scores, key=lambda k: task_scores[k])
@@ -47,6 +57,8 @@ class DiagnosticEngine:
             error_cue=task_cues[weakest_tid],
             diagnostic_details={
                 "task_scores": task_scores,
+                "train_scores": train_scores,
+                "val_scores": val_scores,
                 "task_cues": task_cues,
                 "target_description": weakest_task.description,
             },
