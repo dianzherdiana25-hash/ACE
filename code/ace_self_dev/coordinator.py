@@ -53,6 +53,7 @@ from .stagnation_detector import (
     StagnationType,
 )
 from .failure_constraint_engine import FailureConstraintEngine
+from .metacognitive_predictor import MetacognitivePredictor
 from .primitive_synthesizer import PrimitiveSynthesizer
 from .quality_diversity import QualityDiversityArchive
 from .state_manager import StateManager
@@ -98,6 +99,10 @@ class SelfDevelopmentCoordinator:
         )
         self.primitive_synthesizer = PrimitiveSynthesizer(
             library_path=str(self.checkpoint_dir / "primitives_library.json")
+        )
+        self.metacognitive_predictor = MetacognitivePredictor(
+            risk_tolerance_threshold=0.70,
+            storage_path=str(self.checkpoint_dir / "metacognitive_memory.json"),
         )
 
     def search_and_select_candidate(
@@ -302,6 +307,14 @@ class SelfDevelopmentCoordinator:
                 task=target_task,
             )
 
+            # 4.6. METACOGNITIVE PRE-EXECUTION ABSTENTION
+            task_constraints = self.failure_constraint_engine.get_constraints_for_task(target_task_id)
+            should_abstain, failure_risk, abstain_reason = self.metacognitive_predictor.should_abstain(
+                candidate=candidate,
+                failure_constraints=task_constraints,
+                task_id=target_task_id,
+            )
+
             # 5. EVALUATE
             if stagnation_check.is_stagnated or not stagnation_check.should_evaluate:
                 # Halt redundant evaluation! Zero queries to sealed holdout!
@@ -328,6 +341,37 @@ class SelfDevelopmentCoordinator:
                     state_digest_before=state_digest_before,
                     provenance_proof=candidate.provenance_proof.to_dict() if candidate.provenance_proof else {},
                 )
+            elif should_abstain:
+                # Pre-execution abstention: save $0 budget and prevent uninformative evaluator calls!
+                receipt = EvaluationReceipt(
+                    receipt_id=f"receipt_abstain_{candidate.candidate_id}_c{cycle_id}",
+                    evaluator_manifest_digest="SKIPPED_DUE_TO_PREDICTED_FAILURE",
+                    candidate_id=candidate.candidate_id,
+                    parent_id=active_head_id,
+                    train_score=diagnosis.baseline_score,
+                    validation_score=diagnosis.baseline_score,
+                    holdout_score=diagnosis.baseline_score,
+                    gain_over_parent=0.0,
+                    prior_regression=0.0,
+                    decision=CandidateDecision.ABSTAINED,
+                    decision_reason=abstain_reason,
+                    evaluator_calls=0,
+                    cpu_seconds=0.0,
+                    memory_mb=0.0,
+                    cost_usd=0.0,
+                    receipt_signature=f"ABSTAIN_{candidate.candidate_id[:8]}",
+                    key_fingerprint="NONE",
+                    timestamp=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                    prior_cycle_id=prior_cycle_id,
+                    state_digest_before=state_digest_before,
+                    provenance_proof=candidate.provenance_proof.to_dict() if candidate.provenance_proof else {},
+                )
+                self.metacognitive_predictor.record_outcome(
+                    candidate_id=candidate.candidate_id,
+                    predicted_prob=failure_risk,
+                    actual_failure=True,
+                    executed=False,
+                )
             else:
                 if host_controller is None:
                     holdout_banks = {tid: list(t.sealed_confirmation_holdout) for tid, t in tasks.items()}
@@ -336,8 +380,8 @@ class SelfDevelopmentCoordinator:
                         holdout_banks=holdout_banks,
                     )
                     host_controller = HostController(
-                        evaluator=sealed_eval,
                         budget=ExecutionBudget(max_execution_seconds=120.0, max_queries=500, max_candidates=20),
+                        evaluator=sealed_eval,
                         sandbox_gate=HostSandboxGate(enforce_os_containment=False),
                         root_candidate_id=active_head_id,
                         root_source_sha=f"root_sha_c{cycle_id}",
@@ -353,6 +397,15 @@ class SelfDevelopmentCoordinator:
                     host_controller=host_controller,
                     prior_cycle_id=prior_cycle_id,
                     state_digest_before=state_digest_before,
+                )
+
+                # Record empirical outcome in metacognitive predictor
+                actual_failed = (receipt.decision != CandidateDecision.ACCEPTED)
+                self.metacognitive_predictor.record_outcome(
+                    candidate_id=candidate.candidate_id,
+                    predicted_prob=failure_risk,
+                    actual_failure=actual_failed,
+                    executed=True,
                 )
 
                 # Register novel evaluated candidate in bitvector catalog
@@ -406,6 +459,7 @@ class SelfDevelopmentCoordinator:
                 "state_digest_before": receipt.state_digest_before,
                 "provenance_proof": receipt.provenance_proof,
                 "stagnation_check": stagnation_check.to_dict(),
+                "metacognitive_forecast": self.metacognitive_predictor.forecast(candidate, task_constraints).to_dict(),
             }
             self.checkpointer.save_checkpoint(ckpt)
 
@@ -507,6 +561,7 @@ class SelfDevelopmentCoordinator:
                 "active_head_id": active_head,
                 "is_promoted": is_promoted,
                 "decision": receipt.decision.value,
+                "decision_reason": receipt.decision_reason,
                 "candidate_id": candidate.candidate_id,
                 "author_type": candidate.author_type.value,
                 "target_task_id": target_task_id,
@@ -519,6 +574,7 @@ class SelfDevelopmentCoordinator:
                 "is_stagnated": stagnation_check.is_stagnated,
                 "stagnation_type": stagnation_check.stagnation_type.value,
                 "should_commit": stagnation_check.should_commit,
+                "should_abstain": should_abstain,
                 "next_agenda_priority": next_goal.to_dict(),
                 "governance": {
                     "release_gate": "BLOCK_RELEASE",

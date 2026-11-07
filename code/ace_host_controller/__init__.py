@@ -59,6 +59,21 @@ from .evaluator_v2 import (
     OracleBoundaryViolation,
     PreRegistrationCommitment,
 )
+from .resilient_watchdog import (
+    CycleStallTimeoutError,
+    DiagnosticDump,
+    RecoveryFailedError,
+    ResilientWatchdog,
+    ResourceStats,
+    StateIntegrityError,
+    TelemetryBeacon,
+    WatchdogConfig,
+    WatchdogError,
+    compute_merkle_root,
+    recover_research_state,
+    verify_merkle_tree,
+    verify_state_merkle_chain,
+)
 
 __all__ = [
     "AcceptanceDecision",
@@ -69,6 +84,8 @@ __all__ = [
     "ChainedExposureRecord",
     "ContaminationDetectedError",
     "ContaminationError",
+    "CycleStallTimeoutError",
+    "DiagnosticDump",
     "DualOracleHarness",
     "EvaluationReceipt",
     "EvaluatorManifest",
@@ -87,12 +104,24 @@ __all__ = [
     "OracleBoundaryViolation",
     "PermitDeniedError",
     "PreRegistrationCommitment",
+    "RecoveryFailedError",
+    "ResilientWatchdog",
+    "ResourceStats",
     "RollbackRecord",
     "SandboxSecurityError",
     "SealedHoldoutEvaluator",
     "SealingStatus",
+    "StateIntegrityError",
     "SubprocessSealedEvaluator",
+    "TelemetryBeacon",
+    "WatchdogConfig",
+    "WatchdogError",
+    "compute_merkle_root",
     "detect_os_sealing",
+    "recover_research_state",
+    "verify_merkle_tree",
+    "verify_state_merkle_chain",
 ]
+
 
 

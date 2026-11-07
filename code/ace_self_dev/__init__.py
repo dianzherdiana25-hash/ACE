@@ -4,9 +4,11 @@ from .models import (
     CandidateDecision,
     CodeCandidate,
     CycleCheckpoint,
+    EmpiricalValidationProof,
     EvaluationReceipt,
     NextAgendaPriority,
     PersistentResearchState,
+    PromotionReceipt,
     ProvenanceProof,
     ResearchHypothesis,
     SystemDiagnosis,
@@ -31,6 +33,25 @@ from .strategy_repair import (
 from .failure_constraint_engine import FailureConstraint, FailureConstraintEngine
 from .quality_diversity import EliteEntry, QualityDiversityArchive
 from .primitive_synthesizer import PrimitiveSynthesizer, SynthesizedPrimitive
+from .metacognitive_predictor import (
+    CalibrationReport,
+    CandidateFeatures,
+    HighRiskHeuristic,
+    MetacognitiveForecast,
+    MetacognitivePredictor,
+    ReliabilityBin,
+    compute_brier_score,
+    compute_calibration_report,
+    compute_expected_calibration_error,
+)
+from .lineage_manager import CryptographicLineageNode, LineageManager
+from .generational_ladder import (
+    GenerationalCandidateSynthesizer,
+    GenerationalCompositeASTNode,
+    GenerationalLadder,
+    GenerationalLibrary,
+    GenerationalMilestone,
+)
 
 __all__ = [
     "AuthorType",
@@ -63,4 +84,22 @@ __all__ = [
     "QualityDiversityArchive",
     "PrimitiveSynthesizer",
     "SynthesizedPrimitive",
+    "CalibrationReport",
+    "CandidateFeatures",
+    "HighRiskHeuristic",
+    "MetacognitiveForecast",
+    "MetacognitivePredictor",
+    "ReliabilityBin",
+    "compute_brier_score",
+    "compute_calibration_report",
+    "compute_expected_calibration_error",
+    "EmpiricalValidationProof",
+    "PromotionReceipt",
+    "CryptographicLineageNode",
+    "LineageManager",
+    "GenerationalMilestone",
+    "GenerationalLibrary",
+    "GenerationalCompositeASTNode",
+    "GenerationalCandidateSynthesizer",
+    "GenerationalLadder",
 ]

@@ -30,6 +30,7 @@ class CandidateDecision(str, Enum):
     REJECTED = "REJECTED"
     BLOCKED = "BLOCKED"
     STAGNATED = "STAGNATED"
+    ABSTAINED = "ABSTAINED"
 
 
 @dataclass(frozen=True)
@@ -166,6 +167,109 @@ class EvaluationReceipt:
     state_digest_before: str = ""
     state_digest_after: str = ""
     provenance_proof: Optional[Dict[str, Any]] = None
+
+
+@dataclass(frozen=True)
+class EmpiricalValidationProof:
+    """Empirical validation proof establishing holdout gain, non-regression, and manifest validity."""
+    proof_id: str
+    candidate_id: str
+    parent_id: str
+    generation: int
+    holdout_score: float
+    baseline_score: float
+    gain_over_parent: float
+    prior_regression: float
+    task_scores: Dict[str, float]
+    evaluator_manifest_digest: str
+    witness_count: int
+    proof_digest: str
+    timestamp: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "proof_id": self.proof_id,
+            "candidate_id": self.candidate_id,
+            "parent_id": self.parent_id,
+            "generation": self.generation,
+            "holdout_score": self.holdout_score,
+            "baseline_score": self.baseline_score,
+            "gain_over_parent": self.gain_over_parent,
+            "prior_regression": self.prior_regression,
+            "task_scores": self.task_scores,
+            "evaluator_manifest_digest": self.evaluator_manifest_digest,
+            "witness_count": self.witness_count,
+            "proof_digest": self.proof_digest,
+            "timestamp": self.timestamp,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> EmpiricalValidationProof:
+        return cls(
+            proof_id=data["proof_id"],
+            candidate_id=data["candidate_id"],
+            parent_id=data["parent_id"],
+            generation=data["generation"],
+            holdout_score=float(data["holdout_score"]),
+            baseline_score=float(data["baseline_score"]),
+            gain_over_parent=float(data["gain_over_parent"]),
+            prior_regression=float(data.get("prior_regression", 0.0)),
+            task_scores=data.get("task_scores", {}),
+            evaluator_manifest_digest=data.get("evaluator_manifest_digest", ""),
+            witness_count=int(data.get("witness_count", 0)),
+            proof_digest=data.get("proof_digest", ""),
+            timestamp=data.get("timestamp", ""),
+        )
+
+
+@dataclass(frozen=True)
+class PromotionReceipt:
+    """Cryptographic receipt verifying certified generational promotion (G_k -> G_{k+1})."""
+    receipt_id: str
+    generation: int
+    candidate_id: str
+    parent_id: str
+    source_sha: str
+    parent_merkle_hash: str
+    merkle_node_hash: str
+    empirical_proof: EmpiricalValidationProof
+    primitives_extracted: List[str]
+    receipt_signature: str
+    key_fingerprint: str
+    timestamp: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "receipt_id": self.receipt_id,
+            "generation": self.generation,
+            "candidate_id": self.candidate_id,
+            "parent_id": self.parent_id,
+            "source_sha": self.source_sha,
+            "parent_merkle_hash": self.parent_merkle_hash,
+            "merkle_node_hash": self.merkle_node_hash,
+            "empirical_proof": self.empirical_proof.to_dict(),
+            "primitives_extracted": self.primitives_extracted,
+            "receipt_signature": self.receipt_signature,
+            "key_fingerprint": self.key_fingerprint,
+            "timestamp": self.timestamp,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> PromotionReceipt:
+        return cls(
+            receipt_id=data["receipt_id"],
+            generation=data["generation"],
+            candidate_id=data["candidate_id"],
+            parent_id=data["parent_id"],
+            source_sha=data["source_sha"],
+            parent_merkle_hash=data["parent_merkle_hash"],
+            merkle_node_hash=data["merkle_node_hash"],
+            empirical_proof=EmpiricalValidationProof.from_dict(data["empirical_proof"]),
+            primitives_extracted=data.get("primitives_extracted", []),
+            receipt_signature=data["receipt_signature"],
+            key_fingerprint=data["key_fingerprint"],
+            timestamp=data["timestamp"],
+        )
 
 
 @dataclass(frozen=True)

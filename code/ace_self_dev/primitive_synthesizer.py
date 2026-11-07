@@ -131,10 +131,115 @@ class PrimitiveSynthesizer:
                     self._primitives[pid] = prim
                     discovered.append(prim)
 
+        # 3. Gated modular congruence extraction
+        elif gene_dict.get("is_gated"):
+            mod = gene_dict.get("modulus", 3)
+            sw = gene_dict.get("stride_weight", 1)
+            dw = gene_dict.get("density_weight", 1)
+            res = gene_dict.get("target_residue", 0)
+            kernel_expr = f"(((stride_val * {sw} + density * {dw})) % {mod}) == {res}"
+            func_name = f"prim_gated_m{mod}_s{abs(sw)}_d{abs(dw)}"
+            p_code = (
+                f"def {func_name}(length: int, density: int, stride_val: int) -> int:\n"
+                f"    return 0 if ({kernel_expr}) else 1\n"
+            )
+            sha = hashlib.sha256(p_code.encode("utf-8")).hexdigest()
+            pid = "PRIM_" + sha[:10]
+            if pid not in self._primitives:
+                validate_ast(p_code.encode("utf-8"), expected_name=func_name)
+                prim = SynthesizedPrimitive(
+                    primitive_id=pid,
+                    name=f"gated_congruence_mod{mod}",
+                    signature="(length: int, density: int, stride_val: int) -> int",
+                    expression_body=kernel_expr,
+                    source_code=p_code,
+                    source_sha=sha,
+                    complexity_cost=3,
+                    compression_value=1.30,
+                    discovered_task_id=task_id,
+                    origin_candidate_id=candidate.candidate_id,
+                )
+                self._primitives[pid] = prim
+                discovered.append(prim)
+
+        # 4. Multi-Task Dispatch modular branch extraction
+        elif gene_dict.get("is_dispatch"):
+            mod_a = gene_dict.get("mod_a", 2)
+            mod_b = gene_dict.get("mod_b", 3)
+            ss = gene_dict.get("stride_scale", 1)
+            # Branch A: Density parity kernel
+            kernel_a = f"(density % {mod_a}) == 0"
+            func_a = f"prim_disp_density_m{mod_a}"
+            code_a = (
+                f"def {func_a}(length: int, density: int, stride_val: int) -> int:\n"
+                f"    return 0 if ({kernel_a}) else 1\n"
+            )
+            sha_a = hashlib.sha256(code_a.encode("utf-8")).hexdigest()
+            pid_a = "PRIM_" + sha_a[:10]
+            if pid_a not in self._primitives:
+                validate_ast(code_a.encode("utf-8"), expected_name=func_a)
+                prim_a = SynthesizedPrimitive(
+                    primitive_id=pid_a,
+                    name=f"dispatch_density_parity_mod{mod_a}",
+                    signature="(length: int, density: int, stride_val: int) -> int",
+                    expression_body=kernel_a,
+                    source_code=code_a,
+                    source_sha=sha_a,
+                    complexity_cost=2,
+                    compression_value=1.20,
+                    discovered_task_id=task_id,
+                    origin_candidate_id=candidate.candidate_id,
+                )
+                self._primitives[pid_a] = prim_a
+                discovered.append(prim_a)
+
+            # Branch B: Strided modulus kernel
+            kernel_b = f"((stride_val * {ss}) % {mod_b}) == 0"
+            func_b = f"prim_disp_stride_m{mod_b}"
+            code_b = (
+                f"def {func_b}(length: int, density: int, stride_val: int) -> int:\n"
+                f"    return 0 if ({kernel_b}) else 1\n"
+            )
+            sha_b = hashlib.sha256(code_b.encode("utf-8")).hexdigest()
+            pid_b = "PRIM_" + sha_b[:10]
+            if pid_b not in self._primitives:
+                validate_ast(code_b.encode("utf-8"), expected_name=func_b)
+                prim_b = SynthesizedPrimitive(
+                    primitive_id=pid_b,
+                    name=f"dispatch_strided_mod{mod_b}",
+                    signature="(length: int, density: int, stride_val: int) -> int",
+                    expression_body=kernel_b,
+                    source_code=code_b,
+                    source_sha=sha_b,
+                    complexity_cost=2,
+                    compression_value=1.20,
+                    discovered_task_id=task_id,
+                    origin_candidate_id=candidate.candidate_id,
+                )
+                self._primitives[pid_b] = prim_b
+                discovered.append(prim_b)
+
         if discovered:
             self._save()
 
         return discovered
+
+    def register_primitive(self, primitive: SynthesizedPrimitive) -> bool:
+        """Register a verified SynthesizedPrimitive directly into the library."""
+        if primitive.primitive_id in self._primitives:
+            return False
+        # Verify AST safety
+        fn_name = primitive.source_code.split("def ")[1].split("(")[0]
+        validate_ast(primitive.source_code.encode("utf-8"), expected_name=fn_name)
+        self._primitives[primitive.primitive_id] = primitive
+        self._save()
+        return True
+
+    def get_primitive(self, primitive_id: str) -> Optional[SynthesizedPrimitive]:
+        return self._primitives.get(primitive_id)
+
+    def has_primitive(self, primitive_id: str) -> bool:
+        return primitive_id in self._primitives
 
     def get_all_primitives(self) -> List[SynthesizedPrimitive]:
         return list(self._primitives.values())

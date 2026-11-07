@@ -18,6 +18,7 @@ sys.path.insert(0, str(REPO_ROOT / "code"))
 
 from ace_self_dev.coordinator import SelfDevelopmentCoordinator
 from ace_self_dev.models import AuthorType
+from ace_host_controller.resilient_watchdog import ResilientWatchdog, WatchdogConfig
 
 
 def log(msg: str):
@@ -96,48 +97,73 @@ def run_daemon_loop(batch_size: int = 2, sleep_seconds: int = 15):
     log(f"Repository Root: {REPO_ROOT}")
     log(f"Batch Size: {batch_size} cycles | Inter-batch Sleep: {sleep_seconds}s")
 
+    watchdog = ResilientWatchdog(
+        WatchdogConfig(
+            state_dir=str(REPO_ROOT / "checkpoints" / "self_dev"),
+            diagnostic_dir=str(REPO_ROOT / "evidence" / "self_dev" / "diagnostics"),
+            heartbeat_file="daemon_heartbeat.json",
+            cycle_timeout_seconds=60.0,
+            heartbeat_interval_seconds=15.0,
+        )
+    )
+
+    log("Verifying persistent research state integrity...")
+    valid_state = watchdog.ensure_valid_state()
+    cycle_cnt = valid_state.get("cycle_count", 0)
+    state_dig = str(valid_state.get("state_digest", ""))[:16]
+    log(f"State verified: CycleCount={cycle_cnt}, Digest={state_dig}...")
+
+    watchdog.start_background_monitor()
+
     coord = SelfDevelopmentCoordinator(
         checkpoint_dir=str(REPO_ROOT / "checkpoints" / "self_dev"),
         evidence_dir=str(REPO_ROOT / "evidence" / "self_dev"),
     )
 
     iteration = 0
-    while True:
-        iteration += 1
-        log(f"--- Starting Autonomous Iteration {iteration} (Batch: {batch_size} cycles) ---")
+    try:
+        while True:
+            iteration += 1
+            log(f"--- Starting Autonomous Iteration {iteration} (Batch: {batch_size} cycles) ---")
 
-        for step in range(1, batch_size + 1):
-            try:
-                res = coord.run_autonomous_cycle(author_type=AuthorType.ACE_AUTONOMOUS_V02)
-                cid = res.get("cycle_id")
-                dec = res.get("decision")
-                tid = res.get("target_task_id") or res.get("hypothesis", {}).get("target_task_id", "unknown")
-                gain = res.get("gain_over_parent", 0.0)
-                holdout = res.get("holdout_score", 0.0)
-                promoted = res.get("is_promoted", False)
-                head = res.get("active_head_id")
+            for step in range(1, batch_size + 1):
+                try:
+                    res = watchdog.run_guarded_cycle(
+                        coord.run_autonomous_cycle,
+                        author_type=AuthorType.ACE_AUTONOMOUS_V02,
+                        timeout_seconds=60.0,
+                        fallback_on_timeout=True,
+                    )
+                    cid = res.get("cycle_id")
+                    dec = res.get("decision")
+                    tid = res.get("target_task_id") or res.get("hypothesis", {}).get("target_task_id", "unknown")
+                    gain = res.get("gain_over_parent", 0.0)
+                    holdout = res.get("holdout_score", 0.0)
+                    promoted = res.get("is_promoted", False)
+                    head = res.get("active_head_id")
 
-                log(
-                    f"Step {step}/{batch_size} -> Cycle {cid} Completed: "
-                    f"Task={tid}, Gain={gain:+.4f}, Holdout={holdout:.4f}, Decision={dec}, Promoted={promoted}, ActiveHead={head}"
-                )
+                    log(
+                        f"Step {step}/{batch_size} -> Cycle {cid} Completed: "
+                        f"Task={tid}, Gain={gain:+.4f}, Holdout={holdout:.4f}, Decision={dec}, Promoted={promoted}, ActiveHead={head}"
+                    )
 
-                # Halt redundant evaluations and prevent uninformative commits
-                should_commit = res.get("should_commit", True)
-                if not should_commit or dec in ("STAGNATED", "BLOCKED"):
-                    log(f"Cycle {cid} was halted/uninformative ({dec}). Skipping git commit to prevent repository clutter.")
-                else:
-                    git_commit_and_push(cid, dec, tid)
+                    # Halt redundant evaluations and prevent uninformative commits
+                    should_commit = res.get("should_commit", True)
+                    if not should_commit or dec in ("STAGNATED", "BLOCKED", "STALLED"):
+                        log(f"Cycle {cid} was halted/uninformative ({dec}). Skipping git commit to prevent repository clutter.")
+                    else:
+                        git_commit_and_push(cid, dec, tid)
 
-                next_strat = res.get("next_agenda_priority", {}).get("strategy")
-                if next_strat == "SEARCH_SPACE_EXHAUSTED":
-                    log("StrategyRepair indicates SEARCH_SPACE_EXHAUSTED: All representation families across all tasks explored.")
-                    log("Cleanly halting autonomous daemon loop.")
-                    return
+                    next_strat = res.get("next_agenda_priority", {}).get("strategy")
+                    if next_strat == "SEARCH_SPACE_EXHAUSTED":
+                        log("StrategyRepair indicates SEARCH_SPACE_EXHAUSTED: All representation families across all tasks explored.")
+                        log("Cleanly halting autonomous daemon loop.")
+                        return
 
-            except Exception as e:
-                log(f"Error in cycle execution: {e}")
-                time.sleep(5)
+                except Exception as e:
+                    log(f"Error in cycle execution: {e}")
+                    time.sleep(5)
+
 
         log(f"Iteration {iteration} complete. Running external verifier...")
         try:
@@ -157,7 +183,11 @@ def run_daemon_loop(batch_size: int = 2, sleep_seconds: int = 15):
 
         log(f"Sleeping {sleep_seconds}s before next iteration...")
         time.sleep(sleep_seconds)
+    finally:
+        log("Halting watchdog background monitor...")
+        watchdog.stop_background_monitor()
 
 
 if __name__ == "__main__":
     run_daemon_loop(batch_size=2, sleep_seconds=15)
+
