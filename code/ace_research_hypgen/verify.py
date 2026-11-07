@@ -54,10 +54,12 @@ def verify_hypgen_artifact(artifact_path: Path) -> dict[str, Any]:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("artifact", type=Path, default=Path("evidence/hypgen/f10_hypothesis_synthesis_v1.json.gz"), nargs="?")
+    parser.add_argument("--artifact", type=Path, default=None, dest="artifact_opt", help="Optional artifact path alias")
     args = parser.parse_args(argv)
 
+    target_path = args.artifact_opt or args.artifact
     try:
-        res = verify_hypgen_artifact(args.artifact)
+        res = verify_hypgen_artifact(target_path)
         print(f"PASS: F10 verifier ok. Decision={res['f10_decision']} (delta={res['delta_vs_random']})")
         return 0
     except Exception as e:
