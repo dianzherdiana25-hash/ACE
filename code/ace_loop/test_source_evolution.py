@@ -129,6 +129,132 @@ class TestSourceEvolution(unittest.TestCase):
         # length=2 -> returns 1
         self.assertEqual(fn(2, 1, 2), 1)
 
+    def test_relational_gated_gene_bounds_validation(self):
+        """Verify boundary checks on operators, variables, and combiners in RelationalGatedGene."""
+        with self.assertRaises(SourceEvolutionError):
+            RelationalGatedGene(length_op="INVALID_OP")
+        with self.assertRaises(SourceEvolutionError):
+            RelationalGatedGene(boundary_op="~=")
+        with self.assertRaises(SourceEvolutionError):
+            RelationalGatedGene(congruence_op=">")
+        with self.assertRaises(SourceEvolutionError):
+            RelationalGatedGene(boundary_var="unauthorized_var")
+        with self.assertRaises(SourceEvolutionError):
+            RelationalGatedGene(combiner="XOR")
+        with self.assertRaises(SourceEvolutionError):
+            RelationalGatedGene(modulus=1)  # modulus must be >= 2
+
+    def test_relational_gated_gene_conjunction_and_execution(self):
+        """Verify multi-clause conjunction (AND) generation, AST validation, and execution."""
+        g = mutate_relational_gated_gene(1)
+        self.assertEqual(g.combiner, "AND")
+        self.assertEqual(g.clause_type, "CONJUNCTION_AND")
+
+        src = generate_source(g)
+        self.assertIn(b" and ", src)
+        validate_ast(src)
+
+        fn = compile_function(src, g)
+        # Ordinal 1: (length >= 4) AND (((stride_val * 1 + density * 1) % 3) == 0) AND (density <= 4)
+        # Test matching case: length=5, density=2, stride_val=1 -> 1*1 + 2*1 = 3 % 3 == 0, density <= 4 -> returns 0
+        self.assertEqual(fn(5, 2, 1), 0)
+        # Test failing length guard: length=3 -> returns 1
+        self.assertEqual(fn(3, 2, 1), 1)
+        # Test failing modular congruence: length=5, density=2, stride_val=2 -> (2 + 2) % 3 == 1 != 0 -> returns 1
+        self.assertEqual(fn(5, 2, 2), 1)
+        # Test failing boundary condition: length=5, density=5, stride_val=1 -> density 5 > 4 -> returns 1
+        self.assertEqual(fn(5, 5, 1), 1)
+
+    def test_relational_gated_gene_disjunction_and_execution(self):
+        """Verify multi-clause disjunction (OR) generation, AST validation, and execution."""
+        g = mutate_relational_gated_gene(3)
+        self.assertEqual(g.combiner, "OR")
+        self.assertEqual(g.clause_type, "DISJUNCTION_OR")
+
+        src = generate_source(g)
+        self.assertIn(b" or ", src)
+        validate_ast(src)
+
+        fn = compile_function(src, g)
+        # Ordinal 3: (length <= 2) OR (((stride_val * 2 + density * -1) % 3) == 0) OR (density >= 5)
+        # Match via length <= 2
+        self.assertEqual(fn(2, 0, 0), 0)
+        # Match via density >= 5 even with length=10
+        self.assertEqual(fn(10, 5, 0), 0)
+        # Match via modular congruence: stride_val=2, density=1 -> (4 - 1) % 3 == 0
+        self.assertEqual(fn(10, 1, 2), 0)
+        # Failure: length=10, density=2, stride_val=2 -> (4 - 2) % 3 = 2 != 0, density < 5, length > 2 -> returns 1
+        self.assertEqual(fn(10, 2, 2), 1)
+
+    def test_relational_gated_mutations_coverage(self):
+        """Verify all 10 deterministic relational gated rules compile and execute."""
+        self.assertEqual(len(RELATIONAL_GATED_MUTATIONS), 10)
+        for ordinal in range(1, 11):
+            gene = mutate_relational_gated_gene(ordinal)
+            src = generate_source(gene)
+            validate_ast(src)
+            fn = compile_function(src, gene)
+            val = fn(6, 2, 3)
+            self.assertIn(val, (gene.true_val, gene.false_val))
+
+    def test_distinction_between_coefficient_tuning_and_structural_innovation(self):
+        """Strictly distinguish parameter coefficient tuning from structural algorithmic novelty."""
+        base = mutate_relational_gated_gene(1)
+
+        # 1. Parameter coefficient tuning: modify only weights, thresholds, or modulus
+        tuned = tune_relational_coefficients(base, stride_delta=1, density_delta=-1, threshold_delta=2)
+        self.assertTrue(base.is_coefficient_tuning(tuned))
+        self.assertFalse(base.is_structural_innovation(tuned))
+        self.assertTrue(is_coefficient_tuning(base, tuned))
+        self.assertFalse(is_structural_innovation(base, tuned))
+        self.assertEqual(base.structural_signature(), tuned.structural_signature())
+        self.assertNotEqual(base.coefficient_profile(), tuned.coefficient_profile())
+
+        # 2. Structural algorithmic innovation: modify boolean combiner (AND <-> OR)
+        struct_or = mutate_relational_structure(base, new_combiner="OR")
+        self.assertTrue(base.is_structural_innovation(struct_or))
+        self.assertFalse(base.is_coefficient_tuning(struct_or))
+        self.assertTrue(is_structural_innovation(base, struct_or))
+        self.assertFalse(is_coefficient_tuning(base, struct_or))
+        self.assertNotEqual(base.structural_signature(), struct_or.structural_signature())
+
+        # 3. Structural algorithmic innovation: modify relational operator or boundary variable
+        struct_op = mutate_relational_structure(base, new_length_op="<=", new_boundary_var="stride_val")
+        self.assertTrue(base.is_structural_innovation(struct_op))
+        self.assertFalse(base.is_coefficient_tuning(struct_op))
+
+        # 4. Cross-family structural innovation: TypedGene vs RelationalGatedGene
+        self.assertTrue(is_structural_innovation(SEED_GENE, base))
+        self.assertFalse(is_coefficient_tuning(SEED_GENE, base))
+
+    def test_relational_gated_gene_dict_roundtrip(self):
+        """Verify serialization and deserialization roundtrip for RelationalGatedGene."""
+        gene = mutate_relational_gated_gene(2)
+        d = gene.to_dict()
+        self.assertTrue(d.get("is_relational"))
+        self.assertTrue(d.get("is_relational_gated"))
+        reconstructed = gene_from_dict(d)
+        self.assertIsInstance(reconstructed, RelationalGatedGene)
+        self.assertEqual(reconstructed, gene)
+
+    def test_relational_gated_gene_determinism(self):
+        """Verify identical ordinals produce identical genes, source bytes, and SHAs."""
+        g1 = mutate_relational_gated_gene(4)
+        g2 = mutate_relational_gated_gene(4)
+        self.assertEqual(g1, g2)
+        src1 = generate_source(g1)
+        src2 = generate_source(g2)
+        self.assertEqual(src1, src2)
+        self.assertEqual(compute_sha(src1), compute_sha(src2))
+
+    def test_relational_gated_ast_whitelist_compliance(self):
+        """Ensure all generated relational gated mechanisms strictly adhere to the AST whitelist."""
+        for ord_val in range(1, 11):
+            gene = mutate_relational_gated_gene(ord_val)
+            src = generate_source(gene)
+            func_def = validate_ast(src)
+            self.assertEqual(func_def.name, "evaluate_mechanism")
+
 
 if __name__ == "__main__":
     unittest.main()
