@@ -55,6 +55,12 @@ class HostSandboxGate:
         "pickle",
         "shelve",
         "marshal",
+        "gc",
+        "inspect",
+        "traceback",
+        "linecache",
+        "pdb",
+        "importlib",
     })
 
     FORBIDDEN_CALLS = frozenset({
