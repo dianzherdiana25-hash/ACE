@@ -1,0 +1,92 @@
+{
+  "schema": "ace.phase2.baseline_evidence.v1",
+  "base_commit_sha": "80104ce50ecbcea21080bed8c0eabce88d47ccb5",
+  "execution_statuses": {
+    "ACE_BASE_RUNTIME_EXECUTED": true,
+    "NEW_CAPABILITY_INTEGRATED_AND_EXECUTED": true,
+    "SCIENTIFIC_CAPABILITY_VALIDATED": false
+  },
+  "scientific_decision": "NOT_ASSESSED",
+  "oaie_established": false,
+  "verify_sources": {
+    "status": "PASS",
+    "pinned_files_verified": 25,
+    "manifest": "docs/UPSTREAM_SOURCES.json"
+  },
+  "runtime_demo_execution": {
+    "implementation_digest": "931b1582e4dc9579a56712936097a9d476941cdc1bc19c876f6ea4936aab644c",
+    "demo_json_sha256": "5068df35272067020e24fffcc7de0fa7991f953c94e0cd7e61af0966dc0f3e42",
+    "status_json_sha256": "0b1c0dd0ecbf86c31c658bd5eb147fdfe01b4d4be7416ff366dddd25061d85ea",
+    "restart_status_py313_sha256": "0b1c0dd0ecbf86c31c658bd5eb147fdfe01b4d4be7416ff366dddd25061d85ea",
+    "restart_storage_condition": "SQLite WAL reopened cleanly across fresh Python 3.12 -> Python 3.13 process boundary; 3 completed tasks, 2 staged capabilities, 3 terminal evaluations, 9 hash-chained events preserved byte-for-byte.",
+    "task_count": 3,
+    "capabilities_stored": 2,
+    "evaluations_recorded": 3,
+    "events_recorded": 9,
+    "tasks": [
+      {
+        "name": "source_equal",
+        "task_id": "7f34e0ab07cb9404948e8b0e6a89ecd6e057a2b4e4da3892902e1289066d82ab",
+        "model_id": "7c6506bd695207bd3d91531de0dd606106f24c3e1de3729ff772e26fdda74a0f",
+        "status": "completed",
+        "phase": "LEARNED_STAGED",
+        "learning_called": true,
+        "inherited": false,
+        "train_score": "63/63",
+        "validation_score": "128/128",
+        "terminal_score": "128/128",
+        "terminal_data_sha256": "ddb7efc9c42957b34c9bfd8a5b15a03d9911e8169abc5192f412bfaf8b1950d0",
+        "terminal_predictions_sha256": "db79b0bf458284e663ebd6db2ba28c87c608d5f019972e04213d9fc5600c5228"
+      },
+      {
+        "name": "inherited_equal",
+        "task_id": "563d54e0dd10a223dac6fd67438bff290c0d7bdad419379d059cf251cede2c15",
+        "model_id": "7c6506bd695207bd3d91531de0dd606106f24c3e1de3729ff772e26fdda74a0f",
+        "status": "completed",
+        "phase": "REUSE_VALIDATED",
+        "learning_called": false,
+        "inherited": true,
+        "train_score": "63/63",
+        "validation_score": "128/128",
+        "terminal_score": "128/128",
+        "terminal_data_sha256": "b3141d78d419bf93d73549186c2c53c6e5c73a621bc00a822169ea4f74042e51",
+        "terminal_predictions_sha256": "385bc3db4b8402031f19301d48a49be4710a435f4ebdc3c3f2c0f78de81864a8"
+      },
+      {
+        "name": "changed_ends",
+        "task_id": "8ef5a29ca8562cb8a9d2ff6316aed11801297dfc2235dd12e1e43ed5d50bf560",
+        "model_id": "3e5b5b32c8db7e417e97f4b279b6debc55031b558013768f5afee50f01c585e8",
+        "status": "completed",
+        "phase": "LEARNED_STAGED",
+        "learning_called": true,
+        "inherited": false,
+        "train_score": "63/63",
+        "validation_score": "128/128",
+        "terminal_score": "128/128",
+        "terminal_data_sha256": "0f0ab0bacb542c5829e31099cb1dc5090f4262e40048b4855239d4d2833f8335",
+        "terminal_predictions_sha256": "d0b8586e97035b52e637a6d5b2bf93ac3c8716cbb9f61d327369d5dc187b8093"
+      }
+    ]
+  },
+  "unit_tests": {
+    "ace_runtime_py312": {"tests": 17, "passed": 17, "failed": 0},
+    "ace_runtime_py313": {"tests": 17, "passed": 17, "failed": 0},
+    "pr67_autonomy_spike_py312": {"commit": "d7b311ab883bc6f58e75a271d064aa4850bc1930", "tests": 11, "passed": 11, "failed": 0},
+    "pr67_autonomy_spike_py313": {"commit": "d7b311ab883bc6f58e75a271d064aa4850bc1930", "tests": 11, "passed": 11, "failed": 0},
+    "pr67_github_actions_run_42346508018": {
+      "conclusion": "success",
+      "jobs": {
+        "autonomy (3.12)": "success",
+        "autonomy (3.13)": "success"
+      }
+    }
+  },
+  "autonomy_branch_comparison": {
+    "codex_branch": "engineering/ace-autonomy-core-v01",
+    "codex_head_sha": "d545083a27a820a6507741a24e190024998b07b7",
+    "pr67_branch": "engineering/chat-ace-autonomy-prototype-20261107",
+    "pr67_head_sha": "d7b311ab883bc6f58e75a271d064aa4850bc1930",
+    "ancestry": "d545083a is the exact preregistration parent of d7b311ab (prescore sha256 b7a540c73fb20df4a6787fccaf48ad409465a411d944ddaa3cc62c28cdaddcbc)",
+    "selected_base": "d7b311ab883bc6f58e75a271d064aa4850bc1930 (preserving full history of both branches while remediating all 12 security/durability gaps in Fase 3)"
+  }
+}
