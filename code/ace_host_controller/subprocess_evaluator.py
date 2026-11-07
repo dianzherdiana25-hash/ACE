@@ -1,10 +1,13 @@
 """SubprocessSealedEvaluator managing out-of-process candidate evaluation.
 
 Spawns isolated worker processes to evaluate candidate source code without
-ever leaking holdout test sets into the calling candidate generator memory space.
+ever leaking holdout test labels or signing keys into the worker process.
+Parent process evaluates predictions against private holdout banks and signs receipts.
 """
 from __future__ import annotations
 
+import hashlib
+import hmac
 import json
 import secrets
 import subprocess
@@ -29,14 +32,14 @@ class SubprocessSealedEvaluator:
         timeout_seconds: float = 30.0,
     ):
         self.manifest_id = manifest_id
-        # Private holdouts; NEVER exposed via public properties
+        # Private holdouts; NEVER exposed via public properties or sent with labels to workers
         self._holdout_banks = {k: list(v) for k, v in holdout_banks.items()}
         self._prior_baseline_scores = dict(prior_baseline_scores or {})
         self._signing_key = signing_key or secrets.token_bytes(32)
         self.timeout_seconds = timeout_seconds
         self.sealing_status = detect_os_sealing()
 
-        # In-process backup evaluator for manifest and receipt verification
+        # In-process evaluator for manifest and receipt verification
         self._local_evaluator = SealedHoldoutEvaluator(
             manifest_id=manifest_id,
             holdout_banks=self._holdout_banks,
@@ -66,16 +69,19 @@ class SubprocessSealedEvaluator:
         budget: ExecutionBudget,
         max_regression: float = 0.02,
     ) -> EvaluationReceipt:
-        """Evaluate candidate code in a separated subprocess."""
+        """Evaluate candidate code in a separated subprocess.
+        
+        The worker receives ONLY inputs (queries); holdout labels and signing keys
+        remain strictly in the parent process.
+        """
         budget.record_candidate_eval()
 
+        # Strip all labels: worker gets ONLY inputs
+        inputs_by_task = {k: [inp for inp, _ in v] for k, v in self._holdout_banks.items()}
         payload = {
             "candidate_id": candidate_id,
             "source_code": candidate_source,
-            "holdout_banks": {k: [list(x) for x in v] for k, v in self._holdout_banks.items()},
-            "prior_baseline_scores": self._prior_baseline_scores,
-            "signing_key_hex": self._signing_key.hex(),
-            "max_regression": max_regression,
+            "inputs_by_task": inputs_by_task,
         }
 
         t_start = time.monotonic()
@@ -108,36 +114,66 @@ class SubprocessSealedEvaluator:
                 )
 
             res = json.loads(stdout)
-            if "error" in res or not res.get("passed", False):
+            if "error" in res or "predictions_by_task" not in res:
                 return EvaluationReceipt(
-                    receipt_id=res.get("receipt_id", f"rcpt_err_{candidate_id}"),
+                    receipt_id=f"rcpt_err_{candidate_id}",
                     candidate_id=candidate_id,
-                    holdout_accuracy=float(res.get("holdout_accuracy", 0.0)),
-                    holdout_count=int(res.get("holdout_count", 0)),
-                    prior_regression=float(res.get("prior_regression", 1.0)),
+                    holdout_accuracy=0.0,
+                    holdout_count=0,
+                    prior_regression=1.0,
                     evaluator_manifest_digest=self.manifest.manifest_digest,
                     execution_seconds=round(elapsed, 4),
                     passed=False,
-                    hmac_signature=res.get("hmac_signature", ""),
+                    hmac_signature="0000000000000000000000000000000000000000000000000000000000000000",
                 )
 
-            receipt = EvaluationReceipt(
-                receipt_id=res["receipt_id"],
-                candidate_id=res["candidate_id"],
-                holdout_accuracy=float(res["holdout_accuracy"]),
-                holdout_count=int(res["holdout_count"]),
-                prior_regression=float(res["prior_regression"]),
-                evaluator_manifest_digest=res["evaluator_manifest_digest"],
-                execution_seconds=float(res["execution_seconds"]),
-                passed=bool(res["passed"]),
-                hmac_signature=res["hmac_signature"],
+            # Evaluate worker predictions against private holdout banks
+            predictions_by_task = res["predictions_by_task"]
+            total_correct = 0
+            total_samples = 0
+            task_accuracies: Dict[str, float] = {}
+
+            for task_name, bank in self._holdout_banks.items():
+                preds = predictions_by_task.get(task_name, [])
+                task_correct = 0
+                for i, (_, expected) in enumerate(bank):
+                    pred = preds[i] if i < len(preds) else (not expected)
+                    if pred == expected:
+                        task_correct += 1
+                acc = task_correct / max(1, len(bank))
+                task_accuracies[task_name] = acc
+                total_correct += task_correct
+                total_samples += len(bank)
+
+            overall_acc = total_correct / max(1, total_samples)
+
+            # Compute regression against prior baseline tasks
+            max_reg = 0.0
+            for task_name, prior_acc in self._prior_baseline_scores.items():
+                curr_acc = task_accuracies.get(task_name, 0.0)
+                if curr_acc < prior_acc:
+                    diff = prior_acc - curr_acc
+                    if diff > max_reg:
+                        max_reg = diff
+
+            passed = (max_reg <= max_regression)
+
+            # Issue and sign receipt inside parent process
+            receipt_id = f"rcpt_iso_{candidate_id}_{int(time.time())}"
+            payload_str = f"{receipt_id}:{candidate_id}:{overall_acc:.4f}:{total_samples}:{max_reg:.4f}:{self.manifest.manifest_digest}:{passed}"
+            sig = hmac.new(self._signing_key, payload_str.encode("utf-8"), hashlib.sha256).hexdigest()
+
+            return EvaluationReceipt(
+                receipt_id=receipt_id,
+                candidate_id=candidate_id,
+                holdout_accuracy=round(overall_acc, 4),
+                holdout_count=total_samples,
+                prior_regression=round(max_reg, 4),
+                evaluator_manifest_digest=self.manifest.manifest_digest,
+                execution_seconds=round(elapsed, 4),
+                passed=passed,
+                hmac_signature=sig,
             )
-
-            # Verify receipt signature with supervisor key
-            if not self._local_evaluator.verify_receipt(receipt):
-                raise ValueError("Worker returned invalid HMAC signature on receipt")
-
-            return receipt
 
         except (subprocess.TimeoutExpired, Exception):
             elapsed = time.monotonic() - t_start
