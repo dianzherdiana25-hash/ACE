@@ -54,8 +54,15 @@ MODULE_GROUPS = {
         "ace_research_discovery.test_discovery",
         "ace_research_agenda.test_agenda",
         "ace_integration_redteam.test_integration_redteam",
+        "ace_host_controller.test_host_controller",
+        "ace_host_controller.test_boundary_penetration",
+        "ace_host_controller.test_evaluator_v2",
+        "ace_research_f12.test_f12_research",
+        "ace_research_f13.test_f13_memory",
+        "ace_research_f14.test_f14_discovery",
     ],
 }
+
 
 EVIDENCE_CHECKS = [
     {
@@ -108,7 +115,23 @@ EVIDENCE_CHECKS = [
         "path": ROOT / "evidence" / "generations" / "ace_generations_growth_v1.json.gz",
         "verify_fn": lambda p: _verify_generations_growth(p),
     },
+    {
+        "name": "Phase 12: Causal Autonomous Research Evidence (F12)",
+        "path": ROOT / "evidence" / "f12" / "ace_f12_causal_research_v1.json.gz",
+        "verify_fn": lambda p: _verify_f12(p),
+    },
+    {
+        "name": "Phase 13: Causal Memory Validation Evidence (F13)",
+        "path": ROOT / "evidence" / "f13" / "ace_f13_causal_memory_v1.json.gz",
+        "verify_fn": lambda p: _verify_f13(p),
+    },
+    {
+        "name": "Phase 14: Autonomous Mechanism Discovery Evidence (F14)",
+        "path": ROOT / "evidence" / "f14" / "ace_f14_mechanism_discovery_v1.json.gz",
+        "verify_fn": lambda p: _verify_f14(p),
+    },
 ]
+
 
 
 def _sha256(path: Path) -> str:
@@ -229,7 +252,38 @@ def _verify_generations_growth(p: Path) -> dict:
     }
 
 
+def _verify_f12(p: Path) -> dict:
+    from ace_research_f12.verify import verify_f12_evidence
+    with gzip.open(p, "rt", encoding="utf-8") as f:
+        data = json.load(f)
+    ok, msg = verify_f12_evidence(data)
+    if not ok:
+        raise ValueError(msg)
+    return {"status": "PASS", "sha256": _sha256(p), "message": msg}
+
+
+def _verify_f13(p: Path) -> dict:
+    from ace_research_f13.verify import verify_f13_evidence
+    with gzip.open(p, "rt", encoding="utf-8") as f:
+        data = json.load(f)
+    ok, msg = verify_f13_evidence(data)
+    if not ok:
+        raise ValueError(msg)
+    return {"status": "PASS", "sha256": _sha256(p), "message": msg}
+
+
+def _verify_f14(p: Path) -> dict:
+    from ace_research_f14.verify import verify_f14_evidence
+    with gzip.open(p, "rt", encoding="utf-8") as f:
+        data = json.load(f)
+    ok, msg = verify_f14_evidence(data)
+    if not ok:
+        raise ValueError(msg)
+    return {"status": "PASS", "sha256": _sha256(p), "message": msg}
+
+
 def run_test_module(mod_name: str) -> dict:
+
     t0 = time.perf_counter()
     suite = unittest.defaultTestLoader.loadTestsFromName(mod_name)
     count = suite.countTestCases()
