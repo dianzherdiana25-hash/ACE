@@ -85,6 +85,30 @@ class CompositeGene:
         }
 
 
+@dataclass(frozen=True)
+class GatedGene:
+    """Strongly-typed gated modular gene: conditional length guard and modular congruence."""
+    min_length: int = 4
+    stride_weight: int = 1
+    density_weight: int = 1
+    modulus: int = 3
+    target_residue: int = 0
+    true_val: int = 0
+    false_val: int = 1
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "is_gated": True,
+            "min_length": self.min_length,
+            "stride_weight": self.stride_weight,
+            "density_weight": self.density_weight,
+            "modulus": self.modulus,
+            "target_residue": self.target_residue,
+            "true_val": self.true_val,
+            "false_val": self.false_val,
+        }
+
+
 SEED_GENE = TypedGene(
     window_stride=2,
     modulus=3,
@@ -115,9 +139,27 @@ MUTATION_RULES: Tuple[Tuple[str, int], ...] = (
 
 COMPOSITE_OPERATORS: Tuple[str, ...] = ("ADD", "XOR", "SUB", "MULT")
 
+GATED_MUTATIONS: Tuple[Tuple[int, int, int, int], ...] = (
+    # (min_length, stride_weight, density_weight, modulus)
+    (4, 1, 1, 3),  # (stride + density) % 3 == 0, min_len >= 4
+    (3, 1, 0, 2),  # stride % 2 == 0, min_len >= 3
+    (4, 2, -1, 3), # (2*stride - density) % 3 == 0, min_len >= 4
+    (3, 1, -1, 2), # (stride - density) % 2 == 0, min_len >= 3
+)
 
-def gene_from_dict(d: Dict[str, Any]) -> Union[TypedGene, CompositeGene]:
-    """Reconstruct TypedGene or CompositeGene from dict representation."""
+
+def gene_from_dict(d: Dict[str, Any]) -> Union[TypedGene, CompositeGene, GatedGene]:
+    """Reconstruct TypedGene, CompositeGene, or GatedGene from dict representation."""
+    if d.get("is_gated", False):
+        return GatedGene(
+            min_length=d.get("min_length", 4),
+            stride_weight=d.get("stride_weight", 1),
+            density_weight=d.get("density_weight", 1),
+            modulus=d.get("modulus", 3),
+            target_residue=d.get("target_residue", 0),
+            true_val=d.get("true_val", 0),
+            false_val=d.get("false_val", 1),
+        )
     if d.get("is_composite", False):
         return CompositeGene(
             gene_a=gene_from_dict(d["gene_a"]),
@@ -160,6 +202,21 @@ def mutate_composite_gene(
     return CompositeGene(gene_a=mutated_a, gene_b=mutated_b, operator=op)
 
 
+def mutate_gated_gene(ordinal: int) -> GatedGene:
+    """Deterministically synthesize a gated modular gene."""
+    _check_int(ordinal, 0, 100000, "ordinal")
+    rule = GATED_MUTATIONS[(ordinal - 1) % len(GATED_MUTATIONS)]
+    return GatedGene(
+        min_length=rule[0],
+        stride_weight=rule[1],
+        density_weight=rule[2],
+        modulus=rule[3],
+        target_residue=0,
+        true_val=0,
+        false_val=1,
+    )
+
+
 def _render_atomic_expr(g: TypedGene) -> str:
     return (
         f"{g.sign} * ("
@@ -171,10 +228,19 @@ def _render_atomic_expr(g: TypedGene) -> str:
 
 
 def generate_source(
-    gene: Union[TypedGene, CompositeGene],
+    gene: Union[TypedGene, CompositeGene, GatedGene],
     function_name: str = "evaluate_mechanism",
 ) -> bytes:
     """Generate typed, bounded Python source code from a validated Gene."""
+    if isinstance(gene, GatedGene):
+        code_text = (
+            f"def {function_name}(length: int, density: int, stride_val: int) -> int:\n"
+            f"    return {gene.true_val} if ((length >= {gene.min_length}) and "
+            f"(((stride_val * {gene.stride_weight} + density * {gene.density_weight}) % {gene.modulus}) == {gene.target_residue})) "
+            f"else {gene.false_val}\n"
+        )
+        return code_text.encode("utf-8")
+
     if isinstance(gene, CompositeGene):
         expr_a = _render_atomic_expr(gene.gene_a)
         expr_b = _render_atomic_expr(gene.gene_b)
@@ -201,7 +267,7 @@ def generate_source(
         )
         return code_text.encode("utf-8")
 
-    raise SourceEvolutionError("TypedGene or CompositeGene instance required")
+    raise SourceEvolutionError("TypedGene, CompositeGene, or GatedGene instance required")
 
 
 ALLOWED_AST_NODES = (
@@ -219,6 +285,18 @@ ALLOWED_AST_NODES = (
     ast.BitXor,
     ast.USub,
     ast.UAdd,
+    ast.IfExp,
+    ast.Compare,
+    ast.Eq,
+    ast.NotEq,
+    ast.GtE,
+    ast.LtE,
+    ast.Gt,
+    ast.Lt,
+    ast.BoolOp,
+    ast.And,
+    ast.Or,
+    ast.Not,
     ast.Name,
     ast.Constant,
     ast.Load,

@@ -58,16 +58,47 @@ class AgendaEngine:
 
         # Check if all tasks have exhausted linear mutations
         linear_failures_per_task = {
-            tid: len([f for f in state.failure_catalog.get(tid, []) if not f.get("gene_dict", {}).get("is_composite", False)])
+            tid: len([f for f in state.failure_catalog.get(tid, []) if not f.get("gene_dict", {}).get("is_composite", False) and not f.get("gene_dict", {}).get("is_gated", False)])
             for tid in tasks.keys()
         }
         all_linear_exhausted = all(c >= self.max_attempts_per_task for c in linear_failures_per_task.values())
 
-        if all_linear_exhausted:
-            composite_failures_per_task = {
-                tid: [f for f in state.failure_catalog.get(tid, []) if f.get("gene_dict", {}).get("is_composite", False)]
+        composite_failures_per_task = {
+            tid: [f for f in state.failure_catalog.get(tid, []) if f.get("gene_dict", {}).get("is_composite", False)]
+            for tid in tasks.keys()
+        }
+        all_composite_exhausted = all_linear_exhausted and all(
+            len(c) >= self.max_attempts_per_task for c in composite_failures_per_task.values()
+        )
+
+        if all_composite_exhausted:
+            gated_failures_per_task = {
+                tid: [f for f in state.failure_catalog.get(tid, []) if f.get("gene_dict", {}).get("is_gated", False)]
                 for tid in tasks.keys()
             }
+            if state.next_agenda_priority:
+                rec_tid = state.next_agenda_priority.get("priority_task_id")
+                if rec_tid in tasks and len(gated_failures_per_task.get(rec_tid, [])) < self.max_attempts_per_task:
+                    selected_task_id = rec_tid
+                else:
+                    for cand_tid in ranked_tasks:
+                        if len(gated_failures_per_task.get(cand_tid, [])) < self.max_attempts_per_task:
+                            selected_task_id = cand_tid
+                            break
+            else:
+                for cand_tid in ranked_tasks:
+                    if len(gated_failures_per_task.get(cand_tid, [])) < self.max_attempts_per_task:
+                        selected_task_id = cand_tid
+                        break
+
+            tried_gated = {f.get("mutation_ordinal") for f in gated_failures_per_task.get(selected_task_id, [])}
+            selected_ordinal = 1
+            while selected_ordinal in tried_gated and selected_ordinal <= 10:
+                selected_ordinal += 1
+
+            return selected_task_id, task_seed, selected_ordinal
+
+        if all_linear_exhausted:
             if state.next_agenda_priority:
                 rec_tid = state.next_agenda_priority.get("priority_task_id")
                 if rec_tid in tasks and len(composite_failures_per_task.get(rec_tid, [])) < self.max_attempts_per_task:
@@ -131,10 +162,21 @@ class AgendaEngine:
     ) -> ResearchHypothesis:
         """Formulate a falsifiable hypothesis tailored to the selected task and mutation ordinal."""
         past_failures = state.failure_catalog.get(target_task_id, [])
-        linear_failures = [f for f in past_failures if not f.get("gene_dict", {}).get("is_composite", False)]
-        is_composite = len(linear_failures) >= self.max_attempts_per_task
+        gated_failures = [f for f in past_failures if f.get("gene_dict", {}).get("is_gated", False)]
+        composite_failures = [f for f in past_failures if f.get("gene_dict", {}).get("is_composite", False)]
+        linear_failures = [f for f in past_failures if not f.get("gene_dict", {}).get("is_composite", False) and not f.get("gene_dict", {}).get("is_gated", False)]
 
-        if is_composite:
+        is_gated = (len(linear_failures) >= self.max_attempts_per_task and len(composite_failures) >= self.max_attempts_per_task)
+        is_composite = len(linear_failures) >= self.max_attempts_per_task and not is_gated
+
+        if is_gated:
+            strategy = "SYNTHESIZE_GATED_EXPRESSION_TREE"
+            statement = (
+                f"Cycle {cycle_id}: Applying gated modular expression tree synthesis (ordinal {ordinal}) for {target_task_id} "
+                f"({target_task.family}) will achieve holdout gain >= 0.1500 without prior regression > 0.0200."
+            )
+            hyp_id = f"HYP_AUTONOMOUS_C{cycle_id}_{target_task_id}_gated_ord{ordinal}"
+        elif is_composite:
             strategy = "SYNTHESIZE_COMPOSITE_MECHANISM"
             statement = (
                 f"Cycle {cycle_id}: Applying composite mechanism synthesis (operator ordinal {ordinal}) for {target_task_id} "
@@ -196,11 +238,44 @@ class AgendaEngine:
         else:
             # Rejection: Negative result cataloged.
             past_failures = state.failure_catalog.get(current_task_id, [])
-            linear_failures = [f for f in past_failures if not f.get("gene_dict", {}).get("is_composite", False)]
-            is_composite = len(linear_failures) >= self.max_attempts_per_task
+            gated_failures = [f for f in past_failures if f.get("gene_dict", {}).get("is_gated", False)]
+            composite_failures = [f for f in past_failures if f.get("gene_dict", {}).get("is_composite", False)]
+            linear_failures = [f for f in past_failures if not f.get("gene_dict", {}).get("is_composite", False) and not f.get("gene_dict", {}).get("is_gated", False)]
 
-            if is_composite:
-                composite_failures = [f for f in past_failures if f.get("gene_dict", {}).get("is_composite", False)]
+            is_gated = (len(linear_failures) >= self.max_attempts_per_task and len(composite_failures) >= self.max_attempts_per_task)
+            is_composite = len(linear_failures) >= self.max_attempts_per_task and not is_gated
+
+            if is_gated:
+                gated_attempts = len(gated_failures) + 1
+                if gated_attempts < self.max_attempts_per_task:
+                    next_ord = current_ordinal + 1
+                    return NextAgendaPriority(
+                        priority_task_id=current_task_id,
+                        priority_family=tasks[current_task_id].family,
+                        strategy="SYNTHESIZE_GATED_EXPRESSION_TREE",
+                        suggested_ordinal=next_ord,
+                        rationalization=(
+                            f"Gated expression tree ordinal {current_ordinal} on {current_task_id} failed with gain {gain:+.4f}. "
+                            f"Attempt {gated_attempts}/{self.max_attempts_per_task}: exploring gated ordinal {next_ord}."
+                        ),
+                        timestamp=now,
+                    )
+                else:
+                    all_tids = list(tasks.keys())
+                    curr_idx = all_tids.index(current_task_id) if current_task_id in all_tids else 0
+                    next_tid = all_tids[(curr_idx + 1) % len(all_tids)]
+                    return NextAgendaPriority(
+                        priority_task_id=next_tid,
+                        priority_family=tasks[next_tid].family,
+                        strategy="SYNTHESIZE_GATED_EXPRESSION_TREE",
+                        suggested_ordinal=1,
+                        rationalization=(
+                            f"Target {current_task_id} reached {gated_attempts} gated expression attempts. "
+                            f"Advancing gated synthesis agenda to {next_tid} ({tasks[next_tid].family})."
+                        ),
+                        timestamp=now,
+                    )
+            elif is_composite:
                 composite_attempts = len(composite_failures) + 1
                 if composite_attempts < self.max_attempts_per_task:
                     next_ord = current_ordinal + 1
@@ -219,14 +294,20 @@ class AgendaEngine:
                     all_tids = list(tasks.keys())
                     curr_idx = all_tids.index(current_task_id) if current_task_id in all_tids else 0
                     next_tid = all_tids[(curr_idx + 1) % len(all_tids)]
+                    other_tasks_comp = [
+                        len([f for f in state.failure_catalog.get(tid, []) if f.get("gene_dict", {}).get("is_composite", False)])
+                        for tid in tasks.keys() if tid != current_task_id
+                    ]
+                    all_comp_full = all(c >= self.max_attempts_per_task for c in other_tasks_comp)
+                    next_strat = "SYNTHESIZE_GATED_EXPRESSION_TREE" if all_comp_full else "SYNTHESIZE_COMPOSITE_MECHANISM"
                     return NextAgendaPriority(
                         priority_task_id=next_tid,
                         priority_family=tasks[next_tid].family,
-                        strategy="SYNTHESIZE_COMPOSITE_MECHANISM",
+                        strategy=next_strat,
                         suggested_ordinal=1,
                         rationalization=(
                             f"Target {current_task_id} reached {composite_attempts} composite attempts. "
-                            f"Advancing composite synthesis agenda to {next_tid} ({tasks[next_tid].family})."
+                            f"Advancing synthesis agenda to {next_tid} ({tasks[next_tid].family}) via {next_strat}."
                         ),
                         timestamp=now,
                     )

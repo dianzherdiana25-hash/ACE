@@ -108,6 +108,18 @@ class TestSourceEvolution(unittest.TestCase):
         with self.assertRaises(SourceEvolutionError):
             CompositeGene(gene_a=SEED_GENE, gene_b=SEED_GENE, operator="INVALID_OP")
 
+    def test_gated_gene_generation_and_execution(self):
+        from ace_loop.source_evolution import GatedGene, mutate_gated_gene
+        g = mutate_gated_gene(1)
+        src = generate_source(g)
+        self.assertIn(b"if ((length >=", src)
+        validate_ast(src)
+        fn = compile_function(src, g)
+        # length=4, density=1, stride_val=2 -> (2*1 + 1*1) % 3 = 3 % 3 = 0 -> returns 0
+        self.assertEqual(fn(4, 1, 2), 0)
+        # length=2 -> returns 1
+        self.assertEqual(fn(2, 1, 2), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

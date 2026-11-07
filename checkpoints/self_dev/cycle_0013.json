@@ -1,0 +1,128 @@
+{
+  "cycle_id": 13,
+  "phase": "REPORTED",
+  "active_head_id": "G0_self_dev_root_c0",
+  "prior_cycle_id": 12,
+  "state_digest_before": "cd92f84a3031a4f3a3460be7ab5152b570a3900f59b49da96487fc5b4facc4ca",
+  "state_digest_after": "982e248002b14b6e3e95e41b2bc9f3d7f4925a3a34b17bf51767015647db233d",
+  "diagnosis": {
+    "timestamp": "2026-11-07T18:35:51Z",
+    "baseline_head_id": "G0_self_dev_root_c0",
+    "baseline_score": 0.6625,
+    "diagnosed_weakness_task": "task_k2_modular_stride_shift",
+    "diagnosed_weakness_family": "family_k",
+    "observed_failure_rate": 0.425,
+    "error_cue": "acc=0.575, fp=8, fn=9",
+    "details": {
+      "task_scores": {
+        "task_j1_multiscale_run_parity": 0.625,
+        "task_j2_symmetric_run_boundary": 0.625,
+        "task_k1_center_pivot_density": 0.825,
+        "task_k2_modular_stride_shift": 0.575
+      },
+      "task_cues": {
+        "task_j1_multiscale_run_parity": "acc=0.625, fp=2, fn=13",
+        "task_j2_symmetric_run_boundary": "acc=0.625, fp=6, fn=9",
+        "task_k1_center_pivot_density": "acc=0.825, fp=4, fn=3",
+        "task_k2_modular_stride_shift": "acc=0.575, fp=8, fn=9"
+      },
+      "target_description": "Modular Stride Shift Invariant"
+    }
+  },
+  "hypothesis": {
+    "hypothesis_id": "HYP_AUTONOMOUS_C13_task_j2_symmetric_run_boundary_comp_ord1",
+    "statement": "Cycle 13: Applying composite mechanism synthesis (operator ordinal 1) for task_j2_symmetric_run_boundary (family_j) will achieve holdout gain >= 0.1500 without prior regression > 0.0200.",
+    "target_task_id": "task_j2_symmetric_run_boundary",
+    "min_required_gain": 0.15,
+    "max_regression_tolerance": 0.02,
+    "preregistration_hash": "f3f824f9f17613314ce10d66c238daa1bbecbdf5505cfc78c9c006cde85fe3e0",
+    "task_seed": 5617,
+    "mutation_ordinal": 1
+  },
+  "candidate": {
+    "candidate_id": "CAND_HYP_AUTONOMOUS_C13_task_j2_symmetric_run_boundary_comp_ord1",
+    "parent_id": "G0_self_dev_root_c0",
+    "author_type": "ACE_AUTONOMOUS_V02",
+    "source_code": "def evaluate_mechanism(length: int, density: int, stride_val: int) -> int:\n    return (1 * (length * 1 + density * 2 + (stride_val % 3) - 1)) ^ (1 * (length * 1 + density * 2 + (stride_val % 5) - 1))\n",
+    "source_sha": "db86d1443a76095d5e8346365bd69b23945a62bbb47440b57597cfb657e49c6b",
+    "gene_dict": {
+      "is_composite": true,
+      "gene_a": {
+        "is_composite": false,
+        "window_stride": 3,
+        "modulus": 3,
+        "parity_threshold": 1,
+        "weight_length": 1,
+        "weight_density": 2,
+        "sign": 1
+      },
+      "gene_b": {
+        "is_composite": false,
+        "window_stride": 2,
+        "modulus": 5,
+        "parity_threshold": 1,
+        "weight_length": 1,
+        "weight_density": 2,
+        "sign": 1
+      },
+      "operator": "XOR"
+    },
+    "diff_patch": "--- a/G0_self_dev_root_c0.py\n+++ b/HYP_AUTONOMOUS_C13_task_j2_symmetric_run_boundary_comp_ord1_ord1.py\n@@ -1,2 +1,2 @@\n def evaluate_mechanism(length: int, density: int, stride_val: int) -> int:\n-    return 1 * (length * 1 + density * 2 + (stride_val % 3) - 1)\n+    return (1 * (length * 1 + density * 2 + (stride_val % 3) - 1)) ^ (1 * (length * 1 + density * 2 + (stride_val % 5) - 1))\n",
+    "creation_timestamp": "2026-11-07T18:35:51Z",
+    "provenance_proof": {
+      "author_type": "ACE_AUTONOMOUS_V02",
+      "execution_pid": 40,
+      "platform": "Linux x86_64",
+      "python_version": "3.11.2",
+      "git_commit_sha": "fad5a4eb72e7f8a357f2648d50afc05dee96f140",
+      "source_sha": "db86d1443a76095d5e8346365bd69b23945a62bbb47440b57597cfb657e49c6b",
+      "key_fingerprint": "74045ef82c32ef6e",
+      "hmac_signature": "a1c458713fed190f88db808206b63aee9be5fe3c4e7cc18093eda58cb0550d90",
+      "timestamp": "2026-11-07T18:35:51Z"
+    }
+  },
+  "evaluation": {
+    "receipt_id": "RCPT_CAND_HYP_AUTONOMOUS_C13_task_j2_symmetric_run_boundary_comp_ord1_1794076552",
+    "evaluator_manifest_digest": "31037e1dafe1705a409175a93665cea689b8c3af488c8aaca3a4d8472090327c",
+    "candidate_id": "CAND_HYP_AUTONOMOUS_C13_task_j2_symmetric_run_boundary_comp_ord1",
+    "parent_id": "G0_self_dev_root_c0",
+    "train_score": 0.35,
+    "validation_score": 0.5,
+    "holdout_score": 0.6094,
+    "gain_over_parent": -0.0859,
+    "prior_regression": 0.0,
+    "decision": "REJECTED",
+    "decision_reason": "Holdout gain -0.0859 below required min_gain 0.1500",
+    "evaluator_calls": 200,
+    "cpu_seconds": 0.0011,
+    "memory_mb": 57.09,
+    "cost_usd": 0.0,
+    "receipt_signature": "7990a74a98458decd31e902fd2204e6debdba6b5fc25bda8245520ae1cc4e63f",
+    "key_fingerprint": "74045ef82c32ef6e",
+    "timestamp": "2026-11-07T18:35:51Z",
+    "prior_cycle_id": 12,
+    "state_digest_before": "cd92f84a3031a4f3a3460be7ab5152b570a3900f59b49da96487fc5b4facc4ca",
+    "provenance_proof": {
+      "author_type": "ACE_AUTONOMOUS_V02",
+      "execution_pid": 40,
+      "platform": "Linux x86_64",
+      "python_version": "3.11.2",
+      "git_commit_sha": "fad5a4eb72e7f8a357f2648d50afc05dee96f140",
+      "source_sha": "db86d1443a76095d5e8346365bd69b23945a62bbb47440b57597cfb657e49c6b",
+      "key_fingerprint": "74045ef82c32ef6e",
+      "hmac_signature": "a1c458713fed190f88db808206b63aee9be5fe3c4e7cc18093eda58cb0550d90",
+      "timestamp": "2026-11-07T18:35:51Z"
+    }
+  },
+  "decision": "REJECTED",
+  "next_goal": {
+    "priority_task_id": "task_j2_symmetric_run_boundary",
+    "priority_family": "family_j",
+    "strategy": "SYNTHESIZE_COMPOSITE_MECHANISM",
+    "suggested_ordinal": 2,
+    "rationalization": "Composite mechanism ordinal 1 on task_j2_symmetric_run_boundary failed with gain -0.0859. Attempt 1/2: exploring composite ordinal 2.",
+    "timestamp": "2026-11-07T18:35:52Z"
+  },
+  "cost_usd": 0.0,
+  "updated_at": "2026-11-07T18:35:52Z"
+}

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 12,
+  "cycle_count": 13,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -182,6 +182,21 @@
       "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0012.json.gz",
       "prior_digest": "1d97a60a30eeadd2e1693be71d38b9579304b2494aae4bc23f8f35b392f7146b",
       "state_digest": "cd92f84a3031a4f3a3460be7ab5152b570a3900f59b49da96487fc5b4facc4ca"
+    },
+    {
+      "cycle_id": 13,
+      "timestamp": "2026-11-07T18:35:52Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C13_task_j2_symmetric_run_boundary_comp_ord1",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C13_task_j2_symmetric_run_boundary_comp_ord1",
+      "source_sha": "db86d1443a76095d5e8346365bd69b23945a62bbb47440b57597cfb657e49c6b",
+      "decision": "REJECTED",
+      "holdout_score": 0.6094,
+      "gain_over_parent": -0.0859,
+      "rejection_reason": "Holdout gain -0.0859 below required min_gain 0.1500",
+      "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0013.json.gz",
+      "prior_digest": "cd92f84a3031a4f3a3460be7ab5152b570a3900f59b49da96487fc5b4facc4ca",
+      "state_digest": "982e248002b14b6e3e95e41b2bc9f3d7f4925a3a34b17bf51767015647db233d"
     }
   ],
   "failure_catalog": {
@@ -405,6 +420,36 @@
         "gain_over_parent": -0.0234,
         "rejection_reason": "Holdout gain -0.0234 below required min_gain 0.1500",
         "timestamp": "2026-11-07T17:41:17Z"
+      },
+      {
+        "cycle_id": 13,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C13_task_j2_symmetric_run_boundary_comp_ord1",
+        "gene_dict": {
+          "is_composite": true,
+          "gene_a": {
+            "is_composite": false,
+            "window_stride": 3,
+            "modulus": 3,
+            "parity_threshold": 1,
+            "weight_length": 1,
+            "weight_density": 2,
+            "sign": 1
+          },
+          "gene_b": {
+            "is_composite": false,
+            "window_stride": 2,
+            "modulus": 5,
+            "parity_threshold": 1,
+            "weight_length": 1,
+            "weight_density": 2,
+            "sign": 1
+          },
+          "operator": "XOR"
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": -0.0859,
+        "rejection_reason": "Holdout gain -0.0859 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T18:35:52Z"
       }
     ],
     "task_k1_center_pivot_density": [
@@ -514,15 +559,21 @@
       "target_task_id": "task_j1_multiscale_run_parity",
       "status": "FALSIFIED",
       "cycle_id": 12
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C13_task_j2_symmetric_run_boundary_comp_ord1",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "status": "FALSIFIED",
+      "cycle_id": 13
     }
   ],
   "next_agenda_priority": {
     "priority_task_id": "task_j2_symmetric_run_boundary",
     "priority_family": "family_j",
     "strategy": "SYNTHESIZE_COMPOSITE_MECHANISM",
-    "suggested_ordinal": 1,
-    "rationalization": "Target task_j1_multiscale_run_parity reached 2 composite attempts. Advancing composite synthesis agenda to task_j2_symmetric_run_boundary (family_j).",
-    "timestamp": "2026-11-07T18:01:06Z"
+    "suggested_ordinal": 2,
+    "rationalization": "Composite mechanism ordinal 1 on task_j2_symmetric_run_boundary failed with gain -0.0859. Attempt 1/2: exploring composite ordinal 2.",
+    "timestamp": "2026-11-07T18:35:52Z"
   },
   "concurrency_lock": {
     "is_locked": false,
@@ -538,10 +589,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "cd92f84a3031a4f3a3460be7ab5152b570a3900f59b49da96487fc5b4facc4ca",
+  "state_digest": "982e248002b14b6e3e95e41b2bc9f3d7f4925a3a34b17bf51767015647db233d",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 12,
-    "last_known_good_digest": "cd92f84a3031a4f3a3460be7ab5152b570a3900f59b49da96487fc5b4facc4ca",
+    "last_known_good_cycle": 13,
+    "last_known_good_digest": "982e248002b14b6e3e95e41b2bc9f3d7f4925a3a34b17bf51767015647db233d",
     "recovery_count": 0
   }
 }
