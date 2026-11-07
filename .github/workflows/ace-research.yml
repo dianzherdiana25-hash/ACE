@@ -38,7 +38,11 @@ jobs:
           ace_capability_evolution.test_compositional
           ace_runtime.test_engine
           ace_runtime.test_cli
+          ace_research_generations.test_generations
+          ace_research_generations.test_generations_growth
           -v
+      - name: Verify generations growth evidence artifact
+        run: python -m ace_research_generations.verify_growth --artifact evidence/generations/ace_generations_growth_v1.json.gz
       - name: Verify deterministic composition replay
         run: |
           python -m ace_capability_evolution.compositional --output /tmp/composition.json
