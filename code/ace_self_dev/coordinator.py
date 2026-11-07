@@ -325,6 +325,7 @@ class SelfDevelopmentCoordinator:
             active_head, is_promoted = self.governor.apply_decision(
                 receipt=receipt,
                 host_controller=host_controller,
+                fallback_head_id=active_head_id,
             )
             ckpt.phase = "DECIDED"
             ckpt.active_head_id = active_head
