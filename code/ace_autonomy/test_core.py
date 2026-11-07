@@ -1,6 +1,7 @@
 """Adversarial unit tests and integration with actual ACE Runtime on CI."""
 import json
 import multiprocessing
+import os
 from pathlib import Path
 import sqlite3
 import tempfile
@@ -17,6 +18,16 @@ def make_goal(*steps):
 def worker(workspace, root, gid, out):
     with Autonomy(workspace, root) as engine:
         out.put(engine.run_one(gid))
+
+
+def crash_worker(workspace, root, gid):
+    with Autonomy(workspace, root) as engine:
+        original = engine._dispatch
+        def die_after_read(action):
+            original(action)
+            os._exit(17)
+        engine._dispatch = die_after_read
+        engine.run_one(gid)
 
 
 class AutonomyTests(unittest.TestCase):
@@ -96,6 +107,20 @@ class AutonomyTests(unittest.TestCase):
                 with self.assertRaises(RuntimeError):
                     a.run_one(gid)
             self.assertEqual(a.report(gid)["status"], "QUEUED")
+
+    def test_actual_subprocess_death_rolls_back_and_resumes(self):
+        goal = make_goal({"tool": "inspect_file", "path": "README.md"})
+        with self.open() as a:
+            gid = a.enqueue(goal)
+        ctx = multiprocessing.get_context("spawn")
+        p = ctx.Process(target=crash_worker, args=(str(self.ws), str(self.root), gid))
+        p.start()
+        p.join(timeout=20)
+        self.assertEqual(p.exitcode, 17)
+        with self.open() as a:
+            self.assertEqual(a.report(gid)["status"], "QUEUED")
+            self.assertEqual(a.run_one(gid)["status"], "SUCCEEDED")
+            self.assertEqual(a.db.execute("SELECT count(*) FROM events").fetchone()[0], 2)
 
     def test_two_processes_do_not_duplicate_step(self):
         goal = make_goal({"tool": "inspect_file", "path": "README.md"})
