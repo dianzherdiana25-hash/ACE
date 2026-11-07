@@ -105,13 +105,15 @@ def run_daemon_loop(batch_size: int = 2, sleep_seconds: int = 15):
                 res = coord.run_autonomous_cycle(author_type=AuthorType.ACE_AUTONOMOUS_V02)
                 cid = res.get("cycle_id")
                 dec = res.get("decision")
-                tid = res.get("hypothesis", {}).get("target_task_id", "unknown")
+                tid = res.get("target_task_id") or res.get("hypothesis", {}).get("target_task_id", "unknown")
+                gain = res.get("gain_over_parent", 0.0)
+                holdout = res.get("holdout_score", 0.0)
                 promoted = res.get("is_promoted", False)
                 head = res.get("active_head_id")
 
                 log(
                     f"Step {step}/{batch_size} -> Cycle {cid} Completed: "
-                    f"Task={tid}, Decision={dec}, Promoted={promoted}, ActiveHead={head}"
+                    f"Task={tid}, Gain={gain:+.4f}, Holdout={holdout:.4f}, Decision={dec}, Promoted={promoted}, ActiveHead={head}"
                 )
 
                 # Commit and push after each completed cycle
