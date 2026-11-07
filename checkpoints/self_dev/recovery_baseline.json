@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 104,
+  "cycle_count": 105,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -1562,6 +1562,21 @@
       "evidence_path": "/home/antigravity/dianzherdiana25-hash/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0104.json.gz",
       "prior_digest": "424d2cab90135c911f8c3e5e60fe9d8fe3baa917fe760ce472ae7387010af3d2",
       "state_digest": "89c57d7f20a3ca2b669508909f7636f529a9700e55825778edafb6d4a73853be"
+    },
+    {
+      "cycle_id": 105,
+      "timestamp": "2026-11-07T18:57:18Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C105_task_k2_modular_stride_shift_gated_ord11",
+      "target_task_id": "task_k2_modular_stride_shift",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C105_task_k2_modular_stride_shift_gated_ord11",
+      "source_sha": "0f313962c19a1d65ff7daf7715f952ac26023aa267f08e815f36f6dd9ad26042",
+      "decision": "REJECTED",
+      "holdout_score": 0.8125,
+      "gain_over_parent": 0.125,
+      "rejection_reason": "Holdout gain 0.1250 below required min_gain 0.1500",
+      "evidence_path": "/home/antigravity/dianzherdiana25-hash/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0105.json.gz",
+      "prior_digest": "89c57d7f20a3ca2b669508909f7636f529a9700e55825778edafb6d4a73853be",
+      "state_digest": "d7bf7b61f73c05a18999b9bbe8ddb339149c503ec40815e5cef1a77313abd649"
     }
   ],
   "failure_catalog": {
@@ -3133,6 +3148,24 @@
         "gain_over_parent": 0.125,
         "rejection_reason": "Holdout gain 0.1250 below required min_gain 0.1500",
         "timestamp": "2026-11-07T18:57:16Z"
+      },
+      {
+        "cycle_id": 105,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C105_task_k2_modular_stride_shift_gated_ord11",
+        "gene_dict": {
+          "is_gated": true,
+          "min_length": 4,
+          "stride_weight": 2,
+          "density_weight": -1,
+          "modulus": 3,
+          "target_residue": 0,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 11,
+        "gain_over_parent": 0.125,
+        "rejection_reason": "Holdout gain 0.1250 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T18:57:18Z"
       }
     ],
     "task_j1_multiscale_run_parity": [
@@ -4150,6 +4183,12 @@
       "target_task_id": "task_k2_modular_stride_shift",
       "status": "FALSIFIED",
       "cycle_id": 104
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C105_task_k2_modular_stride_shift_gated_ord11",
+      "target_task_id": "task_k2_modular_stride_shift",
+      "status": "FALSIFIED",
+      "cycle_id": 105
     }
   ],
   "next_agenda_priority": {
@@ -4157,15 +4196,15 @@
     "priority_family": "family_j",
     "strategy": "SYNTHESIZE_GATED_EXPRESSION_TREE",
     "suggested_ordinal": 1,
-    "rationalization": "Target task_k2_modular_stride_shift reached 82 gated expression attempts. Advancing gated synthesis agenda to task_j1_multiscale_run_parity (family_j).",
-    "timestamp": "2026-11-07T18:57:16Z"
+    "rationalization": "Target task_k2_modular_stride_shift reached 83 gated expression attempts. Advancing gated synthesis agenda to task_j1_multiscale_run_parity (family_j).",
+    "timestamp": "2026-11-07T18:57:18Z"
   },
   "concurrency_lock": {
     "is_locked": true,
-    "locked_by": "worker_80_1794077836",
-    "locked_at": "2026-11-07T18:57:16Z",
-    "expires_at": "1794078436.45",
-    "lock_token": "724fdd56866810e7"
+    "locked_by": "worker_80_1794077838",
+    "locked_at": "2026-11-07T18:57:18Z",
+    "expires_at": "1794078438.02",
+    "lock_token": "e615267d55da1cb5"
   },
   "immutable_baseline": {
     "root_candidate_id": "G0_self_dev_root_c0",
@@ -4174,10 +4213,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "89c57d7f20a3ca2b669508909f7636f529a9700e55825778edafb6d4a73853be",
+  "state_digest": "d7bf7b61f73c05a18999b9bbe8ddb339149c503ec40815e5cef1a77313abd649",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 104,
-    "last_known_good_digest": "89c57d7f20a3ca2b669508909f7636f529a9700e55825778edafb6d4a73853be",
+    "last_known_good_cycle": 105,
+    "last_known_good_digest": "d7bf7b61f73c05a18999b9bbe8ddb339149c503ec40815e5cef1a77313abd649",
     "recovery_count": 0
   }
 }
