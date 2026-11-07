@@ -22,11 +22,13 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 EXPECTED_PRESCORE_HASHES = {
     "docs/research/f13/ACE_F13_CAUSAL_MEMORY_PRESCORE_20261107.md": "0948f00b273be45a408d7c758cd45c2b5a67c15c215b86e9600f2940decf34f3",
     "docs/research/f14/ACE_F14_INDEPENDENT_EVALUATION_PRESCORE_20261107.md": "08baed13793977b7a056e262d984dde074e243edf0aa00a5c45b486f0c249659",
+    "docs/research/f14/ACE_F14_V3_PREREGISTRATION_20261107.md": "2c287b5702244010afde9d8ac5ecfbe3d80c6a18b860c7916f7f9e34e8f98a9a",
 }
 
 EXPECTED_EVIDENCE_HASHES = {
     "evidence/f13/ace_f13_causal_memory_v1.json.gz": "efa00a78db2d6ab43f1635f6402adaa7049c82be59146268f91e29266324dd03",
     "evidence/f14/ace_f14_mechanism_discovery_v1.json.gz": "4cc363b9ff0fb17f84bc960bc4e94573c10ba038e525d2f7f5fcfd86141a3062",
+    "evidence/f14/ace_f14_v3_scientific_validation.json.gz": "6eb79e93d9fcd892476735853739d7d0cbfafbc9c64afb0cdb557604837f359d",
 }
 
 
@@ -91,10 +93,19 @@ def main() -> int:
         print("FAIL: ace_research_f14.verify failed!", file=sys.stderr)
         return 1
 
+    res_f14_v3 = subprocess.run(
+        [sys.executable, "-m", "ace_research_f14.verify_v3", "--artifact", "evidence/f14/ace_f14_v3_scientific_validation.json.gz"],
+        cwd=str(REPO_ROOT),
+        env={"PYTHONPATH": str(REPO_ROOT / "code"), "PATH": str(Path(sys.executable).parent)},
+    )
+    if res_f14_v3.returncode != 0:
+        print("FAIL: ace_research_f14.verify_v3 failed!", file=sys.stderr)
+        return 1
+
     # 5. Run test suites
     print("[5/5] Running unit test suites...")
     res_tests = subprocess.run(
-        [sys.executable, "-m", "unittest", "ace_research_f13.test_f13_memory", "ace_research_f14.test_f14_discovery"],
+        [sys.executable, "-m", "unittest", "ace_research_f13.test_f13_memory", "ace_research_f14.test_f14_discovery", "ace_host_controller.test_boundary_penetration"],
         cwd=str(REPO_ROOT),
         env={"PYTHONPATH": str(REPO_ROOT / "code"), "PATH": str(Path(sys.executable).parent)},
     )
