@@ -354,12 +354,18 @@ class AutonomousGenerationalDiscovery:
 
         # Update prior baseline scores in Host Controller to enforce regression prevention for G2
         if dec_g1.status == "ACCEPTED":
-            host_controller.evaluator._prior_baseline_scores = {
+            baseline_map = {
                 "task_a1_even_a_mod2": 1.0,
                 "task_a2_odd_b_mod2": 1.0,
                 "task_b1_dyck_bal": 1.0,
                 "task_b2_dyck_deep": 1.0,
             }
+            if hasattr(host_controller, "update_baseline_scores"):
+                host_controller.update_baseline_scores(baseline_map)
+            elif hasattr(host_controller.evaluator, "update_baseline_scores"):
+                host_controller.evaluator.update_baseline_scores(baseline_map)
+            else:
+                host_controller.evaluator._prior_baseline_scores = baseline_map
 
         # 3. Evolve G1 -> G2: autonomous discovery on unseen Family C (Relational Split-Frame)
         g2_solvers: Dict[str, ASTNode] = dict(g1_solvers)
