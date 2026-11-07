@@ -37,6 +37,66 @@ from .grammar import (
 
 
 @dataclass
+class SearchMetrics:
+    unique_candidates_evaluated: int
+    evaluator_calls: int
+    cpu_seconds: float
+    memory_mb: float
+    search_cost_usd: float = 0.0
+
+
+@dataclass
+class SearchResult:
+    candidates: List[Tuple[ASTNode, float]]
+    metrics: SearchMetrics
+
+    def __getitem__(self, idx: int) -> Tuple[ASTNode, float]:
+        return self.candidates[idx]
+
+    def __len__(self) -> int:
+        return len(self.candidates)
+
+    def __iter__(self):
+        return iter(self.candidates)
+
+
+INITIAL_PRIMITIVE_CATALOG = frozenset({
+    "InputString",
+    "SliceOp",
+    "CountOp",
+    "LengthOp",
+    "HalfSplitOp",
+    "ModEqPred",
+    "RelationalEqPred",
+    "DyckBalanceOp",
+})
+
+
+def audit_primitive_novelty(node: ASTNode) -> Dict[str, Any]:
+    """Inspect AST to determine whether it contains any genuinely novel computational primitives."""
+    node_classes = set()
+
+    def _traverse(n: Any) -> None:
+        if isinstance(n, ASTNode):
+            node_classes.add(n.__class__.__name__)
+            for attr in ("src", "left", "right"):
+                child = getattr(n, attr, None)
+                if child is not None:
+                    _traverse(child)
+
+    _traverse(node)
+    novel_classes = node_classes - INITIAL_PRIMITIVE_CATALOG
+    is_novel = len(novel_classes) > 0
+    return {
+        "is_novel_primitive": is_novel,
+        "classification": "GENUINE_NOVEL_PRIMITIVE" if is_novel else "AST_COMPOSITION",
+        "node_classes": sorted(list(node_classes)),
+        "novel_classes": sorted(list(novel_classes)),
+        "signature": node.signature(),
+    }
+
+
+@dataclass
 class ErrorDiagnostic:
     error_rate: float
     total_failures: int
@@ -44,6 +104,7 @@ class ErrorDiagnostic:
     dyck_signal: float
     relational_signal: float
     primary_cue: str  # "strided", "dyck", "relational", "flat"
+
 
 
 class ErrorDiagnoser:
@@ -204,9 +265,12 @@ class GrammarSearchEngine:
         budget: int = 50,
         search_mode: str = "guided",  # "guided", "random", "compute_matched"
         include_relational: bool = True,
-    ) -> List[Tuple[ASTNode, float]]:
-        """Generate and rank candidate mechanism ASTs evaluated on training samples."""
-        inp = InputString()
+    ) -> SearchResult:
+        """Generate and rank candidate mechanism ASTs evaluated on training samples with strict budget enforcement."""
+        import resource
+        import time
+
+        t_start = time.perf_counter()
         candidates: List[ASTNode] = []
 
         if search_mode == "random":
@@ -222,12 +286,19 @@ class GrammarSearchEngine:
                 t = self.rng.choice(templates)
                 candidates.append(self._generate_random_template_ast(t))
         else:
-            # Primary Guided Discovery: systematic exploration of grammar space
-            candidates = self.get_grammar_pool(include_relational=include_relational)
+            # Primary Guided Discovery: systematic exploration of grammar space bounded by budget
+            pool = self.get_grammar_pool(include_relational=include_relational)
+            candidates = pool[:budget]
+
 
         # Evaluate and rank candidates on training data
         scored: List[Tuple[ASTNode, float]] = []
+        evaluator_calls = 0
+        seen_signatures = set()
+
         for ast in candidates:
+            seen_signatures.add(ast.signature())
+            evaluator_calls += len(train_samples)
             try:
                 hits = sum(1 for w, lbl in train_samples if ast.evaluate(w) == lbl)
                 acc = hits / max(1, len(train_samples))
@@ -238,7 +309,20 @@ class GrammarSearchEngine:
                 continue
 
         scored.sort(key=lambda x: x[1], reverse=True)
-        return scored
+        elapsed = time.perf_counter() - t_start
+        try:
+            mem_mb = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024.0
+        except Exception:
+            mem_mb = 0.0
+
+        metrics = SearchMetrics(
+            unique_candidates_evaluated=len(seen_signatures),
+            evaluator_calls=evaluator_calls,
+            cpu_seconds=round(elapsed, 4),
+            memory_mb=round(mem_mb, 2),
+            search_cost_usd=0.0,
+        )
+        return SearchResult(candidates=scored, metrics=metrics)
 
     def _generate_random_template_ast(self, template: str) -> ASTNode:
         inp = InputString()
@@ -313,6 +397,7 @@ class AutonomousGenerationalDiscovery:
         self,
         task_suites: Dict[str, Any],
         host_controller: HostController,
+        search_budget: int = 75,
     ) -> Dict[str, Any]:
         """Run full autonomous discovery cycle from G0 to G2 under Host Controller."""
         inp = InputString()
@@ -336,20 +421,28 @@ class AutonomousGenerationalDiscovery:
             g1_task_ids = all_task_ids[:split_idx]
             g2_task_ids = all_task_ids[split_idx:]
 
-        # 2. Evolve G0 -> G1: discover mechanisms for G1 tasks
+        # 2. Evolve G0 -> G1: discover mechanisms for G1 tasks using train_pool only (zero holdout access!)
         g1_solvers: Dict[str, ASTNode] = {}
+        search_metrics_by_task: Dict[str, Any] = {}
         for tid in g1_task_ids:
             task = task_suites[tid]
             diag = self.diagnoser.analyze(g0_fn, task.train_pool)
-            cands = self.searcher.search_candidates(
-                diag, task.train_pool, budget=60, include_relational=False
+            search_res = self.searcher.search_candidates(
+                diag, task.train_pool, budget=search_budget, include_relational=False
             )
-            g1_solvers[tid] = cands[0][0]
+            g1_solvers[tid] = search_res[0][0]
+            search_metrics_by_task[tid] = {
+                "unique_candidates_evaluated": search_res.metrics.unique_candidates_evaluated,
+                "evaluator_calls": search_res.metrics.evaluator_calls,
+                "cpu_seconds": search_res.metrics.cpu_seconds,
+                "memory_mb": search_res.metrics.memory_mb,
+            }
 
         g1_dispatch_fn, g1_code = _build_multi_task_candidate(g1_solvers, default_ast)
         g1_sha = hashlib.sha256(g1_code.encode("utf-8")).hexdigest()
 
         # Submit G1 to Host Controller (parent is empirical root G0)
+        # Note: HostController updates prior baseline scores internally upon promotion
         dec_g1 = host_controller.evaluate_and_gate(
             candidate_id="G1_autonomous_discovered",
             parent_id=root_id,
@@ -362,28 +455,21 @@ class AutonomousGenerationalDiscovery:
             },
         )
 
-        # Update prior baseline scores in Host Controller from empirical G1 performance
-        if dec_g1.status == "ACCEPTED":
-            baseline_map = {
-                tid: round(sum(1 for w, lbl in task_suites[tid].holdout_pool if g1_dispatch_fn(w, tid) == lbl) / max(1, len(task_suites[tid].holdout_pool)), 4)
-                for tid in g1_task_ids
-            }
-            if hasattr(host_controller, "update_baseline_scores"):
-                host_controller.update_baseline_scores(baseline_map)
-            elif hasattr(host_controller.evaluator, "update_baseline_scores"):
-                host_controller.evaluator.update_baseline_scores(baseline_map)
-            else:
-                host_controller.evaluator._prior_baseline_scores = baseline_map
-
-        # 3. Evolve G1 -> G2: autonomous discovery on unseen G2 tasks
+        # 3. Evolve G1 -> G2: autonomous discovery on unseen G2 tasks using train_pool only
         g2_solvers: Dict[str, ASTNode] = dict(g1_solvers)
         for tid in g2_task_ids:
             task = task_suites[tid]
             diag = self.diagnoser.analyze(lambda w: g1_dispatch_fn(w, tid), task.train_pool)
-            cands = self.searcher.search_candidates(
-                diag, task.train_pool, budget=60, include_relational=True
+            search_res = self.searcher.search_candidates(
+                diag, task.train_pool, budget=search_budget, include_relational=True
             )
-            g2_solvers[tid] = cands[0][0]
+            g2_solvers[tid] = search_res[0][0]
+            search_metrics_by_task[tid] = {
+                "unique_candidates_evaluated": search_res.metrics.unique_candidates_evaluated,
+                "evaluator_calls": search_res.metrics.evaluator_calls,
+                "cpu_seconds": search_res.metrics.cpu_seconds,
+                "memory_mb": search_res.metrics.memory_mb,
+            }
 
         g2_dispatch_fn, g2_code = _build_multi_task_candidate(g2_solvers, default_ast)
         g2_sha = hashlib.sha256(g2_code.encode("utf-8")).hexdigest()
@@ -402,10 +488,17 @@ class AutonomousGenerationalDiscovery:
             },
         )
 
-        # Collect raw predictions and raw labels across all holdout samples
-        raw_samples: List[Tuple[str, str, bool]] = [
-            (tid, w, lbl) for tid, t in task_suites.items() for w, lbl in t.holdout_pool
-        ]
+        # 4. Audit Primitive Novelty vs Composition
+        novelty_audits = {tid: audit_primitive_novelty(node) for tid, node in g2_solvers.items()}
+        any_novel_primitive = any(a["is_novel_primitive"] for a in novelty_audits.values())
+
+        # 5. Collect predictions across terminal holdouts if provided
+        raw_samples: List[Tuple[str, str, bool]] = []
+        for tid, t in task_suites.items():
+            pool = getattr(t, "terminal_holdout_pool", getattr(t, "holdout_pool", []))
+            for w, lbl in pool:
+                raw_samples.append((tid, w, lbl))
+
         raw_labels = [lbl for _, _, lbl in raw_samples]
         raw_preds = {
             "g0": [bool(g0_fn(w)) for _, w, _ in raw_samples],
@@ -431,10 +524,16 @@ class AutonomousGenerationalDiscovery:
             "g2_ast_family_c": g2_solvers.get("task_c1_split_eq_mod2", g2_ast_vals[-1] if g2_ast_vals else default_ast).signature(),
             "g1_solvers_signatures": {tid: node.signature() for tid, node in g1_solvers.items()},
             "g2_solvers_signatures": {tid: node.signature() for tid, node in g2_solvers.items()},
+            "g1_dispatch_fn": g1_dispatch_fn,
+            "g2_dispatch_fn": g2_dispatch_fn,
             "active_head_id": host_controller.lineage.active_head_id,
+            "novelty_audits": novelty_audits,
+            "is_novel_primitive_discovered": any_novel_primitive,
+            "search_metrics": search_metrics_by_task,
             "raw_labels": raw_labels,
             "raw_predictions": raw_preds,
             "decisions": [dec_g1, dec_g2],
         }
+
 
 
