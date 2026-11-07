@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 3,
+  "cycle_count": 5,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -47,6 +47,36 @@
       "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0003.json.gz",
       "prior_digest": "a4b4b59b4b6b05f98bd957aee75c96a21fecced7cf61ed4a80b8b02d9fb98cb0",
       "state_digest": "93f66e5bc8607db31bbb71f0c3924b579c2b3af08656bc15b333c0a9df4d4622"
+    },
+    {
+      "cycle_id": 4,
+      "timestamp": "2026-11-07T17:38:50Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C4_task_j1_multiscale_run_parity_ord2",
+      "target_task_id": "task_j1_multiscale_run_parity",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C4_task_j1_multiscale_run_parity_ord2",
+      "source_sha": "373167919d71c9af38f74703309667a5899d930c66eead56fad233015bd55d99",
+      "decision": "REJECTED",
+      "holdout_score": 0.6562,
+      "gain_over_parent": -0.0313,
+      "rejection_reason": "Holdout gain -0.0313 below required min_gain 0.1500",
+      "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0004.json.gz",
+      "prior_digest": "93f66e5bc8607db31bbb71f0c3924b579c2b3af08656bc15b333c0a9df4d4622",
+      "state_digest": "a78a0518d92b2e3b348bfa11ad2d5597ff8e2648661d298b1985f53b3cc828ba"
+    },
+    {
+      "cycle_id": 5,
+      "timestamp": "2026-11-07T17:38:50Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C5_task_j2_symmetric_run_boundary_ord1",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C5_task_j2_symmetric_run_boundary_ord1",
+      "source_sha": "373167919d71c9af38f74703309667a5899d930c66eead56fad233015bd55d99",
+      "decision": "REJECTED",
+      "holdout_score": 0.6641,
+      "gain_over_parent": -0.0312,
+      "rejection_reason": "Holdout gain -0.0312 below required min_gain 0.1500",
+      "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0005.json.gz",
+      "prior_digest": "a78a0518d92b2e3b348bfa11ad2d5597ff8e2648661d298b1985f53b3cc828ba",
+      "state_digest": "a82711be634a98c66ddbb1f8b9d9bf8ad2521ed555542fbbb6f283b0edd3ddfe"
     }
   ],
   "failure_catalog": {
@@ -100,6 +130,40 @@
         "gain_over_parent": -0.0234,
         "rejection_reason": "Holdout gain -0.0234 below required min_gain 0.1500",
         "timestamp": "2026-11-07T17:18:41Z"
+      },
+      {
+        "cycle_id": 4,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C4_task_j1_multiscale_run_parity_ord2",
+        "gene_dict": {
+          "window_stride": 4,
+          "modulus": 3,
+          "parity_threshold": 1,
+          "weight_length": 1,
+          "weight_density": 2,
+          "sign": 1
+        },
+        "mutation_ordinal": 2,
+        "gain_over_parent": -0.0313,
+        "rejection_reason": "Holdout gain -0.0313 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T17:38:50Z"
+      }
+    ],
+    "task_j2_symmetric_run_boundary": [
+      {
+        "cycle_id": 5,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C5_task_j2_symmetric_run_boundary_ord1",
+        "gene_dict": {
+          "window_stride": 3,
+          "modulus": 3,
+          "parity_threshold": 1,
+          "weight_length": 1,
+          "weight_density": 2,
+          "sign": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": -0.0312,
+        "rejection_reason": "Holdout gain -0.0312 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T17:38:50Z"
       }
     ]
   },
@@ -121,22 +185,34 @@
       "target_task_id": "task_j1_multiscale_run_parity",
       "status": "FALSIFIED",
       "cycle_id": 3
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C4_task_j1_multiscale_run_parity_ord2",
+      "target_task_id": "task_j1_multiscale_run_parity",
+      "status": "FALSIFIED",
+      "cycle_id": 4
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C5_task_j2_symmetric_run_boundary_ord1",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "status": "FALSIFIED",
+      "cycle_id": 5
     }
   ],
   "next_agenda_priority": {
-    "priority_task_id": "task_j1_multiscale_run_parity",
+    "priority_task_id": "task_j2_symmetric_run_boundary",
     "priority_family": "family_j",
     "strategy": "EXPLORE_MUTATION_ORDINAL",
     "suggested_ordinal": 2,
-    "rationalization": "Mutation ordinal 1 on task_j1_multiscale_run_parity failed with gain -0.0234. Attempt 1/2: exploring ordinal 2.",
-    "timestamp": "2026-11-07T17:18:41Z"
+    "rationalization": "Mutation ordinal 1 on task_j2_symmetric_run_boundary failed with gain -0.0312. Attempt 1/2: exploring ordinal 2.",
+    "timestamp": "2026-11-07T17:38:50Z"
   },
   "concurrency_lock": {
     "is_locked": true,
-    "locked_by": "worker_2720_1794071921",
-    "locked_at": "2026-11-07T17:18:41Z",
-    "expires_at": "1794072521.84",
-    "lock_token": "41eb08cf998a3e12"
+    "locked_by": "worker_37_1794073130",
+    "locked_at": "2026-11-07T17:38:50Z",
+    "expires_at": "1794073730.89",
+    "lock_token": "2568f821ca4609f1"
   },
   "immutable_baseline": {
     "root_candidate_id": "G0_self_dev_root_c0",
@@ -145,10 +221,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "93f66e5bc8607db31bbb71f0c3924b579c2b3af08656bc15b333c0a9df4d4622",
+  "state_digest": "a82711be634a98c66ddbb1f8b9d9bf8ad2521ed555542fbbb6f283b0edd3ddfe",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 3,
-    "last_known_good_digest": "93f66e5bc8607db31bbb71f0c3924b579c2b3af08656bc15b333c0a9df4d4622",
+    "last_known_good_cycle": 5,
+    "last_known_good_digest": "a82711be634a98c66ddbb1f8b9d9bf8ad2521ed555542fbbb6f283b0edd3ddfe",
     "recovery_count": 0
   }
 }
