@@ -141,10 +141,16 @@ COMPOSITE_OPERATORS: Tuple[str, ...] = ("ADD", "XOR", "SUB", "MULT")
 
 GATED_MUTATIONS: Tuple[Tuple[int, int, int, int], ...] = (
     # (min_length, stride_weight, density_weight, modulus)
-    (4, 1, 1, 3),  # (stride + density) % 3 == 0, min_len >= 4
-    (3, 1, 0, 2),  # stride % 2 == 0, min_len >= 3
-    (4, 2, -1, 3), # (2*stride - density) % 3 == 0, min_len >= 4
-    (3, 1, -1, 2), # (stride - density) % 2 == 0, min_len >= 3
+    (4, 1, 1, 3),   # Ordinal 1: (stride + density) % 3 == 0, min_len >= 4
+    (3, 1, 0, 2),   # Ordinal 2: stride % 2 == 0, min_len >= 3
+    (4, 2, -1, 3),  # Ordinal 3: (2*stride - density) % 3 == 0, min_len >= 4
+    (3, 1, -1, 2),  # Ordinal 4: (stride - density) % 2 == 0, min_len >= 3
+    (3, 0, 1, 2),   # Ordinal 5: density % 2 == 0, min_len >= 3 (task_j2 parity)
+    (3, 2, 0, 3),   # Ordinal 6: (stride * 2) % 3 == 0, min_len >= 3
+    (4, 1, 2, 3),   # Ordinal 7: (stride + 2*density) % 3 == 0, min_len >= 4
+    (3, 1, 1, 2),   # Ordinal 8: (stride + density) % 2 == 0, min_len >= 3
+    (4, 2, 1, 3),   # Ordinal 9: (2*stride + density) % 3 == 0, min_len >= 4
+    (3, 2, -2, 3),  # Ordinal 10: (2*stride - 2*density) % 3 == 0, min_len >= 3
 )
 
 

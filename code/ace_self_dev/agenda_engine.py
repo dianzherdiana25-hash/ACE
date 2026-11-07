@@ -76,20 +76,17 @@ class AgendaEngine:
                 tid: [f for f in state.failure_catalog.get(tid, []) if f.get("gene_dict", {}).get("is_gated", False)]
                 for tid in tasks.keys()
             }
-            if state.next_agenda_priority:
-                rec_tid = state.next_agenda_priority.get("priority_task_id")
-                if rec_tid in tasks and len(gated_failures_per_task.get(rec_tid, [])) < self.max_attempts_per_task:
-                    selected_task_id = rec_tid
+            under_quota = [tid for tid in ranked_tasks if len(gated_failures_per_task.get(tid, [])) < self.max_attempts_per_task]
+            if under_quota:
+                if state.next_agenda_priority and state.next_agenda_priority.get("priority_task_id") in under_quota:
+                    selected_task_id = state.next_agenda_priority.get("priority_task_id")
                 else:
-                    for cand_tid in ranked_tasks:
-                        if len(gated_failures_per_task.get(cand_tid, [])) < self.max_attempts_per_task:
-                            selected_task_id = cand_tid
-                            break
+                    selected_task_id = under_quota[0]
             else:
-                for cand_tid in ranked_tasks:
-                    if len(gated_failures_per_task.get(cand_tid, [])) < self.max_attempts_per_task:
-                        selected_task_id = cand_tid
-                        break
+                if state.next_agenda_priority and state.next_agenda_priority.get("priority_task_id") in tasks:
+                    selected_task_id = state.next_agenda_priority.get("priority_task_id")
+                else:
+                    selected_task_id = min(ranked_tasks, key=lambda tid: len(gated_failures_per_task.get(tid, [])))
 
             tried_gated = {f.get("mutation_ordinal") for f in gated_failures_per_task.get(selected_task_id, [])}
             selected_ordinal = 1
