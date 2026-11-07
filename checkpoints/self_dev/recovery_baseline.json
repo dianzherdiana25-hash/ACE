@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 13,
+  "cycle_count": 14,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -197,6 +197,21 @@
       "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0013.json.gz",
       "prior_digest": "cd92f84a3031a4f3a3460be7ab5152b570a3900f59b49da96487fc5b4facc4ca",
       "state_digest": "982e248002b14b6e3e95e41b2bc9f3d7f4925a3a34b17bf51767015647db233d"
+    },
+    {
+      "cycle_id": 14,
+      "timestamp": "2026-11-07T18:37:47Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C14_task_j2_symmetric_run_boundary_comp_ord2",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C14_task_j2_symmetric_run_boundary_comp_ord2",
+      "source_sha": "f07053259a2ec96a90488a307fceb2341990a691adb864a69f5c97260de5cedb",
+      "decision": "REJECTED",
+      "holdout_score": 0.625,
+      "gain_over_parent": -0.0703,
+      "rejection_reason": "Holdout gain -0.0703 below required min_gain 0.1500",
+      "evidence_path": "/home/antigravity/dianzherdiana25-hash/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0014.json.gz",
+      "prior_digest": "982e248002b14b6e3e95e41b2bc9f3d7f4925a3a34b17bf51767015647db233d",
+      "state_digest": "13a4388b493b7a609fbd96d2ac8ba6600b52d940e961b57ba1e0207e77cfd019"
     }
   ],
   "failure_catalog": {
@@ -450,6 +465,36 @@
         "gain_over_parent": -0.0859,
         "rejection_reason": "Holdout gain -0.0859 below required min_gain 0.1500",
         "timestamp": "2026-11-07T18:35:52Z"
+      },
+      {
+        "cycle_id": 14,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C14_task_j2_symmetric_run_boundary_comp_ord2",
+        "gene_dict": {
+          "is_composite": true,
+          "gene_a": {
+            "is_composite": false,
+            "window_stride": 4,
+            "modulus": 3,
+            "parity_threshold": 1,
+            "weight_length": 1,
+            "weight_density": 2,
+            "sign": 1
+          },
+          "gene_b": {
+            "is_composite": false,
+            "window_stride": 2,
+            "modulus": 7,
+            "parity_threshold": 1,
+            "weight_length": 1,
+            "weight_density": 2,
+            "sign": 1
+          },
+          "operator": "SUB"
+        },
+        "mutation_ordinal": 2,
+        "gain_over_parent": -0.0703,
+        "rejection_reason": "Holdout gain -0.0703 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T18:37:47Z"
       }
     ],
     "task_k1_center_pivot_density": [
@@ -565,22 +610,28 @@
       "target_task_id": "task_j2_symmetric_run_boundary",
       "status": "FALSIFIED",
       "cycle_id": 13
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C14_task_j2_symmetric_run_boundary_comp_ord2",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "status": "FALSIFIED",
+      "cycle_id": 14
     }
   ],
   "next_agenda_priority": {
-    "priority_task_id": "task_j2_symmetric_run_boundary",
-    "priority_family": "family_j",
+    "priority_task_id": "task_k1_center_pivot_density",
+    "priority_family": "family_k",
     "strategy": "SYNTHESIZE_COMPOSITE_MECHANISM",
-    "suggested_ordinal": 2,
-    "rationalization": "Composite mechanism ordinal 1 on task_j2_symmetric_run_boundary failed with gain -0.0859. Attempt 1/2: exploring composite ordinal 2.",
-    "timestamp": "2026-11-07T18:35:52Z"
+    "suggested_ordinal": 1,
+    "rationalization": "Target task_j2_symmetric_run_boundary reached 2 composite attempts. Advancing synthesis agenda to task_k1_center_pivot_density (family_k) via SYNTHESIZE_COMPOSITE_MECHANISM.",
+    "timestamp": "2026-11-07T18:37:47Z"
   },
   "concurrency_lock": {
     "is_locked": true,
-    "locked_by": "worker_40_1794076551",
-    "locked_at": "2026-11-07T18:35:51Z",
-    "expires_at": "1794077151.98",
-    "lock_token": "1cfb3b1b5d274204"
+    "locked_by": "worker_80_1794076667",
+    "locked_at": "2026-11-07T18:37:47Z",
+    "expires_at": "1794077267.61",
+    "lock_token": "c6f93c7f7c5e015c"
   },
   "immutable_baseline": {
     "root_candidate_id": "G0_self_dev_root_c0",
@@ -589,10 +640,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "982e248002b14b6e3e95e41b2bc9f3d7f4925a3a34b17bf51767015647db233d",
+  "state_digest": "13a4388b493b7a609fbd96d2ac8ba6600b52d940e961b57ba1e0207e77cfd019",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 13,
-    "last_known_good_digest": "982e248002b14b6e3e95e41b2bc9f3d7f4925a3a34b17bf51767015647db233d",
+    "last_known_good_cycle": 14,
+    "last_known_good_digest": "13a4388b493b7a609fbd96d2ac8ba6600b52d940e961b57ba1e0207e77cfd019",
     "recovery_count": 0
   }
 }
