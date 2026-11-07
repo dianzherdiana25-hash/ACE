@@ -13,6 +13,7 @@ import argparse
 import gzip
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -23,6 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CODE_DIR = ROOT / "code"
 if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))
+os.environ["PYTHONPATH"] = str(CODE_DIR) + (f":{os.environ['PYTHONPATH']}" if "PYTHONPATH" in os.environ else "")
 
 MODULE_GROUPS = {
     "regressions": [
@@ -44,6 +46,10 @@ MODULE_GROUPS = {
     ],
     "research_and_redteam": [
         "ace_research_repair.test_repair",
+        "ace_research_repair.test_repair_sandbox",
+        "ace_research_hypgen.test_hypgen",
+        "ace_research_agenda.test_durable_resume",
+        "ace_research_generations.test_generations_growth",
         "ace_research_generations.test_generations",
         "ace_research_discovery.test_discovery",
         "ace_research_agenda.test_agenda",
@@ -91,6 +97,16 @@ EVIDENCE_CHECKS = [
         "name": "Phase 9: Autonomous Research Agenda Evidence",
         "path": ROOT / "evidence" / "agenda" / "ace_research_agenda_v1.json.gz",
         "verify_fn": lambda p: _verify_agenda(p),
+    },
+    {
+        "name": "Phase 10: Autonomous Hypothesis Synthesis Evidence (F10)",
+        "path": ROOT / "evidence" / "hypgen" / "f10_hypothesis_synthesis_v1.json.gz",
+        "verify_fn": lambda p: _verify_hypgen(p),
+    },
+    {
+        "name": "P4 Growth: Recursive Generations Capability Growth Evidence",
+        "path": ROOT / "evidence" / "generations" / "ace_generations_growth_v1.json.gz",
+        "verify_fn": lambda p: _verify_generations_growth(p),
     },
 ]
 
@@ -187,6 +203,29 @@ def _verify_agenda(p: Path) -> dict:
         "sha256": _sha256(p),
         "uncompressed_sha256": rec["uncompressed_sha256"],
         "archive_summary": rec["archive_summary"],
+    }
+
+
+def _verify_hypgen(p: Path) -> dict:
+    from ace_research_hypgen.verify import verify_hypgen_artifact
+    rec = verify_hypgen_artifact(p)
+    return {
+        "status": "PASS",
+        "sha256": _sha256(p),
+        "uncompressed_sha256": rec["uncompressed_sha256"],
+        "f10_decision": rec["f10_decision"],
+        "threshold_passed": rec["threshold_passed"],
+    }
+
+
+def _verify_generations_growth(p: Path) -> dict:
+    from ace_research_generations.verify_growth import verify_generations_growth_artifact
+    rec = verify_generations_growth_artifact(p, replay=False)
+    return {
+        "status": "PASS",
+        "sha256": _sha256(p),
+        "uncompressed_sha256": rec["uncompressed_sha256"],
+        "all_gates_pass": rec["all_gates_pass"],
     }
 
 

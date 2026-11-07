@@ -5,6 +5,7 @@ on:
     branches:
       - validation/ace-full-system-ci-20261107
       - integration/ace-master-verified-20261107
+      - engineering/ace-exact-ci-audit-20261107
   pull_request:
     paths:
       - 'code/**'
@@ -106,15 +107,23 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Verify imported source bytes
         run: python tools/verify_sources.py
-      - name: Test research subsystems & redteam suites (36 tests)
+      - name: Test research subsystems & redteam suites (77 tests)
         run: >-
           python -m unittest
           ace_research_repair.test_repair
+          ace_research_repair.test_repair_sandbox
+          ace_research_hypgen.test_hypgen
+          ace_research_agenda.test_durable_resume
+          ace_research_generations.test_generations_growth
           ace_research_generations.test_generations
           ace_research_discovery.test_discovery
           ace_research_agenda.test_agenda
           ace_integration_redteam.test_integration_redteam
           -v
+      - name: Verify hypothesis synthesis evidence artifact
+        run: python -m ace_research_hypgen.verify --artifact evidence/hypgen/f10_hypothesis_synthesis_v1.json.gz
+      - name: Verify generations growth evidence artifact
+        run: python -m ace_research_generations.verify_growth --artifact evidence/generations/ace_generations_growth_v1.json.gz
       - name: Execute Red Team full integration suite
         run: python -m ace_integration_redteam.redteam_suite
 
