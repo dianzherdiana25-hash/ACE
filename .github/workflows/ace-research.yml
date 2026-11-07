@@ -38,7 +38,10 @@ jobs:
           ace_capability_evolution.test_compositional
           ace_runtime.test_engine
           ace_runtime.test_cli
+          ace_research_hypgen.test_hypgen
           -v
+      - name: Verify hypothesis synthesis evidence artifact
+        run: python -m ace_research_hypgen.verify --artifact evidence/hypgen/f10_hypothesis_synthesis_v1.json.gz
       - name: Verify deterministic composition replay
         run: |
           python -m ace_capability_evolution.compositional --output /tmp/composition.json
