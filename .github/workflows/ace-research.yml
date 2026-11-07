@@ -41,6 +41,8 @@ jobs:
           ace_research_repair.test_repair
           ace_research_repair.test_repair_sandbox
           ace_research_hypgen.test_hypgen
+          ace_research_agenda.test_agenda
+          ace_research_agenda.test_durable_resume
           -v
       - name: Verify repair evidence artifact
         run: python -m ace_research_repair.verify --artifact evidence/repair/ace_repair_v1.json.gz
