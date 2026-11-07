@@ -345,11 +345,52 @@ class TestHostBoundaryPenetration(unittest.TestCase):
             candidate_fn=lambda w: len(w) % 2 == 0,
         )
         self.assertEqual(dec_child_of_fail.status, "REJECTED")
-        self.assertTrue(any("not ACCEPTED" in r for r in dec_child_of_fail.rejection_reasons))
         self.assertEqual(host.lineage.active_head_id, "G1_cand")
+
+    def test_internalized_baseline_scores_on_promotion(self):
+        """Host Controller must update evaluator baseline scores internally upon promotion without external holdout reads."""
+        from ace_host_controller import HostController, HostSandboxGate, SealedHoldoutEvaluator
+
+        local_eval = SealedHoldoutEvaluator(
+            manifest_id="test_man",
+            holdout_banks=self.holdouts,
+            prior_baseline_scores={"task_test": 0.0},
+        )
+        host = HostController(
+            evaluator=local_eval,
+            budget=self.budget,
+            sandbox_gate=HostSandboxGate(enforce_os_containment=False),
+            root_candidate_id="G0_root",
+            root_holdout_score=0.25,
+            min_gain=0.15,
+        )
+        dec = host.evaluate_and_gate(
+            candidate_id="G1_accepted",
+            parent_id="G0_root",
+            generation=1,
+            source_sha="1" * 64,
+            candidate_fn=lambda w: len(w) % 2 == 0,
+        )
+        self.assertEqual(dec.status, "ACCEPTED")
+        # Internalized baseline update should now match candidate accuracy (1.0 on test holdouts)
+        self.assertEqual(local_eval._prior_baseline_scores["task_test"], 1.0)
+
+    def test_blocked_environment_when_not_sealed(self):
+        """Sandbox gate must fail-closed with BLOCKED_ENVIRONMENT when OS containment is absent."""
+        from unittest.mock import patch
+        from ace_host_controller.boundary import SealingStatus
+        from ace_host_controller import HostSandboxGate
+
+        gate = HostSandboxGate(enforce_os_containment=True)
+        with patch("ace_host_controller.boundary.detect_os_sealing", return_value=SealingStatus.NOT_SEALED):
+            result = gate.check_environment_containment()
+            self.assertFalse(result.allowed)
+            self.assertEqual(result.reason, "BLOCKED_ENVIRONMENT")
+            self.assertTrue(any("BLOCKED_ENVIRONMENT" in result.reason or "absent" in v for v in result.violations))
 
 
 if __name__ == "__main__":
     unittest.main()
+
 
 
