@@ -69,6 +69,8 @@ class HostController:
         sandbox_gate: Optional[HostSandboxGate] = None,
         root_candidate_id: str = "G0_root",
         root_source_sha: str = "0000000000000000000000000000000000000000000000000000000000000000",
+        root_candidate_fn: Optional[Callable[[str], bool]] = None,
+        root_holdout_score: Optional[float] = None,
         min_gain: float = 0.15,
         max_regression: float = 0.02,
     ):
@@ -87,7 +89,25 @@ class HostController:
             generation=0,
             metadata={"description": "Baseline root model G0"},
         )
-        self.lineage.update_status(root_candidate_id, "ACCEPTED", holdout_score=0.50)
+        # Empirical root holdout score initialization (never hardcode arbitrary constants)
+        if root_holdout_score is not None:
+            initial_root_score = round(float(root_holdout_score), 4)
+        elif root_candidate_fn is not None:
+            rcpt = self.evaluator.evaluate_candidate(
+                candidate_id=root_candidate_id,
+                candidate_fn=root_candidate_fn,
+                budget=self.budget,
+                min_gain=0.0,
+                max_regression=1.0,
+            )
+            initial_root_score = round(rcpt.holdout_accuracy, 4)
+        elif getattr(self.evaluator, "_prior_baseline_scores", None):
+            prior_scores = self.evaluator._prior_baseline_scores.values()
+            initial_root_score = round(sum(prior_scores) / max(1, len(prior_scores)), 4)
+        else:
+            initial_root_score = 0.0
+
+        self.lineage.update_status(root_candidate_id, "ACCEPTED", holdout_score=initial_root_score)
 
         self.exposure_ledger = ExposureLedger()
         self.rollback_history: list[RollbackRecord] = []
@@ -97,6 +117,19 @@ class HostController:
         self.release_gate = "BLOCK_RELEASE"
         self.scientific_status = "NOT_ASSESSED"
         self.oaie_established = False
+
+    def initialize_root_score(self, root_fn: Callable[[str], bool]) -> float:
+        """Measure empirical root starting accuracy via trusted evaluator and update lineage root score."""
+        receipt = self.evaluator.evaluate_candidate(
+            candidate_id=self.lineage.root_id,
+            candidate_fn=root_fn,
+            budget=self.budget,
+            min_gain=0.0,
+            max_regression=1.0,
+        )
+        score = round(receipt.holdout_accuracy, 4)
+        self.lineage.update_status(self.lineage.root_id, "ACCEPTED", holdout_score=score)
+        return score
 
     def evaluate_and_gate(
         self,
@@ -110,6 +143,19 @@ class HostController:
     ) -> AcceptanceDecision:
         """Evaluate a candidate, verify non-contamination and sandbox rules, and decide promotion."""
         rejection_reasons: list[str] = []
+
+        # Validate parent node exists and is in ACCEPTED status
+        if parent_id not in self.lineage.nodes:
+            rejection_reasons.append(f"Parent candidate '{parent_id}' does not exist in lineage")
+            parent_score = 0.0
+        else:
+            parent_node = self.lineage.nodes[parent_id]
+            parent_score = parent_node.holdout_score
+            if parent_node.status != "ACCEPTED":
+                rejection_reasons.append(
+                    f"Parent candidate '{parent_id}' has status '{parent_node.status}', not ACCEPTED. "
+                    f"Cannot promote candidate from an unaccepted/rejected parent."
+                )
 
         # 1. Register candidate in lineage or check if blocked
         if candidate_id in self.lineage.nodes:
@@ -155,8 +201,6 @@ class HostController:
             max_regression=self.max_regression,
         )
 
-        parent_node = self.lineage.nodes[parent_id]
-        parent_score = parent_node.holdout_score
         gain = receipt.holdout_accuracy - parent_score
 
         if receipt.prior_regression > self.max_regression:
