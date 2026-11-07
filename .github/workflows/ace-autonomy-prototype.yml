@@ -1,0 +1,51 @@
+name: ACE bounded autonomy prototype
+
+on:
+  push:
+    branches:
+      - engineering/chat-ace-autonomy-prototype-20261107
+  pull_request:
+    paths:
+      - 'code/ace_autonomy/**'
+      - 'docs/ACE_AUTONOMY_PROTOTYPE_20261107.md'
+      - '.github/workflows/ace-autonomy-prototype.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  autonomy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13']
+    env:
+      PYTHONPATH: code
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Pin exact candidate checkout
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          git show -s --format='%H %s' HEAD
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify original ACE sources
+        run: python tools/verify_sources.py
+      - name: Test bounded autonomy and actual ACE runtime integration
+        run: python -m unittest ace_autonomy.test_core -v
+      - name: Test main ACE runtime unchanged
+        run: python -m unittest ace_runtime.test_engine ace_runtime.test_cli -v
+      - name: Execute ACE original CLI against fresh workspace
+        run: |
+          python ace.py demo --workspace "$RUNNER_TEMP/ace-public-demo" > "$RUNNER_TEMP/ace-demo.json"
+          cmp "$RUNNER_TEMP/ace-demo.json" evidence/runtime/v1-demo.json
