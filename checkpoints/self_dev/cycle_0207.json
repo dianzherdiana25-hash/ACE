@@ -1,0 +1,116 @@
+{
+  "cycle_id": 207,
+  "phase": "REPORTED",
+  "active_head_id": "G0_self_dev_root_c0",
+  "prior_cycle_id": 206,
+  "state_digest_before": "caf799f2a0f3bdf978352bcd0dfa5536874ec5f266e43ef1a89f9a293e92d9ae",
+  "state_digest_after": "08e0d8ad27f6b25521a95bb0bbef0a01c874fc26608e295ea7cc1dd66b007abe",
+  "diagnosis": {
+    "timestamp": "2026-11-07T19:16:24Z",
+    "baseline_head_id": "G0_self_dev_root_c0",
+    "baseline_score": 0.6625,
+    "diagnosed_weakness_task": "task_k2_modular_stride_shift",
+    "diagnosed_weakness_family": "family_k",
+    "observed_failure_rate": 0.425,
+    "error_cue": "acc=0.575, fp=8, fn=9",
+    "details": {
+      "task_scores": {
+        "task_j1_multiscale_run_parity": 0.625,
+        "task_j2_symmetric_run_boundary": 0.625,
+        "task_k1_center_pivot_density": 0.825,
+        "task_k2_modular_stride_shift": 0.575
+      },
+      "task_cues": {
+        "task_j1_multiscale_run_parity": "acc=0.625, fp=2, fn=13",
+        "task_j2_symmetric_run_boundary": "acc=0.625, fp=6, fn=9",
+        "task_k1_center_pivot_density": "acc=0.825, fp=4, fn=3",
+        "task_k2_modular_stride_shift": "acc=0.575, fp=8, fn=9"
+      },
+      "target_description": "Modular Stride Shift Invariant"
+    }
+  },
+  "hypothesis": {
+    "hypothesis_id": "HYP_AUTONOMOUS_C207_task_k2_modular_stride_shift_gated_ord11",
+    "statement": "Cycle 207: Applying gated modular expression tree synthesis (ordinal 11) for task_k2_modular_stride_shift (family_k) will achieve holdout gain >= 0.1500 without prior regression > 0.0200.",
+    "target_task_id": "task_k2_modular_stride_shift",
+    "min_required_gain": 0.15,
+    "max_regression_tolerance": 0.02,
+    "preregistration_hash": "06cfe4f8021f6f3a1aac577167f5688aacb8cfff1b8b786b0ae0e18b26325117",
+    "task_seed": 4912,
+    "mutation_ordinal": 11
+  },
+  "candidate": {
+    "candidate_id": "CAND_HYP_AUTONOMOUS_C207_task_k2_modular_stride_shift_gated_ord11",
+    "parent_id": "G0_self_dev_root_c0",
+    "author_type": "ACE_AUTONOMOUS_V02",
+    "source_code": "def evaluate_mechanism(length: int, density: int, stride_val: int) -> int:\n    return 0 if ((length >= 4) and (((stride_val * 2 + density * -1) % 3) == 0)) else 1\n",
+    "source_sha": "0f313962c19a1d65ff7daf7715f952ac26023aa267f08e815f36f6dd9ad26042",
+    "gene_dict": {
+      "is_gated": true,
+      "min_length": 4,
+      "stride_weight": 2,
+      "density_weight": -1,
+      "modulus": 3,
+      "target_residue": 0,
+      "true_val": 0,
+      "false_val": 1
+    },
+    "diff_patch": "--- a/G0_self_dev_root_c0.py\n+++ b/HYP_AUTONOMOUS_C207_task_k2_modular_stride_shift_gated_ord11_ord11.py\n@@ -1,2 +1,2 @@\n def evaluate_mechanism(length: int, density: int, stride_val: int) -> int:\n-    return 1 * (length * 1 + density * 2 + (stride_val % 3) - 1)\n+    return 0 if ((length >= 4) and (((stride_val * 2 + density * -1) % 3) == 0)) else 1\n",
+    "creation_timestamp": "2026-11-07T19:16:24Z",
+    "provenance_proof": {
+      "author_type": "ACE_AUTONOMOUS_V02",
+      "execution_pid": 80,
+      "platform": "Linux x86_64",
+      "python_version": "3.11.2",
+      "git_commit_sha": "bfc257dbf6164eebb7c844a86d908e245cb688e8",
+      "source_sha": "0f313962c19a1d65ff7daf7715f952ac26023aa267f08e815f36f6dd9ad26042",
+      "key_fingerprint": "9cf83c76d1334ea4",
+      "hmac_signature": "8ecca4033e0cae17048dc6daf9de4418697bc221de97810f76b8cc7e518d9296",
+      "timestamp": "2026-11-07T19:16:24Z"
+    }
+  },
+  "evaluation": {
+    "receipt_id": "RCPT_CAND_HYP_AUTONOMOUS_C207_task_k2_modular_stride_shift_gated_ord11_1794078984",
+    "evaluator_manifest_digest": "6227010b06a3ec399c799e4ff8963c4db07bc92e6cc654f9d9849130bcb236f5",
+    "candidate_id": "CAND_HYP_AUTONOMOUS_C207_task_k2_modular_stride_shift_gated_ord11",
+    "parent_id": "G0_self_dev_root_c0",
+    "train_score": 1.0,
+    "validation_score": 1.0,
+    "holdout_score": 0.8125,
+    "gain_over_parent": 0.125,
+    "prior_regression": 0.0,
+    "decision": "REJECTED",
+    "decision_reason": "Holdout gain 0.1250 below required min_gain 0.1500",
+    "evaluator_calls": 200,
+    "cpu_seconds": 0.0006,
+    "memory_mb": 57.21,
+    "cost_usd": 0.0,
+    "receipt_signature": "e2bf002f1533a8add7825b7f9fa4db2d6e5b8b6f1b39ba454c49ac1afaad7fe8",
+    "key_fingerprint": "9cf83c76d1334ea4",
+    "timestamp": "2026-11-07T19:16:24Z",
+    "prior_cycle_id": 206,
+    "state_digest_before": "caf799f2a0f3bdf978352bcd0dfa5536874ec5f266e43ef1a89f9a293e92d9ae",
+    "provenance_proof": {
+      "author_type": "ACE_AUTONOMOUS_V02",
+      "execution_pid": 80,
+      "platform": "Linux x86_64",
+      "python_version": "3.11.2",
+      "git_commit_sha": "bfc257dbf6164eebb7c844a86d908e245cb688e8",
+      "source_sha": "0f313962c19a1d65ff7daf7715f952ac26023aa267f08e815f36f6dd9ad26042",
+      "key_fingerprint": "9cf83c76d1334ea4",
+      "hmac_signature": "8ecca4033e0cae17048dc6daf9de4418697bc221de97810f76b8cc7e518d9296",
+      "timestamp": "2026-11-07T19:16:24Z"
+    }
+  },
+  "decision": "REJECTED",
+  "next_goal": {
+    "priority_task_id": "task_j1_multiscale_run_parity",
+    "priority_family": "family_j",
+    "strategy": "SYNTHESIZE_GATED_EXPRESSION_TREE",
+    "suggested_ordinal": 1,
+    "rationalization": "Target task_k2_modular_stride_shift reached 185 gated expression attempts. Advancing gated synthesis agenda to task_j1_multiscale_run_parity (family_j).",
+    "timestamp": "2026-11-07T19:16:24Z"
+  },
+  "cost_usd": 0.0,
+  "updated_at": "2026-11-07T19:16:24Z"
+}
