@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - engineering/chat-ace-autonomy-prototype-20261107
+      - engineering/ace-autonomy-v1-20261107
   pull_request:
     paths:
+      - 'autonomy.py'
       - 'code/ace_autonomy/**'
-      - 'docs/ACE_AUTONOMY_PROTOTYPE_20261107.md'
+      - 'docs/ACE_AUTONOMY_*.md'
       - '.github/workflows/ace-autonomy-prototype.yml'
   workflow_dispatch:
 
@@ -41,11 +43,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Verify original ACE sources
         run: python tools/verify_sources.py
-      - name: Test bounded autonomy and actual ACE runtime integration
-        run: python -m unittest ace_autonomy.test_core -v
+      - name: Test bounded autonomy and adversarial durability suite
+        run: python -m unittest ace_autonomy.test_core ace_autonomy.test_adversarial_autonomy -v
       - name: Test main ACE runtime unchanged
         run: python -m unittest ace_runtime.test_engine ace_runtime.test_cli -v
-      - name: Execute ACE original CLI against fresh workspace
+      - name: Execute ACE original CLI and Autonomy CLI against fresh workspaces
         run: |
           python ace.py demo --workspace "$RUNNER_TEMP/ace-public-demo" > "$RUNNER_TEMP/ace-demo.json"
           cmp "$RUNNER_TEMP/ace-demo.json" evidence/runtime/v1-demo.json
+          python autonomy.py --workspace "$RUNNER_TEMP/ace-autonomy-demo" demo > "$RUNNER_TEMP/autonomy-demo.json"
