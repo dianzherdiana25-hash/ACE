@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 5,
+  "cycle_count": 8,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -77,6 +77,51 @@
       "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0005.json.gz",
       "prior_digest": "a78a0518d92b2e3b348bfa11ad2d5597ff8e2648661d298b1985f53b3cc828ba",
       "state_digest": "a82711be634a98c66ddbb1f8b9d9bf8ad2521ed555542fbbb6f283b0edd3ddfe"
+    },
+    {
+      "cycle_id": 6,
+      "timestamp": "2026-11-07T17:41:17Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C6_task_j2_symmetric_run_boundary_ord2",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C6_task_j2_symmetric_run_boundary_ord2",
+      "source_sha": "373167919d71c9af38f74703309667a5899d930c66eead56fad233015bd55d99",
+      "decision": "REJECTED",
+      "holdout_score": 0.6719,
+      "gain_over_parent": -0.0234,
+      "rejection_reason": "Holdout gain -0.0234 below required min_gain 0.1500",
+      "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0006.json.gz",
+      "prior_digest": "a82711be634a98c66ddbb1f8b9d9bf8ad2521ed555542fbbb6f283b0edd3ddfe",
+      "state_digest": "cbb462db142c0ca2873bb1e504ef7337adc5f4977c59e7717bf7af33dd9badf1"
+    },
+    {
+      "cycle_id": 7,
+      "timestamp": "2026-11-07T17:41:17Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C7_task_k1_center_pivot_density_ord1",
+      "target_task_id": "task_k1_center_pivot_density",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C7_task_k1_center_pivot_density_ord1",
+      "source_sha": "373167919d71c9af38f74703309667a5899d930c66eead56fad233015bd55d99",
+      "decision": "REJECTED",
+      "holdout_score": 0.5938,
+      "gain_over_parent": -0.1015,
+      "rejection_reason": "Holdout gain -0.1015 below required min_gain 0.1500",
+      "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0007.json.gz",
+      "prior_digest": "cbb462db142c0ca2873bb1e504ef7337adc5f4977c59e7717bf7af33dd9badf1",
+      "state_digest": "5a95073cb64ff9fef71ccf10f38a7631432fa3b95725483da7ac66ff4dd4ee4d"
+    },
+    {
+      "cycle_id": 8,
+      "timestamp": "2026-11-07T17:41:17Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C8_task_k1_center_pivot_density_ord2",
+      "target_task_id": "task_k1_center_pivot_density",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C8_task_k1_center_pivot_density_ord2",
+      "source_sha": "373167919d71c9af38f74703309667a5899d930c66eead56fad233015bd55d99",
+      "decision": "REJECTED",
+      "holdout_score": 0.5938,
+      "gain_over_parent": -0.1015,
+      "rejection_reason": "Holdout gain -0.1015 below required min_gain 0.1500",
+      "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0008.json.gz",
+      "prior_digest": "5a95073cb64ff9fef71ccf10f38a7631432fa3b95725483da7ac66ff4dd4ee4d",
+      "state_digest": "f5b28fcb2cf159fcea57c0594a5e883b332d67dc7225d164dccc5f98faa840a2"
     }
   ],
   "failure_catalog": {
@@ -164,6 +209,56 @@
         "gain_over_parent": -0.0312,
         "rejection_reason": "Holdout gain -0.0312 below required min_gain 0.1500",
         "timestamp": "2026-11-07T17:38:50Z"
+      },
+      {
+        "cycle_id": 6,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C6_task_j2_symmetric_run_boundary_ord2",
+        "gene_dict": {
+          "window_stride": 4,
+          "modulus": 3,
+          "parity_threshold": 1,
+          "weight_length": 1,
+          "weight_density": 2,
+          "sign": 1
+        },
+        "mutation_ordinal": 2,
+        "gain_over_parent": -0.0234,
+        "rejection_reason": "Holdout gain -0.0234 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T17:41:17Z"
+      }
+    ],
+    "task_k1_center_pivot_density": [
+      {
+        "cycle_id": 7,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C7_task_k1_center_pivot_density_ord1",
+        "gene_dict": {
+          "window_stride": 3,
+          "modulus": 3,
+          "parity_threshold": 1,
+          "weight_length": 1,
+          "weight_density": 2,
+          "sign": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": -0.1015,
+        "rejection_reason": "Holdout gain -0.1015 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T17:41:17Z"
+      },
+      {
+        "cycle_id": 8,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C8_task_k1_center_pivot_density_ord2",
+        "gene_dict": {
+          "window_stride": 4,
+          "modulus": 3,
+          "parity_threshold": 1,
+          "weight_length": 1,
+          "weight_density": 2,
+          "sign": 1
+        },
+        "mutation_ordinal": 2,
+        "gain_over_parent": -0.1015,
+        "rejection_reason": "Holdout gain -0.1015 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T17:41:17Z"
       }
     ]
   },
@@ -197,22 +292,40 @@
       "target_task_id": "task_j2_symmetric_run_boundary",
       "status": "FALSIFIED",
       "cycle_id": 5
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C6_task_j2_symmetric_run_boundary_ord2",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "status": "FALSIFIED",
+      "cycle_id": 6
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C7_task_k1_center_pivot_density_ord1",
+      "target_task_id": "task_k1_center_pivot_density",
+      "status": "FALSIFIED",
+      "cycle_id": 7
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C8_task_k1_center_pivot_density_ord2",
+      "target_task_id": "task_k1_center_pivot_density",
+      "status": "FALSIFIED",
+      "cycle_id": 8
     }
   ],
   "next_agenda_priority": {
-    "priority_task_id": "task_j2_symmetric_run_boundary",
-    "priority_family": "family_j",
-    "strategy": "EXPLORE_MUTATION_ORDINAL",
-    "suggested_ordinal": 2,
-    "rationalization": "Mutation ordinal 1 on task_j2_symmetric_run_boundary failed with gain -0.0312. Attempt 1/2: exploring ordinal 2.",
-    "timestamp": "2026-11-07T17:38:50Z"
+    "priority_task_id": "task_k2_modular_stride_shift",
+    "priority_family": "family_k",
+    "strategy": "SHIFT_TO_NEXT_WEAKEST_TASK",
+    "suggested_ordinal": 1,
+    "rationalization": "Target task_k1_center_pivot_density reached 2 falsified attempts. Shifting research agenda to alternative capability task_k2_modular_stride_shift (family_k).",
+    "timestamp": "2026-11-07T17:41:17Z"
   },
   "concurrency_lock": {
     "is_locked": true,
-    "locked_by": "worker_37_1794073130",
-    "locked_at": "2026-11-07T17:38:50Z",
-    "expires_at": "1794073730.89",
-    "lock_token": "2568f821ca4609f1"
+    "locked_by": "worker_15_1794073277",
+    "locked_at": "2026-11-07T17:41:17Z",
+    "expires_at": "1794073877.34",
+    "lock_token": "5e6edd938c6aa781"
   },
   "immutable_baseline": {
     "root_candidate_id": "G0_self_dev_root_c0",
@@ -221,10 +334,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "a82711be634a98c66ddbb1f8b9d9bf8ad2521ed555542fbbb6f283b0edd3ddfe",
+  "state_digest": "f5b28fcb2cf159fcea57c0594a5e883b332d67dc7225d164dccc5f98faa840a2",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 5,
-    "last_known_good_digest": "a82711be634a98c66ddbb1f8b9d9bf8ad2521ed555542fbbb6f283b0edd3ddfe",
+    "last_known_good_cycle": 8,
+    "last_known_good_digest": "f5b28fcb2cf159fcea57c0594a5e883b332d67dc7225d164dccc5f98faa840a2",
     "recovery_count": 0
   }
 }
