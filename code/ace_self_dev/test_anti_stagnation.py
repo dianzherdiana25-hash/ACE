@@ -109,7 +109,8 @@ class TestAntiStagnationSelfRepair(unittest.TestCase):
         self.assertEqual(result.stagnation_type, StagnationType.DUPLICATE_SOURCE_SHA)
         self.assertFalse(result.should_evaluate)
         self.assertFalse(result.should_commit)
-        self.assertIn("already evaluated in cycle 1", result.reason)
+        self.assertIn("exact syntactic duplicate", result.reason)
+        self.assertIn("Cycle 1", result.reason)
 
     def test_2_semantic_equivalence_detected_via_bitvector(self):
         """Proof 2: Stagnation detector catches semantic bitvector duplicates with different syntax."""
@@ -118,11 +119,11 @@ class TestAntiStagnationSelfRepair(unittest.TestCase):
         task = ConfirmationTask(
             task_id="task_parity",
             family="parity",
-            train_pool=("a", "aa", "aaa", "aaaa"),
-            validation_pool=("aaaaa", "aaaaaa"),
-            sealed_confirmation_holdout=("aaaaaaa",),
-            ground_truth_rule=lambda w: len(w) % 2 == 0,
-            null_control_rule=lambda w: False,
+            description="parity test task",
+            oracle_fn=lambda w: len(w) % 2 == 0,
+            train_pool=[("a", False), ("aa", True), ("aaa", False), ("aaaa", True)],
+            validation_pool=[("aaaaa", False), ("aaaaaa", True)],
+            sealed_confirmation_holdout=[("aaaaaaa", False)],
         )
         state = PersistentResearchState()
 
