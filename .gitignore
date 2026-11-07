@@ -5,3 +5,6 @@ ace-work/
 *.sqlite3-wal
 *.sqlite3-shm
 .agents/
+checkpoints/self_dev/STOP_DAEMON
+checkpoints/self_dev/concurrency.lock
+*.tmp
