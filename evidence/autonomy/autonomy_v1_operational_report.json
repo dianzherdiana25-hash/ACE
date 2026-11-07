@@ -1,0 +1,96 @@
+{
+  "demo_execution": {
+    "final_report": {
+      "budget_usage": {
+        "candidates_staged": 0,
+        "cpu_seconds_used": 0.3682,
+        "retries_by_step": {},
+        "steps_used": 2,
+        "wall_seconds_used": 0.3698
+      },
+      "goal_id": "2e3af26f3ec0e226b51acbd96364862a802c5362f72fd99841b19ba1cbca7ab6",
+      "next_step": 2,
+      "oaie_established": false,
+      "results": [
+        {
+          "evidence": {
+            "capabilities": 2,
+            "events": 9,
+            "implementation": "931b1582e4dc9579a56712936097a9d476941cdc1bc19c876f6ea4936aab644c",
+            "scientific_decision": "NOT_ASSESSED",
+            "tasks": 3,
+            "tool": "ace_demo"
+          },
+          "ok": true,
+          "step": 0,
+          "verified": true
+        },
+        {
+          "evidence": {
+            "capabilities": 2,
+            "completed": 3,
+            "implementation": "931b1582e4dc9579a56712936097a9d476941cdc1bc19c876f6ea4936aab644c",
+            "scientific_decision": "NOT_ASSESSED",
+            "tool": "ace_status"
+          },
+          "ok": true,
+          "step": 1,
+          "verified": true
+        }
+      ],
+      "schema": "ace.autonomy.v1",
+      "scientific_decision": "NOT_ASSESSED",
+      "source": "f0abef93d778167bbf428f11a79a9a75180c5bbbccbab5539e8d0a2d3de2ff3f",
+      "status": "SUCCEEDED",
+      "total_steps": 2
+    },
+    "goal_id": "2e3af26f3ec0e226b51acbd96364862a802c5362f72fd99841b19ba1cbca7ab6",
+    "status": {
+      "capabilities_registered": 2,
+      "events": 3,
+      "goal_counts": {
+        "SUCCEEDED": 1
+      },
+      "goals": [
+        {
+          "goal_id": "2e3af26f3ec0e226b51acbd96364862a802c5362f72fd99841b19ba1cbca7ab6",
+          "name": "autonomy_demo_cycle",
+          "next_step": 2,
+          "status": "SUCCEEDED",
+          "total_steps": 2
+        }
+      ],
+      "oaie_established": false,
+      "schema": "ace.autonomy.v1",
+      "scientific_decision": "NOT_ASSESSED",
+      "source": "f0abef93d778167bbf428f11a79a9a75180c5bbbccbab5539e8d0a2d3de2ff3f"
+    }
+  },
+  "execution_statuses": {
+    "ACE_BASE_RUNTIME_EXECUTED": true,
+    "NEW_CAPABILITY_INTEGRATED_AND_EXECUTED": true,
+    "SCIENTIFIC_CAPABILITY_VALIDATED": false
+  },
+  "oaie_established": false,
+  "private_keys_archived": false,
+  "schema": "ace.autonomy.v1.evidence",
+  "scientific_decision": "NOT_ASSESSED",
+  "test_matrix": {
+    "python_3_12": {
+      "passed": 20,
+      "ran": 20,
+      "suites": [
+        "ace_autonomy.test_core",
+        "ace_autonomy.test_adversarial_autonomy"
+      ]
+    },
+    "python_3_13": {
+      "passed": 20,
+      "ran": 20,
+      "suites": [
+        "ace_autonomy.test_core",
+        "ace_autonomy.test_adversarial_autonomy"
+      ]
+    }
+  }
+}
