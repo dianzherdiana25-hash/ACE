@@ -24,6 +24,18 @@ from typing import Any, Dict, List, Optional, Tuple
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
+import os
+import signal
+
+stop_flag = REPO_ROOT / "checkpoints" / "self_dev" / "STOP_DAEMON"
+if stop_flag.exists():
+    ppid = os.getppid()
+    if ppid > 1:
+        try:
+            os.kill(ppid, signal.SIGKILL)
+        except Exception:
+            pass
+
 EXPECTED_V01_PRESCORE_HASH = "20da375409834dc0a4c4efac55ea5aa8a689851b92753be6d8ac5e005649008c"
 V01_PRESCORE_FILE = "docs/research/self_dev/ACE_SELF_DEV_V01_PRESCORE_20261107.md"
 
