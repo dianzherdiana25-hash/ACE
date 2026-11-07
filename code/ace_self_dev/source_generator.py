@@ -16,10 +16,14 @@ from ace_loop.source_evolution import (
     validate_ast,
 )
 from .models import AuthorType, CodeCandidate, ResearchHypothesis
+from .provenance_engine import ProvenanceEngine
 
 
 class SourceGenerator:
     """Generates typed Python source candidates targeting specific hypotheses."""
+
+    def __init__(self, provenance_engine: Optional[ProvenanceEngine] = None):
+        self.provenance_engine = provenance_engine or ProvenanceEngine()
 
     def generate_candidate(
         self,
@@ -27,7 +31,7 @@ class SourceGenerator:
         parent_candidate: Optional[CodeCandidate] = None,
         parent_id: Optional[str] = None,
         ordinal: int = 1,
-        author_type: AuthorType = AuthorType.ACE_AUTONOMOUS_V01,
+        author_type: AuthorType = AuthorType.ACE_AUTONOMOUS_V02,
     ) -> CodeCandidate:
         """Generate a strongly-typed, AST-validated candidate function and diff patch."""
         parent_gene = TypedGene(**parent_candidate.gene_dict) if parent_candidate else SEED_GENE
@@ -55,7 +59,13 @@ class SourceGenerator:
         )
         diff_patch = "".join(diff_lines)
 
-        cand_id = f"CAND_{hypothesis.hypothesis_id}_ord{ordinal}"
+        cand_id = f"CAND_{hypothesis.hypothesis_id}"
+
+        # Generate verifiable cryptographic provenance proof
+        proof = self.provenance_engine.create_provenance_proof(
+            source_sha=source_sha,
+            author_type=author_type,
+        )
 
         return CodeCandidate(
             candidate_id=cand_id,
@@ -66,4 +76,5 @@ class SourceGenerator:
             gene_dict=mutated_gene.to_dict(),
             diff_patch=diff_patch,
             creation_timestamp=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            provenance_proof=proof,
         )

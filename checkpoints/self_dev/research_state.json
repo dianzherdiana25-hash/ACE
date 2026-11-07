@@ -1,0 +1,154 @@
+{
+  "schema_version": "2.0",
+  "active_generation_id": "G0_self_dev_root_c0",
+  "cycle_count": 3,
+  "completed_cycles": [
+    {
+      "cycle_id": 1,
+      "timestamp": "2026-11-07T17:18:30Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C1_task_k2_modular_stride_shift_ord1",
+      "target_task_id": "task_k2_modular_stride_shift",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C1_task_k2_modular_stride_shift_ord1",
+      "source_sha": "373167919d71c9af38f74703309667a5899d930c66eead56fad233015bd55d99",
+      "decision": "REJECTED",
+      "holdout_score": 0.6719,
+      "gain_over_parent": -0.0234,
+      "rejection_reason": "Holdout gain -0.0234 below required min_gain 0.1500",
+      "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0001.json.gz",
+      "prior_digest": "2ff10791463d12d1b196fcef362a6e0b48b16ab673c83617ab341ab5e2012943",
+      "state_digest": "f9949f51af1bf1432819201da8b0fa62faddf08e0a158ddf53420af44b2e04b0"
+    },
+    {
+      "cycle_id": 2,
+      "timestamp": "2026-11-07T17:18:36Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C2_task_k2_modular_stride_shift_ord2",
+      "target_task_id": "task_k2_modular_stride_shift",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C2_task_k2_modular_stride_shift_ord2",
+      "source_sha": "373167919d71c9af38f74703309667a5899d930c66eead56fad233015bd55d99",
+      "decision": "REJECTED",
+      "holdout_score": 0.6797,
+      "gain_over_parent": -0.0156,
+      "rejection_reason": "Holdout gain -0.0156 below required min_gain 0.1500",
+      "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0002.json.gz",
+      "prior_digest": "f9949f51af1bf1432819201da8b0fa62faddf08e0a158ddf53420af44b2e04b0",
+      "state_digest": "a4b4b59b4b6b05f98bd957aee75c96a21fecced7cf61ed4a80b8b02d9fb98cb0"
+    },
+    {
+      "cycle_id": 3,
+      "timestamp": "2026-11-07T17:18:41Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C3_task_j1_multiscale_run_parity_ord1",
+      "target_task_id": "task_j1_multiscale_run_parity",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C3_task_j1_multiscale_run_parity_ord1",
+      "source_sha": "373167919d71c9af38f74703309667a5899d930c66eead56fad233015bd55d99",
+      "decision": "REJECTED",
+      "holdout_score": 0.6719,
+      "gain_over_parent": -0.0234,
+      "rejection_reason": "Holdout gain -0.0234 below required min_gain 0.1500",
+      "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0003.json.gz",
+      "prior_digest": "a4b4b59b4b6b05f98bd957aee75c96a21fecced7cf61ed4a80b8b02d9fb98cb0",
+      "state_digest": "93f66e5bc8607db31bbb71f0c3924b579c2b3af08656bc15b333c0a9df4d4622"
+    }
+  ],
+  "failure_catalog": {
+    "task_k2_modular_stride_shift": [
+      {
+        "cycle_id": 1,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C1_task_k2_modular_stride_shift_ord1",
+        "gene_dict": {
+          "window_stride": 3,
+          "modulus": 3,
+          "parity_threshold": 1,
+          "weight_length": 1,
+          "weight_density": 2,
+          "sign": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": -0.0234,
+        "rejection_reason": "Holdout gain -0.0234 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T17:18:30Z"
+      },
+      {
+        "cycle_id": 2,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C2_task_k2_modular_stride_shift_ord2",
+        "gene_dict": {
+          "window_stride": 4,
+          "modulus": 3,
+          "parity_threshold": 1,
+          "weight_length": 1,
+          "weight_density": 2,
+          "sign": 1
+        },
+        "mutation_ordinal": 2,
+        "gain_over_parent": -0.0156,
+        "rejection_reason": "Holdout gain -0.0156 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T17:18:36Z"
+      }
+    ],
+    "task_j1_multiscale_run_parity": [
+      {
+        "cycle_id": 3,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C3_task_j1_multiscale_run_parity_ord1",
+        "gene_dict": {
+          "window_stride": 3,
+          "modulus": 3,
+          "parity_threshold": 1,
+          "weight_length": 1,
+          "weight_density": 2,
+          "sign": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": -0.0234,
+        "rejection_reason": "Holdout gain -0.0234 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T17:18:41Z"
+      }
+    ]
+  },
+  "hypotheses_history": [
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C1_task_k2_modular_stride_shift_ord1",
+      "target_task_id": "task_k2_modular_stride_shift",
+      "status": "FALSIFIED",
+      "cycle_id": 1
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C2_task_k2_modular_stride_shift_ord2",
+      "target_task_id": "task_k2_modular_stride_shift",
+      "status": "FALSIFIED",
+      "cycle_id": 2
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C3_task_j1_multiscale_run_parity_ord1",
+      "target_task_id": "task_j1_multiscale_run_parity",
+      "status": "FALSIFIED",
+      "cycle_id": 3
+    }
+  ],
+  "next_agenda_priority": {
+    "priority_task_id": "task_j1_multiscale_run_parity",
+    "priority_family": "family_j",
+    "strategy": "EXPLORE_MUTATION_ORDINAL",
+    "suggested_ordinal": 2,
+    "rationalization": "Mutation ordinal 1 on task_j1_multiscale_run_parity failed with gain -0.0234. Attempt 1/2: exploring ordinal 2.",
+    "timestamp": "2026-11-07T17:18:41Z"
+  },
+  "concurrency_lock": {
+    "is_locked": false,
+    "locked_by": "",
+    "locked_at": "",
+    "expires_at": "",
+    "lock_token": ""
+  },
+  "immutable_baseline": {
+    "root_candidate_id": "G0_self_dev_root_c0",
+    "root_source_sha": "root_genesis_predicate_len3_even",
+    "root_predicate_code": "def evaluate_mechanism(length: int, density: int, stride_val: int) -> int:\n    return length % 3",
+    "baseline_accuracy": 0.5,
+    "genesis_timestamp": "2026-11-07T00:00:00Z"
+  },
+  "state_digest": "93f66e5bc8607db31bbb71f0c3924b579c2b3af08656bc15b333c0a9df4d4622",
+  "fail_closed_recovery": {
+    "last_known_good_cycle": 3,
+    "last_known_good_digest": "93f66e5bc8607db31bbb71f0c3924b579c2b3af08656bc15b333c0a9df4d4622",
+    "recovery_count": 0
+  }
+}

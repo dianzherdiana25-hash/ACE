@@ -76,9 +76,9 @@ jobs:
           sha256sum _ace_chat_evidence/receipt.json
           echo 'ACE task request processed with reproducible receipt.' >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Execute Autonomous Self-Development Cycle 1
+      - name: Execute Autonomous Self-Development Step
         run: |
-          python -m ace_self_dev.cli --cycle 1 --task-seed 42 --mutation-ordinal 1 --author-type ${{ github.event.inputs.author_type || 'ACE_AUTONOMOUS_V01' }}
+          python -m ace_self_dev.cli --autonomous --author-type ${{ github.event.inputs.author_type || 'ACE_AUTONOMOUS_V02' }}
           python tools/verify_self_dev.py
 
       - name: Archive receipts & artifacts for ChatGPT inspection
@@ -89,6 +89,7 @@ jobs:
           path: |
             _ace_chat_evidence/receipt.json
             _ace_chat_evidence/run-summary.json
-            evidence/self_dev/ace_self_dev_v01_cycle_*.json.gz
+            checkpoints/self_dev/research_state.json
+            evidence/self_dev/ace_self_dev_v*.json.gz
           if-no-files-found: warn
           retention-days: 7

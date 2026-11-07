@@ -1,0 +1,7 @@
+{
+  "root_candidate_id": "G0_self_dev_root_c0",
+  "root_source_sha": "root_genesis_predicate_len3_even",
+  "root_predicate_code": "def evaluate_mechanism(length: int, density: int, stride_val: int) -> int:\n    return length % 3",
+  "baseline_accuracy": 0.5,
+  "genesis_timestamp": "2026-11-07T00:00:00Z"
+}
