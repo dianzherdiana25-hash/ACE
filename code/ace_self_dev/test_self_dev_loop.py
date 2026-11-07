@@ -224,6 +224,170 @@ class TestSelfDevelopmentLoop(unittest.TestCase):
         self.assertIsNotNone(receipt)
         self.assertIn(receipt.decision.value, ("ACCEPTED", "REJECTED"))
 
+    def test_relational_gated_candidate_generation_and_isolated_evaluation(self):
+        """Verify SourceGenerator and IsolatedEvaluator handle multi-clause relational gated mechanisms safely."""
+        coord = SelfDevelopmentCoordinator(
+            checkpoint_dir=str(self.ckpt_dir),
+            evidence_dir=str(self.evidence_dir),
+        )
+        tasks = create_confirmation_suite(42)
+        hyp = ResearchHypothesis(
+            hypothesis_id="HYP_TEST_RELATIONAL",
+            statement="Applying multi-clause relational gated synthesis for task_k2",
+            target_task_id="task_k2_modular_stride_shift",
+            strategy="SYNTHESIZE_RELATIONAL_MULTI_CLAUSE",
+        )
+        cand = coord.generator.generate_candidate(
+            hypothesis=hyp,
+            parent_candidate=None,
+            parent_id="G0_root",
+            ordinal=1,
+            author_type=AuthorType.ACE_AUTONOMOUS_V02,
+        )
+        self.assertTrue(cand.gene_dict.get("is_relational"))
+        self.assertTrue(cand.gene_dict.get("is_relational_gated"))
+        self.assertIn("and", cand.source_code)
+
+        # Isolated evaluation must compile and evaluate relational candidate safely
+        receipt = coord.evaluator.evaluate_candidate(
+            candidate=cand,
+            hypothesis=hyp,
+            tasks=tasks,
+            host_controller=None,
+            prior_cycle_id=1,
+            state_digest_before="state_digest_test",
+        )
+        self.assertIsNotNone(receipt)
+        self.assertIn(receipt.decision.value, ("ACCEPTED", "REJECTED"))
+        self.assertGreaterEqual(receipt.train_score, 0.0)
+        self.assertGreaterEqual(receipt.validation_score, 0.0)
+
+    def test_sealed_terminal_holdout_gating_prevents_repeated_queries(self):
+        """Verify that sealed holdout evaluations are gated to prevent steering search or cherry-picking."""
+        coord = SelfDevelopmentCoordinator(
+            checkpoint_dir=str(self.ckpt_dir),
+            evidence_dir=str(self.evidence_dir),
+        )
+        tasks = create_confirmation_suite(42)
+        hyp = ResearchHypothesis(
+            hypothesis_id="HYP_TEST_GATING",
+            statement="Applying typed AST mutation ordinal 1 for task_k2",
+            target_task_id="task_k2_modular_stride_shift",
+            strategy="LINEAR_MUTATION",
+        )
+        cand = coord.generator.generate_candidate(
+            hypothesis=hyp,
+            parent_candidate=None,
+            parent_id="G0_root",
+            ordinal=1,
+            author_type=AuthorType.ACE_AUTONOMOUS_V02,
+        )
+
+        # First evaluation succeeds
+        receipt1 = coord.evaluator.evaluate_candidate(
+            candidate=cand,
+            hypothesis=hyp,
+            tasks=tasks,
+            host_controller=None,
+            prior_cycle_id=1,
+            state_digest_before="state_digest_test",
+        )
+        self.assertIsNotNone(receipt1)
+
+        # Second evaluation of the same candidate against sealed holdout is blocked by gating
+        with self.assertRaises(RuntimeError) as ctx:
+            coord.evaluator.evaluate_candidate(
+                candidate=cand,
+                hypothesis=hyp,
+                tasks=tasks,
+                host_controller=None,
+                prior_cycle_id=1,
+                state_digest_before="state_digest_test",
+            )
+        self.assertIn("Holdout gating violation", str(ctx.exception))
+
+    def test_candidate_search_relies_strictly_on_train_and_validation_metrics(self):
+        """Verify that candidate search explores variants using train and validation pools without holdout access."""
+        coord = SelfDevelopmentCoordinator(
+            checkpoint_dir=str(self.ckpt_dir),
+            evidence_dir=str(self.evidence_dir),
+        )
+        tasks = create_confirmation_suite(42)
+        target_task = tasks["task_k2_modular_stride_shift"]
+        hyp = ResearchHypothesis(
+            hypothesis_id="HYP_TEST_SEARCH",
+            statement="Applying multi-clause relational gated synthesis for task_k2",
+            target_task_id="task_k2_modular_stride_shift",
+            strategy="SYNTHESIZE_RELATIONAL_MULTI_CLAUSE",
+        )
+
+        # Search across 3 candidate variants on validation pool
+        best_cand = coord.search_and_select_candidate(
+            hypothesis=hyp,
+            parent_candidate=None,
+            active_head_id="G0_root",
+            author_type=AuthorType.ACE_AUTONOMOUS_V02,
+            target_task=target_task,
+            search_budget=3,
+        )
+        self.assertIsNotNone(best_cand)
+        # Verify holdout was NEVER queried during search
+        self.assertEqual(len(coord.evaluator._holdout_queried_candidates), 0)
+
+    def test_frozen_thresholds_fail_closed_on_artificial_relaxation(self):
+        """Verify that artificial lowering of min_required_gain or relaxation of tolerance fails closed."""
+        coord = SelfDevelopmentCoordinator(
+            checkpoint_dir=str(self.ckpt_dir),
+            evidence_dir=str(self.evidence_dir),
+        )
+        tasks = create_confirmation_suite(42)
+
+        # Sub-threshold min_gain is rejected
+        hyp_low_gain = ResearchHypothesis(
+            hypothesis_id="HYP_LOW_GAIN",
+            statement="Test lowering gain",
+            target_task_id="task_k2_modular_stride_shift",
+            min_required_gain=0.1000,  # Below frozen 0.1500
+        )
+        cand = coord.generator.generate_candidate(
+            hypothesis=hyp_low_gain,
+            parent_candidate=None,
+            parent_id="G0_root",
+            ordinal=1,
+            author_type=AuthorType.ACE_AUTONOMOUS_V02,
+        )
+        with self.assertRaises(ValueError) as ctx:
+            coord.evaluator.evaluate_candidate(
+                candidate=cand,
+                hypothesis=hyp_low_gain,
+                tasks=tasks,
+                host_controller=None,
+            )
+        self.assertIn("Fail-closed governance invariant violation", str(ctx.exception))
+
+        # Excessive regression tolerance is rejected
+        hyp_high_reg = ResearchHypothesis(
+            hypothesis_id="HYP_HIGH_REG",
+            statement="Test relaxing regression tolerance",
+            target_task_id="task_k2_modular_stride_shift",
+            max_regression_tolerance=0.0500,  # Exceeds frozen 0.0200
+        )
+        cand2 = coord.generator.generate_candidate(
+            hypothesis=hyp_high_reg,
+            parent_candidate=None,
+            parent_id="G0_root",
+            ordinal=2,
+            author_type=AuthorType.ACE_AUTONOMOUS_V02,
+        )
+        with self.assertRaises(ValueError) as ctx:
+            coord.evaluator.evaluate_candidate(
+                candidate=cand2,
+                hypothesis=hyp_high_reg,
+                tasks=tasks,
+                host_controller=None,
+            )
+        self.assertIn("Fail-closed governance invariant violation", str(ctx.exception))
+
 
 if __name__ == "__main__":
     unittest.main()

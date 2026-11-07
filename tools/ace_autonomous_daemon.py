@@ -67,7 +67,13 @@ def git_commit_and_push(cycle_id: int, decision: str, task_id: str):
             text=True,
         )
 
-        branch = "integration/ace-autonomous-continuity-v02-20261107"
+        branch_res = subprocess.run(
+            ["git", "branch", "--show-current"],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+        )
+        branch = branch_res.stdout.strip() or "integration/ace-anti-stagnation-self-repair-20261107"
         log(f"Pushing to origin/{branch}...")
         push_res = subprocess.run(
             ["git", "push", "origin", branch],
