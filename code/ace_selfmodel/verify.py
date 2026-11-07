@@ -38,10 +38,14 @@ def verify_report(data: dict) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("report_path", type=Path)
+    parser.add_argument("report_path", type=Path, nargs="?", default=None)
+    parser.add_argument("--artifact", type=Path, default=None, help="Path to report artifact")
     args = parser.parse_args(argv)
-    raw = args.report_path.read_bytes()
-    if args.report_path.suffix == ".gz":
+    target_path = args.artifact or args.report_path
+    if target_path is None:
+        parser.error("must provide report_path or --artifact")
+    raw = target_path.read_bytes()
+    if target_path.suffix == ".gz":
         raw = gzip.decompress(raw)
     data = json.loads(raw.decode("utf-8"))
     try:
