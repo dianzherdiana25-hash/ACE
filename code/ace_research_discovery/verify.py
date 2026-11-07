@@ -175,6 +175,12 @@ def main(argv: list[str] | None = None) -> int:
         help="Path to canonical JSON evidence file to verify",
     )
     parser.add_argument(
+        "--artifact",
+        type=Path,
+        default=None,
+        help="Path to evidence file to verify (alias for --input)",
+    )
+    parser.add_argument(
         "--replay",
         action="store_true",
         help="Re-execute full benchmark and assert byte-for-bit identical canonical JSON",
@@ -182,7 +188,12 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     root = Path(__file__).resolve().parents[2]
-    raw_bytes = args.input.read_bytes()
+    target_path = args.artifact or args.input
+    if target_path.suffix == ".gz":
+        import gzip
+        raw_bytes = gzip.decompress(target_path.read_bytes())
+    else:
+        raw_bytes = target_path.read_bytes()
     report = json.loads(raw_bytes.decode("utf-8"))
     if canonical_json(report) != raw_bytes:
         print("FAIL: input file is not in canonical JSON byte form", file=sys.stderr)
