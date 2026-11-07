@@ -28,6 +28,9 @@ from .strategy_repair import (
     StrategyRepairDecision,
     StrategyRepairEngine,
 )
+from .failure_constraint_engine import FailureConstraint, FailureConstraintEngine
+from .quality_diversity import EliteEntry, QualityDiversityArchive
+from .primitive_synthesizer import PrimitiveSynthesizer, SynthesizedPrimitive
 
 __all__ = [
     "AuthorType",
@@ -54,4 +57,10 @@ __all__ = [
     "RepresentationFamily",
     "StrategyRepairDecision",
     "StrategyRepairEngine",
+    "FailureConstraint",
+    "FailureConstraintEngine",
+    "EliteEntry",
+    "QualityDiversityArchive",
+    "PrimitiveSynthesizer",
+    "SynthesizedPrimitive",
 ]

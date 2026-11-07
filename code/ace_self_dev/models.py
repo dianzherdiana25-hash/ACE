@@ -108,9 +108,37 @@ class CodeCandidate:
     source_code: str
     source_sha: str
     gene_dict: Dict[str, Any]
-    diff_patch: str
-    creation_timestamp: str
+    diff_patch: str = ""
+    creation_timestamp: str = ""
     provenance_proof: Optional[ProvenanceProof] = None
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "candidate_id": self.candidate_id,
+            "parent_id": self.parent_id,
+            "author_type": self.author_type.value,
+            "source_code": self.source_code,
+            "source_sha": self.source_sha,
+            "gene_dict": self.gene_dict,
+            "diff_patch": self.diff_patch,
+            "creation_timestamp": self.creation_timestamp,
+            "provenance_proof": self.provenance_proof.to_dict() if self.provenance_proof else None,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> CodeCandidate:
+        prov = ProvenanceProof.from_dict(data["provenance_proof"]) if data.get("provenance_proof") else None
+        return cls(
+            candidate_id=data["candidate_id"],
+            parent_id=data["parent_id"],
+            author_type=AuthorType(data["author_type"]),
+            source_code=data["source_code"],
+            source_sha=data["source_sha"],
+            gene_dict=data["gene_dict"],
+            diff_patch=data.get("diff_patch", ""),
+            creation_timestamp=data.get("creation_timestamp", ""),
+            provenance_proof=prov,
+        )
 
 
 @dataclass(frozen=True)

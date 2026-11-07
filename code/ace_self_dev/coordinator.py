@@ -52,6 +52,9 @@ from .stagnation_detector import (
     StagnationDetector,
     StagnationType,
 )
+from .failure_constraint_engine import FailureConstraintEngine
+from .primitive_synthesizer import PrimitiveSynthesizer
+from .quality_diversity import QualityDiversityArchive
 from .state_manager import StateManager
 from .strategy_repair import (
     RepresentationFamily,
@@ -87,6 +90,15 @@ class SelfDevelopmentCoordinator:
             registry_path=str(self.checkpoint_dir / "bitvector_registry.json")
         )
         self.strategy_repair = StrategyRepairEngine()
+        self.failure_constraint_engine = FailureConstraintEngine(
+            storage_path=str(self.checkpoint_dir / "failure_constraints.json")
+        )
+        self.qd_archive = QualityDiversityArchive(
+            storage_path=str(self.checkpoint_dir / "qd_archive.json")
+        )
+        self.primitive_synthesizer = PrimitiveSynthesizer(
+            library_path=str(self.checkpoint_dir / "primitives_library.json")
+        )
 
     def search_and_select_candidate(
         self,
@@ -102,28 +114,38 @@ class SelfDevelopmentCoordinator:
         The sealed confirmation holdout is strictly gated and NEVER queried during this search.
         """
         base_ordinal = getattr(hypothesis, "mutation_ordinal", 1)
-        if search_budget <= 1:
-            return self.generator.generate_candidate(
-                hypothesis=hypothesis,
-                parent_candidate=parent_candidate,
-                parent_id=active_head_id,
-                ordinal=base_ordinal,
-                author_type=author_type,
-            )
-
         best_cand: Optional[CodeCandidate] = None
         best_val_score = -1.0
 
-        for offset in range(search_budget):
+        budget = max(1, search_budget)
+        for offset in range(budget):
+            ordinal = base_ordinal + offset
             cand = self.generator.generate_candidate(
                 hypothesis=hypothesis,
                 parent_candidate=parent_candidate,
                 parent_id=active_head_id,
-                ordinal=base_ordinal + offset,
+                ordinal=ordinal,
                 author_type=author_type,
             )
-            # Evaluate strictly on train and validation pools without holdout access
-            train_acc, val_acc, _ = self.evaluator.score_train_and_validation(cand, target_task)
+
+            # 1. Popper Failure Constraint check: prune provably invalid configurations
+            is_pruned, prune_reason = self.failure_constraint_engine.check_pruning(
+                target_task.task_id, cand.gene_dict
+            )
+            if is_pruned and budget > 1:
+                continue
+
+            # 2. Evaluate strictly on train and validation pools without holdout access
+            train_acc, val_acc, cand_pred = self.evaluator.score_train_and_validation(cand, target_task)
+            val_preds = [cand_pred(w) for w, _ in target_task.validation_pool]
+
+            # 3. pyribs MAP-Elites behavioral archive insertion
+            self.qd_archive.consider_candidate(cand, val_acc, val_preds)
+
+            # 4. Stitch / DreamCoder reusable primitive extraction
+            if val_acc >= 0.75:
+                self.primitive_synthesizer.extract_primitives_from_candidate(cand, target_task.task_id, val_acc)
+
             if val_acc > best_val_score:
                 best_val_score = val_acc
                 best_cand = cand
@@ -344,6 +366,22 @@ class SelfDevelopmentCoordinator:
                     bitvector=stagnation_check.bitvector,
                 )
 
+                # Deduce failure constraint if candidate was rejected
+                if receipt.decision == CandidateDecision.REJECTED and target_task:
+                    _, _, pred_fn = self.evaluator.score_train_and_validation(candidate, target_task)
+                    for w, expected in target_task.validation_pool:
+                        if pred_fn(w) != expected:
+                            from ace_loop.source_evolution import gene_from_dict
+                            cand_gene = gene_from_dict(candidate.gene_dict)
+                            self.failure_constraint_engine.deduce_constraint(
+                                task_id=target_task_id,
+                                gene=cand_gene,
+                                witness_input=w,
+                                expected_label=expected,
+                                predicted_label=pred_fn(w),
+                            )
+                            break
+
             ckpt.phase = "EVALUATED"
             ckpt.evaluation = {
                 "receipt_id": receipt.receipt_id,
@@ -427,6 +465,13 @@ class SelfDevelopmentCoordinator:
                 },
                 "next_agenda_priority": next_goal.to_dict(),
                 "proposal": proposal,
+                "deep_research_primitives": {
+                    "failure_constraints_total": self.failure_constraint_engine.total_constraints,
+                    "failure_constraints_pruned": self.failure_constraint_engine.pruned_candidates_count,
+                    "qd_archive_coverage_pct": self.qd_archive.to_summary_dict()["coverage_pct"],
+                    "qd_archive_filled_niches": self.qd_archive.filled_niches,
+                    "synthesized_primitives_total": self.primitive_synthesizer.total_primitives,
+                },
             }
 
             with gzip.open(evidence_path, "wb") as f:

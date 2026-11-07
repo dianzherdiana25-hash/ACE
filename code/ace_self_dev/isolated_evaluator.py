@@ -20,13 +20,16 @@ from .models import CandidateDecision, CodeCandidate, EvaluationReceipt, Researc
 from .provenance_engine import ProvenanceEngine
 
 
-def _candidate_to_string_predicate(fn: Callable[[int, int, int], int]) -> Callable[[str], bool]:
+def _candidate_to_string_predicate(fn: Callable[..., int]) -> Callable[..., bool]:
     """Convert a mathematical mechanism function into a string classification predicate."""
-    def predicate(w: str) -> bool:
+    def predicate(w: str, tid: Optional[str] = None) -> bool:
         length = len(w)
         density = w.count("a")
         stride_val = sum(1 for i, ch in enumerate(w) if i % 2 == 0 and ch == "a")
-        raw_val = fn(length, density, stride_val)
+        try:
+            raw_val = fn(length, density, stride_val, tid)
+        except TypeError:
+            raw_val = fn(length, density, stride_val)
         return (raw_val % 2 == 0)
     return predicate
 
@@ -122,12 +125,28 @@ class IsolatedEvaluator:
             )
             host_controller.initialize_root_score(lambda w: (len(w) % 3 == 0))
 
+        is_multi_task = (
+            hypothesis.strategy == "MULTI_TASK_DISPATCH"
+            or target_tid in ("multi_task", "MULTI_TASK")
+            or getattr(candidate, "is_multi_task", False)
+            or (candidate.gene_dict and candidate.gene_dict.get("is_dispatch"))
+        )
+        if is_multi_task:
+            def dispatch_candidate_fn(w: str, tid: Optional[str] = None) -> bool:
+                try:
+                    return bool(cand_pred(w, tid))
+                except TypeError:
+                    return bool(cand_pred(w))
+            eval_candidate_fn = dispatch_candidate_fn
+        else:
+            eval_candidate_fn = lambda w, tid: cand_pred(w) if tid == target_tid else getattr(host_controller, "root_candidate_fn", lambda s: (len(s) % 3 == 0))(w)
+
         decision = host_controller.evaluate_and_gate(
             candidate_id=candidate.candidate_id,
             parent_id=candidate.parent_id,
             generation=1,
             source_sha=candidate.source_sha,
-            candidate_fn=lambda w, tid: cand_pred(w) if tid == target_tid else getattr(host_controller, "root_candidate_fn", lambda s: (len(s) % 3 == 0))(w),
+            candidate_fn=eval_candidate_fn,
             candidate_code_or_spec=candidate.source_code,
             metadata={
                 "author_type": candidate.author_type.value,
