@@ -63,6 +63,8 @@ class AutonomyTests(unittest.TestCase):
                     a.enqueue(make_goal({"tool": "inspect_file", "path": path}))
             with self.assertRaises(PolicyError):
                 a.enqueue(make_goal({"tool": "shell", "cmd": "ls"}))
+            with self.assertRaises(PolicyError):
+                a.enqueue(make_goal({"tool": ["inspect_file"]}))
             (self.root / "escape").symlink_to(Path(self.tmp.name))
             gid = a.enqueue(make_goal({"tool": "inspect_file", "path": "escape/README.md"}))
             self.assertEqual(a.run_one(gid)["status"], "FAILED")
