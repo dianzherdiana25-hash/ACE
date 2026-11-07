@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 252,
+  "cycle_count": 253,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -3782,6 +3782,21 @@
       "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0252.json.gz",
       "prior_digest": "2b8d77e147c568d20b29486f3e670bf306a731a3af35438fc2dc25137a7ff52c",
       "state_digest": "015e945f9be46b149c2a8b20939d514694aef6efe3adf075f31a0c31b518fdba"
+    },
+    {
+      "cycle_id": 253,
+      "timestamp": "2026-11-07T20:51:12Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1",
+      "target_task_id": "task_j1_multiscale_run_parity",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1",
+      "source_sha": "4caebd62e73cec654c78753fcb8a76bb391ba56915f5fba57c2ac0a35af6615f",
+      "decision": "REJECTED",
+      "holdout_score": 0.7422,
+      "gain_over_parent": 0.0547,
+      "rejection_reason": "Holdout gain 0.0547 below required min_gain 0.1500",
+      "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0253.json.gz",
+      "prior_digest": "015e945f9be46b149c2a8b20939d514694aef6efe3adf075f31a0c31b518fdba",
+      "state_digest": "ecc79fd357bd284b88c425cd4ea1b826a2b755f057e32bfb94c0f4a89f9ccb09"
     }
   ],
   "failure_catalog": {
@@ -8148,6 +8163,34 @@
         "gain_over_parent": 0.0,
         "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C252_task_j1_multiscale_run_parity_gated_ord1 source_sha '595abf277430' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C17_task_k2_modular_stride_shift_gated_ord1 (Cycle 17).",
         "timestamp": "2026-11-07T20:46:00Z"
+      },
+      {
+        "cycle_id": 253,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1",
+        "source_sha": "4caebd62e73cec654c78753fcb8a76bb391ba56915f5fba57c2ac0a35af6615f",
+        "gene_dict": {
+          "is_relational": true,
+          "is_relational_gated": true,
+          "clause_type": "CONJUNCTION_AND",
+          "combiner": "AND",
+          "length_op": ">=",
+          "length_threshold": 4,
+          "stride_weight": 1,
+          "density_weight": 1,
+          "length_weight": 0,
+          "modulus": 3,
+          "target_residue": 0,
+          "congruence_op": "==",
+          "boundary_var": "density",
+          "boundary_op": "<=",
+          "boundary_threshold": 4,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0547,
+        "rejection_reason": "Holdout gain 0.0547 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T20:51:12Z"
       }
     ],
     "task_j2_symmetric_run_boundary": [
@@ -9923,6 +9966,12 @@
       "target_task_id": "task_j1_multiscale_run_parity",
       "status": "FALSIFIED",
       "cycle_id": 252
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1",
+      "target_task_id": "task_j1_multiscale_run_parity",
+      "status": "FALSIFIED",
+      "cycle_id": 253
     }
   ],
   "next_agenda_priority": {
@@ -9930,8 +9979,8 @@
     "priority_family": "family_j",
     "strategy": "RELATIONAL_MULTI_CLAUSE",
     "suggested_ordinal": 1,
-    "rationalization": "Attempt quota reached for GATED_EXPRESSION_TREE on 'task_j1_multiscale_run_parity' (2 attempts). Promoting search policy to next representation family 'RELATIONAL_MULTI_CLAUSE' (ordinal 1) rather than looping ordinals.",
-    "timestamp": "2026-11-07T20:46:00Z"
+    "rationalization": "Failure in RELATIONAL_MULTI_CLAUSE is parameter-based (gain range non-degenerate). Exploring untried parameter ordinal 1 on task_j1_multiscale_run_parity.",
+    "timestamp": "2026-11-07T20:51:12Z"
   },
   "concurrency_lock": {
     "is_locked": false,
@@ -9947,10 +9996,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "015e945f9be46b149c2a8b20939d514694aef6efe3adf075f31a0c31b518fdba",
+  "state_digest": "ecc79fd357bd284b88c425cd4ea1b826a2b755f057e32bfb94c0f4a89f9ccb09",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 252,
-    "last_known_good_digest": "015e945f9be46b149c2a8b20939d514694aef6efe3adf075f31a0c31b518fdba",
+    "last_known_good_cycle": 253,
+    "last_known_good_digest": "ecc79fd357bd284b88c425cd4ea1b826a2b755f057e32bfb94c0f4a89f9ccb09",
     "recovery_count": 0
   }
 }

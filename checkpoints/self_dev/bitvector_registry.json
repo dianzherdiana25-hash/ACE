@@ -1,0 +1,11 @@
+{
+  "task_j1_multiscale_run_parity": {
+    "a673e592955577235daa9feeb17fdb47c94e5724d28dcc708b9ce6f1dd9c0991": {
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1",
+      "cycle_id": 253,
+      "source_sha": "4caebd62e73cec654c78753fcb8a76bb391ba56915f5fba57c2ac0a35af6615f",
+      "score": 0.7422,
+      "bitvector_preview": "00000000000000100100100100100101"
+    }
+  }
+}

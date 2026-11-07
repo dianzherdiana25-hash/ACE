@@ -4,6 +4,11 @@ on:
   schedule:
     # Run daily at 03:00 UTC
     - cron: '0 3 * * *'
+  pull_request:
+    paths:
+      - 'code/ace_code_agent/**'
+      - '.github/workflows/ace-autonomous-dev-v03.yml'
+      - 'tools/ace_autonomous_daemon.py'
   workflow_dispatch:
     inputs:
       max_cycles:

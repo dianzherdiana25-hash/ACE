@@ -227,7 +227,7 @@ class StagnationDetector:
             return False, 0, 0.0, []
 
         scores = [float(c.get("holdout_score", 0.0)) for c in relevant_cycles]
-        if len(scores) < k:
+        if len(scores) < effective_k:
             return False, 0, max(scores), scores
 
         best_score = scores[0]
@@ -240,7 +240,7 @@ class StagnationDetector:
             else:
                 consecutive_no_imp += 1
 
-        is_stagnated = consecutive_no_imp >= k
+        is_stagnated = consecutive_no_imp >= effective_k
         return is_stagnated, consecutive_no_imp, best_score, scores
 
     def check_strategy_exhaustion(
