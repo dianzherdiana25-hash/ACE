@@ -38,9 +38,37 @@ jobs:
           ace_capability_evolution.test_compositional
           ace_runtime.test_engine
           ace_runtime.test_cli
+          ace_research_repair.test_repair
+          ace_research_repair.test_repair_sandbox
+          ace_research_hypgen.test_hypgen
+          ace_research_agenda.test_agenda
+          ace_research_agenda.test_durable_resume
+          ace_research_generations.test_generations
+          ace_research_generations.test_generations_growth
+          ace_host_controller.test_host_controller
+          ace_host_controller.test_boundary_penetration
+          ace_host_controller.test_evaluator_v2
+          ace_research_f12.test_f12_research
+          ace_research_f13.test_f13_memory
+          ace_research_f14.test_f14_discovery
           -v
+      - name: Verify repair evidence artifact
+        run: python -m ace_research_repair.verify --artifact evidence/repair/ace_repair_v1.json.gz
+      - name: Verify hypothesis synthesis evidence artifact
+        run: python -m ace_research_hypgen.verify --artifact evidence/hypgen/f10_hypothesis_synthesis_v1.json.gz
+      - name: Verify generations growth evidence artifact
+        run: python -m ace_research_generations.verify_growth --artifact evidence/generations/ace_generations_growth_v1.json.gz
+      - name: Verify F12 causal research evidence artifact
+        run: python -m ace_research_f12.verify --artifact evidence/f12/ace_f12_causal_research_v1.json.gz
+      - name: Verify F13 causal memory evidence artifact
+        run: python -m ace_research_f13.verify --artifact evidence/f13/ace_f13_causal_memory_v1.json.gz
+      - name: Verify F14 mechanism discovery evidence artifact
+        run: python -m ace_research_f14.verify --artifact evidence/f14/ace_f14_mechanism_discovery_v1.json.gz
+      - name: Run unified F13 and F14 external verifier
+        run: python tools/verify_f13_f14.py
       - name: Verify deterministic composition replay
         run: |
+
           python -m ace_capability_evolution.compositional --output /tmp/composition.json
           python -m ace_capability_evolution.compositional --output /tmp/composition-replay.json
           cmp /tmp/composition.json /tmp/composition-replay.json
