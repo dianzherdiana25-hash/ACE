@@ -79,8 +79,9 @@ class MerkleExposureLedger:
         self.records.append(rec)
         self._exposed_strings.add(content)
 
-        # Index 4-grams and above for substring leakage checking
-        for n in range(4, min(8, len(content) + 1)):
+        # Index 4-grams and above (up to 16-grams) for substring leakage checking
+        max_n = min(16, len(content))
+        for n in range(4, max_n + 1):
             for i in range(len(content) - n + 1):
                 self._exposed_ngrams.add(content[i : i + n])
 
@@ -222,6 +223,17 @@ class DualOracleHarness:
 
         # Answer strictly from experiment oracle; never consult terminal holdout
         return bool(self._experiment_oracles[task_id](input_str))
+
+    def query_terminal_oracle(self, candidate_id: str, task_id: str, input_str: str) -> None:
+        """Terminal holdout oracle cannot be queried by candidates under any circumstances."""
+        raise OracleBoundaryViolation(
+            f"Candidate '{candidate_id}' attempted forbidden direct query to terminal holdout oracle for task '{task_id}'"
+        )
+
+    def update_baseline_scores(self, new_scores: Mapping[str, float]) -> None:
+        """Safely update prior baseline scores in dual oracle harness."""
+        for k, v in new_scores.items():
+            self._prior_baseline_scores[k] = float(v)
 
     def evaluate_terminal_holdouts(
         self,
