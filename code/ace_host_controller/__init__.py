@@ -43,8 +43,17 @@ from .sealed_evaluator import (
     SealedHoldoutEvaluator,
 )
 
+from .boundary import (
+    BoundarySecurityViolation,
+    ImmutablePromotionRules,
+    SealingStatus,
+    detect_os_sealing,
+)
+from .subprocess_evaluator import SubprocessSealedEvaluator
+
 __all__ = [
     "AcceptanceDecision",
+    "BoundarySecurityViolation",
     "BudgetExceededError",
     "CandidateNode",
     "CapabilityPermit",
@@ -57,6 +66,7 @@ __all__ = [
     "GateResult",
     "HostController",
     "HostSandboxGate",
+    "ImmutablePromotionRules",
     "LineageCycleError",
     "LineageGraph",
     "LineageNotFoundError",
@@ -64,4 +74,8 @@ __all__ = [
     "RollbackRecord",
     "SandboxSecurityError",
     "SealedHoldoutEvaluator",
+    "SealingStatus",
+    "SubprocessSealedEvaluator",
+    "detect_os_sealing",
 ]
+
