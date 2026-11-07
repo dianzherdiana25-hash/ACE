@@ -38,7 +38,11 @@ def compute_sha256(path: Path) -> str:
 
 def verify_self_dev_evidence(evidence: Dict[str, Any]) -> Tuple[bool, str]:
     bench_id = evidence.get("benchmark_id")
-    if bench_id not in ("ACE_AUTONOMOUS_SELF_DEV_LOOP_V01", "ACE_AUTONOMOUS_CONTINUITY_V02"):
+    if bench_id not in (
+        "ACE_AUTONOMOUS_SELF_DEV_LOOP_V01",
+        "ACE_AUTONOMOUS_CONTINUITY_V02",
+        "ACE_AUTONOMOUS_SELF_DEV_BOOTSTRAP_V03",
+    ):
         return False, f"Invalid benchmark_id: {bench_id}"
 
     # 1. Governance check
@@ -64,16 +68,16 @@ def verify_self_dev_evidence(evidence: Dict[str, Any]) -> Tuple[bool, str]:
     cand_id = rcpt.get("candidate_id", "")
 
     if gain < 0.1500:
-        if decision != "REJECTED":
-            return False, f"Candidate with gain {gain} < 0.1500 was not REJECTED (decision: {decision})"
+        if decision not in ("REJECTED", "STAGNATED", "ABSTAINED"):
+            return False, f"Candidate with gain {gain} < 0.1500 was not REJECTED, STAGNATED, or ABSTAINED (decision: {decision})"
         if is_promoted is not False:
             return False, "Candidate with gain < 0.1500 was marked promoted"
         if active_head == cand_id:
-            return False, f"Lineage corruption: rejected candidate {cand_id} became active head"
+            return False, f"Lineage corruption: non-promoted candidate {cand_id} became active head"
 
     # 4. Author provenance
     author = evidence["candidate"].get("author_type")
-    if author not in ("ACE_AUTONOMOUS_V01", "ACE_AUTONOMOUS_V02", "GEMINI", "CODEX", "HUMAN"):
+    if author not in ("ACE_AUTONOMOUS_V01", "ACE_AUTONOMOUS_V02", "ACE_AUTONOMOUS_V03", "GEMINI", "CODEX", "HUMAN"):
         return False, f"Invalid author_type: {author}"
 
     # 5. Cost verification

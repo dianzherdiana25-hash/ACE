@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 251,
+  "cycle_count": 252,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -3767,6 +3767,21 @@
       "evidence_path": "/home/antigravity/dianzherdiana25-hash/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0251.json.gz",
       "prior_digest": "35752630d82eca326e97b7873f5ad4597318d8663fcb0dd3952cd5c6dda4a3c9",
       "state_digest": "2b8d77e147c568d20b29486f3e670bf306a731a3af35438fc2dc25137a7ff52c"
+    },
+    {
+      "cycle_id": 252,
+      "timestamp": "2026-11-07T20:46:00Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C252_task_j1_multiscale_run_parity_gated_ord1",
+      "target_task_id": "task_j1_multiscale_run_parity",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C252_task_j1_multiscale_run_parity_gated_ord1",
+      "source_sha": "595abf2774304a214ab4f45b88485ab11e127b1660d8cc0a592bc739177cb926",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C252_task_j1_multiscale_run_parity_gated_ord1 source_sha '595abf277430' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C17_task_k2_modular_stride_shift_gated_ord1 (Cycle 17).",
+      "evidence_path": "evidence/self_dev/ace_self_dev_v02_cycle_0252.json.gz",
+      "prior_digest": "2b8d77e147c568d20b29486f3e670bf306a731a3af35438fc2dc25137a7ff52c",
+      "state_digest": "015e945f9be46b149c2a8b20939d514694aef6efe3adf075f31a0c31b518fdba"
     }
   ],
   "failure_catalog": {
@@ -8114,6 +8129,25 @@
         "gain_over_parent": -0.0234,
         "rejection_reason": "Holdout gain -0.0234 below required min_gain 0.1500",
         "timestamp": "2026-11-07T18:38:59Z"
+      },
+      {
+        "cycle_id": 252,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C252_task_j1_multiscale_run_parity_gated_ord1",
+        "source_sha": "595abf2774304a214ab4f45b88485ab11e127b1660d8cc0a592bc739177cb926",
+        "gene_dict": {
+          "is_gated": true,
+          "min_length": 4,
+          "stride_weight": 1,
+          "density_weight": 1,
+          "modulus": 3,
+          "target_residue": 0,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C252_task_j1_multiscale_run_parity_gated_ord1 source_sha '595abf277430' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C17_task_k2_modular_stride_shift_gated_ord1 (Cycle 17).",
+        "timestamp": "2026-11-07T20:46:00Z"
       }
     ],
     "task_j2_symmetric_run_boundary": [
@@ -9883,15 +9917,21 @@
       "target_task_id": "task_k2_modular_stride_shift",
       "status": "FALSIFIED",
       "cycle_id": 251
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C252_task_j1_multiscale_run_parity_gated_ord1",
+      "target_task_id": "task_j1_multiscale_run_parity",
+      "status": "FALSIFIED",
+      "cycle_id": 252
     }
   ],
   "next_agenda_priority": {
     "priority_task_id": "task_j1_multiscale_run_parity",
     "priority_family": "family_j",
-    "strategy": "SYNTHESIZE_GATED_EXPRESSION_TREE",
+    "strategy": "RELATIONAL_MULTI_CLAUSE",
     "suggested_ordinal": 1,
-    "rationalization": "Target task_k2_modular_stride_shift reached 229 gated expression attempts. Advancing gated synthesis agenda to task_j1_multiscale_run_parity (family_j).",
-    "timestamp": "2026-11-07T19:24:46Z"
+    "rationalization": "Attempt quota reached for GATED_EXPRESSION_TREE on 'task_j1_multiscale_run_parity' (2 attempts). Promoting search policy to next representation family 'RELATIONAL_MULTI_CLAUSE' (ordinal 1) rather than looping ordinals.",
+    "timestamp": "2026-11-07T20:46:00Z"
   },
   "concurrency_lock": {
     "is_locked": false,
@@ -9907,10 +9947,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "2b8d77e147c568d20b29486f3e670bf306a731a3af35438fc2dc25137a7ff52c",
+  "state_digest": "015e945f9be46b149c2a8b20939d514694aef6efe3adf075f31a0c31b518fdba",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 251,
-    "last_known_good_digest": "2b8d77e147c568d20b29486f3e670bf306a731a3af35438fc2dc25137a7ff52c",
+    "last_known_good_cycle": 252,
+    "last_known_good_digest": "015e945f9be46b149c2a8b20939d514694aef6efe3adf075f31a0c31b518fdba",
     "recovery_count": 0
   }
 }
