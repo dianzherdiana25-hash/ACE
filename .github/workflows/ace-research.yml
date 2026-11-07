@@ -45,6 +45,7 @@ jobs:
           ace_research_agenda.test_durable_resume
           ace_research_generations.test_generations
           ace_research_generations.test_generations_growth
+          ace_commercial.test_repo_auditor
           -v
       - name: Verify repair evidence artifact
         run: python -m ace_research_repair.verify --artifact evidence/repair/ace_repair_v1.json.gz
