@@ -141,6 +141,81 @@ class TestHostBoundaryPenetration(unittest.TestCase):
             self.assertFalse(ok)
             self.assertIn("OS containment absent (NOT_SEALED)", violations)
 
+    def test_supervisor_can_block_candidate(self):
+        """Supervisor explicitly blocks a candidate; subsequent gating rejects promotion."""
+        from ace_host_controller import HostController, HostSandboxGate, SealedHoldoutEvaluator
+
+        local_eval = SealedHoldoutEvaluator(
+            manifest_id="test_man",
+            holdout_banks=self.holdouts,
+            prior_baseline_scores={},
+        )
+        host = HostController(
+            evaluator=local_eval,
+            budget=self.budget,
+            sandbox_gate=HostSandboxGate(enforce_os_containment=False),
+            root_candidate_id="G0_root",
+        )
+        # Supervisor explicitly blocks malicious candidate
+        host.block_candidate("cand_bad_01", reason="Known security evasion attempt")
+
+        # Gating evaluation attempt
+        decision = host.evaluate_and_gate(
+            candidate_id="cand_bad_01",
+            parent_id="G0_root",
+            generation=1,
+            source_sha="a" * 64,
+            candidate_fn=lambda w: True,
+        )
+        self.assertEqual(decision.status, "REJECTED")
+        self.assertTrue(any("BLOCKED" in r for r in decision.rejection_reasons))
+
+    def test_supervisor_can_revoke_promotion(self):
+        """Supervisor revokes promotion of an accepted candidate, rolling back active head."""
+        from ace_host_controller import HostController, HostSandboxGate, SealedHoldoutEvaluator
+
+        local_eval = SealedHoldoutEvaluator(
+            manifest_id="test_man",
+            holdout_banks=self.holdouts,
+            prior_baseline_scores={"task_test": 0.50},
+        )
+        host = HostController(
+            evaluator=local_eval,
+            budget=self.budget,
+            sandbox_gate=HostSandboxGate(enforce_os_containment=False),
+            root_candidate_id="G0_root",
+        )
+        # Normal candidate accepted
+        dec = host.evaluate_and_gate(
+            candidate_id="G1_accepted",
+            parent_id="G0_root",
+            generation=1,
+            source_sha="b" * 64,
+            candidate_fn=lambda w, t=None: len(w) % 2 == 0,
+        )
+        self.assertEqual(dec.status, "ACCEPTED")
+        self.assertEqual(host.lineage.active_head_id, "G1_accepted")
+
+        # Supervisor discovers post-promotion defect and revokes promotion
+        rollback_rec = host.revoke_promotion("G1_accepted", reason="Post-eval contamination discovered")
+        self.assertEqual(rollback_rec.rolled_back_from, "G1_accepted")
+        self.assertEqual(rollback_rec.restored_head, "G0_root")
+        self.assertEqual(host.lineage.active_head_id, "G0_root")
+        self.assertEqual(host.lineage.nodes["G1_accepted"].status, "REVOKED")
+
+    def test_safe_baseline_scores_update(self):
+        """HostController safely updates baseline scores without exposing private banks."""
+        from ace_host_controller import HostController, SealedHoldoutEvaluator
+
+        local_eval = SealedHoldoutEvaluator(
+            manifest_id="test_man",
+            holdout_banks=self.holdouts,
+            prior_baseline_scores={},
+        )
+        host = HostController(evaluator=local_eval, root_candidate_id="G0_root")
+        host.update_baseline_scores({"task_test": 1.0})
+        self.assertEqual(local_eval._prior_baseline_scores["task_test"], 1.0)
+
 
 if __name__ == "__main__":
     unittest.main()

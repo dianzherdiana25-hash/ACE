@@ -111,15 +111,21 @@ class HostController:
         """Evaluate a candidate, verify non-contamination and sandbox rules, and decide promotion."""
         rejection_reasons: list[str] = []
 
-        # 1. Register candidate in lineage
-        self.lineage.register_candidate(
-            candidate_id=candidate_id,
-            parent_id=parent_id,
-            source_sha=source_sha,
-            generation=generation,
-            metadata=metadata,
-        )
-        self.lineage.update_status(candidate_id, "EVALUATING")
+        # 1. Register candidate in lineage or check if blocked
+        if candidate_id in self.lineage.nodes:
+            if self.lineage.nodes[candidate_id].status == "BLOCKED":
+                rejection_reasons.append(f"Candidate '{candidate_id}' is BLOCKED by supervisor")
+            else:
+                self.lineage.update_status(candidate_id, "EVALUATING")
+        else:
+            self.lineage.register_candidate(
+                candidate_id=candidate_id,
+                parent_id=parent_id,
+                source_sha=source_sha,
+                generation=generation,
+                metadata=metadata,
+            )
+            self.lineage.update_status(candidate_id, "EVALUATING")
 
         # 2. Audit Sandbox
         sandbox_passed = True
@@ -218,6 +224,57 @@ class HostController:
         )
         self.rollback_history.append(record)
         return record
+
+    def block_candidate(self, candidate_id: str, reason: str) -> None:
+        """Supervisor explicitly blocks a candidate from promotion."""
+        if candidate_id not in self.lineage.nodes:
+            self.lineage.register_candidate(
+                candidate_id=candidate_id,
+                parent_id=self.lineage.active_head_id,
+                source_sha="0" * 64,
+                generation=1,
+                metadata={"blocked_reason": reason},
+            )
+        self.lineage.update_status(candidate_id, "BLOCKED")
+
+    def revoke_promotion(self, candidate_id: str, reason: str) -> RollbackRecord:
+        """Supervisor explicitly revokes promotion of an accepted candidate and rolls back active head."""
+        if candidate_id not in self.lineage.nodes:
+            raise KeyError(f"Candidate {candidate_id} not found in lineage")
+        node = self.lineage.nodes[candidate_id]
+        if node.status != "ACCEPTED":
+            raise ValueError(f"Cannot revoke candidate {candidate_id} with status {node.status}")
+        node.status = "REVOKED"
+        node.metadata["revocation_reason"] = reason
+
+        if self.lineage.active_head_id == candidate_id:
+            ancestors = self.lineage.get_ancestors(candidate_id)
+            if not ancestors:
+                raise ValueError(f"Candidate {candidate_id} has no ancestor to roll back to")
+            target_id = ancestors[0]
+            self.lineage.active_head_id = target_id
+            record = RollbackRecord(
+                rolled_back_from=candidate_id,
+                restored_head=target_id,
+                reason=f"Promotion revoked: {reason}",
+            )
+            self.rollback_history.append(record)
+            return record
+        else:
+            record = RollbackRecord(
+                rolled_back_from=candidate_id,
+                restored_head=self.lineage.active_head_id or self.lineage.root_id or "",
+                reason=f"Promotion revoked (inactive head): {reason}",
+            )
+            self.rollback_history.append(record)
+            return record
+
+    def update_baseline_scores(self, new_scores: dict[str, float]) -> None:
+        """Safely update prior baseline scores in the evaluator without exposing private banks."""
+        if hasattr(self.evaluator, "update_baseline_scores"):
+            self.evaluator.update_baseline_scores(new_scores)
+        elif hasattr(self.evaluator, "_prior_baseline_scores"):
+            self.evaluator._prior_baseline_scores.update({k: float(v) for k, v in new_scores.items()})
 
     def get_governance_report(self) -> dict[str, Any]:
         """Generate authoritative cryptographic governance report."""
