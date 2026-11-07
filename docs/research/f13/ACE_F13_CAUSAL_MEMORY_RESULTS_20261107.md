@@ -5,7 +5,7 @@
 **Pre-Score Commitment:** `docs/research/f13/ACE_F13_CAUSAL_MEMORY_PRESCORE_20261107.md`  
 **Pre-Score Commitment SHA-256:** `0948f00b273be45a408d7c758cd45c2b5a67c15c215b86e9600f2940decf34f3`  
 **Evidence Artifact:** `evidence/f13/ace_f13_causal_memory_v1.json.gz`  
-**Evidence Artifact SHA-256:** `91caa55f5a25311c1831d4b86e8a5dfd6c4e3dcf83898568c979241db9c45dcb`  
+**Evidence Artifact SHA-256:** `efa00a78db2d6ab43f1635f6402adaa7049c82be59146268f91e29266324dd03`  
 **Release Gate:** `BLOCK_RELEASE`  
 **Scientific Status:** `NOT_ASSESSED`  
 **OAIE Established:** `False`  

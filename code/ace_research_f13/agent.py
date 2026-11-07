@@ -216,11 +216,21 @@ class F13CausalAgent:
             # Execute metered oracle query
             queries_used += 1
             if host_controller is not None:
-                host_controller.exposure_ledger.record_exposure(
-                    candidate_id=f"f13_probe_{task.task_id}_{queries_used}",
-                    query_type="active_inquiry",
-                    content=best_probe,
-                )
+                if hasattr(host_controller, "budget"):
+                    host_controller.budget.consume_queries(1)
+                if hasattr(host_controller, "exposure_ledger"):
+                    if hasattr(host_controller.exposure_ledger, "record_exposure"):
+                        host_controller.exposure_ledger.record_exposure(
+                            candidate_id=f"f13_probe_{task.task_id}_{queries_used}",
+                            query_type="active_inquiry",
+                            content=best_probe,
+                        )
+                    elif hasattr(host_controller.exposure_ledger, "record_query"):
+                        host_controller.exposure_ledger.record_query(
+                            candidate_id=f"f13_probe_{task.task_id}_{queries_used}",
+                            query_type="active_inquiry",
+                            content=best_probe,
+                        )
 
             oracle_answer = bool(oracle_fn(best_probe))
 
@@ -243,20 +253,20 @@ class F13CausalAgent:
                 params={},
             )
 
-        # 4. Measure holdout accuracy
-        holdout_hits = sum(
-            1 for w, lbl in task.holdout_pool if selected_hyp.predicate_fn(w) == lbl
+        # 4. Measure empirical consistency on training/development pool ONLY (zero holdout access)
+        train_hits = sum(
+            1 for w, lbl in task.train_pool if selected_hyp.predicate_fn(w) == lbl
         )
-        holdout_acc = holdout_hits / max(1, len(task.holdout_pool))
+        train_acc = train_hits / max(1, len(task.train_pool))
 
-        # 5. Record in causal memory if successful
-        if holdout_acc >= 0.85:
+        # 5. Record in causal memory if successful on training/development feedback
+        if train_acc >= 0.85:
             self.memory.record_task_solution(
                 task_id=task.task_id,
                 cluster=task.cluster,
                 winning_operator=selected_hyp.family,
                 winning_params=selected_hyp.params,
-                holdout_accuracy=holdout_acc,
+                holdout_accuracy=train_acc,  # Based strictly on development feedback
                 queries_used=queries_used,
             )
 
@@ -266,7 +276,7 @@ class F13CausalAgent:
             "is_transfer_target": task.is_transfer_target,
             "selected_family": selected_hyp.family,
             "selected_description": selected_hyp.description,
-            "holdout_accuracy": holdout_acc,
+            "train_accuracy": train_acc,
             "queries_used": queries_used,
             "surviving_candidates_count": len(candidate_pool),
         }

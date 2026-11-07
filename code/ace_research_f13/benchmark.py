@@ -134,19 +134,23 @@ def run_f13_curriculum_benchmark(
 
             for task_id in task_order:
                 task = curriculum[task_id]
-                _, meta = agent.solve_task(
+                sol_fn, meta = agent.solve_task(
                     task=task,
                     oracle_fn=task.oracle_fn,
                     base_query_budget=20,
                     host_controller=host,
                 )
+                # Evaluator independently evaluates on sealed holdout pool
+                holdout_hits = sum(1 for w, lbl in task.holdout_pool if sol_fn(w) == lbl)
+                holdout_acc = round(holdout_hits / max(1, len(task.holdout_pool)), 4)
+                meta["holdout_accuracy"] = holdout_acc
                 run_record["task_results"][task_id] = meta
 
-                all_accs.append(meta["holdout_accuracy"])
+                all_accs.append(holdout_acc)
                 all_queries.append(meta["queries_used"])
 
                 if task.is_transfer_target:
-                    transfer_accs.append(meta["holdout_accuracy"])
+                    transfer_accs.append(holdout_acc)
                     transfer_queries.append(meta["queries_used"])
 
             mean_transfer_acc = _mean(transfer_accs)

@@ -12,7 +12,7 @@ from ace_research_f13.benchmark import (
     run_f13_curriculum_benchmark,
 )
 from ace_research_f13.causal_memory import CausalMemoryV2
-from ace_research_f13.tasks import create_distractor_tasks, create_f13_curriculum
+from ace_research_f13.tasks import F13Task, create_distractor_tasks, create_f13_curriculum
 
 
 class TestF13CausalMemory(unittest.TestCase):
@@ -80,8 +80,48 @@ class TestF13CausalMemory(unittest.TestCase):
         mem = CausalMemoryV2(mode="standard", seed=42)
         agent = F13CausalAgent(memory=mem, seed=42)
         pred_fn, meta = agent.solve_task(task0, task0.oracle_fn, base_query_budget=10)
-        self.assertEqual(meta["holdout_accuracy"], 1.0)
+        self.assertEqual(meta["train_accuracy"], 1.0)
         self.assertTrue(meta["queries_used"] >= 0)
+
+    def test_terminal_label_noninterference(self):
+        """MANDATORY NON-INTERFERENCE PROOF:
+        Inverting terminal holdout labels MUST NOT alter agent hypothesis proposals,
+        causal memory state, queries consumed, or chosen candidate.
+        """
+        curr = create_f13_curriculum()
+        task = curr["t1_strided_even_parity"]
+
+        # Run 1: Normal task with clean holdout labels
+        mem1 = CausalMemoryV2(mode="standard", seed=42)
+        agent1 = F13CausalAgent(memory=mem1, seed=42)
+        pred_fn1, meta1 = agent1.solve_task(task, task.oracle_fn, base_query_budget=15)
+
+        # Run 2: Adversarially inverted terminal holdout labels
+        inverted_holdouts = [(w, not lbl) for w, lbl in task.holdout_pool]
+        adversarial_task = F13Task(
+            task_id=task.task_id,
+            cluster=task.cluster,
+            description=task.description,
+            oracle_fn=task.oracle_fn,
+            train_pool=list(task.train_pool),  # Same training pool
+            holdout_pool=inverted_holdouts,     # Inverted terminal labels!
+            is_transfer_target=task.is_transfer_target,
+        )
+        mem2 = CausalMemoryV2(mode="standard", seed=42)
+        agent2 = F13CausalAgent(memory=mem2, seed=42)
+        pred_fn2, meta2 = agent2.solve_task(adversarial_task, task.oracle_fn, base_query_budget=15)
+
+        # Verify bit-for-bit invariance of agent behavior
+        self.assertEqual(meta1["selected_family"], meta2["selected_family"])
+        self.assertEqual(meta1["selected_description"], meta2["selected_description"])
+        self.assertEqual(meta1["train_accuracy"], meta2["train_accuracy"])
+        self.assertEqual(meta1["queries_used"], meta2["queries_used"])
+        self.assertEqual(len(mem1.abstractions), len(mem2.abstractions))
+
+        # Predictions are identical across arbitrary evaluation strings
+        test_strings = ["", "a", "b", "aa", "ab", "ba", "bb", "abab", "baba", "aaaaaa", "bbbbbb"]
+        for s in test_strings:
+            self.assertEqual(pred_fn1(s), pred_fn2(s), f"Prediction diverged on '{s}'!")
 
 
 if __name__ == "__main__":
