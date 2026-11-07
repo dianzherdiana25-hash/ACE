@@ -5,6 +5,8 @@ import ast
 import unittest
 
 from ace_loop.source_evolution import (
+    COMPOSITE_OPERATORS,
+    CompositeGene,
     MUTATION_RULES,
     SEED_GENE,
     SourceEvolutionError,
@@ -12,6 +14,8 @@ from ace_loop.source_evolution import (
     compile_function,
     compute_sha,
     generate_source,
+    gene_from_dict,
+    mutate_composite_gene,
     mutate_gene,
     validate_ast,
 )
@@ -70,6 +74,39 @@ class TestSourceEvolution(unittest.TestCase):
             TypedGene(window_stride=2, modulus=3, parity_threshold=1, weight_length=1, weight_density=1, sign=0)
         with self.assertRaises(SourceEvolutionError):
             TypedGene(window_stride=2, modulus=3, parity_threshold=10, weight_length=1, weight_density=1, sign=1)
+
+    def test_composite_gene_generation_and_execution(self):
+        gene_a = mutate_gene(SEED_GENE, 0)
+        gene_b = mutate_gene(SEED_GENE, 1)
+        comp = CompositeGene(gene_a=gene_a, gene_b=gene_b, operator="XOR")
+        src = generate_source(comp)
+        self.assertIn(b"^", src)
+        validate_ast(src)
+        fn = compile_function(src, comp)
+        val = fn(5, 2, 7)
+        self.assertIsInstance(val, int)
+
+    def test_mutate_composite_gene_determinism(self):
+        c1 = mutate_composite_gene(SEED_GENE, SEED_GENE, 2)
+        c2 = mutate_composite_gene(SEED_GENE, SEED_GENE, 2)
+        self.assertEqual(c1, c2)
+        src1 = generate_source(c1)
+        src2 = generate_source(c2)
+        self.assertEqual(compute_sha(src1), compute_sha(src2))
+
+    def test_gene_from_dict_roundtrip(self):
+        atomic_dict = SEED_GENE.to_dict()
+        reconstructed_atomic = gene_from_dict(atomic_dict)
+        self.assertEqual(reconstructed_atomic, SEED_GENE)
+
+        comp = CompositeGene(gene_a=SEED_GENE, gene_b=mutate_gene(SEED_GENE, 1), operator="ADD")
+        comp_dict = comp.to_dict()
+        reconstructed_comp = gene_from_dict(comp_dict)
+        self.assertEqual(reconstructed_comp, comp)
+
+    def test_composite_gene_invalid_operator(self):
+        with self.assertRaises(SourceEvolutionError):
+            CompositeGene(gene_a=SEED_GENE, gene_b=SEED_GENE, operator="INVALID_OP")
 
 
 if __name__ == "__main__":

@@ -17,6 +17,7 @@ from ace_self_dev import (
     PersistentResearchState,
     ProvenanceEngine,
     ProvenanceProof,
+    ResearchHypothesis,
     SelfDevelopmentCoordinator,
     StateManager,
     create_confirmation_suite,
@@ -187,6 +188,41 @@ class TestSelfDevelopmentLoop(unittest.TestCase):
         )
         self.assertTrue(is_rejected)
         self.assertLessEqual(acc, 0.5000)
+
+    def test_composite_candidate_generation_and_isolated_evaluation(self):
+        """Verify SourceGenerator and IsolatedEvaluator handle composite mechanisms safely."""
+        coord = SelfDevelopmentCoordinator(
+            checkpoint_dir=str(self.ckpt_dir),
+            evidence_dir=str(self.evidence_dir),
+        )
+        tasks = create_confirmation_suite(42)
+        hyp = ResearchHypothesis(
+            hypothesis_id="HYP_TEST_COMPOSITE",
+            statement="Applying composite mechanism synthesis for task_k2",
+            target_task_id="task_k2_modular_stride_shift",
+            strategy="SYNTHESIZE_COMPOSITE_MECHANISM",
+        )
+        cand = coord.generator.generate_candidate(
+            hypothesis=hyp,
+            parent_candidate=None,
+            parent_id="G0_root",
+            ordinal=1,
+            author_type=AuthorType.ACE_AUTONOMOUS_V02,
+        )
+        self.assertTrue(cand.gene_dict.get("is_composite"))
+        self.assertIn("^", cand.source_code)
+
+        # Isolated evaluation must compile and execute composite candidate without error
+        receipt = coord.evaluator.evaluate_candidate(
+            candidate=cand,
+            hypothesis=hyp,
+            tasks=tasks,
+            host_controller=None,
+            prior_cycle_id=1,
+            state_digest_before="state_digest_test",
+        )
+        self.assertIsNotNone(receipt)
+        self.assertIn(receipt.decision.value, ("ACCEPTED", "REJECTED"))
 
 
 if __name__ == "__main__":

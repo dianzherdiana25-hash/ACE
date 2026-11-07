@@ -1,9 +1,12 @@
-"""E1.6-V2: Bounded, Typed Source-Code Mutation Engine for Autonomous Self-Development.
+"""E1.6-V3: Bounded, Typed Source-Code Mutation Engine for Autonomous Self-Development.
 
 Produces and compiles deterministic Python source code from strongly typed gene specifications.
+Supports:
+- Atomic TypedGene expressions: single modular combinations.
+- CompositeGene expressions: compositional combinations using algebraic and bitwise operators (ADD, SUB, XOR, MULT).
 Enforces strict AST safety boundaries:
 - Pure functions only (no imports, no system calls, no I/O, no eval/exec).
-- Whitelisted AST node types: FunctionDef, Return, BinOp, UnaryOp, Compare, Name, Constant.
+- Whitelisted AST node types: FunctionDef, Return, BinOp, UnaryOp, BitXor, Name, Constant.
 - Clean execution environment with empty builtins.
 - Cryptographic hash verification of source bytes (source_sha).
 """
@@ -12,7 +15,7 @@ from __future__ import annotations
 import ast
 from dataclasses import dataclass
 import hashlib
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 
 class SourceEvolutionError(ValueError):
@@ -48,14 +51,37 @@ class TypedGene:
         if self.sign not in (-1, 1):
             raise SourceEvolutionError("sign must be -1 or 1")
 
-    def to_dict(self) -> Dict[str, int]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
+            "is_composite": False,
             "window_stride": self.window_stride,
             "modulus": self.modulus,
             "parity_threshold": self.parity_threshold,
             "weight_length": self.weight_length,
             "weight_density": self.weight_density,
             "sign": self.sign,
+        }
+
+
+@dataclass(frozen=True)
+class CompositeGene:
+    """Strongly-typed composite gene combining dual mechanisms via algebraic or bitwise operators."""
+    gene_a: TypedGene
+    gene_b: TypedGene
+    operator: str  # "ADD", "SUB", "XOR", "MULT"
+
+    def __post_init__(self):
+        if not isinstance(self.gene_a, TypedGene) or not isinstance(self.gene_b, TypedGene):
+            raise SourceEvolutionError("CompositeGene requires two TypedGene instances")
+        if self.operator not in ("ADD", "SUB", "XOR", "MULT"):
+            raise SourceEvolutionError(f"Unsupported composite operator: {self.operator}")
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "is_composite": True,
+            "gene_a": self.gene_a.to_dict(),
+            "gene_b": self.gene_b.to_dict(),
+            "operator": self.operator,
         }
 
 
@@ -87,33 +113,95 @@ MUTATION_RULES: Tuple[Tuple[str, int], ...] = (
     ("sign", 1),
 )
 
+COMPOSITE_OPERATORS: Tuple[str, ...] = ("ADD", "XOR", "SUB", "MULT")
+
+
+def gene_from_dict(d: Dict[str, Any]) -> Union[TypedGene, CompositeGene]:
+    """Reconstruct TypedGene or CompositeGene from dict representation."""
+    if d.get("is_composite", False):
+        return CompositeGene(
+            gene_a=gene_from_dict(d["gene_a"]),
+            gene_b=gene_from_dict(d["gene_b"]),
+            operator=d.get("operator", "XOR"),
+        )
+    return TypedGene(
+        window_stride=d.get("window_stride", 2),
+        modulus=d.get("modulus", 3),
+        parity_threshold=d.get("parity_threshold", 1),
+        weight_length=d.get("weight_length", 1),
+        weight_density=d.get("weight_density", 2),
+        sign=d.get("sign", 1),
+    )
+
 
 def mutate_gene(parent: TypedGene, ordinal: int) -> TypedGene:
     """Deterministically mutate a parent gene based on an ordinal index."""
     _check_int(ordinal, 0, 100000, "ordinal")
     field, val = MUTATION_RULES[ordinal % len(MUTATION_RULES)]
-    params = parent.to_dict()
+    params = dict(parent.to_dict())
+    params.pop("is_composite", None)
     params[field] = val
-    if params == parent.to_dict():
+    if params == {k: v for k, v in parent.to_dict().items() if k != "is_composite"}:
         new_w = parent.weight_density + 1 if parent.weight_density < 8 else -8
         params["weight_density"] = new_w
     return TypedGene(**params)
 
 
-def generate_source(gene: TypedGene, function_name: str = "evaluate_mechanism") -> bytes:
-    """Generate typed, bounded Python source code from a validated Gene."""
-    if not isinstance(gene, TypedGene):
-        raise SourceEvolutionError("TypedGene instance required")
+def mutate_composite_gene(
+    parent_a: TypedGene,
+    parent_b: TypedGene,
+    ordinal: int,
+) -> CompositeGene:
+    """Deterministically mutate and synthesize a composite gene."""
+    _check_int(ordinal, 0, 100000, "ordinal")
+    mutated_a = mutate_gene(parent_a, ordinal)
+    mutated_b = mutate_gene(parent_b, ordinal + 3)
+    op = COMPOSITE_OPERATORS[ordinal % len(COMPOSITE_OPERATORS)]
+    return CompositeGene(gene_a=mutated_a, gene_b=mutated_b, operator=op)
 
-    code_text = (
-        f"def {function_name}(length: int, density: int, stride_val: int) -> int:\n"
-        f"    return {gene.sign} * ("
-        f"length * {gene.weight_length} + "
-        f"density * {gene.weight_density} + "
-        f"(stride_val % {gene.modulus}) - "
-        f"{gene.parity_threshold})\n"
+
+def _render_atomic_expr(g: TypedGene) -> str:
+    return (
+        f"{g.sign} * ("
+        f"length * {g.weight_length} + "
+        f"density * {g.weight_density} + "
+        f"(stride_val % {g.modulus}) - "
+        f"{g.parity_threshold})"
     )
-    return code_text.encode("utf-8")
+
+
+def generate_source(
+    gene: Union[TypedGene, CompositeGene],
+    function_name: str = "evaluate_mechanism",
+) -> bytes:
+    """Generate typed, bounded Python source code from a validated Gene."""
+    if isinstance(gene, CompositeGene):
+        expr_a = _render_atomic_expr(gene.gene_a)
+        expr_b = _render_atomic_expr(gene.gene_b)
+        if gene.operator == "XOR":
+            op_sym = "^"
+        elif gene.operator == "MULT":
+            op_sym = "*"
+        elif gene.operator == "SUB":
+            op_sym = "-"
+        else:
+            op_sym = "+"
+
+        code_text = (
+            f"def {function_name}(length: int, density: int, stride_val: int) -> int:\n"
+            f"    return ({expr_a}) {op_sym} ({expr_b})\n"
+        )
+        return code_text.encode("utf-8")
+
+    if isinstance(gene, TypedGene):
+        expr = _render_atomic_expr(gene)
+        code_text = (
+            f"def {function_name}(length: int, density: int, stride_val: int) -> int:\n"
+            f"    return {expr}\n"
+        )
+        return code_text.encode("utf-8")
+
+    raise SourceEvolutionError("TypedGene or CompositeGene instance required")
 
 
 ALLOWED_AST_NODES = (
@@ -128,6 +216,7 @@ ALLOWED_AST_NODES = (
     ast.Sub,
     ast.Mult,
     ast.Mod,
+    ast.BitXor,
     ast.USub,
     ast.UAdd,
     ast.Name,
@@ -161,7 +250,10 @@ def validate_ast(source_bytes: bytes, expected_name: str = "evaluate_mechanism")
     return func_def
 
 
-def compile_function(source_bytes: bytes, gene: TypedGene) -> Callable[[int, int, int], int]:
+def compile_function(
+    source_bytes: bytes,
+    gene: Optional[Union[TypedGene, CompositeGene, Dict[str, Any]]] = None,
+) -> Callable[[int, int, int], int]:
     """Safely compile verified source bytes into an isolated callable."""
     validate_ast(source_bytes)
     source_str = source_bytes.decode("utf-8")

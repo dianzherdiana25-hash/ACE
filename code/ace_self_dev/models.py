@@ -95,6 +95,7 @@ class ResearchHypothesis:
     max_regression_tolerance: float = 0.0200
     max_search_budget_cost_usd: float = 0.0
     preregistration_hash: str = ""
+    strategy: str = "LINEAR_MUTATION"
 
 
 @dataclass(frozen=True)
@@ -105,7 +106,7 @@ class CodeCandidate:
     author_type: AuthorType
     source_code: str
     source_sha: str
-    gene_dict: Dict[str, int]
+    gene_dict: Dict[str, Any]
     diff_patch: str
     creation_timestamp: str
     provenance_proof: Optional[ProvenanceProof] = None

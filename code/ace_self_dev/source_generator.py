@@ -7,11 +7,14 @@ import time
 from typing import Any, Dict, Optional, Tuple
 
 from ace_loop.source_evolution import (
+    CompositeGene,
     SEED_GENE,
     TypedGene,
     compile_function,
     compute_sha,
     generate_source,
+    gene_from_dict,
+    mutate_composite_gene,
     mutate_gene,
     validate_ast,
 )
@@ -34,12 +37,30 @@ class SourceGenerator:
         author_type: AuthorType = AuthorType.ACE_AUTONOMOUS_V02,
     ) -> CodeCandidate:
         """Generate a strongly-typed, AST-validated candidate function and diff patch."""
-        parent_gene = TypedGene(**parent_candidate.gene_dict) if parent_candidate else SEED_GENE
-        parent_source = parent_candidate.source_code if parent_candidate else generate_source(parent_gene).decode("utf-8")
         effective_parent_id = parent_id or (parent_candidate.candidate_id if parent_candidate else "G0_root_seed")
+        parent_source = parent_candidate.source_code if parent_candidate else generate_source(SEED_GENE).decode("utf-8")
 
-        # Apply deterministic mutation
-        mutated_gene = mutate_gene(parent_gene, ordinal=ordinal)
+        # Determine mutation strategy (atomic vs composite)
+        is_composite = (
+            getattr(hypothesis, "strategy", "") == "SYNTHESIZE_COMPOSITE_MECHANISM"
+            or "composite" in hypothesis.statement.lower()
+        )
+
+        if is_composite:
+            base_gene = gene_from_dict(parent_candidate.gene_dict) if parent_candidate else SEED_GENE
+            if isinstance(base_gene, CompositeGene):
+                gene_a = base_gene.gene_a
+                gene_b = base_gene.gene_b
+            else:
+                gene_a = base_gene
+                gene_b = mutate_gene(base_gene, ordinal + 2)
+            mutated_gene = mutate_composite_gene(gene_a, gene_b, ordinal=ordinal)
+        else:
+            parent_gene = gene_from_dict(parent_candidate.gene_dict) if parent_candidate else SEED_GENE
+            if isinstance(parent_gene, CompositeGene):
+                parent_gene = parent_gene.gene_a
+            mutated_gene = mutate_gene(parent_gene, ordinal=ordinal)
+
         source_bytes = generate_source(mutated_gene)
 
         # Validate AST strictly against security boundaries

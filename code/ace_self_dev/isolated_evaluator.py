@@ -14,7 +14,7 @@ from ace_host_controller import (
     HostSandboxGate,
     SealedHoldoutEvaluator,
 )
-from ace_loop.source_evolution import TypedGene, compile_function
+from ace_loop.source_evolution import compile_function, gene_from_dict
 from .confirmation_suite import ConfirmationTask
 from .models import CandidateDecision, CodeCandidate, EvaluationReceipt, ResearchHypothesis
 from .provenance_engine import ProvenanceEngine
@@ -53,7 +53,7 @@ class IsolatedEvaluator:
         target_task = tasks[target_tid]
 
         # 1. Compile candidate function safely
-        gene = TypedGene(**candidate.gene_dict)
+        gene = gene_from_dict(candidate.gene_dict)
         source_bytes = candidate.source_code.encode("utf-8")
         raw_fn = compile_function(source_bytes, gene)
         cand_pred = _candidate_to_string_predicate(raw_fn)
@@ -67,6 +67,23 @@ class IsolatedEvaluator:
         val_acc = round(val_hits / max(1, len(target_task.validation_pool)), 4)
 
         # 4. Gating via Host Controller on sealed terminal holdout
+        if host_controller is None:
+            holdout_banks = {tid: list(t.sealed_confirmation_holdout) for tid, t in tasks.items()}
+            sealed_eval = SealedHoldoutEvaluator(
+                manifest_id=f"manifest_eval_{candidate.candidate_id}",
+                holdout_banks=holdout_banks,
+            )
+            host_controller = HostController(
+                evaluator=sealed_eval,
+                budget=ExecutionBudget(max_execution_seconds=120.0, max_queries=500, max_candidates=20),
+                sandbox_gate=HostSandboxGate(enforce_os_containment=False),
+                root_candidate_id=candidate.parent_id,
+                root_source_sha=f"sha_{candidate.parent_id}",
+                min_gain=hypothesis.min_required_gain,
+                max_regression=hypothesis.max_regression_tolerance,
+            )
+            host_controller.initialize_root_score(lambda w: (len(w) % 3 == 0))
+
         decision = host_controller.evaluate_and_gate(
             candidate_id=candidate.candidate_id,
             parent_id=candidate.parent_id,

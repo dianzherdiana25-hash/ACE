@@ -56,22 +56,53 @@ class AgendaEngine:
         selected_task_id = ranked_tasks[0]
         selected_ordinal = 1
 
-        # Check if next_agenda_priority from previous cycle has a recommendation
+        # Check if all tasks have exhausted linear mutations
+        linear_failures_per_task = {
+            tid: len([f for f in state.failure_catalog.get(tid, []) if not f.get("gene_dict", {}).get("is_composite", False)])
+            for tid in tasks.keys()
+        }
+        all_linear_exhausted = all(c >= self.max_attempts_per_task for c in linear_failures_per_task.values())
+
+        if all_linear_exhausted:
+            composite_failures_per_task = {
+                tid: [f for f in state.failure_catalog.get(tid, []) if f.get("gene_dict", {}).get("is_composite", False)]
+                for tid in tasks.keys()
+            }
+            if state.next_agenda_priority:
+                rec_tid = state.next_agenda_priority.get("priority_task_id")
+                if rec_tid in tasks and len(composite_failures_per_task.get(rec_tid, [])) < self.max_attempts_per_task:
+                    selected_task_id = rec_tid
+                else:
+                    for cand_tid in ranked_tasks:
+                        if len(composite_failures_per_task.get(cand_tid, [])) < self.max_attempts_per_task:
+                            selected_task_id = cand_tid
+                            break
+            else:
+                for cand_tid in ranked_tasks:
+                    if len(composite_failures_per_task.get(cand_tid, [])) < self.max_attempts_per_task:
+                        selected_task_id = cand_tid
+                        break
+
+            tried_comp = {f.get("mutation_ordinal") for f in composite_failures_per_task.get(selected_task_id, [])}
+            selected_ordinal = 1
+            while selected_ordinal in tried_comp and selected_ordinal <= 10:
+                selected_ordinal += 1
+
+            return selected_task_id, task_seed, selected_ordinal
+
+        # Linear mutation regime
         if state.next_agenda_priority:
             rec_tid = state.next_agenda_priority.get("priority_task_id")
             rec_ord = state.next_agenda_priority.get("suggested_ordinal", 1)
             if rec_tid in tasks:
-                # Check how many times rec_tid has already failed
                 past_failures = state.failure_catalog.get(rec_tid, [])
                 tried_ordinals = {f.get("mutation_ordinal") for f in past_failures}
                 if len(past_failures) < self.max_attempts_per_task:
                     selected_task_id = rec_tid
                     selected_ordinal = rec_ord
-                    # Ensure we don't repeat an already tried ordinal
                     while selected_ordinal in tried_ordinals and selected_ordinal <= 10:
                         selected_ordinal += 1
 
-        # If the top ranked task was already attempted too many times, find the next one
         past_failures = state.failure_catalog.get(selected_task_id, [])
         tried_ordinals = {f.get("mutation_ordinal") for f in past_failures}
         if len(past_failures) >= self.max_attempts_per_task:
@@ -85,7 +116,6 @@ class AgendaEngine:
                     selected_ordinal = cand_ord
                     break
         else:
-            # Advance ordinal if 1 was already tried
             while selected_ordinal in tried_ordinals and selected_ordinal <= 10:
                 selected_ordinal += 1
 
@@ -101,13 +131,24 @@ class AgendaEngine:
     ) -> ResearchHypothesis:
         """Formulate a falsifiable hypothesis tailored to the selected task and mutation ordinal."""
         past_failures = state.failure_catalog.get(target_task_id, [])
-        prior_context = f" (after {len(past_failures)} prior falsified attempts)" if past_failures else ""
+        linear_failures = [f for f in past_failures if not f.get("gene_dict", {}).get("is_composite", False)]
+        is_composite = len(linear_failures) >= self.max_attempts_per_task
 
-        statement = (
-            f"Cycle {cycle_id}: Applying typed AST mutation ordinal {ordinal} for {target_task_id} "
-            f"({target_task.family}){prior_context} will achieve holdout gain >= 0.1500 without prior regression > 0.0200."
-        )
-        hyp_id = f"HYP_AUTONOMOUS_C{cycle_id}_{target_task_id}_ord{ordinal}"
+        if is_composite:
+            strategy = "SYNTHESIZE_COMPOSITE_MECHANISM"
+            statement = (
+                f"Cycle {cycle_id}: Applying composite mechanism synthesis (operator ordinal {ordinal}) for {target_task_id} "
+                f"({target_task.family}) will achieve holdout gain >= 0.1500 without prior regression > 0.0200."
+            )
+            hyp_id = f"HYP_AUTONOMOUS_C{cycle_id}_{target_task_id}_comp_ord{ordinal}"
+        else:
+            strategy = "LINEAR_MUTATION"
+            prior_context = f" (after {len(past_failures)} prior falsified attempts)" if past_failures else ""
+            statement = (
+                f"Cycle {cycle_id}: Applying typed AST mutation ordinal {ordinal} for {target_task_id} "
+                f"({target_task.family}){prior_context} will achieve holdout gain >= 0.1500 without prior regression > 0.0200."
+            )
+            hyp_id = f"HYP_AUTONOMOUS_C{cycle_id}_{target_task_id}_ord{ordinal}"
 
         # Hash commitment of hypothesis
         h_payload = f"{hyp_id}:{target_task_id}:{ordinal}:{statement}".encode("utf-8")
@@ -121,6 +162,7 @@ class AgendaEngine:
             max_regression_tolerance=0.0200,
             max_search_budget_cost_usd=0.0,
             preregistration_hash=prereg_hash,
+            strategy=strategy,
         )
 
     def formulate_next_goal(
@@ -153,34 +195,68 @@ class AgendaEngine:
             )
         else:
             # Rejection: Negative result cataloged.
-            past_attempts = len(state.failure_catalog.get(current_task_id, [])) + 1
-            if past_attempts < self.max_attempts_per_task:
-                # Explore next mutation ordinal on the same task
-                next_ord = current_ordinal + 1
-                return NextAgendaPriority(
-                    priority_task_id=current_task_id,
-                    priority_family=tasks[current_task_id].family,
-                    strategy="EXPLORE_MUTATION_ORDINAL",
-                    suggested_ordinal=next_ord,
-                    rationalization=(
-                        f"Mutation ordinal {current_ordinal} on {current_task_id} failed with gain {gain:+.4f}. "
-                        f"Attempt {past_attempts}/{self.max_attempts_per_task}: exploring ordinal {next_ord}."
-                    ),
-                    timestamp=now,
-                )
+            past_failures = state.failure_catalog.get(current_task_id, [])
+            linear_failures = [f for f in past_failures if not f.get("gene_dict", {}).get("is_composite", False)]
+            is_composite = len(linear_failures) >= self.max_attempts_per_task
+
+            if is_composite:
+                composite_failures = [f for f in past_failures if f.get("gene_dict", {}).get("is_composite", False)]
+                composite_attempts = len(composite_failures) + 1
+                if composite_attempts < self.max_attempts_per_task:
+                    next_ord = current_ordinal + 1
+                    return NextAgendaPriority(
+                        priority_task_id=current_task_id,
+                        priority_family=tasks[current_task_id].family,
+                        strategy="SYNTHESIZE_COMPOSITE_MECHANISM",
+                        suggested_ordinal=next_ord,
+                        rationalization=(
+                            f"Composite mechanism ordinal {current_ordinal} on {current_task_id} failed with gain {gain:+.4f}. "
+                            f"Attempt {composite_attempts}/{self.max_attempts_per_task}: exploring composite ordinal {next_ord}."
+                        ),
+                        timestamp=now,
+                    )
+                else:
+                    all_tids = list(tasks.keys())
+                    curr_idx = all_tids.index(current_task_id) if current_task_id in all_tids else 0
+                    next_tid = all_tids[(curr_idx + 1) % len(all_tids)]
+                    return NextAgendaPriority(
+                        priority_task_id=next_tid,
+                        priority_family=tasks[next_tid].family,
+                        strategy="SYNTHESIZE_COMPOSITE_MECHANISM",
+                        suggested_ordinal=1,
+                        rationalization=(
+                            f"Target {current_task_id} reached {composite_attempts} composite attempts. "
+                            f"Advancing composite synthesis agenda to {next_tid} ({tasks[next_tid].family})."
+                        ),
+                        timestamp=now,
+                    )
             else:
-                # Exhausted attempts on current task; shift focus to next task
-                all_tids = list(tasks.keys())
-                curr_idx = all_tids.index(current_task_id) if current_task_id in all_tids else 0
-                next_tid = all_tids[(curr_idx + 1) % len(all_tids)]
-                return NextAgendaPriority(
-                    priority_task_id=next_tid,
-                    priority_family=tasks[next_tid].family,
-                    strategy="SHIFT_TO_NEXT_WEAKEST_TASK",
-                    suggested_ordinal=1,
-                    rationalization=(
-                        f"Target {current_task_id} reached {past_attempts} falsified attempts. "
-                        f"Shifting research agenda to alternative capability {next_tid} ({tasks[next_tid].family})."
-                    ),
-                    timestamp=now,
-                )
+                past_attempts = len(past_failures) + 1
+                if past_attempts < self.max_attempts_per_task:
+                    next_ord = current_ordinal + 1
+                    return NextAgendaPriority(
+                        priority_task_id=current_task_id,
+                        priority_family=tasks[current_task_id].family,
+                        strategy="EXPLORE_MUTATION_ORDINAL",
+                        suggested_ordinal=next_ord,
+                        rationalization=(
+                            f"Mutation ordinal {current_ordinal} on {current_task_id} failed with gain {gain:+.4f}. "
+                            f"Attempt {past_attempts}/{self.max_attempts_per_task}: exploring ordinal {next_ord}."
+                        ),
+                        timestamp=now,
+                    )
+                else:
+                    all_tids = list(tasks.keys())
+                    curr_idx = all_tids.index(current_task_id) if current_task_id in all_tids else 0
+                    next_tid = all_tids[(curr_idx + 1) % len(all_tids)]
+                    return NextAgendaPriority(
+                        priority_task_id=next_tid,
+                        priority_family=tasks[next_tid].family,
+                        strategy="SHIFT_TO_NEXT_WEAKEST_TASK",
+                        suggested_ordinal=1,
+                        rationalization=(
+                            f"Target {current_task_id} reached {past_attempts} falsified attempts. "
+                            f"Shifting research agenda to alternative capability {next_tid} ({tasks[next_tid].family})."
+                        ),
+                        timestamp=now,
+                    )
