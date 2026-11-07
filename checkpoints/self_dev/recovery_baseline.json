@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 14,
+  "cycle_count": 15,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -212,6 +212,21 @@
       "evidence_path": "/home/antigravity/dianzherdiana25-hash/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0014.json.gz",
       "prior_digest": "982e248002b14b6e3e95e41b2bc9f3d7f4925a3a34b17bf51767015647db233d",
       "state_digest": "13a4388b493b7a609fbd96d2ac8ba6600b52d940e961b57ba1e0207e77cfd019"
+    },
+    {
+      "cycle_id": 15,
+      "timestamp": "2026-11-07T18:37:49Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C15_task_k1_center_pivot_density_comp_ord1",
+      "target_task_id": "task_k1_center_pivot_density",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C15_task_k1_center_pivot_density_comp_ord1",
+      "source_sha": "db86d1443a76095d5e8346365bd69b23945a62bbb47440b57597cfb657e49c6b",
+      "decision": "REJECTED",
+      "holdout_score": 0.5703,
+      "gain_over_parent": -0.125,
+      "rejection_reason": "Holdout gain -0.1250 below required min_gain 0.1500",
+      "evidence_path": "/home/antigravity/dianzherdiana25-hash/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0015.json.gz",
+      "prior_digest": "13a4388b493b7a609fbd96d2ac8ba6600b52d940e961b57ba1e0207e77cfd019",
+      "state_digest": "3bfcf693ec8d5267493eaaa8d263773d75109754849734d0ca60dbbfd8ebf4aa"
     }
   ],
   "failure_catalog": {
@@ -529,6 +544,36 @@
         "gain_over_parent": -0.1015,
         "rejection_reason": "Holdout gain -0.1015 below required min_gain 0.1500",
         "timestamp": "2026-11-07T17:41:17Z"
+      },
+      {
+        "cycle_id": 15,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C15_task_k1_center_pivot_density_comp_ord1",
+        "gene_dict": {
+          "is_composite": true,
+          "gene_a": {
+            "is_composite": false,
+            "window_stride": 3,
+            "modulus": 3,
+            "parity_threshold": 1,
+            "weight_length": 1,
+            "weight_density": 2,
+            "sign": 1
+          },
+          "gene_b": {
+            "is_composite": false,
+            "window_stride": 2,
+            "modulus": 5,
+            "parity_threshold": 1,
+            "weight_length": 1,
+            "weight_density": 2,
+            "sign": 1
+          },
+          "operator": "XOR"
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": -0.125,
+        "rejection_reason": "Holdout gain -0.1250 below required min_gain 0.1500",
+        "timestamp": "2026-11-07T18:37:49Z"
       }
     ]
   },
@@ -616,22 +661,28 @@
       "target_task_id": "task_j2_symmetric_run_boundary",
       "status": "FALSIFIED",
       "cycle_id": 14
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C15_task_k1_center_pivot_density_comp_ord1",
+      "target_task_id": "task_k1_center_pivot_density",
+      "status": "FALSIFIED",
+      "cycle_id": 15
     }
   ],
   "next_agenda_priority": {
     "priority_task_id": "task_k1_center_pivot_density",
     "priority_family": "family_k",
     "strategy": "SYNTHESIZE_COMPOSITE_MECHANISM",
-    "suggested_ordinal": 1,
-    "rationalization": "Target task_j2_symmetric_run_boundary reached 2 composite attempts. Advancing synthesis agenda to task_k1_center_pivot_density (family_k) via SYNTHESIZE_COMPOSITE_MECHANISM.",
-    "timestamp": "2026-11-07T18:37:47Z"
+    "suggested_ordinal": 2,
+    "rationalization": "Composite mechanism ordinal 1 on task_k1_center_pivot_density failed with gain -0.1250. Attempt 1/2: exploring composite ordinal 2.",
+    "timestamp": "2026-11-07T18:37:49Z"
   },
   "concurrency_lock": {
     "is_locked": true,
-    "locked_by": "worker_80_1794076667",
-    "locked_at": "2026-11-07T18:37:47Z",
-    "expires_at": "1794077267.61",
-    "lock_token": "c6f93c7f7c5e015c"
+    "locked_by": "worker_80_1794076669",
+    "locked_at": "2026-11-07T18:37:49Z",
+    "expires_at": "1794077269.14",
+    "lock_token": "95e5fd44ee27dfd1"
   },
   "immutable_baseline": {
     "root_candidate_id": "G0_self_dev_root_c0",
@@ -640,10 +691,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "13a4388b493b7a609fbd96d2ac8ba6600b52d940e961b57ba1e0207e77cfd019",
+  "state_digest": "3bfcf693ec8d5267493eaaa8d263773d75109754849734d0ca60dbbfd8ebf4aa",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 14,
-    "last_known_good_digest": "13a4388b493b7a609fbd96d2ac8ba6600b52d940e961b57ba1e0207e77cfd019",
+    "last_known_good_cycle": 15,
+    "last_known_good_digest": "3bfcf693ec8d5267493eaaa8d263773d75109754849734d0ca60dbbfd8ebf4aa",
     "recovery_count": 0
   }
 }
