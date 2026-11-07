@@ -29,6 +29,7 @@ class CandidateDecision(str, Enum):
     ACCEPTED = "ACCEPTED"
     REJECTED = "REJECTED"
     BLOCKED = "BLOCKED"
+    STAGNATED = "STAGNATED"
 
 
 @dataclass(frozen=True)

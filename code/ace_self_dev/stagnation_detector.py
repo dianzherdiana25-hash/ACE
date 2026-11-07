@@ -208,13 +208,14 @@ class StagnationDetector:
         state: PersistentResearchState,
         task_id: Optional[str] = None,
         patience_k: Optional[int] = None,
+        k: Optional[int] = None,
     ) -> Tuple[bool, int, float, List[float]]:
         """Detect lack of validation/holdout improvement over K consecutive attempts.
         
         Returns:
             (is_stagnated, consecutive_no_improvement_count, best_score, score_history)
         """
-        k = patience_k or self.patience_k
+        effective_k = k or patience_k or self.patience_k
         if not state.completed_cycles:
             return False, 0, 0.0, []
 

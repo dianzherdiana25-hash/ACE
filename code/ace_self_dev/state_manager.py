@@ -234,6 +234,7 @@ class StateManager:
             state.failure_catalog[target_task_id].append({
                 "cycle_id": cycle_id,
                 "candidate_id": candidate_id,
+                "source_sha": source_sha,
                 "gene_dict": gene_dict,
                 "mutation_ordinal": mutation_ordinal,
                 "gain_over_parent": gain_over_parent,
