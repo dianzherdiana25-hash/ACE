@@ -61,10 +61,12 @@ def verify_agenda_artifact(
 def main() -> int:
     parser = argparse.ArgumentParser(description="Verify ACE Fase 9 agenda artifact.")
     parser.add_argument("--artifact", default="evidence/agenda/ace_research_agenda_v1.json.gz")
-    parser.add_argument("--no-replay", action="store_true")
+    parser.add_argument("--replay", action="store_true", help="Re-run campaign replay")
+    parser.add_argument("--no-replay", action="store_true", help="Deprecated alias")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
-    print(json.dumps(verify_agenda_artifact(root / args.artifact, root, replay=not args.no_replay), indent=2))
+    replay = bool(args.replay and not args.no_replay)
+    print(json.dumps(verify_agenda_artifact(root / args.artifact, root, replay=replay), indent=2))
     return 0
 
 
