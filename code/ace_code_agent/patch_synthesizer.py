@@ -49,12 +49,13 @@ class ModularPatchGenerator:
 
         # Synthesize replacement depending on hypothesis strategy
         if strategy == "MULTI_TASK_COMPOSITE_DISPATCH":
-            # Synthesize an AST-validated multi-task dispatch helper
-            replacement_code = self._synthesize_dispatch_enhancement(original_source)
+            helper_snippet = self._get_dispatch_helper_snippet()
         elif strategy == "LIBRARY_PRIMITIVE_SYNTHESIS":
-            replacement_code = self._synthesize_primitive_enhancement(original_source)
+            helper_snippet = self._get_primitive_helper_snippet()
         else:
-            replacement_code = self._synthesize_constraint_pruning_enhancement(original_source)
+            helper_snippet = self._get_constraint_helper_snippet()
+
+        replacement_code = original_source + helper_snippet
 
         # Generate unified diff
         orig_lines = original_source.splitlines(keepends=True)
@@ -73,8 +74,8 @@ class ModularPatchGenerator:
             hypothesis_id=hypothesis.hypothesis_id,
             target_file=target_file,
             diff_content=diff_text,
-            original_code_snippet=original_source[:500],
-            replacement_code_snippet=replacement_code[:500],
+            original_code_snippet="",
+            replacement_code_snippet=helper_snippet,
             patch_type="AST_TRANSFORMATION",
             author_provenance="ACE_BOUNDED_AST_PATCH_GENERATOR_V03",
             generator_metadata={
@@ -89,9 +90,8 @@ class ModularPatchGenerator:
             },
         )
 
-    def _synthesize_dispatch_enhancement(self, source: str) -> str:
-        """Appends an optimized multi-task composite dispatch kernel."""
-        helper_snippet = (
+    def _get_dispatch_helper_snippet(self) -> str:
+        return (
             "\n\n# --- ACE V0.3 Autonomous Dispatch Enhancement ---\n"
             "def ace_v03_composite_dispatch(length: int, density: int, stride_val: int, task_id: str = '') -> int:\n"
             "    \"\"\"Autonomously synthesized multi-task composite dispatch kernel.\"\"\"\n"
@@ -103,27 +103,32 @@ class ModularPatchGenerator:
             "        return 1 if (diff % 4 == 0 or diff % 5 == 0) else 0\n"
             "    return (length % 3)\n"
         )
-        return source + helper_snippet
 
-    def _synthesize_primitive_enhancement(self, source: str) -> str:
-        """Appends an optimized modular balance primitive kernel."""
-        helper_snippet = (
+    def _get_primitive_helper_snippet(self) -> str:
+        return (
             "\n\n# --- ACE V0.3 Autonomous Primitive Kernel ---\n"
             "def ace_v03_modular_balance_kernel(stride: int, density: int, modulus: int = 3) -> bool:\n"
             "    \"\"\"Autonomously synthesized modular balance kernel.\"\"\"\n"
             "    return ((stride * 2 - density) % modulus) == 0\n"
         )
-        return source + helper_snippet
 
-    def _synthesize_constraint_pruning_enhancement(self, source: str) -> str:
-        """Appends an in-memory fast constraint checker."""
-        helper_snippet = (
+    def _get_constraint_helper_snippet(self) -> str:
+        return (
             "\n\n# --- ACE V0.3 Autonomous Fast Pruning ---\n"
             "def ace_v03_fast_prune_check(candidate_sha: str, known_falsified: set) -> bool:\n"
             "    \"\"\"Autonomously synthesized in-memory fast candidate filter.\"\"\"\n"
             "    return candidate_sha not in known_falsified\n"
         )
-        return source + helper_snippet
+
+    def _synthesize_dispatch_enhancement(self, source: str) -> str:
+        return source + self._get_dispatch_helper_snippet()
+
+    def _synthesize_primitive_enhancement(self, source: str) -> str:
+        return source + self._get_primitive_helper_snippet()
+
+    def _synthesize_constraint_pruning_enhancement(self, source: str) -> str:
+        return source + self._get_constraint_helper_snippet()
+
 
     def _generate_external_model_patch(
         self,
