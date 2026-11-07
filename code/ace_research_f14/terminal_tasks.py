@@ -76,9 +76,11 @@ def _oracle_f2_triplet_parity(w: str) -> bool:
 
 
 def _generate_pools(
-    oracle: Callable[[str], bool], n_holdout_per_class: int = 16
+    oracle: Callable[[str], bool],
+    n_holdout_per_class: int = 16,
+    task_seed: int = 42,
 ) -> Tuple[List[Tuple[str, bool]], List[Tuple[str, bool]]]:
-    """Deterministically generate train and holdout pools."""
+    """Deterministically generate train and holdout pools with seed-controlled sample synthesis."""
     short_words = [
         "", "a", "b", "aa", "ab", "ba", "bb",
         "aaa", "aab", "aba", "abb", "baa", "bab", "bba", "bbb",
@@ -92,12 +94,14 @@ def _generate_pools(
     holdout_pos: List[Tuple[str, bool]] = []
     holdout_neg: List[Tuple[str, bool]] = []
 
-    # Longer words for terminal holdout evaluation (length 6..10)
-    for length in range(6, 11):
-        for idx in range(64):
+    # Longer words for terminal holdout evaluation (length 6..11)
+    max_len = 11 if task_seed == 42 else 12
+    max_idx = 64 if task_seed == 42 else 128
+    for length in range(6, max_len):
+        for idx in range(max_idx):
             # Deterministic word synthesis from bits
             chars = []
-            val = idx
+            val = idx if task_seed == 42 else (idx ^ (task_seed * 2654435761)) & 0x7FFFFFFF
             for pos in range(length):
                 chars.append("b" if (val >> (pos % 6)) & 1 else "a")
                 val = (val * 1103515245 + 12345) & 0x7FFFFFFF
@@ -118,16 +122,17 @@ def _generate_pools(
     return train, holdout
 
 
-def create_f14_terminal_suite() -> Dict[str, TerminalF14Task]:
-    """Create the independent 6-task terminal benchmark suite."""
-    train_d1, hold_d1 = _generate_pools(_oracle_d1_even_runs)
-    train_d2, hold_d2 = _generate_pools(_oracle_d2_bounded_alt)
-    train_e1, hold_e1 = _generate_pools(_oracle_e1_prefix_depth_mod3)
-    train_e2, hold_e2 = _generate_pools(_oracle_e2_mirror_parity)
-    train_f1, hold_f1 = _generate_pools(_oracle_f1_stride3_cross)
-    train_f2, hold_f2 = _generate_pools(_oracle_f2_triplet_parity)
+def create_f14_terminal_suite(task_generation_seed: int = 42) -> Dict[str, TerminalF14Task]:
+    """Create the independent 6-task terminal benchmark suite parameterized by task_generation_seed."""
+    train_d1, hold_d1 = _generate_pools(_oracle_d1_even_runs, task_seed=task_generation_seed)
+    train_d2, hold_d2 = _generate_pools(_oracle_d2_bounded_alt, task_seed=task_generation_seed)
+    train_e1, hold_e1 = _generate_pools(_oracle_e1_prefix_depth_mod3, task_seed=task_generation_seed)
+    train_e2, hold_e2 = _generate_pools(_oracle_e2_mirror_parity, task_seed=task_generation_seed)
+    train_f1, hold_f1 = _generate_pools(_oracle_f1_stride3_cross, task_seed=task_generation_seed)
+    train_f2, hold_f2 = _generate_pools(_oracle_f2_triplet_parity, task_seed=task_generation_seed)
 
     tasks = [
+
         TerminalF14Task(
             task_id="task_d1_even_runs",
             family="family_d",
