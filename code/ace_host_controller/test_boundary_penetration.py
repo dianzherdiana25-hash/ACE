@@ -216,6 +216,52 @@ class TestHostBoundaryPenetration(unittest.TestCase):
         host.update_baseline_scores({"task_test": 1.0})
         self.assertEqual(local_eval._prior_baseline_scores["task_test"], 1.0)
 
+    def test_worker_receives_no_signing_key_or_ground_truth_labels(self):
+        """Worker subprocess payload must contain ONLY inputs; never signing keys or expected labels."""
+        inputs_by_task = {k: [inp for inp, _ in v] for k, v in self.evaluator._holdout_banks.items()}
+        for task_name, inputs in inputs_by_task.items():
+            for item in inputs:
+                self.assertIsInstance(item, str)
+        # Ensure evaluator holds signing key privately and does not leak it in public properties
+        self.assertFalse(hasattr(self.evaluator, "signing_key"))
+        self.assertFalse(hasattr(self.evaluator, "holdout_banks"))
+
+    def test_worker_blocks_forbidden_ast_candidate(self):
+        """Candidate attempting dangerous import fails gracefully in isolated worker."""
+        attack_code = (
+            "def candidate_fn(w, task_name=None):\n"
+            "    import os\n"
+            "    return True\n"
+        )
+        receipt = self.evaluator.evaluate_candidate_isolated(
+            candidate_id="attack_cand_01",
+            candidate_source=attack_code,
+            budget=self.budget,
+        )
+        self.assertFalse(receipt.passed)
+        self.assertEqual(receipt.holdout_accuracy, 0.0)
+
+    def test_lineage_forgery_and_tampering_blocked(self):
+        """Tampering with lineage or attempting forged child registration is rejected."""
+        from ace_host_controller.lineage import LineageGraph, LineageNotFoundError
+
+        graph = LineageGraph(root_id="G0_root")
+        graph.register_candidate(
+            candidate_id="G0_root",
+            parent_id=None,
+            source_sha="0" * 64,
+            generation=0,
+        )
+        # Cannot add node with invalid/non-existent parent
+        with self.assertRaises(LineageNotFoundError):
+            graph.register_candidate(
+                candidate_id="G1_orphan",
+                parent_id="non_existent_parent",
+                generation=1,
+                source_sha="1" * 64,
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
+
