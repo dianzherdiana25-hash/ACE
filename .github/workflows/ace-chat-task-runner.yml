@@ -1,0 +1,94 @@
+name: ACE Chat & Self-Development Task Runner
+
+on:
+  push:
+    paths:
+      - 'chat_tasks/current.json'
+      - 'code/ace_chat/**'
+      - 'code/ace_loop/**'
+      - 'code/ace_self_dev/**'
+      - '.github/workflows/ace-chat-task-runner.yml'
+  pull_request:
+    paths:
+      - 'chat_tasks/current.json'
+      - 'code/ace_chat/**'
+      - 'code/ace_loop/**'
+      - 'code/ace_self_dev/**'
+      - '.github/workflows/ace-chat-task-runner.yml'
+  workflow_dispatch:
+    inputs:
+      task_name:
+        description: 'Task name or identifier'
+        required: false
+        default: 'self_dev_cycle_1'
+      author_type:
+        description: 'Author provenance (ACE_AUTONOMOUS_V01, GEMINI, CODEX, HUMAN)'
+        required: false
+        default: 'ACE_AUTONOMOUS_V01'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ace-chat-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: false
+
+jobs:
+  execute-bounded-ace-request:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: code
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+
+      - name: Verify source integrity
+        run: |
+          set -euo pipefail
+          python tools/verify_sources.py
+
+      - name: Run unit test suites
+        run: |
+          python -m unittest ace_chat.test_task_runner ace_loop.test_source_evolution ace_self_dev.test_self_dev_loop -v
+
+      - name: Execute data-only Chat task runner
+        run: |
+          set -euo pipefail
+          mkdir -p _ace_chat_evidence
+          python -m ace_chat.task_runner \
+            --request chat_tasks/current.json \
+            --output _ace_chat_evidence/receipt.json \
+            --research-output _ace_chat_evidence/research.json | tee _ace_chat_evidence/run-summary.json
+          python -m ace_chat.task_runner \
+            --request chat_tasks/current.json \
+            --output _ace_chat_evidence/replay-receipt.json \
+            --research-output _ace_chat_evidence/replay-research.json > _ace_chat_evidence/replay-summary.json
+          cmp _ace_chat_evidence/receipt.json _ace_chat_evidence/replay-receipt.json
+          sha256sum _ace_chat_evidence/receipt.json
+          echo 'ACE task request processed with reproducible receipt.' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Execute Autonomous Self-Development Cycle 1
+        run: |
+          python -m ace_self_dev.cli --cycle 1 --task-seed 42 --mutation-ordinal 1 --author-type ${{ github.event.inputs.author_type || 'ACE_AUTONOMOUS_V01' }}
+          python tools/verify_self_dev.py
+
+      - name: Archive receipts & artifacts for ChatGPT inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-chat-and-selfdev-receipts
+          path: |
+            _ace_chat_evidence/receipt.json
+            _ace_chat_evidence/run-summary.json
+            evidence/self_dev/ace_self_dev_v01_cycle_*.json.gz
+          if-no-files-found: warn
+          retention-days: 7
