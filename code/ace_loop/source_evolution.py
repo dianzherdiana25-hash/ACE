@@ -317,8 +317,8 @@ GATED_MUTATIONS: Tuple[Tuple[int, int, int, int], ...] = (
 )
 
 
-def gene_from_dict(d: Dict[str, Any]) -> Union[TypedGene, CompositeGene, GatedGene, RelationalGene, DispatchGene]:
-    """Reconstruct TypedGene, CompositeGene, GatedGene, RelationalGene, or DispatchGene from dict representation."""
+def gene_from_dict(d: Dict[str, Any]) -> Union[TypedGene, CompositeGene, GatedGene, RelationalGene, RelationalGatedGene, DispatchGene]:
+    """Reconstruct TypedGene, CompositeGene, GatedGene, RelationalGene, RelationalGatedGene, or DispatchGene from dict representation."""
     if d.get("is_dispatch", False):
         return DispatchGene(
             ordinal=d.get("ordinal", 1),
@@ -326,6 +326,24 @@ def gene_from_dict(d: Dict[str, Any]) -> Union[TypedGene, CompositeGene, GatedGe
             mod_a=d.get("mod_a", 2),
             mod_b=d.get("mod_b", 3),
             stride_scale=d.get("stride_scale", 1),
+            true_val=d.get("true_val", 0),
+            false_val=d.get("false_val", 1),
+        )
+    if d.get("is_relational_gated", False) or (d.get("is_relational", False) and ("combiner" in d or "boundary_var" in d or "boundary_threshold" in d)):
+        return RelationalGatedGene(
+            length_op=d.get("length_op", ">="),
+            length_threshold=d.get("length_threshold", 4),
+            stride_weight=d.get("stride_weight", 1),
+            density_weight=d.get("density_weight", 1),
+            length_weight=d.get("length_weight", 0),
+            modulus=d.get("modulus", 3),
+            target_residue=d.get("target_residue", 0),
+            congruence_op=d.get("congruence_op", "=="),
+            boundary_var=d.get("boundary_var", "density"),
+            boundary_op=d.get("boundary_op", "<="),
+            boundary_threshold=d.get("boundary_threshold", 4),
+            combiner=d.get("combiner", "AND"),
+            clause_type=d.get("clause_type", "CONJUNCTION_AND"),
             true_val=d.get("true_val", 0),
             false_val=d.get("false_val", 1),
         )
