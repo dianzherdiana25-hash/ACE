@@ -7,7 +7,10 @@ import unittest
 from ace_loop.source_evolution import (
     COMPOSITE_OPERATORS,
     CompositeGene,
+    GatedGene,
     MUTATION_RULES,
+    RELATIONAL_GATED_MUTATIONS,
+    RelationalGatedGene,
     SEED_GENE,
     SourceEvolutionError,
     TypedGene,
@@ -15,8 +18,14 @@ from ace_loop.source_evolution import (
     compute_sha,
     generate_source,
     gene_from_dict,
+    is_coefficient_tuning,
+    is_structural_innovation,
     mutate_composite_gene,
+    mutate_gated_gene,
     mutate_gene,
+    mutate_relational_gated_gene,
+    mutate_relational_structure,
+    tune_relational_coefficients,
     validate_ast,
 )
 
