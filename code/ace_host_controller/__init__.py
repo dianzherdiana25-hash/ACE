@@ -43,12 +43,25 @@ from .sealed_evaluator import (
     SealedHoldoutEvaluator,
 )
 
+from .evaluator_v2 import (
+    ChainedExposureRecord,
+    ContaminationDetectedError,
+    DualOracleHarness,
+    LedgerTamperError,
+    MerkleExposureLedger,
+    OracleBoundaryViolation,
+    PreRegistrationCommitment,
+)
+
 __all__ = [
     "AcceptanceDecision",
     "BudgetExceededError",
     "CandidateNode",
     "CapabilityPermit",
+    "ChainedExposureRecord",
+    "ContaminationDetectedError",
     "ContaminationError",
+    "DualOracleHarness",
     "EvaluationReceipt",
     "EvaluatorManifest",
     "ExecutionBudget",
@@ -57,11 +70,16 @@ __all__ = [
     "GateResult",
     "HostController",
     "HostSandboxGate",
+    "LedgerTamperError",
     "LineageCycleError",
     "LineageGraph",
     "LineageNotFoundError",
+    "MerkleExposureLedger",
+    "OracleBoundaryViolation",
     "PermitDeniedError",
+    "PreRegistrationCommitment",
     "RollbackRecord",
     "SandboxSecurityError",
     "SealedHoldoutEvaluator",
 ]
+
