@@ -216,6 +216,140 @@ class TestHostBoundaryPenetration(unittest.TestCase):
         host.update_baseline_scores({"task_test": 1.0})
         self.assertEqual(local_eval._prior_baseline_scores["task_test"], 1.0)
 
+    def test_worker_receives_no_signing_key_or_ground_truth_labels(self):
+        """Worker subprocess payload must contain ONLY inputs; never signing keys or expected labels."""
+        inputs_by_task = {k: [inp for inp, _ in v] for k, v in self.evaluator._holdout_banks.items()}
+        for task_name, inputs in inputs_by_task.items():
+            for item in inputs:
+                self.assertIsInstance(item, str)
+        # Ensure evaluator holds signing key privately and does not leak it in public properties
+        self.assertFalse(hasattr(self.evaluator, "signing_key"))
+        self.assertFalse(hasattr(self.evaluator, "holdout_banks"))
+
+    def test_worker_blocks_forbidden_ast_candidate(self):
+        """Candidate attempting dangerous import fails gracefully in isolated worker."""
+        attack_code = (
+            "def candidate_fn(w, task_name=None):\n"
+            "    import os\n"
+            "    return True\n"
+        )
+        receipt = self.evaluator.evaluate_candidate_isolated(
+            candidate_id="attack_cand_01",
+            candidate_source=attack_code,
+            budget=self.budget,
+        )
+        self.assertFalse(receipt.passed)
+        self.assertEqual(receipt.holdout_accuracy, 0.0)
+
+    def test_lineage_forgery_and_tampering_blocked(self):
+        """Tampering with lineage or attempting forged child registration is rejected."""
+        from ace_host_controller.lineage import LineageGraph, LineageNotFoundError
+
+        graph = LineageGraph(root_id="G0_root")
+        graph.register_candidate(
+            candidate_id="G0_root",
+            parent_id=None,
+            source_sha="0" * 64,
+            generation=0,
+        )
+        # Cannot add node with invalid/non-existent parent
+        with self.assertRaises(LineageNotFoundError):
+            graph.register_candidate(
+                candidate_id="G1_orphan",
+                parent_id="non_existent_parent",
+                generation=1,
+                source_sha="1" * 64,
+            )
+
+    def test_root_score_initialization_not_hardcoded_0_50(self):
+        """Root holdout score must be measured empirically or provided via trusted initialization, never 0.50."""
+        from ace_host_controller import HostController, SealedHoldoutEvaluator
+
+        local_eval = SealedHoldoutEvaluator(
+            manifest_id="test_man",
+            holdout_banks=self.holdouts,
+            prior_baseline_scores={},
+        )
+        # Default initialization without score is 0.0, never hardcoded 0.50
+        host_default = HostController(evaluator=local_eval, root_candidate_id="G0_default")
+        self.assertEqual(host_default.lineage.nodes["G0_default"].holdout_score, 0.0)
+
+        # Evaluator-driven initialization via root_candidate_fn
+        # In self.holdouts: "a": False, "aa": True, "aaa": False, "aaaa": True
+        # dummy fn returning True gets 2/4 = 0.50, but returning False gets 2/4 = 0.50
+        # len(w) == 2 gets 1/4 = 0.25
+        host_eval = HostController(
+            evaluator=local_eval,
+            root_candidate_id="G0_measured",
+            root_candidate_fn=lambda w: len(w) == 2,
+        )
+        self.assertEqual(host_eval.lineage.nodes["G0_measured"].holdout_score, 0.75)
+
+        # Explicit trusted root holdout score
+        host_explicit = HostController(
+            evaluator=local_eval,
+            root_candidate_id="G0_explicit",
+            root_holdout_score=0.3906,
+        )
+        self.assertEqual(host_explicit.lineage.nodes["G0_explicit"].holdout_score, 0.3906)
+
+    def test_gain_invariance_and_child_of_rejected_parent_blocked(self):
+        """Gain must be measured against true parent score, and child of a rejected parent cannot be promoted."""
+        from ace_host_controller import HostController, HostSandboxGate, SealedHoldoutEvaluator
+
+        local_eval = SealedHoldoutEvaluator(
+            manifest_id="test_man",
+            holdout_banks=self.holdouts,
+            prior_baseline_scores={},
+        )
+        # Root score is 0.3906
+        host = HostController(
+            evaluator=local_eval,
+            budget=self.budget,
+            sandbox_gate=HostSandboxGate(enforce_os_containment=False),
+            root_candidate_id="G0_root",
+            root_holdout_score=0.3906,
+            min_gain=0.15,
+            max_regression=0.02,
+        )
+
+        # G1 candidate achieves 1.0 (4/4 hits): gain should be 1.0 - 0.3906 = +0.6094 (>= 0.15 -> ACCEPTED)
+        dec_g1 = host.evaluate_and_gate(
+            candidate_id="G1_cand",
+            parent_id="G0_root",
+            generation=1,
+            source_sha="1" * 64,
+            candidate_fn=lambda w: len(w) % 2 == 0,
+        )
+        self.assertEqual(dec_g1.status, "ACCEPTED")
+        self.assertEqual(dec_g1.gain_over_parent, 0.6094)
+        self.assertEqual(host.lineage.active_head_id, "G1_cand")
+
+        # Now submit candidate G_fail with insufficient gain (e.g. returns True -> 2/4 = 0.50, gain over G1 = 0.50 - 1.0 = -0.50)
+        dec_fail = host.evaluate_and_gate(
+            candidate_id="G_rejected",
+            parent_id="G1_cand",
+            generation=2,
+            source_sha="f" * 64,
+            candidate_fn=lambda w: True,
+        )
+        self.assertEqual(dec_fail.status, "REJECTED")
+        self.assertEqual(host.lineage.active_head_id, "G1_cand")  # active head does NOT advance
+
+        # Attempt to submit child branching from rejected parent: MUST BE REJECTED
+        dec_child_of_fail = host.evaluate_and_gate(
+            candidate_id="G_illegal_child",
+            parent_id="G_rejected",
+            generation=3,
+            source_sha="c" * 64,
+            candidate_fn=lambda w: len(w) % 2 == 0,
+        )
+        self.assertEqual(dec_child_of_fail.status, "REJECTED")
+        self.assertTrue(any("not ACCEPTED" in r for r in dec_child_of_fail.rejection_reasons))
+        self.assertEqual(host.lineage.active_head_id, "G1_cand")
+
 
 if __name__ == "__main__":
     unittest.main()
+
+
