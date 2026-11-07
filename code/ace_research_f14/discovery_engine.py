@@ -326,9 +326,19 @@ class AutonomousGenerationalDiscovery:
 
         root_id = host_controller.lineage.active_head_id
 
-        # 2. Evolve G0 -> G1: discover mechanisms for Family A & Family B tasks (Family C is unseen)
+        # Determine G1 vs G2 tasks from task metadata or split
+        if any(hasattr(t, "generation_target") for t in task_suites.values()):
+            g1_task_ids = [tid for tid, t in task_suites.items() if getattr(t, "generation_target", None) == 1]
+            g2_task_ids = [tid for tid, t in task_suites.items() if getattr(t, "generation_target", None) == 2]
+        else:
+            all_task_ids = list(task_suites.keys())
+            split_idx = max(1, int(len(all_task_ids) * (2 / 3)))
+            g1_task_ids = all_task_ids[:split_idx]
+            g2_task_ids = all_task_ids[split_idx:]
+
+        # 2. Evolve G0 -> G1: discover mechanisms for G1 tasks
         g1_solvers: Dict[str, ASTNode] = {}
-        for tid in ("task_a1_even_a_mod2", "task_a2_odd_b_mod2", "task_b1_dyck_bal", "task_b2_dyck_deep"):
+        for tid in g1_task_ids:
             task = task_suites[tid]
             diag = self.diagnoser.analyze(g0_fn, task.train_pool)
             cands = self.searcher.search_candidates(
@@ -352,13 +362,11 @@ class AutonomousGenerationalDiscovery:
             },
         )
 
-        # Update prior baseline scores in Host Controller to enforce regression prevention for G2
+        # Update prior baseline scores in Host Controller from empirical G1 performance
         if dec_g1.status == "ACCEPTED":
             baseline_map = {
-                "task_a1_even_a_mod2": 1.0,
-                "task_a2_odd_b_mod2": 1.0,
-                "task_b1_dyck_bal": 1.0,
-                "task_b2_dyck_deep": 1.0,
+                tid: round(sum(1 for w, lbl in task_suites[tid].holdout_pool if g1_dispatch_fn(w, tid) == lbl) / max(1, len(task_suites[tid].holdout_pool)), 4)
+                for tid in g1_task_ids
             }
             if hasattr(host_controller, "update_baseline_scores"):
                 host_controller.update_baseline_scores(baseline_map)
@@ -367,9 +375,9 @@ class AutonomousGenerationalDiscovery:
             else:
                 host_controller.evaluator._prior_baseline_scores = baseline_map
 
-        # 3. Evolve G1 -> G2: autonomous discovery on unseen Family C (Relational Split-Frame)
+        # 3. Evolve G1 -> G2: autonomous discovery on unseen G2 tasks
         g2_solvers: Dict[str, ASTNode] = dict(g1_solvers)
-        for tid in ("task_c1_split_eq_mod2", "task_c2_split_eq_mod3"):
+        for tid in g2_task_ids:
             task = task_suites[tid]
             diag = self.diagnoser.analyze(lambda w: g1_dispatch_fn(w, tid), task.train_pool)
             cands = self.searcher.search_candidates(
@@ -379,7 +387,6 @@ class AutonomousGenerationalDiscovery:
 
         g2_dispatch_fn, g2_code = _build_multi_task_candidate(g2_solvers, default_ast)
         g2_sha = hashlib.sha256(g2_code.encode("utf-8")).hexdigest()
-
 
         # Submit G2 to Host Controller
         dec_g2 = host_controller.evaluate_and_gate(
@@ -394,19 +401,24 @@ class AutonomousGenerationalDiscovery:
             },
         )
 
+        g1_ast_vals = list(g1_solvers.values())
+        g2_ast_vals = list(g2_solvers.values())
+
         return {
             "g0_empirical_accuracy": g0_empirical_acc,
             "g0_ast": default_ast.signature(),
             "g1_accepted": dec_g1.status == "ACCEPTED",
             "g1_accuracy": dec_g1.holdout_accuracy,
             "g1_gain": dec_g1.gain_over_parent,
-            "g1_ast_family_a": g1_solvers["task_a1_even_a_mod2"].signature(),
-            "g1_ast_family_b": g1_solvers["task_b1_dyck_bal"].signature(),
+            "g1_ast_family_a": g1_solvers.get("task_a1_even_a_mod2", g1_ast_vals[0] if g1_ast_vals else default_ast).signature(),
+            "g1_ast_family_b": g1_solvers.get("task_b1_dyck_bal", g1_ast_vals[min(1, len(g1_ast_vals) - 1)] if g1_ast_vals else default_ast).signature(),
             "g2_accepted": dec_g2.status == "ACCEPTED",
             "g2_accuracy": dec_g2.holdout_accuracy,
             "g2_gain": dec_g2.gain_over_parent,
             "g2_regression": dec_g2.prior_regression,
-            "g2_ast_family_c": g2_solvers["task_c1_split_eq_mod2"].signature(),
+            "g2_ast_family_c": g2_solvers.get("task_c1_split_eq_mod2", g2_ast_vals[-1] if g2_ast_vals else default_ast).signature(),
+            "g1_solvers_signatures": {tid: node.signature() for tid, node in g1_solvers.items()},
+            "g2_solvers_signatures": {tid: node.signature() for tid, node in g2_solvers.items()},
             "decisions": [dec_g1, dec_g2],
         }
 

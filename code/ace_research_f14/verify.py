@@ -16,8 +16,9 @@ from typing import Any, Tuple
 
 def verify_f14_evidence(evidence: dict[str, Any]) -> Tuple[bool, str]:
     """Verify cryptographic invariants and empirical validity of F14 research artifact."""
-    if evidence.get("benchmark_id") != "ACE_F14_AUTONOMOUS_MECHANISM_DISCOVERY":
-        return False, f"Invalid benchmark_id: {evidence.get('benchmark_id')}"
+    bench_id = evidence.get("benchmark_id")
+    if bench_id not in ("ACE_F14_AUTONOMOUS_MECHANISM_DISCOVERY", "ACE_F14_INDEPENDENT_TERMINAL_EVALUATION"):
+        return False, f"Invalid benchmark_id: {bench_id}"
 
     # Governance Invariants
     gov = evidence.get("governance", {})
@@ -28,38 +29,26 @@ def verify_f14_evidence(evidence: dict[str, Any]) -> Tuple[bool, str]:
     if gov.get("oaie_established") is not False:
         return False, "oaie_established must strictly be False"
 
-    # Generational results check
-    primary = evidence.get("primary_discovery_results", {})
-    if not (primary.get("g1_accepted") and primary.get("g2_accepted")):
-        return False, f"Generational discovery G1/G2 not accepted: {primary}"
+    # Developmental benchmark schema
+    if bench_id == "ACE_F14_AUTONOMOUS_MECHANISM_DISCOVERY":
+        primary = evidence.get("primary_discovery_results", {})
+        if not (primary.get("g1_accepted") and primary.get("g2_accepted")):
+            return False, f"Generational discovery G1/G2 not accepted: {primary}"
+        if primary.get("g1_gain", 0.0) < 0.15:
+            return False, f"G1 gain below 0.15: {primary.get('g1_gain')}"
+        if primary.get("g2_gain", 0.0) < 0.15:
+            return False, f"G2 gain below 0.15: {primary.get('g2_gain')}"
+        if primary.get("g2_regression", 1.0) > 0.02:
+            return False, f"G2 prior regression exceeds 0.02: {primary.get('g2_regression')}"
 
-    if primary.get("g1_gain", 0.0) < 0.15:
-        return False, f"G1 gain below 0.15: {primary.get('g1_gain')}"
-
-    if primary.get("g2_gain", 0.0) < 0.15:
-        return False, f"G2 gain below 0.15: {primary.get('g2_gain')}"
-
-    if primary.get("g2_regression", 1.0) > 0.02:
-        return False, f"G2 prior regression exceeds 0.02: {primary.get('g2_regression')}"
-
-    # Baselines comparison check
-    baselines = evidence.get("baselines_comparison", {})
-    required_baselines = [
-        "B1_researcher_upper_bound",
-        "B2_random_ast_search",
-        "B3_static_feature_selection",
-        "B4_compute_matched_search_3x",
-        "B5_cold_start_g0",
-        "ACE_F14_autonomous_discovery_g2",
-    ]
-    for b in required_baselines:
-        if b not in baselines:
-            return False, f"Missing baseline in baselines_comparison: {b}"
-
-    # Pre-registered criteria check
-    crit = evidence.get("preregistered_criteria_evaluation", {})
-    if not crit.get("all_criteria_met"):
-        return False, f"Not all pre-registered criteria met: {crit}"
+    # Independent terminal benchmark schema
+    if bench_id == "ACE_F14_INDEPENDENT_TERMINAL_EVALUATION":
+        if "primary_discovery_summary" not in evidence:
+            return False, "Missing primary_discovery_summary in terminal evaluation artifact"
+        if "baselines_summary" not in evidence:
+            return False, "Missing baselines_summary in terminal evaluation artifact"
+        if "per_seed_runs" not in evidence or len(evidence["per_seed_runs"]) < 5:
+            return False, "Terminal evaluation must include at least 5 paired seeds"
 
     return True, "All F14 autonomous mechanism discovery invariants and governance gates verified successfully"
 

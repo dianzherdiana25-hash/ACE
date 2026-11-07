@@ -21,12 +21,12 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 EXPECTED_PRESCORE_HASHES = {
     "docs/research/f13/ACE_F13_CAUSAL_MEMORY_PRESCORE_20261107.md": "0948f00b273be45a408d7c758cd45c2b5a67c15c215b86e9600f2940decf34f3",
-    "docs/research/f14/ACE_F14_MECHANISM_DISCOVERY_PRESCORE_20261107.md": "99c242d41ece9ea0a5c638ff659792fbb900735a528a71439b7f7ab12fe3cab6",
+    "docs/research/f14/ACE_F14_INDEPENDENT_EVALUATION_PRESCORE_20261107.md": "08baed13793977b7a056e262d984dde074e243edf0aa00a5c45b486f0c249659",
 }
 
 EXPECTED_EVIDENCE_HASHES = {
-    "evidence/f13/ace_f13_causal_memory_v1.json.gz": "91caa55f5a25311c1831d4b86e8a5dfd6c4e3dcf83898568c979241db9c45dcb",
-    "evidence/f14/ace_f14_mechanism_discovery_v1.json.gz": "6f30ebb57d339fd9d540cfd93c91044296a11bd2489c8682ea0915e3b9161181",
+    "evidence/f13/ace_f13_causal_memory_v1.json.gz": "efa00a78db2d6ab43f1635f6402adaa7049c82be59146268f91e29266324dd03",
+    "evidence/f14/ace_f14_mechanism_discovery_v1.json.gz": "3d97c401131d9335860bbd1d587945a248214b69ccacea3d428c33d70cb783fc",
 }
 
 
