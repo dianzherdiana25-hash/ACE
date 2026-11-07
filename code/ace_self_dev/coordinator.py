@@ -88,10 +88,59 @@ class SelfDevelopmentCoordinator:
         )
         self.strategy_repair = StrategyRepairEngine()
 
+    def search_and_select_candidate(
+        self,
+        hypothesis: ResearchHypothesis,
+        parent_candidate: Optional[CodeCandidate],
+        active_head_id: str,
+        author_type: AuthorType,
+        target_task: ConfirmationTask,
+        search_budget: int = 1,
+    ) -> CodeCandidate:
+        """Search candidate hypotheses relying strictly on train and validation metrics.
+
+        The sealed confirmation holdout is strictly gated and NEVER queried during this search.
+        """
+        base_ordinal = getattr(hypothesis, "mutation_ordinal", 1)
+        if search_budget <= 1:
+            return self.generator.generate_candidate(
+                hypothesis=hypothesis,
+                parent_candidate=parent_candidate,
+                parent_id=active_head_id,
+                ordinal=base_ordinal,
+                author_type=author_type,
+            )
+
+        best_cand: Optional[CodeCandidate] = None
+        best_val_score = -1.0
+
+        for offset in range(search_budget):
+            cand = self.generator.generate_candidate(
+                hypothesis=hypothesis,
+                parent_candidate=parent_candidate,
+                parent_id=active_head_id,
+                ordinal=base_ordinal + offset,
+                author_type=author_type,
+            )
+            # Evaluate strictly on train and validation pools without holdout access
+            train_acc, val_acc, _ = self.evaluator.score_train_and_validation(cand, target_task)
+            if val_acc > best_val_score:
+                best_val_score = val_acc
+                best_cand = cand
+
+        return best_cand or self.generator.generate_candidate(
+            hypothesis=hypothesis,
+            parent_candidate=parent_candidate,
+            parent_id=active_head_id,
+            ordinal=base_ordinal,
+            author_type=author_type,
+        )
+
     def run_autonomous_cycle(
         self,
         host_controller: Optional[HostController] = None,
         author_type: AuthorType = AuthorType.ACE_AUTONOMOUS_V02,
+        candidate_search_budget: int = 1,
     ) -> Dict[str, Any]:
         """Execute one complete autonomous cycle driven entirely by persistent research state."""
         worker_id = f"worker_{os.getpid()}_{int(time.time())}"
