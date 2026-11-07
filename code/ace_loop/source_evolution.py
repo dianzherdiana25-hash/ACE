@@ -753,10 +753,34 @@ def _render_atomic_expr(g: TypedGene) -> str:
 
 
 def generate_source(
-    gene: Union[TypedGene, CompositeGene, GatedGene, RelationalGene, DispatchGene],
+    gene: Union[TypedGene, CompositeGene, GatedGene, RelationalGene, RelationalGatedGene, DispatchGene],
     function_name: str = "evaluate_mechanism",
 ) -> bytes:
     """Generate typed, bounded Python source code from a validated Gene."""
+    if isinstance(gene, RelationalGatedGene):
+        c1 = f"(length {gene.length_op} {gene.length_threshold})"
+        terms = []
+        if gene.stride_weight != 0:
+            terms.append(f"(stride_val * {gene.stride_weight})")
+        if gene.density_weight != 0:
+            terms.append(f"(density * {gene.density_weight})")
+        if gene.length_weight != 0:
+            terms.append(f"(length * {gene.length_weight})")
+        if not terms:
+            terms.append("0")
+        lhs = " + ".join(terms)
+        c2 = f"((({lhs}) % {gene.modulus}) {gene.congruence_op} {gene.target_residue})"
+        c3 = f"({gene.boundary_var} {gene.boundary_op} {gene.boundary_threshold})"
+
+        comb = " and " if gene.combiner.upper() == "AND" else " or "
+        condition = f"({c1}{comb}{c2}{comb}{c3})"
+
+        code_text = (
+            f"def {function_name}(length: int, density: int, stride_val: int) -> int:\n"
+            f"    return {gene.true_val} if {condition} else {gene.false_val}\n"
+        )
+        return code_text.encode("utf-8")
+
     if isinstance(gene, DispatchGene):
         branch_true = f"(0 if ((density % {gene.mod_a}) == 0) else 1)"
         branch_false = f"(0 if (((stride_val * {gene.stride_scale}) % {gene.mod_b}) == 0) else 1)"
@@ -825,7 +849,7 @@ def generate_source(
         )
         return code_text.encode("utf-8")
 
-    raise SourceEvolutionError("TypedGene, CompositeGene, GatedGene, RelationalGene, or DispatchGene required")
+    raise SourceEvolutionError("TypedGene, CompositeGene, GatedGene, RelationalGene, RelationalGatedGene, or DispatchGene required")
 
 
 ALLOWED_AST_NODES = (
@@ -888,7 +912,7 @@ def validate_ast(source_bytes: bytes, expected_name: str = "evaluate_mechanism")
 
 def compile_function(
     source_bytes: bytes,
-    gene: Optional[Union[TypedGene, CompositeGene, Dict[str, Any]]] = None,
+    gene: Optional[Union[TypedGene, CompositeGene, GatedGene, RelationalGene, RelationalGatedGene, DispatchGene, Dict[str, Any]]] = None,
 ) -> Callable[[int, int, int], int]:
     """Safely compile verified source bytes into an isolated callable."""
     validate_ast(source_bytes)
