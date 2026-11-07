@@ -35,7 +35,7 @@ def git_commit_and_push(cycle_id: int, decision: str, task_id: str):
     try:
         log(f"Staging artifacts and state for Cycle {cycle_id}...")
         subprocess.run(
-            ["git", "add", "checkpoints/", "evidence/", "code/", "docs/"],
+            ["git", "add", "checkpoints/", "evidence/", "code/", "docs/", "tools/"],
             cwd=REPO_ROOT,
             check=True,
             capture_output=True,
