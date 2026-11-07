@@ -43,11 +43,15 @@ jobs:
           ace_research_hypgen.test_hypgen
           ace_research_agenda.test_agenda
           ace_research_agenda.test_durable_resume
+          ace_research_generations.test_generations
+          ace_research_generations.test_generations_growth
           -v
       - name: Verify repair evidence artifact
         run: python -m ace_research_repair.verify --artifact evidence/repair/ace_repair_v1.json.gz
       - name: Verify hypothesis synthesis evidence artifact
         run: python -m ace_research_hypgen.verify --artifact evidence/hypgen/f10_hypothesis_synthesis_v1.json.gz
+      - name: Verify generations growth evidence artifact
+        run: python -m ace_research_generations.verify_growth --artifact evidence/generations/ace_generations_growth_v1.json.gz
       - name: Verify deterministic composition replay
         run: |
           python -m ace_capability_evolution.compositional --output /tmp/composition.json
