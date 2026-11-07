@@ -53,6 +53,12 @@ class SubprocessSealedEvaluator:
                 inputs.append(inp)
         return inputs
 
+    def update_baseline_scores(self, new_scores: Mapping[str, float]) -> None:
+        """Update baseline scores safely without leaking holdout banks."""
+        for k, v in new_scores.items():
+            self._prior_baseline_scores[k] = float(v)
+        self._local_evaluator.update_baseline_scores(new_scores)
+
     def evaluate_candidate_isolated(
         self,
         candidate_id: str,

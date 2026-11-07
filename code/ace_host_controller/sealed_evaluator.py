@@ -117,6 +117,11 @@ class SealedHoldoutEvaluator:
                 inputs.append(inp)
         return inputs
 
+    def update_baseline_scores(self, new_scores: Mapping[str, float]) -> None:
+        """Safely update prior baseline scores without exposing holdout banks."""
+        for k, v in new_scores.items():
+            self._prior_baseline_scores[k] = float(v)
+
     def evaluate_candidate(
         self,
         candidate_id: str,
