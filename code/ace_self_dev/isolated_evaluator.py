@@ -31,11 +31,39 @@ def _candidate_to_string_predicate(fn: Callable[[int, int, int], int]) -> Callab
     return predicate
 
 
+FROZEN_MIN_REQUIRED_GAIN: float = 0.1500
+FROZEN_MAX_REGRESSION_TOLERANCE: float = 0.0200
+
+
 class IsolatedEvaluator:
     """Evaluates candidates through Host Controller and sealed confirmation holdouts."""
 
     def __init__(self, provenance_engine: Optional[ProvenanceEngine] = None):
         self.provenance = provenance_engine or ProvenanceEngine()
+        self._holdout_queried_candidates: set[str] = set()
+
+    def score_train_and_validation(
+        self,
+        candidate: CodeCandidate,
+        target_task: ConfirmationTask,
+    ) -> Tuple[float, float, Callable[[str], bool]]:
+        """Score candidate strictly on train and validation pools without querying sealed holdout.
+
+        Candidate search and strategy selection MUST rely on this method to prevent
+        test-set leakage or steering search with sealed terminal holdouts.
+        """
+        gene = gene_from_dict(candidate.gene_dict)
+        source_bytes = candidate.source_code.encode("utf-8")
+        raw_fn = compile_function(source_bytes, gene)
+        cand_pred = _candidate_to_string_predicate(raw_fn)
+
+        train_hits = sum(1 for w, lbl in target_task.train_pool if cand_pred(w) == lbl)
+        train_acc = round(train_hits / max(1, len(target_task.train_pool)), 4)
+
+        val_hits = sum(1 for w, lbl in target_task.validation_pool if cand_pred(w) == lbl)
+        val_acc = round(val_hits / max(1, len(target_task.validation_pool)), 4)
+
+        return train_acc, val_acc, cand_pred
 
     def evaluate_candidate(
         self,
@@ -52,21 +80,31 @@ class IsolatedEvaluator:
         target_tid = hypothesis.target_task_id
         target_task = tasks[target_tid]
 
-        # 1. Compile candidate function safely
-        gene = gene_from_dict(candidate.gene_dict)
-        source_bytes = candidate.source_code.encode("utf-8")
-        raw_fn = compile_function(source_bytes, gene)
-        cand_pred = _candidate_to_string_predicate(raw_fn)
+        # Enforce frozen scientific evaluation thresholds without artificial lowering
+        if hypothesis.min_required_gain < FROZEN_MIN_REQUIRED_GAIN:
+            raise ValueError(
+                f"Fail-closed governance invariant violation: min_required_gain ({hypothesis.min_required_gain}) "
+                f"cannot be artificially lowered below frozen threshold {FROZEN_MIN_REQUIRED_GAIN:.4f}"
+            )
+        if hypothesis.max_regression_tolerance > FROZEN_MAX_REGRESSION_TOLERANCE:
+            raise ValueError(
+                f"Fail-closed governance invariant violation: max_regression_tolerance ({hypothesis.max_regression_tolerance}) "
+                f"cannot be artificially relaxed above frozen tolerance {FROZEN_MAX_REGRESSION_TOLERANCE:.4f}"
+            )
 
-        # 2. Score on train pool
-        train_hits = sum(1 for w, lbl in target_task.train_pool if cand_pred(w) == lbl)
-        train_acc = round(train_hits / max(1, len(target_task.train_pool)), 4)
-
-        # 3. Score on validation pool
-        val_hits = sum(1 for w, lbl in target_task.validation_pool if cand_pred(w) == lbl)
-        val_acc = round(val_hits / max(1, len(target_task.validation_pool)), 4)
+        # 1-3. Score on train and validation pools
+        train_acc, val_acc, cand_pred = self.score_train_and_validation(candidate, target_task)
 
         # 4. Gating via Host Controller on sealed terminal holdout
+        # Sealed confirmation holdout evaluations are strictly gated: never queried repeatedly to steer search
+        if candidate.candidate_id in self._holdout_queried_candidates:
+            raise RuntimeError(
+                f"Holdout gating violation: Candidate {candidate.candidate_id} has already been evaluated "
+                f"against sealed confirmation holdout. Sealed terminal holdout cannot be repeatedly queried "
+                f"to steer search or cherry-pick."
+            )
+        self._holdout_queried_candidates.add(candidate.candidate_id)
+
         if host_controller is None:
             holdout_banks = {tid: list(t.sealed_confirmation_holdout) for tid, t in tasks.items()}
             sealed_eval = SealedHoldoutEvaluator(
@@ -79,8 +117,8 @@ class IsolatedEvaluator:
                 sandbox_gate=HostSandboxGate(enforce_os_containment=False),
                 root_candidate_id=candidate.parent_id,
                 root_source_sha=f"sha_{candidate.parent_id}",
-                min_gain=hypothesis.min_required_gain,
-                max_regression=hypothesis.max_regression_tolerance,
+                min_gain=FROZEN_MIN_REQUIRED_GAIN,
+                max_regression=FROZEN_MAX_REGRESSION_TOLERANCE,
             )
             host_controller.initialize_root_score(lambda w: (len(w) % 3 == 0))
 
@@ -163,5 +201,5 @@ class IsolatedEvaluator:
         acc = round(hits / max(1, len(task.sealed_confirmation_holdout)), 4)
         parent_score = 0.5000
         gain = acc - parent_score
-        is_rejected = (gain < 0.1500)
+        is_rejected = (gain < FROZEN_MIN_REQUIRED_GAIN)
         return (is_rejected, acc)
