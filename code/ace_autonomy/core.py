@@ -102,10 +102,14 @@ class Autonomy:
                 next_step INTEGER NOT NULL, results_digest TEXT NOT NULL,
                 previous TEXT NOT NULL, signature TEXT NOT NULL);
         """)
-        with self.transaction():
-            self.db.execute("INSERT OR IGNORE INTO metadata VALUES ('schema', ?)", (SCHEMA,))
-            self.db.execute("INSERT OR IGNORE INTO metadata VALUES ('source', ?)", (self.source_digest,))
-            self._verify()
+        try:
+            with self.transaction():
+                self.db.execute("INSERT OR IGNORE INTO metadata VALUES ('schema', ?)", (SCHEMA,))
+                self.db.execute("INSERT OR IGNORE INTO metadata VALUES ('source', ?)", (self.source_digest,))
+                self._verify()
+        except BaseException:
+            self.db.close()
+            raise
 
     def close(self):
         self.db.close()
