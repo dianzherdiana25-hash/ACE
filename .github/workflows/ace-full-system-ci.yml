@@ -1,0 +1,159 @@
+name: ACE full-system verification
+
+on:
+  push:
+    branches:
+      - validation/ace-full-system-ci-20261107
+      - integration/ace-master-verified-20261107
+      - engineering/ace-exact-ci-audit-20261107
+  pull_request:
+    paths:
+      - 'code/**'
+      - 'tools/**'
+      - 'evidence/**'
+      - 'docs/validation/**'
+      - 'ace.py'
+      - 'autonomy.py'
+      - '.github/workflows/ace-full-system-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regressions-and-autonomy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13']
+    env:
+      PYTHONPATH: code
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Pin exact candidate checkout
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          git show -s --format='%H %s' HEAD
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify imported source bytes
+        run: python tools/verify_sources.py
+      - name: Test original research & runtime suites (109 tests)
+        run: >-
+          python -m unittest
+          ace_runtime.test_engine
+          ace_runtime.test_cli
+          ace_research_primitives.test_primitive_discovery
+          ace_candidate_search.test_search
+          ace_candidate_search.test_verify_results
+          ace_capability_evolution.test_pilot
+          ace_capability_evolution.test_structural
+          ace_capability_evolution.test_compositional
+          -v
+      - name: Test bounded autonomy & adversarial autonomy (20 tests)
+        run: python -m unittest ace_autonomy.test_core ace_autonomy.test_adversarial_autonomy -v
+      - name: Test self-model & representation transfer suites (14 tests)
+        run: >-
+          python -m unittest
+          ace_selfmodel.test_selfmodel
+          ace_research_reptransfer.test_reptransfer
+          ace_research_reptransfer.test_audit_diagnostics
+          -v
+      - name: Verify deterministic composition replay
+        run: |
+          python -m ace_capability_evolution.compositional --output /tmp/composition.json
+          python -m ace_capability_evolution.compositional --output /tmp/composition-replay.json
+          cmp /tmp/composition.json /tmp/composition-replay.json
+          gzip -dc evidence/composition/v03.json.gz > /tmp/committed-composition.json
+          cmp /tmp/composition.json /tmp/committed-composition.json
+      - name: Verify operational demo receipts
+        run: |
+          python ace.py demo --workspace "$RUNNER_TEMP/ace-runtime" > "$RUNNER_TEMP/ace-runtime-demo.json"
+          cmp "$RUNNER_TEMP/ace-runtime-demo.json" evidence/runtime/v1-demo.json
+          python autonomy.py --workspace "$RUNNER_TEMP/ace-autonomy-demo" demo > "$RUNNER_TEMP/autonomy-demo.json"
+
+  research-and-redteam:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13']
+    env:
+      PYTHONPATH: code
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Pin exact candidate checkout
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          git show -s --format='%H %s' HEAD
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify imported source bytes
+        run: python tools/verify_sources.py
+      - name: Test research subsystems & redteam suites (77 tests)
+        run: >-
+          python -m unittest
+          ace_research_repair.test_repair
+          ace_research_repair.test_repair_sandbox
+          ace_research_hypgen.test_hypgen
+          ace_research_agenda.test_durable_resume
+          ace_research_generations.test_generations_growth
+          ace_research_generations.test_generations
+          ace_research_discovery.test_discovery
+          ace_research_agenda.test_agenda
+          ace_integration_redteam.test_integration_redteam
+          ace_host_controller.test_host_controller
+          ace_research_f12.test_f12_research
+          -v
+      - name: Verify hypothesis synthesis evidence artifact
+        run: python -m ace_research_hypgen.verify --artifact evidence/hypgen/f10_hypothesis_synthesis_v1.json.gz
+      - name: Verify generations growth evidence artifact
+        run: python -m ace_research_generations.verify_growth --artifact evidence/generations/ace_generations_growth_v1.json.gz
+      - name: Verify F12 causal research evidence artifact
+        run: python -m ace_research_f12.verify --artifact evidence/f12/ace_f12_causal_research_v1.json.gz
+      - name: Execute Red Team full integration suite
+        run: python -m ace_integration_redteam.redteam_suite
+
+  evidence-and-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13']
+    env:
+      PYTHONPATH: code
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Pin exact candidate checkout
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          git show -s --format='%H %s' HEAD
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify all evidence artifacts & cryptographic checksums
+        run: python tools/verify_full_system.py --group evidence
