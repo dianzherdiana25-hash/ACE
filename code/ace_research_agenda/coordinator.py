@@ -106,14 +106,50 @@ class AutonomousResearchCoordinator:
         archive: ResearchArchive,
         *,
         abstain_threshold: float = 0.58,
+        workspace_dir: Path | None = None,
     ):
         self.root = repo_root.resolve()
         self.autonomy = autonomy
         self.memory = memory
         self.archive = archive
+        self.workspace_dir = Path(workspace_dir).resolve() if workspace_dir else None
         self.awareness = CapabilityAwareness(self.root)
         self.evaluator = MetacognitiveEvaluator(abstain_threshold=abstain_threshold)
         self.reflection = SelfReflection()
+
+    def _checkpoint_path(self) -> Path | None:
+        if self.workspace_dir:
+            return self.workspace_dir / "agenda_checkpoint.json"
+        return None
+
+    def _load_durable_checkpoint(self) -> dict[str, Any]:
+        cp = self._checkpoint_path()
+        if cp and cp.is_file():
+            try:
+                return json.loads(cp.read_text(encoding="utf-8"))
+            except Exception:
+                return {}
+        return {}
+
+    def _save_durable_checkpoint(
+        self,
+        cycle_logs: list[dict[str, Any]],
+        steps_consumed: int,
+        cpu_consumed_est: float,
+    ) -> None:
+        cp = self._checkpoint_path()
+        if not cp:
+            return
+        payload = {
+            "version": 1,
+            "cycles_completed": len(cycle_logs),
+            "steps_consumed": steps_consumed,
+            "cpu_consumed_est": round(cpu_consumed_est, 6),
+            "cycle_logs": cycle_logs,
+        }
+        tmp = cp.with_suffix(".tmp")
+        tmp.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        tmp.replace(cp)
 
     def observe_evidence_and_state(self) -> dict[str, Any]:
         """Stage 1: Observe live SelfState and empirical evidence bundles across subsystems."""
@@ -751,24 +787,58 @@ class AutonomousResearchCoordinator:
 
         raise ValueError(f"unsupported experiment_kind: {hyp.experiment_kind}")
 
-    def run_campaign(self, budget: ResearchCampaignBudget | None = None) -> dict[str, Any]:
-        """Execute a complete multi-cycle autonomous research run with zero human prompts."""
+    def run_campaign(
+        self,
+        budget: ResearchCampaignBudget | None = None,
+        *,
+        target_total_cycles: int | None = None,
+    ) -> dict[str, Any]:
+        """Execute a multi-cycle autonomous research run with zero human prompts.
+
+        Supports durable resumption across distinct processes without duplicating
+        already-completed hypotheses or cycles.
+        """
         camp_budget = budget or ResearchCampaignBudget()
         camp_budget.validate()
 
         observation = self.observe_evidence_and_state()
         gaps = self.identify_gaps(observation)
         all_hypotheses = self.propose_hypotheses(gaps)
-        remaining: list[ResearchHypothesis] = list(all_hypotheses)
 
-        steps_consumed = 0
-        cpu_consumed_est = 0.0
+        # Inspect durable archive and checkpoint for prior progress:
+        prior_records = self.archive.list_records()
+        prior_hyp_ids = {r["hypothesis_id"] for r in prior_records}
+        prior_cycle_count = max((int(r.get("cycle_index", 0)) for r in prior_records), default=0)
+
+        prior_checkpoint = self._load_durable_checkpoint()
+        prior_cycle_logs: list[dict[str, Any]] = prior_checkpoint.get("cycle_logs", [])
+        steps_consumed = prior_checkpoint.get("steps_consumed", 0)
+        cpu_consumed_est = prior_checkpoint.get("cpu_consumed_est", 0.0)
+
+        # Skip hypotheses that were already completed/archived in previous cycles
+        remaining: list[ResearchHypothesis] = [h for h in all_hypotheses if h.hypothesis_id not in prior_hyp_ids]
+
         cycle_logs: list[dict[str, Any]] = []
-        permanently_abstained_unidentifiable: set[str] = set()
+        permanently_abstained_unidentifiable: set[str] = {
+            r["hypothesis_id"]
+            for r in prior_records
+            if r.get("outcome_status") == "ABSTAINED_UNIDENTIFIABLE"
+        }
 
-        for cycle_idx in range(1, camp_budget.max_cycles + 1):
+        # Determine cycles to execute in this campaign run:
+        if target_total_cycles is not None:
+            cycles_to_run = max(0, min(camp_budget.max_cycles, target_total_cycles - prior_cycle_count))
+        else:
+            cycles_to_run = camp_budget.max_cycles
+
+        start_cycle = prior_cycle_count + 1
+        end_cycle = prior_cycle_count + cycles_to_run
+
+        for cycle_idx in range(start_cycle, end_cycle + 1):
             rem_steps = camp_budget.max_total_steps - steps_consumed
             rem_cpu = round(camp_budget.max_total_cpu_s - cpu_consumed_est, 6)
+            if rem_steps <= 0 or rem_cpu <= 0.0:
+                break
 
             chosen, ranked, abstained = self._rank_candidates_for_cycle(remaining, rem_steps, rem_cpu)
 
@@ -856,6 +926,8 @@ class AutonomousResearchCoordinator:
                 "post_cycle_ace_library_count": post_state.ace_library_count,
             })
 
+            self._save_durable_checkpoint(prior_cycle_logs + cycle_logs, steps_consumed, cpu_consumed_est)
+
         self.archive.verify()
         self.memory.verify()
         auto_status = self.autonomy.status()
@@ -865,24 +937,26 @@ class AutonomousResearchCoordinator:
         refuted_cnt = sum(1 for r in archived_records if r["outcome_status"] == "REFUTED_NEGATIVE_ARCHIVED")
         abstained_cnt = sum(1 for r in archived_records if r["outcome_status"] == "ABSTAINED_UNIDENTIFIABLE")
 
+        all_cycle_logs = prior_cycle_logs + cycle_logs
+
         # Verify metacognitive adaptation: HYP_03 must be abstained via ABSTAIN_EMPIRICAL_FAILURE_RISK
         # in cycles AFTER HYP_02 was refuted!
         hyp03_post_refutation_abstained = any(
             any(
                 ab["hypothesis_id"] == "HYP_03_PALINDROME_DFA_LIMIT_PROBE_B"
                 and ab["recommendation"] == "ABSTAIN_EMPIRICAL_FAILURE_RISK"
-                for ab in c["abstained_in_cycle"]
+                for ab in c.get("abstained_in_cycle", [])
             )
-            for c in cycle_logs
+            for c in all_cycle_logs
         )
 
         ace_runtime_phases = [
             c["verdict"]["details"].get("phase")
-            for c in cycle_logs
+            for c in all_cycle_logs
             if c.get("verdict") and "phase" in c["verdict"].get("details", {})
         ] + [
             "LEARNED_STAGED/REUSE_VALIDATED"
-            for c in cycle_logs
+            for c in all_cycle_logs
             if c.get("verdict")
             and c["verdict"].get("details", {}).get("learned_staged", 0)
             + c["verdict"].get("details", {}).get("reuse_validated", 0)
@@ -895,7 +969,16 @@ class AutonomousResearchCoordinator:
             "hyp03_post_refutation_abstained": hyp03_post_refutation_abstained,
         }
 
-        return {
+        budget_report = {
+            "max_cycles": camp_budget.max_cycles,
+            "max_total_steps": camp_budget.max_total_steps,
+            "max_total_cpu_s": camp_budget.max_total_cpu_s,
+            "cycles_executed": len(all_cycle_logs),
+            "steps_consumed": steps_consumed,
+            "human_prompts_between_cycles": 0,
+        }
+
+        res: dict[str, Any] = {
             "schema": "ace.research_agenda.v1",
             "scientific_status": "NOT_ASSESSED",
             "release_status": "BLOCK_RELEASE",
@@ -925,14 +1008,7 @@ class AutonomousResearchCoordinator:
                 "HYP_01_HYP_04_SINGLE_SEED_SMALL_N",
             ],
             "ace_runtime_phases_observed": ace_runtime_phases,
-            "campaign_budget": {
-                "max_cycles": camp_budget.max_cycles,
-                "max_total_steps": camp_budget.max_total_steps,
-                "max_total_cpu_s": camp_budget.max_total_cpu_s,
-                "cycles_executed": len(cycle_logs),
-                "steps_consumed": steps_consumed,
-                "human_prompts_between_cycles": 0,
-            },
+            "campaign_budget": budget_report,
             "initial_observation": observation,
             "identified_gaps": [g.to_dict() for g in gaps],
             "proposed_hypotheses": [h.to_dict() for h in all_hypotheses],
@@ -942,7 +1018,7 @@ class AutonomousResearchCoordinator:
                     for k, v in c.items()
                     if k != "archive_signature"
                 }
-                for c in cycle_logs
+                for c in all_cycle_logs
             ],
             "archive_summary": {
                 "total_archived_records": len(archived_records),
@@ -954,19 +1030,58 @@ class AutonomousResearchCoordinator:
                 "autonomy_capabilities_registered": auto_status["capabilities_registered"],
             },
         }
+        if prior_cycle_count > 0:
+            res["durable_resumption"] = {
+                "resumed_from_cycle": prior_cycle_count,
+                "session_cycles_executed": len(cycle_logs),
+            }
+        return res
 
 
-def run_autonomous_research_campaign(repo_root: Path | None = None) -> dict[str, Any]:
+def run_autonomous_research_campaign(
+    repo_root: Path | None = None,
+    workspace_dir: Path | None = None,
+    budget: ResearchCampaignBudget | None = None,
+    *,
+    target_total_cycles: int | None = None,
+) -> dict[str, Any]:
     root = (repo_root or Path(__file__).resolve().parents[2]).resolve()
-    with tempfile.TemporaryDirectory(prefix="ace_fase9_agenda_") as tmp:
-        base = Path(tmp)
+    camp_budget = budget or ResearchCampaignBudget(max_cycles=5, max_total_steps=32, max_total_cpu_s=25.0)
+    if workspace_dir is None:
+        with tempfile.TemporaryDirectory(prefix="ace_fase9_agenda_") as tmp:
+            base = Path(tmp)
+            with (
+                Autonomy(base / "autonomy_ws", root) as autonomy,
+                ExperienceMemory(base / "selfmodel_ws") as memory,
+                ResearchArchive(base / "archive_ws") as archive,
+            ):
+                coord = AutonomousResearchCoordinator(root, autonomy, memory, archive, workspace_dir=base)
+                return coord.run_campaign(camp_budget, target_total_cycles=target_total_cycles)
+    else:
+        base = Path(workspace_dir).resolve()
+        base.mkdir(parents=True, exist_ok=True)
         with (
             Autonomy(base / "autonomy_ws", root) as autonomy,
             ExperienceMemory(base / "selfmodel_ws") as memory,
             ResearchArchive(base / "archive_ws") as archive,
         ):
-            coord = AutonomousResearchCoordinator(root, autonomy, memory, archive)
-            return coord.run_campaign(ResearchCampaignBudget(max_cycles=5, max_total_steps=32, max_total_cpu_s=25.0))
+            coord = AutonomousResearchCoordinator(root, autonomy, memory, archive, workspace_dir=base)
+            return coord.run_campaign(camp_budget, target_total_cycles=target_total_cycles)
+
+
+def run_durable_autonomous_research_campaign(
+    workspace_dir: Path,
+    repo_root: Path | None = None,
+    budget: ResearchCampaignBudget | None = None,
+    *,
+    target_total_cycles: int | None = None,
+) -> dict[str, Any]:
+    return run_autonomous_research_campaign(
+        repo_root=repo_root,
+        workspace_dir=workspace_dir,
+        budget=budget,
+        target_total_cycles=target_total_cycles,
+    )
 
 
 def write_agenda_evidence_gz(report: dict[str, Any], out_path: Path) -> str:

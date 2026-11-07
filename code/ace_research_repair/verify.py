@@ -205,9 +205,16 @@ def main(argv: list[str] | None = None) -> int:
         type=Path,
         default=Path("evidence/repair/ace_repair_v1.json.gz"),
     )
+    parser.add_argument(
+        "--artifact",
+        type=Path,
+        default=None,
+        help="Optional artifact path alias",
+    )
     args = parser.parse_args(argv)
+    target_path = args.artifact or args.report
     try:
-        receipt = verify_report_bytes(args.report.read_bytes(), replay=True)
+        receipt = verify_report_bytes(target_path.read_bytes(), replay=True)
     except (RepairVerificationError, ValueError, KeyError, TypeError, OSError) as exc:
         print(json.dumps({"status": "HALT_INVALID_REPAIR_EVIDENCE", "error": str(exc)}, sort_keys=True))
         return 2
