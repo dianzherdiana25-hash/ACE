@@ -249,13 +249,14 @@ class SelfDevelopmentCoordinator:
             }
             self.checkpointer.save_checkpoint(ckpt)
 
-            # 4. GENERATE
-            candidate = self.generator.generate_candidate(
+            # 4. GENERATE / CANDIDATE SEARCH
+            candidate = self.search_and_select_candidate(
                 hypothesis=hypothesis,
                 parent_candidate=None,
-                parent_id=active_head_id,
-                ordinal=mutation_ordinal,
+                active_head_id=active_head_id,
                 author_type=author_type,
+                target_task=target_task,
+                search_budget=candidate_search_budget,
             )
             ckpt.phase = "CANDIDATE_GENERATED"
             ckpt.candidate = {

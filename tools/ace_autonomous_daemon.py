@@ -116,8 +116,18 @@ def run_daemon_loop(batch_size: int = 2, sleep_seconds: int = 15):
                     f"Task={tid}, Gain={gain:+.4f}, Holdout={holdout:.4f}, Decision={dec}, Promoted={promoted}, ActiveHead={head}"
                 )
 
-                # Commit and push after each completed cycle
-                git_commit_and_push(cid, dec, tid)
+                # Halt redundant evaluations and prevent uninformative commits
+                should_commit = res.get("should_commit", True)
+                if not should_commit or dec in ("STAGNATED", "BLOCKED"):
+                    log(f"Cycle {cid} was halted/uninformative ({dec}). Skipping git commit to prevent repository clutter.")
+                else:
+                    git_commit_and_push(cid, dec, tid)
+
+                next_strat = res.get("next_agenda_priority", {}).get("strategy")
+                if next_strat == "SEARCH_SPACE_EXHAUSTED":
+                    log("StrategyRepair indicates SEARCH_SPACE_EXHAUSTED: All representation families across all tasks explored.")
+                    log("Cleanly halting autonomous daemon loop.")
+                    return
 
             except Exception as e:
                 log(f"Error in cycle execution: {e}")
