@@ -483,6 +483,265 @@ def mutate_dispatch_gene(ordinal: int) -> DispatchGene:
     )
 
 
+RELATIONAL_GATED_MUTATIONS: Tuple[Dict[str, Any], ...] = (
+    # Ordinal 1: 3-clause Conjunction (length guard AND modular congruence AND density upper bound)
+    {
+        "combiner": "AND",
+        "clause_type": "CONJUNCTION_AND",
+        "length_op": ">=",
+        "length_threshold": 4,
+        "stride_weight": 1,
+        "density_weight": 1,
+        "length_weight": 0,
+        "modulus": 3,
+        "target_residue": 0,
+        "congruence_op": "==",
+        "boundary_var": "density",
+        "boundary_op": "<=",
+        "boundary_threshold": 4,
+        "true_val": 0,
+        "false_val": 1,
+    },
+    # Ordinal 2: 3-clause Conjunction (stride parity AND density lower bound)
+    {
+        "combiner": "AND",
+        "clause_type": "CONJUNCTION_AND",
+        "length_op": ">=",
+        "length_threshold": 3,
+        "stride_weight": 1,
+        "density_weight": 0,
+        "length_weight": 0,
+        "modulus": 2,
+        "target_residue": 0,
+        "congruence_op": "==",
+        "boundary_var": "density",
+        "boundary_op": ">=",
+        "boundary_threshold": 1,
+        "true_val": 0,
+        "false_val": 1,
+    },
+    # Ordinal 3: 3-clause Disjunction (short prefix OR modular congruence OR high density)
+    {
+        "combiner": "OR",
+        "clause_type": "DISJUNCTION_OR",
+        "length_op": "<=",
+        "length_threshold": 2,
+        "stride_weight": 2,
+        "density_weight": -1,
+        "length_weight": 0,
+        "modulus": 3,
+        "target_residue": 0,
+        "congruence_op": "==",
+        "boundary_var": "density",
+        "boundary_op": ">=",
+        "boundary_threshold": 5,
+        "true_val": 0,
+        "false_val": 1,
+    },
+    # Ordinal 4: 3-clause Conjunction (length guard AND difference parity AND stride bound)
+    {
+        "combiner": "AND",
+        "clause_type": "CONJUNCTION_AND",
+        "length_op": ">=",
+        "length_threshold": 5,
+        "stride_weight": 1,
+        "density_weight": -1,
+        "length_weight": 0,
+        "modulus": 2,
+        "target_residue": 0,
+        "congruence_op": "==",
+        "boundary_var": "stride_val",
+        "boundary_op": "<=",
+        "boundary_threshold": 2,
+        "true_val": 0,
+        "false_val": 1,
+    },
+    # Ordinal 5: 3-clause Disjunction (long length OR density parity OR high stride)
+    {
+        "combiner": "OR",
+        "clause_type": "DISJUNCTION_OR",
+        "length_op": ">=",
+        "length_threshold": 6,
+        "stride_weight": 0,
+        "density_weight": 1,
+        "length_weight": 0,
+        "modulus": 2,
+        "target_residue": 0,
+        "congruence_op": "==",
+        "boundary_var": "stride_val",
+        "boundary_op": ">=",
+        "boundary_threshold": 2,
+        "true_val": 0,
+        "false_val": 1,
+    },
+    # Ordinal 6: 3-clause Conjunction (length guard AND stride mod 3 AND density bound)
+    {
+        "combiner": "AND",
+        "clause_type": "CONJUNCTION_AND",
+        "length_op": ">=",
+        "length_threshold": 4,
+        "stride_weight": 2,
+        "density_weight": 0,
+        "length_weight": 0,
+        "modulus": 3,
+        "target_residue": 0,
+        "congruence_op": "==",
+        "boundary_var": "density",
+        "boundary_op": "<=",
+        "boundary_threshold": 3,
+        "true_val": 0,
+        "false_val": 1,
+    },
+    # Ordinal 7: 3-clause Disjunction (boundary disjunction)
+    {
+        "combiner": "OR",
+        "clause_type": "DISJUNCTION_OR",
+        "length_op": "<=",
+        "length_threshold": 3,
+        "stride_weight": 1,
+        "density_weight": 2,
+        "length_weight": 0,
+        "modulus": 3,
+        "target_residue": 0,
+        "congruence_op": "==",
+        "boundary_var": "density",
+        "boundary_op": ">=",
+        "boundary_threshold": 4,
+        "true_val": 0,
+        "false_val": 1,
+    },
+    # Ordinal 8: 3-clause Conjunction (length guard AND combined modulus AND positive stride)
+    {
+        "combiner": "AND",
+        "clause_type": "CONJUNCTION_AND",
+        "length_op": ">=",
+        "length_threshold": 4,
+        "stride_weight": 2,
+        "density_weight": 1,
+        "length_weight": 0,
+        "modulus": 3,
+        "target_residue": 0,
+        "congruence_op": "==",
+        "boundary_var": "stride_val",
+        "boundary_op": ">=",
+        "boundary_threshold": 1,
+        "true_val": 0,
+        "false_val": 1,
+    },
+    # Ordinal 9: 3-clause Conjunction (modular sum AND density limit)
+    {
+        "combiner": "AND",
+        "clause_type": "CONJUNCTION_AND",
+        "length_op": ">=",
+        "length_threshold": 3,
+        "stride_weight": 1,
+        "density_weight": 1,
+        "length_weight": 0,
+        "modulus": 2,
+        "target_residue": 0,
+        "congruence_op": "==",
+        "boundary_var": "density",
+        "boundary_op": "<=",
+        "boundary_threshold": 2,
+        "true_val": 0,
+        "false_val": 1,
+    },
+    # Ordinal 10: 3-clause Disjunction (scaled congruence OR sparse density)
+    {
+        "combiner": "OR",
+        "clause_type": "DISJUNCTION_OR",
+        "length_op": ">=",
+        "length_threshold": 5,
+        "stride_weight": 2,
+        "density_weight": -2,
+        "length_weight": 0,
+        "modulus": 3,
+        "target_residue": 0,
+        "congruence_op": "==",
+        "boundary_var": "density",
+        "boundary_op": "<=",
+        "boundary_threshold": 1,
+        "true_val": 0,
+        "false_val": 1,
+    },
+)
+
+
+def mutate_relational_gated_gene(ordinal: int) -> RelationalGatedGene:
+    """Deterministically synthesize a multi-clause relational gated gene."""
+    _check_int(ordinal, 0, 100000, "ordinal")
+    rule = RELATIONAL_GATED_MUTATIONS[(ordinal - 1) % len(RELATIONAL_GATED_MUTATIONS)]
+    return RelationalGatedGene(**rule)
+
+
+def is_structural_innovation(gene_a: Any, gene_b: Any) -> bool:
+    """Classify whether the transition from gene_a to gene_b is a structural algorithmic innovation."""
+    if type(gene_a) is not type(gene_b):
+        return True
+    if hasattr(gene_a, "is_structural_innovation"):
+        return gene_a.is_structural_innovation(gene_b)
+    if isinstance(gene_a, CompositeGene):
+        if gene_a.operator != gene_b.operator:
+            return True
+        return is_structural_innovation(gene_a.gene_a, gene_b.gene_a) or is_structural_innovation(gene_a.gene_b, gene_b.gene_b)
+    return False
+
+
+def is_coefficient_tuning(gene_a: Any, gene_b: Any) -> bool:
+    """Classify whether the transition from gene_a to gene_b is parameter coefficient tuning."""
+    if type(gene_a) is not type(gene_b):
+        return False
+    if hasattr(gene_a, "is_coefficient_tuning"):
+        return gene_a.is_coefficient_tuning(gene_b)
+    return (not is_structural_innovation(gene_a, gene_b)) and (gene_a != gene_b)
+
+
+def tune_relational_coefficients(
+    gene: RelationalGatedGene,
+    stride_delta: int = 0,
+    density_delta: int = 0,
+    threshold_delta: int = 0,
+    modulus_delta: int = 0,
+) -> RelationalGatedGene:
+    """Perform purely parametric coefficient tuning on a RelationalGatedGene without structural change."""
+    d = gene.to_dict()
+    d.pop("is_relational", None)
+    d.pop("is_relational_gated", None)
+    new_stride = max(-16, min(16, gene.stride_weight + stride_delta))
+    new_density = max(-16, min(16, gene.density_weight + density_delta))
+    new_thresh = max(0, min(128, gene.length_threshold + threshold_delta))
+    new_mod = max(2, min(31, gene.modulus + modulus_delta))
+    d["stride_weight"] = new_stride
+    d["density_weight"] = new_density
+    d["length_threshold"] = new_thresh
+    d["modulus"] = new_mod
+    return RelationalGatedGene(**d)
+
+
+def mutate_relational_structure(
+    gene: RelationalGatedGene,
+    new_combiner: Optional[str] = None,
+    new_length_op: Optional[str] = None,
+    new_boundary_op: Optional[str] = None,
+    new_boundary_var: Optional[str] = None,
+) -> RelationalGatedGene:
+    """Perform structural algorithmic innovation on a RelationalGatedGene."""
+    d = gene.to_dict()
+    d.pop("is_relational", None)
+    d.pop("is_relational_gated", None)
+    if new_combiner is not None:
+        comb = new_combiner.upper()
+        d["combiner"] = comb
+        d["clause_type"] = f"{'CONJUNCTION' if comb == 'AND' else 'DISJUNCTION'}_{comb}"
+    if new_length_op is not None:
+        d["length_op"] = new_length_op
+    if new_boundary_op is not None:
+        d["boundary_op"] = new_boundary_op
+    if new_boundary_var is not None:
+        d["boundary_var"] = new_boundary_var
+    return RelationalGatedGene(**d)
+
+
 def _render_atomic_expr(g: TypedGene) -> str:
     return (
         f"{g.sign} * ("
