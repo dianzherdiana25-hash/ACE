@@ -14,6 +14,7 @@ import json
 import os
 from pathlib import Path
 import resource
+import shutil
 import signal
 import subprocess
 import sys
@@ -24,6 +25,96 @@ from .corpus import DevTestCase, PerturbationSpec
 
 DEFAULT_TIMEOUT_SEC = 3.0
 DEFAULT_CPU_LIMIT_SEC = 2
+DEFAULT_MEM_LIMIT_BYTES = 512 * 1024 * 1024  # 512 MB
+DEFAULT_FILE_LIMIT_BYTES = 512 * 1024  # 512 KB
+DEFAULT_NOFILE_LIMIT = 32
+
+
+class TrustBoundary:
+    TRUSTED_FIXTURE = "TRUSTED_FIXTURE"
+    CLOSED_AST_MUTATION = "CLOSED_AST_MUTATION"
+    UNTRUSTED_CANDIDATE = "UNTRUSTED_CANDIDATE"
+
+
+FORBIDDEN_MODULES = frozenset({
+    "os", "subprocess", "socket", "urllib", "requests", "http",
+    "shutil", "ctypes", "posix", "nt", "importlib", "multiprocessing",
+    "threading", "signal", "pty", "commands", "builtins", "__builtin__",
+    "asyncio", "aiohttp", "ftplib", "poplib", "imaplib", "smtplib",
+    "ssl", "xmlrpc", "webbrowser", "pickle", "shelve", "tempfile",
+})
+
+FORBIDDEN_CALLS = frozenset({
+    "eval", "exec", "compile", "open", "input", "globals", "locals",
+    "vars", "breakpoint", "__import__",
+})
+
+FORBIDDEN_ATTRS = frozenset({
+    "__subclasses__", "__bases__", "__globals__", "__builtins__",
+    "__code__", "__closure__", "__func__", "__self__",
+})
+
+
+def is_os_sandbox_available() -> tuple[bool, str]:
+    """Detect whether genuine OS-level containment is active and functional."""
+    env_override = os.environ.get("ACE_OS_SANDBOX_OVERRIDE")
+    if env_override is not None:
+        return (env_override == "1", "ENVIRONMENT_OVERRIDE")
+
+    bwrap_path = shutil.which("bwrap")
+    if bwrap_path:
+        try:
+            r = subprocess.run(
+                [bwrap_path, "--unshare-all", "--ro-bind", "/", "/", "--tmpfs", "/tmp", "true"],
+                capture_output=True,
+                timeout=1.5,
+            )
+            if r.returncode == 0:
+                return True, "bwrap"
+        except Exception:
+            pass
+
+    unshare_path = shutil.which("unshare")
+    if unshare_path:
+        try:
+            r = subprocess.run(
+                [unshare_path, "--user", "--net", "true"],
+                capture_output=True,
+                timeout=1.5,
+            )
+            if r.returncode == 0:
+                return True, "unshare_user_net"
+        except Exception:
+            pass
+
+    return False, "NO_OS_SANDBOX"
+
+
+def audit_candidate_ast(source_code: str) -> tuple[bool, str | None]:
+    """Perform static deny-by-default AST security audit on candidate source."""
+    try:
+        tree = ast.parse(source_code)
+    except SyntaxError as exc:
+        return False, f"SyntaxError:{type(exc).__name__}"
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                base_mod = alias.name.split(".")[0]
+                if base_mod in FORBIDDEN_MODULES:
+                    return False, f"ForbiddenModuleImport:{alias.name}"
+        elif isinstance(node, ast.ImportFrom):
+            base_mod = (node.module or "").split(".")[0]
+            if base_mod in FORBIDDEN_MODULES:
+                return False, f"ForbiddenFromModuleImport:{node.module}"
+        elif isinstance(node, ast.Call):
+            if isinstance(node.func, ast.Name) and node.func.id in FORBIDDEN_CALLS:
+                return False, f"ForbiddenCall:{node.func.id}"
+        elif isinstance(node, ast.Attribute):
+            if node.attr in FORBIDDEN_ATTRS:
+                return False, f"ForbiddenAttribute:{node.attr}"
+
+    return True, None
 
 
 def _write_nofollow(path: Path, content: str) -> None:
@@ -52,10 +143,30 @@ def _scrubbed_env() -> dict[str, str]:
     }
 
 
-def _make_preexec(cpu_limit_sec: int):
+def _make_preexec(
+    cpu_limit_sec: int,
+    mem_limit_bytes: int = DEFAULT_MEM_LIMIT_BYTES,
+    fsize_limit_bytes: int = DEFAULT_FILE_LIMIT_BYTES,
+    nofile_limit: int = DEFAULT_NOFILE_LIMIT,
+):
     def _apply_limits() -> None:
         resource.setrlimit(resource.RLIMIT_CPU, (cpu_limit_sec, cpu_limit_sec))
         resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+        if hasattr(resource, "RLIMIT_AS"):
+            try:
+                resource.setrlimit(resource.RLIMIT_AS, (mem_limit_bytes, mem_limit_bytes))
+            except (ValueError, OSError):
+                pass
+        if hasattr(resource, "RLIMIT_FSIZE"):
+            try:
+                resource.setrlimit(resource.RLIMIT_FSIZE, (fsize_limit_bytes, fsize_limit_bytes))
+            except (ValueError, OSError):
+                pass
+        if hasattr(resource, "RLIMIT_NOFILE"):
+            try:
+                resource.setrlimit(resource.RLIMIT_NOFILE, (nofile_limit, nofile_limit))
+            except (ValueError, OSError):
+                pass
 
     return _apply_limits
 
@@ -420,16 +531,36 @@ def run_dev_suite(
     collect_trace: bool = False,
     timeout_sec: float = DEFAULT_TIMEOUT_SEC,
     cpu_limit_sec: int = DEFAULT_CPU_LIMIT_SEC,
+    trust_level: str = TrustBoundary.CLOSED_AST_MUTATION,
 ) -> dict[str, Any]:
     """Execute `test_cases` against `source_code` inside an isolated temporary directory."""
-    try:
-        ast.parse(source_code)
-    except SyntaxError as exc:
+    # 1. Enforce fail-closed BLOCKED_ENVIRONMENT for UNTRUSTED_CANDIDATE when real OS sandbox is absent
+    if trust_level == TrustBoundary.UNTRUSTED_CANDIDATE:
+        os_avail, os_mech = is_os_sandbox_available()
+        if not os_avail:
+            return {
+                "status": "BLOCKED_ENVIRONMENT",
+                "blocked_environment": True,
+                "timed_out": False,
+                "sandbox_error": f"BLOCKED_ENVIRONMENT: OS-level containment unavailable ({os_mech}) for untrusted candidate execution",
+                "compile_ok": False,
+                "compile_error": "BLOCKED_ENVIRONMENT",
+                "all_passed": False,
+                "passed_count": 0,
+                "total_count": len(test_cases),
+                "cases": [],
+            }
+
+    # 2. Deny-by-default static AST security audit
+    ast_ok, ast_err = audit_candidate_ast(source_code)
+    if not ast_ok:
         return {
+            "status": "AST_DENY_BY_DEFAULT",
+            "blocked_environment": False,
             "timed_out": False,
-            "sandbox_error": None,
+            "sandbox_error": f"AST_SECURITY_VIOLATION:{ast_err}",
             "compile_ok": False,
-            "compile_error": type(exc).__name__,
+            "compile_error": f"AST_SECURITY_VIOLATION:{ast_err}",
             "all_passed": False,
             "passed_count": 0,
             "total_count": len(test_cases),
@@ -486,8 +617,40 @@ def run_perturbation_suite(
     *,
     timeout_sec: float = DEFAULT_TIMEOUT_SEC,
     cpu_limit_sec: int = DEFAULT_CPU_LIMIT_SEC,
+    trust_level: str = TrustBoundary.CLOSED_AST_MUTATION,
 ) -> dict[str, Any]:
     """Execute unlabeled behavioral consistency checks inside an isolated child process."""
+    if trust_level == TrustBoundary.UNTRUSTED_CANDIDATE:
+        os_avail, os_mech = is_os_sandbox_available()
+        if not os_avail:
+            return {
+                "status": "BLOCKED_ENVIRONMENT",
+                "blocked_environment": True,
+                "timed_out": False,
+                "passed": False,
+                "crash_free": False,
+                "call_isolation_ok": False,
+                "variation_ok": False,
+                "equivalence_ok": False,
+                "unique_non_empty_outputs": 0,
+                "rejection_reasons": ["BLOCKED_ENVIRONMENT: OS-level containment unavailable"],
+            }
+
+    ast_ok, ast_err = audit_candidate_ast(source_code)
+    if not ast_ok:
+        return {
+            "status": "AST_DENY_BY_DEFAULT",
+            "blocked_environment": False,
+            "timed_out": False,
+            "passed": False,
+            "crash_free": False,
+            "call_isolation_ok": False,
+            "variation_ok": False,
+            "equivalence_ok": False,
+            "unique_non_empty_outputs": 0,
+            "rejection_reasons": [f"AST_SECURITY_VIOLATION:{ast_err}"],
+        }
+
     spec_obj = {
         "entrypoint": entrypoint,
         "diverse_inputs": perturbation_spec.diverse_inputs,
