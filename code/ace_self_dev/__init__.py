@@ -16,6 +16,18 @@ from .coordinator import SelfDevelopmentCoordinator
 from .agenda_engine import AgendaEngine
 from .provenance_engine import ProvenanceEngine
 from .state_manager import StateManager
+from .stagnation_detector import (
+    BitvectorRegistry,
+    StagnationCheckResult,
+    StagnationDetector,
+    StagnationType,
+)
+from .strategy_repair import (
+    FailurePatternType,
+    RepresentationFamily,
+    StrategyRepairDecision,
+    StrategyRepairEngine,
+)
 
 __all__ = [
     "AuthorType",
@@ -34,4 +46,12 @@ __all__ = [
     "AgendaEngine",
     "ProvenanceEngine",
     "StateManager",
+    "BitvectorRegistry",
+    "StagnationCheckResult",
+    "StagnationDetector",
+    "StagnationType",
+    "FailurePatternType",
+    "RepresentationFamily",
+    "StrategyRepairDecision",
+    "StrategyRepairEngine",
 ]

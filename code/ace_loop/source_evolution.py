@@ -136,6 +136,119 @@ class RelationalGene:
 
 
 @dataclass(frozen=True)
+class RelationalGatedGene:
+    """Strongly-typed multi-clause relational gated gene for expressive non-linear invariants.
+
+    Expresses multi-clause conjunctions or disjunctions across:
+    1. Length guard (e.g. length >= length_threshold)
+    2. Modular congruence (e.g. ((stride_val * stride_w + density * density_w) % mod) == target_residue)
+    3. Relational boundary condition (e.g. boundary_var boundary_op boundary_threshold, such as density <= 4)
+
+    Provides clear distinction between:
+    - Parametric coefficient tuning (modifying numeric weights, thresholds, moduli)
+    - Structural algorithmic innovation (changing logical combiners AND<->OR, relational operators, or clause topology)
+    """
+    length_op: str = ">="              # ">=", "<=", "==", "!=", ">", "<"
+    length_threshold: int = 4          # 0 to 128
+    stride_weight: int = 1             # -16 to 16
+    density_weight: int = 1            # -16 to 16
+    length_weight: int = 0             # -16 to 16
+    modulus: int = 3                   # 2 to 31
+    target_residue: int = 0            # 0 to 30
+    congruence_op: str = "=="          # "==", "!="
+    boundary_var: str = "density"      # "density", "stride_val", "length"
+    boundary_op: str = "<="            # "<=", ">=", "==", "!=", "<", ">"
+    boundary_threshold: int = 4        # 0 to 128
+    combiner: str = "AND"              # "AND" (conjunction) or "OR" (disjunction)
+    clause_type: str = "CONJUNCTION_AND" # Structural clause classification tag
+    true_val: int = 0
+    false_val: int = 1
+
+    def __post_init__(self):
+        _check_int(self.length_threshold, 0, 128, "length_threshold")
+        _check_int(self.stride_weight, -16, 16, "stride_weight")
+        _check_int(self.density_weight, -16, 16, "density_weight")
+        _check_int(self.length_weight, -16, 16, "length_weight")
+        _check_int(self.modulus, 2, 31, "modulus")
+        _check_int(self.target_residue, 0, 30, "target_residue")
+        _check_int(self.boundary_threshold, 0, 128, "boundary_threshold")
+        _check_int(self.true_val, -100, 100, "true_val")
+        _check_int(self.false_val, -100, 100, "false_val")
+
+        valid_rel_ops = (">=", "<=", "==", "!=", ">", "<")
+        if self.length_op not in valid_rel_ops:
+            raise SourceEvolutionError(f"Invalid length_op: {self.length_op}")
+        if self.boundary_op not in valid_rel_ops:
+            raise SourceEvolutionError(f"Invalid boundary_op: {self.boundary_op}")
+        if self.congruence_op not in ("==", "!="):
+            raise SourceEvolutionError(f"Invalid congruence_op: {self.congruence_op}")
+        if self.boundary_var not in ("density", "stride_val", "length"):
+            raise SourceEvolutionError(f"Invalid boundary_var: {self.boundary_var}")
+        if self.combiner.upper() not in ("AND", "OR"):
+            raise SourceEvolutionError(f"Invalid combiner: {self.combiner}, must be 'AND' or 'OR'")
+
+    def structural_signature(self) -> Tuple[str, str, str, str, str, str]:
+        """Return structural topology signature for algorithmic innovation checks."""
+        return (
+            self.clause_type,
+            self.combiner.upper(),
+            self.length_op,
+            self.congruence_op,
+            self.boundary_var,
+            self.boundary_op,
+        )
+
+    def coefficient_profile(self) -> Tuple[int, int, int, int, int, int, int, int, int]:
+        """Return numeric coefficient vector for parameter tuning checks."""
+        return (
+            self.length_threshold,
+            self.stride_weight,
+            self.density_weight,
+            self.length_weight,
+            self.modulus,
+            self.target_residue,
+            self.boundary_threshold,
+            self.true_val,
+            self.false_val,
+        )
+
+    def is_structural_innovation(self, other: Any) -> bool:
+        """True if other represents structural/topological change rather than coefficient tuning."""
+        if not isinstance(other, RelationalGatedGene):
+            return True
+        return self.structural_signature() != other.structural_signature()
+
+    def is_coefficient_tuning(self, other: Any) -> bool:
+        """True if other shares structural topology and only modifies numeric parameters."""
+        if not isinstance(other, RelationalGatedGene):
+            return False
+        return (self.structural_signature() == other.structural_signature()) and (
+            self.coefficient_profile() != other.coefficient_profile()
+        )
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "is_relational": True,
+            "is_relational_gated": True,
+            "clause_type": self.clause_type,
+            "combiner": self.combiner.upper(),
+            "length_op": self.length_op,
+            "length_threshold": self.length_threshold,
+            "stride_weight": self.stride_weight,
+            "density_weight": self.density_weight,
+            "length_weight": self.length_weight,
+            "modulus": self.modulus,
+            "target_residue": self.target_residue,
+            "congruence_op": self.congruence_op,
+            "boundary_var": self.boundary_var,
+            "boundary_op": self.boundary_op,
+            "boundary_threshold": self.boundary_threshold,
+            "true_val": self.true_val,
+            "false_val": self.false_val,
+        }
+
+
+@dataclass(frozen=True)
 class DispatchGene:
     """Strongly-typed multi-task dispatch gene: routes to specialized mechanism branches."""
     ordinal: int = 1
