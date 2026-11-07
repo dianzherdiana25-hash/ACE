@@ -1,0 +1,131 @@
+{
+  "status": "REJECT_EXPLORATORY_NOT_ASSESSED",
+  "protocol_commit": "83b99ca351dec652212b75b97c76bb539a572cc9",
+  "implementation_commit": "546fc3577fd0f4b10d4c04b1a68ca6ce2b7ec6e3",
+  "main_sha_at_prereg": "80104ce50ecbcea21080bed8c0eabce88d47ccb5",
+  "eval_seeds": [
+    2100,
+    2355
+  ],
+  "dev_seeds": [
+    1100,
+    1131
+  ],
+  "methods": [
+    "diversity",
+    "novelty",
+    "static",
+    "random"
+  ],
+  "scenarios": [
+    "valid",
+    "clustered",
+    "scattered",
+    "random_label"
+  ],
+  "outcomes": {
+    "valid": {
+      "diversity": {
+        "accepted": 256,
+        "mismatches": 0
+      },
+      "novelty": {
+        "accepted": 256,
+        "mismatches": 0
+      },
+      "static": {
+        "accepted": 256,
+        "mismatches": 0
+      },
+      "random": {
+        "accepted": 256,
+        "mismatches": 0
+      }
+    },
+    "clustered": {
+      "diversity": {
+        "accepted": 79,
+        "mismatches": 221
+      },
+      "novelty": {
+        "accepted": 224,
+        "mismatches": 78
+      },
+      "static": {
+        "accepted": 223,
+        "mismatches": 163
+      },
+      "random": {
+        "accepted": 88,
+        "mismatches": 245
+      }
+    },
+    "scattered": {
+      "diversity": {
+        "accepted": 81,
+        "mismatches": 262
+      },
+      "novelty": {
+        "accepted": 97,
+        "mismatches": 248
+      },
+      "static": {
+        "accepted": 76,
+        "mismatches": 253
+      },
+      "random": {
+        "accepted": 87,
+        "mismatches": 252
+      }
+    },
+    "random_label": {
+      "diversity": {
+        "accepted": 0,
+        "mismatches": 1007
+      },
+      "novelty": {
+        "accepted": 2,
+        "mismatches": 994
+      },
+      "static": {
+        "accepted": 0,
+        "mismatches": 1035
+      },
+      "random": {
+        "accepted": 2,
+        "mismatches": 1028
+      }
+    }
+  },
+  "pooled_invalid_false_acceptance": {
+    "diversity": 0.3125,
+    "novelty": 0.626953125,
+    "static": 0.583984375,
+    "random": 0.341796875
+  },
+  "relative_reduction_vs_controls": {
+    "novelty": 0.5015576323987538,
+    "static": 0.46488294314381273,
+    "random": 0.08571428571428572
+  },
+  "trials": 4096,
+  "labels": 32768,
+  "selection_distance_operations": 3383296,
+  "cpu_process_seconds_local": 0.48916500899999993,
+  "code_sha256_local": "137366e04a8df708a630cd1d44040b6e16ec1595912973196ade93705cfb36f6",
+  "decision": "REJECT: relative reduction vs random 8.57% < prespecified 20%; valid acceptance 100% across all methods",
+  "counterexamples": [
+    "Novelty-only and static miss clustered errors: 224/256 and 223/256 false acceptance",
+    "Random performs close to diversity on scattered errors; diversity fails 20% improvement gate",
+    "Random-label oracle violates assumed truth model; acceptance not interpretable as validity"
+  ],
+  "protocol_discrepancy": "Prereg text says '12-bit Boolean predictor', whereas implemented oracle maps six-bit inputs (64) to one-bit labels; report as protocol wording defect, not silently corrected.",
+  "limitations": [
+    "No independent replay at exact GitHub SHA",
+    "CPU not matched across arms",
+    "No sealed heldout; public synthetic evaluation only",
+    "Mismatch per label is falsification proxy, not Shannon information gain",
+    "No genuine novel hypothesis proposal; F10 owns structural generation",
+    "No control for observationally equivalent pair was separately executed; valid world serves only no-mismatch control"
+  ]
+}

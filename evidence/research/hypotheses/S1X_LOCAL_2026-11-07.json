@@ -1,0 +1,127 @@
+{
+  "status": "REJECT_EXPLORATORY_NOT_ASSESSED",
+  "protocol_commit": "fc9f264d6284adb62a810231ef22c18e28f001ef",
+  "main_sha": "80104ce50ecbcea21080bed8c0eabce88d47ccb5",
+  "execution": "Python local notebook, source not committed; not exact-SHA reproducible",
+  "seeds": {
+    "clean": 211,
+    "shift": 311,
+    "misspec": 411,
+    "null": 511
+  },
+  "worlds_per_scenario": 256,
+  "arms": [
+    "adaptive",
+    "static",
+    "random",
+    "uncertainty"
+  ],
+  "trials": 4096,
+  "labels": 16384,
+  "scoring_operations": 2654208,
+  "cpu_seconds_process_local": 1.2657,
+  "results": {
+    "clean": {
+      "adaptive": [
+        164,
+        0.527266,
+        0.513543
+      ],
+      "static": [
+        173,
+        0.536816,
+        0.520598
+      ],
+      "random": [
+        148,
+        0.509365,
+        0.503274
+      ],
+      "uncertainty": [
+        164,
+        0.527266,
+        0.513543
+      ]
+    },
+    "shift": {
+      "adaptive": [
+        170,
+        0.551415,
+        0.468472
+      ],
+      "static": [
+        158,
+        0.546715,
+        0.466645
+      ],
+      "random": [
+        130,
+        0.503743,
+        0.46779
+      ],
+      "uncertainty": [
+        170,
+        0.551415,
+        0.468472
+      ]
+    },
+    "misspec": {
+      "adaptive": [
+        43,
+        -0.252994,
+        0.489991
+      ],
+      "static": [
+        40,
+        -0.310812,
+        0.493616
+      ],
+      "random": [
+        48,
+        -0.2099,
+        0.454165
+      ],
+      "uncertainty": [
+        43,
+        -0.252994,
+        0.489991
+      ]
+    },
+    "null": {
+      "adaptive": [
+        null,
+        null,
+        0.492004
+      ],
+      "static": [
+        null,
+        null,
+        0.502005
+      ],
+      "random": [
+        null,
+        null,
+        0.440085
+      ],
+      "uncertainty": [
+        null,
+        null,
+        0.492004
+      ]
+    }
+  },
+  "metric_columns": [
+    "correct_of_256",
+    "true_log_posterior_gain_bits_per_label",
+    "model_entropy_reduction_bits_per_label"
+  ],
+  "false_confident_all_arms_all_scenarios": 0,
+  "decision": "REJECT: adaptive 164/256 vs static 173/256; adaptive true gain .527266 vs static .536816, fails both prespecified gates",
+  "counterexample": "adaptive and uncertainty yield identical scores; under 35% noise all methods have negative true log posterior gain despite positive model entropy reduction",
+  "limitations": [
+    "Local implementation not committed or independently replayed",
+    "CPU not matched across arms",
+    "Only 16 fixed compositional hypotheses, not genuine open-ended generation",
+    "No sealed holdout, public synthetic development/evaluation only"
+  ]
+}

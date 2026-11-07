@@ -1,0 +1,10 @@
+# S1-W prescore protocol — adaptive queries under single-spike semantics
+Date: 2026-11-07. Public synthetic only. This is a counterexample test, not operator discovery.
+
+Hypothesis H1 (falsifiable): Bayesian sequential query selection achieves >=0.10 absolute higher adversarial detection recall than each of static top-prior, random and half-prior/half-exploration, while losing <=0.05 absolute normal recall relative to static. Reject if either criterion fails.
+
+Generative worlds: hidden change index j in [0,63]. A query to index i returns label 1 iff i=j, else 0. Normal distribution: 75% uniform j in [0,7], 25% uniform j in [8,63]. Adversarial distribution reverses the high-mass block to [56,63]. No-change worlds yield all zero labels. Random-label worlds return Bernoulli(0.5), independently of j. Development draws use seed 73; terminal evaluation seeds 1073 (normal), 2073 (adversarial), 3073 (no-change), 4073 (random labels), with 4096 worlds per distribution. Dev 512 worlds; evaluation worlds disjoint.
+
+Methods: Bayesian posterior (correct normal prior, sequentially renormalize after each negative), static top 8 prior, random 8 without replacement, hedged 4 top-prior + 4 uniform outside. Each uses exactly eight unique index queries per world and no additional evaluator calls. Detection = at least one positive label. False acceptance measured on no-change and random labels (any positive interpreted as change). Compare paired seeded worlds across methods; random methods use separately seeded RNG. Report actual label presentations, CPU process time, trials, query-ranking operations, and observed posterior entropy reduction per label in bits, with zeros for no-change and flag model misspecification on random-label control. Do not use evaluation to tune method.
+
+If Bayesian ranking is equivalent to static ranking under deterministic negative-only single-spike observations, explicitly retain this counterexample. All results exploratory NOT_ASSESSED without independent exact-SHA reproduction. Frozen E1.4/E1.4aa and all other paths untouched.

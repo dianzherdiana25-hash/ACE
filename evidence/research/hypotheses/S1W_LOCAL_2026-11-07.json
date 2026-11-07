@@ -1,0 +1,74 @@
+{
+  "status": "REJECT_EXPLORATORY_NOT_ASSESSED",
+  "protocol_commit": "20c589fa60526f48d053a032d9bc263d0ceccfc8",
+  "code_commit": "9e446703c565723d611b14dbfb94b1c0916bd7b4",
+  "main_sha_at_start": "80104ce50ecbcea21080bed8c0eabce88d47ccb5",
+  "worlds_per_scenario": 4096,
+  "scenarios": 4,
+  "arms": 4,
+  "trials": 65536,
+  "labels_presented": 524288,
+  "ranking_comparisons": 8388608,
+  "cpu_seconds_process_local": 3.573693732,
+  "results": {
+    "normal": {
+      "bayesian": 3074,
+      "static": 3074,
+      "random": 494,
+      "hedged": 1650
+    },
+    "adversarial": {
+      "bayesian": 150,
+      "static": 150,
+      "random": 524,
+      "hedged": 360
+    },
+    "no_change": {
+      "bayesian": 0,
+      "static": 0,
+      "random": 0,
+      "hedged": 0
+    },
+    "random_labels": {
+      "bayesian": 4084,
+      "static": 4083,
+      "random": 4077,
+      "hedged": 4086
+    }
+  },
+  "metric": "positive detections / 4096 worlds per scenario; each arm receives 8 queries per world",
+  "posterior_entropy_gain_bits_per_label_proxy": {
+    "normal": {
+      "bayesian": 0.2732,
+      "static": 0.38301,
+      "random": 0.08857,
+      "hedged": 0.2376
+    },
+    "adversarial": {
+      "bayesian": -0.14966,
+      "static": -0.1352,
+      "random": 0.09257,
+      "hedged": 0.06538
+    },
+    "no_change": {
+      "bayesian": -0.16178,
+      "static": -0.16178,
+      "random": 0.02339,
+      "hedged": 0.01732
+    },
+    "random_labels": {
+      "bayesian": 0.55576,
+      "static": 0.56184,
+      "random": 0.56163,
+      "hedged": 0.5628
+    }
+  },
+  "interpretation": "Bayesian greedy matches static top-prior exactly for normal and adversarial; it fails preregistered adversarial +10 percentage point gate. All methods have ~99.5-99.8% false change detection on random-label control. Negative entropy proxy values expose model misspecification; do not interpret as actual information gained.",
+  "caveats": [
+    "CPU not matched; Bayesian performs 8,388,608 ranking comparisons vs zero for fixed-order arms",
+    "Single-spike oracle with known prior, not genuine autonomous hypothesis invention",
+    "Random-label control violates likelihood model; entropy numbers are uncalibrated proxy",
+    "Evidence transcribed from local run, GitHub exact-SHA rerun not performed",
+    "No independent heldout custody; NOT_ASSESSED"
+  ]
+}
