@@ -50,6 +50,15 @@ from .boundary import (
     detect_os_sealing,
 )
 from .subprocess_evaluator import SubprocessSealedEvaluator
+from .evaluator_v2 import (
+    ChainedExposureRecord,
+    ContaminationDetectedError,
+    DualOracleHarness,
+    LedgerTamperError,
+    MerkleExposureLedger,
+    OracleBoundaryViolation,
+    PreRegistrationCommitment,
+)
 
 __all__ = [
     "AcceptanceDecision",
@@ -57,7 +66,10 @@ __all__ = [
     "BudgetExceededError",
     "CandidateNode",
     "CapabilityPermit",
+    "ChainedExposureRecord",
+    "ContaminationDetectedError",
     "ContaminationError",
+    "DualOracleHarness",
     "EvaluationReceipt",
     "EvaluatorManifest",
     "ExecutionBudget",
@@ -67,10 +79,14 @@ __all__ = [
     "HostController",
     "HostSandboxGate",
     "ImmutablePromotionRules",
+    "LedgerTamperError",
     "LineageCycleError",
     "LineageGraph",
     "LineageNotFoundError",
+    "MerkleExposureLedger",
+    "OracleBoundaryViolation",
     "PermitDeniedError",
+    "PreRegistrationCommitment",
     "RollbackRecord",
     "SandboxSecurityError",
     "SealedHoldoutEvaluator",
@@ -78,4 +94,5 @@ __all__ = [
     "SubprocessSealedEvaluator",
     "detect_os_sealing",
 ]
+
 
