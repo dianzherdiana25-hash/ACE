@@ -136,9 +136,12 @@ class SealedHoldoutEvaluator:
         for task_name, bank in self._holdout_banks.items():
             task_correct = 0
             for inp, expected in bank:
-                # Execution of candidate callable
+                # Execution of candidate callable (supports multi-task dispatch or single-task)
                 try:
-                    pred = bool(candidate_fn(inp))
+                    try:
+                        pred = bool(candidate_fn(inp, task_name))
+                    except TypeError:
+                        pred = bool(candidate_fn(inp))
                 except Exception:
                     pred = not expected  # Treat runtime exception as wrong prediction
                 if pred == expected:
