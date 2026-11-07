@@ -109,6 +109,56 @@ class GatedGene:
         }
 
 
+@dataclass(frozen=True)
+class RelationalGene:
+    """Strongly-typed relational multi-clause gene for non-linear pattern invariants."""
+    ordinal: int = 1
+    min_length: int = 4
+    stride_weight: int = 2
+    density_weight: int = -1
+    modulus: int = 0
+    op: str = "EQ_ZERO"
+    true_val: int = 0
+    false_val: int = 1
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "is_relational": True,
+            "ordinal": self.ordinal,
+            "min_length": self.min_length,
+            "stride_weight": self.stride_weight,
+            "density_weight": self.density_weight,
+            "modulus": self.modulus,
+            "op": self.op,
+            "true_val": self.true_val,
+            "false_val": self.false_val,
+        }
+
+
+@dataclass(frozen=True)
+class DispatchGene:
+    """Strongly-typed multi-task dispatch gene: routes to specialized mechanism branches."""
+    ordinal: int = 1
+    split_len: int = 5
+    mod_a: int = 2
+    mod_b: int = 3
+    stride_scale: int = 1
+    true_val: int = 0
+    false_val: int = 1
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "is_dispatch": True,
+            "ordinal": self.ordinal,
+            "split_len": self.split_len,
+            "mod_a": self.mod_a,
+            "mod_b": self.mod_b,
+            "stride_scale": self.stride_scale,
+            "true_val": self.true_val,
+            "false_val": self.false_val,
+        }
+
+
 SEED_GENE = TypedGene(
     window_stride=2,
     modulus=3,
