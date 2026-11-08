@@ -141,6 +141,27 @@ class ContinuousResearcherPipeline:
             "mathematical_foundation": "Von Neumann Minimax Theorem and No-Regret Hedge dynamics over player mixed strategies (Freund & Schapire, 1999)",
             "suggested_implementation": "code/ace_game_theory/minimax_synthesizer.py",
             "verification_criteria": "Guaranteed Nash equilibrium convergence with sublinear average regret O(1/sqrt(T))"
+        },
+        {
+            "capability_name": "Refinement Types & Liquid Types Verification",
+            "target_bottleneck": "Synthesized program crashes on edge-case precondition violations (division-by-zero, out-of-bounds index)",
+            "mathematical_foundation": "Refinement types {x: B | phi(x)} and decidable subtyping via Horn clause implication discharge (Rondon et al., 2008)",
+            "suggested_implementation": "code/ace_refinement_types/liquid_verifier.py",
+            "verification_criteria": "Zero runtime exceptions guaranteed via static liquid type checking and sound subtyping discharge"
+        },
+        {
+            "capability_name": "GNN AST Graph Representation Learning Engine",
+            "target_bottleneck": "Loss of relational tree topology and non-local syntactic dependencies in flat sequence AST embeddings",
+            "mathematical_foundation": "Relational Graph Neural Networks (R-GCN / GraphSAGE) & Child-Sum Tree-LSTM over typed directed edges with permutation equivariance",
+            "suggested_implementation": "code/ace_gnn/ast_embedder.py",
+            "verification_criteria": "Guaranteed permutation equivariance, pooling dimension consistency, and semantic equivalence scoring"
+        },
+        {
+            "capability_name": "Equality Saturation & E-Graphs (Optimal AST Rewriting)",
+            "target_bottleneck": "Suboptimal greedy heuristic term rewriting trapped in local syntactic minima",
+            "mathematical_foundation": "E-graph congruence closure data structure with equality saturation (Willsey et al., POPL 2021 egg)",
+            "suggested_implementation": "code/ace_egraph/equality_saturation.py",
+            "verification_criteria": "Sound equivalence saturation with monotonic e-class extraction and zero cyclic blowup"
         }
     ]
 
