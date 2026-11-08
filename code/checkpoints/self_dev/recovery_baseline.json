@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "active_generation_id": "G0_self_dev_root_c0",
+  "cycle_count": 0,
+  "completed_cycles": [],
+  "failure_catalog": {},
+  "hypotheses_history": [],
+  "next_agenda_priority": null,
+  "concurrency_lock": {
+    "is_locked": false,
+    "locked_by": "",
+    "locked_at": "",
+    "expires_at": "",
+    "lock_token": ""
+  },
+  "immutable_baseline": {
+    "root_candidate_id": "G0_self_dev_root_c0",
+    "root_source_sha": "root_genesis_predicate_len3_even",
+    "root_predicate_code": "def evaluate_mechanism(length: int, density: int, stride_val: int) -> int:\n    return length % 3",
+    "baseline_accuracy": 0.5,
+    "genesis_timestamp": "2026-11-07T00:00:00Z"
+  },
+  "state_digest": "2ff10791463d12d1b196fcef362a6e0b48b16ab673c83617ab341ab5e2012943",
+  "fail_closed_recovery": {
+    "last_known_good_cycle": 0,
+    "last_known_good_digest": "",
+    "recovery_count": 0
+  }
+}
