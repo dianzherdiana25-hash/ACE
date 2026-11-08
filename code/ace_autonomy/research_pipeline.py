@@ -108,6 +108,13 @@ class ContinuousResearcherPipeline:
             "verification_criteria": "Preserves structural isomorphism with cosine similarity >= 0.95 and achieves zero false equivalence on non-isomorphic trees"
         },
         {
+            "capability_name": "Counterexample-Guided Abstraction Refinement (CEGAR)",
+            "target_bottleneck": "Spurious counterexamples and precision loss in coarse abstract interpretation during program verification",
+            "mathematical_foundation": "Clarke-Grumberg-Jha CEGAR loop over predicate lattices, spurious counterexample detection, and lazy predicate discovery",
+            "suggested_implementation": "code/ace_neurosymbolic/cegar_refinement.py",
+            "verification_criteria": "Monotonic elimination of spurious counterexamples with verified inductive invariant synthesis"
+        },
+        {
             "capability_name": "PAC-Bayesian Generalization Bound Estimator",
             "target_bottleneck": "Unbounded generalization error and catastrophic overfitting in synthesized program distributions",
             "mathematical_foundation": "McAllester and Seeger-Maurer PAC-Bayesian theorems inverting relative entropy kl(R_hat || R) <= (KL + ln(2*sqrt(m)/delta)) / m",
@@ -162,8 +169,37 @@ class ContinuousResearcherPipeline:
             "mathematical_foundation": "E-graph congruence closure data structure with equality saturation (Willsey et al., POPL 2021 egg)",
             "suggested_implementation": "code/ace_egraph/equality_saturation.py",
             "verification_criteria": "Sound equivalence saturation with monotonic e-class extraction and zero cyclic blowup"
+        },
+        {
+            "capability_name": "Craig Interpolation Inductive Invariant Synthesizer",
+            "target_bottleneck": "State space explosion in unbounded loops and lack of concise inductive invariant synthesis from counterexample traces",
+            "mathematical_foundation": "Craig's Interpolation Theorem (1957), McMillan's Propositional Resolution Refutation Labeling (2003), and Farkas' Lemma duality for linear arithmetic polyhedra",
+            "suggested_implementation": "code/ace_interpolation/craig_interpolator.py",
+            "verification_criteria": "Sound generation of Craig interpolants satisfying A => I, I /\\ B |= False, Symbol(I) subseteq Symbol(A) & Symbol(B), and inductive loop invariant synthesis"
+        },
+        {
+            "capability_name": "Separation Logic & Spatial Heap Synthesizer",
+            "target_bottleneck": "Unsound aliasing, pointer mutations, and memory safety reasoning in dynamic heap structures",
+            "mathematical_foundation": "O'Hearn & Reynolds Separation Logic (2001) separating conjunction P * Q, frame rule, and inductive inductive shape predicate synthesis",
+            "suggested_implementation": "code/ace_separation_logic/heap_synthesizer.py",
+            "verification_criteria": "Sound memory frame verification with zero false aliasing and inductive heap list/tree shape invariant induction"
+        },
+        {
+            "capability_name": "Type-Directed Component-Based Program Synthesizer",
+            "target_bottleneck": "Combinatorial synthesis explosion across rich multi-typed primitive libraries without observational equivalence pruning",
+            "mathematical_foundation": "SyGuS-style component-based synthesis with forward valuation semantics and observational equivalence (OE) equivalence classes",
+            "suggested_implementation": "code/ace_component_synthesis/component_synthesizer.py",
+            "verification_criteria": "Guaranteed 100% I/O specification satisfaction with stratified composition and drastic search space pruning via observational equivalence"
+        },
+        {
+            "capability_name": "SMT DPLL(T) Formal Verifier Engine",
+            "target_bottleneck": "Combinatorial semantic verification over mixed linear integer arithmetic constraints and boolean propositional control logic",
+            "mathematical_foundation": "DPLL(T) architecture with Fourier-Motzkin QF-LIA theory solver, Chvátal-Gomory GCD cut tightening, T-propagation, and minimal infeasible core conflict clause learning",
+            "suggested_implementation": "code/ace_smt/dpllt_solver.py",
+            "verification_criteria": "Sound verification of program ASTs against Hoare-style specs with zero false positives on valid programs and concrete counterexamples on buggy programs"
         }
     ]
+
 
     def __init__(self, workspace_path: Path):
         self.workspace = Path(workspace_path)

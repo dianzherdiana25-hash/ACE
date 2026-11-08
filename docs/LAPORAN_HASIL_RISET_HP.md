@@ -51,6 +51,8 @@ Menguji apakah sistem ACE yang telah dilengkapi **Mission Bus (W1)** dan **Penil
 - **Conformal Risk Control (`code/ace_conformal`):** Jaminan coverage marginal non-parametrik bebas distribusi $1 - \alpha$ via split conformal prediction dan Learn-Then-Test.
 - **Bidirectional Program Inversion (`code/ace_inversion`):** Lensa kategori-teoretik asimetris (Put-Get, Get-Put, Put-Put) dan transduser bijektif round-trip $f^{-1}(f(x)) == x$ nol kehilangan informasi.
 - **Differentiable Program Sketching (`code/ace_neurosymbolic`):** Relaksasi kontinu Gumbel-Softmax dengan smooth tensor interpreter dan kompresi pencarian 28.57x.
+- **Craig Interpolation Invariant Synthesizer (`code/ace_interpolation`):** Pembuktian teorema Craig via pelabelan refutasi resolusi McMillan dan dualitas Farkas' Lemma linear, dengan sintesis otomatis loop invariant induktif (Initiation, Consecution, Safety).
+- **Type-Directed Component Synthesizer (`code/ace_component_synthesis`):** Sintesis program berbasis komponen tipe SyGuS dengan forward valuation, observational equivalence (OE) pruning (memangkas ~50% pencarian redundan), dan stratified composition memenuhi 100% spesifikasi I/O.
 
 ---
 

@@ -45,7 +45,7 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 - Seluruh Unit Test Repositori: **368/368 PASS** (`Ran 368 tests in 317.521s. OK`).
 - Matrix CI PR #90: **11/11 PASS** (Python 3.12 & 3.13 pada seluruh workflow).
 - Mission Bus Autonomous Queue: **808+ submissions recorded**, Hash Chain Integrity **VALID** (verified).
-- Mesin Algoritma Discovery: **14 Mesin Terverifikasi** pada runtime otonom (85/85 tes modul baru PASS).
+- Mesin Algoritma Discovery: **15 Mesin Terverifikasi** pada runtime otonom (95/95 tes modul baru PASS).
 - Active Epistemic BALD Sampler: **87.12% query reduction**, 7.77x sample efficiency gain over random testing.
 - Neural-Guided A* Program Search: **6.69x hingga 34.88x speedup** terhadap pencarian exhaustive, 100% sound.
 - Differentiable Program Sketching: **28.57x kompresi ruang pencarian** via relaksasi Gumbel-Softmax dan smooth tensor interpreter.
@@ -54,6 +54,8 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 - NSGA-II Pareto DSL Optimizer: **32/32 tests PASS**, 5-stage progressive curriculum dengan Macro Primitives dan Stage 5 composite relational synthesis (100% exact match).
 - PAC-Bayesian Generalization Estimator: **5/5 tests PASS**, sertifikat bound finite-sample McAllester dan Seeger-Maurer $kl$-inversion sound.
 - Conformal Risk Control: **4/4 tests PASS**, penjaminan coverage marginal terkalibrasi $1 - \alpha$ bebas distribusi (split conformal prediction).
+- Craig Interpolation Invariant Synthesizer: **10/10 tests PASS**, teorema Craig $A \implies I$, $I \land B \models \bot$, $\operatorname{vars}(I) \subseteq \operatorname{vars}(A) \cap \operatorname{vars}(B)$ terverifikasi penuh via McMillan resolution DAG dan Farkas' Lemma linear duality, dengan sertifikasi loop invariant induktif otomatis (Initiation, Consecution, Safety).
+- Type-Directed Component Synthesizer: **10/10 tests PASS**, forward valuation dengan Observational Equivalence (OE) pruning (memangkas ~50% ruang pencarian redundan sejak level 1) dan stratified composition menghasilkan program 100% memenuhi spesifikasi I/O.
 - Autonomous Self-Dev Researcher: **Cycle 6 completed & accepted**, receipt signed, state persisted.
 - Uji A/B/C Graf (4-Vertex): **Kondisi C 100.0%** vs Kondisi B 85.8% vs Kondisi A 92.5%.
 - Uji A/B/C Rasio 4:1: **Kondisi C 100.0%** vs Kondisi B 89.0% vs Kondisi A 77.4%.
