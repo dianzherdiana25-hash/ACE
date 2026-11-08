@@ -47,6 +47,8 @@ Menguji apakah sistem ACE yang telah dilengkapi **Mission Bus (W1)** dan **Penil
 - **Causal SCM Invariant Miner (`code/ace_causal`):** Mining invariant kausal Pearl do-calculus, $d$-separation struktural, dan 0 false discovery di bawah confounder tak teramati.
 - **Neural-Guided A* Program Search (`code/ace_neurosymbolic`):** Evaluasi heuristik $A^*$ berbasis estimasi fitur statistikal I/O dengan percepatan 6.69x hingga 34.88x di atas pencarian exhaustive.
 - **NSGA-II Pareto DSL Optimizer (`code/ace_evolution`):** Optimasi multi-objektif (akurasi, parsimoni, latensi) non-dominated sorting dan crowding distance pada kurikulum bertingkat.
+- **PAC-Bayesian Generalization Estimator (`code/ace_pac_bayes`):** Sertifikat bound generalisasi populasi McAllester dan Seeger-Maurer $kl$-inversion dengan prior kompleksitas Kolmogorov/MDL.
+- **Conformal Risk Control (`code/ace_conformal`):** Jaminan coverage marginal non-parametrik bebas distribusi $1 - \alpha$ via split conformal prediction dan Learn-Then-Test.
 
 ---
 
