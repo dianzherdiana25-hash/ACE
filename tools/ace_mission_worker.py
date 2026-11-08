@@ -198,6 +198,28 @@ def run_worker_loop(workspace_dir: Path, max_missions_to_process: int = 12):
     return processed, status
 
 
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Autonomous ACE Mission Bus Worker")
+    parser.add_argument("--workspace", default=str(REPO_ROOT / "ace-work"), help="Workspace directory")
+    parser.add_argument("--max-missions", type=int, default=6, help="Maximum missions per batch")
+    parser.add_argument("--continuous", action="store_true", default=False, help="Run continuously in background")
+    parser.add_argument("--sleep-seconds", type=int, default=30, help="Sleep seconds between continuous batches")
+    args = parser.parse_args()
+
+    ws = Path(args.workspace)
+    if args.continuous:
+        log("=== Starting Continuous Mission Bus Worker Daemon ===")
+        iteration = 0
+        while True:
+            iteration += 1
+            log(f"--- Iteration {iteration} ---")
+            run_worker_loop(ws, max_missions_to_process=args.max_missions)
+            log(f"Sleeping {args.sleep_seconds}s before next autonomous mission cycle...")
+            time.sleep(args.sleep_seconds)
+    else:
+        run_worker_loop(ws, max_missions_to_process=args.max_missions)
+
+
 if __name__ == "__main__":
-    ws = REPO_ROOT / "ace-work"
-    run_worker_loop(ws, max_missions_to_process=6)
+    main()
