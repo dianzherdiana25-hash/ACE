@@ -175,5 +175,33 @@ class TestMissionBus(unittest.TestCase):
             )
 
 
+    def test_automata_and_evolutionary_proposers(self):
+        """AutomataProposer and EvolutionaryProposer generate valid typed solutions."""
+        from ace_mission.proposers import AutomataProposer, EvolutionaryProposer
+
+        mission = {
+            "id": "mission_test_lstar",
+            "goal": "Synthesize minimal DFA for parity",
+            "task_family_ids": ["parity_runlength"]
+        }
+        proposer = AutomataProposer()
+        res = proposer.propose(mission, self.workspace)
+        self.assertEqual(res["provenance"], "ADVISOR_AGENT")
+        self.assertTrue(Path(res["artifact_path"]).exists())
+        self.assertIn("states", res)
+
+        mission_evo = {
+            "id": "mission_test_evo",
+            "goal": "Evolve ratio 4:1 condition",
+            "task_family_ids": ["ratio_4_1_noise"]
+        }
+        evo_proposer = EvolutionaryProposer()
+        res_evo = evo_proposer.propose(mission_evo, self.workspace)
+        self.assertEqual(res_evo["provenance"], "ADVISOR_AGENT")
+        self.assertTrue(Path(res_evo["artifact_path"]).exists())
+        self.assertIn("accuracy", res_evo)
+
+
 if __name__ == "__main__":
     unittest.main()
+

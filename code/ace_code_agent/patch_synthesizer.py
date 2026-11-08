@@ -129,6 +129,19 @@ class ModularPatchGenerator:
                 f"    \"\"\"\n"
                 f"    return ((stride * {stride_mult} - density) % modulus) == 0\n"
             )
+        elif strategy == "EVOLUTIONARY_SEARCH_SYNTHESIS":
+            from ace_evolution.island_search import EvolutionaryIslandSearch
+            searcher = EvolutionaryIslandSearch(num_islands=2, island_population=15, max_depth=3, seed=seed_val)
+            train_data = [("ab", True), ("aab", True), ("ba", False), ("bb", False)]
+            best = searcher.search(train_data, max_generations=10)
+            snippet = f"\n\n# --- ACE V0.4 Evolutionary Island Synthesis: {safe_id} ---\n" + best.to_python_function(f"ace_v04_evolved_{safe_id}")
+
+        elif strategy == "LSTAR_AUTOMATA_SYNTHESIS":
+            from ace_automata.lstar import LStarLearner
+            learner = LStarLearner(alphabet=("a", "b"))
+            dfa = learner.learn(lambda s: s.count("a") % 2 == 0)
+            snippet = f"\n\n# --- ACE V0.4 L* Automata Synthesis: {safe_id} ---\n" + dfa.to_python_code(f"ace_v04_automata_{safe_id}")
+
         else:
             snippet = (
                 f"\n\n# --- ACE V0.4 Autonomous Synthesis: {safe_id} ---\n"

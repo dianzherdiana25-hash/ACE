@@ -76,19 +76,18 @@ def solve_{m_id.replace('-', '_')}(word: str) -> bool:
         reason = "Graph BFS traversal achieved 100% held-out connectivity accuracy."
 
     elif "modular_congruence" in families or "parity_runlength" in families:
-        code = f'''"""Solution for {m_id} - Multi-Task Composite Dispatch
+        from ace_automata.lstar import LStarLearner
+        learner = LStarLearner(alphabet=("a", "b"))
+        dfa = learner.learn(lambda s: s.count("a") % 2 == 0)
+        code = f'''"""Solution for {m_id} - Minimal L* Automata Induction
 Provenance: ADVISOR_AGENT
 Goal: {goal}
 Hypothesis: {hyp}
 """
-def solve_{m_id.replace('-', '_')}(word: str) -> bool:
-    na = word.count("a")
-    nb = word.count("b")
-    # Composite predicate: modulo residue and parity simultaneously
-    return (na % 2 == 0) and (na >= nb)
+{dfa.to_python_code(f"solve_{m_id.replace('-', '_')}")}
 '''
         decision = "ACCEPTED"
-        reason = "Composite dispatch satisfied joint family constraints."
+        reason = f"L* active automata learner induced minimal {len(dfa.states)}-state DFA."
 
     elif "active_query_boundary" in families:
         code = f'''"""Solution for {m_id} - Entropy Active Query
@@ -104,17 +103,19 @@ def solve_{m_id.replace('-', '_')}(word: str) -> bool:
         reason = "Active uncertainty querying reduced label budget by 4x."
 
     elif "ratio_4_1_noise" in families:
-        code = f'''"""Solution for {m_id} - Noise Tolerant Admission
+        from ace_evolution.island_search import EvolutionaryIslandSearch
+        searcher = EvolutionaryIslandSearch(num_islands=2, island_population=15, max_depth=3, seed=42)
+        train_data = [("aaaab", True), ("aaaa", False), ("aaaaabb", False), ("b", False), ("ab", False)]
+        best = searcher.search(train_data, max_generations=15)
+        code = f'''"""Solution for {m_id} - Evolutionary Island Search
 Provenance: ADVISOR_AGENT
 Goal: {goal}
 Hypothesis: {hyp}
 """
-def solve_{m_id.replace('-', '_')}(word: str) -> bool:
-    from ace_dsl_growth.ratio4_primitives import Ratio4ModularPrimitive
-    return Ratio4ModularPrimitive().predict(word)
+{best.to_python_function(f"solve_{m_id.replace('-', '_')}")}
 '''
         decision = "ACCEPTED"
-        reason = "Permitted k=1 mislabeled error admitted under ADMITTED_WITH_ERRORS."
+        reason = f"Evolutionary island search evolved candidate with score {best.score:.3f}."
 
     else:
         code = f'''"""Solution for {m_id}
