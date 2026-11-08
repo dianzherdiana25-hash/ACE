@@ -113,6 +113,13 @@ class ContinuousResearcherPipeline:
             "mathematical_foundation": "Split conformal prediction and bounded loss exchangeability (Vovk et al., 2005; Bates et al., 2021)",
             "suggested_implementation": "code/ace_conformal/conformal_risk.py",
             "verification_criteria": "Guaranteed 1 - alpha marginal coverage on arbitrary non-parametric test distributions"
+        },
+        {
+            "capability_name": "Bidirectional Program Inversion (Category-Theoretic Lenses)",
+            "target_bottleneck": "One-way synthesis inability to derive invertible parsers, encoders/decoders, and bijective DSL transducers",
+            "mathematical_foundation": "Asymmetric lens laws (Get-Put, Put-Get) and Galois connections over algebraic data types",
+            "suggested_implementation": "code/ace_inversion/bidirectional_transducer.py",
+            "verification_criteria": "Guaranteed round-trip bijectivity f^{-1}(f(x)) == x across non-trivial structured domains"
         }
     ]
 
