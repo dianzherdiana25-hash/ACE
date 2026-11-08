@@ -108,6 +108,39 @@ class TestResearchPipeline(unittest.TestCase):
         target_ids = {t["id"] for t in audit["termination_targets"]}
         self.assertEqual(target_ids, {"ag_idle_2", "ag_unassigned_3"})
 
+    def test_neural_guided_search_pipeline_integration(self):
+        """Tests end-to-end integration of Neural-Guided A* search in discovery pipeline."""
+        # Advance until Neural-Guided A* is scouted
+        found = None
+        for _ in range(len(self.pipeline.CURRICULUM_TOPICS)):
+            p = self.pipeline.scout_next_capability("neurosymbolic_scout")
+            if "Neural-Guided A*" in p.capability_name:
+                found = p
+                break
+
+        self.assertIsNotNone(found)
+        self.assertIn("code/ace_neurosymbolic/neural_guided_search.py", found.suggested_implementation)
+
+        # Execute synthesis using NeuralGuidedAStarSearch
+        from ace_neurosymbolic.neural_guided_search import NeuralGuidedAStarSearch
+        searcher = NeuralGuidedAStarSearch(max_expansions=100)
+        data = [("ab", True), ("ba", True), ("a", False), ("b", False)]
+        res = searcher.search(data, target_accuracy=1.0)
+        self.assertTrue(res.success)
+
+        # Mark implemented & verified
+        p_impl = self.pipeline.mark_implemented(found.proposal_id, "commit_neurosymbolic_v1")
+        self.assertEqual(p_impl.status, "IMPLEMENTED")
+        p_ver = self.pipeline.mark_verified(
+            found.proposal_id,
+            {
+                "accuracy": res.accuracy,
+                "nodes_expanded": res.nodes_expanded,
+                "speedup_factor": 5.0,
+            }
+        )
+        self.assertEqual(p_ver.status, "VERIFIED")
+
 
 if __name__ == "__main__":
     unittest.main()

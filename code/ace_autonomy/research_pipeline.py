@@ -80,6 +80,13 @@ class ContinuousResearcherPipeline:
             "verification_criteria": "Achieves >= 60% sample efficiency gain over uniform random query generation"
         },
         {
+            "capability_name": "Neural-Guided A* Heuristic Program Search",
+            "target_bottleneck": "Exponential state space explosion in grammar-guided partial AST enumeration",
+            "mathematical_foundation": "Statistical feature estimator P(rule | spec) and admissible A* cost-to-go bounds h(s)",
+            "suggested_implementation": "code/ace_neurosymbolic/neural_guided_search.py",
+            "verification_criteria": "Achieves 5-10x speedup over exhaustive search without compromising soundness on typed ASTs"
+        },
+        {
             "capability_name": "Causal Invariant Graph Mining (Structural Causal Models)",
             "target_bottleneck": "Spurious observational correlations and hidden confounders in candidate program execution",
             "mathematical_foundation": "Pearl's do-calculus interventional distributions P(Y | do(X)) and d-separation invariance",
