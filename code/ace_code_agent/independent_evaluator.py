@@ -16,25 +16,32 @@ class IndependentEvaluator:
     """Evaluates candidates using held-out confirmation tasks and negative controls."""
 
     def __init__(self):
-        # Private confirmation bank (isolated from generator)
-        self._private_confirmation_bank = {
-            "task_k2": [
-                (12, 4, 3, 1), (15, 6, 3, 1), (10, 2, 2, 0), (14, 5, 2, 0),
-                (18, 6, 3, 1), (20, 8, 4, 1), (11, 3, 1, 0), (16, 7, 2, 0),
-            ],
-            "task_j1": [
-                (12, 4, 3, 1), (15, 5, 3, 0), (14, 2, 2, 1), (10, 4, 2, 1),
-                (16, 6, 3, 0), (20, 4, 4, 1), (18, 8, 3, 0), (22, 6, 4, 1),
-            ],
-        }
+        from ace_evaluator.sealed_generator import get_evaluation_seed_and_status
+        seed, self.claim_status = get_evaluation_seed_and_status()
+        self._seed = seed
+
+    def _get_confirmation_instances(self, task_id: str) -> List[Tuple[int, int, int, int]]:
+        import random
+        rng = random.Random(self._seed + (abs(hash(task_id)) % 10000))
+        instances = []
+        for _ in range(16):
+            length = rng.randint(10, 25)
+            density = rng.randint(2, 8)
+            stride_val = rng.randint(1, 4)
+            if task_id == "task_k2":
+                expected = 1 if ((stride_val * 2 - density) % 3 == 0) else 0
+            else:
+                expected = 1 if (length + density) % 2 == 0 else 0
+            instances.append((length, density, stride_val, expected))
+        return instances
 
     def evaluate_predicate(
         self,
         predicate_fn: Callable[[int, int, int], int],
         task_id: str = "task_k2",
     ) -> Tuple[float, int, int]:
-        """Evaluates a predicate against the private confirmation bank."""
-        bank = self._private_confirmation_bank.get(task_id, [])
+        """Evaluates a predicate against the dynamically generated confirmation instances."""
+        bank = self._get_confirmation_instances(task_id)
         if not bank:
             return 0.0, 0, 0
 

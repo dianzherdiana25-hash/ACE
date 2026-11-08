@@ -25,7 +25,7 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 | **Loop Self-Dev Historis** | Dipindahkan ke `ace-data` | 252 `REJECTED`, 1 `STAGNATED`, 0 `ACCEPTED` | Siklus 1–253 diarsipkan di `origin/ace-data`; tidak lagi mengotori riwayat git kode. |
 | **Code Agent V0.4** | Operasional Mandiri | `NOT_ASSESSED` | Menghasilkan patch AST dinamis, menguji di worktree terisolasi, membuka PR #90 (11/11 CI pass). |
 | **Mission Bus (W1)** | Aktif & Teruji (5/5 tes lulus) | `OPERATIONAL_PROTOTYPE` | Skema `ace.mission.v1`, SQLite hash chain, CLI (`next`, `submit`, `status`, `generate`), anti-idle, dan eskalasi penjenuhan selesai. |
-| **Penilai Tersegel (W2)** | Dalam Implementasi | - | Mengganti bank literal 8 baris dengan generator keluarga tugas bersegel parameter. |
+| **Penilai Tersegel (W2)** | Aktif & Teruji (4/4 tes lulus) | `CONFIRMED_SEALED` / `NOT_ASSESSED` | 6 keluarga berparameter, bank terminal dari `ACE_SEALED_SEED`, negatif count-matched, 4 uji penipuan ditolak keras (memorizer, dead code, flipper, leak). |
 
 ---
 
