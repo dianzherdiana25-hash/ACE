@@ -8,3 +8,5 @@ ace-work/
 checkpoints/self_dev/STOP_DAEMON
 checkpoints/self_dev/concurrency.lock
 *.tmp
+checkpoints/self_dev/cycle_*.json
+evidence/self_dev/*.json.gz
