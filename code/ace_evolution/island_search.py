@@ -53,6 +53,12 @@ class TypedASTNode:
                     if depth < 0:
                         return False
             return depth == 0
+        elif self.op.startswith("macro_") or self.op == "call_macro":
+            if isinstance(self.val, TypedASTNode):
+                return self.val.evaluate(word)
+            elif callable(self.val):
+                return self.val(word)
+            return bool(self.val)
 
         # Arithmetic
         elif self.op == "add":
@@ -117,6 +123,9 @@ class TypedASTNode:
             return 'GraphAdjacencyPrimitive(4).predict(word)'
         elif self.op == "dyck_balanced":
             return 'is_dyck_balanced(word)'
+        elif self.op.startswith("macro_") or self.op == "call_macro":
+            macro_name = self.op if self.op != "call_macro" else "macro_fn"
+            return f"{macro_name}(word)"
         elif self.op == "add":
             return f"({self.children[0].to_code()} + {self.children[1].to_code()})"
         elif self.op == "sub":

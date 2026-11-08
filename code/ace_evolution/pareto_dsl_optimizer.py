@@ -55,6 +55,29 @@ class Objectives:
         }
 
 
+@dataclass
+class MacroPrimitive:
+    """A modular macro primitive / sub-routine induced for hierarchical program synthesis."""
+
+    name: str
+    return_type: str  # 'INT' or 'BOOL'
+    ast: TypedASTNode
+    description: str = ""
+
+    def to_node(self) -> TypedASTNode:
+        return TypedASTNode(self.name, self.return_type, val=self.ast)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "return_type": self.return_type,
+            "description": self.description,
+            "code": self.ast.to_code(),
+            "size": self.ast.size(),
+            "depth": self.ast.depth(),
+        }
+
+
 class DSLGrammarWeights:
     """Configurable probability weights for DSL grammar production rules.
 
@@ -111,6 +134,7 @@ class DSLGrammarWeights:
         compound_bool_cmp: Optional[Dict[str, float]] = None,
         compound_bool_logic: Optional[Dict[str, float]] = None,
         structural: Optional[Dict[str, float]] = None,
+        macros: Optional[Dict[str, MacroPrimitive]] = None,
     ):
         self.terminal_int = dict(terminal_int or self.DEFAULT_TERMINAL_INT)
         self.compound_int = dict(compound_int or self.DEFAULT_COMPOUND_INT)
@@ -118,6 +142,21 @@ class DSLGrammarWeights:
         self.compound_bool_cmp = dict(compound_bool_cmp or self.DEFAULT_COMPOUND_BOOL_CMP)
         self.compound_bool_logic = dict(compound_bool_logic or self.DEFAULT_COMPOUND_BOOL_LOGIC)
         self.structural = dict(structural or self.DEFAULT_STRUCTURAL)
+        self.macros: Dict[str, MacroPrimitive] = dict(macros or {})
+        for name, macro in self.macros.items():
+            if macro.return_type == "INT" and name not in self.terminal_int:
+                self.terminal_int[name] = 2.0
+            elif macro.return_type == "BOOL" and name not in self.terminal_bool:
+                self.terminal_bool[name] = 2.0
+        self.normalize()
+
+    def register_macro(self, macro: MacroPrimitive, weight: float = 2.0) -> None:
+        """Registers a modular macro primitive into the hierarchical grammar."""
+        self.macros[macro.name] = macro
+        if macro.return_type == "INT":
+            self.terminal_int[macro.name] = weight
+        else:
+            self.terminal_bool[macro.name] = weight
         self.normalize()
 
     def normalize(self) -> DSLGrammarWeights:
@@ -264,13 +303,19 @@ class WeightedASTGenerator:
         if is_terminal:
             if target_type == "INT":
                 op = self.grammar.sample_op("terminal_int", rand)
-                if op == "int_const":
+                if op in self.grammar.macros:
+                    macro = self.grammar.macros[op]
+                    return TypedASTNode(op, "INT", val=macro.ast)
+                elif op == "int_const":
                     val = rand.choice([0, 1, 2, 3, 4])
                     return TypedASTNode("int_const", "INT", val=val)
                 return TypedASTNode(op, "INT")
             else:  # BOOL
                 op = self.grammar.sample_op("terminal_bool", rand)
-                if op == "starts_with":
+                if op in self.grammar.macros:
+                    macro = self.grammar.macros[op]
+                    return TypedASTNode(op, "BOOL", val=macro.ast)
+                elif op == "starts_with":
                     return TypedASTNode("starts_with", "BOOL", val=rand.choice(["a", "b"]))
                 elif op == "ends_with":
                     return TypedASTNode("ends_with", "BOOL", val=rand.choice(["a", "b"]))
@@ -306,6 +351,48 @@ class WeightedASTGenerator:
                     left = self.generate("BOOL", depth + 1, max_depth, rand)
                     right = self.generate("BOOL", depth + 1, max_depth, rand)
                     return TypedASTNode(op, "BOOL", children=[left, right])
+
+
+class HierarchicalSubGrammar:
+    """Manages multi-layer hierarchical grammar induction and modular macros."""
+
+    def __init__(self, base_grammar: Optional[DSLGrammarWeights] = None):
+        self.grammar = base_grammar or DSLGrammarWeights()
+
+    def induce_macro_from_ast(
+        self, name: str, ast: TypedASTNode, description: str = "", weight: float = 2.5
+    ) -> MacroPrimitive:
+        """Induces a modular macro primitive from an evolved AST subtree."""
+        macro = MacroPrimitive(
+            name=name,
+            return_type=ast.return_type,
+            ast=copy.deepcopy(ast),
+            description=description or f"Induced macro from AST: {ast.to_code()}",
+        )
+        self.grammar.register_macro(macro, weight=weight)
+        return macro
+
+    def induce_from_pareto_front(
+        self, pareto_front: List[Any], prefix: str = "macro_layer1"
+    ) -> List[MacroPrimitive]:
+        """Extracts top non-dominated subtrees as reusable macro primitives."""
+        induced: List[MacroPrimitive] = []
+        seen_codes: Set[str] = set()
+        for cand in pareto_front:
+            ast = None
+            if hasattr(cand, "best_program") and cand.best_program:
+                ast = cand.best_program.root
+            elif hasattr(cand, "root"):
+                ast = cand.root
+
+            if ast and ast.depth() >= 2:
+                code = ast.to_code()
+                if code not in seen_codes:
+                    seen_codes.add(code)
+                    macro_name = f"{prefix}_{len(induced)}"
+                    macro = self.induce_macro_from_ast(macro_name, ast, description=code)
+                    induced.append(macro)
+        return induced
 
 
 class GrammarCandidate:

@@ -120,6 +120,13 @@ class ContinuousResearcherPipeline:
             "mathematical_foundation": "Asymmetric lens laws (Get-Put, Put-Get) and Galois connections over algebraic data types",
             "suggested_implementation": "code/ace_inversion/bidirectional_transducer.py",
             "verification_criteria": "Guaranteed round-trip bijectivity f^{-1}(f(x)) == x across non-trivial structured domains"
+        },
+        {
+            "capability_name": "Disjunctive Abstract Interpretation (Trace Partitioning)",
+            "target_bottleneck": "Convex over-approximation precision loss in non-convex multi-path branch invariants",
+            "mathematical_foundation": "Powerset abstract domain P(D^#) with semantic trace partitioning and state splitting (Rival & Mauborgne, 2007)",
+            "suggested_implementation": "code/ace_abstract_interp/disjunctive_domain.py",
+            "verification_criteria": "Zero false alarms on non-convex disjunctive invariants with automatic path partition merging"
         }
     ]
 

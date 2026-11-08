@@ -141,6 +141,46 @@ class TestResearchPipeline(unittest.TestCase):
         )
         self.assertEqual(p_ver.status, "VERIFIED")
 
+    def test_differentiable_sketch_pipeline_integration(self):
+        """Tests integration of Differentiable Program Sketching in discovery pipeline."""
+        found = None
+        for _ in range(len(self.pipeline.CURRICULUM_TOPICS)):
+            p = self.pipeline.scout_next_capability("neurosymbolic_scout")
+            if "Differentiable Neurosymbolic" in p.capability_name:
+                found = p
+                break
+
+        self.assertIsNotNone(found)
+        self.assertIn("code/ace_neurosymbolic/sketch_synthesizer.py", found.suggested_implementation)
+
+        # Run synthesis via DifferentiableSketchSynthesizer
+        from ace_neurosymbolic.sketch_synthesizer import (
+            LogicalConjunctionSketch,
+            DifferentiableSketchSynthesizer,
+        )
+        sketch = LogicalConjunctionSketch()
+        train_data = [
+            ("ab", True), ("axxb", True), ("a123b", True),
+            ("ba", False), ("a", False), ("b", False),
+        ]
+        synth = DifferentiableSketchSynthesizer(learning_rate=2.0, max_steps=20, num_restarts=2, seed=99)
+        res = synth.synthesize(sketch, train_data, target_accuracy=1.0)
+        self.assertTrue(res.success)
+        self.assertGreaterEqual(res.search_space_compression, 10.0)
+
+        # Mark implemented & verified
+        p_impl = self.pipeline.mark_implemented(found.proposal_id, "commit_sketch_v1")
+        self.assertEqual(p_impl.status, "IMPLEMENTED")
+        p_ver = self.pipeline.mark_verified(
+            found.proposal_id,
+            {
+                "accuracy": res.accuracy,
+                "total_steps": res.total_steps,
+                "search_space_compression": res.search_space_compression,
+            }
+        )
+        self.assertEqual(p_ver.status, "VERIFIED")
+
 
 if __name__ == "__main__":
     unittest.main()

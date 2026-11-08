@@ -1,26 +1,37 @@
-"""ACE Neurosymbolic Engine: Neural-Guided Program Search.
+"""ACE Neurosymbolic Engine.
 
 Provides:
-- Statistical Feature Estimator over I/O specifications
-- Partial AST representations with typed Hole expansion
-- Neural-Guided A* Heuristic Program Search
-- Comparative Exhaustive Search Baseline for Soundness and Speedup Verification
+- Neural-Guided A* Heuristic Program Search with Statistical Feature Estimators
+- Differentiable Neurosymbolic Program Sketching via Gumbel-Softmax Relaxation
 """
 from __future__ import annotations
 
 from ace_neurosymbolic.neural_guided_search import (
+    Grammar,
     Hole,
+    NeuralGuidedAStarSearch,
     PartialAST,
     ProductionRule,
-    Grammar,
-    StatisticalFeatureEstimator,
-    NeuralGuidedAStarSearch,
-    ExhaustiveProgramSearch,
     SearchResult,
+    StatisticalFeatureEstimator,
+    ExhaustiveProgramSearch,
     benchmark_speedup,
+)
+from ace_neurosymbolic.sketch_synthesizer import (
+    DifferentiableSketchSynthesizer,
+    GumbelSoftmax,
+    LogicalConjunctionSketch,
+    PrimitiveChoice,
+    ProgramSketch,
+    RelationalComparisonSketch,
+    SketchSynthesisResult,
+    Slot,
+    SmoothInterpreter,
+    compare_with_unrelaxed_enumeration,
 )
 
 __all__ = [
+    # Neural Guided Search
     "Hole",
     "PartialAST",
     "ProductionRule",
@@ -30,4 +41,15 @@ __all__ = [
     "ExhaustiveProgramSearch",
     "SearchResult",
     "benchmark_speedup",
+    # Differentiable Sketching
+    "Slot",
+    "PrimitiveChoice",
+    "GumbelSoftmax",
+    "SmoothInterpreter",
+    "ProgramSketch",
+    "RelationalComparisonSketch",
+    "LogicalConjunctionSketch",
+    "DifferentiableSketchSynthesizer",
+    "SketchSynthesisResult",
+    "compare_with_unrelaxed_enumeration",
 ]
