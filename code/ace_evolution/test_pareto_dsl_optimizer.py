@@ -320,7 +320,7 @@ class TestNSGAIIOptimization(unittest.TestCase):
 class TestOptimizationCurriculum(unittest.TestCase):
     def test_curriculum_stages_ordering(self):
         curriculum = OptimizationCurriculum()
-        self.assertEqual(len(curriculum.stages), 4)
+        self.assertEqual(len(curriculum.stages), 6)
         for i, stage in enumerate(curriculum.stages):
             self.assertEqual(stage.level, i)
             self.assertGreater(len(stage.train_data), 0)
@@ -337,6 +337,26 @@ class TestOptimizationCurriculum(unittest.TestCase):
         # Parity transfer emphasizes count_a and mod
         self.assertGreater(weights1.terminal_int["count_a"], 1.0)
         self.assertGreater(weights1.compound_int["mod"], 1.0)
+
+    def test_dyck_balanced_primitive(self):
+        node = TypedASTNode("dyck_balanced", "BOOL")
+        self.assertTrue(node.evaluate(""))
+        self.assertTrue(node.evaluate("ab"))
+        self.assertTrue(node.evaluate("aabb"))
+        self.assertTrue(node.evaluate("abab"))
+        self.assertFalse(node.evaluate("ba"))
+        self.assertFalse(node.evaluate("a"))
+        self.assertFalse(node.evaluate("b"))
+        self.assertFalse(node.evaluate("abba"))  # prefix abb has depth -1
+
+    def test_prepare_next_curriculum_dyck_transfer(self):
+        curriculum = OptimizationCurriculum()
+        prior = DSLGrammarWeights()
+
+        stage4, weights4 = curriculum.prepare_next_curriculum(3, prior)
+        self.assertEqual(stage4.level, 4)
+        self.assertEqual(stage4.stage_id, "CURR_S4_DYCK_CONTEXT_FREE")
+        self.assertGreaterEqual(weights4.terminal_bool["dyck_balanced"], 4.0)
 
 
 if __name__ == "__main__":

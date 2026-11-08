@@ -99,6 +99,20 @@ class ContinuousResearcherPipeline:
             "mathematical_foundation": "Continuous relaxation over AST grammar productions with Gumbel-Softmax annealing",
             "suggested_implementation": "code/ace_neurosymbolic/sketch_synthesizer.py",
             "verification_criteria": "Converges to verified AST program sketches with 10x search space compression"
+        },
+        {
+            "capability_name": "PAC-Bayesian Generalization Bound Estimator",
+            "target_bottleneck": "Unbounded generalization error and catastrophic overfitting in synthesized program distributions",
+            "mathematical_foundation": "McAllester and Seeger-Maurer PAC-Bayesian theorems inverting relative entropy kl(R_hat || R) <= (KL + ln(2*sqrt(m)/delta)) / m",
+            "suggested_implementation": "code/ace_pac_bayes/pac_bounds.py",
+            "verification_criteria": "Guarantees finite sample population risk bounds with confidence >= 1 - delta, strictly tighter than naive union bounds"
+        },
+        {
+            "capability_name": "Conformal Risk Control & Distribution-Free Prediction Sets",
+            "target_bottleneck": "Uncalibrated confidence intervals and lack of finite-sample coverage guarantees for program outputs",
+            "mathematical_foundation": "Split conformal prediction and bounded loss exchangeability (Vovk et al., 2005; Bates et al., 2021)",
+            "suggested_implementation": "code/ace_conformal/conformal_risk.py",
+            "verification_criteria": "Guaranteed 1 - alpha marginal coverage on arbitrary non-parametric test distributions"
         }
     ]
 

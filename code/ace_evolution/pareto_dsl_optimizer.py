@@ -84,6 +84,7 @@ class DSLGrammarWeights:
         "ends_with": 1.0,
         "contains": 1.0,
         "graph_bfs": 0.5,
+        "dyck_balanced": 0.5,
         "bool_const": 0.5,
     }
     DEFAULT_COMPOUND_BOOL_CMP: Dict[str, float] = {
@@ -279,6 +280,8 @@ class WeightedASTGenerator:
                     return TypedASTNode("bool_const", "BOOL", val=rand.choice([True, False]))
                 elif op == "graph_bfs":
                     return TypedASTNode("graph_bfs", "BOOL")
+                elif op == "dyck_balanced":
+                    return TypedASTNode("dyck_balanced", "BOOL")
                 return TypedASTNode("bool_const", "BOOL", val=True)
 
         # Compound / Non-terminal
@@ -948,6 +951,27 @@ class OptimizationCurriculum:
             ("aabb", True), ("abab", True), ("bba", False), ("aaaa", False),
         ]
 
+        # Stage 4: Context-Free Dyck Balanced Bracket & Nested Invariants (Level 4)
+        train_s4 = [
+            ("", True), ("ab", True), ("aabb", True), ("abab", True),
+            ("aababb", True), ("aaabbb", True), ("abaabb", True),
+            ("ba", False), ("baba", False), ("bbaa", False), ("a", False),
+            ("b", False), ("aab", False), ("abb", False), ("abba", False),
+        ]
+        val_s4 = [
+            ("aabbaabb", True), ("ababab", True), ("aaababbb", True), ("aabbabab", True),
+            ("bbbaaa", False), ("aabaabbb", False), ("baabbaab", False), ("aba", False),
+        ]
+
+        # Stage 5: Context-Sensitive Relational Structural Invariants (Level 5)
+        train_s5 = [
+            ("ab", True), ("aabb", True), ("aaabbb", True),
+            ("a", False), ("b", False), ("ba", False), ("aab", False), ("abb", False),
+        ]
+        val_s5 = [
+            ("aaaabbbb", True), ("bbbaaa", False), ("aaabb", False),
+        ]
+
         return [
             CurriculumStage(
                 stage_id="CURR_S0_TERMINAL",
@@ -981,6 +1005,22 @@ class OptimizationCurriculum:
                 train_data=train_s3,
                 val_data=val_s3,
             ),
+            CurriculumStage(
+                stage_id="CURR_S4_DYCK_CONTEXT_FREE",
+                name="Context-Free Dyck Balanced Bracket & Nested Invariants",
+                description="Evolve grammar weights to discover context-free Dyck-1 balanced bracket and nested structural invariants.",
+                level=4,
+                train_data=train_s4,
+                val_data=val_s4,
+            ),
+            CurriculumStage(
+                stage_id="CURR_S5_CONTEXT_SENSITIVE",
+                name="Context-Sensitive Relational Invariants",
+                description="Evolve grammar weights for structural multi-constraint reasoning across compositional domains.",
+                level=5,
+                train_data=train_s5,
+                val_data=val_s5,
+            ),
         ]
 
     def get_stage(self, level: int) -> CurriculumStage:
@@ -1010,6 +1050,18 @@ class OptimizationCurriculum:
             # Compositional mixture
             base_weights.structural["terminal_prob"] = 0.25
             base_weights.structural["bool_cmp_prob"] = 0.5
+            base_weights.compound_bool_logic["and"] *= 2.0
+        elif next_level == 4:
+            # Context-Free Dyck balance & nested invariant adaptation
+            base_weights.terminal_bool["dyck_balanced"] = 4.0
+            base_weights.terminal_int["count_a"] *= 2.0
+            base_weights.terminal_int["count_b"] *= 2.0
+            base_weights.compound_bool_cmp["eq"] *= 2.0
+            base_weights.compound_bool_logic["and"] *= 2.0
+            base_weights.structural["terminal_prob"] = 0.4
+        elif next_level >= 5:
+            base_weights.terminal_bool["dyck_balanced"] = 3.0
+            base_weights.terminal_bool["graph_bfs"] = 2.0
             base_weights.compound_bool_logic["and"] *= 2.0
 
         return stage, base_weights.normalize()

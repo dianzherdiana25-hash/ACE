@@ -43,6 +43,16 @@ class TypedASTNode:
         elif self.op == "graph_bfs":
             from ace_dsl_growth.graph_primitives import GraphAdjacencyPrimitive
             return GraphAdjacencyPrimitive(target_nodes=4).predict(word)
+        elif self.op == "dyck_balanced":
+            depth = 0
+            for ch in word:
+                if ch in ("a", "("):
+                    depth += 1
+                elif ch in ("b", ")"):
+                    depth -= 1
+                    if depth < 0:
+                        return False
+            return depth == 0
 
         # Arithmetic
         elif self.op == "add":
@@ -105,6 +115,8 @@ class TypedASTNode:
             return f'("{self.val}" in word)'
         elif self.op == "graph_bfs":
             return 'GraphAdjacencyPrimitive(4).predict(word)'
+        elif self.op == "dyck_balanced":
+            return 'is_dyck_balanced(word)'
         elif self.op == "add":
             return f"({self.children[0].to_code()} + {self.children[1].to_code()})"
         elif self.op == "sub":
