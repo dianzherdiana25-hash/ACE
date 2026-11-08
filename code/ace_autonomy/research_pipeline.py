@@ -60,10 +60,10 @@ class ContinuousResearcherPipeline:
         },
         {
             "capability_name": "Abstract Interpretation Invariant Analyzer",
-            "target_bottleneck": "Unobservable runtime semantic drift and unbounded loops in candidate execution",
-            "mathematical_foundation": "Interval abstract domain approximating variable bounds and invariant properties",
+            "target_bottleneck": "Unobservable runtime semantic drift, out-of-bounds states, and unbounded loops in candidate execution",
+            "mathematical_foundation": "Interval & polyhedral abstract domain fixed-point iteration for invariant synthesis and safety bounds",
             "suggested_implementation": "code/ace_abstract_interp/invariants.py",
-            "verification_criteria": "Zero false negatives in detecting out-of-bound variables or non-terminating ASTs"
+            "verification_criteria": "Zero false negatives in detecting out-of-bound variables or non-terminating ASTs, with sound inductive invariant synthesis"
         },
         {
             "capability_name": "Relational Predicate Mining (Inductive Logic Programming)",
@@ -71,6 +71,13 @@ class ContinuousResearcherPipeline:
             "mathematical_foundation": "First-order horn clause induction over background relational facts",
             "suggested_implementation": "code/ace_ilp/relational_miner.py",
             "verification_criteria": "Induces connectivity, reachability, and transitivity rules automatically"
+        },
+        {
+            "capability_name": "Active Epistemic Uncertainty Sampling (BALD)",
+            "target_bottleneck": "High verification oracle query costs and sample-inefficient counterexamples",
+            "mathematical_foundation": "Mutual information maximization over hypothesis posterior (Bayesian Active Learning by Disagreement)",
+            "suggested_implementation": "code/ace_epistemic/active_sampler.py",
+            "verification_criteria": "Achieves >= 60% sample efficiency gain over uniform random query generation"
         }
     ]
 
