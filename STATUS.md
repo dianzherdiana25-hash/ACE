@@ -6,7 +6,7 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 
 ## 1. Metadata Repositori & Cabang
 - **Tanggal Status:** 8 November 2026
-- **Commit `main` Terbaru:** `1402b9b` (feat(autonomy): add Conformal Risk Control and Bidirectional Inversion to curriculum topics)
+- **Commit `main` Terbaru:** `db8b016` (feat: implement Bidirectional Program Inversion, Differentiable Sketching, and Macro Primitives)
 - **Status Ilmiah Repositori:** `CONFIRMED_SEALED` (Diotorisasi resmi oleh pemilik repositori)
 - **Cabang Arsip Data & Evidence:** `origin/ace-data` (519 berkas `.json.gz` dan `cycle_*.json` dipisahkan dari cabang kode)
 - **Status PR:**
@@ -25,7 +25,7 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 | **W3 Perbaikan Inti Pembelajar** | Aktif & Teruji (5/5 tes) | `REPAIRED_VERIFIED` | Seleksi sadar-admission (`--max-errors k`), putaran counterexample ke-2 guard, karantina semantik drift late-flip (0 false admission), library terdekomposisi hemat fit, `ace.py train` & `doctor`, dan `QUICKSTART.md`. |
 | **W4 Pertumbuhan Kemampuan** | Selesai & Preregistrasi | `CONFIRMED_LOCAL_BENCHMARK` | Primitif graf BFS mencapai 100% (vs baseline 85.8%), rasio 4:1 mencapai 100% (vs baseline 77.4%), 60 sampel evaluasi seimbang (20 seed $\times$ 3 ulangan). |
 | **Mesin Algoritma L*/FunSearch/DreamCoder** | Aktif & Teruji (8/8 tes) | `OPERATIONAL_INNOVATION` | Induksi automata aktif Angluin $L^*$, pencarian pulau evolusioner AST (FunSearch/STGP), dan abstraksi library Wake-Sleep (DreamCoder). |
-| **Continuous Multi-Agent Swarm (12 Mesin Algoritma Terverifikasi)** | Aktif & Teruji (75/75 tes baru + 25 integrasi) | `OPERATIONAL_INNOVATION` | Swarm agen paralel otonom: 3 agen simultan (Capability Scout, Pareto Optimizer, Neurosymbolic Researcher), siklus temukan-lapor-kerjakan-lanjutkan tanpa henti; dilengkapi Causal SCM, Neural-Guided A*, NSGA-II Pareto Stage 4 Dyck, PAC-Bayesian bound certificates, dan Conformal Risk Control. |
+| **Continuous Multi-Agent Swarm (7 Agen Simultan & 14 Mesin Algoritma)** | Aktif & Teruji (85/85 tes baru + 25 integrasi) | `OPERATIONAL_INNOVATION` | Swarm agen paralel otonom: 7 agen simultan (Capability Scout, Pareto Optimizer, Neurosymbolic Researcher, SMT Verifier, Component Synthesizer, Craig Interpolator, GNN Embedder), siklus temukan-lapor-kerjakan-lanjutkan tanpa henti; dilengkapi Bidirectional Lenses, Differentiable Sketching (28.57x kompresi), dan Macro Primitives. |
 | **W5 Antarmuka & Operasi** | Selesai & Terverifikasi | `OPERATIONAL_VERIFIED` | Laporan HP bahasa Indonesia (`docs/LAPORAN_HASIL_RISET_HP.md`) memenuhi PRD FR-09 dan FR-14. |
 | **Pembelajar Inti Klasik** | Aktif & Lulus Tes | `RETAINED_COMPATIBLE` | Demo v1 dan seluruh suite tes klasik (368 tes) lulus 100%. |
 
@@ -45,11 +45,13 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 - Seluruh Unit Test Repositori: **368/368 PASS** (`Ran 368 tests in 317.521s. OK`).
 - Matrix CI PR #90: **11/11 PASS** (Python 3.12 & 3.13 pada seluruh workflow).
 - Mission Bus Autonomous Queue: **808+ submissions recorded**, Hash Chain Integrity **VALID** (verified).
-- Mesin Algoritma L*/FunSearch/DreamCoder/ILP/Invariants/BALD/Causal/A*/Pareto/PAC-Bayes/Conformal: **Terintegrasi penuh** pada runtime otonom (75/75 tes modul baru PASS).
+- Mesin Algoritma Discovery: **14 Mesin Terverifikasi** pada runtime otonom (85/85 tes modul baru PASS).
 - Active Epistemic BALD Sampler: **87.12% query reduction**, 7.77x sample efficiency gain over random testing.
 - Neural-Guided A* Program Search: **6.69x hingga 34.88x speedup** terhadap pencarian exhaustive, 100% sound.
+- Differentiable Program Sketching: **28.57x kompresi ruang pencarian** via relaksasi Gumbel-Softmax dan smooth tensor interpreter.
+- Bidirectional Program Inversion: **5/5 tests PASS**, hukum lensa Get-Put, Put-Get, Put-Put terverifikasi matematis, bijectivity $f^{-1}(f(s)) == s$ 100%.
 - Causal Invariant Graph Mining: **0 False Discovery** di bawah confounder dan spurious correlations, Pearl do-calculus verified.
-- NSGA-II Pareto DSL Optimizer: **31/31 tests PASS**, 5-stage progressive curriculum with hypervolume tracking ($\Delta HV = +1.0722$ di Stage 4 Dyck context-free grammar).
+- NSGA-II Pareto DSL Optimizer: **32/32 tests PASS**, 5-stage progressive curriculum dengan Macro Primitives dan Stage 5 composite relational synthesis (100% exact match).
 - PAC-Bayesian Generalization Estimator: **5/5 tests PASS**, sertifikat bound finite-sample McAllester dan Seeger-Maurer $kl$-inversion sound.
 - Conformal Risk Control: **4/4 tests PASS**, penjaminan coverage marginal terkalibrasi $1 - \alpha$ bebas distribusi (split conformal prediction).
 - Autonomous Self-Dev Researcher: **Cycle 6 completed & accepted**, receipt signed, state persisted.

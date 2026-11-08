@@ -49,6 +49,8 @@ Menguji apakah sistem ACE yang telah dilengkapi **Mission Bus (W1)** dan **Penil
 - **NSGA-II Pareto DSL Optimizer (`code/ace_evolution`):** Optimasi multi-objektif (akurasi, parsimoni, latensi) non-dominated sorting dan crowding distance pada kurikulum bertingkat.
 - **PAC-Bayesian Generalization Estimator (`code/ace_pac_bayes`):** Sertifikat bound generalisasi populasi McAllester dan Seeger-Maurer $kl$-inversion dengan prior kompleksitas Kolmogorov/MDL.
 - **Conformal Risk Control (`code/ace_conformal`):** Jaminan coverage marginal non-parametrik bebas distribusi $1 - \alpha$ via split conformal prediction dan Learn-Then-Test.
+- **Bidirectional Program Inversion (`code/ace_inversion`):** Lensa kategori-teoretik asimetris (Put-Get, Get-Put, Put-Put) dan transduser bijektif round-trip $f^{-1}(f(x)) == x$ nol kehilangan informasi.
+- **Differentiable Program Sketching (`code/ace_neurosymbolic`):** Relaksasi kontinu Gumbel-Softmax dengan smooth tensor interpreter dan kompresi pencarian 28.57x.
 
 ---
 
