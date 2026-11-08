@@ -13,12 +13,20 @@ from .invariants import (
     INF,
     NEG_INF,
 )
+from .disjunctive_domain import (
+    DisjunctiveInterval,
+    TracePartitionState,
+    DisjunctiveInterpreter,
+)
 
 __all__ = [
     "Interval",
     "AbstractState",
     "AbstractInterpreter",
     "InvariantSynthesizer",
+    "DisjunctiveInterval",
+    "TracePartitionState",
+    "DisjunctiveInterpreter",
     "INF",
     "NEG_INF",
 ]

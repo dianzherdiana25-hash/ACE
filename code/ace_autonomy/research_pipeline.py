@@ -101,6 +101,13 @@ class ContinuousResearcherPipeline:
             "verification_criteria": "Converges to verified AST program sketches with 10x search space compression"
         },
         {
+            "capability_name": "Equivariant AST Graph Representation & Latent Transfer",
+            "target_bottleneck": "Lack of cross-task sub-tree reuse and failure to recognize structurally isomorphic programs under alpha-renaming",
+            "mathematical_foundation": "Weisfeiler-Lehman topological graph kernels and permutation-equivariant message passing over AST directed acyclic graphs",
+            "suggested_implementation": "code/ace_neurosymbolic/graph_embedding.py",
+            "verification_criteria": "Preserves structural isomorphism with cosine similarity >= 0.95 and achieves zero false equivalence on non-isomorphic trees"
+        },
+        {
             "capability_name": "PAC-Bayesian Generalization Bound Estimator",
             "target_bottleneck": "Unbounded generalization error and catastrophic overfitting in synthesized program distributions",
             "mathematical_foundation": "McAllester and Seeger-Maurer PAC-Bayesian theorems inverting relative entropy kl(R_hat || R) <= (KL + ln(2*sqrt(m)/delta)) / m",
@@ -127,6 +134,13 @@ class ContinuousResearcherPipeline:
             "mathematical_foundation": "Powerset abstract domain P(D^#) with semantic trace partitioning and state splitting (Rival & Mauborgne, 2007)",
             "suggested_implementation": "code/ace_abstract_interp/disjunctive_domain.py",
             "verification_criteria": "Zero false alarms on non-convex disjunctive invariants with automatic path partition merging"
+        },
+        {
+            "capability_name": "Game-Theoretic Minimax Adversarial Synthesis (No-Regret Co-Evolution)",
+            "target_bottleneck": "Static evaluation blind spots and subtle edge-case semantic regressions in synthesized programs",
+            "mathematical_foundation": "Von Neumann Minimax Theorem and No-Regret Hedge dynamics over player mixed strategies (Freund & Schapire, 1999)",
+            "suggested_implementation": "code/ace_game_theory/minimax_synthesizer.py",
+            "verification_criteria": "Guaranteed Nash equilibrium convergence with sublinear average regret O(1/sqrt(T))"
         }
     ]
 

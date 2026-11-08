@@ -181,6 +181,39 @@ class TestResearchPipeline(unittest.TestCase):
         )
         self.assertEqual(p_ver.status, "VERIFIED")
 
+    def test_equivariant_graph_embedding_pipeline_integration(self):
+        """Tests integration of Equivariant AST Graph Representation in discovery pipeline."""
+        found = None
+        for _ in range(len(self.pipeline.CURRICULUM_TOPICS)):
+            p = self.pipeline.scout_next_capability("neurosymbolic_scout")
+            if "Equivariant AST Graph" in p.capability_name:
+                found = p
+                break
+
+        self.assertIsNotNone(found)
+        self.assertIn("code/ace_neurosymbolic/graph_embedding.py", found.suggested_implementation)
+
+        # Run kernel similarity check
+        from ace_neurosymbolic.graph_embedding import WeisfeilerLehmanASTKernel
+        from ace_evolution.island_search import TypedASTNode
+        kernel = WeisfeilerLehmanASTKernel(num_iterations=3)
+        ast1 = TypedASTNode("eq", "BOOL", [TypedASTNode("count_a", "INT"), TypedASTNode("count_b", "INT")])
+        ast2 = TypedASTNode("eq", "BOOL", [TypedASTNode("count_b", "INT"), TypedASTNode("count_a", "INT")])
+        sim = kernel.similarity(ast1, ast2)
+        self.assertGreaterEqual(sim, 0.95)
+
+        # Mark implemented & verified
+        p_impl = self.pipeline.mark_implemented(found.proposal_id, "commit_graph_embedding_v1")
+        self.assertEqual(p_impl.status, "IMPLEMENTED")
+        p_ver = self.pipeline.mark_verified(
+            found.proposal_id,
+            {
+                "isomorphism_similarity": sim,
+                "zero_false_equivalence": True,
+            }
+        )
+        self.assertEqual(p_ver.status, "VERIFIED")
+
 
 if __name__ == "__main__":
     unittest.main()

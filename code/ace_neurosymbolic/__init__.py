@@ -3,10 +3,21 @@
 Provides:
 - Neural-Guided A* Heuristic Program Search with Statistical Feature Estimators
 - Differentiable Neurosymbolic Program Sketching via Gumbel-Softmax Relaxation
+- Equivariant AST Graph Representation, Weisfeiler-Lehman Kernels, and Latent Transfer
 """
 from __future__ import annotations
 
+from ace_neurosymbolic.graph_embedding import (
+    COMMUTATIVE_OPERATORS,
+    ASTGraph,
+    EquivariantASTGNN,
+    GraphEdge,
+    GraphNode,
+    LatentProgramLibrary,
+    WeisfeilerLehmanASTKernel,
+)
 from ace_neurosymbolic.neural_guided_search import (
+    ExhaustiveProgramSearch,
     Grammar,
     Hole,
     NeuralGuidedAStarSearch,
@@ -14,7 +25,6 @@ from ace_neurosymbolic.neural_guided_search import (
     ProductionRule,
     SearchResult,
     StatisticalFeatureEstimator,
-    ExhaustiveProgramSearch,
     benchmark_speedup,
 )
 from ace_neurosymbolic.sketch_synthesizer import (
@@ -52,4 +62,12 @@ __all__ = [
     "DifferentiableSketchSynthesizer",
     "SketchSynthesisResult",
     "compare_with_unrelaxed_enumeration",
+    # Equivariant Graph Embeddings & Transfer
+    "COMMUTATIVE_OPERATORS",
+    "ASTGraph",
+    "GraphNode",
+    "GraphEdge",
+    "WeisfeilerLehmanASTKernel",
+    "EquivariantASTGNN",
+    "LatentProgramLibrary",
 ]
