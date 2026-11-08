@@ -320,7 +320,7 @@ class TestNSGAIIOptimization(unittest.TestCase):
 class TestOptimizationCurriculum(unittest.TestCase):
     def test_curriculum_stages_ordering(self):
         curriculum = OptimizationCurriculum()
-        self.assertEqual(len(curriculum.stages), 6)
+        self.assertEqual(len(curriculum.stages), 7)
         for i, stage in enumerate(curriculum.stages):
             self.assertEqual(stage.level, i)
             self.assertGreater(len(stage.train_data), 0)
@@ -357,6 +357,16 @@ class TestOptimizationCurriculum(unittest.TestCase):
         self.assertEqual(stage4.level, 4)
         self.assertEqual(stage4.stage_id, "CURR_S4_DYCK_CONTEXT_FREE")
         self.assertGreaterEqual(weights4.terminal_bool["dyck_balanced"], 4.0)
+
+    def test_prepare_next_curriculum_stage5_transfer(self):
+        curriculum = OptimizationCurriculum()
+        prior = DSLGrammarWeights()
+
+        stage5, weights5 = curriculum.prepare_next_curriculum(4, prior)
+        self.assertEqual(stage5.level, 5)
+        self.assertEqual(stage5.stage_id, "CURR_S5_CONTEXT_SENSITIVE")
+        self.assertGreaterEqual(weights5.terminal_bool["graph_bfs"], 4.0)
+        self.assertGreaterEqual(weights5.compound_bool_logic["and"], 3.0)
 
 
 if __name__ == "__main__":

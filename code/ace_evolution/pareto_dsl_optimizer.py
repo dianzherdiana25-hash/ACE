@@ -964,12 +964,35 @@ class OptimizationCurriculum:
         ]
 
         # Stage 5: Context-Sensitive Relational Structural Invariants (Level 5)
+        # Invariant: Graph connectivity (GraphAdjacencyPrimitive) AND counter balance (count_a == count_b)
         train_s5 = [
-            ("ab", True), ("aabb", True), ("aaabbb", True),
-            ("a", False), ("b", False), ("ba", False), ("aab", False), ("abb", False),
+            ("abbaba", True),  # connected path (0-1-2-3), balanced (3a, 3b)
+            ("aaabbb", True),  # connected star (center 0), balanced (3a, 3b)
+            ("baaabb", True),  # connected path, balanced (3a, 3b)
+            ("ababba", True),  # connected tree, balanced (3a, 3b)
+            ("bbbaaa", False), # disconnected node 0 (3a, 3b)
+            ("aababb", False), # disconnected node 3 (3a, 3b)
+            ("aaaaaa", False), # connected K4, unbalanced (6a, 0b)
+            ("aaaaab", False), # connected, unbalanced (5a, 1b)
+            ("bbbbbb", False), # disconnected, unbalanced (0a, 6b)
+            ("ab", False),     # short, length < 6
         ]
         val_s5 = [
-            ("aaaabbbb", True), ("bbbaaa", False), ("aaabb", False),
+            ("abaabb", True),  # connected tree, balanced (3a, 3b)
+            ("aabbab", True),  # connected path, balanced (3a, 3b)
+            ("bababa", True),  # connected cycle, balanced (3a, 3b)
+            ("baabba", False), # disconnected node 0 (3a, 3b)
+            ("aabaab", False), # connected, unbalanced (4a, 2b)
+            ("bbaabb", False), # disconnected, unbalanced (2a, 4b)
+        ]
+
+        # Stage 6: Hierarchical Sub-Grammar Program Induction (Level 6)
+        train_s6 = [
+            ("abbaba", True), ("aaabbb", True), ("abaabb", True),
+            ("bbbaaa", False), ("aaaaaa", False), ("bbbbbb", False),
+        ]
+        val_s6 = [
+            ("aabbab", True), ("baabba", False), ("aaaaab", False),
         ]
 
         return [
@@ -1021,6 +1044,14 @@ class OptimizationCurriculum:
                 train_data=train_s5,
                 val_data=val_s5,
             ),
+            CurriculumStage(
+                stage_id="CURR_S6_PROGRAM_INDUCTION",
+                name="Hierarchical Sub-Grammar Program Induction",
+                description="Induce modular macro-primitives and multi-level AST abstractions for complex relational tasks.",
+                level=6,
+                train_data=train_s6,
+                val_data=val_s6,
+            ),
         ]
 
     def get_stage(self, level: int) -> CurriculumStage:
@@ -1059,9 +1090,20 @@ class OptimizationCurriculum:
             base_weights.compound_bool_cmp["eq"] *= 2.0
             base_weights.compound_bool_logic["and"] *= 2.0
             base_weights.structural["terminal_prob"] = 0.4
-        elif next_level >= 5:
+        elif next_level == 5:
+            # Context-sensitive multi-constraint: graph connectivity + counter balance
+            base_weights.terminal_bool["graph_bfs"] = 4.0
+            base_weights.terminal_int["count_a"] *= 2.5
+            base_weights.terminal_int["count_b"] *= 2.5
+            base_weights.compound_bool_cmp["eq"] *= 2.5
+            base_weights.compound_bool_logic["and"] *= 3.0
+            base_weights.structural["terminal_prob"] = 0.25
+            base_weights.structural["bool_cmp_prob"] = 0.5
+        elif next_level >= 6:
+            # Hierarchical macro induction
+            base_weights.terminal_bool["graph_bfs"] = 3.0
             base_weights.terminal_bool["dyck_balanced"] = 3.0
-            base_weights.terminal_bool["graph_bfs"] = 2.0
-            base_weights.compound_bool_logic["and"] *= 2.0
+            base_weights.compound_bool_logic["and"] *= 2.5
+            base_weights.structural["terminal_prob"] = 0.3
 
         return stage, base_weights.normalize()
