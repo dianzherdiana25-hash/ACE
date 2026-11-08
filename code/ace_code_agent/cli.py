@@ -27,6 +27,10 @@ def main() -> int:
         if res.get("pr_metadata"):
             print(f"PR Branch Created: {res['pr_metadata'].get('branch_name')}")
             print(f"Commit SHA: {res['pr_metadata'].get('commit_sha')}")
+            if res["pr_metadata"].get("pr_url"):
+                print(f"GitHub PR URL: {res['pr_metadata'].get('pr_url')}")
+            if res["pr_metadata"].get("pr_number"):
+                print(f"GitHub PR Number: #{res['pr_metadata'].get('pr_number')}")
 
     return 0
 

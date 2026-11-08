@@ -145,13 +145,13 @@ class AutonomousSoftwareResearcher:
         }
         state["tested_patches"] = tested_patches
 
-        # 8. If accepted and auto_pr is requested, create autonomous git branch & PR
+        # 8. If accepted and auto_pr is requested, create autonomous git branch, push, & GitHub PR
         pr_created = False
         pr_meta: Optional[AutonomousPRMetadata] = None
         if exec_result.decision == "ACCEPTED" and auto_pr:
             pr_meta = self.pr_manager.prepare_pr_metadata(problem, hypothesis, patch, exec_result)
-            ok_branch, commit_sha = self.pr_manager.create_git_branch_and_commit(pr_meta, patch)
-            if ok_branch:
+            ok_pr, pr_info = self.pr_manager.publish_autonomous_pr(pr_meta, patch)
+            if ok_pr and pr_meta.pr_number and pr_meta.pr_url:
                 pr_created = True
                 state["created_prs"].append(pr_meta.to_dict())
 
@@ -166,6 +166,9 @@ class AutonomousSoftwareResearcher:
             "rejection_reason": exec_result.rejection_reason,
             "receipt_signature": exec_result.receipt_signature,
             "pr_created": pr_created,
+            "commit_sha": pr_meta.commit_sha if pr_meta else "",
+            "pr_number": pr_meta.pr_number if pr_meta else None,
+            "pr_url": pr_meta.pr_url if pr_meta else None,
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         })
         self._save_researcher_state(state)

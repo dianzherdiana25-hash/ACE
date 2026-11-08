@@ -82,11 +82,10 @@ class TestAutonomousCodeAgentOperationalProof(unittest.TestCase):
         synthesizer = ModularPatchGenerator()
         orig_source = "def evaluate_mechanism(l, d, s):\n    return l % 3\n"
         patch = synthesizer.generate_patch(hypothesis, orig_source, "code/ace_self_dev/strategy_repair.py")
-
-        self.assertIn("def ace_v03_composite_dispatch", patch.replacement_code_snippet)
+        self.assertIn("ace_v04_dispatch", patch.replacement_code_snippet)
         self.assertIn("--- a/code/ace_self_dev/strategy_repair.py", patch.diff_content)
         self.assertIn("+++ b/code/ace_self_dev/strategy_repair.py", patch.diff_content)
-        self.assertEqual(patch.author_provenance, "ACE_BOUNDED_AST_PATCH_GENERATOR_V03")
+        self.assertEqual(patch.author_provenance, "ACE_BOUNDED_AST_PATCH_GENERATOR_V04")
         self.assertFalse(patch.generator_metadata.get("external_model_claimed", False))
 
     def test_criterion_3_worktree_isolation_and_security_blocking(self):
@@ -146,10 +145,99 @@ class TestAutonomousCodeAgentOperationalProof(unittest.TestCase):
         state_after_1 = reloaded_researcher.load_researcher_state()
         self.assertEqual(state_after_1["completed_cycles"], 1)
 
-        # Run Cycle 2 with identical input to simulate duplicate candidate
+        # Run Cycle 2 with identical hypothesis to verify duplicate de-duplication
+        prob1 = ResearchProblem.from_dict(res1["problem"])
+        hyp1 = ImprovementHypothesis.from_dict(res1["hypothesis"])
+        reloaded_researcher.selector.select_next_problem = lambda diag: (prob1, hyp1)
         res2 = reloaded_researcher.execute_autonomous_cycle(auto_pr=False)
         self.assertEqual(res2["decision"], "DUPLICATE_PATCH_SKIPPED")
         self.assertEqual(res2["evaluator_calls"], 0)
 
         # Baseline check
         self.assertTrue(self.immutable_baseline_file.exists())
+
+    def test_criterion_autonomous_pr_pipeline_and_safety(self):
+        """Criterion: AutonomousPRManager enforces safety namespace and structured verification."""
+        from ace_code_agent.pr_manager import AutonomousPRManager
+        from ace_code_agent.models import AutonomousPRMetadata, CodePatch, WorktreeExecutionResult
+
+        pr_manager = AutonomousPRManager(self.temp_repo)
+        problem = ResearchProblem(
+            problem_id="prob_pr_test",
+            category="REPRESENTATION_BOTTLENECK",
+            title="PR Pipeline Test Problem",
+            description="Testing PR metadata generation.",
+            target_files=["code/ace_self_dev/strategy_repair.py"],
+        )
+        hypothesis = ImprovementHypothesis(
+            hypothesis_id="hyp_pr_test_01",
+            problem_id="prob_pr_test",
+            statement="Test statement for PR generation.",
+            proposed_strategy="MULTI_TASK_COMPOSITE_DISPATCH",
+            expected_metric_gain=0.18,
+            target_module="code/ace_self_dev/strategy_repair.py",
+            rationale="Test rationale.",
+        )
+        patch = CodePatch(
+            patch_id="patch_test_pr",
+            hypothesis_id="hyp_pr_test_01",
+            target_file="code/ace_self_dev/strategy_repair.py",
+            diff_content="--- a\n+++ b\n",
+            original_code_snippet="",
+            replacement_code_snippet="def dummy_test(): pass\n",
+            patch_type="AST_TRANSFORMATION",
+            author_provenance="ACE_BOUNDED_AST_PATCH_GENERATOR_V04",
+        )
+        exec_res = WorktreeExecutionResult(
+            execution_id="exec_test_01",
+            patch_id=patch.patch_id,
+            hypothesis_id=hypothesis.hypothesis_id,
+            worktree_path="",
+            applied_cleanly=True,
+            ast_valid=True,
+            tests_passed=1,
+            tests_failed=0,
+            test_duration_seconds=0.1,
+            decision="ACCEPTED",
+            receipt_signature="sig_test_12345",
+        )
+
+        pr_meta = pr_manager.prepare_pr_metadata(problem, hypothesis, patch, exec_res)
+        self.assertTrue(pr_meta.branch_name.startswith("ace-dev/"))
+        self.assertIn("Autonomous Research PR", pr_meta.body_markdown)
+        self.assertIn("sig_test_12345", pr_meta.body_markdown)
+
+        # Test safety namespace violation
+        unsafe_meta = AutonomousPRMetadata(
+            pr_id="unsafe_01",
+            branch_name="main-exploit",
+            target_branch="main",
+            title="Unsafe branch",
+            body_markdown="Unsafe",
+            commit_sha="",
+            hypothesis_id="hyp_unsafe",
+            patch_id="patch_unsafe",
+            merkle_proof_digest="sig",
+            author_identity="ACE",
+        )
+        ok, msg = pr_manager.create_git_branch_and_commit(unsafe_meta, patch)
+        self.assertFalse(ok)
+        self.assertIn("SECURITY VIOLATION", msg)
+
+        # Test verification fails closed without PR number/url
+        empty_meta = AutonomousPRMetadata(
+            pr_id="empty_01",
+            branch_name="ace-dev/test",
+            target_branch="main",
+            title="Empty PR",
+            body_markdown="Empty",
+            commit_sha="",
+            hypothesis_id="hyp_test",
+            patch_id="patch_test",
+            merkle_proof_digest="sig",
+            author_identity="ACE",
+        )
+        ok_ver, ver_msg, _ = pr_manager.verify_pr_exists(empty_meta)
+        self.assertFalse(ok_ver)
+        self.assertIn("No PR number or URL", ver_msg)
+

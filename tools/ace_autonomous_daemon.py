@@ -121,7 +121,11 @@ def run_researcher_cycle(
     log(f"  Decision:   {decision}")
     if res.get("pr_metadata"):
         branch_name = res["pr_metadata"].get("branch_name")
+        pr_url = res["pr_metadata"].get("pr_url")
+        pr_num = res["pr_metadata"].get("pr_number")
         log(f"  PR Branch Created: {branch_name}")
+        if pr_url:
+            log(f"  GitHub PR Created: {pr_url} (#{pr_num})")
     return res
 
 

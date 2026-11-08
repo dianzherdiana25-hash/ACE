@@ -1,7 +1,8 @@
-"""Worktree Test Harness & Isolated Evaluator.
+"""Worktree Test Harness & Isolated Evaluator (V0.4).
 
-Applies candidate patches in an isolated execution sandbox,
-verifies AST safety, runs regression tests, and guarantees fail-closed rollback.
+Applies candidate patches strictly in an isolated execution sandbox,
+verifies AST safety, executes regression tests inside the isolated workspace,
+and guarantees fail-closed cleanup and rollback.
 """
 from __future__ import annotations
 
@@ -17,7 +18,6 @@ import time
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 from .models import CodePatch, WorktreeExecutionResult
-
 
 PROTECTED_PATHS: Set[str] = {
     ".github/workflows",
@@ -51,13 +51,13 @@ class WorktreeHarness:
 
     def validate_patch_security(self, patch: CodePatch) -> Tuple[bool, str]:
         """Verify that patch does not touch protected governance paths or inject unsafe AST."""
-        # Check target path
+        # 1. Check target path against protected governance paths
         target = patch.target_file
         for prot in PROTECTED_PATHS:
             if target.startswith(prot):
                 return False, f"SECURITY VIOLATION: Patch targets protected system path '{target}'"
 
-        # Check replacement code AST
+        # 2. Check replacement code AST
         try:
             tree = ast.parse(patch.replacement_code_snippet)
             for node in ast.walk(tree):
@@ -77,12 +77,56 @@ class WorktreeHarness:
 
         return True, "Security validation passed."
 
+    def _setup_isolated_workspace(self, prefix: str = "ace_worktree_") -> Tuple[Path, str]:
+        """Creates an isolated execution sandbox via git worktree or deep sandbox copy."""
+        temp_dir = Path(tempfile.mkdtemp(prefix=prefix))
+        mode = "worktree"
+        try:
+            # Attempt git worktree creation at HEAD
+            worktree_path = temp_dir / "repo"
+            res = subprocess.run(
+                ["git", "worktree", "add", "--detach", str(worktree_path), "HEAD"],
+                cwd=self.repo_root,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            if res.returncode == 0 and worktree_path.exists():
+                return worktree_path, "git_worktree"
+        except Exception:
+            pass
+
+        # Fallback: Copy minimal execution tree to isolated directory
+        mode = "copy_sandbox"
+        for folder in ("code", "tools"):
+            src_f = self.repo_root / folder
+            dst_f = temp_dir / folder
+            if src_f.exists():
+                shutil.copytree(src_f, dst_f, dirs_exist_ok=True)
+        return temp_dir, mode
+
+    def _cleanup_isolated_workspace(self, workspace_path: Path, mode: str) -> None:
+        """Cleans up the isolated workspace and detached git worktree."""
+        try:
+            if mode == "git_worktree":
+                subprocess.run(
+                    ["git", "worktree", "remove", "--force", str(workspace_path)],
+                    cwd=self.repo_root,
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                )
+            parent = workspace_path.parent if mode == "git_worktree" else workspace_path
+            shutil.rmtree(parent, ignore_errors=True)
+        except Exception:
+            pass
+
     def execute_in_worktree(
         self,
         patch: CodePatch,
         test_commands: Optional[List[List[str]]] = None,
     ) -> WorktreeExecutionResult:
-        """Creates an isolated workspace, applies patch, runs tests, and ensures clean cleanup."""
+        """Creates an isolated workspace, applies patch to isolated source, runs tests, and cleans up."""
         execution_id = f"exec_{patch.patch_id}_{int(time.time())}"
         start_time = time.time()
 
@@ -104,51 +148,63 @@ class WorktreeHarness:
                 rollback_completed=True,
             )
 
-        # Step 2: Create isolated temp directory
-        temp_dir = Path(tempfile.mkdtemp(prefix="ace_worktree_"))
-        rollback_done = False
+        # Step 2: Create isolated execution workspace
+        workspace_path, mode = self._setup_isolated_workspace()
+        applied_cleanly = False
+        ast_valid = False
 
         try:
-            # Copy minimal files needed for isolated test
-            target_file_rel = patch.target_file
-            src_file = self.repo_root / target_file_rel
-            dest_file = temp_dir / target_file_rel
-            dest_file.parent.mkdir(parents=True, exist_ok=True)
+            # Locate target file inside isolated workspace
+            target_dest = workspace_path / patch.target_file
+            target_dest.parent.mkdir(parents=True, exist_ok=True)
 
-            if src_file.exists():
-                shutil.copy2(src_file, dest_file)
-
-            # Apply patch replacement
-            orig_content = src_file.read_text(encoding="utf-8") if src_file.exists() else ""
-            # Apply replacement: append or rewrite
+            orig_content = target_dest.read_text(encoding="utf-8") if target_dest.exists() else ""
             new_content = orig_content + "\n" + patch.replacement_code_snippet
-            dest_file.write_text(new_content, encoding="utf-8")
+            target_dest.write_text(new_content, encoding="utf-8")
+            applied_cleanly = True
 
-            # Validate destination AST
-            ast.parse(dest_file.read_text(encoding="utf-8"))
+            # Validate AST of the patched file inside the isolated workspace
+            ast.parse(new_content)
+            ast_valid = True
 
-            # Step 3: Run isolated verification tests
-            tests_passed = 1
+            # Step 3: Run isolated verification tests inside the workspace
+            tests_passed = 0
             tests_failed = 0
+
+            # Default test command executes unit tests against the isolated workspace code
+            isolated_env = dict(os.environ)
+            isolated_env["PYTHONPATH"] = str(workspace_path / "code")
+            isolated_env["PYTHONDONTWRITEBYTECODE"] = "1"
+
             if test_commands:
-                for cmd in test_commands:
-                    res = subprocess.run(
-                        cmd,
-                        cwd=str(self.repo_root),
-                        capture_output=True,
-                        text=True,
-                        timeout=30,
-                    )
-                    if res.returncode == 0:
-                        tests_passed += 1
-                    else:
-                        tests_failed += 1
+                cmds_to_run = test_commands
+            else:
+                # Default sanity test verifying that the target module imports cleanly
+                mod_name = patch.target_file.replace("/", ".").replace(".py", "")
+                if mod_name.startswith("code."):
+                    mod_name = mod_name[5:]
+                cmds_to_run = [
+                    [sys.executable, "-c", f"import {mod_name}; print('{mod_name} import ok')"]
+                ]
+
+            for cmd in cmds_to_run:
+                res = subprocess.run(
+                    cmd,
+                    cwd=str(workspace_path),
+                    env=isolated_env,
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                )
+                if res.returncode == 0:
+                    tests_passed += 1
+                else:
+                    tests_failed += 1
 
             duration = round(time.time() - start_time, 3)
-            decision = "ACCEPTED" if tests_failed == 0 else "REJECTED"
-            reason = "Tests passed cleanly." if decision == "ACCEPTED" else "Isolated test command failed."
+            decision = "ACCEPTED" if tests_failed == 0 and applied_cleanly and ast_valid else "REJECTED"
+            reason = "Isolated tests passed cleanly." if decision == "ACCEPTED" else f"Isolated test command failed (failed: {tests_failed})."
 
-            # Generate receipt signature
             sig_payload = f"{execution_id}:{patch.patch_sha256}:{decision}:{duration}".encode("utf-8")
             receipt_sig = hashlib.sha256(sig_payload).hexdigest()
 
@@ -156,13 +212,17 @@ class WorktreeHarness:
                 execution_id=execution_id,
                 patch_id=patch.patch_id,
                 hypothesis_id=patch.hypothesis_id,
-                worktree_path=str(temp_dir),
-                applied_cleanly=True,
-                ast_valid=True,
+                worktree_path=str(workspace_path),
+                applied_cleanly=applied_cleanly,
+                ast_valid=ast_valid,
                 tests_passed=tests_passed,
                 tests_failed=tests_failed,
                 test_duration_seconds=duration,
-                performance_metrics={"duration_s": duration, "tests_total": tests_passed + tests_failed},
+                performance_metrics={
+                    "duration_s": duration,
+                    "tests_total": tests_passed + tests_failed,
+                    "isolation_mode": mode,
+                },
                 decision=decision,
                 rejection_reason=reason,
                 receipt_signature=receipt_sig,
@@ -174,17 +234,16 @@ class WorktreeHarness:
                 execution_id=execution_id,
                 patch_id=patch.patch_id,
                 hypothesis_id=patch.hypothesis_id,
-                worktree_path=str(temp_dir),
-                applied_cleanly=False,
-                ast_valid=False,
+                worktree_path=str(workspace_path),
+                applied_cleanly=applied_cleanly,
+                ast_valid=ast_valid,
                 tests_passed=0,
                 tests_failed=1,
                 test_duration_seconds=round(time.time() - start_time, 3),
                 decision="REJECTED",
-                rejection_reason=f"Execution error: {str(e)}",
+                rejection_reason=f"Isolated execution error: {str(e)}",
                 rollback_completed=True,
             )
         finally:
-            # Clean up temporary worktree
-            shutil.rmtree(temp_dir, ignore_errors=True)
-            rollback_done = True
+            # Clean up the isolated workspace
+            self._cleanup_isolated_workspace(workspace_path, mode)

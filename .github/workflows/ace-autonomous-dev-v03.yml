@@ -43,7 +43,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          persist-credentials: false
+          persist-credentials: true
           fetch-depth: 10
 
       - name: Set up Python
@@ -62,6 +62,9 @@ jobs:
           python -m unittest ace_code_agent.test_operational_proof -v
 
       - name: Execute Autonomous Software Researcher Step
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           AUTO_PR_FLAG=""
@@ -74,6 +77,20 @@ jobs:
         run: |
           set -euo pipefail
           python tools/verify_self_dev.py
+
+      - name: Persist Research State & Provenance Across Runs
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add checkpoints/self_dev/v03_researcher_state.json checkpoints/self_dev/research_state.json checkpoints/self_dev/daemon.log checkpoints/self_dev/daemon_heartbeat.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(self-dev): update persistent research state across autonomous runs [skip ci]"
+            git push origin HEAD:${{ github.ref }} || echo "State push non-fatal warning"
+          fi
 
       - name: Archive Receipts & Research State
         if: always()
