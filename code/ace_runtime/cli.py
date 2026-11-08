@@ -89,6 +89,15 @@ def parser():
 
     gen_p = mission_subs.add_parser("generate", help="generate missions from diagnostics")
 
+    # W3: Core learner repair commands
+    train_p = commands.add_parser("train", help="train with admission awareness and max errors tolerance")
+    train_p.add_argument("--workspace", required=True, type=Path)
+    train_p.add_argument("--task", required=True, type=Path)
+    train_p.add_argument("--max-errors", default=0, type=int, help="maximum mislabeled errors to admit")
+
+    doc_p = commands.add_parser("doctor", help="diagnose workspace and system integrity")
+    doc_p.add_argument("--workspace", default=Path("./ace-work"), type=Path)
+
     return result
 
 
@@ -131,6 +140,7 @@ def main(argv=None):
     try:
         # File input is checked before initializing or opening runtime state.
         task = read_task(args.task) if args.command == "enqueue" else None
+        rows = labeled_rows(read_json(args.data)) if args.command == "evaluate" else None
         if args.command == "mission":
             from ace_mission.bus import MissionBus
             from ace_mission.generator import MissionGenerator
@@ -160,6 +170,28 @@ def main(argv=None):
                 missions = generator.generate_from_diagnostics(diags)
                 result = {"generated_count": len(missions), "missions": missions}
             print(json.dumps(result, sort_keys=True, allow_nan=False))
+            return 0
+
+        if args.command == "doctor":
+            from ace_core_repair.doctor import run_doctor_diagnostics
+            report = run_doctor_diagnostics(args.workspace)
+            print(json.dumps(report, sort_keys=True, indent=2))
+            return 0
+
+        if args.command == "train":
+            from ace_core_repair.admission import AdmissionAwareSelector
+            task = read_task(args.task)
+            selector = AdmissionAwareSelector(max_errors=args.max_errors)
+            from ace_capability_evolution import compositional as c
+            learned, fit_report = c.fit(task["train"], task["validation"])
+            eval_res = selector.evaluate_and_select(
+                lambda w: learned["composition"].predict(w),
+                task["train"],
+                task["validation"]
+            )
+            eval_res["task_name"] = task["name"]
+            eval_res["fit_report"] = fit_report
+            print(json.dumps(eval_res, sort_keys=True, indent=2))
             return 0
 
         from .engine import Runtime

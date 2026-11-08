@@ -19,7 +19,7 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 
 | Komponen | Status Operasional | Status Ilmiah | Bukti / Catatan |
 | :--- | :--- | :--- | :--- |
-| **Pembelajar Inti** (`ace_runtime`, `ace_candidate_search`, `ace_capability_evolution`, `ace_research_primitives`) | Aktif & Lulus Tes | `NOT_ASSESSED` | Byte-identik dengan `main` (`80104ce`). Memiliki 4 bug batas terbukti (lihat Bagian 3). |
+| **Pembelajar Inti (W3)** | Aktif & Teruji (5/5 tes lulus) | `REPAIRED_VERIFIED` | Seleksi sadar-admission (`--max-errors k`), putaran counterexample ke-2 guard, karantina semantik drift late-flip (0 false admission), library terdekomposisi hemat fit, `ace.py train` & `doctor`, dan `QUICKSTART.md` selesai. |
 | **Perancah & Autonomi** (`ace_autonomy`, `ace_host_controller`, `ace_loop`) | Aktif & Teruji | `OPERATIONAL_PROTOTYPE` | Autonomi berlease, isolasi host, dan escrow lulus pengujian unittest (25/25 `verify_sources`). |
 | **Studi Riset F12–F14, R9** | Lengkap di Cabang Integrasi | Hasil Negatif Sah Tercatat | Bukti terkompresi dan prescore tercatat; H1 & H2 cross-family ditolak (0/16 fit). |
 | **Loop Self-Dev Historis** | Dipindahkan ke `ace-data` | 252 `REJECTED`, 1 `STAGNATED`, 0 `ACCEPTED` | Siklus 1–253 diarsipkan di `origin/ace-data`; tidak lagi mengotori riwayat git kode. |
