@@ -6,7 +6,7 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 
 ## 1. Metadata Repositori & Cabang
 - **Tanggal Status:** 8 November 2026
-- **Commit `main` Terbaru:** `184aecf` (Algorithmic Discovery: L*, FunSearch Islands, DreamCoder Abstraction)
+- **Commit `main` Terbaru:** `4250c10` (Continuous Researcher Pipeline, CEGIS Synthesizer, MCTS Program Search)
 - **Status Ilmiah Repositori:** `CONFIRMED_SEALED` (Diotorisasi resmi oleh pemilik repositori)
 - **Cabang Arsip Data & Evidence:** `origin/ace-data` (519 berkas `.json.gz` dan `cycle_*.json` dipisahkan dari cabang kode)
 - **Status PR:**
