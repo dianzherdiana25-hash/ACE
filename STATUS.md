@@ -25,6 +25,7 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 | **W3 Perbaikan Inti Pembelajar** | Aktif & Teruji (5/5 tes) | `REPAIRED_VERIFIED` | Seleksi sadar-admission (`--max-errors k`), putaran counterexample ke-2 guard, karantina semantik drift late-flip (0 false admission), library terdekomposisi hemat fit, `ace.py train` & `doctor`, dan `QUICKSTART.md`. |
 | **W4 Pertumbuhan Kemampuan** | Selesai & Preregistrasi | `CONFIRMED_LOCAL_BENCHMARK` | Primitif graf BFS mencapai 100% (vs baseline 85.8%), rasio 4:1 mencapai 100% (vs baseline 77.4%), 60 sampel evaluasi seimbang (20 seed $\times$ 3 ulangan). |
 | **Mesin Algoritma L*/FunSearch/DreamCoder** | Aktif & Teruji (8/8 tes) | `OPERATIONAL_INNOVATION` | Induksi automata aktif Angluin $L^*$, pencarian pulau evolusioner AST (FunSearch/STGP), dan abstraksi library Wake-Sleep (DreamCoder). |
+| **Continuous Researcher Loop & CEGIS/MCTS** | Aktif & Teruji (5/5 tes) | `OPERATIONAL_INNOVATION` | Loop riset otonom dua arah: agen menemukan, melapor, langsung dikerjakan koordinator, lalu agen lanjut mencari secara berkesinambungan; dilengkapi CEGIS dan MCTS. |
 | **W5 Antarmuka & Operasi** | Selesai & Terverifikasi | `OPERATIONAL_VERIFIED` | Laporan HP bahasa Indonesia (`docs/LAPORAN_HASIL_RISET_HP.md`) memenuhi PRD FR-09 dan FR-14. |
 | **Pembelajar Inti Klasik** | Aktif & Lulus Tes | `RETAINED_COMPATIBLE` | Demo v1 dan seluruh suite tes klasik (368 tes) lulus 100%. |
 

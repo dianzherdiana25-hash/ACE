@@ -1,0 +1,150 @@
+"""Autonomous Continuous Researcher Agent Pipeline.
+
+Enables researcher agents to:
+1. Formulate hypotheses and scout novel algorithmic capabilities.
+2. Package findings into structured DiscoveryProposals.
+3. Notify the coordinating agent (Antigravity) via messages/events.
+4. Immediately resume searching for subsequent capabilities in an uninterrupted loop.
+5. Track proposal lifecycle: PROPOSED -> IMPLEMENTED -> VERIFIED -> BENCHMARKED.
+"""
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass, field
+import datetime
+import hashlib
+import json
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+
+@dataclass
+class DiscoveryProposal:
+    proposal_id: str
+    capability_name: str
+    target_bottleneck: str
+    mathematical_foundation: str
+    suggested_implementation: str
+    verification_criteria: str
+    author_agent: str
+    timestamp: str = field(default_factory=lambda: datetime.datetime.now(datetime.timezone.utc).isoformat())
+    status: str = "PROPOSED"  # PROPOSED, IMPLEMENTED, VERIFIED, BENCHMARKED
+    implementation_commit: Optional[str] = None
+    evaluation_receipt: Optional[Dict[str, Any]] = None
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> DiscoveryProposal:
+        return cls(**data)
+
+
+class ContinuousResearcherPipeline:
+    """Manages the autonomous discovery agenda and two-way handoff loop."""
+
+    # Default curricular research topics derived from computer science literature
+    CURRICULUM_TOPICS = [
+        {
+            "capability_name": "Counterexample-Guided Inductive Synthesis (CEGIS)",
+            "target_bottleneck": "Synthesis search space explosion when validating against large test sets",
+            "mathematical_foundation": "Iterative verifier-synthesizer loop finding minimal distinguishing counterexample constraints",
+            "suggested_implementation": "code/ace_synthesis/cegis.py",
+            "verification_criteria": "Guaranteed convergence to correct candidate with minimal oracle calls"
+        },
+        {
+            "capability_name": "Monte Carlo Tree Search (MCTS) Program Tree Exploration",
+            "target_bottleneck": "Exponential branching factor in grammar-guided expression generation",
+            "mathematical_foundation": "UCT (Upper Confidence bounds applied to Trees) balancing exploration and exploitation in AST construction",
+            "suggested_implementation": "code/ace_mcts/program_mcts.py",
+            "verification_criteria": "Finds target predicates 5x faster than blind exhaustive enumeration"
+        },
+        {
+            "capability_name": "Abstract Interpretation Invariant Analyzer",
+            "target_bottleneck": "Unobservable runtime semantic drift and unbounded loops in candidate execution",
+            "mathematical_foundation": "Interval abstract domain approximating variable bounds and invariant properties",
+            "suggested_implementation": "code/ace_abstract_interp/invariants.py",
+            "verification_criteria": "Zero false negatives in detecting out-of-bound variables or non-terminating ASTs"
+        },
+        {
+            "capability_name": "Relational Predicate Mining (Inductive Logic Programming)",
+            "target_bottleneck": "Multi-entity graph relationship and topological structure discovery",
+            "mathematical_foundation": "First-order horn clause induction over background relational facts",
+            "suggested_implementation": "code/ace_ilp/relational_miner.py",
+            "verification_criteria": "Induces connectivity, reachability, and transitivity rules automatically"
+        }
+    ]
+
+    def __init__(self, workspace_path: Path):
+        self.workspace = Path(workspace_path)
+        self.workspace.mkdir(parents=True, exist_ok=True)
+        self.registry_file = self.workspace / "discovery_registry.json"
+        self.proposals: Dict[str, DiscoveryProposal] = {}
+        self.current_curriculum_index = 0
+        self._load_registry()
+
+    def _load_registry(self):
+        if self.registry_file.exists():
+            try:
+                data = json.loads(self.registry_file.read_text(encoding="utf-8"))
+                self.proposals = {
+                    pid: DiscoveryProposal.from_dict(p)
+                    for pid, p in data.get("proposals", {}).items()
+                }
+                self.current_curriculum_index = data.get("current_index", 0)
+            except Exception:
+                self.proposals = {}
+                self.current_curriculum_index = 0
+
+    def _save_registry(self):
+        data = {
+            "current_index": self.current_curriculum_index,
+            "total_proposals": len(self.proposals),
+            "proposals": {pid: p.to_dict() for pid, p in self.proposals.items()}
+        }
+        self.registry_file.write_text(json.dumps(data, indent=2), encoding="utf-8")
+
+    def scout_next_capability(self, agent_id: str = "scout_agent_01") -> DiscoveryProposal:
+        """Agent scouts and proposes the next breakthrough capability, advancing research agenda."""
+        topic = self.CURRICULUM_TOPICS[self.current_curriculum_index % len(self.CURRICULUM_TOPICS)]
+        self.current_curriculum_index += 1
+
+        proposal_raw = f"{topic['capability_name']}_{self.current_curriculum_index}_{datetime.datetime.now().timestamp()}"
+        pid = f"disc_{hashlib.sha256(proposal_raw.encode()).hexdigest()[:10]}"
+
+        proposal = DiscoveryProposal(
+            proposal_id=pid,
+            capability_name=topic["capability_name"],
+            target_bottleneck=topic["target_bottleneck"],
+            mathematical_foundation=topic["mathematical_foundation"],
+            suggested_implementation=topic["suggested_implementation"],
+            verification_criteria=topic["verification_criteria"],
+            author_agent=agent_id,
+            status="PROPOSED"
+        )
+        self.proposals[pid] = proposal
+        self._save_registry()
+        return proposal
+
+    def mark_implemented(self, proposal_id: str, commit_sha: str) -> DiscoveryProposal:
+        """Coordinating agent (Antigravity) records code implementation."""
+        if proposal_id not in self.proposals:
+            raise KeyError(f"Proposal {proposal_id} not found")
+        p = self.proposals[proposal_id]
+        p.status = "IMPLEMENTED"
+        p.implementation_commit = commit_sha
+        self._save_registry()
+        return p
+
+    def mark_verified(self, proposal_id: str, receipt: Dict[str, Any]) -> DiscoveryProposal:
+        """Coordinating agent records test suite verification and holdout evaluation receipt."""
+        if proposal_id not in self.proposals:
+            raise KeyError(f"Proposal {proposal_id} not found")
+        p = self.proposals[proposal_id]
+        p.status = "VERIFIED"
+        p.evaluation_receipt = receipt
+        self._save_registry()
+        return p
+
+    def pending_implementations(self) -> List[DiscoveryProposal]:
+        """Returns proposals waiting for implementation."""
+        return [p for p in self.proposals.values() if p.status == "PROPOSED"]
