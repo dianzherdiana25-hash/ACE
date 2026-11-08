@@ -18,6 +18,8 @@ from ace_evolution.pareto_dsl_optimizer import (
     ParetoDSLOptimizer,
     ParetoOptimizationResult,
     ProgramParetoCandidate,
+    SelfRefiningProgramSynthesizer,
+    SelfRefiningResult,
     WeightedASTGenerator,
     calculate_crowding_distance,
     compute_hypervolume_2d,
@@ -322,7 +324,7 @@ class TestNSGAIIOptimization(unittest.TestCase):
 class TestOptimizationCurriculum(unittest.TestCase):
     def test_curriculum_stages_ordering(self):
         curriculum = OptimizationCurriculum()
-        self.assertEqual(len(curriculum.stages), 9)
+        self.assertEqual(len(curriculum.stages), 10)
         for i, stage in enumerate(curriculum.stages):
             self.assertEqual(stage.level, i)
             self.assertGreater(len(stage.train_data), 0)
@@ -390,6 +392,15 @@ class TestOptimizationCurriculum(unittest.TestCase):
         self.assertGreaterEqual(weights7.terminal_bool["dyck_balanced"], 3.5)
         self.assertGreaterEqual(weights7.compound_bool_logic["or"], 3.0)
 
+    def test_prepare_next_curriculum_stage8_transfer(self):
+        curriculum = OptimizationCurriculum()
+        prior = DSLGrammarWeights()
+
+        stage8, weights8 = curriculum.prepare_next_curriculum(7, prior)
+        self.assertEqual(stage8.level, 8)
+        self.assertEqual(stage8.stage_id, "CURR_S8_UNIVERSAL_STRUCTURAL_SYNTHESIS")
+        self.assertGreaterEqual(weights8.terminal_bool["graph_bfs"], 3.0)
+
 
 class TestHierarchicalSubGrammar(unittest.TestCase):
     def test_macro_primitive_creation_and_eval(self):
@@ -448,6 +459,27 @@ class TestHierarchicalSubGrammar(unittest.TestCase):
         self.assertEqual(coord.size(), 3)
         self.assertTrue(coord.evaluate("abbaba"))
         self.assertFalse(coord.evaluate("bbbaaa"))  # disconnected
+
+
+class TestSelfRefiningSynthesis(unittest.TestCase):
+    def test_self_refining_synthesizer_budget_enforced(self):
+        synthesizer = SelfRefiningProgramSynthesizer(resource_budget=15, max_depth=3, seed=42)
+        dataset = [("ab", True), ("ba", False), ("a", False), ("b", False)]
+        result = synthesizer.synthesize_and_refine(dataset, deterministic_latency=True)
+
+        self.assertIsInstance(result, SelfRefiningResult)
+        self.assertLessEqual(result.budget_used, 15)
+        self.assertGreater(result.refinement_steps, 0)
+        self.assertGreaterEqual(result.candidate.objectives.accuracy, 0.0)
+
+    def test_self_refining_universal_synthesis_optimizer(self):
+        optimizer = ParetoDSLOptimizer(population_size=6, seed=42, deterministic_latency=True)
+        dataset = [("ab", True), ("aabb", True), ("ba", False), ("bbaa", False)]
+        result = optimizer.self_refining_universal_synthesis(dataset, budget=10, generations=3)
+
+        self.assertIsInstance(result, ParetoOptimizationResult)
+        self.assertGreater(len(result.pareto_front), 0)
+        self.assertIsNotNone(result.knee_point)
 
 
 if __name__ == "__main__":
