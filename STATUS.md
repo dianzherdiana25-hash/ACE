@@ -6,7 +6,7 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 
 ## 1. Metadata Repositori & Cabang
 - **Tanggal Status:** 8 November 2026
-- **Commit `main` Terbaru:** `e8b7548` (Continuous Pipeline: Invariants, CEGIS, MCTS, L*, FunSearch, DreamCoder)
+- **Commit `main` Terbaru:** `d8d85fa` (Continuous Multi-Agent Discovery Swarm: ILP, Invariants, CEGIS, MCTS)
 - **Status Ilmiah Repositori:** `CONFIRMED_SEALED` (Diotorisasi resmi oleh pemilik repositori)
 - **Cabang Arsip Data & Evidence:** `origin/ace-data` (519 berkas `.json.gz` dan `cycle_*.json` dipisahkan dari cabang kode)
 - **Status PR:**
