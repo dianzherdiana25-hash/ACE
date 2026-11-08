@@ -11,6 +11,8 @@ from ace_evolution.pareto_dsl_optimizer import (
     CurriculumStage,
     DSLGrammarWeights,
     GrammarCandidate,
+    HierarchicalSubGrammar,
+    MacroPrimitive,
     Objectives,
     OptimizationCurriculum,
     ParetoDSLOptimizer,
@@ -320,7 +322,7 @@ class TestNSGAIIOptimization(unittest.TestCase):
 class TestOptimizationCurriculum(unittest.TestCase):
     def test_curriculum_stages_ordering(self):
         curriculum = OptimizationCurriculum()
-        self.assertEqual(len(curriculum.stages), 7)
+        self.assertEqual(len(curriculum.stages), 8)
         for i, stage in enumerate(curriculum.stages):
             self.assertEqual(stage.level, i)
             self.assertGreater(len(stage.train_data), 0)
@@ -367,6 +369,74 @@ class TestOptimizationCurriculum(unittest.TestCase):
         self.assertEqual(stage5.stage_id, "CURR_S5_CONTEXT_SENSITIVE")
         self.assertGreaterEqual(weights5.terminal_bool["graph_bfs"], 4.0)
         self.assertGreaterEqual(weights5.compound_bool_logic["and"], 3.0)
+
+    def test_prepare_next_curriculum_stage6_transfer(self):
+        curriculum = OptimizationCurriculum()
+        prior = DSLGrammarWeights()
+
+        stage6, weights6 = curriculum.prepare_next_curriculum(5, prior)
+        self.assertEqual(stage6.level, 6)
+        self.assertEqual(stage6.stage_id, "CURR_S6_PROGRAM_INDUCTION")
+        self.assertGreaterEqual(weights6.terminal_bool["graph_bfs"], 3.0)
+
+
+class TestHierarchicalSubGrammar(unittest.TestCase):
+    def test_macro_primitive_creation_and_eval(self):
+        # Build macro AST: word.count('a') == word.count('b')
+        ca = TypedASTNode("count_a", "INT")
+        cb = TypedASTNode("count_b", "INT")
+        eq = TypedASTNode("eq", "BOOL", children=[ca, cb])
+
+        macro = MacroPrimitive(
+            name="macro_balanced",
+            return_type="BOOL",
+            ast=eq,
+            description="Checks if count_a == count_b",
+        )
+        self.assertEqual(macro.name, "macro_balanced")
+        d = macro.to_dict()
+        self.assertIn("code", d)
+        self.assertEqual(d["size"], 3)
+
+        node = macro.to_node()
+        self.assertTrue(node.evaluate("ab"))
+        self.assertTrue(node.evaluate("aabb"))
+        self.assertFalse(node.evaluate("aab"))
+        self.assertEqual(node.size(), 1)  # Compressed abstraction representation
+        self.assertIn("macro_balanced(word)", node.to_code())
+
+    def test_hierarchical_subgrammar_induction(self):
+        hsg = HierarchicalSubGrammar()
+        ca = TypedASTNode("count_a", "INT")
+        two = TypedASTNode("int_const", "INT", val=2)
+        mod = TypedASTNode("mod", "INT", children=[ca, two])
+        zero = TypedASTNode("int_const", "INT", val=0)
+        even_parity = TypedASTNode("eq", "BOOL", children=[mod, zero])
+
+        macro = hsg.induce_macro_from_ast("macro_even_a", even_parity, weight=5.0)
+        self.assertIn("macro_even_a", hsg.grammar.terminal_bool)
+        self.assertEqual(hsg.grammar.terminal_bool["macro_even_a"], 5.0)
+        self.assertIn("macro_even_a", hsg.grammar.macros)
+
+        # Test sampling with WeightedASTGenerator
+        rng = random.Random(42)
+        generator = WeightedASTGenerator(hsg.grammar)
+        sampled = generator.generate("BOOL", depth=1, max_depth=2, rng=rng)
+        self.assertIsInstance(sampled, TypedASTNode)
+
+    def test_multilayer_program_evaluation(self):
+        # Layer 1 Macro: graph reachability
+        macro_graph = MacroPrimitive("macro_graph", "BOOL", TypedASTNode("graph_bfs", "BOOL"))
+        # Layer 1 Macro: balance
+        ca = TypedASTNode("count_a", "INT")
+        cb = TypedASTNode("count_b", "INT")
+        macro_bal = MacroPrimitive("macro_bal", "BOOL", TypedASTNode("eq", "BOOL", children=[ca, cb]))
+
+        # Layer 2 Coordinator AST: macro_graph and macro_bal
+        coord = TypedASTNode("and", "BOOL", children=[macro_graph.to_node(), macro_bal.to_node()])
+        self.assertEqual(coord.size(), 3)
+        self.assertTrue(coord.evaluate("abbaba"))
+        self.assertFalse(coord.evaluate("bbbaaa"))  # disconnected
 
 
 if __name__ == "__main__":

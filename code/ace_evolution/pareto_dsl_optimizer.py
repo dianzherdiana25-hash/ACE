@@ -1082,6 +1082,15 @@ class OptimizationCurriculum:
             ("aabbab", True), ("baabba", False), ("aaaaab", False),
         ]
 
+        # Stage 7: Cross-Domain Meta-Transfer & Generalized Structural Abstraction (Level 7)
+        train_s7 = [
+            ("abbaba", True), ("aaabbb", True), ("ab", True), ("aabb", True),
+            ("bbbaaa", False), ("aaaaaa", False), ("bbbbbb", False), ("ba", False),
+        ]
+        val_s7 = [
+            ("abaabb", True), ("abab", True), ("aababb", False), ("bbaabb", False),
+        ]
+
         return [
             CurriculumStage(
                 stage_id="CURR_S0_TERMINAL",
@@ -1139,6 +1148,14 @@ class OptimizationCurriculum:
                 train_data=train_s6,
                 val_data=val_s6,
             ),
+            CurriculumStage(
+                stage_id="CURR_S7_CROSS_DOMAIN_TRANSFER",
+                name="Cross-Domain Meta-Transfer & Generalized Structural Abstraction",
+                description="Meta-transfer hierarchical macro primitives across composite multi-domain language and graph tasks.",
+                level=7,
+                train_data=train_s7,
+                val_data=val_s7,
+            ),
         ]
 
     def get_stage(self, level: int) -> CurriculumStage:
@@ -1186,11 +1203,17 @@ class OptimizationCurriculum:
             base_weights.compound_bool_logic["and"] *= 3.0
             base_weights.structural["terminal_prob"] = 0.25
             base_weights.structural["bool_cmp_prob"] = 0.5
-        elif next_level >= 6:
+        elif next_level == 6:
             # Hierarchical macro induction
             base_weights.terminal_bool["graph_bfs"] = 3.0
             base_weights.terminal_bool["dyck_balanced"] = 3.0
             base_weights.compound_bool_logic["and"] *= 2.5
             base_weights.structural["terminal_prob"] = 0.3
+        elif next_level >= 7:
+            # Cross-domain meta-transfer
+            base_weights.structural["terminal_prob"] = 0.35
+            base_weights.structural["bool_cmp_prob"] = 0.5
+            base_weights.compound_bool_logic["and"] *= 2.0
+            base_weights.compound_bool_logic["or"] *= 1.5
 
         return stage, base_weights.normalize()
