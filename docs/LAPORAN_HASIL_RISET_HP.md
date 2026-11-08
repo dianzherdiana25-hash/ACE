@@ -39,6 +39,11 @@ Menguji apakah sistem ACE yang telah dilengkapi **Mission Bus (W1)** dan **Penil
 - **Angluin $L^*$ Automata (`code/ace_automata`):** Belajar aktif DFA minimal secara matematis untuk bahasa reguler (parity, mod-3) dengan bukti ekuivalensi.
 - **FunSearch Evolutionary Islands (`code/ace_evolution`):** Pencarian program AST multi-pulau 4 populasi independen dengan seleksi Pareto (akurasi, ukuran, kebaruan).
 - **DreamCoder Wake-Sleep Abstraction (`code/ace_abstraction`):** Kompresi dan abstraksi solusi berulang menjadi primitif DSL kelas satu (mewujudkan PRD G4 pewarisan kemampuan).
+- **CEGIS Synthesizer (`code/ace_synthesis`):** Sintesis induktif berpandu counterexample dengan loop verifikasi minimal.
+- **MCTS Program Tree (`code/ace_mcts`):** Pencarian pohon Monte Carlo berbobot UCT atas produksi gramatika bervalidasi tipe.
+- **Abstract Interpretation Invariant (`code/ace_abstract_interp`):** Kisi interval (Interval Lattice) dengan operator pelebaran ($\nabla$) dan penyempitan ($\Delta$) untuk batas drift semantik nol false-negative.
+- **ILP Relational Mining (`code/ace_ilp`):** Induksi klausa Horn dengan $\theta$-subsumpsi Plotkin dan FOIL information gain.
+- **Active Epistemic BALD Sampler (`code/ace_epistemic`):** Sampling ketidakpastian informasi mutual Bayesian Active Learning by Disagreement (reduksi query 87.12%, efisiensi 7.77x).
 
 ---
 

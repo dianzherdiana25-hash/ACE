@@ -6,7 +6,7 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 
 ## 1. Metadata Repositori & Cabang
 - **Tanggal Status:** 8 November 2026
-- **Commit `main` Terbaru:** `d8d85fa` (Continuous Multi-Agent Discovery Swarm: ILP, Invariants, CEGIS, MCTS)
+- **Commit `main` Terbaru:** `4f69875` (feat(epistemic): implement BALD active uncertainty query sampler with 87% query reduction)
 - **Status Ilmiah Repositori:** `CONFIRMED_SEALED` (Diotorisasi resmi oleh pemilik repositori)
 - **Cabang Arsip Data & Evidence:** `origin/ace-data` (519 berkas `.json.gz` dan `cycle_*.json` dipisahkan dari cabang kode)
 - **Status PR:**
@@ -25,7 +25,7 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 | **W3 Perbaikan Inti Pembelajar** | Aktif & Teruji (5/5 tes) | `REPAIRED_VERIFIED` | Seleksi sadar-admission (`--max-errors k`), putaran counterexample ke-2 guard, karantina semantik drift late-flip (0 false admission), library terdekomposisi hemat fit, `ace.py train` & `doctor`, dan `QUICKSTART.md`. |
 | **W4 Pertumbuhan Kemampuan** | Selesai & Preregistrasi | `CONFIRMED_LOCAL_BENCHMARK` | Primitif graf BFS mencapai 100% (vs baseline 85.8%), rasio 4:1 mencapai 100% (vs baseline 77.4%), 60 sampel evaluasi seimbang (20 seed $\times$ 3 ulangan). |
 | **Mesin Algoritma L*/FunSearch/DreamCoder** | Aktif & Teruji (8/8 tes) | `OPERATIONAL_INNOVATION` | Induksi automata aktif Angluin $L^*$, pencarian pulau evolusioner AST (FunSearch/STGP), dan abstraksi library Wake-Sleep (DreamCoder). |
-| **Continuous Multi-Agent Swarm (CEGIS, MCTS, Invariants, ILP)** | Aktif & Teruji (15/15 tes) | `OPERATIONAL_INNOVATION` | Swarm agen paralel otonom: 3 agen simultan (Capability Scout, Pareto Optimizer, Neurosymbolic Researcher), siklus temukan-lapor-kerjakan-lanjutkan tanpa henti; dilengkapi ILP Relational Mining. |
+| **Continuous Multi-Agent Swarm (CEGIS, MCTS, Invariants, ILP, BALD)** | Aktif & Teruji (24/24 tes) | `OPERATIONAL_INNOVATION` | Swarm agen paralel otonom: 3 agen simultan (Capability Scout, Pareto Optimizer, Neurosymbolic Researcher), siklus temukan-lapor-kerjakan-lanjutkan tanpa henti; dilengkapi ILP Relational Mining dan BALD Active Epistemic Sampling (87% query reduction). |
 | **W5 Antarmuka & Operasi** | Selesai & Terverifikasi | `OPERATIONAL_VERIFIED` | Laporan HP bahasa Indonesia (`docs/LAPORAN_HASIL_RISET_HP.md`) memenuhi PRD FR-09 dan FR-14. |
 | **Pembelajar Inti Klasik** | Aktif & Lulus Tes | `RETAINED_COMPATIBLE` | Demo v1 dan seluruh suite tes klasik (368 tes) lulus 100%. |
 
@@ -44,8 +44,9 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 - `verify_sources.py`: **25/25 PASS** (offline blob integrity).
 - Seluruh Unit Test Repositori: **368/368 PASS** (`Ran 368 tests in 317.521s. OK`).
 - Matrix CI PR #90: **11/11 PASS** (Python 3.12 & 3.13 pada seluruh workflow).
-- Mission Bus Autonomous Queue: **378+ submissions recorded**, Hash Chain Integrity **VALID**.
-- Mesin Algoritma L*/FunSearch/DreamCoder: **Terintegrasi penuh** pada Mission Bus dan Patch Synthesizer.
+- Mission Bus Autonomous Queue: **398+ submissions recorded**, Hash Chain Integrity **VALID**.
+- Mesin Algoritma L*/FunSearch/DreamCoder/ILP/Invariants/BALD: **Terintegrasi penuh** pada runtime otonom.
+- Active Epistemic BALD Sampler: **87.12% query reduction**, 7.77x sample efficiency gain over random testing.
 - Autonomous Self-Dev Researcher: **Cycle 6 completed & accepted**, receipt signed, state persisted.
 - Uji A/B/C Graf (4-Vertex): **Kondisi C 100.0%** vs Kondisi B 85.8% vs Kondisi A 92.5%.
 - Uji A/B/C Rasio 4:1: **Kondisi C 100.0%** vs Kondisi B 89.0% vs Kondisi A 77.4%.
