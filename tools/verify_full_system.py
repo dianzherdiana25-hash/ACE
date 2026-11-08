@@ -22,9 +22,11 @@ import unittest
 
 ROOT = Path(__file__).resolve().parent.parent
 CODE_DIR = ROOT / "code"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))
-os.environ["PYTHONPATH"] = str(CODE_DIR) + (f":{os.environ['PYTHONPATH']}" if "PYTHONPATH" in os.environ else "")
+os.environ["PYTHONPATH"] = f"{CODE_DIR}:{ROOT}" + (f":{os.environ['PYTHONPATH']}" if "PYTHONPATH" in os.environ else "")
 
 MODULE_GROUPS = {
     "regressions": [
@@ -60,6 +62,39 @@ MODULE_GROUPS = {
         "ace_research_f12.test_f12_research",
         "ace_research_f13.test_f13_memory",
         "ace_research_f14.test_f14_discovery",
+    ],
+    "advanced_synthesis_and_formal_methods": [
+        "ace_abstract_interp.test_disjunctive_domain",
+        "ace_abstract_interp.test_invariants",
+        "ace_abstraction.test_wake_sleep",
+        "ace_automata.test_lstar",
+        "ace_autonomy.test_research_pipeline",
+        "ace_causal.test_causal_miner",
+        "ace_component_synthesis.test_component_synthesizer",
+        "ace_conformal.test_conformal_risk",
+        "ace_core_repair.test_core_repair",
+        "ace_dsl_growth.test_dsl_growth",
+        "ace_egraph.test_equality_saturation",
+        "ace_epistemic.test_active_sampler",
+        "ace_evaluator.test_sealed_evaluator",
+        "ace_evolution.test_island_search",
+        "ace_evolution.test_pareto_dsl_optimizer",
+        "ace_game_theory.test_minimax_synthesizer",
+        "ace_gnn.test_ast_embedder",
+        "ace_ilp.test_relational_miner",
+        "ace_interpolation.test_craig_interpolator",
+        "ace_inversion.test_bidirectional_transducer",
+        "ace_mcts.test_program_mcts",
+        "ace_mission.test_mission_bus",
+        "ace_neurosymbolic.test_cegar_refinement",
+        "ace_neurosymbolic.test_graph_embedding",
+        "ace_neurosymbolic.test_neural_guided_search",
+        "ace_neurosymbolic.test_sketch_synthesizer",
+        "ace_pac_bayes.test_pac_bounds",
+        "ace_red_team.test_adversarial_suite",
+        "ace_report.test_mobile_report",
+        "ace_smt.test_dpllt_solver",
+        "ace_synthesis.test_cegis",
     ],
 }
 
@@ -302,7 +337,8 @@ def run_test_module(mod_name: str) -> dict:
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--group", choices=["all", "regressions", "autonomy_and_selfmodel", "research_and_redteam", "evidence"], default="all")
+    valid_groups = ["all", "regressions", "autonomy_and_selfmodel", "research_and_redteam", "advanced_synthesis_and_formal_methods", "evidence"]
+    parser.add_argument("--group", choices=valid_groups, default="all")
     parser.add_argument("--json", action="store_true", help="Output machine-readable JSON summary")
     args = parser.parse_args(argv)
 
@@ -323,7 +359,7 @@ def main(argv=None) -> int:
 
     # 1. Run tests if requested
     if args.group != "evidence":
-        groups = [args.group] if args.group != "all" else ["regressions", "autonomy_and_selfmodel", "research_and_redteam"]
+        groups = [args.group] if args.group != "all" else list(MODULE_GROUPS.keys())
         for g in groups:
             print(f"\n--- Running Test Group: {g} ---")
             for mod in MODULE_GROUPS[g]:

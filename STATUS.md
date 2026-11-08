@@ -6,7 +6,7 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 
 ## 1. Metadata Repositori & Cabang
 - **Tanggal Status:** 8 November 2026
-- **Commit `main` Terbaru:** `db8b016` (feat: implement Bidirectional Program Inversion, Differentiable Sketching, and Macro Primitives)
+- **Commit `main` Terbaru:** `de1f644` (feat(red_team): implement Red Team Adversarial Security & Robustness Suite)
 - **Status Ilmiah Repositori:** `CONFIRMED_SEALED` (Diotorisasi resmi oleh pemilik repositori)
 - **Cabang Arsip Data & Evidence:** `origin/ace-data` (519 berkas `.json.gz` dan `cycle_*.json` dipisahkan dari cabang kode)
 - **Status PR:**

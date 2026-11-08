@@ -9,6 +9,8 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+import os
+from pathlib import Path
 import secrets
 import subprocess
 import sys
@@ -83,15 +85,18 @@ class SubprocessSealedEvaluator:
             "source_code": candidate_source,
             "inputs_by_task": inputs_by_task,
         }
-
         t_start = time.monotonic()
         try:
+            worker_env = dict(os.environ)
+            code_dir = str(Path(__file__).resolve().parent.parent)
+            worker_env["PYTHONPATH"] = f"{code_dir}:{worker_env.get('PYTHONPATH', '')}"
             proc = subprocess.Popen(
                 [sys.executable, "-m", "ace_host_controller.isolated_worker"],
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
+                env=worker_env,
             )
             stdout, stderr = proc.communicate(
                 input=json.dumps(payload), timeout=self.timeout_seconds
