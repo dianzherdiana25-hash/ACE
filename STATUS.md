@@ -6,12 +6,12 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 
 ## 1. Metadata Repositori & Cabang
 - **Tanggal Status:** 8 November 2026
-- **Commit `main` Terbaru:** `def4ee4` (PR #91 MERGED)
+- **Commit `main` Terbaru:** `81cd222` (PR #91 MERGED, Mission Worker & Continuous Self-Dev State)
 - **Status Ilmiah Repositori:** `CONFIRMED_SEALED` (Diotorisasi resmi oleh pemilik repositori)
 - **Cabang Arsip Data & Evidence:** `origin/ace-data` (519 berkas `.json.gz` dan `cycle_*.json` dipisahkan dari cabang kode)
 - **Status PR:**
   - **PR #91:** **MERGED** ke `main` (commit `def4ee41d172135431bcbe98bab3113e76e2971c`) via otorisasi `APPROVE-MERGE` pemilik.
-  - **PR #90:** [ACE Autonomous Research PR #90](https://github.com/dianzherdiana25-hash/ACE/pull/90) (Dibuat otomatis oleh runtime ACE)
+  - **PR #90:** [ACE Autonomous Research PR #90](https://github.com/dianzherdiana25-hash/ACE/pull/90) (Dibuat otomatis oleh runtime ACE, CI 11/11 PASS)
 
 ---
 
@@ -42,6 +42,8 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 - `verify_sources.py`: **25/25 PASS** (offline blob integrity).
 - Seluruh Unit Test Repositori: **368/368 PASS** (`Ran 368 tests in 317.521s. OK`).
 - Matrix CI PR #90: **11/11 PASS** (Python 3.12 & 3.13 pada seluruh workflow).
+- Mission Bus Autonomous Queue: **252 submissions recorded**, Hash Chain Integrity **VALID**.
+- Autonomous Self-Dev Researcher: **Cycle 6 completed & accepted**, receipt signed, state persisted.
 - Uji A/B/C Graf (4-Vertex): **Kondisi C 100.0%** vs Kondisi B 85.8% vs Kondisi A 92.5%.
 - Uji A/B/C Rasio 4:1: **Kondisi C 100.0%** vs Kondisi B 89.0% vs Kondisi A 77.4%.
 - Cross-Family Transfer: Menghemat **0 dari 16** fit (H1 & H2 ditolak pada baseline 6 Nov, hasil negatif sah tercatat).
