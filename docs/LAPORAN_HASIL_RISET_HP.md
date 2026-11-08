@@ -53,6 +53,7 @@ Menguji apakah sistem ACE yang telah dilengkapi **Mission Bus (W1)** dan **Penil
 - **Differentiable Program Sketching (`code/ace_neurosymbolic`):** Relaksasi kontinu Gumbel-Softmax dengan smooth tensor interpreter dan kompresi pencarian 28.57x.
 - **Craig Interpolation Invariant Synthesizer (`code/ace_interpolation`):** Pembuktian teorema Craig via pelabelan refutasi resolusi McMillan dan dualitas Farkas' Lemma linear, dengan sintesis otomatis loop invariant induktif (Initiation, Consecution, Safety).
 - **Type-Directed Component Synthesizer (`code/ace_component_synthesis`):** Sintesis program berbasis komponen tipe SyGuS dengan forward valuation, observational equivalence (OE) pruning (memangkas ~50% pencarian redundan), dan stratified composition memenuhi 100% spesifikasi I/O.
+- **SMT DPLL(T) Formal Verifier Engine (`code/ace_smt`):** DPLL SAT solver terintegrasi teori Quantifier-Free Linear Integer Arithmetic (QF-LIA) via eliminasi variabel Fourier-Motzkin, pengetatan Chvátal-Gomory GCD, T-propagation, conflict clause learning, dan antarmuka pembuktian spesifikasi program Hoare logic (12/12 tests PASS).
 
 ---
 
