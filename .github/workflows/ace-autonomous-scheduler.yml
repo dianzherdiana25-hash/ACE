@@ -60,18 +60,20 @@ jobs:
         run: |
           python -m ace_self_dev.cli --force-unlock
 
-      - name: Execute Bounded Autonomous Research Cycles
+      - name: Execute Bounded Mission Bus Operations
         run: |
           set -euo pipefail
-          MAX_CYCLES="${{ github.event.inputs.max_cycles || '3' }}"
-          AUTHOR="${{ github.event.inputs.author_type || 'ACE_AUTONOMOUS_V02' }}"
-          echo "Running ACE Autonomous Continuity with MAX_CYCLES=${MAX_CYCLES}, AUTHOR=${AUTHOR}..."
-          python -m ace_self_dev.cli --continuous "$MAX_CYCLES" --author-type "$AUTHOR"
+          echo "Executing ACE Mission Bus (ace.mission.v1) lifecycle..."
+          python3 ace.py mission --workspace ./ace-work generate
+          python3 ace.py mission --workspace ./ace-work status
+          # Claim next mission
+          python3 ace.py mission --workspace ./ace-work next --agent "github_actions_scheduler"
+          python3 ace.py mission --workspace ./ace-work status
 
-      - name: Verify Autonomous Continuity & Artifacts
+      - name: Verify Mission Bus and System Integrity
         run: |
           set -euo pipefail
-          python tools/verify_self_dev.py
+          PYTHONPATH=code python -m unittest discover -s code/ace_mission -p "test_*.py"
 
       - name: Archive research state, checkpoints, and receipts
         if: always()
