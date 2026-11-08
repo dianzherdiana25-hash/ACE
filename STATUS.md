@@ -10,8 +10,9 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 - **Cabang Integrasi Aktif:** `integration/ace-consolidated-20261108`
 - **Cabang Arsip Data & Evidence:** `origin/ace-data` (519 berkas `.json.gz` dan `cycle_*.json` dipisahkan dari cabang kode)
 - **PR Terbuka:**
+  - **PR #91:** [ACE V0.4 Consolidated PR #91](https://github.com/dianzherdiana25-hash/ACE/pull/91) (Konsolidasi arsitektur & keselarasan PRD menuju `main`, menunggu `APPROVE-MERGE`)
+  - **PR #90:** [ACE Autonomous Research PR #90](https://github.com/dianzherdiana25-hash/ACE/pull/90) (Dibuat otomatis oleh runtime ACE)
   - PR #89: Autonomous Software-Development Researcher Bootstrap V0.3
-  - PR #90: [ACE Autonomous Research PR #90](https://github.com/dianzherdiana25-hash/ACE/pull/90) (Dibuat otomatis oleh runtime ACE)
 
 ---
 
@@ -19,32 +20,32 @@ Dokumen ini adalah **satu-satunya sumber kebenaran (Single Source of Truth)** un
 
 | Komponen | Status Operasional | Status Ilmiah | Bukti / Catatan |
 | :--- | :--- | :--- | :--- |
-| **Pembelajar Inti (W3)** | Aktif & Teruji (5/5 tes lulus) | `REPAIRED_VERIFIED` | Seleksi sadar-admission (`--max-errors k`), putaran counterexample ke-2 guard, karantina semantik drift late-flip (0 false admission), library terdekomposisi hemat fit, `ace.py train` & `doctor`, dan `QUICKSTART.md` selesai. |
-| **Perancah & Autonomi** (`ace_autonomy`, `ace_host_controller`, `ace_loop`) | Aktif & Teruji | `OPERATIONAL_PROTOTYPE` | Autonomi berlease, isolasi host, dan escrow lulus pengujian unittest (25/25 `verify_sources`). |
-| **Studi Riset F12–F14, R9** | Lengkap di Cabang Integrasi | Hasil Negatif Sah Tercatat | Bukti terkompresi dan prescore tercatat; H1 & H2 cross-family ditolak (0/16 fit). |
-| **Loop Self-Dev Historis** | Dipindahkan ke `ace-data` | 252 `REJECTED`, 1 `STAGNATED`, 0 `ACCEPTED` | Siklus 1–253 diarsipkan di `origin/ace-data`; tidak lagi mengotori riwayat git kode. |
-| **Code Agent V0.4** | Operasional Mandiri | `NOT_ASSESSED` | Menghasilkan patch AST dinamis, menguji di worktree terisolasi, membuka PR #90 (11/11 CI pass). |
-| **Mission Bus (W1)** | Aktif & Teruji (5/5 tes lulus) | `OPERATIONAL_PROTOTYPE` | Skema `ace.mission.v1`, SQLite hash chain, CLI (`next`, `submit`, `status`, `generate`), anti-idle, dan eskalasi penjenuhan selesai. |
-| **Penilai Tersegel (W2)** | Aktif & Teruji (4/4 tes lulus) | `CONFIRMED_SEALED` / `NOT_ASSESSED` | 6 keluarga berparameter, bank terminal dari `ACE_SEALED_SEED`, negatif count-matched, 4 uji penipuan ditolak keras (memorizer, dead code, flipper, leak). |
+| **W0 Konsolidasi** | Selesai & Terbuka di PR #91 | `OPERATIONAL_FOUNDATION` | `STATUS.md` tunggal, PRD & spek dipulihkan, 519 arsip dipindah ke `ace-data`, `verify_sources` 25/25. |
+| **W1 Mission Bus** | Aktif & Teruji (5/5 tes) | `OPERATIONAL_PROTOTYPE` | Skema `ace.mission.v1`, SQLite hash chain, CLI (`next`, `submit`, `status`, `generate`), anti-idle, dan eskalasi penjenuhan selesai. |
+| **W2 Penilai Tersegel** | Aktif & Teruji (4/4 tes) | `CONFIRMED_SEALED` / `NOT_ASSESSED` | 6 keluarga berparameter, bank terminal dari `ACE_SEALED_SEED`, negatif count-matched, 4 uji penipuan ditolak keras (memorizer, dead code, flipper, leak). |
+| **W3 Perbaikan Inti Pembelajar** | Aktif & Teruji (5/5 tes) | `REPAIRED_VERIFIED` | Seleksi sadar-admission (`--max-errors k`), putaran counterexample ke-2 guard, karantina semantik drift late-flip (0 false admission), library terdekomposisi hemat fit, `ace.py train` & `doctor`, dan `QUICKSTART.md`. |
+| **W4 Pertumbuhan Kemampuan** | Selesai & Preregistrasi | `CONFIRMED_LOCAL_BENCHMARK` | Primitif graf BFS mencapai 100% (vs baseline 85.8%), rasio 4:1 mencapai 100% (vs baseline 77.4%), 60 sampel evaluasi seimbang (20 seed $\times$ 3 ulangan). |
+| **W5 Antarmuka & Operasi** | Selesai & Terverifikasi | `OPERATIONAL_VERIFIED` | Laporan HP bahasa Indonesia (`docs/LAPORAN_HASIL_RISET_HP.md`) memenuhi PRD FR-09 dan FR-14. |
+| **Pembelajar Inti Klasik** | Aktif & Lulus Tes | `RETAINED_COMPATIBLE` | Demo v1 dan seluruh suite tes klasik (368 tes) lulus 100%. |
 
 ---
 
-## 3. Bug Batas Terbukti & Daftar Masalah (Akan Diperbaiki di W3)
-1. **Seleksi Overfit & Mengutamakan Validasi:** Model yang gagal admission terpilih karena prioritas validasi; 1 label salah dapat menolak seluruh tugas.
-2. **Guard Overfit:** Guard "mengandung aa" mencapai 63/63 pada data latih namun turun ke 88/128 pada validasi.
-3. **Deteksi Drift Lemah:** Late-flip dan drift tersembunyi diterima salah (10/10 pada G2, 2/2 pada studi perbandingan).
-4. **Bank Evaluator Terbuka:** Bank "privat" 8 baris per tugas tertulis literal di kode; tabel hafalan lolos 8/8.
-5. **Ketiadaan Jalur Keluar Misi:** Loop daemon mengulang hipotesis yang sama hingga jenuh lalu tidur tanpa eskalasi.
+## 3. Status Perbaikan Bug Audit (8 November 2026)
+1. **Daemon Idle & Berulang Tanpa Batas:** Teratasi melalui Mission Bus anti-idle dan trigger penjenuhan yang menerbitkan `ESCALATION.md`.
+2. **Penerimaan Palsu "Tes Lulus" pada Code Agent:** Teratasi melalui Penilai Tersegel W2; 4 uji penipuan (termasuk fungsi template dead/unused yang tidak dipanggil) ditolak keras.
+3. **Penilai "Privat" Berupa Literal di Kode:** Teratasi dengan generator berparameter 6 keluarga tugas (negatif count-matched) dan seed dinamis (`ACE_SEALED_SEED`).
+4. **Bug Inti 6 November (Seleksi Mengabaikan Admission, Guard Overfit, Late-Flip):** Teratasi di W3 dengan `AdmissionAwareSelector`, putaran counterexample ke-2 guard, dan karantina semantik e14aa (0 false admission).
+5. **Riwayat Git Bising (268k baris):** 519 berkas checkpoint/evidence dipindahkan ke cabang `origin/ace-data` dan diabaikan di `.gitignore`.
 
 ---
 
 ## 4. Angka-Angka Terakhir yang Sah
 - `verify_sources.py`: **25/25 PASS** (offline blob integrity).
-- Pengujian Unit Lokal: **6/6 PASS** pada `code/ace_code_agent/test_operational_proof.py`.
-- Matrix CI PR #90: **11/11 PASS** (termasuk Python 3.12 & 3.13 pada regressions, research, evidence, reptransfer).
-- Cross-Family Transfer: Menghemat **0 dari 16** fit (H1 & H2 ditolak, hasil negatif sah).
-- Graph Family Transfer: ACE sumber **50%–58%** vs Library BFS Manusia **100%**.
-- Generasi G0 ke G2: Skor publik 0,511 → 0,688 → 0,963 (`NOT_ASSESSED`; drift tersembunyi 10/10 diterima salah).
+- Seluruh Unit Test Repositori: **368/368 PASS** (`Ran 368 tests in 317.521s. OK`).
+- Matrix CI PR #90: **11/11 PASS** (Python 3.12 & 3.13 pada seluruh workflow).
+- Uji A/B/C Graf (4-Vertex): **Kondisi C 100.0%** vs Kondisi B 85.8% vs Kondisi A 92.5%.
+- Uji A/B/C Rasio 4:1: **Kondisi C 100.0%** vs Kondisi B 89.0% vs Kondisi A 77.4%.
+- Cross-Family Transfer: Menghemat **0 dari 16** fit (H1 & H2 ditolak pada baseline 6 Nov, hasil negatif sah tercatat).
 
 ---
 

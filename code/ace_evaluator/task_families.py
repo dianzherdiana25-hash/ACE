@@ -83,21 +83,21 @@ def _generate_sequence_instances(rng: random.Random, count: int) -> List[Tuple[s
     return instances
 
 
-def _generate_counter_ratio_instances(rng: random.Random, count: int) -> List[Tuple[str, bool]]:
-    """Generates strings where count(a) > 2 * count(b)."""
+def _generate_counter_ratio_instances(rng: random.Random, count: int, ratio_mult: int = 4) -> List[Tuple[str, bool]]:
+    """Generates strings where count(a) > ratio_mult * count(b) (e.g. 4:1 ratio)."""
     half = count // 2
     instances: List[Tuple[str, bool]] = []
 
     for _ in range(half):
         n_b = rng.randint(0, 3)
-        n_a = (2 * n_b) + rng.randint(1, 4)
+        n_a = (ratio_mult * n_b) + rng.randint(1, 4)
         chars = ["a"] * n_a + ["b"] * n_b
         rng.shuffle(chars)
         instances.append(("".join(chars), True))
 
-        # Negative: count(a) <= 2 * count(b)
-        n_b_neg = rng.randint(2, 6)
-        n_a_neg = rng.randint(0, 2 * n_b_neg)
+        # Negative: count(a) <= ratio_mult * count(b)
+        n_b_neg = rng.randint(1, 5)
+        n_a_neg = rng.randint(0, ratio_mult * n_b_neg)
         chars_neg = ["a"] * n_a_neg + ["b"] * n_b_neg
         rng.shuffle(chars_neg)
         instances.append(("".join(chars_neg), False))
