@@ -1,0 +1,16 @@
+{
+  "task_j1_multiscale_run_parity": [
+    {
+      "constraint_id": "FC_9fae13d61259",
+      "task_id": "task_j1_multiscale_run_parity",
+      "constraint_type": "PARAMETRIC_MISALIGNMENT",
+      "violating_witness": "bbaaaaa",
+      "expected_label": true,
+      "forbidden_pattern": {
+        "clause_type": "CONJUNCTION_AND",
+        "modulus": 3
+      },
+      "deduced_reason": "Relational clause configuration failed on witness 'bbaaaaa'"
+    }
+  ]
+}

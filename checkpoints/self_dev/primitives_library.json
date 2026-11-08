@@ -1,0 +1,14 @@
+{
+  "PRIM_2444e3ae73": {
+    "primitive_id": "PRIM_2444e3ae73",
+    "name": "gated_congruence_mod3",
+    "signature": "(length: int, density: int, stride_val: int) -> int",
+    "expression_body": "(((stride_val * 1 + density * 1)) % 3) == 0",
+    "source_code": "def prim_gated_m3_s1_d1(length: int, density: int, stride_val: int) -> int:\n    return 0 if ((((stride_val * 1 + density * 1)) % 3) == 0) else 1\n",
+    "source_sha": "2444e3ae7323b4421ca57c10ac3dd734deb2caebf7af5bd01f0a1fc2efdde84f",
+    "complexity_cost": 3,
+    "compression_value": 1.3,
+    "discovered_task_id": "task_j1_multiscale_run_parity",
+    "origin_candidate_id": "CAND_HYP_AUTONOMOUS_C252_task_j1_multiscale_run_parity_gated_ord1"
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "ace_base_runtime": {
+    "capabilities": 2,
+    "completed": 3,
+    "demo_eval_perfect": true,
+    "implementation": "931b1582e4dc9579a56712936097a9d476941cdc1bc19c876f6ea4936aab644c"
+  },
+  "agenda_integration_summary": {
+    "abstained_unidentifiable": 1,
+    "autonomy_capabilities_registered": 16,
+    "autonomy_goal_counts": {
+      "STAGED_FOR_REVIEW": 2,
+      "SUCCEEDED": 3
+    },
+    "metacognitive_post_refutation_abstention_verified": true,
+    "refuted_negative_archived": 1,
+    "supported_bounded": 4,
+    "total_archived_records": 6
+  },
+  "ast_holdout_isolation": {
+    "all_isolated": true,
+    "packages": {
+      "ace_research_discovery": {
+        "checked_modules": [
+          "dsl.py",
+          "discovery.py",
+          "arms.py"
+        ],
+        "isolated": true,
+        "violations": []
+      },
+      "ace_research_generations": {
+        "checked_modules": [
+          "__init__.py",
+          "immutable_guard.py",
+          "tasks.py",
+          "mechanisms.py",
+          "lineage.py"
+        ],
+        "isolated": true,
+        "violations": []
+      },
+      "ace_research_repair": {
+        "checked_modules": [
+          "__init__.py",
+          "corpus.py",
+          "sandbox.py",
+          "operators.py",
+          "represent.py",
+          "memory.py",
+          "engine.py"
+        ],
+        "isolated": true,
+        "violations": []
+      },
+      "ace_research_reptransfer": {
+        "checked_modules": [
+          "__init__.py",
+          "tasks.py",
+          "sampling.py",
+          "features.py",
+          "head.py",
+          "arms.py"
+        ],
+        "isolated": true,
+        "violations": []
+      }
+    }
+  },
+  "codex_graph_builder_untouched": true,
+  "evidence_flags": {
+    "ACE_BASE_RUNTIME_EXECUTED": true,
+    "NEW_CAPABILITY_INTEGRATED_AND_EXECUTED": true,
+    "SCIENTIFIC_CAPABILITY_VALIDATED": true
+  },
+  "evidence_inventory": {
+    "evidence/agenda/ace_research_agenda_v1.json.gz": {
+      "compressed_sha256": "9d9c1e15d1c1fe96a6cc1929152cd5ceed64d6669ccaea11b62ea96cc14632ae",
+      "oaie_established": false,
+      "scientific_status": "NOT_ASSESSED",
+      "uncompressed_sha256": "d9d26bbca8bcabd22074285a7f17adadda446ad0a9ebec00054ac6abb5c5e66f"
+    },
+    "evidence/discovery/f6_novel_discovery_v1.json.gz": {
+      "compressed_sha256": "449ffa2b1466f8bb7ddd489016b089d0f1d12327fc40cf6997ad4ceee017bb3e",
+      "oaie_established": false,
+      "scientific_status": "NOT_ASSESSED",
+      "uncompressed_sha256": "3ece491a9926380117e866426f87cde55057d3fcd25bd61c4a68d18b0a367792"
+    },
+    "evidence/generations/ace_g0_g2_v1.json.gz": {
+      "compressed_sha256": "876446c24d6637f6d942f9caf66de8a8072759a442e267a38f63520165214876",
+      "oaie_established": false,
+      "scientific_status": "NOT_ASSESSED",
+      "uncompressed_sha256": "2b749959258be9109c6cd60fc6e423d894ba3eb8f7a9b0f222d34634ad5ae4a0"
+    },
+    "evidence/repair/ace_repair_v1.json.gz": {
+      "compressed_sha256": "6d9adf3dbc6a3a3e2326e50bf67e28cddb3cdea3865fadf4de209f4ecea6edf7",
+      "oaie_established": false,
+      "scientific_status": "NOT_ASSESSED",
+      "uncompressed_sha256": "0eb98aa4eb967fb1207589cb28a3d595278557af033ce309c83922d684b04929"
+    },
+    "evidence/reptransfer/r9_gemini_v1.json.gz": {
+      "compressed_sha256": "f229ed0e66214e004d10f591d0e4cd4f53e63f0c75cf8becd9f7c29119b27b44",
+      "oaie_established": false,
+      "scientific_status": "NOT_ASSESSED",
+      "uncompressed_sha256": "1f8f5836b79a811c6413879823ca6f21f6def998b4944d72f46f6bd697412d91"
+    },
+    "evidence/selfmodel/ace_selfmodel_v1.json.gz": {
+      "compressed_sha256": "e15607ae4ebca34c60d6a657f375b30c90f70b2801f5cb7b783f6490e04b2489",
+      "oaie_established": false,
+      "scientific_status": "NOT_ASSESSED",
+      "uncompressed_sha256": "76d2038362281666d56321ca255431451bb4bc2bfa964a67045df5e8bf077da0"
+    }
+  },
+  "immutable_core_guard": {
+    "evaluator_sha256": "66e87d6a6a8498d9bb78d7935d71b387eef08b0aabe06a4cf3466c7b2f30e636",
+    "locked_files_verified": 7,
+    "promotion_policy_sha256": "e2440ae633ca4cf241490d8ede09e7e0abdf7dd0af74643374be5e0854305707"
+  },
+  "oaie_established": false,
+  "phenomenal_consciousness": "PHENOMENAL_CONSCIOUSNESS_UNKNOWN",
+  "release_status": "BLOCK_RELEASE",
+  "schema": "ace.full_integration_redteam.v1",
+  "scientific_status": "NOT_ASSESSED",
+  "upstream_pins_check": "PASS: 25 imported files match their recorded Git blob IDs (offline)"
+}

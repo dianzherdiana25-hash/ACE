@@ -1,0 +1,88 @@
+name: ACE Autonomous Research Scheduler V0.2
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_cycles:
+        description: 'Maximum autonomous cycles to execute in this run (1-5)'
+        required: false
+        default: '3'
+      force_unlock:
+        description: 'Force release expired concurrency lock'
+        required: false
+        default: 'false'
+      author_type:
+        description: 'Author provenance identifier'
+        required: false
+        default: 'ACE_AUTONOMOUS_V02'
+  schedule:
+    # Run once daily at 00:00 UTC (strictly bounded)
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ace-autonomous-continuity
+  cancel-in-progress: false
+
+jobs:
+  execute-bounded-autonomous-continuity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: code
+      PYTHONDONTWRITEBYTECODE: '1'
+      ACE_SIGNING_KEY: ${{ secrets.ACE_SIGNING_KEY }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+
+      - name: Verify source integrity
+        run: |
+          set -euo pipefail
+          python tools/verify_sources.py
+
+      - name: Run unit and continuity test suites
+        run: |
+          set -euo pipefail
+          python -m unittest ace_self_dev.test_self_dev_loop ace_loop.test_source_evolution ace_chat.test_task_runner -v
+
+      - name: Force unlock state if requested
+        if: "${{ github.event.inputs.force_unlock == 'true' }}"
+        run: |
+          python -m ace_self_dev.cli --force-unlock
+
+      - name: Execute Bounded Mission Bus Operations
+        run: |
+          set -euo pipefail
+          echo "Executing ACE Mission Bus (ace.mission.v1) lifecycle..."
+          python3 ace.py mission --workspace ./ace-work generate
+          python3 ace.py mission --workspace ./ace-work status
+          # Claim next mission
+          python3 ace.py mission --workspace ./ace-work next --agent "github_actions_scheduler"
+          python3 ace.py mission --workspace ./ace-work status
+
+      - name: Verify Mission Bus and System Integrity
+        run: |
+          set -euo pipefail
+          PYTHONPATH=code python -m unittest discover -s code/ace_mission -p "test_*.py"
+
+      - name: Archive research state, checkpoints, and receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-autonomous-continuity-evidence
+          path: |
+            checkpoints/self_dev/research_state.json
+            checkpoints/self_dev/cycle_*.json
+            evidence/self_dev/ace_self_dev_v*.json.gz
+          if-no-files-found: warn
+          retention-days: 7
