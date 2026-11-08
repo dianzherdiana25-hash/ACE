@@ -78,6 +78,20 @@ class ContinuousResearcherPipeline:
             "mathematical_foundation": "Mutual information maximization over hypothesis posterior (Bayesian Active Learning by Disagreement)",
             "suggested_implementation": "code/ace_epistemic/active_sampler.py",
             "verification_criteria": "Achieves >= 60% sample efficiency gain over uniform random query generation"
+        },
+        {
+            "capability_name": "Causal Invariant Graph Mining (Structural Causal Models)",
+            "target_bottleneck": "Spurious observational correlations and hidden confounders in candidate program execution",
+            "mathematical_foundation": "Pearl's do-calculus interventional distributions P(Y | do(X)) and d-separation invariance",
+            "suggested_implementation": "code/ace_causal/causal_miner.py",
+            "verification_criteria": "Identifies true causal invariants with zero false discovery under non-interventional confounders"
+        },
+        {
+            "capability_name": "Differentiable Neurosymbolic Program Sketching",
+            "target_bottleneck": "Discrete combinatorial cliff in high-order multi-primitive AST synthesis",
+            "mathematical_foundation": "Continuous relaxation over AST grammar productions with Gumbel-Softmax annealing",
+            "suggested_implementation": "code/ace_neurosymbolic/sketch_synthesizer.py",
+            "verification_criteria": "Converges to verified AST program sketches with 10x search space compression"
         }
     ]
 
