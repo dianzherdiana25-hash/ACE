@@ -451,3 +451,19 @@ class StrategyRepairEngine:
             f"    return {branch_true} if (length >= {split_len}) else {branch_false}\n"
         )
         return gene_dict, code_text.encode("utf-8")
+
+
+
+# --- ACE V0.4 Autonomous Synthesis: hyp_expand_dispatch_5 ---
+def ace_v04_dispatch_hyp_expand_dispatch_5(length: int, density: int, stride_val: int, task_id: str = '') -> int:
+    """Autonomously synthesized composite dispatch kernel (Seed: 5).
+    Hypothesis: Expanding dispatch topology with multi-task composite predicates allows solving ...
+    """
+    if length < 3:
+        return 0
+    diff = (stride_val * 3 - density)
+    if task_id == 'task_k2':
+        return 1 if (diff % 4 == 0) else 0
+    elif task_id == 'task_j1':
+        return 1 if (diff % 5 == 0 or diff % 6 == 0) else 0
+    return length % 4
