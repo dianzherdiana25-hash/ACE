@@ -13,6 +13,8 @@ def run_doctor_diagnostics(workspace: Path = Path("./ace-work")) -> Dict[str, An
 
     # 1. Source integrity check (verify_sources)
     try:
+        if str(root) not in sys.path:
+            sys.path.insert(0, str(root))
         from tools.verify_sources import verify
         verified_count = verify(root)
         source_pass = True

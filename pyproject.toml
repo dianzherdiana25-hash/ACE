@@ -28,6 +28,10 @@ dev = [
     "pytest>=7.0",
 ]
 
+[project.scripts]
+ace = "ace_runtime.cli:main"
+ace-autonomy = "ace_autonomy.cli:main"
+
 [tool.setuptools]
 package-dir = {"" = "code"}
 
