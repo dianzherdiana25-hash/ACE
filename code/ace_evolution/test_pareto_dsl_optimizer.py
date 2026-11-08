@@ -322,7 +322,7 @@ class TestNSGAIIOptimization(unittest.TestCase):
 class TestOptimizationCurriculum(unittest.TestCase):
     def test_curriculum_stages_ordering(self):
         curriculum = OptimizationCurriculum()
-        self.assertEqual(len(curriculum.stages), 8)
+        self.assertEqual(len(curriculum.stages), 9)
         for i, stage in enumerate(curriculum.stages):
             self.assertEqual(stage.level, i)
             self.assertGreater(len(stage.train_data), 0)
@@ -378,6 +378,17 @@ class TestOptimizationCurriculum(unittest.TestCase):
         self.assertEqual(stage6.level, 6)
         self.assertEqual(stage6.stage_id, "CURR_S6_PROGRAM_INDUCTION")
         self.assertGreaterEqual(weights6.terminal_bool["graph_bfs"], 3.0)
+
+    def test_prepare_next_curriculum_stage7_meta_transfer(self):
+        curriculum = OptimizationCurriculum()
+        prior = DSLGrammarWeights()
+
+        stage7, weights7 = curriculum.prepare_next_curriculum(6, prior)
+        self.assertEqual(stage7.level, 7)
+        self.assertEqual(stage7.stage_id, "CURR_S7_CROSS_DOMAIN_TRANSFER")
+        self.assertGreaterEqual(weights7.terminal_bool["graph_bfs"], 3.5)
+        self.assertGreaterEqual(weights7.terminal_bool["dyck_balanced"], 3.5)
+        self.assertGreaterEqual(weights7.compound_bool_logic["or"], 3.0)
 
 
 class TestHierarchicalSubGrammar(unittest.TestCase):

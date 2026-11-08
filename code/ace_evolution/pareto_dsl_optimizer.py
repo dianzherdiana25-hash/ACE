@@ -1084,11 +1084,23 @@ class OptimizationCurriculum:
 
         # Stage 7: Cross-Domain Meta-Transfer & Generalized Structural Abstraction (Level 7)
         train_s7 = [
-            ("abbaba", True), ("aaabbb", True), ("ab", True), ("aabb", True),
-            ("bbbaaa", False), ("aaaaaa", False), ("bbbbbb", False), ("ba", False),
+            ("ab", True), ("aabb", True), ("abab", True),
+            ("abbaba", True), ("aaabbb", True), ("abaabb", True),
+            ("ba", False), ("bbaa", False), ("aab", False),
+            ("bbbaaa", False), ("baabba", False), ("aaaaaa", False), ("bbbbbb", False),
         ]
         val_s7 = [
-            ("abaabb", True), ("abab", True), ("aababb", False), ("bbaabb", False),
+            ("aabbab", True), ("aaaabbbb", True), ("bababa", True),
+            ("bbaabb", False), ("aaaaab", False), ("aab", False),
+        ]
+
+        # Stage 8: Universal Structural Synthesis & Self-Refining Program Discovery (Level 8)
+        train_s8 = [
+            ("ab", True), ("aabb", True), ("abbaba", True), ("aaabbb", True),
+            ("ba", False), ("bbbaaa", False), ("aaaaaa", False), ("bbbbbb", False),
+        ]
+        val_s8 = [
+            ("abab", True), ("abaabb", True), ("baabba", False), ("bbaabb", False),
         ]
 
         return [
@@ -1156,6 +1168,14 @@ class OptimizationCurriculum:
                 train_data=train_s7,
                 val_data=val_s7,
             ),
+            CurriculumStage(
+                stage_id="CURR_S8_UNIVERSAL_STRUCTURAL_SYNTHESIS",
+                name="Universal Structural Synthesis & Self-Refining Program Discovery",
+                description="Self-refining multi-goal synthesis across arbitrary composition of grammatical invariants with bounded resource allocation.",
+                level=8,
+                train_data=train_s8,
+                val_data=val_s8,
+            ),
         ]
 
     def get_stage(self, level: int) -> CurriculumStage:
@@ -1209,11 +1229,22 @@ class OptimizationCurriculum:
             base_weights.terminal_bool["dyck_balanced"] = 3.0
             base_weights.compound_bool_logic["and"] *= 2.5
             base_weights.structural["terminal_prob"] = 0.3
-        elif next_level >= 7:
-            # Cross-domain meta-transfer
+        elif next_level == 7:
+            # Cross-domain meta-transfer across formal language, graph, and counters
+            base_weights.terminal_bool["graph_bfs"] = 3.5
+            base_weights.terminal_bool["dyck_balanced"] = 3.5
+            base_weights.terminal_int["count_a"] *= 2.0
+            base_weights.terminal_int["count_b"] *= 2.0
+            base_weights.compound_bool_logic["or"] *= 3.0
+            base_weights.compound_bool_logic["and"] *= 2.5
             base_weights.structural["terminal_prob"] = 0.35
             base_weights.structural["bool_cmp_prob"] = 0.5
-            base_weights.compound_bool_logic["and"] *= 2.0
-            base_weights.compound_bool_logic["or"] *= 1.5
+        elif next_level >= 8:
+            # Universal self-refining synthesis
+            base_weights.terminal_bool["graph_bfs"] = 3.0
+            base_weights.terminal_bool["dyck_balanced"] = 3.0
+            base_weights.compound_bool_logic["and"] *= 2.5
+            base_weights.compound_bool_logic["or"] *= 2.5
+            base_weights.structural["terminal_prob"] = 0.3
 
         return stage, base_weights.normalize()
