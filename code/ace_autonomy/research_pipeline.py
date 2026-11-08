@@ -155,3 +155,38 @@ class ContinuousResearcherPipeline:
     def pending_implementations(self) -> List[DiscoveryProposal]:
         """Returns proposals waiting for implementation."""
         return [p for p in self.proposals.values() if p.status == "PROPOSED"]
+
+
+def audit_and_enforce_agent_missions(
+    active_agents: List[Dict[str, Any]],
+    active_mission_agent_ids: Set[str],
+) -> Dict[str, Any]:
+    """Strict lifecycle governor enforcing:
+    1. Zero idle agents: Any agent runtime without an active mission is flagged for immediate termination.
+    2. Zero obsolete agents: Any agent that has completed its task or is not needed is shut down.
+    """
+    valid_active = []
+    to_terminate = []
+
+    for ag in active_agents:
+        ag_id = ag.get("conversationId") or ag.get("id") or ag.get("agent_id")
+        role = ag.get("role", "unknown")
+        state = ag.get("state", "running")
+
+        # Condition: An agent must not be idle, and must have an active assigned mission
+        if state == "idle" or ag_id not in active_mission_agent_ids:
+            to_terminate.append({
+                "id": ag_id,
+                "role": role,
+                "reason": "IDLE_OR_UNASSIGNED_MISSION" if state == "idle" else "NO_ACTIVE_MISSION_ASSIGNED"
+            })
+        else:
+            valid_active.append(ag)
+
+    return {
+        "total_audited": len(active_agents),
+        "valid_active_count": len(valid_active),
+        "termination_targets": to_terminate,
+        "clean_state": len(to_terminate) == 0,
+    }
+

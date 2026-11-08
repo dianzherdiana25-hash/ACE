@@ -89,6 +89,26 @@ class TestResearchPipeline(unittest.TestCase):
         self.assertEqual(all_proposals[mcts_prop.proposal_id].status, "VERIFIED")
         self.assertEqual(all_proposals[interp_prop.proposal_id].status, "PROPOSED")
 
+    def test_audit_and_enforce_agent_missions(self):
+        """Enforces that idle or mission-less agents are flagged for immediate termination."""
+        from ace_autonomy.research_pipeline import audit_and_enforce_agent_missions
+
+        active_agents = [
+            {"conversationId": "ag_active_1", "role": "Capability Researcher", "state": "running"},
+            {"conversationId": "ag_idle_2", "role": "Completed Scout", "state": "idle"},
+            {"conversationId": "ag_unassigned_3", "role": "Orphaned Runner", "state": "running"},
+        ]
+        assigned_missions = {"ag_active_1"}
+
+        audit = audit_and_enforce_agent_missions(active_agents, assigned_missions)
+        self.assertFalse(audit["clean_state"])
+        self.assertEqual(audit["valid_active_count"], 1)
+        self.assertEqual(len(audit["termination_targets"]), 2)
+
+        target_ids = {t["id"] for t in audit["termination_targets"]}
+        self.assertEqual(target_ids, {"ag_idle_2", "ag_unassigned_3"})
+
 
 if __name__ == "__main__":
     unittest.main()
+
