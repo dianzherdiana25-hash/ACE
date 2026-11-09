@@ -33,7 +33,7 @@ from .worktree_harness import WorktreeHarness
 class AutonomousSoftwareResearcher:
     """End-to-end controller for autonomous software development research."""
 
-    def __init__(self, repo_root: Optional[Path] = None):
+    def __init__(self, repo_root: Optional[Path] = None, use_ai_fleet: bool = True):
         if repo_root is None:
             self.repo_root = Path(__file__).resolve().parent.parent.parent
         else:
@@ -42,7 +42,7 @@ class AutonomousSoftwareResearcher:
         self.reader = CodebaseReader(self.repo_root)
         from .problem_selector import ProblemSelector
         self.selector = ProblemSelector()
-        self.synthesizer = ModularPatchGenerator()
+        self.synthesizer = ModularPatchGenerator(use_external_model=use_ai_fleet)
         self.harness = WorktreeHarness(self.repo_root)
         self.evaluator = IndependentEvaluator()
         self.pr_manager = AutonomousPRManager(self.repo_root)

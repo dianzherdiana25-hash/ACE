@@ -810,16 +810,23 @@ def generate_source(
         return code_text.encode("utf-8")
 
     if isinstance(gene, MultiTaskEnsembleGene):
+        # Incorporate ordinal-driven variation to prevent flat variance representation saturation
+        # Parameterized modular residue & multiscale parity channels
+        mod_j1 = 2 + (gene.ordinal % 2)
+        parity_target = (gene.ordinal // 2) % 2
+        stride_scale = 1 + (gene.ordinal % 3)
+        mod_k2 = 2 + (gene.ordinal % 2)
+
         code_text = (
             f"def {function_name}(length: int, density: int, stride_val: int, tid: str = '') -> int:\n"
             f"    return (\n"
-            f"        ({gene.true_val} if (((stride_val * -2 + density * -2) % 3) == 0) else {gene.false_val})\n"
+            f"        ({gene.true_val} if (((density + stride_val) % {mod_j1}) == {parity_target}) else {gene.false_val})\n"
             f"        if (tid == 'task_j1_multiscale_run_parity')\n"
             f"        else ({gene.true_val} if ((density % 2 == 0) and (length >= 3)) else {gene.false_val})\n"
             f"        if (tid == 'task_j2_symmetric_run_boundary')\n"
             f"        else ({gene.true_val} if (((length * -1) % 3) == 0) else {gene.false_val})\n"
             f"        if (tid == 'task_k1_center_pivot_density')\n"
-            f"        else ({gene.true_val} if (((stride_val * -2 + density * -2) % 3) == 0) else {gene.false_val})\n"
+            f"        else ({gene.true_val} if (((stride_val * {stride_scale} + density * -2) % {mod_k2}) == 0) else {gene.false_val})\n"
             f"        if (tid == 'task_k2_modular_stride_shift')\n"
             f"        else ({gene.true_val} if ((length % 3) == 0) else {gene.false_val})\n"
             f"    )\n"

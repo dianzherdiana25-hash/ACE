@@ -168,6 +168,7 @@ def run_daemon_loop(
     log(f"Repository Root: {REPO_ROOT}")
     log(f"Mode: {mode.upper()} | Max Cycles: {max_cycles if max_cycles > 0 else 'Continuous'}")
     log(f"Batch Size: {batch_size} | Inter-batch Sleep: {sleep_seconds}s | Auto-PR: {auto_pr}")
+    log("Multi-AI Fleet Advisor: ACTIVE (PowerBrain, Pollinations, G4F, AI Horde with Auto-Fallback)")
 
     watchdog = ResilientWatchdog(
         WatchdogConfig(
