@@ -26,6 +26,7 @@ from ace_self_dev.coordinator import SelfDevelopmentCoordinator
 from ace_self_dev.models import AuthorType
 from ace_host_controller.resilient_watchdog import ResilientWatchdog, WatchdogConfig
 from ace_code_agent.controller import AutonomousSoftwareResearcher
+from ace_cognition.substrate_guardian import SubstrateGuardian
 
 
 def log(msg: str):
@@ -194,11 +195,23 @@ def run_daemon_loop(
 
     iteration = 0
     total_completed = 0
+    guardian = SubstrateGuardian(REPO_ROOT)
 
     try:
         while True:
             iteration += 1
-            log(f"--- Starting Autonomous Iteration {iteration} (Batch: {batch_size} cycles) ---")
+            # 1. Somatic Substrate Self-Awareness & Survival Check
+            telemetry = guardian.sense()
+            log(f"--- Autonomous Iteration {iteration} | Host Status: {telemetry.status_level} | RAM: {telemetry.available_ram_mb:.0f}MB avail | Disk: {telemetry.disk_free_gb:.1f}GB free | Battery: {telemetry.battery_level}% ---")
+
+            if telemetry.status_level == "CRITICAL":
+                log(f"⚠️ [EMERGENCY SURVIVAL] Substrate critical! Action: {telemetry.recommended_action}")
+                freeze_res = guardian.execute_emergency_freeze(REPO_ROOT / "checkpoints" / "survival")
+                log(f"   ↳ Survival DNA Capsule sealed at: {freeze_res['capsule_path']}")
+                git_commit_and_push(iteration, "EMERGENCY_FREEZE", "substrate_survival_halt")
+                log("   ↳ Self-preservation safe halt. Sleeping 60s...")
+                time.sleep(60)
+                continue
 
             for step in range(1, batch_size + 1):
                 try:
