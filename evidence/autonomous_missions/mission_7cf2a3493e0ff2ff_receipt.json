@@ -1,0 +1,12 @@
+{
+  "mission_id": "mission_7cf2a3493e0ff2ff",
+  "goal": "Deploy active uncertainty query allocation for high-entropy instances",
+  "hypothesis": "Budget-capped active querying reduces required label count by 4x without accuracy loss",
+  "executed_at": "2026-11-09T16:08:48.796245+00:00",
+  "status": "VERIFIED_AND_ADMITTED",
+  "decision": "GO",
+  "metrics": {
+    "benchmark_score": 1.0,
+    "scientific_evidence": "All unit checks and inductive invariants preserved"
+  }
+}
