@@ -12,6 +12,7 @@ via the unified `ask-ai` subsystem to autonomously guide ACE self-development:
 from __future__ import annotations
 
 import ast
+import json
 import os
 import re
 import shutil
