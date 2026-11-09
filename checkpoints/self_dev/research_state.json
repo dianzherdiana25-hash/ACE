@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 262,
+  "cycle_count": 263,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -3932,6 +3932,21 @@
       "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0262.json.gz",
       "prior_digest": "077feeddaca5870a88c5764ad7ca187dac76f8f9bacd26fc7d1e8aaa98d5720a",
       "state_digest": "af925d55c24f388b887907919d1d19713f5eed9f50b6be0df5b606b267e6b2bc"
+    },
+    {
+      "cycle_id": 263,
+      "timestamp": "2026-11-09T16:51:30Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C263_task_k1_center_pivot_density_dispatch_ord2",
+      "target_task_id": "task_k1_center_pivot_density",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C263_task_k1_center_pivot_density_dispatch_ord2",
+      "source_sha": "cd17e1b75959edebd606054b50f21ffbe53e33d89a090acb4310a16f90ee9e6a",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C263_task_k1_center_pivot_density_dispatch_ord2 source_sha 'cd17e1b75959' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C256_task_j1_multiscale_run_parity_dispatch_ord1 (Cycle 256).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0263.json.gz",
+      "prior_digest": "af925d55c24f388b887907919d1d19713f5eed9f50b6be0df5b606b267e6b2bc",
+      "state_digest": "89c27e7a92bda274e60c0c20d0c8689defbcabb3eb238eec62a5596f5c41b85b"
     }
   ],
   "failure_catalog": {
@@ -8801,6 +8816,25 @@
         "gain_over_parent": 0.0,
         "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C262_task_k1_center_pivot_density_dispatch_ord1 source_sha 'cd17e1b75959' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C256_task_j1_multiscale_run_parity_dispatch_ord1 (Cycle 256).",
         "timestamp": "2026-11-09T16:51:03Z"
+      },
+      {
+        "cycle_id": 263,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C263_task_k1_center_pivot_density_dispatch_ord2",
+        "source_sha": "cd17e1b75959edebd606054b50f21ffbe53e33d89a090acb4310a16f90ee9e6a",
+        "gene_dict": {
+          "is_dispatch": true,
+          "ordinal": 1,
+          "split_len": 5,
+          "mod_a": 2,
+          "mod_b": 3,
+          "stride_scale": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 2,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C263_task_k1_center_pivot_density_dispatch_ord2 source_sha 'cd17e1b75959' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C256_task_j1_multiscale_run_parity_dispatch_ord1 (Cycle 256).",
+        "timestamp": "2026-11-09T16:51:30Z"
       }
     ]
   },
@@ -10376,15 +10410,21 @@
       "target_task_id": "task_k1_center_pivot_density",
       "status": "FALSIFIED",
       "cycle_id": 262
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C263_task_k1_center_pivot_density_dispatch_ord2",
+      "target_task_id": "task_k1_center_pivot_density",
+      "status": "FALSIFIED",
+      "cycle_id": 263
     }
   ],
   "next_agenda_priority": {
     "priority_task_id": "task_k1_center_pivot_density",
     "priority_family": "family_k",
     "strategy": "MULTI_TASK_DISPATCH",
-    "suggested_ordinal": 1,
-    "rationalization": "Failure in MULTI_TASK_DISPATCH is parameter-based (gain range non-degenerate). Exploring untried parameter ordinal 1 on task_k1_center_pivot_density.",
-    "timestamp": "2026-11-09T16:51:03Z"
+    "suggested_ordinal": 2,
+    "rationalization": "Failure in MULTI_TASK_DISPATCH is parameter-based (gain range non-degenerate). Exploring untried parameter ordinal 2 on task_k1_center_pivot_density.",
+    "timestamp": "2026-11-09T16:51:30Z"
   },
   "concurrency_lock": {
     "is_locked": false,
@@ -10400,10 +10440,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "af925d55c24f388b887907919d1d19713f5eed9f50b6be0df5b606b267e6b2bc",
+  "state_digest": "89c27e7a92bda274e60c0c20d0c8689defbcabb3eb238eec62a5596f5c41b85b",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 262,
-    "last_known_good_digest": "af925d55c24f388b887907919d1d19713f5eed9f50b6be0df5b606b267e6b2bc",
+    "last_known_good_cycle": 263,
+    "last_known_good_digest": "89c27e7a92bda274e60c0c20d0c8689defbcabb3eb238eec62a5596f5c41b85b",
     "recovery_count": 0
   }
 }
