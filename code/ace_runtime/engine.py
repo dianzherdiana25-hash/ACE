@@ -264,7 +264,9 @@ class Runtime:
         reused = bool(reuse_report and reuse_report["admitted"])
         if not reused:
             learned, fit_report = c.fit(train, validation)
-            candidates = inherited + [learned["composition"]]
+            # Sertakan seluruh kandidat yang berhasil disintesis (composition + fixed_product + dfa + counter)
+            all_learned = list(learned.values())
+            candidates = inherited + all_learned
             chosen, selection = c.select(candidates, train, validation)
         else:
             selection = reuse_report
