@@ -37,3 +37,17 @@ PYTHONPATH=code python -m unittest ace_code_agent.test_operational_proof -v
 ```
 
 Public diagnostic tests validate AST controls, actual candidate scoring and that accepted/promotion remains blocked. Full system CI and unrelated legacy failures must be reported separately at the exact commit SHA.
+
+## Checking historical `ask-ai` proposals from Termux
+
+Run on a separate, reviewed checkout (not the active autorun daemon):
+
+```sh
+PYTHONPATH=code python tools/ace_ai_diagnostic.py --limit 5
+```
+
+The command reads `checkpoints/self_dev/ai_consultations.json`, reports bounded public scores for each supported candidate source, and does not write files or send network requests. Previous `engine` values are **unverified labels**. Unsupported calls such as `int(...)` are reported `UNSUPPORTED_STATIC_GRAMMAR` without executing code. Example local `hyp_expand_dispatch_95` formula receives 59/96 modular, 57/96 parity and 71/96 joint on this public grid; an ideal task-specific rule can score 96/96. No capability is admitted.
+
+The mobile dashboard now bases its status on recent heartbeat timestamps (90-second freshness threshold) and recorded decisions, rather than stale numbers, fixed AI claims or a permanent green live-status pill. Android may stop background Termux processes at any time.
+
+Always run the exact pinned PR SHA in CI before considering use; the known `ace_runtime.test_engine` status mismatch (`LEARNED_STAGED` vs `NO_VALIDATED_MODEL`) is not fixed or suppressed by this patch.
