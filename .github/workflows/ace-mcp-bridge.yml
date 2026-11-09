@@ -1,0 +1,53 @@
+name: ACE MCP bridge — exact-head local contracts
+
+on:
+  push:
+    branches:
+      - integration/ace-mcp-bridge-20261106
+    paths:
+      - 'code/ace_mcp/**'
+      - 'docs/ACE_MCP_BRIDGE_*'
+      - '.github/workflows/ace-mcp-bridge.yml'
+  pull_request:
+    paths:
+      - 'code/ace_mcp/**'
+      - 'docs/ACE_MCP_BRIDGE_*'
+      - '.github/workflows/ace-mcp-bridge.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ace-mcp-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12','3.13']
+    env:
+      PYTHONPATH: code
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Assert actual Git commit (not synthetic merge)
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED"
+      - name: Verify core source provenance
+        run: python tools/verify_sources.py
+      - name: Test MCP request, permissions and genuine ACE integration
+        run: python -m unittest ace_mcp.test_bridge ace_mcp.test_transport ace_mcp.test_code_diagnostic -v
+      - name: Existing ACE runtime regression
+        run: python -m unittest ace_runtime.test_engine ace_runtime.test_cli -v
+      - name: Verify no MCP service activated by CI
+        run: |
+          test -z "${ACE_MCP_HTTP_TOKEN:-}"
+          test -f code/ace_mcp/server.py

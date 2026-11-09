@@ -25,12 +25,8 @@ class SealingStatus(str, Enum):
 
 def detect_os_sealing() -> SealingStatus:
     """Detect whether true OS-level process containment is available in the environment."""
-    if os.path.exists("/.dockerenv") or os.path.exists("/run/.containerenv"):
-        return SealingStatus.CONTAINER_SEALED
-    if shutil.which("bwrap") or os.path.exists("/usr/bin/bwrap"):
-        return SealingStatus.BWRAP_SEALED
-    if shutil.which("nsjail") or os.path.exists("/usr/bin/nsjail"):
-        return SealingStatus.NSJAIL_SEALED
+    # Availability of a sandbox binary or container marker does not show
+    # that this particular candidate process is actually confined.
     return SealingStatus.NOT_SEALED
 
 

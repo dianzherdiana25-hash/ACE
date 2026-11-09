@@ -53,8 +53,11 @@ class WorktreeHarness:
         """Verify that patch does not touch protected governance paths or inject unsafe AST."""
         # 1. Check target path against protected governance paths
         target = patch.target_file
+        path = Path(target)
+        if path.is_absolute() or ".." in path.parts or not path.parts:
+            return False, "SECURITY VIOLATION: Invalid target path"
         for prot in PROTECTED_PATHS:
-            if target.startswith(prot):
+            if path == Path(prot) or Path(prot) in path.parents:
                 return False, f"SECURITY VIOLATION: Patch targets protected system path '{target}'"
 
         # 2. Check replacement code AST
@@ -147,6 +150,17 @@ class WorktreeHarness:
                 rejection_reason=sec_msg,
                 rollback_completed=True,
             )
+
+        # A worktree is not an OS security boundary. Fail closed until a
+        # supervised sandbox with filesystem and credential isolation exists.
+        return WorktreeExecutionResult(
+            execution_id=execution_id, patch_id=patch.patch_id,
+            hypothesis_id=patch.hypothesis_id, worktree_path="",
+            applied_cleanly=False, ast_valid=False, tests_passed=0, tests_failed=1,
+            test_duration_seconds=round(time.time() - start_time, 3),
+            decision="REJECTED", rejection_reason="BLOCKED_ENVIRONMENT: OS containment unavailable",
+            rollback_completed=True,
+        )
 
         # Step 2: Create isolated execution workspace
         workspace_path, mode = self._setup_isolated_workspace()

@@ -78,6 +78,10 @@ class SubprocessSealedEvaluator:
         """
         budget.record_candidate_eval()
 
+        # This worker is launched directly, without per-candidate OS isolation.
+        # Do not execute untrusted code until such isolation is implemented.
+        raise PermissionError("BLOCKED_ENVIRONMENT: candidate process is not confined")
+
         # Strip all labels: worker gets ONLY inputs
         inputs_by_task = {k: [inp for inp, _ in v] for k, v in self._holdout_banks.items()}
         payload = {

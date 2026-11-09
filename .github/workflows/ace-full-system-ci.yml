@@ -3,6 +3,7 @@ name: ACE full-system verification
 on:
   push:
     branches:
+      - main
       - validation/ace-full-system-ci-20261107
       - integration/ace-master-verified-20261107
       - engineering/ace-exact-ci-audit-20261107
@@ -14,6 +15,8 @@ on:
       - 'docs/validation/**'
       - 'ace.py'
       - 'autonomy.py'
+      - 'pyproject.toml'
+      - 'install.sh'
       - '.github/workflows/ace-full-system-ci.yml'
   workflow_dispatch:
 
@@ -23,7 +26,7 @@ permissions:
 jobs:
   regressions-and-autonomy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -47,6 +50,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Verify imported source bytes
         run: python tools/verify_sources.py
+      - name: Run all discovered test modules
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess, sys
+          modules = sorted('.'.join(p.with_suffix('').parts[1:]) for p in pathlib.Path('code').rglob('test_*.py'))
+          subprocess.run([sys.executable, '-m', 'unittest', *modules], check=True)
+          PY
       - name: Test original research & runtime suites (109 tests)
         run: >-
           python -m unittest

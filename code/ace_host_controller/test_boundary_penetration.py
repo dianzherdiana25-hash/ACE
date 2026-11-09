@@ -119,14 +119,10 @@ class TestHostBoundaryPenetration(unittest.TestCase):
             "def candidate_fn(w, task_name=None):\n"
             "    return len(w) % 2 == 0\n"
         )
-        receipt = self.evaluator.evaluate_candidate_isolated(
-            candidate_id="clean_cand_01",
-            candidate_source=safe_code,
-            budget=self.budget,
-        )
-        self.assertTrue(receipt.passed)
-        self.assertEqual(receipt.holdout_accuracy, 1.0)
-        self.assertTrue(self.evaluator._local_evaluator.verify_receipt(receipt))
+        with self.assertRaisesRegex(PermissionError, "BLOCKED_ENVIRONMENT"):
+            self.evaluator.evaluate_candidate_isolated(
+                candidate_id="clean_cand_01", candidate_source=safe_code, budget=self.budget
+            )
 
     def test_not_sealed_detection_and_blocking(self):
         """When OS containerization is absent, sealing status is NOT_SEALED."""
@@ -233,13 +229,10 @@ class TestHostBoundaryPenetration(unittest.TestCase):
             "    import os\n"
             "    return True\n"
         )
-        receipt = self.evaluator.evaluate_candidate_isolated(
-            candidate_id="attack_cand_01",
-            candidate_source=attack_code,
-            budget=self.budget,
-        )
-        self.assertFalse(receipt.passed)
-        self.assertEqual(receipt.holdout_accuracy, 0.0)
+        with self.assertRaisesRegex(PermissionError, "BLOCKED_ENVIRONMENT"):
+            self.evaluator.evaluate_candidate_isolated(
+                candidate_id="attack_cand_01", candidate_source=attack_code, budget=self.budget
+            )
 
     def test_lineage_forgery_and_tampering_blocked(self):
         """Tampering with lineage or attempting forged child registration is rejected."""

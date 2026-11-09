@@ -138,7 +138,7 @@ class TestAutonomousCodeAgentOperationalProof(unittest.TestCase):
         # Run Cycle 1
         res1 = self.researcher.execute_autonomous_cycle(auto_pr=False)
         self.assertEqual(res1["cycle"], 1)
-        self.assertEqual(res1["decision"], "ACCEPTED")
+        self.assertEqual(res1["decision"], "REJECTED")
 
         # Reload researcher from disk (simulating restart)
         reloaded_researcher = AutonomousSoftwareResearcher(self.temp_repo)
