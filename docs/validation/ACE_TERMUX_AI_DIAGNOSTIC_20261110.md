@@ -46,8 +46,12 @@ Run on a separate, reviewed checkout (not the active autorun daemon):
 PYTHONPATH=code python tools/ace_ai_diagnostic.py --limit 5
 ```
 
-The command reads `checkpoints/self_dev/ai_consultations.json`, reports bounded public scores for each supported candidate source, and does not write files or send network requests. Previous `engine` values are **unverified labels**. Unsupported calls such as `int(...)` are reported `UNSUPPORTED_STATIC_GRAMMAR` without executing code. Example local `hyp_expand_dispatch_95` formula receives 59/96 modular, 57/96 parity and 71/96 joint on this public grid; an ideal task-specific rule can score 96/96. No capability is admitted.
+The command reads `checkpoints/self_dev/ai_consultations.json`, reports bounded public scores for each supported candidate source, and does not write files or send network requests. Previous `engine` values are **unverified labels**. Only the strictly bounded `int(expression)` conversion is now interpreted without executing Python; arbitrary calls, attributes, keyword arguments and nested calls are still rejected. The actual cycle-96 candidate uses `int(congruent and parity_matches)` and is supported by the public diagnostic. Example local `hyp_expand_dispatch_95` formula receives 59/96 modular, 57/96 parity and 71/96 joint on this public grid; an ideal task-specific rule can score 96/96. No capability is admitted.
 
 The mobile dashboard now bases its status on recent heartbeat timestamps (90-second freshness threshold) and recorded decisions, rather than stale numbers, fixed AI claims or a permanent green live-status pill. Android may stop background Termux processes at any time.
 
 Always run the exact pinned PR SHA in CI before considering use; the known `ace_runtime.test_engine` status mismatch (`LEARNED_STAGED` vs `NO_VALIDATED_MODEL`) is not fixed or suppressed by this patch.
+
+## Follow-up: cycle 96 integer-conversion support
+
+The read-only checker originally marked `hyp_expand_dispatch_96` `UNSUPPORTED_STATIC_GRAMMAR` because it used `int(congruent and parity_matches)`. A strictly interpreted, single-argument `int(expression)` arithmetic primitive has now been added. This does not call Python's `int` on candidate objects, resolve external functions, or permit arbitrary calls. Regression tests cover the actual syntax and reject `eval`, `__import__`, `float`, method calls, second arguments and keywords. The new result remains `PUBLIC_DIAGNOSTIC_ONLY`, with zero candidate Python execution and no promotion.
