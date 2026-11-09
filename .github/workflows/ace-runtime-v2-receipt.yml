@@ -39,12 +39,14 @@ jobs:
           python-version: '3.12'
       - name: Verify frozen imported sources
         run: python tools/verify_sources.py
+      - name: Verify pinned runtime v2 fixture and tamper controls
+        run: python -m unittest tools.test_verify_runtime_demo_v2 -v
       - name: Generate v2 candidate from two independent clean workspaces
         run: |
           python ace.py demo --workspace "$RUNNER_TEMP/ace-v2-a" > "$RUNNER_TEMP/v2-a.json"
           python ace.py demo --workspace "$RUNNER_TEMP/ace-v2-b" > "$RUNNER_TEMP/v2-b.json"
           cmp "$RUNNER_TEMP/v2-a.json" "$RUNNER_TEMP/v2-b.json"
-          python tools/verify_runtime_demo_v2.py --candidate "$RUNNER_TEMP/v2-a.json" --check-replay-only
+          python tools/verify_runtime_demo_v2.py --candidate "$RUNNER_TEMP/v2-a.json" --expected evidence/runtime/v2-demo.json
           sha256sum "$RUNNER_TEMP/v2-a.json"
           echo 'ACE_V2_JSON_START'
           cat "$RUNNER_TEMP/v2-a.json"
