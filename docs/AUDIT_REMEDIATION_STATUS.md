@@ -43,3 +43,11 @@ recompute that checksum; it must not be used as evidence of origin or authentici
 In the local VM, separate candidate probes for host file access, environment
 inheritance, modification of the read-only tests, and network access all failed
 while their baselines passed. This is a bounded test, not a general sandbox audit.
+
+`ace_host_exchange` defines data-only host requests and candidates, bound by
+canonical SHA-256 identifiers to the full base commit and fixed target. Host/model
+strings are self-reported metadata, not proof of identity, and checksums are not
+signatures. Opt-in stdio MCP tool `ace_host_candidate_diagnostic` verifies both
+envelopes and refuses a different HEAD or patch before returning the diagnostic
+receipt. It performs no LLM call, persistent ledger write, improvement validation,
+promotion or publication. Operators must not place secrets in these envelopes.

@@ -44,7 +44,7 @@ jobs:
       - name: Verify core source provenance
         run: python tools/verify_sources.py
       - name: Test MCP request, permissions and genuine ACE integration
-        run: python -m unittest ace_mcp.test_bridge ace_mcp.test_transport ace_mcp.test_code_diagnostic ace_code_agent.test_patch_diagnostic -v
+        run: python -m unittest ace_mcp.test_bridge ace_mcp.test_transport ace_mcp.test_code_diagnostic ace_code_agent.test_patch_diagnostic ace_host_exchange.test_contracts -v
       - name: Existing ACE runtime regression
         run: python -m unittest ace_runtime.test_engine ace_runtime.test_cli -v
       - name: Verify no MCP service activated by CI

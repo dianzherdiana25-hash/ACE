@@ -91,6 +91,15 @@ PATCH_DIAGNOSTIC = {
     "annotations": {"readOnlyHint": False, "destructiveHint": False},
 }
 
+HOST_DIAGNOSTIC = {
+    "name": "ace_host_candidate_diagnostic",
+    "description": "Evaluate a request-bound host candidate on the committed baseline; diagnostic only.",
+    "inputSchema": {"type": "object", "additionalProperties": False,
+                    "properties": {"request": {"type": "object"}, "candidate": {"type": "object"}},
+                    "required": ["request", "candidate"]},
+    "annotations": {"readOnlyHint": False, "destructiveHint": False},
+}
+
 
 class ToolInputError(ValueError):
     pass
@@ -125,7 +134,7 @@ class ACEBridge:
         self.enable_code_diagnostic = enable_code_diagnostic
 
     def tools(self):
-        return list(TOOL_SPECS) + ([CODE_DIAGNOSTIC, PATCH_DIAGNOSTIC] if self.enable_code_diagnostic else [])
+        return list(TOOL_SPECS) + ([CODE_DIAGNOSTIC, PATCH_DIAGNOSTIC, HOST_DIAGNOSTIC] if self.enable_code_diagnostic else [])
 
     def call(self, name, arguments):
         if type(name) is not str or name not in {s["name"] for s in self.tools()}:
@@ -142,6 +151,10 @@ class ACEBridge:
                 return evaluate_patch(Path(__file__).resolve().parents[2], TARGET, args["snippet"])
             except (OSError, subprocess.SubprocessError) as exc:
                 raise RuntimeError("BLOCKED_ENVIRONMENT: cannot construct committed snapshot") from exc
+        if name == "ace_host_candidate_diagnostic":
+            args = _object_args(arguments, ("request", "candidate"))
+            from ace_host_exchange.diagnostic import evaluate_host_candidate
+            return evaluate_host_candidate(Path(__file__).resolve().parents[2], args['request'], args['candidate'])
         if name in WRITE_TOOLS and not self.allow_writes:
             raise PermissionError("ACE write tools are disabled; administrator must enable them")
         if name == "ace_status":
