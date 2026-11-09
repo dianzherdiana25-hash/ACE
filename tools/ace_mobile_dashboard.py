@@ -81,12 +81,23 @@ def get_focus_breakdown(log_lines: list[str], research_state: dict, heartbeat: d
         "membersihkan cache kompilasi temporary (__pycache__, .tmp, .bak), dan menghapus file yatim di Termux."
     )
 
-    # 5. Menggunakan AI Apa?
-    ai_used = (
-        "Armada Multi-AI Aktif: Berpikir via PowerBrain (GPT-5/4 engine) "
-        "dengan failover otomatis ke Pollinations AI, G4F (DeepSeek), dan AI Horde. "
-        "100% Gratis, Tanpa Kuota Habis, & $0.00 Biaya."
-    )
+    # 5. Catatan penggunaan AI yang terobservasi, bukan klaim statis.
+    consultations = load_json(REPO_ROOT / "checkpoints" / "self_dev" / "ai_consultations.json")
+    if isinstance(consultations, list) and consultations:
+        last = consultations[-1]
+        timestamp = str(last.get("timestamp", "tidak diketahui"))
+        status = str(last.get("status", "tidak diketahui"))
+        ai_used = (
+            f"Konsultasi AI terakhir tercatat: {timestamp}. Status: {status}. "
+            "Jalur ask-ai dapat digunakan, tetapi penyedia model aktual dan "
+            "biaya belum diverifikasi. Riwayat ini bukan bukti seluruh "
+            "penyedia aktif atau solusi meningkatkan kemampuan ACE."
+        )
+    else:
+        ai_used = (
+            "Belum ada bukti konsultasi AI tersimpan. "
+            "Status koneksi penyedia dan biaya belum diverifikasi."
+        )
 
     return {
         "doing": doing,
