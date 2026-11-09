@@ -111,8 +111,10 @@ class MultiAIFleetAdvisor:
                 "strategy": strategy,
                 "ace_asked": f"Bantu buatkan fungsi logika murni `ace_ai_synthesized_{safe_id}` untuk hipotesis: '{hypothesis_statement}'. Wajib pure arithmetic, zero imports.",
                 "ai_answered": code_snippet,
-                "status": "VALID_AST_PASSED",
-                "engine": "PowerBrain (GPT-5/4) / Pollinations",
+                "status": "AST_PRECHECK_ONLY_NOT_EXECUTED",
+                "engine": "ask-ai CLI (upstream provider unverified)",
+                "provider_verified": False,
+                "code_executed": False,
             }
             self._log_consultation(dialogue_entry)
 
@@ -121,7 +123,7 @@ class MultiAIFleetAdvisor:
                 f"# Hypothesis: {hypothesis_statement[:80]}...\n"
                 f"# Strategy: {strategy} | Seed: {seed_val}\n"
             )
-            return (header + code_snippet, "MULTI_AI_FLEET_ASK_AI")
+            return (header + code_snippet, "ASK_AI_UPSTREAM_UNVERIFIED")
 
         except Exception:
             return None
