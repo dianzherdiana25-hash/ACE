@@ -127,5 +127,44 @@
     "behavior_density": 0.5312,
     "novelty_score": 0.0729,
     "generation_cycle": 0
+  },
+  "0_1": {
+    "niche_key": [
+      0,
+      1
+    ],
+    "candidate": {
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C258_task_j2_symmetric_run_boundary_ord1",
+      "parent_id": "G0_self_dev_root_c0",
+      "author_type": "ACE_AUTONOMOUS_V02",
+      "source_code": "def evaluate_mechanism(length: int, density: int, stride_val: int) -> int:\n    return 1 * (length * 1 + density * 2 + (stride_val % 3) - 1)\n",
+      "source_sha": "373167919d71c9af38f74703309667a5899d930c66eead56fad233015bd55d99",
+      "gene_dict": {
+        "is_composite": false,
+        "window_stride": 3,
+        "modulus": 3,
+        "parity_threshold": 1,
+        "weight_length": 1,
+        "weight_density": 2,
+        "sign": 1
+      },
+      "diff_patch": "",
+      "creation_timestamp": "2026-11-09T16:47:58Z",
+      "provenance_proof": {
+        "author_type": "ACE_AUTONOMOUS_V02",
+        "execution_pid": 26753,
+        "platform": "Android aarch64",
+        "python_version": "3.14.10",
+        "git_commit_sha": "55bb206daf70028ddead36a5ab629f70d058c93f",
+        "source_sha": "373167919d71c9af38f74703309667a5899d930c66eead56fad233015bd55d99",
+        "key_fingerprint": "3b815e2df395b415",
+        "hmac_signature": "9dc1c0d40f7439b6a808678984a97b98ef618396f2d2fb720bc04841e6cf4884",
+        "timestamp": "2026-11-09T16:47:58Z"
+      }
+    },
+    "fitness": 0.5625,
+    "behavior_density": 0.375,
+    "novelty_score": 0.0937,
+    "generation_cycle": 0
   }
 }

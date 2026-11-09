@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 257,
+  "cycle_count": 258,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -3857,6 +3857,21 @@
       "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0257.json.gz",
       "prior_digest": "98a9df28ab48f59e44e3c97dd18f7852803910f9b6501d98663e4f530ead5614",
       "state_digest": "cf6c4399e091bec33584392aa812821a0ced5356bbfc50e87a2039fefde33928"
+    },
+    {
+      "cycle_id": 258,
+      "timestamp": "2026-11-09T16:47:58Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C258_task_j2_symmetric_run_boundary_ord1",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C258_task_j2_symmetric_run_boundary_ord1",
+      "source_sha": "373167919d71c9af38f74703309667a5899d930c66eead56fad233015bd55d99",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C258_task_j2_symmetric_run_boundary_ord1 source_sha '373167919d71' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C1_task_k2_modular_stride_shift_ord1 (Cycle 1).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0258.json.gz",
+      "prior_digest": "cf6c4399e091bec33584392aa812821a0ced5356bbfc50e87a2039fefde33928",
+      "state_digest": "4e1d5262a44413b6edc5a0b409dafc5828618a96745dd5b1c2db563ed46b18db"
     }
   ],
   "failure_catalog": {
@@ -8475,6 +8490,24 @@
         "gain_over_parent": -0.0625,
         "rejection_reason": "Holdout gain -0.0625 below required min_gain 0.1500",
         "timestamp": "2026-11-07T18:39:22Z"
+      },
+      {
+        "cycle_id": 258,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C258_task_j2_symmetric_run_boundary_ord1",
+        "source_sha": "373167919d71c9af38f74703309667a5899d930c66eead56fad233015bd55d99",
+        "gene_dict": {
+          "is_composite": false,
+          "window_stride": 3,
+          "modulus": 3,
+          "parity_threshold": 1,
+          "weight_length": 1,
+          "weight_density": 2,
+          "sign": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C258_task_j2_symmetric_run_boundary_ord1 source_sha '373167919d71' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C1_task_k2_modular_stride_shift_ord1 (Cycle 1).",
+        "timestamp": "2026-11-09T16:47:58Z"
       }
     ],
     "task_k1_center_pivot_density": [
@@ -10150,22 +10183,28 @@
       "target_task_id": "task_j1_multiscale_run_parity",
       "status": "FALSIFIED",
       "cycle_id": 257
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C258_task_j2_symmetric_run_boundary_ord1",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "status": "FALSIFIED",
+      "cycle_id": 258
     }
   ],
   "next_agenda_priority": {
-    "priority_task_id": "task_j1_multiscale_run_parity",
-    "priority_family": "family_j",
-    "strategy": "MULTI_TASK_DISPATCH",
-    "suggested_ordinal": 2,
-    "rationalization": "Failure in MULTI_TASK_DISPATCH is parameter-based (gain range non-degenerate). Exploring untried parameter ordinal 2 on task_j1_multiscale_run_parity.",
-    "timestamp": "2026-11-09T16:47:06Z"
+    "priority_task_id": "task_k1_center_pivot_density",
+    "priority_family": "family_k",
+    "strategy": "RELATIONAL_MULTI_CLAUSE",
+    "suggested_ordinal": 1,
+    "rationalization": "Shifting research agenda to task 'task_k1_center_pivot_density' with representation family 'RELATIONAL_MULTI_CLAUSE' (ordinal 1) to avoid unproductive cycles on 'task_j2_symmetric_run_boundary'.",
+    "timestamp": "2026-11-09T16:47:58Z"
   },
   "concurrency_lock": {
     "is_locked": true,
-    "locked_by": "worker_26753_1794242825",
-    "locked_at": "2026-11-09T16:47:05Z",
-    "expires_at": "1794243425.92",
-    "lock_token": "d21916f1f0156e7a"
+    "locked_by": "worker_26753_1794242878",
+    "locked_at": "2026-11-09T16:47:58Z",
+    "expires_at": "1794243478.05",
+    "lock_token": "bb33f3dd53f23981"
   },
   "immutable_baseline": {
     "root_candidate_id": "G0_self_dev_root_c0",
@@ -10174,10 +10213,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "cf6c4399e091bec33584392aa812821a0ced5356bbfc50e87a2039fefde33928",
+  "state_digest": "4e1d5262a44413b6edc5a0b409dafc5828618a96745dd5b1c2db563ed46b18db",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 257,
-    "last_known_good_digest": "cf6c4399e091bec33584392aa812821a0ced5356bbfc50e87a2039fefde33928",
+    "last_known_good_cycle": 258,
+    "last_known_good_digest": "4e1d5262a44413b6edc5a0b409dafc5828618a96745dd5b1c2db563ed46b18db",
     "recovery_count": 0
   }
 }
