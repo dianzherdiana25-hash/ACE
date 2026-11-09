@@ -16,5 +16,23 @@
     "ai_answered": "def ace_ai_synthesized_hyp_expand_dispatch_73(length: int, density: int, stride_val: int) -> int:\n    # Pisahkan deteksi kanal modular dan paritas run\n    if length < 3:\n        return 0\n    modular_invariant = ((stride_val * 2 - density) % 3) == 0\n    parity_invariant = (density % 2 == 0) and (length >= 4)\n    return 0 if (modular_invariant and parity_invariant) else 1",
     "status": "VALID_AST_PASSED",
     "engine": "Pollinations AI (Multi-Model)"
+  },
+  {
+    "timestamp": "2026-11-09 19:37:20 UTC",
+    "hypothesis_id": "test_ace_ai",
+    "strategy": "PARITY",
+    "ace_asked": "Bantu buatkan fungsi logika murni `ace_ai_synthesized_test_ace_ai` untuk hipotesis: 'Buat fungsi yang mengembalikan 1 jika length genap, selain itu 0'. Wajib pure arithmetic, zero imports.",
+    "ai_answered": "def ace_ai_synthesized_test_ace_ai(length: int, density: int, stride_val: int) -> int:\n    return 1 if length % 2 == 0 else 0",
+    "status": "VALID_AST_PASSED",
+    "engine": "PowerBrain (GPT-5/4) / Pollinations"
+  },
+  {
+    "timestamp": "2026-11-09 19:39:57 UTC",
+    "hypothesis_id": "hyp_expand_dispatch_95",
+    "strategy": "MULTI_TASK_COMPOSITE_DISPATCH",
+    "ace_asked": "Bantu buatkan fungsi logika murni `ace_ai_synthesized_hyp_expand_dispatch_95` untuk hipotesis: 'Expanding dispatch topology with multi-task composite predicates allows solving both modular congruence and run-length parity simultaneously.'. Wajib pure arithmetic, zero imports.",
+    "ai_answered": "def ace_ai_synthesized_hyp_expand_dispatch_95(length: int, density: int, stride_val: int) -> int:\n    if stride_val == 0:\n        return 0\n    congruent = length % stride_val == density % stride_val\n    run_length_parity = (length - density) % 2 == 0\n    return 1 if congruent and run_length_parity else 0",
+    "status": "VALID_AST_PASSED",
+    "engine": "PowerBrain (GPT-5/4) / Pollinations"
   }
 ]
