@@ -13,6 +13,7 @@ import time
 from typing import List, Optional, Set, Tuple
 
 from .models import CodePatch, WorktreeExecutionResult
+from .static_probe import public_diagnostic, UnsafeOrUnsupported
 
 PROTECTED_PATHS: Set[str] = {
     ".github/workflows",
@@ -92,10 +93,26 @@ class WorktreeHarness:
         start_time = time.monotonic()
         allowed, reason = self.validate_patch_security(patch)
         decision = "INCONCLUSIVE" if allowed else "REJECTED"
+        # Public diagnostic uses a bounded AST interpreter, not Python execution.
+        # Unsupported grammar still remains INCONCLUSIVE: no unsafe fallback.
+        metrics = {
+            "candidate_python_executed": 0.0,
+            "independent_confirmation": 0.0,
+            "connected_to_active_algorithm": 0.0,
+        }
+        probe_status = "NOT_RUN"
+        if allowed:
+            try:
+                metrics.update(public_diagnostic(patch.replacement_code_snippet))
+                probe_status = "PUBLIC_PROBE_COMPLETED"
+            except UnsafeOrUnsupported:
+                probe_status = "UNSUPPORTED_OR_INCOMPLETE_CANDIDATE"
+            except Exception:
+                probe_status = "PUBLIC_PROBE_ERROR"
         explanation = (
-            "STAGED_ONLY_NOT_EXECUTED: no verified OS containment, connected "
-            "behavioral test, candidate-vs-baseline measurement or independent "
-            "evaluator receipt; import-only tests cannot authorize promotion."
+            "STAGED_ONLY_NOT_EXECUTED: " + probe_status +
+            "; public synthetic scores are not independent evidence, "
+            "and candidate is not wired into active ACE behavior."
             if allowed else reason
         )
         # SHA-256 is a local integrity checksum, NOT an evaluator signature.
@@ -112,11 +129,7 @@ class WorktreeHarness:
             tests_passed=0,
             tests_failed=0 if allowed else 1,
             test_duration_seconds=round(time.monotonic() - start_time, 4),
-            performance_metrics={
-                "candidate_executed": 0.0,
-                "behavioral_tests_executed": 0.0,
-                "gain_measured": 0.0,
-            },
+            performance_metrics=metrics,
             decision=decision,
             rejection_reason=explanation,
             receipt_signature=receipt,
