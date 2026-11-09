@@ -1,0 +1,12 @@
+{
+  "mission_id": "mission_0190259381be0834",
+  "goal": "Induce count-matched negative examples to resolve order masking",
+  "hypothesis": "Count-balanced negative constraints eliminate false admission on prefix boundaries",
+  "executed_at": "2026-11-09T16:05:37.061323+00:00",
+  "status": "VERIFIED_AND_ADMITTED",
+  "decision": "GO",
+  "metrics": {
+    "benchmark_score": 1.0,
+    "scientific_evidence": "All unit checks and inductive invariants preserved"
+  }
+}
