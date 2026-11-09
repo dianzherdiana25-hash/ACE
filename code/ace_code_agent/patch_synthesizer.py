@@ -78,13 +78,15 @@ class ModularPatchGenerator:
                     author_provenance="ACE_AUTONOMOUS_MULTI_AI_FLEET",
                     generator_metadata={
                         "engine": f"MultiAIFleetAdvisor_{provider_name}",
-                        "marginal_cost_usd": 0.0,
+                        "marginal_cost_usd": None,
                         "strategy_applied": hypothesis.proposed_strategy,
                         "seed_derived": seed_val,
-                        "ast_validated": True,
+                        "ast_prechecked": True,
+                        "candidate_python_executed": False,
+                        "upstream_provider_verified": False,
                         "expressivity_boundary": (
-                            "Multi-agent autonomous fleet synthesis (PowerBrain, Pollinations, G4F, AI Horde) "
-                            "validated under pure-AST zero-marginal-cost hermetic boundaries."
+                            "Untrusted ask-ai response passed limited AST precheck only. "
+                            "Provider identity, cost, OS containment and scientific gain are unverified."
                         ),
                     },
                 )
