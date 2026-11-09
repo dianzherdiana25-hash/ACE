@@ -12,6 +12,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 V1_SHA = "475d35bab2d319650de5504e472b76f05d65458d"
+V2_SHA = "aca172204e1769e1603576769ef60b958312ae9930e39e12ea8d23e9bd85b03b"
+V2_BYTES = 3829
 
 
 def _git_blob_sha(data: bytes) -> str:
@@ -85,8 +87,20 @@ def verify(candidate: Path, expected: Path | None = None) -> dict:
             or len(status["implementation"]) != 64
             or status["implementation"] == v1["status"]["implementation"]):
         raise ValueError("runtime implementation mismatch or not versioned")
-    if expected is not None and raw != expected.read_bytes():
-        raise ValueError("v2 fixture mismatch: exact public replay changed")
+    if expected is not None:
+        golden = expected.read_bytes()
+        if len(golden) != V2_BYTES or hashlib.sha256(golden).hexdigest() != V2_SHA:
+            raise ValueError("committed v2 public fixture no longer matches pinned SHA-256")
+        provenance = json.loads((ROOT / "evidence/runtime/v2-provenance.json").read_text())
+        if (provenance.get("schema") != "ace.runtime.public-demo.v2.provenance"
+                or provenance.get("v1_historical", {}).get("git_blob_sha1") != V1_SHA
+                or provenance.get("v2_candidate", {}).get("sha256") != V2_SHA
+                or provenance.get("v2_candidate", {}).get("byte_count") != V2_BYTES
+                or provenance.get("scientific_status") != "NOT_ASSESSED"
+                or provenance.get("release_gate") != "BLOCK_RELEASE"):
+            raise ValueError("runtime v2 provenance does not match pinned receipt")
+        if raw != golden:
+            raise ValueError("v2 fixture mismatch: exact public replay changed")
     return {
         "status": "PASS_PUBLIC_ENGINEERING_REPLAY_NOT_SCIENTIFIC_GO",
         "v1_historical_blob": V1_SHA,
