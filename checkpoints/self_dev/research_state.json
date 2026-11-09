@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C271",
-  "cycle_count": 272,
+  "cycle_count": 273,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -4082,6 +4082,21 @@
       "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0272.json.gz",
       "prior_digest": "b2eda418e8195bbed7209338682f8c8d63bf9188870c13506836b9068a23ab56",
       "state_digest": "0271ba140079b58bb6d1c19da1e9f74eec4bcdb0ff5b9190ef25fd8ca04e3f43"
+    },
+    {
+      "cycle_id": 273,
+      "timestamp": "2026-11-09T17:28:58Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C273",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C273",
+      "source_sha": "0fab5a2097d43a73787123db83b2854084be4fb9a56bcddb374451ac0eabe58c",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C273 source_sha '0fab5a2097d4' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C271 (Cycle 271).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0273.json.gz",
+      "prior_digest": "0271ba140079b58bb6d1c19da1e9f74eec4bcdb0ff5b9190ef25fd8ca04e3f43",
+      "state_digest": "60565ce963f2886abd59378d2f3aafb068fab63b3703734bc8f4ec3660a856e9"
     }
   ],
   "failure_catalog": {
@@ -9147,6 +9162,23 @@
         "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C263_task_k1_center_pivot_density_dispatch_ord2 source_sha 'cd17e1b75959' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C256_task_j1_multiscale_run_parity_dispatch_ord1 (Cycle 256).",
         "timestamp": "2026-11-09T16:51:30Z"
       }
+    ],
+    "multi_task": [
+      {
+        "cycle_id": 273,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C273",
+        "source_sha": "0fab5a2097d43a73787123db83b2854084be4fb9a56bcddb374451ac0eabe58c",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C273 source_sha '0fab5a2097d4' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C271 (Cycle 271).",
+        "timestamp": "2026-11-09T17:28:58Z"
+      }
     ]
   },
   "hypotheses_history": [
@@ -10781,15 +10813,21 @@
       "target_task_id": "task_k2_modular_stride_shift",
       "status": "FALSIFIED",
       "cycle_id": 272
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C273",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 273
     }
   ],
   "next_agenda_priority": {
-    "priority_task_id": "task_k2_modular_stride_shift",
-    "priority_family": "SEARCH_SPACE_EXHAUSTED",
-    "strategy": "SEARCH_SPACE_EXHAUSTED",
-    "suggested_ordinal": 0,
-    "rationalization": "SEARCH_SPACE_EXHAUSTED: Autonomous research policy has methodically explored and falsified all available representation mechanisms (Linear, Composite, Gated, Relational Multi-Clause, Multi-Task Dispatch). Halting further evaluations to prevent redundant compute expenditure and uninformative commits.",
-    "timestamp": "2026-11-09T17:28:04Z"
+    "priority_task_id": "multi_task",
+    "priority_family": "unknown",
+    "strategy": "MULTI_TASK_ENSEMBLE",
+    "suggested_ordinal": 1,
+    "rationalization": "Failure in MULTI_TASK_ENSEMBLE is parameter-based (gain range non-degenerate). Exploring untried parameter ordinal 1 on multi_task.",
+    "timestamp": "2026-11-09T17:28:58Z"
   },
   "concurrency_lock": {
     "is_locked": false,
@@ -10805,10 +10843,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "0271ba140079b58bb6d1c19da1e9f74eec4bcdb0ff5b9190ef25fd8ca04e3f43",
+  "state_digest": "60565ce963f2886abd59378d2f3aafb068fab63b3703734bc8f4ec3660a856e9",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 272,
-    "last_known_good_digest": "0271ba140079b58bb6d1c19da1e9f74eec4bcdb0ff5b9190ef25fd8ca04e3f43",
+    "last_known_good_cycle": 273,
+    "last_known_good_digest": "60565ce963f2886abd59378d2f3aafb068fab63b3703734bc8f4ec3660a856e9",
     "recovery_count": 0
   }
 }
