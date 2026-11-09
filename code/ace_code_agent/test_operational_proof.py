@@ -465,3 +465,45 @@ class TestTermuxAiDiagnosticCLI(unittest.TestCase):
                 audit_consultations(path)
             with self.assertRaises(ValueError):
                 audit_consultations(path, limit=0)
+
+    def test_cycle_95_and_96_are_duplicate_on_public_grid(self):
+        from ace_code_agent.static_probe import public_behavior_digest, public_diagnostic
+        c95 = (
+            "def ace_ai_synthesized_hyp_expand_dispatch_95(length,density,stride_val):\n"
+            "    if stride_val == 0:\n"
+            "        return 0\n"
+            "    congruent = length % stride_val == density % stride_val\n"
+            "    run_length_parity = (length - density) % 2 == 0\n"
+            "    return 1 if congruent and run_length_parity else 0\n"
+        )
+        c96 = (
+            "def ace_ai_synthesized_hyp_expand_dispatch_96(length,density,stride_val):\n"
+            "    if stride_val == 0:\n"
+            "        return 0\n"
+            "    congruent = length % stride_val == density % stride_val\n"
+            "    parity_matches = length % 2 == density % 2\n"
+            "    return int(congruent and parity_matches)\n"
+        )
+        self.assertEqual(public_behavior_digest(c95), public_behavior_digest(c96))
+        self.assertEqual(public_diagnostic(c95), public_diagnostic(c96))
+
+    def test_audit_flags_repeated_public_behavior_without_claiming_equivalence(self):
+        from tools.ace_ai_diagnostic import audit_consultations
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "consultations.json"
+            same_behavior = [
+                {"hypothesis_id": "hyp_old",
+                 "ai_answered": "def ace_ai_synthesized_first(length,density,stride_val):\n"
+                                "    return 1 if length % 2 == 0 else 0\n"},
+                {"hypothesis_id": "hyp_new",
+                 "ai_answered": "def ace_ai_synthesized_second(length,density,stride_val):\n"
+                                "    return int(length % 2 == 0)\n"},
+            ]
+            path.write_text(json.dumps(same_behavior), encoding="utf-8")
+            report = audit_consultations(path, limit=2)
+            self.assertEqual(
+                report["records"][1]["public_behavior_duplicate_of"], "hyp_old"
+            )
+            self.assertEqual(report["records"][0]["status"], "PUBLIC_DIAGNOSTIC_ONLY")
+            self.assertEqual(report["records"][1]["status"], "PUBLIC_DIAGNOSTIC_ONLY")
+            self.assertEqual(report["release_gate"], "BLOCK_RELEASE")
