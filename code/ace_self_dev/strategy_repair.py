@@ -36,6 +36,10 @@ class RepresentationFamily(str, Enum):
     GATED_EXPRESSION_TREE = "GATED_EXPRESSION_TREE"
     RELATIONAL_MULTI_CLAUSE = "RELATIONAL_MULTI_CLAUSE"
     MULTI_TASK_DISPATCH = "MULTI_TASK_DISPATCH"
+    MULTI_TASK_ENSEMBLE = "MULTI_TASK_ENSEMBLE"
+    AUTOMATA_LSTAR = "AUTOMATA_LSTAR"
+    CEGIS_SMT = "CEGIS_SMT"
+    FEATURE_DECOMPOSITION = "FEATURE_DECOMPOSITION"
 
 
 FAMILY_LADDER: List[RepresentationFamily] = [
@@ -46,12 +50,23 @@ FAMILY_LADDER: List[RepresentationFamily] = [
     RepresentationFamily.MULTI_TASK_DISPATCH,
 ]
 
+ADVANCED_PARADIGM_LADDER: List[RepresentationFamily] = [
+    RepresentationFamily.MULTI_TASK_ENSEMBLE,
+    RepresentationFamily.AUTOMATA_LSTAR,
+    RepresentationFamily.CEGIS_SMT,
+    RepresentationFamily.FEATURE_DECOMPOSITION,
+]
+
 FAMILY_TO_STRATEGY: Dict[RepresentationFamily, str] = {
     RepresentationFamily.LINEAR_MUTATION: "LINEAR_MUTATION",
     RepresentationFamily.COMPOSITE_MECHANISM: "SYNTHESIZE_COMPOSITE_MECHANISM",
     RepresentationFamily.GATED_EXPRESSION_TREE: "SYNTHESIZE_GATED_EXPRESSION_TREE",
     RepresentationFamily.RELATIONAL_MULTI_CLAUSE: "RELATIONAL_MULTI_CLAUSE",
     RepresentationFamily.MULTI_TASK_DISPATCH: "MULTI_TASK_DISPATCH",
+    RepresentationFamily.MULTI_TASK_ENSEMBLE: "MULTI_TASK_ENSEMBLE",
+    RepresentationFamily.AUTOMATA_LSTAR: "AUTOMATA_LSTAR",
+    RepresentationFamily.CEGIS_SMT: "CEGIS_SMT",
+    RepresentationFamily.FEATURE_DECOMPOSITION: "FEATURE_DECOMPOSITION",
 }
 
 STRATEGY_TO_FAMILY: Dict[str, RepresentationFamily] = {
@@ -61,6 +76,11 @@ STRATEGY_TO_FAMILY: Dict[str, RepresentationFamily] = {
     "SYNTHESIZE_GATED_EXPRESSION_TREE": RepresentationFamily.GATED_EXPRESSION_TREE,
     "RELATIONAL_MULTI_CLAUSE": RepresentationFamily.RELATIONAL_MULTI_CLAUSE,
     "MULTI_TASK_DISPATCH": RepresentationFamily.MULTI_TASK_DISPATCH,
+    "MULTI_TASK_ENSEMBLE": RepresentationFamily.MULTI_TASK_ENSEMBLE,
+    "SYNTHESIZE_MULTI_TASK_ENSEMBLE": RepresentationFamily.MULTI_TASK_ENSEMBLE,
+    "AUTOMATA_LSTAR": RepresentationFamily.AUTOMATA_LSTAR,
+    "CEGIS_SMT": RepresentationFamily.CEGIS_SMT,
+    "FEATURE_DECOMPOSITION": RepresentationFamily.FEATURE_DECOMPOSITION,
 }
 
 # Concrete relational multi-clause synthesis rules (family level 3)
@@ -144,6 +164,14 @@ class StrategyRepairEngine:
     def determine_family_of_failure(self, failure_dict: Dict[str, Any]) -> RepresentationFamily:
         """Inspect a failure record's gene_dict to identify its representation family."""
         gene = failure_dict.get("gene_dict", {})
+        if gene.get("is_multi_task_ensemble", False):
+            return RepresentationFamily.MULTI_TASK_ENSEMBLE
+        if gene.get("is_automata_lstar", False):
+            return RepresentationFamily.AUTOMATA_LSTAR
+        if gene.get("is_cegis_smt", False):
+            return RepresentationFamily.CEGIS_SMT
+        if gene.get("is_feature_decomposition", False):
+            return RepresentationFamily.FEATURE_DECOMPOSITION
         if gene.get("is_dispatch", False):
             return RepresentationFamily.MULTI_TASK_DISPATCH
         if gene.get("is_relational", False):

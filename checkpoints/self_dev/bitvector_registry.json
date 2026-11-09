@@ -7,5 +7,14 @@
       "score": 0.7422,
       "bitvector_preview": "00000000000000100100100100100101"
     }
+  },
+  "multi_task": {
+    "b2b2099f195ae82d4226514800f3133916b133e265b0fe25d9b6694477b4461f": {
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C271",
+      "cycle_id": 271,
+      "source_sha": "0fab5a2097d43a73787123db83b2854084be4fb9a56bcddb374451ac0eabe58c",
+      "score": 0.875,
+      "bitvector_preview": "00000011111111000000000000000000"
+    }
   }
 }

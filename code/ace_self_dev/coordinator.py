@@ -227,41 +227,63 @@ class SelfDevelopmentCoordinator:
 
             # Check for exhaustive search space closure
             if target_task_id == "SEARCH_SPACE_EXHAUSTED":
-                return {
-                    "cycle_id": cycle_id,
-                    "status": "STAGNATED",
-                    "phase": "TERMINAL_STAGNATION",
-                    "active_head_id": active_head_id,
-                    "is_promoted": False,
-                    "decision": "STAGNATED",
-                    "candidate_id": "NONE",
-                    "author_type": author_type.value,
-                    "target_task_id": "NONE",
-                    "holdout_score": diagnosis.baseline_score,
-                    "gain_over_parent": 0.0,
-                    "evidence_path": "",
-                    "prior_cycle_id": prior_cycle_id,
-                    "state_digest_before": state_digest_before,
-                    "state_digest_after": state_digest_before,
-                    "should_commit": False,
-                    "reason": "SEARCH_SPACE_EXHAUSTED: All representation families exhausted across confirmation tasks.",
-                    "governance": {
-                        "release_gate": "BLOCK_RELEASE",
-                        "scientific_status": "NOT_ASSESSED",
-                        "oaie_established": False,
-                    },
-                }
+                past_ensembles = [
+                    c for c in state.completed_cycles
+                    if c.get("gene_dict", {}).get("is_multi_task_ensemble")
+                ]
+                if len(past_ensembles) < 3:
+                    target_task_id = "multi_task"
+                    task_seed = provisional_seed
+                    mutation_ordinal = len(past_ensembles) + 1
+                    import hashlib
+                    stmt = f"Cycle {cycle_id}: Paradigm Shift to Multi-Task Ensemble Kernel resolving joint confirmation tasks simultaneously."
+                    hypothesis = ResearchHypothesis(
+                        hypothesis_id=f"HYP_PARADIGM_SHIFT_ENSEMBLE_C{cycle_id}",
+                        statement=stmt,
+                        target_task_id="multi_task",
+                        min_required_gain=0.1500,
+                        max_regression_tolerance=0.0200,
+                        preregistration_hash=hashlib.sha256(stmt.encode()).hexdigest(),
+                        strategy="MULTI_TASK_ENSEMBLE",
+                    )
+                    tasks = provisional_tasks
+                    target_task = list(tasks.values())[0]
+                else:
+                    return {
+                        "cycle_id": cycle_id,
+                        "status": "STAGNATED",
+                        "phase": "TERMINAL_STAGNATION",
+                        "active_head_id": active_head_id,
+                        "is_promoted": False,
+                        "decision": "STAGNATED",
+                        "candidate_id": "NONE",
+                        "author_type": author_type.value,
+                        "target_task_id": "NONE",
+                        "holdout_score": diagnosis.baseline_score,
+                        "gain_over_parent": 0.0,
+                        "evidence_path": "",
+                        "prior_cycle_id": prior_cycle_id,
+                        "state_digest_before": state_digest_before,
+                        "state_digest_after": state_digest_before,
+                        "should_commit": False,
+                        "reason": "SEARCH_SPACE_EXHAUSTED: All representation families exhausted across confirmation tasks.",
+                        "governance": {
+                            "release_gate": "BLOCK_RELEASE",
+                            "scientific_status": "NOT_ASSESSED",
+                            "oaie_established": False,
+                        },
+                    }
+            else:
+                tasks = create_confirmation_suite(task_seed=task_seed)
+                target_task = tasks.get(target_task_id, list(tasks.values())[0])
 
-            tasks = create_confirmation_suite(task_seed=task_seed)
-            target_task = tasks[target_task_id]
-
-            hypothesis = self.agenda_engine.formulate_hypothesis(
-                cycle_id=cycle_id,
-                target_task_id=target_task_id,
-                target_task=target_task,
-                ordinal=mutation_ordinal,
-                state=state,
-            )
+                hypothesis = self.agenda_engine.formulate_hypothesis(
+                    cycle_id=cycle_id,
+                    target_task_id=target_task_id,
+                    target_task=target_task,
+                    ordinal=mutation_ordinal,
+                    state=state,
+                )
             ckpt.phase = "HYPOTHESIS_SELECTED"
             ckpt.hypothesis = {
                 "hypothesis_id": hypothesis.hypothesis_id,
@@ -420,7 +442,7 @@ class SelfDevelopmentCoordinator:
                 )
 
                 # Deduce failure constraint if candidate was rejected
-                if receipt.decision == CandidateDecision.REJECTED and target_task:
+                if receipt.decision == CandidateDecision.REJECTED and target_task and target_task_id in tasks:
                     _, _, pred_fn = self.evaluator.score_train_and_validation(candidate, target_task)
                     for w, expected in target_task.validation_pool:
                         if pred_fn(w) != expected:

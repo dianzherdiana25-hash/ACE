@@ -10,6 +10,7 @@ from ace_loop.source_evolution import (
     CompositeGene,
     DispatchGene,
     GatedGene,
+    MultiTaskEnsembleGene,
     RelationalGene,
     RelationalGatedGene,
     SEED_GENE,
@@ -22,6 +23,7 @@ from ace_loop.source_evolution import (
     mutate_dispatch_gene,
     mutate_gated_gene,
     mutate_gene,
+    mutate_multi_task_ensemble_gene,
     mutate_relational_gated_gene,
     mutate_relational_gene,
     validate_ast,
@@ -48,12 +50,17 @@ class SourceGenerator:
         effective_parent_id = parent_id or (parent_candidate.candidate_id if parent_candidate else "G0_root_seed")
         parent_source = parent_candidate.source_code if parent_candidate else generate_source(SEED_GENE).decode("utf-8")
 
-        # Determine mutation strategy (atomic vs composite vs gated vs relational vs dispatch)
+        # Determine mutation strategy (atomic vs composite vs gated vs relational vs dispatch vs ensemble)
         strat = getattr(hypothesis, "strategy", "")
+        is_ensemble = (
+            strat in ("MULTI_TASK_ENSEMBLE", "SYNTHESIZE_MULTI_TASK_ENSEMBLE")
+            or "ensemble" in hypothesis.statement.lower()
+            or "multi-task composite" in hypothesis.statement.lower()
+        )
         is_dispatch = (
             strat == "MULTI_TASK_DISPATCH"
             or "dispatch" in hypothesis.statement.lower()
-        )
+        ) and not is_ensemble
         is_relational_gated = (
             strat in ("SYNTHESIZE_RELATIONAL_MULTI_CLAUSE", "RELATIONAL_GATED", "RELATIONAL_MULTI_CLAUSE")
             or "relational gated" in hypothesis.statement.lower()
@@ -72,7 +79,9 @@ class SourceGenerator:
             or "composite" in hypothesis.statement.lower()
         ) and not is_relational_gated
 
-        if is_dispatch:
+        if is_ensemble:
+            mutated_gene = mutate_multi_task_ensemble_gene(ordinal=ordinal)
+        elif is_dispatch:
             mutated_gene = mutate_dispatch_gene(ordinal=ordinal)
         elif is_relational_gated:
             mutated_gene = mutate_relational_gated_gene(ordinal=ordinal)

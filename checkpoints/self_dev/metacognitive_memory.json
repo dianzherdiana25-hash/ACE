@@ -7,6 +7,11 @@
       0.5704,
       true,
       true
+    ],
+    [
+      0.7565,
+      false,
+      true
     ]
   ],
   "history": {
@@ -15,6 +20,12 @@
       "actual_failure": true,
       "executed": true,
       "timestamp": "2026-11-07T20:51:12Z"
+    },
+    "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C271": {
+      "predicted_prob": 0.7565,
+      "actual_failure": false,
+      "executed": true,
+      "timestamp": "2026-11-09T17:27:18Z"
     }
   }
 }

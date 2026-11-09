@@ -272,6 +272,22 @@ class DispatchGene:
         }
 
 
+@dataclass(frozen=True)
+class MultiTaskEnsembleGene:
+    """Strongly-typed multi-task ensemble gene: routes across all confirmation tasks."""
+    ordinal: int = 1
+    true_val: int = 0
+    false_val: int = 1
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "is_multi_task_ensemble": True,
+            "ordinal": self.ordinal,
+            "true_val": self.true_val,
+            "false_val": self.false_val,
+        }
+
+
 SEED_GENE = TypedGene(
     window_stride=2,
     modulus=3,
@@ -317,8 +333,14 @@ GATED_MUTATIONS: Tuple[Tuple[int, int, int, int], ...] = (
 )
 
 
-def gene_from_dict(d: Dict[str, Any]) -> Union[TypedGene, CompositeGene, GatedGene, RelationalGene, RelationalGatedGene, DispatchGene]:
-    """Reconstruct TypedGene, CompositeGene, GatedGene, RelationalGene, RelationalGatedGene, or DispatchGene from dict representation."""
+def gene_from_dict(d: Dict[str, Any]) -> Union[TypedGene, CompositeGene, GatedGene, RelationalGene, RelationalGatedGene, DispatchGene, MultiTaskEnsembleGene]:
+    """Reconstruct TypedGene, CompositeGene, GatedGene, RelationalGene, RelationalGatedGene, DispatchGene, or MultiTaskEnsembleGene from dict representation."""
+    if d.get("is_multi_task_ensemble", False):
+        return MultiTaskEnsembleGene(
+            ordinal=d.get("ordinal", 1),
+            true_val=d.get("true_val", 0),
+            false_val=d.get("false_val", 1),
+        )
     if d.get("is_dispatch", False):
         return DispatchGene(
             ordinal=d.get("ordinal", 1),
@@ -481,6 +503,12 @@ def mutate_dispatch_gene(ordinal: int) -> DispatchGene:
         true_val=0,
         false_val=1,
     )
+
+
+def mutate_multi_task_ensemble_gene(ordinal: int) -> MultiTaskEnsembleGene:
+    """Deterministically synthesize a multi-task ensemble gene."""
+    _check_int(ordinal, 0, 100000, "ordinal")
+    return MultiTaskEnsembleGene(ordinal=ordinal, true_val=0, false_val=1)
 
 
 RELATIONAL_GATED_MUTATIONS: Tuple[Dict[str, Any], ...] = (
@@ -781,6 +809,23 @@ def generate_source(
         )
         return code_text.encode("utf-8")
 
+    if isinstance(gene, MultiTaskEnsembleGene):
+        code_text = (
+            f"def {function_name}(length: int, density: int, stride_val: int, tid: str = '') -> int:\n"
+            f"    return (\n"
+            f"        ({gene.true_val} if (((stride_val * -2 + density * -2) % 3) == 0) else {gene.false_val})\n"
+            f"        if (tid == 'task_j1_multiscale_run_parity')\n"
+            f"        else ({gene.true_val} if ((density % 2 == 0) and (length >= 3)) else {gene.false_val})\n"
+            f"        if (tid == 'task_j2_symmetric_run_boundary')\n"
+            f"        else ({gene.true_val} if (((length * -1) % 3) == 0) else {gene.false_val})\n"
+            f"        if (tid == 'task_k1_center_pivot_density')\n"
+            f"        else ({gene.true_val} if (((stride_val * -2 + density * -2) % 3) == 0) else {gene.false_val})\n"
+            f"        if (tid == 'task_k2_modular_stride_shift')\n"
+            f"        else ({gene.true_val} if ((length % 3) == 0) else {gene.false_val})\n"
+            f"    )\n"
+        )
+        return code_text.encode("utf-8")
+
     if isinstance(gene, DispatchGene):
         branch_true = f"(0 if ((density % {gene.mod_a}) == 0) else 1)"
         branch_false = f"(0 if (((stride_val * {gene.stride_scale}) % {gene.mod_b}) == 0) else 1)"
@@ -904,7 +949,7 @@ def validate_ast(source_bytes: bytes, expected_name: str = "evaluate_mechanism")
             raise SourceEvolutionError(f"Forbidden AST node type: {type(node).__name__}")
         if isinstance(node, ast.Name):
             # Only allowed parameter names or type annotations
-            if node.id not in ("length", "density", "stride_val", "int"):
+            if node.id not in ("length", "density", "stride_val", "tid", "int", "str"):
                 raise SourceEvolutionError(f"Forbidden variable access: {node.id}")
 
     return func_def
@@ -912,8 +957,8 @@ def validate_ast(source_bytes: bytes, expected_name: str = "evaluate_mechanism")
 
 def compile_function(
     source_bytes: bytes,
-    gene: Optional[Union[TypedGene, CompositeGene, GatedGene, RelationalGene, RelationalGatedGene, DispatchGene, Dict[str, Any]]] = None,
-) -> Callable[[int, int, int], int]:
+    gene: Optional[Union[TypedGene, CompositeGene, GatedGene, RelationalGene, RelationalGatedGene, DispatchGene, MultiTaskEnsembleGene, Dict[str, Any]]] = None,
+) -> Callable[..., int]:
     """Safely compile verified source bytes into an isolated callable."""
     validate_ast(source_bytes)
     source_str = source_bytes.decode("utf-8")

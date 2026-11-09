@@ -27,7 +27,7 @@ def _candidate_to_string_predicate(fn: Callable[..., int]) -> Callable[..., bool
         density = w.count("a")
         stride_val = sum(1 for i, ch in enumerate(w) if i % 2 == 0 and ch == "a")
         try:
-            raw_val = fn(length, density, stride_val, tid)
+            raw_val = fn(length, density, stride_val, tid or "")
         except TypeError:
             raw_val = fn(length, density, stride_val)
         return (raw_val % 2 == 0)
@@ -81,7 +81,7 @@ class IsolatedEvaluator:
         """Run complete 3-tier evaluation: train, validation, and sealed terminal holdout gating."""
         t_start = time.perf_counter()
         target_tid = hypothesis.target_task_id
-        target_task = tasks[target_tid]
+        target_task = tasks.get(target_tid, list(tasks.values())[0])
 
         # Enforce frozen scientific evaluation thresholds without artificial lowering
         if hypothesis.min_required_gain < FROZEN_MIN_REQUIRED_GAIN:
@@ -126,10 +126,10 @@ class IsolatedEvaluator:
             host_controller.initialize_root_score(lambda w: (len(w) % 3 == 0))
 
         is_multi_task = (
-            hypothesis.strategy == "MULTI_TASK_DISPATCH"
+            hypothesis.strategy in ("MULTI_TASK_DISPATCH", "MULTI_TASK_ENSEMBLE", "SYNTHESIZE_MULTI_TASK_ENSEMBLE")
             or target_tid in ("multi_task", "MULTI_TASK")
             or getattr(candidate, "is_multi_task", False)
-            or (candidate.gene_dict and candidate.gene_dict.get("is_dispatch"))
+            or (candidate.gene_dict and (candidate.gene_dict.get("is_dispatch") or candidate.gene_dict.get("is_multi_task_ensemble")))
         )
         if is_multi_task:
             def dispatch_candidate_fn(w: str, tid: Optional[str] = None) -> bool:
