@@ -75,10 +75,15 @@ jobs:
           cmp /tmp/composition.json /tmp/composition-replay.json
           gzip -dc evidence/composition/v03.json.gz > /tmp/committed-composition.json
           cmp /tmp/composition.json /tmp/committed-composition.json
-      - name: Verify operational demo receipts
+      - name: Test versioned public runtime demo receipt custody
+        run: python -m unittest tools.test_verify_runtime_demo_v2 -v
+      - name: Verify v1 historical custody and exact v2 public replay
         run: |
-          python ace.py demo --workspace "$RUNNER_TEMP/ace-runtime" > "$RUNNER_TEMP/ace-runtime-demo.json"
-          cmp "$RUNNER_TEMP/ace-runtime-demo.json" evidence/runtime/v1-demo.json
+          test "$(git hash-object evidence/runtime/v1-demo.json)" = "475d35bab2d319650de5504e472b76f05d65458d"
+          python ace.py demo --workspace "$RUNNER_TEMP/ace-runtime-v2-a" > "$RUNNER_TEMP/ace-runtime-v2-a.json"
+          python ace.py demo --workspace "$RUNNER_TEMP/ace-runtime-v2-b" > "$RUNNER_TEMP/ace-runtime-v2-b.json"
+          cmp "$RUNNER_TEMP/ace-runtime-v2-a.json" "$RUNNER_TEMP/ace-runtime-v2-b.json"
+          python tools/verify_runtime_demo_v2.py --candidate "$RUNNER_TEMP/ace-runtime-v2-a.json" --expected evidence/runtime/v2-demo.json
           python autonomy.py --workspace "$RUNNER_TEMP/ace-autonomy-demo" demo > "$RUNNER_TEMP/autonomy-demo.json"
 
   research-and-redteam:
