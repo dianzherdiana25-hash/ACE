@@ -10,5 +10,17 @@
     "compression_value": 1.3,
     "discovered_task_id": "task_j1_multiscale_run_parity",
     "origin_candidate_id": "CAND_HYP_AUTONOMOUS_C252_task_j1_multiscale_run_parity_gated_ord1"
+  },
+  "PRIM_422de62831": {
+    "primitive_id": "PRIM_422de62831",
+    "name": "congruence_kernel_mod3",
+    "signature": "(length: int, density: int, stride_val: int) -> int",
+    "expression_body": "(((stride_val * 1) + (density * 1)) % 3) == 0",
+    "source_code": "def prim_congruence_m3_s1_d1(length: int, density: int, stride_val: int) -> int:\n    return 0 if ((((stride_val * 1) + (density * 1)) % 3) == 0) else 1\n",
+    "source_sha": "422de628310c22f6a6c3eb1c83dcb5e930ff31120ece89d63bb4923554257c08",
+    "complexity_cost": 4,
+    "compression_value": 1.45,
+    "discovered_task_id": "task_j1_multiscale_run_parity",
+    "origin_candidate_id": "CAND_HYP_AUTONOMOUS_C255_task_j1_multiscale_run_parity_relational_ord1"
   }
 }

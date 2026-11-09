@@ -45,7 +45,7 @@
       1
     ],
     "candidate": {
-      "candidate_id": "CAND_HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C255_task_j1_multiscale_run_parity_relational_ord1",
       "parent_id": "G0_self_dev_root_c0",
       "author_type": "ACE_AUTONOMOUS_V02",
       "source_code": "def evaluate_mechanism(length: int, density: int, stride_val: int) -> int:\n    return 0 if ((length >= 4) and ((((stride_val * 1) + (density * 1)) % 3) == 0) and (density <= 4)) else 1\n",
@@ -69,23 +69,23 @@
         "true_val": 0,
         "false_val": 1
       },
-      "diff_patch": "--- a/G0_self_dev_root_c0.py\n+++ b/HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1_ord1.py\n@@ -1,2 +1,2 @@\n def evaluate_mechanism(length: int, density: int, stride_val: int) -> int:\n-    return 1 * (length * 1 + density * 2 + (stride_val % 3) - 1)\n+    return 0 if ((length >= 4) and ((((stride_val * 1) + (density * 1)) % 3) == 0) and (density <= 4)) else 1\n",
-      "creation_timestamp": "2026-11-07T20:51:12Z",
+      "diff_patch": "--- a/G0_self_dev_root_c0.py\n+++ b/HYP_AUTONOMOUS_C255_task_j1_multiscale_run_parity_relational_ord1_ord1.py\n@@ -1,2 +1,2 @@\n def evaluate_mechanism(length: int, density: int, stride_val: int) -> int:\n-    return 1 * (length * 1 + density * 2 + (stride_val % 3) - 1)\n+    return 0 if ((length >= 4) and ((((stride_val * 1) + (density * 1)) % 3) == 0) and (density <= 4)) else 1\n",
+      "creation_timestamp": "2026-11-09T16:45:20Z",
       "provenance_proof": {
         "author_type": "ACE_AUTONOMOUS_V02",
-        "execution_pid": 17212,
-        "platform": "Linux x86_64",
-        "python_version": "3.11.2",
-        "git_commit_sha": "61e84845f36e029cbe61040ae557fd9f3824cb91",
+        "execution_pid": 26753,
+        "platform": "Android aarch64",
+        "python_version": "3.14.10",
+        "git_commit_sha": "55bb206daf70028ddead36a5ab629f70d058c93f",
         "source_sha": "4caebd62e73cec654c78753fcb8a76bb391ba56915f5fba57c2ac0a35af6615f",
-        "key_fingerprint": "530bebc9dc54efb0",
-        "hmac_signature": "ef3e4c31650c24310c3bf735d5aad3a7b6df5e1647960e5f677a5cd91ec758f6",
-        "timestamp": "2026-11-07T20:51:12Z"
+        "key_fingerprint": "3b815e2df395b415",
+        "hmac_signature": "38c9ba2c7a8287ded9f0750d14916d70a4618c3162bae87853c8f0513417b3b5",
+        "timestamp": "2026-11-09T16:45:20Z"
       }
     },
-    "fitness": 0.7188,
-    "behavior_density": 0.4688,
-    "novelty_score": 0.0313,
+    "fitness": 0.75,
+    "behavior_density": 0.4375,
+    "novelty_score": 0.0156,
     "generation_cycle": 0
   }
 }
