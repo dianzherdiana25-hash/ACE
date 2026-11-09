@@ -1,24 +1,24 @@
 {
-  "beacon_id": 41,
-  "timestamp": "2026-11-09T16:53:01.301045+00:00",
-  "uptime_seconds": 466.45,
-  "cycles_completed": 9,
+  "beacon_id": 46,
+  "timestamp": "2026-11-09T16:54:01.480251+00:00",
+  "uptime_seconds": 526.61,
+  "cycles_completed": 10,
   "cycles_failed": 0,
-  "cycle_throughput_per_hour": 69.46,
-  "average_cycle_duration_seconds": 0.2694,
-  "last_cycle_id": 264,
-  "last_cycle_duration_seconds": 0.232,
+  "cycle_throughput_per_hour": 68.36,
+  "average_cycle_duration_seconds": 0.2688,
+  "last_cycle_id": 265,
+  "last_cycle_duration_seconds": 0.2635,
   "resource_stats": {
-    "rss_memory_mb": 20.85,
+    "rss_memory_mb": 20.86,
     "max_rss_mb": 237.07,
-    "cpu_user_seconds": 4.32,
-    "cpu_system_seconds": 0.85,
-    "cpu_percent": 0.4,
+    "cpu_user_seconds": 4.74,
+    "cpu_system_seconds": 0.93,
+    "cpu_percent": 0.2,
     "active_threads": 2,
-    "timestamp": "2026-11-09T16:53:01.286750+00:00"
+    "timestamp": "2026-11-09T16:54:01.442988+00:00"
   },
   "health_status": "HEALTHY",
-  "active_state_digest": "33588124d0b47117b311cadafc9f700b1b38c5974154b52e8505ec81dd12ddf4",
+  "active_state_digest": "e441627182759779b6d7b8fcf4c4329d6ffd5eaa2603a328a4e33146f68c1333",
   "concurrency_lock_held": false,
   "recovery_count": 0
 }
