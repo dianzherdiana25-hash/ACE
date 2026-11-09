@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 265,
+  "cycle_count": 266,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -3977,6 +3977,21 @@
       "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0265.json.gz",
       "prior_digest": "33588124d0b47117b311cadafc9f700b1b38c5974154b52e8505ec81dd12ddf4",
       "state_digest": "e441627182759779b6d7b8fcf4c4329d6ffd5eaa2603a328a4e33146f68c1333"
+    },
+    {
+      "cycle_id": 266,
+      "timestamp": "2026-11-09T16:54:10Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C266_task_j2_symmetric_run_boundary_relational_ord2",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C266_task_j2_symmetric_run_boundary_relational_ord2",
+      "source_sha": "4caebd62e73cec654c78753fcb8a76bb391ba56915f5fba57c2ac0a35af6615f",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C266_task_j2_symmetric_run_boundary_relational_ord2 source_sha '4caebd62e73c' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1 (Cycle 253).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0266.json.gz",
+      "prior_digest": "e441627182759779b6d7b8fcf4c4329d6ffd5eaa2603a328a4e33146f68c1333",
+      "state_digest": "e71c220299288072b87314a93268c6f78d6fdcc0f3d1c805ed7b4be8a45de517"
     }
   ],
   "failure_catalog": {
@@ -8659,6 +8674,34 @@
         "gain_over_parent": 0.0,
         "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C265_task_j2_symmetric_run_boundary_relational_ord1 source_sha '4caebd62e73c' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1 (Cycle 253).",
         "timestamp": "2026-11-09T16:53:18Z"
+      },
+      {
+        "cycle_id": 266,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C266_task_j2_symmetric_run_boundary_relational_ord2",
+        "source_sha": "4caebd62e73cec654c78753fcb8a76bb391ba56915f5fba57c2ac0a35af6615f",
+        "gene_dict": {
+          "is_relational": true,
+          "is_relational_gated": true,
+          "clause_type": "CONJUNCTION_AND",
+          "combiner": "AND",
+          "length_op": ">=",
+          "length_threshold": 4,
+          "stride_weight": 1,
+          "density_weight": 1,
+          "length_weight": 0,
+          "modulus": 3,
+          "target_residue": 0,
+          "congruence_op": "==",
+          "boundary_var": "density",
+          "boundary_op": "<=",
+          "boundary_threshold": 4,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 2,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C266_task_j2_symmetric_run_boundary_relational_ord2 source_sha '4caebd62e73c' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1 (Cycle 253).",
+        "timestamp": "2026-11-09T16:54:10Z"
       }
     ],
     "task_k1_center_pivot_density": [
@@ -10504,22 +10547,28 @@
       "target_task_id": "task_j2_symmetric_run_boundary",
       "status": "FALSIFIED",
       "cycle_id": 265
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C266_task_j2_symmetric_run_boundary_relational_ord2",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "status": "FALSIFIED",
+      "cycle_id": 266
     }
   ],
   "next_agenda_priority": {
     "priority_task_id": "task_j2_symmetric_run_boundary",
     "priority_family": "family_j",
     "strategy": "RELATIONAL_MULTI_CLAUSE",
-    "suggested_ordinal": 1,
-    "rationalization": "Failure in RELATIONAL_MULTI_CLAUSE is parameter-based (gain range non-degenerate). Exploring untried parameter ordinal 1 on task_j2_symmetric_run_boundary.",
-    "timestamp": "2026-11-09T16:53:18Z"
+    "suggested_ordinal": 2,
+    "rationalization": "Failure in RELATIONAL_MULTI_CLAUSE is parameter-based (gain range non-degenerate). Exploring untried parameter ordinal 2 on task_j2_symmetric_run_boundary.",
+    "timestamp": "2026-11-09T16:54:10Z"
   },
   "concurrency_lock": {
     "is_locked": true,
-    "locked_by": "worker_26753_1794243198",
-    "locked_at": "2026-11-09T16:53:18Z",
-    "expires_at": "1794243798.28",
-    "lock_token": "872c36efd096a209"
+    "locked_by": "worker_26753_1794243250",
+    "locked_at": "2026-11-09T16:54:10Z",
+    "expires_at": "1794243850.49",
+    "lock_token": "2c9242deb477de98"
   },
   "immutable_baseline": {
     "root_candidate_id": "G0_self_dev_root_c0",
@@ -10528,10 +10577,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "e441627182759779b6d7b8fcf4c4329d6ffd5eaa2603a328a4e33146f68c1333",
+  "state_digest": "e71c220299288072b87314a93268c6f78d6fdcc0f3d1c805ed7b4be8a45de517",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 265,
-    "last_known_good_digest": "e441627182759779b6d7b8fcf4c4329d6ffd5eaa2603a328a4e33146f68c1333",
+    "last_known_good_cycle": 266,
+    "last_known_good_digest": "e71c220299288072b87314a93268c6f78d6fdcc0f3d1c805ed7b4be8a45de517",
     "recovery_count": 0
   }
 }
