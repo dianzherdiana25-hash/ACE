@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0",
-  "completed_cycles": 10,
+  "completed_cycles": 11,
   "history": [
     {
       "cycle": 1,
@@ -135,6 +135,20 @@
       "pr_number": null,
       "pr_url": null,
       "timestamp": "2026-11-09T16:46:09Z"
+    },
+    {
+      "cycle": 11,
+      "problem_id": "prob_rep_saturation_11",
+      "hypothesis_id": "hyp_expand_dispatch_11",
+      "patch_sha": "b25727339e707d6bf6f52418f38b15e42e1eb1b2785ccd32f1726e064be93d8a",
+      "decision": "ACCEPTED",
+      "rejection_reason": "Isolated tests passed cleanly.",
+      "receipt_signature": "ed614065d6b81a51520190cda4b38485e8b420a91f3afc404185b813c9faa00f",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-09T16:47:03Z"
     }
   ],
   "tested_patches": {
@@ -197,6 +211,12 @@
       "decision": "ACCEPTED",
       "hypothesis_id": "hyp_expand_dispatch_10",
       "timestamp": "2026-11-09T16:46:09Z"
+    },
+    "b25727339e707d6bf6f52418f38b15e42e1eb1b2785ccd32f1726e064be93d8a": {
+      "cycle": 11,
+      "decision": "ACCEPTED",
+      "hypothesis_id": "hyp_expand_dispatch_11",
+      "timestamp": "2026-11-09T16:47:03Z"
     }
   },
   "active_problems": [],

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 255,
+  "cycle_count": 256,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -3827,6 +3827,21 @@
       "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0255.json.gz",
       "prior_digest": "6aa41c39b8df5c63aeb68165383a2484c0adeae126a885fa4ae021e47c35bf83",
       "state_digest": "15f6349256cc505fd98874fcf6b3224cd3a2a11f6dee0aec81977454e937c14e"
+    },
+    {
+      "cycle_id": 256,
+      "timestamp": "2026-11-09T16:46:12Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C256_task_j1_multiscale_run_parity_dispatch_ord1",
+      "target_task_id": "task_j1_multiscale_run_parity",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C256_task_j1_multiscale_run_parity_dispatch_ord1",
+      "source_sha": "cd17e1b75959edebd606054b50f21ffbe53e33d89a090acb4310a16f90ee9e6a",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Patience window exceeded: 5 consecutive attempts on 'task_j1_multiscale_run_parity' without validation improvement (best=0.7578, min_improvement=0.001).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0256.json.gz",
+      "prior_digest": "15f6349256cc505fd98874fcf6b3224cd3a2a11f6dee0aec81977454e937c14e",
+      "state_digest": "98a9df28ab48f59e44e3c97dd18f7852803910f9b6501d98663e4f530ead5614"
     }
   ],
   "failure_catalog": {
@@ -8277,6 +8292,25 @@
         "gain_over_parent": 0.0,
         "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C255_task_j1_multiscale_run_parity_relational_ord1 source_sha '4caebd62e73c' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1 (Cycle 253).",
         "timestamp": "2026-11-09T16:45:20Z"
+      },
+      {
+        "cycle_id": 256,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C256_task_j1_multiscale_run_parity_dispatch_ord1",
+        "source_sha": "cd17e1b75959edebd606054b50f21ffbe53e33d89a090acb4310a16f90ee9e6a",
+        "gene_dict": {
+          "is_dispatch": true,
+          "ordinal": 1,
+          "split_len": 5,
+          "mod_a": 2,
+          "mod_b": 3,
+          "stride_scale": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Patience window exceeded: 5 consecutive attempts on 'task_j1_multiscale_run_parity' without validation improvement (best=0.7578, min_improvement=0.001).",
+        "timestamp": "2026-11-09T16:46:12Z"
       }
     ],
     "task_j2_symmetric_run_boundary": [
@@ -10070,6 +10104,12 @@
       "target_task_id": "task_j1_multiscale_run_parity",
       "status": "FALSIFIED",
       "cycle_id": 255
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C256_task_j1_multiscale_run_parity_dispatch_ord1",
+      "target_task_id": "task_j1_multiscale_run_parity",
+      "status": "FALSIFIED",
+      "cycle_id": 256
     }
   ],
   "next_agenda_priority": {
@@ -10077,8 +10117,8 @@
     "priority_family": "family_j",
     "strategy": "MULTI_TASK_DISPATCH",
     "suggested_ordinal": 1,
-    "rationalization": "Attempt quota reached for RELATIONAL_MULTI_CLAUSE on 'task_j1_multiscale_run_parity' (2 attempts). Promoting search policy to next representation family 'MULTI_TASK_DISPATCH' (ordinal 1) rather than looping ordinals.",
-    "timestamp": "2026-11-09T16:45:20Z"
+    "rationalization": "Failure in MULTI_TASK_DISPATCH is parameter-based (gain range non-degenerate). Exploring untried parameter ordinal 1 on task_j1_multiscale_run_parity.",
+    "timestamp": "2026-11-09T16:46:12Z"
   },
   "concurrency_lock": {
     "is_locked": false,
@@ -10094,10 +10134,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "15f6349256cc505fd98874fcf6b3224cd3a2a11f6dee0aec81977454e937c14e",
+  "state_digest": "98a9df28ab48f59e44e3c97dd18f7852803910f9b6501d98663e4f530ead5614",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 255,
-    "last_known_good_digest": "15f6349256cc505fd98874fcf6b3224cd3a2a11f6dee0aec81977454e937c14e",
+    "last_known_good_cycle": 256,
+    "last_known_good_digest": "98a9df28ab48f59e44e3c97dd18f7852803910f9b6501d98663e4f530ead5614",
     "recovery_count": 0
   }
 }
