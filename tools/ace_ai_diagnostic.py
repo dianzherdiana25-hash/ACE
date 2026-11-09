@@ -15,7 +15,7 @@ import sys
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "code"))
 
-from ace_code_agent.static_probe import UnsafeOrUnsupported, public_diagnostic
+from ace_code_agent.static_probe import UnsafeOrUnsupported, public_diagnostic, public_behavior_digest
 
 
 def audit_consultations(path: Path, limit: int = 5) -> dict:
@@ -25,6 +25,7 @@ def audit_consultations(path: Path, limit: int = 5) -> dict:
     if not isinstance(data, list):
         raise ValueError("consultation file must contain a JSON list")
     records = []
+    first_seen_behavior = {}
     for record in data[-limit:]:
         if not isinstance(record, dict):
             records.append({"status": "REJECTED_MALFORMED_RECORD"})
@@ -48,6 +49,12 @@ def audit_consultations(path: Path, limit: int = 5) -> dict:
         else:
             try:
                 entry["public_diagnostic"] = public_diagnostic(source)
+                digest = public_behavior_digest(source)
+                entry["public_behavior_digest_sha256"] = digest
+                if digest in first_seen_behavior:
+                    entry["public_behavior_duplicate_of"] = first_seen_behavior[digest]
+                else:
+                    first_seen_behavior[digest] = entry["hypothesis_id"]
                 entry["status"] = "PUBLIC_DIAGNOSTIC_ONLY"
             except UnsafeOrUnsupported as exc:
                 entry["status"] = "UNSUPPORTED_STATIC_GRAMMAR"
@@ -65,6 +72,8 @@ def audit_consultations(path: Path, limit: int = 5) -> dict:
         "candidate_deployed": False,
         "note": (
             "Public synthetic diagnostics, not a sealed evaluator. "
+            "Behavioral hashes only detect identical outputs on a fixed public grid, "
+            "not mathematical equivalence across all inputs. "
             "No model identity verification, network invocation or candidate promotion."
         ),
     }
