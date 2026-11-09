@@ -14,6 +14,7 @@ Berjalan di http://localhost:8080 (bisa dibuka langsung di browser HP Android).
 from __future__ import annotations
 
 import http.server
+from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
@@ -36,68 +37,64 @@ def load_json(path: Path) -> dict:
         return {}
 
 
-def get_focus_breakdown(log_lines: list[str], research_state: dict, heartbeat: dict) -> dict:
-    """Menganalisis status real-time untuk menjawab 5 pertanyaan kunci dalam bahasa manusia."""
-    last_few = "\n".join(log_lines[-10:]) if log_lines else ""
-    c_soft = research_state.get("completed_cycles") or 73
-    c_param = heartbeat.get("last_cycle_id") or 308
-
-    # 1. Sedang Melakukan Apa?
-    if "Running external verifier" in last_few or "ALL CHECKS PASSED" in last_few:
-        doing = "🛡️ Mengaudit Integritas Sistem (Menjalankan 38 unit test & verifikasi bukti Merkle)"
-        doing_status = "VERIFIKASI"
-    elif "Autonomous Repo Janitor" in last_few or "Pruned" in last_few:
-        doing = "🧹 Membersihkan Repositori & Menjaga Kerapian Kode (Janitor Housekeeping)"
-        doing_status = "BERSIH-BERSIH"
-    elif "Executing Autonomous Software-Development" in last_few or "Staging artifacts" in last_few:
-        doing = f"🧠 Merancang & Menguji Sintesis Patch Kode Baru (Siklus {c_soft})"
-        doing_status = "KODING MANDIRI"
-    elif "Pushing to origin" in last_few or "Committing" in last_few:
-        doing = "📦 Mengamankan & Mendorong Hasil Evolusi Baru ke GitHub (main)"
-        doing_status = "SINKRONISASI"
-    elif "Sleeping" in last_few or "Active heartbeat" in last_few:
-        doing = "❄️ Jeda 15 Detik Antar-Siklus (Mendinginkan prosesor & menjaga baterai HP)"
-        doing_status = "ISTIRAHAT SEJENAK"
+def get_focus_breakdown(log_lines: list[str], research_state: dict, heartbeat: dict, live_status: bool = False) -> dict:
+    """Describe recorded evidence, never fabricate activity or model providers."""
+    history = research_state.get("history") or []
+    last = history[-1] if isinstance(history, list) and history and isinstance(history[-1], dict) else {}
+    c_soft = research_state.get("completed_cycles", 0)
+    c_param = heartbeat.get("last_cycle_id", 0)
+    last_lines = "\n".join(log_lines[-10:])
+    if not live_status:
+        doing, doing_status = (
+            "Tidak ada heartbeat daemon terbaru; yang tampil adalah catatan historis.",
+            "TIDAK ADA HEARTBEAT",
+        )
+    elif "Running external verifier" in last_lines:
+        doing, doing_status = ("Aktivitas terakhir: menjalankan verifikasi integritas.", "VERIFIKASI")
+    elif "Autonomous Repo Janitor" in last_lines or "Pruned" in last_lines:
+        doing, doing_status = ("Aktivitas terakhir: housekeeping repositori.", "HOUSEKEEPING")
+    elif "Executing Autonomous Software-Development" in last_lines:
+        doing, doing_status = (f"Aktivitas terakhir: percobaan patch (siklus {c_soft}).", "RISET KODE")
+    elif "Pushing to origin" in last_lines or "Committing" in last_lines:
+        doing, doing_status = ("Aktivitas terakhir: menyimpan checkpoint/commit pada branch Git.", "SINKRONISASI")
+    elif "Sleeping" in last_lines or "Active heartbeat" in last_lines:
+        doing, doing_status = ("Heartbeat tersedia; daemon tercatat sedang jeda.", "JEDA")
     else:
-        doing = f"⚡ Mengeksplorasi Variasi Parameter Logika (Siklus {c_param}) pada Dataset Tertutup"
-        doing_status = "UJI PARAMETER"
+        doing, doing_status = (f"Heartbeat tersedia; siklus parameter terakhir {c_param}.", "STATUS DIREKAM")
 
-    # 2. Menyelesaikan Masalah Apa?
-    solving = (
-        "Mendobrak Kebuntuan Representasi (Search Space Saturation): "
-        "Mencari formula pemisah invariant pergeseran modular (stride 3) dan paritas panjang run karakter "
-        "agar akurasi multi-task melonjak tinggi."
+    problem = next(
+        (line.partition("Problem:")[2].strip()
+         for line in reversed(log_lines) if "Problem:" in line),
+        "",
     )
-
-    # 3. Menambah Apa?
+    solving = f"Masalah terakhir tercatat: {problem}" if problem else "Belum ada diagnosis masalah terbaru di log."
+    decision = str(last.get("decision", "BELUM ADA KEPUTUSAN"))
     adding = (
-        f"Menambahkan patch kode baru Siklus {c_soft} [ACCEPTED], "
-        f"commit resmi terbaru di branch 'main', serta formula logika baru ke memori evolusi."
+        f"Siklus kode terakhir: {c_soft}; keputusan: {decision}. "
+        "Status ACCEPTED pada tes lokal bukan bukti peningkatan kemampuan; "
+        "lihat metrik kandidat dan konfirmasi independen."
     )
-
-    # 4. Mengurangi / Membersihkan Apa?
+    janitor_line = next(
+        (line.partition("Janitor:")[2].strip()
+         for line in reversed(log_lines) if "Janitor:" in line),
+        "",
+    )
     removing = (
-        "Memangkas puluhan snapshot JSON usang (hanya menyisakan 15 snapshot terbaru), "
-        "membersihkan cache kompilasi temporary (__pycache__, .tmp, .bak), dan menghapus file yatim di Termux."
+        f"Housekeeping terakhir (log): {janitor_line}" if janitor_line
+        else "Tidak ada bukti housekeeping di log terbaru."
     )
 
-    # 5. Catatan penggunaan AI yang terobservasi, bukan klaim statis.
     consultations = load_json(REPO_ROOT / "checkpoints" / "self_dev" / "ai_consultations.json")
-    if isinstance(consultations, list) and consultations:
-        last = consultations[-1]
-        timestamp = str(last.get("timestamp", "tidak diketahui"))
-        status = str(last.get("status", "tidak diketahui"))
+    if isinstance(consultations, list) and consultations and isinstance(consultations[-1], dict):
+        latest = consultations[-1]
         ai_used = (
-            f"Konsultasi AI terakhir tercatat: {timestamp}. Status: {status}. "
-            "Jalur ask-ai dapat digunakan, tetapi penyedia model aktual dan "
-            "biaya belum diverifikasi. Riwayat ini bukan bukti seluruh "
-            "penyedia aktif atau solusi meningkatkan kemampuan ACE."
+            f"Konsultasi ask-ai terakhir tercatat: {latest.get('timestamp', 'tidak diketahui')}; "
+            f"status: {latest.get('status', 'tidak diketahui')}. "
+            "Provider/model sebenarnya dan biaya belum diverifikasi; "
+            "hasil konsultasi bukan bukti peningkatan kemampuan."
         )
     else:
-        ai_used = (
-            "Belum ada bukti konsultasi AI tersimpan. "
-            "Status koneksi penyedia dan biaya belum diverifikasi."
-        )
+        ai_used = "Belum ada bukti konsultasi AI yang tercatat."
 
     return {
         "doing": doing,
@@ -148,7 +145,7 @@ def parse_logs_to_stories(raw_lines: list[str]) -> list[dict]:
                 "type": "success",
                 "icon": "🎉",
                 "title": "Solusi Berhasil Diterima!",
-                "desc": "Kode baru lolos verifikasi ketat dan terbukti meningkatkan kemampuan.",
+                "desc": "Patch lulus tes internal; peningkatan kemampuan belum terverifikasi.",
                 "badge": "BERHASIL"
             })
         elif "Push successful for Cycle" in line_clean:
@@ -158,7 +155,7 @@ def parse_logs_to_stories(raw_lines: list[str]) -> list[dict]:
                 "type": "saved",
                 "icon": "📦",
                 "title": f"Hasil Evolusi Siklus {c_num} Disimpan",
-                "desc": "Pengetahuan baru telah diabadikan ke memori permanen (Git).",
+                "desc": "Checkpoint tersimpan di Git; belum membuktikan perbaikan algoritma.",
                 "badge": "Tersimpan"
             })
         elif "(Param):" in line_clean:
@@ -178,7 +175,7 @@ def parse_logs_to_stories(raw_lines: list[str]) -> list[dict]:
                 "type": "shield",
                 "icon": "🛡️",
                 "title": "Audit Integritas Lolos 100%",
-                "desc": "Seluruh 38 tes keamanan dan konsistensi mandiri berjalan sempurna.",
+                "desc": "Verifikasi internal dilaporkan lulus; bukan konfirmasi ilmiah.",
                 "badge": "Aman"
             })
         elif "Host Status:" in line_clean:
@@ -188,7 +185,7 @@ def parse_logs_to_stories(raw_lines: list[str]) -> list[dict]:
                 "type": "health",
                 "icon": "🔋",
                 "title": "Kondisi HP Prima & Terkendali",
-                "desc": f"RAM bebas {ram_str}, suhu dan memori dijaga agar HP tetap dingin.",
+                "desc": f"RAM bebas {ram_str}; suhu tidak diukur oleh dashboard.",
                 "badge": "Kesehatan"
             })
         elif "Janitor:" in line_clean:
@@ -216,17 +213,26 @@ def get_dashboard_data() -> dict:
         except Exception:
             pass
 
-    stories = parse_logs_to_stories(log_lines)
-    focus = get_focus_breakdown(log_lines, research_state, heartbeat)
+    last_beacon = heartbeat.get("timestamp", "")
+    try:
+        moment = datetime.fromisoformat(str(last_beacon).replace("Z", "+00:00"))
+        age_seconds = (datetime.now(timezone.utc) - moment).total_seconds()
+        live_status = 0 <= age_seconds <= 90
+    except (ValueError, TypeError):
+        live_status = False
 
-    completed_cycles = heartbeat.get("last_cycle_id") or 308
-    soft_cycles = research_state.get("completed_cycles") or 73
+    stories = parse_logs_to_stories(log_lines)
+    focus = get_focus_breakdown(log_lines, research_state, heartbeat, live_status)
+
+    completed_cycles = int(heartbeat.get("last_cycle_id") or 0)
+    soft_cycles = int(research_state.get("completed_cycles") or 0)
     level = max(1, completed_cycles // 50)
     level_progress = (completed_cycles % 50) * 2
 
     return {
         "heartbeat": heartbeat,
         "research_state": research_state,
+        "live_status": live_status,
         "completed_cycles": completed_cycles,
         "soft_cycles": soft_cycles,
         "level": level,
@@ -689,7 +695,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Suhu HP & Daya</div>
-                <div class="stat-val" style="color: #34d399;">Dingin ❄️</div>
+                <div class="stat-val" style="color: #94a3b8;">N/A</div>
             </div>
         </div>
 
@@ -733,19 +739,20 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 document.getElementById('focusAdding').textContent = focus.adding || '-';
                 document.getElementById('focusRemoving').textContent = focus.removing || '-';
                 document.getElementById('focusAI').textContent = focus.ai_used || '-';
-                document.getElementById('healthLabel').textContent = focus.doing_status || 'BERPIKIR';
+                document.getElementById('healthLabel').textContent = data.live_status ? (focus.doing_status || 'AKTIF') : 'OFFLINE / BELUM TERVERIFIKASI';
+                document.querySelector('.pulse-dot').style.display = data.live_status ? '' : 'none';
 
                 // Cycles & Levels
-                const cycles = data.completed_cycles || 308;
+                const cycles = Number.isFinite(data.completed_cycles) ? data.completed_cycles : 0;
                 document.getElementById('cycleCount').textContent = cycles;
                 document.getElementById('levelDisplay').textContent = 'Generasi ' + data.level;
                 document.getElementById('progressBar').style.width = data.level_progress + '%';
                 document.getElementById('progressText').textContent = data.level_progress + '%';
 
                 // Stats
-                const tput = hb.cycle_throughput_per_hour || 58;
+                const tput = Number(hb.cycle_throughput_per_hour || 0);
                 document.getElementById('speedVal').textContent = tput.toFixed(0) + '/jam';
-                document.getElementById('ramVal').textContent = (stats.rss_memory_mb || 24).toFixed(0) + ' MB';
+                document.getElementById('ramVal').textContent = Number(stats.rss_memory_mb || 0).toFixed(0) + ' MB';
                 document.getElementById('syncTime').textContent = 'Update: ' + data.timestamp;
 
                 // Stories Feed
