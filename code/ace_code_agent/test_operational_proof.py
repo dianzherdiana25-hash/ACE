@@ -115,6 +115,49 @@ class TestAutonomousCodeAgentOperationalProof(unittest.TestCase):
         baseline_content = json.loads(self.immutable_baseline_file.read_text(encoding="utf-8"))
         self.assertEqual(baseline_content["accuracy"], 0.50)
 
+    def test_fail_closed_candidate_intake_does_not_execute_untrusted_code(self):
+        """A parsable appended function and a purported test must not imply improvement."""
+        from ace_code_agent.models import CodePatch
+        patch = CodePatch(
+            patch_id="staged_only",
+            hypothesis_id="hyp_test",
+            target_file="code/ace_self_dev/strategy_repair.py",
+            diff_content="",
+            original_code_snippet="",
+            replacement_code_snippet="def unused_candidate(length, density, stride_val):\\n    return 1\\n",
+            patch_type="MULTI_AI_SYNTHESIS",
+            author_provenance="EXTERNAL_MODEL_UNTRUSTED",
+        )
+        # The test command would mutate the host if the harness executed it.
+        marker = self.temp_repo / "untrusted_test_ran"
+        command = ["python", "-c", f"open({str(marker)!r}, 'w').write('BAD')"]
+        result = WorktreeHarness(self.temp_repo).execute_in_worktree(
+            patch, test_commands=[command]
+        )
+        self.assertEqual(result.decision, "INCONCLUSIVE")
+        self.assertTrue(result.ast_valid)
+        self.assertFalse(result.applied_cleanly)
+        self.assertEqual(result.tests_passed, 0)
+        self.assertFalse(marker.exists())
+        self.assertIn("STAGED_ONLY_NOT_EXECUTED", result.rejection_reason)
+
+    def test_fail_closed_candidate_rejects_path_traversal(self):
+        """A crafted target must not escape a worktree or protected paths."""
+        from ace_code_agent.models import CodePatch
+        patch = CodePatch(
+            patch_id="path_traversal",
+            hypothesis_id="hyp_test",
+            target_file="code/../checkpoints/self_dev/immutable_baseline.json",
+            diff_content="",
+            original_code_snippet="",
+            replacement_code_snippet="def harmless():\\n    return 0\\n",
+            patch_type="MULTI_AI_SYNTHESIS",
+            author_provenance="EXTERNAL_MODEL_UNTRUSTED",
+        )
+        result = WorktreeHarness(self.temp_repo).execute_in_worktree(patch)
+        self.assertEqual(result.decision, "REJECTED")
+        self.assertIn("SECURITY VIOLATION", result.rejection_reason)
+
     def test_criterion_4_independent_evaluation_and_negative_control(self):
         """Criterion 4: Evaluator accepts valid functions and rejects trivial constant predictors."""
         evaluator = IndependentEvaluator()
@@ -138,7 +181,7 @@ class TestAutonomousCodeAgentOperationalProof(unittest.TestCase):
         # Run Cycle 1
         res1 = self.researcher.execute_autonomous_cycle(auto_pr=False)
         self.assertEqual(res1["cycle"], 1)
-        self.assertEqual(res1["decision"], "ACCEPTED")
+        self.assertEqual(res1["decision"], "INCONCLUSIVE")
 
         # Reload researcher from disk (simulating restart)
         reloaded_researcher = AutonomousSoftwareResearcher(self.temp_repo)
