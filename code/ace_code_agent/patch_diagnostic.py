@@ -6,6 +6,7 @@ and tests execute inside a read-only bubblewrap snapshot with no network.
 from __future__ import annotations
 
 import hashlib
+import hmac
 import io
 import json
 from pathlib import Path
@@ -21,6 +22,19 @@ MAX_PATCH_BYTES = 16384
 
 def _sha(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def verify_receipt(receipt: dict) -> bool:
+    """Detect accidental or unsophisticated edits; checksum is not authentication."""
+    if type(receipt) is not dict or type(receipt.get('receipt_sha256')) is not str:
+        return False
+    unsigned = dict(receipt)
+    expected = unsigned.pop('receipt_sha256')
+    try:
+        actual = _sha(json.dumps(unsigned, sort_keys=True, separators=(',', ':'), allow_nan=False).encode())
+    except (TypeError, ValueError):
+        return False
+    return hmac.compare_digest(expected, actual)
 
 
 def _extract_snapshot(repo: Path, destination: Path, commit: str) -> None:
@@ -51,9 +65,11 @@ def _run(snapshot: Path, bwrap: str, prlimit: str) -> dict:
         except (OSError, subprocess.TimeoutExpired) as exc:
             return {'passed': False, 'status': 'BLOCKED_OR_TIMEOUT', 'error': type(exc).__name__}
         out.seek(0)
-        data = out.read(65536)
+        data = out.read(1048577)
+        if len(data) > 1048576:
+            return {'passed': False, 'status': 'OUTPUT_LIMIT'}
     return {'passed': proc.returncode == 0, 'status': 'PASS' if proc.returncode == 0 else 'FAIL_OR_BLOCKED',
-            'exit_code': proc.returncode, 'output_sha256': _sha(data),
+            'exit_code': proc.returncode, 'output_sha256': _sha(data), 'output_bytes': len(data),
             'output_excerpt': data[-2000:].decode('utf-8', 'replace')}
 
 

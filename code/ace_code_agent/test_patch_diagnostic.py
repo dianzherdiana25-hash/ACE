@@ -31,5 +31,15 @@ class PatchDiagnosticTests(unittest.TestCase):
         self.assertNotEqual(result['base_file_sha256'], result['candidate_file_sha256'])
         self.assertFalse(result['promotion_authorized'])
         self.assertEqual(len(result['receipt_sha256']), 64)
+        self.assertTrue(d.verify_receipt(result))
+        result['promotion_authorized'] = True
+        self.assertFalse(d.verify_receipt(result))
+
+    def test_checksum_is_not_authentication(self):
+        import json
+        receipt = {'promotion_authorized': True}
+        receipt['receipt_sha256'] = d._sha(json.dumps(receipt, sort_keys=True, separators=(',', ':')).encode())
+        # A checksum can be recomputed; acceptance policy must remain separate.
+        self.assertTrue(d.verify_receipt(receipt))
 
 if __name__ == '__main__': unittest.main()

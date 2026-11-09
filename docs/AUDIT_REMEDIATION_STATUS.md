@@ -38,3 +38,8 @@ receipt. If baseline or sandbox startup fails the candidate is not run. These
 hashes are checksums, not signatures; public tests can be gamed, and passing them
 does not establish improvement or authorize promotion. Other paths, dirty working
 tree patches, arbitrary test commands and automatic PR publication are unsupported.
+`verify_receipt` checks for changes against the included checksum, but anyone can
+recompute that checksum; it must not be used as evidence of origin or authenticity.
+In the local VM, separate candidate probes for host file access, environment
+inheritance, modification of the read-only tests, and network access all failed
+while their baselines passed. This is a bounded test, not a general sandbox audit.
