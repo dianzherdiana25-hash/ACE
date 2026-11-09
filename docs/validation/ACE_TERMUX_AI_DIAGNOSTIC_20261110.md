@@ -55,3 +55,7 @@ Always run the exact pinned PR SHA in CI before considering use; the known `ace_
 ## Follow-up: cycle 96 integer-conversion support
 
 The read-only checker originally marked `hyp_expand_dispatch_96` `UNSUPPORTED_STATIC_GRAMMAR` because it used `int(congruent and parity_matches)`. A strictly interpreted, single-argument `int(expression)` arithmetic primitive has now been added. This does not call Python's `int` on candidate objects, resolve external functions, or permit arbitrary calls. Regression tests cover the actual syntax and reject `eval`, `__import__`, `float`, method calls, second arguments and keywords. The new result remains `PUBLIC_DIAGNOSTIC_ONLY`, with zero candidate Python execution and no promotion.
+
+## Behavior-level repetition guard
+
+The read-only audit now exposes `public_behavior_digest_sha256` and `public_behavior_duplicate_of`. These are fingerprints of the output sequence on the **fixed 96 public inputs only**; equal fingerprints are evidence of identical observed predictions on this grid, not a proof of mathematical or open-world equivalence. This guard identifies the previously stored cycle 95 and 96 candidates as identical on the public diagnostic grid. Identical scores alone were not enough to establish this; the new test verifies the complete 96-case prediction vector. It neither promotes a model nor disables future research beyond the selected public observations.
