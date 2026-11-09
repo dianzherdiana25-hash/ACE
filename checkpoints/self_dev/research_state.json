@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 267,
+  "cycle_count": 268,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -4007,6 +4007,21 @@
       "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0267.json.gz",
       "prior_digest": "e71c220299288072b87314a93268c6f78d6fdcc0f3d1c805ed7b4be8a45de517",
       "state_digest": "9b7170c0b9158d4e04f045e721d6abba356396df58ab7b0362693b9ab0aa60a5"
+    },
+    {
+      "cycle_id": 268,
+      "timestamp": "2026-11-09T16:55:58Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C268_task_j2_symmetric_run_boundary_dispatch_ord1",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C268_task_j2_symmetric_run_boundary_dispatch_ord1",
+      "source_sha": "cd17e1b75959edebd606054b50f21ffbe53e33d89a090acb4310a16f90ee9e6a",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C268_task_j2_symmetric_run_boundary_dispatch_ord1 source_sha 'cd17e1b75959' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C256_task_j1_multiscale_run_parity_dispatch_ord1 (Cycle 256).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0268.json.gz",
+      "prior_digest": "9b7170c0b9158d4e04f045e721d6abba356396df58ab7b0362693b9ab0aa60a5",
+      "state_digest": "c1e5b5d7fc4bea7d4b465d765c96a5ffb8f3c462c2e43a1c90e2b48396853796"
     }
   ],
   "failure_catalog": {
@@ -8745,6 +8760,25 @@
         "gain_over_parent": 0.0,
         "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C267_task_j2_symmetric_run_boundary_relational_ord1 source_sha '4caebd62e73c' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1 (Cycle 253).",
         "timestamp": "2026-11-09T16:55:05Z"
+      },
+      {
+        "cycle_id": 268,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C268_task_j2_symmetric_run_boundary_dispatch_ord1",
+        "source_sha": "cd17e1b75959edebd606054b50f21ffbe53e33d89a090acb4310a16f90ee9e6a",
+        "gene_dict": {
+          "is_dispatch": true,
+          "ordinal": 1,
+          "split_len": 5,
+          "mod_a": 2,
+          "mod_b": 3,
+          "stride_scale": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C268_task_j2_symmetric_run_boundary_dispatch_ord1 source_sha 'cd17e1b75959' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C256_task_j1_multiscale_run_parity_dispatch_ord1 (Cycle 256).",
+        "timestamp": "2026-11-09T16:55:58Z"
       }
     ],
     "task_k1_center_pivot_density": [
@@ -10602,6 +10636,12 @@
       "target_task_id": "task_j2_symmetric_run_boundary",
       "status": "FALSIFIED",
       "cycle_id": 267
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C268_task_j2_symmetric_run_boundary_dispatch_ord1",
+      "target_task_id": "task_j2_symmetric_run_boundary",
+      "status": "FALSIFIED",
+      "cycle_id": 268
     }
   ],
   "next_agenda_priority": {
@@ -10609,8 +10649,8 @@
     "priority_family": "family_j",
     "strategy": "MULTI_TASK_DISPATCH",
     "suggested_ordinal": 1,
-    "rationalization": "Structural deficit confirmed for RELATIONAL_MULTI_CLAUSE on 'task_j2_symmetric_run_boundary' (flat variance=0.0000 < 0.005, ceiling=0.0000 << 0.1500). Representational capacity cannot separate the invariant. Promoting search policy to next representation family 'MULTI_TASK_DISPATCH' (ordinal 1) rather than looping ordinals.",
-    "timestamp": "2026-11-09T16:55:05Z"
+    "rationalization": "Failure in MULTI_TASK_DISPATCH is parameter-based (gain range non-degenerate). Exploring untried parameter ordinal 1 on task_j2_symmetric_run_boundary.",
+    "timestamp": "2026-11-09T16:55:58Z"
   },
   "concurrency_lock": {
     "is_locked": false,
@@ -10626,10 +10666,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "9b7170c0b9158d4e04f045e721d6abba356396df58ab7b0362693b9ab0aa60a5",
+  "state_digest": "c1e5b5d7fc4bea7d4b465d765c96a5ffb8f3c462c2e43a1c90e2b48396853796",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 267,
-    "last_known_good_digest": "9b7170c0b9158d4e04f045e721d6abba356396df58ab7b0362693b9ab0aa60a5",
+    "last_known_good_cycle": 268,
+    "last_known_good_digest": "c1e5b5d7fc4bea7d4b465d765c96a5ffb8f3c462c2e43a1c90e2b48396853796",
     "recovery_count": 0
   }
 }
