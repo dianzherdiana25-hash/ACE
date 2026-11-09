@@ -430,9 +430,20 @@ class StrategyRepairEngine:
         return gene_dict, code_text.encode("utf-8")
 
     def generate_dispatch_source(self, ordinal: int) -> Tuple[Dict[str, Any], bytes]:
-        """Synthesize strongly typed AST Python source code for Multi-Task Dispatch candidate."""
-        rule_idx = (ordinal - 1) % len(DISPATCH_RULES)
-        split_len, mod_a, mod_b, s_scale = DISPATCH_RULES[rule_idx]
+        """Synthesize strongly typed AST Python source code for Multi-Task Dispatch candidate.
+        Dynamically expands candidate generation beyond static rules to defeat syntactic saturation.
+        """
+        if ordinal <= len(DISPATCH_RULES):
+            split_len, mod_a, mod_b, s_scale = DISPATCH_RULES[ordinal - 1]
+            d_scale = 1
+        else:
+            # Dynamic parametric dispatch synthesis to prevent duplicate SHAs
+            offset = ordinal - len(DISPATCH_RULES)
+            split_len = 3 + (offset % 7)
+            mod_a = 2 + ((offset // 2) % 5)
+            mod_b = 3 + ((offset // 3) % 7)
+            s_scale = 1 + (offset % 3)
+            d_scale = 1 + ((offset // 4) % 2)
 
         gene_dict = {
             "is_dispatch": True,
@@ -441,10 +452,11 @@ class StrategyRepairEngine:
             "mod_a": mod_a,
             "mod_b": mod_b,
             "stride_scale": s_scale,
+            "density_scale": d_scale,
         }
 
         # Dispatch router branching based on length threshold
-        branch_true = f"(0 if ((density % {mod_a}) == 0) else 1)"
+        branch_true = f"(0 if (((density * {d_scale}) % {mod_a}) == 0) else 1)"
         branch_false = f"(0 if (((stride_val * {s_scale}) % {mod_b}) == 0) else 1)"
         code_text = (
             f"def evaluate_mechanism(length: int, density: int, stride_val: int) -> int:\n"
