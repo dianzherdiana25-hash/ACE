@@ -379,3 +379,54 @@ class TestPublicStaticProbe(unittest.TestCase):
         self.assertEqual(result.performance_metrics["connected_to_active_algorithm"], 0.0)
         self.assertEqual(result.performance_metrics["candidate_python_executed"], 0.0)
         self.assertIn("PUBLIC_PROBE_COMPLETED", result.rejection_reason)
+
+
+class TestTermuxAiDiagnosticCLI(unittest.TestCase):
+    """Read-only reports use the real stored source, not a fabricated AI result."""
+
+    def test_read_only_diagnostics_fail_closed_and_do_not_claim_provider(self):
+        from tools.ace_ai_diagnostic import audit_consultations
+        with tempfile.TemporaryDirectory() as directory:
+            source_path = Path(directory) / "ai_consultations.json"
+            records = [
+                {
+                    "timestamp": "2026-11-09 19:39:57 UTC",
+                    "hypothesis_id": "hyp_expand_dispatch_95",
+                    "engine": "PowerBrain (GPT-5/4) / Pollinations",
+                    "ai_answered": (
+                        "def ace_ai_synthesized_test(length,density,stride_val):\n"
+                        "    return 1 if (2*stride_val-density)%3==0 else 0\n"
+                    ),
+                },
+                {
+                    "timestamp": "2026-11-09 19:41:53 UTC",
+                    "hypothesis_id": "hyp_expand_dispatch_96",
+                    "engine": "UNVERIFIED_PROVIDER",
+                    "ai_answered": (
+                        "def ace_ai_synthesized_bad(length,density,stride_val):\n"
+                        "    return int(length==density)\n"
+                    ),
+                },
+            ]
+            original = json.dumps(records)
+            source_path.write_text(original, encoding="utf-8")
+            report = audit_consultations(source_path, limit=2)
+            self.assertEqual(source_path.read_text(encoding="utf-8"), original)
+            self.assertEqual(report["records_scored"], 2)
+            self.assertEqual(report["records"][0]["status"], "PUBLIC_DIAGNOSTIC_ONLY")
+            self.assertEqual(report["records"][0]["public_diagnostic"]["public_modular_candidate"], 1.0)
+            self.assertFalse(report["records"][0]["provider_verified"])
+            self.assertFalse(report["records"][0]["candidate_python_executed"])
+            self.assertEqual(report["records"][1]["status"], "UNSUPPORTED_STATIC_GRAMMAR")
+            self.assertEqual(report["release_gate"], "BLOCK_RELEASE")
+            self.assertEqual(report["scientific_status"], "NOT_ASSESSED")
+
+    def test_rejects_malformed_input_and_unbounded_limit(self):
+        from tools.ace_ai_diagnostic import audit_consultations
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "consultations.json"
+            path.write_text('{"not": "a list"}', encoding="utf-8")
+            with self.assertRaises(ValueError):
+                audit_consultations(path)
+            with self.assertRaises(ValueError):
+                audit_consultations(path, limit=0)
