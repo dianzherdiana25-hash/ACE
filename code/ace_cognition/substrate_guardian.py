@@ -50,8 +50,8 @@ class SubstrateTelemetry:
 class SubstrateGuardian:
     """Supervises ACE physical host environment, enforcing biological self-preservation."""
 
-    def __init__(self, workspace_root: Path):
-        self.workspace_root = workspace_root.resolve()
+    def __init__(self, workspace_root: Union[str, Path]):
+        self.workspace_root = Path(workspace_root).resolve()
         self.history: list[SubstrateTelemetry] = []
 
     def get_memory_info(self) -> Tuple[float, float]:
