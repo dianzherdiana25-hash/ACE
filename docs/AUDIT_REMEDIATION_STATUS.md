@@ -29,3 +29,12 @@ parity fixture and reports the candidate and fixture SHA-256, a constant baselin
 and `promotion_authorized: false`. It is not an independent holdout, a signed
 receipt, a sandbox certification, or a replacement for the disabled production
 evaluator and autonomous publication gate. Startup or candidate errors fail closed.
+
+The same explicit opt-in exposes `ace_patch_diagnostic`, which compares a fixed
+supervisor-selected regression suite against baseline and append-only patched
+snapshots of `code/ace_self_dev/strategy_repair.py` at committed HEAD. It records
+the commit and SHA-256 hashes of the base file, patch, candidate, test output and
+receipt. If baseline or sandbox startup fails the candidate is not run. These
+hashes are checksums, not signatures; public tests can be gamed, and passing them
+does not establish improvement or authorize promotion. Other paths, dirty working
+tree patches, arbitrary test commands and automatic PR publication are unsupported.
