@@ -27,6 +27,7 @@ from ace_self_dev.models import AuthorType
 from ace_host_controller.resilient_watchdog import ResilientWatchdog, WatchdogConfig
 from ace_code_agent.controller import AutonomousSoftwareResearcher
 from ace_cognition.substrate_guardian import SubstrateGuardian
+from ace_host_controller.repo_janitor import AutonomousRepoJanitor
 
 
 def log(msg: str):
@@ -58,7 +59,7 @@ def git_commit_and_push(cycle_id: int, decision: str, task_or_problem_id: str):
     try:
         log(f"Staging artifacts and state for Cycle {cycle_id}...")
         subprocess.run(
-            ["git", "add", "checkpoints/", "evidence/", "code/", "docs/", "tools/"],
+            ["git", "add", "checkpoints/", "evidence/", "code/", "docs/", "tools/", "CHANGELOG.md"],
             cwd=REPO_ROOT,
             check=True,
             capture_output=True,
@@ -189,6 +190,7 @@ def run_daemon_loop(
     watchdog.start_background_monitor()
 
     researcher = AutonomousSoftwareResearcher(repo_root=REPO_ROOT)
+    janitor = AutonomousRepoJanitor(REPO_ROOT)
     coord = SelfDevelopmentCoordinator(
         checkpoint_dir=str(REPO_ROOT / "checkpoints" / "self_dev"),
         evidence_dir=str(REPO_ROOT / "evidence" / "self_dev"),
@@ -262,6 +264,14 @@ def run_daemon_loop(
                     log(f"External verifier output: {ver.stdout[-300:]}")
             except Exception as ve:
                 log(f"Verifier error: {ve}")
+
+            if iteration % 3 == 0:
+                try:
+                    log("Running Autonomous Repo Janitor (housekeeping, auto-merge & changelog)...")
+                    h_res = janitor.run_full_housekeeping()
+                    log(f"  Janitor: Pruned {h_res['pruned_snapshots_count']} old snapshots, cleaned {h_res['cleaned_caches_count']} caches, changelog updated: {h_res['changelog_updated']}.")
+                except Exception as je:
+                    log(f"  Janitor error (non-fatal): {je}")
 
             if max_cycles > 0 and total_completed >= max_cycles:
                 return
