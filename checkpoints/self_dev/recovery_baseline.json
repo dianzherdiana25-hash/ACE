@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C271",
-  "cycle_count": 302,
+  "cycle_count": 303,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -4532,6 +4532,21 @@
       "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0302.json.gz",
       "prior_digest": "f4894c6bcc51338077993578b45dfe6dd88f80ad6db0a7a23d3688ed27ea60b0",
       "state_digest": "cc56325f5dd6d4ef403dcd29be0556d57ea3a1b32f1d8c70537fbf90cb80dc55"
+    },
+    {
+      "cycle_id": 303,
+      "timestamp": "2026-11-09T18:39:59Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C303",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C303",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C303 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0303.json.gz",
+      "prior_digest": "cc56325f5dd6d4ef403dcd29be0556d57ea3a1b32f1d8c70537fbf90cb80dc55",
+      "state_digest": "9d3097c80eed535acfe8aae8a0b6b878d94dcc4144cc339f4267436ebccf10f2"
     }
   ],
   "failure_catalog": {
@@ -10101,6 +10116,21 @@
         "gain_over_parent": 0.0,
         "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C302 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
         "timestamp": "2026-11-09T18:38:42Z"
+      },
+      {
+        "cycle_id": 303,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C303",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C303 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-09T18:39:59Z"
       }
     ]
   },
@@ -11916,6 +11946,12 @@
       "target_task_id": "multi_task",
       "status": "FALSIFIED",
       "cycle_id": 302
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C303",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 303
     }
   ],
   "next_agenda_priority": {
@@ -11924,14 +11960,14 @@
     "strategy": "LINEAR_MUTATION",
     "suggested_ordinal": 1,
     "rationalization": "Structural deficit confirmed for MULTI_TASK_ENSEMBLE on 'multi_task' (flat variance=0.0000 < 0.005, ceiling=0.0000 << 0.1500). Representational capacity cannot separate the invariant. Promoting search policy to next representation family 'LINEAR_MUTATION' (ordinal 1) rather than looping ordinals.",
-    "timestamp": "2026-11-09T18:38:42Z"
+    "timestamp": "2026-11-09T18:39:59Z"
   },
   "concurrency_lock": {
     "is_locked": true,
-    "locked_by": "worker_31188_1794249521",
-    "locked_at": "2026-11-09T18:38:41Z",
-    "expires_at": "1794250121.92",
-    "lock_token": "3742765642e6c662"
+    "locked_by": "worker_31188_1794249599",
+    "locked_at": "2026-11-09T18:39:59Z",
+    "expires_at": "1794250199.27",
+    "lock_token": "3b6d9b2c546ba4e1"
   },
   "immutable_baseline": {
     "root_candidate_id": "G0_self_dev_root_c0",
@@ -11940,10 +11976,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "cc56325f5dd6d4ef403dcd29be0556d57ea3a1b32f1d8c70537fbf90cb80dc55",
+  "state_digest": "9d3097c80eed535acfe8aae8a0b6b878d94dcc4144cc339f4267436ebccf10f2",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 302,
-    "last_known_good_digest": "cc56325f5dd6d4ef403dcd29be0556d57ea3a1b32f1d8c70537fbf90cb80dc55",
+    "last_known_good_cycle": 303,
+    "last_known_good_digest": "9d3097c80eed535acfe8aae8a0b6b878d94dcc4144cc339f4267436ebccf10f2",
     "recovery_count": 0
   }
 }
