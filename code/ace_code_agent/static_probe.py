@@ -15,7 +15,7 @@ MAX_ABS_VALUE = 1_000_000
 
 _ALLOWED_NODES = (
     ast.Module, ast.FunctionDef, ast.arguments, ast.arg, ast.Assign, ast.If,
-    ast.Return, ast.Name, ast.Load, ast.Store, ast.Constant, ast.IfExp,
+    ast.Return, ast.Name, ast.Load, ast.Store, ast.Constant, ast.IfExp, ast.Call,
     ast.BinOp, ast.Add, ast.Sub, ast.Mult, ast.Mod, ast.FloorDiv,
     ast.BoolOp, ast.And, ast.Or, ast.UnaryOp, ast.Not, ast.UAdd, ast.USub,
     ast.Compare, ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE,
@@ -46,6 +46,13 @@ def _expression(node, env, budget):
     budget.tick()
     if isinstance(node, ast.Constant):
         return _integer(node.value)
+    if isinstance(node, ast.Call):
+        # This is an interpreter primitive, NOT a Python function invocation.
+        # Never resolve names, objects, attributes, keywords or callables.
+        if (not isinstance(node.func, ast.Name) or node.func.id != "int"
+                or len(node.args) != 1 or node.keywords):
+            raise UnsafeOrUnsupported("only bounded int(expression) conversion allowed")
+        return _integer(_expression(node.args[0], env, budget))
     if isinstance(node, ast.Name):
         if node.id not in env:
             raise UnsafeOrUnsupported("undefined variable")
@@ -146,6 +153,12 @@ def parse_candidate(source: str):
         raise UnsafeOrUnsupported("candidate outside closed arithmetic grammar")
     if len(tree.body) != 1 or not isinstance(tree.body[0], ast.FunctionDef):
         raise UnsafeOrUnsupported("requires exactly one function")
+    for node in nodes:
+        if isinstance(node, ast.Call) and (
+            not isinstance(node.func, ast.Name) or node.func.id != "int"
+            or len(node.args) != 1 or node.keywords
+        ):
+            raise UnsafeOrUnsupported("only bounded int(expression) conversion allowed")
     fn = tree.body[0]
     if not fn.name.startswith(("ace_ai_synthesized_", "ace_v04_")):
         raise UnsafeOrUnsupported("unknown candidate entrypoint")
