@@ -36,7 +36,7 @@ FORBIDDEN_CALLS: Set[str] = {
 
 
 class WorktreeHarness:
-    """Safely applies and evaluates candidate patches in isolated worktrees."""
+    """Fail-closed candidate intake. No untrusted source execution occurs here."""
 
     def __init__(self, repo_root: Optional[Path] = None):
         if repo_root is None:
@@ -49,7 +49,7 @@ class WorktreeHarness:
         # 1. Check target path against protected governance paths
         target = patch.target_file
         if (not isinstance(target, str) or not target.startswith("code/") or
-                not target.endswith(".py") or "\\\\" in target or
+                not target.endswith(".py") or chr(92) in target or
                 target.startswith("/") or ".." in PurePosixPath(target).parts):
             return False, "SECURITY VIOLATION: invalid candidate source path"
         for prot in PROTECTED_PATHS:
