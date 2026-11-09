@@ -18,6 +18,9 @@ import shutil
 import subprocess
 import time
 from typing import Any, Dict, List, Optional, Tuple
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 class MultiAIFleetAdvisor:
@@ -25,6 +28,24 @@ class MultiAIFleetAdvisor:
 
     def __init__(self, ask_ai_bin: Optional[str] = None):
         self.ask_ai_bin = ask_ai_bin or shutil.which("ask-ai") or "/data/data/com.termux/files/usr/bin/ask-ai"
+        self.dialogue_file = REPO_ROOT / "checkpoints" / "self_dev" / "ai_consultations.json"
+
+    def _log_consultation(self, record: dict):
+        """Persists the live dialogue between ACE and the AI fleet."""
+        try:
+            self.dialogue_file.parent.mkdir(parents=True, exist_ok=True)
+            history = []
+            if self.dialogue_file.exists():
+                try:
+                    history = json.loads(self.dialogue_file.read_text(encoding="utf-8"))
+                except Exception:
+                    history = []
+            history.append(record)
+            # Retain last 30 dialogues
+            history = history[-30:]
+            self.dialogue_file.write_text(json.dumps(history, indent=2), encoding="utf-8")
+        except Exception:
+            pass
 
     def is_available(self) -> bool:
         """Checks if the unified AI fleet coordinator binary is present and executable."""
@@ -81,6 +102,18 @@ class MultiAIFleetAdvisor:
             # Enforce AST safety whitelist
             if not self.validate_pure_ast(code_snippet):
                 return None
+
+            # Persist live dialogue for dashboard inspection
+            dialogue_entry = {
+                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime()),
+                "hypothesis_id": hypothesis_id,
+                "strategy": strategy,
+                "ace_asked": f"Bantu buatkan fungsi logika murni `ace_ai_synthesized_{safe_id}` untuk hipotesis: '{hypothesis_statement}'. Wajib pure arithmetic, zero imports.",
+                "ai_answered": code_snippet,
+                "status": "VALID_AST_PASSED",
+                "engine": "PowerBrain (GPT-5/4) / Pollinations",
+            }
+            self._log_consultation(dialogue_entry)
 
             header = (
                 f"\n\n# --- ACE Autonomous Multi-AI Fleet Synthesis: {safe_id} ---\n"
