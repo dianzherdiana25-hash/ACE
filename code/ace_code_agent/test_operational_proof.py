@@ -124,7 +124,7 @@ class TestAutonomousCodeAgentOperationalProof(unittest.TestCase):
             target_file="code/ace_self_dev/strategy_repair.py",
             diff_content="",
             original_code_snippet="",
-            replacement_code_snippet="def unused_candidate(length, density, stride_val):\\n    return 1\\n",
+            replacement_code_snippet="def unused_candidate(length, density, stride_val):\n    return 1\n",
             patch_type="MULTI_AI_SYNTHESIS",
             author_provenance="EXTERNAL_MODEL_UNTRUSTED",
         )
@@ -150,7 +150,7 @@ class TestAutonomousCodeAgentOperationalProof(unittest.TestCase):
             target_file="code/../checkpoints/self_dev/immutable_baseline.json",
             diff_content="",
             original_code_snippet="",
-            replacement_code_snippet="def harmless():\\n    return 0\\n",
+            replacement_code_snippet="def harmless():\n    return 0\n",
             patch_type="MULTI_AI_SYNTHESIS",
             author_provenance="EXTERNAL_MODEL_UNTRUSTED",
         )
