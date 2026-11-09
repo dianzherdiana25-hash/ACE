@@ -341,6 +341,40 @@ class TestPublicStaticProbe(unittest.TestCase):
                 with self.assertRaises(UnsafeOrUnsupported):
                     parse_candidate(source)
 
+    def test_actual_96_style_ai_candidate_runs_in_interpreter_only(self):
+        from ace_code_agent.static_probe import public_diagnostic, parse_candidate
+        code = (
+            "def ace_ai_synthesized_hyp_expand_dispatch_96(length: int, density: int, stride_val: int) -> int:\n"
+            "    if stride_val == 0:\n"
+            "        return 0\n"
+            "    congruent = length % stride_val == density % stride_val\n"
+            "    parity_matches = length % 2 == density % 2\n"
+            "    return int(congruent and parity_matches)\n"
+        )
+        self.assertIsNotNone(parse_candidate(code))
+        result = public_diagnostic(code)
+        self.assertEqual(result["public_probe_count"], 96.0)
+        self.assertEqual(result["candidate_python_executed"], 0.0)
+        self.assertEqual(result["independent_confirmation"], 0.0)
+        self.assertEqual(result["connected_to_active_algorithm"], 0.0)
+
+    def test_only_int_one_positional_arg_is_interpreted(self):
+        from ace_code_agent.static_probe import parse_candidate, UnsafeOrUnsupported
+        forbidden_calls = (
+            "eval('1')", "float(length)", "int()", "int(length, 2)",
+            "int(length, base=2)", "int.__call__(length)",
+            "int(__import__('os').system('echo bad'))",
+            "int([1][0])",
+        )
+        for expression in forbidden_calls:
+            code = (
+                "def ace_ai_synthesized_bad(length, density, stride_val):\n"
+                f"    return {expression}\n"
+            )
+            with self.subTest(expression=expression):
+                with self.assertRaises(UnsafeOrUnsupported):
+                    parse_candidate(code)
+
     def test_rejects_unbounded_or_nonbinary_evaluation(self):
         from ace_code_agent.static_probe import (
             parse_candidate, interpret, public_diagnostic, UnsafeOrUnsupported
@@ -417,7 +451,8 @@ class TestTermuxAiDiagnosticCLI(unittest.TestCase):
             self.assertEqual(report["records"][0]["public_diagnostic"]["public_modular_candidate"], 1.0)
             self.assertFalse(report["records"][0]["provider_verified"])
             self.assertFalse(report["records"][0]["candidate_python_executed"])
-            self.assertEqual(report["records"][1]["status"], "UNSUPPORTED_STATIC_GRAMMAR")
+            self.assertEqual(report["records"][1]["status"], "PUBLIC_DIAGNOSTIC_ONLY")
+            self.assertFalse(report["records"][1]["candidate_python_executed"])
             self.assertEqual(report["release_gate"], "BLOCK_RELEASE")
             self.assertEqual(report["scientific_status"], "NOT_ASSESSED")
 
