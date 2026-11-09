@@ -8,6 +8,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import json
+from pathlib import Path
 import time
 from typing import Any, Dict, List, Optional
 
@@ -38,27 +39,27 @@ class RealWorldMissionIntegrator:
                 "goal": "Synthesize automated high-throughput regex parser for system and daemon logs",
                 "hypothesis": "Dynamic boundary capture groups separate timestamp, level, and error codes without shell dependencies",
                 "task_family_ids": ["real_world_log_parsing"],
-                "inputs": [{"type": "log_stream", "path": "logs/system.log"}],
-                "budget": {"max_seconds": 30.0, "max_cost_usd": 0.0},
-                "acceptance": {"metric": "extraction_precision", "threshold": 1.0},
+                "inputs": [{"path": "logs/system.log", "hash": "0" * 64}],
+                "budget": {"time_sec": 30.0, "max_candidates": 10},
+                "acceptance": {"metric": "extraction_precision", "threshold": 1.0, "comparator": "exact_match"},
                 "forbidden": ["forbidden_key.pem"],
             },
             {
                 "goal": "Synthesize procfs resource monitor auditing active python tasks and memory leakage",
                 "hypothesis": "Proactive /proc stat sampling isolates memory leaks before Android OOM killer fires",
                 "task_family_ids": ["real_world_process_sentinel"],
-                "inputs": [{"type": "proc_fs", "path": "/proc"}],
-                "budget": {"max_seconds": 30.0, "max_cost_usd": 0.0},
-                "acceptance": {"metric": "proc_audit_accuracy", "threshold": 1.0},
+                "inputs": [{"path": "/proc", "hash": "0" * 64}],
+                "budget": {"time_sec": 30.0, "max_candidates": 10},
+                "acceptance": {"metric": "proc_audit_accuracy", "threshold": 1.0, "comparator": "exact_match"},
                 "forbidden": ["forbidden_key.pem"],
             },
             {
                 "goal": "Synthesize automated code churn and repository hotspot analyzer",
                 "hypothesis": "Git log shortstat parsing identifies volatile architecture components across cycles",
                 "task_family_ids": ["real_world_git_analytics"],
-                "inputs": [{"type": "git_repo", "path": "."}],
-                "budget": {"max_seconds": 30.0, "max_cost_usd": 0.0},
-                "acceptance": {"metric": "churn_record_coverage", "threshold": 0.90},
+                "inputs": [{"path": ".", "hash": "0" * 64}],
+                "budget": {"time_sec": 30.0, "max_candidates": 10},
+                "acceptance": {"metric": "churn_record_coverage", "threshold": 0.90, "comparator": "exact_match"},
                 "forbidden": ["forbidden_key.pem"],
             },
         ]
