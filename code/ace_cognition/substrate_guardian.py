@@ -195,3 +195,47 @@ class SubstrateGuardian:
             "status": "FROZEN_SECURE",
             "capsule_path": str(capsule_file)
         }
+
+    def trigger_cloud_migration(self, workflow_name: str = "ace-autonomous-dev-v03.yml") -> Dict[str, Any]:
+        """Triggers cloud migration by waking up GitHub Actions runner via repository_dispatch."""
+        import urllib.request
+        import urllib.error
+
+        # Extract PAT from git remote
+        token = os.environ.get("GITHUB_TOKEN")
+        if not token:
+            try:
+                import subprocess
+                rem_out = subprocess.run(["git", "remote", "get-url", "origin"], cwd=self.workspace_root, capture_output=True, text=True)
+                url = rem_out.stdout.strip()
+                if "@" in url and "https://" in url:
+                    user_pass = url.split("https://")[1].split("@")[0]
+                    if ":" in user_pass:
+                        token = user_pass.split(":")[1]
+                    else:
+                        token = user_pass
+            except Exception:
+                pass
+
+        if not token:
+            return {"status": "MIGRATION_SKIPPED", "reason": "NO_TOKEN_FOUND"}
+
+        api_url = f"https://api.github.com/repos/dianzherdiana25-hash/ACE/actions/workflows/{workflow_name}/dispatches"
+        headers = {
+            "Authorization": f"token {token}",
+            "Accept": "application/vnd.github.v3+json",
+            "User-Agent": "ACE-Substrate-Guardian/1.0",
+            "Content-Type": "application/json"
+        }
+        payload = json.dumps({"ref": "main"}).encode("utf-8")
+
+        try:
+            req = urllib.request.Request(api_url, data=payload, headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                if resp.status in (200, 204):
+                    return {"status": "CLOUD_MIGRATION_DISPATCHED", "workflow": workflow_name, "http_code": resp.status}
+                return {"status": "CLOUD_MIGRATION_FAILED", "http_code": resp.status}
+        except urllib.error.HTTPError as e:
+            return {"status": "CLOUD_MIGRATION_ERROR", "http_code": e.code, "error": str(e)}
+        except Exception as e:
+            return {"status": "CLOUD_MIGRATION_ERROR", "error": str(e)}
