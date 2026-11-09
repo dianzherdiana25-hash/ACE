@@ -795,11 +795,14 @@ class DashboardHandler(http.server.BaseHTTPRequestHandler):
         pass
 
 
+class ReusableTCPServer(socketserver.TCPServer):
+    allow_reuse_address = True
+
+
 def run_dashboard(port: int = PORT):
     print(f"\n🚀 [ACE Web Dashboard V2] Berhasil dinyalakan di: http://localhost:{port}")
     print("   Buka browser di HP Anda untuk melihat tampilan visual real-time.\n")
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("", port), DashboardHandler) as httpd:
+    with ReusableTCPServer(("", port), DashboardHandler) as httpd:
         httpd.serve_forever()
 
 
