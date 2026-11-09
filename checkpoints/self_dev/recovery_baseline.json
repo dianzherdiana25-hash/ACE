@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "G0_self_dev_root_c0",
-  "cycle_count": 256,
+  "cycle_count": 257,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -3842,6 +3842,21 @@
       "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0256.json.gz",
       "prior_digest": "15f6349256cc505fd98874fcf6b3224cd3a2a11f6dee0aec81977454e937c14e",
       "state_digest": "98a9df28ab48f59e44e3c97dd18f7852803910f9b6501d98663e4f530ead5614"
+    },
+    {
+      "cycle_id": 257,
+      "timestamp": "2026-11-09T16:47:06Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C257_task_j1_multiscale_run_parity_dispatch_ord2",
+      "target_task_id": "task_j1_multiscale_run_parity",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C257_task_j1_multiscale_run_parity_dispatch_ord2",
+      "source_sha": "cd17e1b75959edebd606054b50f21ffbe53e33d89a090acb4310a16f90ee9e6a",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C257_task_j1_multiscale_run_parity_dispatch_ord2 source_sha 'cd17e1b75959' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C256_task_j1_multiscale_run_parity_dispatch_ord1 (Cycle 256).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0257.json.gz",
+      "prior_digest": "98a9df28ab48f59e44e3c97dd18f7852803910f9b6501d98663e4f530ead5614",
+      "state_digest": "cf6c4399e091bec33584392aa812821a0ced5356bbfc50e87a2039fefde33928"
     }
   ],
   "failure_catalog": {
@@ -8311,6 +8326,25 @@
         "gain_over_parent": 0.0,
         "rejection_reason": "STAGNATION_DETECTED: Patience window exceeded: 5 consecutive attempts on 'task_j1_multiscale_run_parity' without validation improvement (best=0.7578, min_improvement=0.001).",
         "timestamp": "2026-11-09T16:46:12Z"
+      },
+      {
+        "cycle_id": 257,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C257_task_j1_multiscale_run_parity_dispatch_ord2",
+        "source_sha": "cd17e1b75959edebd606054b50f21ffbe53e33d89a090acb4310a16f90ee9e6a",
+        "gene_dict": {
+          "is_dispatch": true,
+          "ordinal": 1,
+          "split_len": 5,
+          "mod_a": 2,
+          "mod_b": 3,
+          "stride_scale": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 2,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C257_task_j1_multiscale_run_parity_dispatch_ord2 source_sha 'cd17e1b75959' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C256_task_j1_multiscale_run_parity_dispatch_ord1 (Cycle 256).",
+        "timestamp": "2026-11-09T16:47:06Z"
       }
     ],
     "task_j2_symmetric_run_boundary": [
@@ -10110,22 +10144,28 @@
       "target_task_id": "task_j1_multiscale_run_parity",
       "status": "FALSIFIED",
       "cycle_id": 256
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C257_task_j1_multiscale_run_parity_dispatch_ord2",
+      "target_task_id": "task_j1_multiscale_run_parity",
+      "status": "FALSIFIED",
+      "cycle_id": 257
     }
   ],
   "next_agenda_priority": {
     "priority_task_id": "task_j1_multiscale_run_parity",
     "priority_family": "family_j",
     "strategy": "MULTI_TASK_DISPATCH",
-    "suggested_ordinal": 1,
-    "rationalization": "Failure in MULTI_TASK_DISPATCH is parameter-based (gain range non-degenerate). Exploring untried parameter ordinal 1 on task_j1_multiscale_run_parity.",
-    "timestamp": "2026-11-09T16:46:12Z"
+    "suggested_ordinal": 2,
+    "rationalization": "Failure in MULTI_TASK_DISPATCH is parameter-based (gain range non-degenerate). Exploring untried parameter ordinal 2 on task_j1_multiscale_run_parity.",
+    "timestamp": "2026-11-09T16:47:06Z"
   },
   "concurrency_lock": {
     "is_locked": true,
-    "locked_by": "worker_26753_1794242772",
-    "locked_at": "2026-11-09T16:46:12Z",
-    "expires_at": "1794243372.57",
-    "lock_token": "ed12a602f8c87928"
+    "locked_by": "worker_26753_1794242825",
+    "locked_at": "2026-11-09T16:47:05Z",
+    "expires_at": "1794243425.92",
+    "lock_token": "d21916f1f0156e7a"
   },
   "immutable_baseline": {
     "root_candidate_id": "G0_self_dev_root_c0",
@@ -10134,10 +10174,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "98a9df28ab48f59e44e3c97dd18f7852803910f9b6501d98663e4f530ead5614",
+  "state_digest": "cf6c4399e091bec33584392aa812821a0ced5356bbfc50e87a2039fefde33928",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 256,
-    "last_known_good_digest": "98a9df28ab48f59e44e3c97dd18f7852803910f9b6501d98663e4f530ead5614",
+    "last_known_good_cycle": 257,
+    "last_known_good_digest": "cf6c4399e091bec33584392aa812821a0ced5356bbfc50e87a2039fefde33928",
     "recovery_count": 0
   }
 }
