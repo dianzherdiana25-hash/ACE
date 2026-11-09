@@ -33,57 +33,62 @@ class RealWorldMissionIntegrator:
 
     def generate_real_world_missions(self) -> List[Dict[str, Any]]:
         """Generate high-priority real-world missions into the bus."""
-        missions = [
+        definitions = [
             {
-                "mission_id": f"RW_MISSION_LOG_PARSER_{int(time.time())}",
-                "family": "real_world_log_parsing",
                 "goal": "Synthesize automated high-throughput regex parser for system and daemon logs",
                 "hypothesis": "Dynamic boundary capture groups separate timestamp, level, and error codes without shell dependencies",
-                "metric": "extraction_precision",
-                "threshold": 1.0,
-                "comparator": "exact_group_match",
-                "info_value_per_label": 0.95,
-                "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "task_family_ids": ["real_world_log_parsing"],
+                "inputs": [{"type": "log_stream", "path": "logs/system.log"}],
+                "budget": {"max_seconds": 30.0, "max_cost_usd": 0.0},
+                "acceptance": {"metric": "extraction_precision", "threshold": 1.0},
+                "forbidden": ["forbidden_key.pem"],
             },
             {
-                "mission_id": f"RW_MISSION_PROCESS_SENTINEL_{int(time.time())}",
-                "family": "real_world_process_sentinel",
                 "goal": "Synthesize procfs resource monitor auditing active python tasks and memory leakage",
                 "hypothesis": "Proactive /proc stat sampling isolates memory leaks before Android OOM killer fires",
-                "metric": "proc_audit_accuracy",
-                "threshold": 1.0,
-                "comparator": "proc_stat_verifier",
-                "info_value_per_label": 0.92,
-                "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "task_family_ids": ["real_world_process_sentinel"],
+                "inputs": [{"type": "proc_fs", "path": "/proc"}],
+                "budget": {"max_seconds": 30.0, "max_cost_usd": 0.0},
+                "acceptance": {"metric": "proc_audit_accuracy", "threshold": 1.0},
+                "forbidden": ["forbidden_key.pem"],
             },
             {
-                "mission_id": f"RW_MISSION_CODEBASE_ANALYTICS_{int(time.time())}",
-                "family": "real_world_git_analytics",
                 "goal": "Synthesize automated code churn and repository hotspot analyzer",
                 "hypothesis": "Git log shortstat parsing identifies volatile architecture components across cycles",
-                "metric": "churn_record_coverage",
-                "threshold": 0.90,
-                "comparator": "git_shortstat_comparator",
-                "info_value_per_label": 0.90,
-                "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "task_family_ids": ["real_world_git_analytics"],
+                "inputs": [{"type": "git_repo", "path": "."}],
+                "budget": {"max_seconds": 30.0, "max_cost_usd": 0.0},
+                "acceptance": {"metric": "churn_record_coverage", "threshold": 0.90},
+                "forbidden": ["forbidden_key.pem"],
             },
         ]
 
-        for m in missions:
-            self.bus.register_mission(m)
-        return missions
+        created = []
+        for d in definitions:
+            m_id = self.bus.create_mission(
+                goal=d["goal"],
+                hypothesis=d["hypothesis"],
+                task_family_ids=d["task_family_ids"],
+                inputs=d["inputs"],
+                budget=d["budget"],
+                acceptance=d["acceptance"],
+                forbidden=d["forbidden"],
+            )
+            created.append({"mission_id": m_id, **d})
+        return created
 
-    def execute_real_world_mission(self, mission_id: str) -> Dict[str, Any]:
+    def execute_real_world_mission(self, mission_id: Optional[str] = None) -> Dict[str, Any]:
         """Claim and execute a real-world capability mission."""
-        claimed = self.bus.claim_mission(mission_id=mission_id, worker_id="worker_real_world_agent")
+        claimed = self.bus.next_mission(agent_id="worker_real_world_agent")
         if not claimed:
-            return {"status": "FAILED", "reason": f"Could not claim mission {mission_id}"}
+            return {"status": "FAILED", "reason": "No pending missions available"}
 
-        # Dispatch based on family
-        family = claimed.get("family", "")
+        m_id = claimed["id"]
+        families = claimed.get("task_family_ids", [])
+        family_str = " ".join(families).lower()
         receipt_data: Dict[str, Any] = {}
 
-        if "log" in family:
+        if "log" in family_str:
             sample_logs = [
                 "2026-11-09T17:00:00Z [INFO] worker_1 200 SUCCESS",
                 "2026-11-09T17:01:00Z [ERROR] worker_2 500 FAILED",
@@ -98,7 +103,7 @@ class RealWorldMissionIntegrator:
                 "passed": rule is not None,
                 "metric_achieved": 1.0 if rule else 0.0,
             }
-        elif "process" in family:
+        elif "process" in family_str:
             load = self.sentinel.audit_system_load()
             receipt_data = {
                 "active_python_procs": load["active_python_processes"],
@@ -106,7 +111,7 @@ class RealWorldMissionIntegrator:
                 "passed": True,
                 "metric_achieved": 1.0,
             }
-        elif "git" in family:
+        elif "git" in family_str:
             metrics = self.git_synth.compute_codebase_metrics()
             receipt_data = {
                 "total_commits": metrics.total_commits,
@@ -118,17 +123,22 @@ class RealWorldMissionIntegrator:
         else:
             receipt_data = {"passed": True, "metric_achieved": 1.0}
 
-        artifact_sha = hashlib.sha256(json.dumps(receipt_data, sort_keys=True).encode()).hexdigest()
-        self.bus.submit_receipt(
-            mission_id=mission_id,
-            worker_id="worker_real_world_agent",
-            artifact_sha=artifact_sha,
-            metrics={"accuracy": receipt_data.get("metric_achieved", 1.0)},
+        # Write receipt artifact to disk
+        out_dir = Path(self.workspace_root) / "evidence" / "real_world"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        artifact_path = out_dir / f"artifact_{m_id}.json"
+        artifact_path.write_text(json.dumps(receipt_data, indent=2), encoding="utf-8")
+
+        sub = self.bus.submit_mission(
+            mission_id=m_id,
+            artifact_path=str(artifact_path),
+            agent_id="worker_real_world_agent",
+            decision="ACCEPTED" if receipt_data.get("passed") else "REJECTED",
         )
 
         return {
             "status": "COMPLETED",
-            "mission_id": mission_id,
-            "artifact_sha": artifact_sha,
+            "mission_id": m_id,
+            "artifact_sha": sub.get("artifact_sha"),
             "receipt": receipt_data,
         }
