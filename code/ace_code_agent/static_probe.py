@@ -7,6 +7,7 @@ probes are NOT a sealed evaluator and can never authorize ACCEPTED/promotion.
 from __future__ import annotations
 
 import ast
+import hashlib
 from typing import Dict
 
 MAX_NODES = 128
@@ -225,3 +226,18 @@ def public_diagnostic(source: str) -> Dict[str, float]:
         "connected_to_active_algorithm": 0.0,
         "candidate_python_executed": 0.0,
     }
+
+
+def public_behavior_digest(source: str) -> str:
+    """Fingerprint public-probe predictions; matches do NOT prove full equivalence.
+
+    This digest is neither a model-identity check nor an independent test receipt.
+    The closed AST interpreter is the sole evaluator of untrusted candidates.
+    """
+    fn = parse_candidate(source)
+    output = bytearray()
+    for length in (3, 4, 5, 6, 8, 11):
+        for density in (1, 2, 3, 4):
+            for stride_val in (0, 1, 2, 3):
+                output.append(interpret(fn, length, density, stride_val))
+    return hashlib.sha256(bytes(output)).hexdigest()
