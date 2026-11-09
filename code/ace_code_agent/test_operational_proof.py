@@ -284,3 +284,98 @@ class TestAutonomousCodeAgentOperationalProof(unittest.TestCase):
         self.assertFalse(ok_ver)
         self.assertIn("No PR number or URL", ver_msg)
 
+
+
+class TestPublicStaticProbe(unittest.TestCase):
+    """Actual AST candidate is probed, but never compiled/executed or promoted."""
+
+    def test_modular_rule_has_real_public_score_and_strong_reference(self):
+        from ace_code_agent.static_probe import public_diagnostic
+        code = (
+            "def ace_ai_synthesized_modular(length: int, density: int, stride_val: int) -> int:\n"
+            "    return 1 if (stride_val * 2 - density) % 3 == 0 else 0\n"
+        )
+        score = public_diagnostic(code)
+        self.assertEqual(score["public_probe_count"], 96.0)
+        self.assertEqual(score["public_modular_candidate"], 1.0)
+        self.assertEqual(score["public_strong_baseline"], 1.0)
+        self.assertLess(score["public_parity_candidate"], 1.0)
+        self.assertEqual(score["independent_confirmation"], 0.0)
+        self.assertEqual(score["connected_to_active_algorithm"], 0.0)
+        self.assertEqual(score["candidate_python_executed"], 0.0)
+
+    def test_branching_and_assignments_are_interpreted_without_exec(self):
+        from ace_code_agent.static_probe import public_diagnostic
+        code = (
+            "def ace_ai_synthesized_parity(length, density, stride_val):\n"
+            "    if length < 4:\n"
+            "        return 0\n"
+            "    good = density % 2 == 0\n"
+            "    return 1 if good else 0\n"
+        )
+        score = public_diagnostic(code)
+        self.assertEqual(score["public_parity_candidate"], 1.0)
+        self.assertEqual(score["candidate_python_executed"], 0.0)
+
+    def test_rejects_untrusted_python_semantics(self):
+        from ace_code_agent.static_probe import parse_candidate, UnsafeOrUnsupported
+        bad = [
+            "import os\n" "def ace_ai_synthesized_bad(length,density,stride_val):\n"
+            "    return os.system('echo BAD')\n",
+            "def ace_ai_synthesized_bad(length,density,stride_val):\n"
+            "    while True: pass\n",
+            "def ace_ai_synthesized_bad(length,density,stride_val):\n"
+            "    return 2**20000000\n",
+            "def ace_ai_synthesized_bad(length,density,stride_val):\n"
+            "    return open('/tmp/unsafe', 'w')\n",
+            "def ace_ai_synthesized_bad(length,density,stride_val, extra):\n"
+            "    return 0\n",
+            "def ace_ai_synthesized_bad(length,density,stride_val):\n"
+            "    return (lambda x: x)(length)\n",
+            "def ace_ai_synthesized_bad(length,density,stride_val):\n"
+            "    return 0\n"
+            "def second(): return 1\n",
+        ]
+        for source in bad:
+            with self.subTest(source=source[:40]):
+                with self.assertRaises(UnsafeOrUnsupported):
+                    parse_candidate(source)
+
+    def test_rejects_unbounded_or_nonbinary_evaluation(self):
+        from ace_code_agent.static_probe import (
+            parse_candidate, interpret, public_diagnostic, UnsafeOrUnsupported
+        )
+        huge = parse_candidate(
+            "def ace_ai_synthesized_big(length,density,stride_val):\n"
+            "    return (length * 999999) * 999999\n"
+        )
+        with self.assertRaises(UnsafeOrUnsupported):
+            interpret(huge, 32, 1, 1)
+        with self.assertRaises(UnsafeOrUnsupported):
+            public_diagnostic(
+                "def ace_ai_synthesized_two(length,density,stride_val):\n"
+                "    return 2\n"
+            )
+
+    def test_public_probe_never_produces_accepted(self):
+        from ace_code_agent.models import CodePatch
+        from ace_code_agent.worktree_harness import WorktreeHarness
+        candidate = CodePatch(
+            patch_id="modular_predicate",
+            hypothesis_id="hyp_modular",
+            target_file="code/ace_self_dev/strategy_repair.py",
+            diff_content="",
+            original_code_snippet="",
+            replacement_code_snippet=(
+                "def ace_ai_synthesized_modular(length,density,stride_val):\n"
+                "    return 1 if (stride_val * 2 - density) % 3 == 0 else 0\n"
+            ),
+            patch_type="MULTI_AI_SYNTHESIS",
+            author_provenance="EXTERNAL_MODEL_UNTRUSTED",
+        )
+        result = WorktreeHarness(self.temp_repo if hasattr(self, "temp_repo") else Path(".")).execute_in_worktree(candidate)
+        self.assertEqual(result.decision, "INCONCLUSIVE")
+        self.assertEqual(result.performance_metrics["public_modular_candidate"], 1.0)
+        self.assertEqual(result.performance_metrics["connected_to_active_algorithm"], 0.0)
+        self.assertEqual(result.performance_metrics["candidate_python_executed"], 0.0)
+        self.assertIn("PUBLIC_PROBE_COMPLETED", result.rejection_reason)
