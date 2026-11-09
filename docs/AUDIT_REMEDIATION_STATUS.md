@@ -43,6 +43,14 @@ recompute that checksum; it must not be used as evidence of origin or authentici
 In the local VM, separate candidate probes for host file access, environment
 inheritance, modification of the read-only tests, and network access all failed
 while their baselines passed. This is a bounded test, not a general sandbox audit.
+The candidate and public tests share a Python interpreter. A malicious append can
+print a forged unittest success summary and call `os._exit(0)` before tests run;
+this bypass was reproduced in the VM. Zero-exit without a completed summary is
+rejected, but a plausible summary is not trusted: candidate results are
+`INCONCLUSIVE` even when the sandbox process reports success. The baseline result
+is an operational diagnostic, not independently authenticated evidence. A
+separate supervisor-owned oracle and an unforgeable observation boundary are
+required before any candidate can be accepted.
 
 `ace_host_exchange` defines data-only host requests and candidates, bound by
 canonical SHA-256 identifiers to the full base commit and fixed target. Host/model
