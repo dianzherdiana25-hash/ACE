@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C271",
-  "cycle_count": 274,
+  "cycle_count": 275,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -4112,6 +4112,21 @@
       "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0274.json.gz",
       "prior_digest": "60565ce963f2886abd59378d2f3aafb068fab63b3703734bc8f4ec3660a856e9",
       "state_digest": "4f97965c6b8bf45c81fb2f30e29167c708e8fa07b9da2cdc37c6b4dafbadfa2c"
+    },
+    {
+      "cycle_id": 275,
+      "timestamp": "2026-11-09T17:30:44Z",
+      "hypothesis_id": "HYP_AUTONOMOUS_C275_task_k2_modular_stride_shift_relational_ord1",
+      "target_task_id": "task_k2_modular_stride_shift",
+      "candidate_id": "CAND_HYP_AUTONOMOUS_C275_task_k2_modular_stride_shift_relational_ord1",
+      "source_sha": "4caebd62e73cec654c78753fcb8a76bb391ba56915f5fba57c2ac0a35af6615f",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C275_task_k2_modular_stride_shift_relational_ord1 source_sha '4caebd62e73c' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1 (Cycle 253).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0275.json.gz",
+      "prior_digest": "4f97965c6b8bf45c81fb2f30e29167c708e8fa07b9da2cdc37c6b4dafbadfa2c",
+      "state_digest": "9e74597c6f8e483d8a0c8b39aa29ab674cbbb6231ab21b9cb88d269c29abc584"
     }
   ],
   "failure_catalog": {
@@ -8383,6 +8398,34 @@
         "gain_over_parent": 0.0,
         "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C272_task_k2_modular_stride_shift_ord1 source_sha '373167919d71' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C1_task_k2_modular_stride_shift_ord1 (Cycle 1).",
         "timestamp": "2026-11-09T17:28:04Z"
+      },
+      {
+        "cycle_id": 275,
+        "candidate_id": "CAND_HYP_AUTONOMOUS_C275_task_k2_modular_stride_shift_relational_ord1",
+        "source_sha": "4caebd62e73cec654c78753fcb8a76bb391ba56915f5fba57c2ac0a35af6615f",
+        "gene_dict": {
+          "is_relational": true,
+          "is_relational_gated": true,
+          "clause_type": "CONJUNCTION_AND",
+          "combiner": "AND",
+          "length_op": ">=",
+          "length_threshold": 4,
+          "stride_weight": 1,
+          "density_weight": 1,
+          "length_weight": 0,
+          "modulus": 3,
+          "target_residue": 0,
+          "congruence_op": "==",
+          "boundary_var": "density",
+          "boundary_op": "<=",
+          "boundary_threshold": 4,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_AUTONOMOUS_C275_task_k2_modular_stride_shift_relational_ord1 source_sha '4caebd62e73c' is an exact syntactic duplicate of historical candidate CAND_HYP_AUTONOMOUS_C253_task_j1_multiscale_run_parity_relational_ord1 (Cycle 253).",
+        "timestamp": "2026-11-09T17:30:44Z"
       }
     ],
     "task_j1_multiscale_run_parity": [
@@ -10858,6 +10901,12 @@
       "target_task_id": "task_j1_multiscale_run_parity",
       "status": "FALSIFIED",
       "cycle_id": 274
+    },
+    {
+      "hypothesis_id": "HYP_AUTONOMOUS_C275_task_k2_modular_stride_shift_relational_ord1",
+      "target_task_id": "task_k2_modular_stride_shift",
+      "status": "FALSIFIED",
+      "cycle_id": 275
     }
   ],
   "next_agenda_priority": {
@@ -10865,8 +10914,8 @@
     "priority_family": "family_k",
     "strategy": "RELATIONAL_MULTI_CLAUSE",
     "suggested_ordinal": 1,
-    "rationalization": "Shifting research agenda to task 'task_k2_modular_stride_shift' with representation family 'RELATIONAL_MULTI_CLAUSE' (ordinal 1) to avoid unproductive cycles on 'task_j1_multiscale_run_parity'.",
-    "timestamp": "2026-11-09T17:29:51Z"
+    "rationalization": "Failure in RELATIONAL_MULTI_CLAUSE is parameter-based (gain range non-degenerate). Exploring untried parameter ordinal 1 on task_k2_modular_stride_shift.",
+    "timestamp": "2026-11-09T17:30:44Z"
   },
   "concurrency_lock": {
     "is_locked": false,
@@ -10882,10 +10931,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "4f97965c6b8bf45c81fb2f30e29167c708e8fa07b9da2cdc37c6b4dafbadfa2c",
+  "state_digest": "9e74597c6f8e483d8a0c8b39aa29ab674cbbb6231ab21b9cb88d269c29abc584",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 274,
-    "last_known_good_digest": "4f97965c6b8bf45c81fb2f30e29167c708e8fa07b9da2cdc37c6b4dafbadfa2c",
+    "last_known_good_cycle": 275,
+    "last_known_good_digest": "9e74597c6f8e483d8a0c8b39aa29ab674cbbb6231ab21b9cb88d269c29abc584",
     "recovery_count": 0
   }
 }
