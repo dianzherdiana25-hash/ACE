@@ -153,7 +153,7 @@ def parse_candidate(source: str):
     if ([a.arg for a in args.args] != ["length", "density", "stride_val"]
             or args.posonlyargs or args.kwonlyargs or args.vararg or args.kwarg
             or args.defaults or any(args.kw_defaults) or fn.decorator_list
-            or fn.type_comment or fn.type_params if hasattr(fn, "type_params") else False):
+            or fn.type_comment or bool(getattr(fn, "type_params", []))):
         raise UnsafeOrUnsupported("candidate signature must be exactly three bounded integers")
     # Annotations never execute; only the literal built-in int annotation is allowed.
     if any(a.annotation is not None and (
