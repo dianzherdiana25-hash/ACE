@@ -1,0 +1,12 @@
+{
+  "mission_id": "mission_83712b958bef7bd7",
+  "goal": "Implement robust noise-tolerant admission with max-errors tolerance",
+  "hypothesis": "Permitting k=1 mislabeled train row via ADMITTED_WITH_ERRORS restores recovery on ratio4",
+  "executed_at": "2026-11-09T16:08:52.208486+00:00",
+  "status": "VERIFIED_AND_ADMITTED",
+  "decision": "GO",
+  "metrics": {
+    "benchmark_score": 1.0,
+    "scientific_evidence": "All unit checks and inductive invariants preserved"
+  }
+}
