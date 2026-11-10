@@ -167,6 +167,14 @@ def parser():
     rb_p = commands.add_parser("rollback", help="kembalikan rilis ke versi stabil sebelumnya")
     rb_p.add_argument("--workspace", default=None, type=Path)
 
+    deliv_p = commands.add_parser("deliverables", help="periksa atau verifikasi kontrak penyelesaian F01-F24")
+    deliv_p.add_argument("deliverables_action", nargs="?", default="status", choices=["status", "verify"])
+    deliv_p.add_argument("--workspace", default=None, type=Path)
+
+    cont_p = commands.add_parser("continue", help="jalankan kelanjutan otomatis antarfase pada agenda terbuka")
+    cont_p.add_argument("--workspace", default=None, type=Path)
+    cont_p.add_argument("--max-steps", default=4, type=int)
+
     return result
 
 
@@ -351,6 +359,21 @@ def _handle_operational_command(args) -> int:
             print(json.dumps(orch.rollback_release(), sort_keys=True, ensure_ascii=False))
             return 0
 
+        if args.command == "deliverables":
+            orch = AutonomyOrchestrator(store)
+            if args.deliverables_action == "verify":
+                snap = orch.run_and_verify_f01_f24_contract()
+            else:
+                snap = store.export_deliverables_snapshot()
+            print(json.dumps(snap, sort_keys=True, ensure_ascii=False))
+            return 0
+
+        if args.command == "continue":
+            orch = AutonomyOrchestrator(store)
+            res = orch.run_autonomous_continuation_cycle(max_steps=args.max_steps)
+            print(json.dumps(res, sort_keys=True, ensure_ascii=False))
+            return 0
+
         if args.command == "web":
             server = ACEWebServer(
                 store,
@@ -387,6 +410,7 @@ def main(argv=None):
         operational_cmds = {
             "chat", "do", "web", "start", "stop", "resume",
             "models", "evidence", "agenda", "learn", "bridge", "update", "rollback",
+            "deliverables", "continue",
         }
         if args.command in operational_cmds:
             return _handle_operational_command(args)

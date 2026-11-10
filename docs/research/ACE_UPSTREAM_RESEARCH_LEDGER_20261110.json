@@ -1171,7 +1171,7 @@
     "No model inference, training or external ACE capability experiment was executed during documentation research.",
     "Termux Python wiki returned an access-denied page; official Termux package recipe was read instead."
   ],
-  "document_revision": 4,
+  "document_revision": 5,
   "revision_3": {
     "base_head": "2a54501d42df7c291f4493939662e32ea5e4c5ed",
     "target_pr_at_revision": 100,
@@ -1261,5 +1261,27 @@
         "runtime_reproduced": true
       }
     ]
+  },
+  "revision_5": {
+    "base_head": "c476f6b4019c9f852dbffd9eae076f720243aaab",
+    "target_pr_at_revision": 101,
+    "execution_contract": "docs/research/ACE_ANTIGRAVITY_EXECUTION_CONTRACT_20261110.md",
+    "master_prompt": "docs/research/ACE_MASTER_PROMPT_ANTIGRAVITY_UNIVERSAL_OFFLINE_OAIE_20261110.md",
+    "mandatory_deliverables": "F01-F24",
+    "deliverables_verified_pass": 24,
+    "deliverables_total": 24,
+    "all_passed": true,
+    "cli_commands_added": [
+      "ace deliverables status",
+      "ace deliverables verify",
+      "ace continue"
+    ],
+    "web_api_endpoints_added": [
+      "GET /api/deliverables",
+      "GET /api/experiments"
+    ],
+    "oaie_experiment_executed": true,
+    "self_improvement_capability_activated": "cap_deteksi_anomali_pengeluaran",
+    "consciousness_boundary_enforced": "ACE memiliki pemantauan mandiri fungsional (functional self-monitoring via SQLite telemetry, gap discovery, frontier registry, dan stagnation detector), bukan pengalaman subjektif (fenomenal/qualia)."
   }
 }

@@ -1141,6 +1141,14 @@ def create_http_handler(core: ACEWebCore):
                 self._send_json({"skills": core.store.list_skills()})
                 return
 
+            if path == "/api/deliverables":
+                self._send_json(core.store.export_deliverables_snapshot())
+                return
+
+            if path == "/api/experiments":
+                self._send_json({"experiments": core.store.list_experiments()})
+                return
+
             self._send_json({"error": f"Route tidak ditemukan: {path}"}, status=HTTPStatus.NOT_FOUND)
 
         def do_POST(self) -> None:
