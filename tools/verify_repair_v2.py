@@ -24,7 +24,7 @@ RUNTIME_IMPLEMENTATION = "068be383bf08ea7301a1425c7ab4c71070744a2f5db11a3136737c
 
 
 def git_blob(data: bytes) -> str:
-    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\\0" + data).hexdigest()
+    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data).hexdigest()
 
 
 class RepairV2ReceiptError(ValueError):
