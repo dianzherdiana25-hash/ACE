@@ -44,6 +44,8 @@ jobs:
           python tools/repair_v2_probe.py --output "$RUNNER_TEMP/repair-v2-b.json.gz" | tee "$RUNNER_TEMP/receipt-b.json"
           cmp "$RUNNER_TEMP/repair-v2-a.json.gz" "$RUNNER_TEMP/repair-v2-b.json.gz"
           cmp "$RUNNER_TEMP/receipt-a.json" "$RUNNER_TEMP/receipt-b.json"
+          python -m unittest tools.test_verify_repair_v2 -v
+          python tools/verify_repair_v2.py --candidate "$RUNNER_TEMP/repair-v2-a.json.gz"
           sha256sum "$RUNNER_TEMP/repair-v2-a.json.gz"
           echo "PASS_PUBLIC_REPAIR_V2_REPLAY_NOT_SCIENTIFIC_GO"
       - name: Upload public engineering receipt candidate (not production)
