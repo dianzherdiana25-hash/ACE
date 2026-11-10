@@ -1,0 +1,1143 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-11-10",
+  "repository": "dianzherdiana25-hash/ACE",
+  "target_pr_at_start": 100,
+  "target_branch": "research/ace-m1-fenced-store-chat-20261110",
+  "observed_head_at_start": "5180b2aea2d18bdfee401135279299d0cc122cb0",
+  "observed_main": "01647dc567ff715145f202309d663e80691d10ab",
+  "scope": "Documentation and primary-source research; no ACE runtime capability implementation in this session",
+  "license_caveat": "SPDX labels are GitHub metadata, not a per-file license audit; NOASSERTION and UNKNOWN remain unresolved. Model weight licenses are separate.",
+  "repositories": [
+    {
+      "id": "R01",
+      "name": "SWE-agent/mini-swe-agent",
+      "status": "METADATA_READ",
+      "url": "https://github.com/SWE-agent/mini-swe-agent",
+      "description": "The 100 line AI agent that solves GitHub issues or helps you in your command line. Radically simple, no huge configs, no giant monorepo—but scores >74% on SWE-bench verified!",
+      "branch": "main",
+      "license": "MIT",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-09T22:24:29Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/SWE-agent/mini-swe-agent/blob/main/README.md",
+        "blob_sha": "7db1d82dfa92eaa00adeb10c8681677a9e6ec639",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R02",
+      "name": "OpenHands/software-agent-sdk",
+      "status": "METADATA_READ",
+      "url": "https://github.com/OpenHands/software-agent-sdk",
+      "description": "A clean, modular SDK for building AI agents with OpenHands V1.",
+      "branch": "main",
+      "license": "MIT",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-10T14:24:51Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/OpenHands/software-agent-sdk/blob/main/README.md",
+        "blob_sha": "386dc8945133cb51969192b0b29c8396719cbff6",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R03",
+      "name": "Aider-AI/aider",
+      "status": "METADATA_READ",
+      "url": "https://github.com/Aider-AI/aider",
+      "description": "aider is AI pair programming in your terminal",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-05-22T14:02:20Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/Aider-AI/aider/blob/main/README.md",
+        "blob_sha": "816c876cb67021fa9f8d37267c8e57923eabdb07",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R04",
+      "name": "ggml-org/llama.cpp",
+      "status": "METADATA_READ",
+      "url": "https://github.com/ggml-org/llama.cpp",
+      "description": "LLM inference in C/C++",
+      "branch": "master",
+      "license": "MIT",
+      "language": "C++",
+      "archived": false,
+      "pushed_at": "2026-11-10T14:06:33Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/ggml-org/llama.cpp/blob/master/README.md",
+        "blob_sha": "a72afcae664ae5217bfac8959582ea4b8e436a89",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R05",
+      "name": "stanfordnlp/dspy",
+      "status": "METADATA_READ",
+      "url": "https://github.com/stanfordnlp/dspy",
+      "description": "DSPy: The framework for programming—not prompting—language models",
+      "branch": "main",
+      "license": "MIT",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-10T13:13:15Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/stanfordnlp/dspy/blob/main/README.md",
+        "blob_sha": "f92d3311e085fed87af6c724b2d43e2076b57cc6",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R06",
+      "name": "letta-ai/letta-code",
+      "status": "METADATA_READ",
+      "url": "https://github.com/letta-ai/letta-code",
+      "description": "Agents that self-improve with experience",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "TypeScript",
+      "archived": false,
+      "pushed_at": "2026-11-10T08:42:54Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/letta-ai/letta-code/blob/main/README.md",
+        "blob_sha": "6b09e6cf359981d7c2a6c225a6fa1b8617a8435b",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R07",
+      "name": "mem0ai/mem0",
+      "status": "METADATA_READ",
+      "url": "https://github.com/mem0ai/mem0",
+      "description": "The Memory Layer for AI Agents - Drop-in memory infrastructure for AI agents and apps. Context that persists. Built for production.",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-06T16:53:07Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/mem0ai/mem0/blob/main/README.md",
+        "blob_sha": "c9ed6dbfbe14a2fe60b8f3761a083786157a6987",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R08",
+      "name": "getzep/graphiti",
+      "status": "METADATA_READ",
+      "url": "https://github.com/getzep/graphiti",
+      "description": "Build Real-Time Knowledge Graphs for AI Agents",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-09T09:35:23Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/getzep/graphiti/blob/main/README.md",
+        "blob_sha": "64fb8be4524f09fcdc222eba36db02c6413549bc",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R09",
+      "name": "tree-sitter/tree-sitter",
+      "status": "METADATA_READ",
+      "url": "https://github.com/tree-sitter/tree-sitter",
+      "description": "An incremental parsing system for programming tools",
+      "branch": "master",
+      "license": "MIT",
+      "language": "Rust",
+      "archived": false,
+      "pushed_at": "2026-11-10T10:00:32Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/tree-sitter/tree-sitter/blob/master/README.md",
+        "blob_sha": "b347c880c2aa27f05a205994b159ac31512ee68b",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R10",
+      "name": "ast-grep/ast-grep",
+      "status": "METADATA_READ",
+      "url": "https://github.com/ast-grep/ast-grep",
+      "description": "⚡A CLI tool for code structural search, lint and rewriting. Written in Rust",
+      "branch": "main",
+      "license": "MIT",
+      "language": "Rust",
+      "archived": false,
+      "pushed_at": "2026-11-10T09:39:04Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/ast-grep/ast-grep/blob/main/README.md",
+        "blob_sha": "504d24e820e460b23fc36084f33b270737c1053d",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R11",
+      "name": "astral-sh/ruff",
+      "status": "METADATA_READ",
+      "url": "https://github.com/astral-sh/ruff",
+      "description": "An extremely fast Python linter and code formatter, written in Rust.",
+      "branch": "main",
+      "license": "MIT",
+      "language": "Rust",
+      "archived": false,
+      "pushed_at": "2026-11-10T14:28:45Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/astral-sh/ruff/blob/main/README.md",
+        "blob_sha": "694b1321ae912e5ec1f9ac42d5f8f7b3197ae6b4",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R12",
+      "name": "HypothesisWorks/hypothesis",
+      "status": "METADATA_READ",
+      "url": "https://github.com/HypothesisWorks/hypothesis",
+      "description": "The property-based testing library for Python",
+      "branch": "master",
+      "license": "NOASSERTION",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-08T00:05:25Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/HypothesisWorks/hypothesis/blob/master/README.md",
+        "blob_sha": "d59d2791894a114f0510c1f02611443470b88ecf",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R13",
+      "name": "Z3Prover/z3",
+      "status": "METADATA_READ",
+      "url": "https://github.com/Z3Prover/z3",
+      "description": "The Z3 Theorem Prover",
+      "branch": "master",
+      "license": "NOASSERTION",
+      "language": "C++",
+      "archived": false,
+      "pushed_at": "2026-11-10T14:08:19Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/Z3Prover/z3/blob/master/README.md",
+        "blob_sha": "8b3c4b4b43b7192c582ae1523fa746de0a11cebb",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R14",
+      "name": "cvc5/cvc5",
+      "status": "METADATA_READ",
+      "url": "https://github.com/cvc5/cvc5",
+      "description": "cvc5 is an open-source automatic theorem prover for Satisfiability Modulo Theories (SMT) problems.",
+      "branch": "main",
+      "license": "NOASSERTION",
+      "language": "SMT",
+      "archived": false,
+      "pushed_at": "2026-11-06T00:06:43Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/cvc5/cvc5/blob/main/README.md",
+        "blob_sha": "4f860672d569f6476aada23260d510b3faefc1d7",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R15",
+      "name": "egraphs-good/egg",
+      "status": "METADATA_READ",
+      "url": "https://github.com/egraphs-good/egg",
+      "description": "egg is a flexible, high-performance e-graph library",
+      "branch": "main",
+      "license": "MIT",
+      "language": "Rust",
+      "archived": false,
+      "pushed_at": "2026-09-28T21:57:08Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/egraphs-good/egg/blob/main/README.md",
+        "blob_sha": "79d467d00d1d0bfb889f8b5156929afac2676320",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R16",
+      "name": "egraphs-good/egglog",
+      "status": "METADATA_READ",
+      "url": "https://github.com/egraphs-good/egglog",
+      "description": "egraphs + datalog!",
+      "branch": "main",
+      "license": "MIT",
+      "language": "Rust",
+      "archived": false,
+      "pushed_at": "2026-11-08T01:28:59Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/egraphs-good/egglog/blob/main/README.md",
+        "blob_sha": "be7d64362e13ba71a89a13600b1614977aa7de18",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R17",
+      "name": "asg017/sqlite-vec",
+      "status": "METADATA_READ",
+      "url": "https://github.com/asg017/sqlite-vec",
+      "description": "A vector search SQLite extension that runs anywhere!",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "C",
+      "archived": false,
+      "pushed_at": "2026-05-18T06:50:45Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/asg017/sqlite-vec/blob/main/README.md",
+        "blob_sha": "f367dcf6ac8a3da75bca39403337af255688c8b9",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R18",
+      "name": "PyO3/pyo3",
+      "status": "METADATA_READ",
+      "url": "https://github.com/PyO3/pyo3",
+      "description": "Rust bindings for the Python interpreter",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Rust",
+      "archived": false,
+      "pushed_at": "2026-11-08T20:36:35Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/PyO3/pyo3/blob/main/README.md",
+        "blob_sha": "8adb4126436b85734bc19af85726c733aff9e7f4",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R19",
+      "name": "bytecodealliance/wasmtime",
+      "status": "METADATA_READ",
+      "url": "https://github.com/bytecodealliance/wasmtime",
+      "description": "A lightweight WebAssembly runtime that is fast, secure, and standards-compliant",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Rust",
+      "archived": false,
+      "pushed_at": "2026-11-10T00:05:31Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/bytecodealliance/wasmtime/blob/main/README.md",
+        "blob_sha": "8d54b8ee056b9ed02b179b0676e66ce5bb1b64b5",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R20",
+      "name": "langchain-ai/langgraph",
+      "status": "METADATA_READ",
+      "url": "https://github.com/langchain-ai/langgraph",
+      "description": "Build resilient agents.",
+      "branch": "main",
+      "license": "MIT",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-10T05:42:48Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/langchain-ai/langgraph/blob/main/README.md",
+        "blob_sha": "97c31e9cb4d8fe56be8d768ce3eb5e22400e897e",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R21",
+      "name": "mlc-ai/mlc-llm",
+      "status": "METADATA_READ",
+      "url": "https://github.com/mlc-ai/mlc-llm",
+      "description": "Universal LLM Deployment Engine with ML Compilation",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-10-30T09:07:12Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/mlc-ai/mlc-llm/blob/main/README.md",
+        "blob_sha": "d5ba2838c5e66a409a70d0d6842b2957380abd0c",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R22",
+      "name": "microsoft/onnxruntime",
+      "status": "METADATA_READ",
+      "url": "https://github.com/microsoft/onnxruntime",
+      "description": "ONNX Runtime: cross-platform, high performance ML inferencing and training accelerator",
+      "branch": "main",
+      "license": "MIT",
+      "language": "C++",
+      "archived": false,
+      "pushed_at": "2026-11-10T14:20:38Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/microsoft/onnxruntime/blob/main/README.md",
+        "blob_sha": "3e4e46f9aa04a769e83790037da70908e4bc1c9e",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R23",
+      "name": "huggingface/transformers",
+      "status": "METADATA_READ",
+      "url": "https://github.com/huggingface/transformers",
+      "description": "🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training. ",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-10T14:27:58Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/huggingface/transformers/blob/main/README.md",
+        "blob_sha": "3fb175afdddfae6feb4ef5438326aa9b0a9abd99",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R24",
+      "name": "huggingface/peft",
+      "status": "METADATA_READ",
+      "url": "https://github.com/huggingface/peft",
+      "description": "🤗 PEFT: State-of-the-art Parameter-Efficient Fine-Tuning.",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-10T08:54:35Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/huggingface/peft/blob/main/README.md",
+        "blob_sha": "ed2dcd70d8a0e07a365bdecca1a1a1deb0f840de",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R25",
+      "name": "huggingface/trl",
+      "status": "METADATA_READ",
+      "url": "https://github.com/huggingface/trl",
+      "description": "Train transformer language models with reinforcement learning.",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-10T13:32:20Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/huggingface/trl/blob/main/README.md",
+        "blob_sha": "df71eeb6e81b6c79cccaa58ce1fc00559d0e8c87",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R26",
+      "name": "huggingface/smolagents",
+      "status": "METADATA_READ",
+      "url": "https://github.com/huggingface/smolagents",
+      "description": "🤗 smolagents: a barebones library for agents that think in code.",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-03T18:36:41Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/huggingface/smolagents/blob/main/README.md",
+        "blob_sha": "7c8af38d981a563add56db76b10cde810e010690",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R27",
+      "name": "pola-rs/polars",
+      "status": "METADATA_READ",
+      "url": "https://github.com/pola-rs/polars",
+      "description": "Extremely fast Query Engine for DataFrames, written in Rust",
+      "branch": "main",
+      "license": "MIT",
+      "language": "Rust",
+      "archived": false,
+      "pushed_at": "2026-11-10T14:07:05Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/pola-rs/polars/blob/main/README.md",
+        "blob_sha": "b868bcab455d882692515ea01d67726a73e84568",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R28",
+      "name": "duckdb/duckdb",
+      "status": "METADATA_READ",
+      "url": "https://github.com/duckdb/duckdb",
+      "description": "DuckDB is a high-performance analytical database system",
+      "branch": "main",
+      "license": "MIT",
+      "language": "C++",
+      "archived": false,
+      "pushed_at": "2026-11-10T14:29:00Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/duckdb/duckdb/blob/main/README.md",
+        "blob_sha": "f9cd154ac7c41b49784cc66e659d60412d468fce",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R29",
+      "name": "python/cpython",
+      "status": "METADATA_READ",
+      "url": "https://github.com/python/cpython",
+      "description": "The Python programming language",
+      "branch": "main",
+      "license": "NOASSERTION",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-10T11:28:27Z",
+      "readme": {
+        "path": "README.rst",
+        "url": "https://github.com/python/cpython/blob/main/README.rst",
+        "blob_sha": "d4bea5edcac674c9a20e23767c6eeda760529a12",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R30",
+      "name": "rust-lang/rust",
+      "status": "METADATA_READ",
+      "url": "https://github.com/rust-lang/rust",
+      "description": "Empowering everyone to build reliable and efficient software.",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Rust",
+      "archived": false,
+      "pushed_at": "2026-11-10T14:24:14Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/rust-lang/rust/blob/main/README.md",
+        "blob_sha": "ed35016eb3a238614741e5922a06b9bf83f9780e",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R31",
+      "name": "golang/go",
+      "status": "METADATA_READ",
+      "url": "https://github.com/golang/go",
+      "description": "The Go programming language",
+      "branch": "master",
+      "license": "BSD-3-Clause",
+      "language": "Go",
+      "archived": false,
+      "pushed_at": "2026-11-10T01:16:03Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/golang/go/blob/master/README.md",
+        "blob_sha": "71c9d1dc2993880f38d227085d1b48c4070d1e85",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R32",
+      "name": "ziglang/zig",
+      "status": "METADATA_READ",
+      "url": "https://github.com/ziglang/zig",
+      "description": "Moved to Codeberg",
+      "branch": "master",
+      "license": "MIT",
+      "language": "Zig",
+      "archived": false,
+      "pushed_at": "2025-11-27T01:42:59Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/ziglang/zig/blob/master/README.md",
+        "blob_sha": "14dd4f1d97bb8c521f26be4bdd2ec4f9a7ac2a46",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R33",
+      "name": "leanprover/lean4",
+      "status": "METADATA_READ",
+      "url": "https://github.com/leanprover/lean4",
+      "description": "Lean 4 programming language and theorem prover",
+      "branch": "master",
+      "license": "Apache-2.0",
+      "language": "Lean",
+      "archived": false,
+      "pushed_at": "2026-11-10T14:17:49Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/leanprover/lean4/blob/master/README.md",
+        "blob_sha": "49a5704ebfdc0a13164623b1876954638302ba69",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R34",
+      "name": "SWI-Prolog/swipl-devel",
+      "status": "METADATA_READ",
+      "url": "https://github.com/SWI-Prolog/swipl-devel",
+      "description": "SWI-Prolog Main development repository",
+      "branch": "master",
+      "license": "NOASSERTION",
+      "language": "C",
+      "archived": false,
+      "pushed_at": "2026-11-09T15:58:34Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/SWI-Prolog/swipl-devel/blob/master/README.md",
+        "blob_sha": "525daf6aa08cc4b01062b292c26c929879297df2",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R35",
+      "name": "microsoft/markitdown",
+      "status": "METADATA_READ",
+      "url": "https://github.com/microsoft/markitdown",
+      "description": "Python tool for converting files and office documents to Markdown.",
+      "branch": "main",
+      "license": "MIT",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2026-11-07T00:14:01Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/microsoft/markitdown/blob/main/README.md",
+        "blob_sha": "af858038fd380b187e2928cfbb8b9802c4912d5b",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R36",
+      "name": "SakanaAI/AI-Scientist",
+      "status": "METADATA_READ",
+      "url": "https://github.com/SakanaAI/AI-Scientist",
+      "description": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery 🧑‍🔬",
+      "branch": "main",
+      "license": "NOASSERTION",
+      "language": "Jupyter Notebook",
+      "archived": false,
+      "pushed_at": "2025-12-19T07:46:21Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/SakanaAI/AI-Scientist/blob/main/README.md",
+        "blob_sha": "6d9b58e462117e7b653ae2a34407e96c3d0ce16a",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R37",
+      "name": "jennyzzt/dgm",
+      "status": "METADATA_READ",
+      "url": "https://github.com/jennyzzt/dgm",
+      "description": "Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Python",
+      "archived": false,
+      "pushed_at": "2025-08-13T10:40:14Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/jennyzzt/dgm/blob/main/README.md",
+        "blob_sha": "e4ed9fa7747d265536961a98d3361000b58e396d",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R38",
+      "name": "MineDojo/Voyager",
+      "status": "METADATA_READ",
+      "url": "https://github.com/MineDojo/Voyager",
+      "description": "An Open-Ended Embodied Agent with Large Language Models",
+      "branch": "main",
+      "license": "MIT",
+      "language": "JavaScript",
+      "archived": false,
+      "pushed_at": "2024-04-03T18:51:36Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/MineDojo/Voyager/blob/main/README.md",
+        "blob_sha": "bc026e7152ff06f275943122c290494abc7b14c0",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R39",
+      "name": "ellisk42/ec",
+      "status": "METADATA_READ",
+      "url": "https://github.com/ellisk42/ec",
+      "description": null,
+      "branch": "master",
+      "license": "MIT",
+      "language": "Slash",
+      "archived": false,
+      "pushed_at": "2023-07-01T20:49:07Z",
+      "readme": {
+        "path": "Readme.md",
+        "url": "https://github.com/ellisk42/ec/blob/master/Readme.md",
+        "blob_sha": "baacfe6b3bb21740727cd765a52c7a28b15e3e74",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R40",
+      "name": "a2aproject/A2A",
+      "status": "METADATA_READ",
+      "url": "https://github.com/a2aproject/A2A",
+      "description": "Agent2Agent (A2A) is an open protocol enabling communication and interoperability between opaque agentic applications.",
+      "branch": "main",
+      "license": "Apache-2.0",
+      "language": "Shell",
+      "archived": false,
+      "pushed_at": "2026-11-10T13:16:12Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/a2aproject/A2A/blob/main/README.md",
+        "blob_sha": "5249418fa9a659019ebc046b41f71e00cf4a8077",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R41",
+      "name": "modelcontextprotocol/modelcontextprotocol",
+      "status": "METADATA_READ",
+      "url": "https://github.com/modelcontextprotocol/modelcontextprotocol",
+      "description": "Specification and documentation for the Model Context Protocol",
+      "branch": "main",
+      "license": "NOASSERTION",
+      "language": "TypeScript",
+      "archived": false,
+      "pushed_at": "2026-11-10T14:27:07Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/README.md",
+        "blob_sha": "477b1bdfe6a8b6352a9fa8d307a9873b533b9498",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    },
+    {
+      "id": "R42",
+      "name": "SoarGroup/Soar",
+      "status": "METADATA_READ",
+      "url": "https://github.com/SoarGroup/Soar",
+      "description": "Soar, a general cognitive architecture for systems that exhibit intelligent behavior.",
+      "branch": "development",
+      "license": "NOASSERTION",
+      "language": "C++",
+      "archived": false,
+      "pushed_at": "2026-11-06T18:14:03Z",
+      "readme": {
+        "path": "README.md",
+        "url": "https://github.com/SoarGroup/Soar/blob/development/README.md",
+        "blob_sha": "6db96c456c389ffcceeae67a64d4662af34eb946",
+        "status": "README_READ"
+      },
+      "termux_compatibility": "NOT_TESTED",
+      "implementation_in_ACE": "NOT_PERFORMED_THIS_SESSION"
+    }
+  ],
+  "research_references": [
+    {
+      "id": "P01",
+      "title": "Attention Is All You Need",
+      "url": "https://arxiv.org/abs/1706.03762",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P02",
+      "title": "Retrieval-Augmented Generation",
+      "url": "https://arxiv.org/abs/2005.11401",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P03",
+      "title": "ReAct",
+      "url": "https://arxiv.org/abs/2210.03629",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P04",
+      "title": "Tree of Thoughts",
+      "url": "https://arxiv.org/abs/2305.10601",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P05",
+      "title": "Reflexion",
+      "url": "https://arxiv.org/abs/2303.11366",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P06",
+      "title": "Self-Refine",
+      "url": "https://arxiv.org/abs/2303.17651",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P07",
+      "title": "CodeAct",
+      "url": "https://arxiv.org/abs/2402.01030",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P08",
+      "title": "SWE-agent",
+      "url": "https://arxiv.org/abs/2405.15793",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P09",
+      "title": "DSPy",
+      "url": "https://arxiv.org/abs/2310.03714",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P10",
+      "title": "GEPA",
+      "url": "https://arxiv.org/abs/2507.19457",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P11",
+      "title": "DreamCoder",
+      "url": "https://arxiv.org/abs/2006.08381",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P12",
+      "title": "Voyager",
+      "url": "https://arxiv.org/abs/2305.16291",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P13",
+      "title": "MemGPT",
+      "url": "https://arxiv.org/abs/2310.08560",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P14",
+      "title": "MAP-Elites",
+      "url": "https://arxiv.org/abs/1504.04909",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P15",
+      "title": "POET",
+      "url": "https://arxiv.org/abs/1901.01753",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P16",
+      "title": "Darwin Godel Machine",
+      "url": "https://arxiv.org/abs/2505.22954",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P17",
+      "title": "FunSearch",
+      "url": "https://deepmind.google/blog/funsearch-making-new-discoveries-in-mathematical-sciences-using-large-language-models/",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P18",
+      "title": "AlphaEvolve",
+      "url": "https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P19",
+      "title": "LoRA",
+      "url": "https://arxiv.org/abs/2106.09685",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P20",
+      "title": "QLoRA",
+      "url": "https://arxiv.org/abs/2305.14314",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P21",
+      "title": "Direct Preference Optimization",
+      "url": "https://arxiv.org/abs/2305.18290",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P22",
+      "title": "Overcoming catastrophic forgetting",
+      "url": "https://arxiv.org/abs/1612.00796",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P23",
+      "title": "DreamerV3 / Mastering Diverse Domains through World Models",
+      "url": "https://arxiv.org/abs/2301.04104",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    },
+    {
+      "id": "P24",
+      "title": "Consciousness in Artificial Intelligence",
+      "url": "https://arxiv.org/abs/2308.08708",
+      "inspection": "PRIMARY_ABSTRACT_OR_OFFICIAL_SUMMARY",
+      "ace_experiment_run": false
+    }
+  ],
+  "model_cards": [
+    {
+      "name": "Qwen/Qwen3-0.6B",
+      "url": "https://huggingface.co/Qwen/Qwen3-0.6B",
+      "inspection": "MODEL_CARD_READ",
+      "license_label_observed": "Apache-2.0",
+      "phone_benchmark_run": false,
+      "weights_downloaded": false
+    },
+    {
+      "name": "Qwen/Qwen3-1.7B",
+      "url": "https://huggingface.co/Qwen/Qwen3-1.7B",
+      "inspection": "MODEL_CARD_READ",
+      "license_label_observed": "Apache-2.0",
+      "phone_benchmark_run": false,
+      "weights_downloaded": false
+    },
+    {
+      "name": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "inspection": "MODEL_CARD_READ",
+      "license_label_observed": "Apache-2.0",
+      "phone_benchmark_run": false,
+      "weights_downloaded": false
+    },
+    {
+      "name": "HuggingFaceTB/SmolLM3-3B",
+      "url": "https://huggingface.co/HuggingFaceTB/SmolLM3-3B",
+      "inspection": "MODEL_CARD_READ",
+      "license_label_observed": "Apache-2.0",
+      "phone_benchmark_run": false,
+      "weights_downloaded": false
+    },
+    {
+      "name": "Qwen/Qwen3.5-0.8B",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B",
+      "inspection": "MODEL_CARD_READ",
+      "license_label_observed": "Apache-2.0",
+      "phone_benchmark_run": false,
+      "weights_downloaded": false
+    }
+  ],
+  "official_documentation": [
+    {
+      "title": "CPython free threading",
+      "url": "https://docs.python.org/3/howto/free-threading-python.html",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "PyO3 performance",
+      "url": "https://pyo3.rs/main/performance.html",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "Rust platform support",
+      "url": "https://doc.rust-lang.org/rustc/platform-support.html",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "Zig language overview",
+      "url": "https://ziglang.org/learn/overview/",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "SQLite FTS5",
+      "url": "https://www.sqlite.org/fts5.html",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "Julia performance",
+      "url": "https://docs.julialang.org/en/v1/manual/performance-tips/",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "Kotlin Android",
+      "url": "https://developer.android.com/kotlin/first",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "SMT-LIB",
+      "url": "https://smt-lib.org/language.shtml",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "WebAssembly security model",
+      "url": "https://webassembly.org/docs/security/",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "Lua manual",
+      "url": "https://www.lua.org/manual/5.4/manual.html",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    }
+  ],
+  "additional_source_samples": [
+    {
+      "url": "https://github.com/SWE-agent/mini-swe-agent/blob/main/src/minisweagent/agents/default.py",
+      "blob_sha": "ca310e37d7c61888c576f73f5e1790ac769407b1",
+      "inspection": "SOURCE_EXCERPT_READ",
+      "source_audit_complete": false
+    },
+    {
+      "url": "https://github.com/Aider-AI/aider/blob/main/aider/repomap.py",
+      "blob_sha": "541bba6ef4a5385b8cf032201ec6e3f3e32a6ea6",
+      "inspection": "SOURCE_EXCERPT_READ",
+      "source_audit_complete": false
+    },
+    {
+      "url": "https://github.com/dianzherdiana25-hash/ACE/blob/5180b2aea2d18bdfee401135279299d0cc122cb0/code/ace_mission/schema.py",
+      "blob_sha": "627b7dde6cb86d301461330074f32a9dfe36de5a",
+      "inspection": "SOURCE_EXCERPT_READ",
+      "source_audit_complete": false
+    }
+  ],
+  "retrieval_limitations": [
+    "Direct GitHub readme API route was unsupported; repository file fetches were used instead.",
+    "Direct Codeberg fetch failed; Zig GitHub migration pointer and official language overview were inspected.",
+    "README and source excerpts do not prove Termux compatibility or complete dependency licensing.",
+    "No model inference, training or external ACE capability experiment was executed during documentation research."
+  ]
+}
