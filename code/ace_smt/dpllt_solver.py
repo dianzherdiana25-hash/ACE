@@ -72,7 +72,7 @@ class LinearConstraint:
         g = math.gcd(*[abs(c) for c in clean_coeffs.values()])
         if g > 1:
             clean_coeffs = {v: c // g for v, c in clean_coeffs.items()}
-            const = math.floor(const / g)
+            const = const // g
 
         return cls(coeffs=clean_coeffs, const=const, atom_id=atom_id)
 
@@ -237,7 +237,7 @@ class TheorySolver:
                         g = math.gcd(*[abs(val) for val in comb_coeffs.values()])
                         if g > 1:
                             comb_coeffs = {w: val // g for w, val in comb_coeffs.items()}
-                            comb_const = math.floor(comb_const / g)
+                            comb_const = comb_const // g
                     else:
                         # Direct numeric bound: 0 <= comb_const
                         if comb_const < 0:
@@ -283,7 +283,7 @@ class TheorySolver:
             for p in positives:
                 a_p = p.coeffs[v]
                 rest = sum(c * model.get(w, 0) for w, c in p.coeffs.items() if w != v)
-                u = math.floor((p.const - rest) / a_p)
+                u = (p.const - rest) // a_p
                 if u < upper_bound:
                     upper_bound = u
 
@@ -291,7 +291,7 @@ class TheorySolver:
             for n in negatives:
                 abs_an = -n.coeffs[v]
                 rest = sum(c * model.get(w, 0) for w, c in n.coeffs.items() if w != v)
-                l = math.ceil((rest - n.const) / abs_an)
+                l = -((n.const - rest) // abs_an)
                 if l > lower_bound:
                     lower_bound = l
 
@@ -920,6 +920,7 @@ class FormalProgramVerifier:
             return merged_env
 
         if isinstance(stmt, While):
+            raise NotImplementedError("Loop verification requires a proved unwinding bound or invariant")
             # Bounded model checking via loop unrolling:
             # Iteration 1..k: if cond: body
             # Followed by assume(~cond) to verify termination and invariant hold

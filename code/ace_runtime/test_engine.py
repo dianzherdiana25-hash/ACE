@@ -67,16 +67,51 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual(runtime.status()["capabilities"], 2)
 
     def test_unvalidated_model_is_never_predictable_or_evaluable(self):
+        # ratio4 is outside the pinned coefficient grammar (1:-4 excluded).
+        # A fixed_product with the starts guard now legitimately fits "starts";
+        # using that family here incorrectly expected the learner to abstain.
         with Runtime(self.workspace) as runtime:
-            data, terminal = task(family="starts")
+            data, terminal = task(family="ratio4")
             identity = runtime.enqueue(data)
             result = runtime.run()[0]
             self.assertEqual(result["phase"], "NO_VALIDATED_MODEL")
+            self.assertFalse(result["staged"])
+            self.assertIsNone(result["model_id"])
+            self.assertFalse(result["selection"]["admitted"])
             self.assertEqual(runtime.status()["capabilities"], 0)
             with self.assertRaises(ValueError):
-                runtime.predict(identity, "ab")
+                runtime.predict(identity, "aaaab")
             with self.assertRaises(ValueError):
                 runtime.evaluate(identity, terminal)
+
+    def test_fixed_guard_starts_is_validated_staging_not_false_acceptance(self):
+        # A train/validation-perfect fixed guard must not be mislabeled as
+        # NO_VALIDATED_MODEL simply because an earlier grammar lacked it.
+        data, terminal = task(family="starts")
+        train, validation = data["train"], data["validation"]
+        with Runtime(self.workspace) as runtime:
+            identity = runtime.enqueue(data)
+            result = runtime.run()[0]
+            self.assertEqual(result["phase"], "LEARNED_STAGED")
+            self.assertTrue(result["staged"])
+            self.assertTrue(result["selection"]["admitted"])
+            self.assertEqual(result["selection"]["train_correct"], len(train))
+            self.assertEqual(result["selection"]["validation_correct"], len(validation))
+            program = program_from_data(result["selection"]["program"]) if "program" in result["selection"] else None
+            if program is None:
+                saved = runtime.db.execute(
+                    "SELECT program FROM library WHERE id=?", (result["model_id"],)
+                ).fetchone()
+                self.assertIsNotNone(saved)
+                program = program_from_data(json.loads(saved["program"]))
+            self.assertTrue(all(program.predict(word) == label for word, label in train + validation))
+            self.assertEqual(runtime.status()["scientific_decision"], "NOT_ASSESSED")
+            self.assertFalse(runtime.status()["candidate_deployed"])
+            # Terminal evaluation happens only after staging; it does not
+            # retroactively change the staged decision.
+            result_after = runtime.evaluate(identity, terminal)
+            self.assertEqual(result_after["scientific_decision"], "NOT_ASSESSED")
+            self.assertFalse(result_after["candidate_deployed"])
 
     def test_queue_is_idempotent_and_bounded_across_restarts(self):
         first, _ = task()

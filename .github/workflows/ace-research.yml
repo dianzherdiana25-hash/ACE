@@ -22,6 +22,15 @@ jobs:
       PYTHONDONTWRITEBYTECODE: "1"
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Pin exact research candidate source
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          git show -s --format='%H %s' HEAD
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -52,8 +61,11 @@ jobs:
           ace_research_f13.test_f13_memory
           ace_research_f14.test_f14_discovery
           -v
-      - name: Verify repair evidence artifact
-        run: python -m ace_research_repair.verify --artifact evidence/repair/ace_repair_v1.json.gz
+      - name: Verify immutable repair v1 custody and pinned public v2 replay
+        run: |
+          python -m unittest tools.test_verify_repair_v2 -v
+          python tools/repair_v2_probe.py --output "$RUNNER_TEMP/ace-repair-v2.json.gz"
+          python tools/verify_repair_v2.py --candidate "$RUNNER_TEMP/ace-repair-v2.json.gz"
       - name: Verify hypothesis synthesis evidence artifact
         run: python -m ace_research_hypgen.verify --artifact evidence/hypgen/f10_hypothesis_synthesis_v1.json.gz
       - name: Verify generations growth evidence artifact
@@ -74,7 +86,10 @@ jobs:
           cmp /tmp/composition.json /tmp/composition-replay.json
           gzip -dc evidence/composition/v03.json.gz > /tmp/committed-composition.json
           cmp /tmp/composition.json /tmp/committed-composition.json
-      - name: Verify operational demo receipt
+      - name: Verify immutable runtime v1 custody and exact public v2 replay
         run: |
-          python ace.py demo --workspace "$RUNNER_TEMP/ace-runtime" > "$RUNNER_TEMP/ace-runtime-demo.json"
-          cmp "$RUNNER_TEMP/ace-runtime-demo.json" evidence/runtime/v1-demo.json
+          python -m unittest tools.test_verify_runtime_demo_v2 -v
+          python ace.py demo --workspace "$RUNNER_TEMP/ace-runtime-v2-a" > "$RUNNER_TEMP/ace-runtime-v2-a.json"
+          python ace.py demo --workspace "$RUNNER_TEMP/ace-runtime-v2-b" > "$RUNNER_TEMP/ace-runtime-v2-b.json"
+          cmp "$RUNNER_TEMP/ace-runtime-v2-a.json" "$RUNNER_TEMP/ace-runtime-v2-b.json"
+          python tools/verify_runtime_demo_v2.py --candidate "$RUNNER_TEMP/ace-runtime-v2-a.json" --expected evidence/runtime/v2-demo.json

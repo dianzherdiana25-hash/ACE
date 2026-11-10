@@ -1,0 +1,63 @@
+name: ACE mission admission (development evidence)
+
+on:
+  pull_request:
+    paths:
+      - 'code/ace_mission/**'
+      - 'tools/ace_mission*.py'
+      - 'evidence/mission_admission/**'
+      - '.github/workflows/ace-mission-admission.yml'
+  push:
+    branches: [audit/ace-reasoning-admission-20261110]
+
+permissions:
+  contents: read
+
+jobs:
+  admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        python-version: ['3.12', '3.13']
+    env:
+      PYTHONPATH: code
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Check exact head and registered protocol
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          git fetch --no-tags origin 7f87cefde9ad495acfdf721c9ea864646d1df747
+          git show 7f87cefde9ad495acfdf721c9ea864646d1df747:docs/research/ACE_MISSION_ADMISSION_PROTOCOL_20261110.md > /tmp/registered.md
+          cmp /tmp/registered.md docs/research/ACE_MISSION_ADMISSION_PROTOCOL_20261110.md
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Source pins, admission controls and existing reasoning regression
+        run: |
+          python tools/verify_sources.py
+          python -m unittest ace_mission.test_admission ace_mission.test_mission_bus ace_cognition.reasoning_test -v
+      - name: Replay new admission study and unchanged historical reasoning
+        run: |
+          python tools/ace_mission_admission_benchmark.py --output /tmp/mission-a.json --profile /tmp/mission-profile-a.json --raw-receipts /tmp/mission-raw-a.json.gz
+          python tools/ace_mission_admission_benchmark.py --output /tmp/mission-b.json --profile /tmp/mission-profile-b.json --raw-receipts /tmp/mission-raw-b.json.gz
+          cmp /tmp/mission-a.json /tmp/mission-b.json
+          cmp /tmp/mission-a.json evidence/mission_admission/public-v1.json
+          python tools/ace_reasoning_benchmark.py --output /tmp/reasoning.json --profile /tmp/reasoning-profile.json
+          cmp /tmp/reasoning.json evidence/internal_reasoning/public-v1.json
+          python tools/ace_reasoning_audit.py /tmp/reasoning.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mission-admission-${{ matrix.python-version }}
+          path: |
+            /tmp/mission-a.json
+            /tmp/mission-profile-a.json
+            /tmp/mission-raw-a.json.gz
+            /tmp/reasoning.json
+          retention-days: 7

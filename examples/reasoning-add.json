@@ -1,0 +1,177 @@
+{
+  "schema": "ace.reasoning.xy.v1",
+  "id": "contoh-penjumlahan",
+  "goal": "Temukan aturan dari contoh; jangan percaya saran tanpa pengujian.",
+  "train": [
+    {
+      "inputs": {
+        "x": -3,
+        "y": -1
+      },
+      "output": -4
+    },
+    {
+      "inputs": {
+        "x": 1,
+        "y": 1
+      },
+      "output": 2
+    },
+    {
+      "inputs": {
+        "x": -2,
+        "y": 0
+      },
+      "output": -2
+    },
+    {
+      "inputs": {
+        "x": 3,
+        "y": 0
+      },
+      "output": 3
+    },
+    {
+      "inputs": {
+        "x": -3,
+        "y": 0
+      },
+      "output": -3
+    },
+    {
+      "inputs": {
+        "x": -1,
+        "y": -1
+      },
+      "output": -2
+    },
+    {
+      "inputs": {
+        "x": -2,
+        "y": -1
+      },
+      "output": -3
+    },
+    {
+      "inputs": {
+        "x": -2,
+        "y": 3
+      },
+      "output": 1
+    },
+    {
+      "inputs": {
+        "x": -3,
+        "y": -3
+      },
+      "output": -6
+    },
+    {
+      "inputs": {
+        "x": 0,
+        "y": 0
+      },
+      "output": 0
+    },
+    {
+      "inputs": {
+        "x": 1,
+        "y": -3
+      },
+      "output": -2
+    },
+    {
+      "inputs": {
+        "x": 0,
+        "y": 2
+      },
+      "output": 2
+    }
+  ],
+  "validation": [
+    {
+      "inputs": {
+        "x": 6,
+        "y": 4
+      },
+      "output": 10
+    },
+    {
+      "inputs": {
+        "x": 2,
+        "y": 6
+      },
+      "output": 8
+    },
+    {
+      "inputs": {
+        "x": -3,
+        "y": 5
+      },
+      "output": 2
+    },
+    {
+      "inputs": {
+        "x": 5,
+        "y": 5
+      },
+      "output": 10
+    },
+    {
+      "inputs": {
+        "x": -5,
+        "y": -6
+      },
+      "output": -11
+    },
+    {
+      "inputs": {
+        "x": 4,
+        "y": -3
+      },
+      "output": 1
+    },
+    {
+      "inputs": {
+        "x": 4,
+        "y": -2
+      },
+      "output": 2
+    },
+    {
+      "inputs": {
+        "x": 3,
+        "y": 3
+      },
+      "output": 6
+    },
+    {
+      "inputs": {
+        "x": -3,
+        "y": -5
+      },
+      "output": -8
+    },
+    {
+      "inputs": {
+        "x": -3,
+        "y": -6
+      },
+      "output": -9
+    },
+    {
+      "inputs": {
+        "x": 2,
+        "y": -3
+      },
+      "output": -1
+    },
+    {
+      "inputs": {
+        "x": -6,
+        "y": 0
+      },
+      "output": -6
+    }
+  ]
+}

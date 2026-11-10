@@ -1,0 +1,55 @@
+{
+  "base_sha": "52394dcf6f203197ffa66b2dc7f802c475690a63",
+  "w4_direct_replay": {
+    "status": "EXPERIMENT_COMPLETED",
+    "sample_size": 60,
+    "seeds_evaluated": 20,
+    "graph_results": {
+      "A": {
+        "mean": 0.9245,
+        "std": 0.0217,
+        "samples": 60
+      },
+      "B": {
+        "mean": 0.8578,
+        "std": 0.0291,
+        "samples": 60
+      },
+      "C": {
+        "mean": 1.0,
+        "std": 0.0,
+        "samples": 60
+      }
+    },
+    "ratio4_results": {
+      "A": {
+        "mean": 0.7742,
+        "std": 0.0314,
+        "samples": 60
+      },
+      "B": {
+        "mean": 0.8902,
+        "std": 0.0255,
+        "samples": 60
+      },
+      "C": {
+        "mean": 1.0,
+        "std": 0.0,
+        "samples": 60
+      }
+    },
+    "hypotheses_evaluation": {
+      "H_graph": "CONFIRMED",
+      "H_ratio4": "CONFIRMED"
+    },
+    "scientific_claim_status": "CONFIRMED_LOCAL_BENCHMARK"
+  },
+  "mission_false_accept_diagnostic": {
+    "decision": "ACCEPTED",
+    "reason": "Active uncertainty querying reduced label budget by 4x.",
+    "source": "\"\"\"Solution for audit_active_query - Entropy Active Query\nProvenance: ADVISOR_AGENT\nGoal: audit only\nHypothesis: audit only\n\"\"\"\ndef solve_audit_active_query(word: str) -> bool:\n    # Active uncertainty sampler\n    return abs(word.count(\"a\") - word.count(\"b\")) <= 1\n",
+    "candidate_executed_by_audit": false,
+    "filesystem_scope": "temporary directory only"
+  },
+  "scientific_status": "NOT_ASSESSED"
+}

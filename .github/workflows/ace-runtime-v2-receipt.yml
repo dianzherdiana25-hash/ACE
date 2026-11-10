@@ -1,0 +1,60 @@
+name: ACE runtime v2 receipt candidate (public engineering replay)
+
+on:
+  pull_request:
+    paths:
+      - 'code/ace_runtime/**'
+      - 'code/ace_capability_evolution/**'
+      - 'code/ace_research_primitives/**'
+      - 'code/ace_candidate_search/**'
+      - 'tools/verify_runtime_demo_v2.py'
+      - 'evidence/runtime/**'
+      - '.github/workflows/ace-runtime-v2-receipt.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-runtime-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: code
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Verify exact checkout and historical receipt custody
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          test "$(git hash-object evidence/runtime/v1-demo.json)" = "475d35bab2d319650de5504e472b76f05d65458d"
+          git show -s --format='%H %s' HEAD
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen imported sources
+        run: python tools/verify_sources.py
+      - name: Verify pinned runtime v2 fixture and tamper controls
+        run: python -m unittest tools.test_verify_runtime_demo_v2 -v
+      - name: Generate v2 candidate from two independent clean workspaces
+        run: |
+          python ace.py demo --workspace "$RUNNER_TEMP/ace-v2-a" > "$RUNNER_TEMP/v2-a.json"
+          python ace.py demo --workspace "$RUNNER_TEMP/ace-v2-b" > "$RUNNER_TEMP/v2-b.json"
+          cmp "$RUNNER_TEMP/v2-a.json" "$RUNNER_TEMP/v2-b.json"
+          python tools/verify_runtime_demo_v2.py --candidate "$RUNNER_TEMP/v2-a.json" --expected evidence/runtime/v2-demo.json
+          sha256sum "$RUNNER_TEMP/v2-a.json"
+          echo 'ACE_V2_JSON_START'
+          cat "$RUNNER_TEMP/v2-a.json"
+          echo 'ACE_V2_JSON_END'
+      - name: Upload public engineering candidate and provenance
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-runtime-v2-public-candidate
+          path: ${{ runner.temp }}/v2-a.json
+          if-no-files-found: error
+          retention-days: 14

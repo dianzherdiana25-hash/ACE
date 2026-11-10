@@ -1,0 +1,30 @@
+{
+  "tested_source_commit": "23082cc4667b682d6354dec283ee466a1a5113f8",
+  "provenance_note": "Started on a225037 with implementation in worktree. Source bytes subsequently published unchanged as 23082cc. Local harness start HEAD is retained; exact-head CI recorded separately.",
+  "harness_reported_start_head": "a225037c8cdfa9f98155ca3122efc8d048e72246",
+  "full_harness_tests": 501,
+  "full_harness_failures": 0,
+  "evidence_checks": 13,
+  "full_harness_all_passed": true,
+  "additional_tests": 155,
+  "additional_all_passed": true,
+  "total_distinct_tests": 656,
+  "new_tests": 13,
+  "focused_tests_subset": 18,
+  "reasoning_replay_byte_identical": true,
+  "source_pins_passed": 25,
+  "raw_logs": {
+    "full-system.log": {
+      "sha256": "ed2cf2a3ba1591b6c466bf97fdd9a3674f303ed7ece411bf51b44a3ea0f425f2",
+      "bytes": 30201
+    },
+    "additional-tests.log": {
+      "sha256": "c1018ae8ad2c549e34628a6122f9e14078ce3fe3ed90b5f4ae1d9efc78704bc3",
+      "bytes": 30644
+    },
+    "reasoning-replay.log": {
+      "sha256": "7b506d38b139a9edd739419e1c81bc19a04e1f254b2b1b1bfd28f1dd91497300",
+      "bytes": 964
+    }
+  }
+}

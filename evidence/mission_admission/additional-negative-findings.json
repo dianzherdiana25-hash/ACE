@@ -1,0 +1,13 @@
+{
+  "selector_validation_counterexample": {
+    "status": "ADMITTED",
+    "errors": 0,
+    "max_errors_allowed": 0,
+    "pos_accuracy": 1.0,
+    "neg_accuracy": 1.0,
+    "train_accuracy": 1.0,
+    "val_accuracy": 0.0
+  },
+  "wrong_token_released_lock": true,
+  "interpretation": "Local deterministic bug reproductions; not new scientific capability. Existing selector admits on train errors alone; StateManager releases a lock despite token mismatch. Outside the single MissionBus patch scope."
+}

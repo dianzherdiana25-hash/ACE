@@ -1,0 +1,37 @@
+{
+  "schema": "ace.repair.public-engineering.v2.provenance",
+  "source_generation_commit": "d232f9cd717fef59b5fd96cd66941ce1edd14aab",
+  "source_workflow_run": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42743777640",
+  "v1_historical": {
+    "git_blob_sha1": "5ae098a6f28ba0269d3d650b0704c588ef8f9783",
+    "canonical_sha256": "0eb98aa4eb967fb1207589cb28a3d595278557af033ce309c83922d684b04929",
+    "replay_matches_v2": false
+  },
+  "v2_candidate": {
+    "gzip_sha256": "a0fac38f0ad20ba4e0b64548e17588b5d55b3609b585fd012b04b76f14418456",
+    "gzip_bytes": 62731,
+    "canonical_sha256": "57a8342870e0b9c40dddd4c5c535fd069eb1e8ba081d810e7233cc871f6fbddb",
+    "canonical_bytes": 491811,
+    "runtime_implementation_sha256": "068be383bf08ea7301a1425c7ab4c71070744a2f5db11a3136737c9bbf4cb5d5",
+    "nominal_verified": {
+      "R_ace": 12,
+      "R_fixed": 12,
+      "R_fresh": 12,
+      "R_rule": 11
+    },
+    "hypotheses": {
+      "H1_nominal_accuracy_and_coverage": false,
+      "H2_efficiency_or_accuracy_vs_fresh": true,
+      "H3_anti_overfit_and_ood_abstention": true,
+      "H4_cross_restart_persistence": true
+    },
+    "scientific_capability_validated": false,
+    "byte_identical_two_clean_runs": true
+  },
+  "status": "PASS_PUBLIC_REPLAY_NOT_SCIENTIFIC_GO",
+  "scientific_status": "NOT_ASSESSED",
+  "release_gate": "BLOCK_RELEASE",
+  "candidate_deployed": false,
+  "open_world_safe": false,
+  "oaie_established": false
+}

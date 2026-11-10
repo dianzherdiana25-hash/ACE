@@ -93,7 +93,8 @@ def parser():
     train_p = commands.add_parser("train", help="train with admission awareness and max errors tolerance")
     train_p.add_argument("--workspace", required=True, type=Path)
     train_p.add_argument("--task", required=True, type=Path)
-    train_p.add_argument("--max-errors", default=0, type=int, help="maximum mislabeled errors to admit")
+    train_p.add_argument("--max-errors", default=0, type=int,
+                         help="training errors tolerated; validation must have zero errors")
 
     doc_p = commands.add_parser("doctor", help="diagnose workspace and system integrity")
     doc_p.add_argument("--workspace", default=Path("./ace-work"), type=Path)
@@ -179,18 +180,11 @@ def main(argv=None):
             return 0
 
         if args.command == "train":
-            from ace_core_repair.admission import AdmissionAwareSelector
+            from ace_core_repair.admission import fit_with_admission
             task = read_task(args.task)
-            selector = AdmissionAwareSelector(max_errors=args.max_errors)
-            from ace_capability_evolution import compositional as c
-            learned, fit_report = c.fit(task["train"], task["validation"])
-            eval_res = selector.evaluate_and_select(
-                lambda w: learned["composition"].predict(w),
-                task["train"],
-                task["validation"]
-            )
+            _, eval_res = fit_with_admission(task["train"], task["validation"],
+                                            max_errors=args.max_errors)
             eval_res["task_name"] = task["name"]
-            eval_res["fit_report"] = fit_report
             print(json.dumps(eval_res, sort_keys=True, indent=2))
             return 0
 

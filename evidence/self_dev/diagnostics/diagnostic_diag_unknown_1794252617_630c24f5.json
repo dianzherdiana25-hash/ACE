@@ -1,0 +1,53 @@
+{
+  "dump_id": "diag_unknown_1794252617_630c24f5",
+  "timestamp": "2026-11-09T19:30:17.871306+00:00",
+  "trigger_reason": "CYCLE_TIMEOUT_EXCEEDED",
+  "cycle_id": null,
+  "elapsed_seconds": 122.724,
+  "timeout_threshold_seconds": 60.0,
+  "resource_stats": {
+    "rss_memory_mb": 16.89,
+    "max_rss_mb": 32.03,
+    "cpu_user_seconds": 3.91,
+    "cpu_system_seconds": 1.12,
+    "cpu_percent": 0.31,
+    "active_threads": 2,
+    "timestamp": "2026-11-09T19:30:18.046454+00:00"
+  },
+  "thread_stacks": {
+    "GuardedCycleWorker_anon:507394059488": [
+      "File \"/data/data/com.termux/files/usr/lib/python3.14/threading.py\", line 1045, in _bootstrap\n    self._bootstrap_inner()",
+      "File \"/data/data/com.termux/files/usr/lib/python3.14/threading.py\", line 1083, in _bootstrap_inner\n    self._context.run(self.run)",
+      "File \"/data/data/com.termux/files/usr/lib/python3.14/threading.py\", line 1025, in run\n    self._target(*self._args, **self._kwargs)",
+      "File \"/data/data/com.termux/files/home/ACE/code/ace_host_controller/resilient_watchdog.py\", line 428, in _run\n    self.result = self.target(*self.args, **self.kwargs)",
+      "File \"/data/data/com.termux/files/home/ACE/code/ace_self_dev/coordinator.py\", line 199, in run_autonomous_cycle\n    provisional_tasks = create_confirmation_suite(task_seed=provisional_seed)",
+      "File \"/data/data/com.termux/files/home/ACE/code/ace_self_dev/confirmation_suite.py\", line 241, in create_confirmation_suite\n    tr, val, ho = _generate_confirmation_pools(fn, task_id=tid, n_per_class=16, task_seed=task_seed)",
+      "File \"/data/data/com.termux/files/home/ACE/code/ace_self_dev/confirmation_suite.py\", line 185, in _generate_confirmation_pools\n    val = (val * 214013 + 2531011) & 0x7FFFFFFF"
+    ],
+    "ResilientWatchdogMonitor:507412950240": [
+      "File \"/data/data/com.termux/files/usr/lib/python3.14/threading.py\", line 1045, in _bootstrap\n    self._bootstrap_inner()",
+      "File \"/data/data/com.termux/files/usr/lib/python3.14/threading.py\", line 1085, in _bootstrap_inner\n    self._invoke_excepthook(self)",
+      "File \"/data/data/com.termux/files/usr/lib/python3.14/threading.py\", line 1334, in invoke_excepthook\n    hook(args)"
+    ],
+    "MainThread:518697221416": [
+      "File \"/data/data/com.termux/files/home/ACE/tools/ace_autonomous_daemon.py\", line 306, in <module>\n    main()",
+      "File \"/data/data/com.termux/files/home/ACE/tools/ace_autonomous_daemon.py\", line 296, in main\n    run_daemon_loop(",
+      "File \"/data/data/com.termux/files/home/ACE/tools/ace_autonomous_daemon.py\", line 233, in run_daemon_loop\n    p_res = run_parameter_cycle(watchdog, coord)",
+      "File \"/data/data/com.termux/files/home/ACE/tools/ace_autonomous_daemon.py\", line 140, in run_parameter_cycle\n    res = watchdog.run_guarded_cycle(",
+      "File \"/data/data/com.termux/files/home/ACE/code/ace_host_controller/resilient_watchdog.py\", line 764, in run_guarded_cycle\n    dump, recovered_state = self._handle_stall_event(cycle_id, elapsed, timeout)",
+      "File \"/data/data/com.termux/files/home/ACE/code/ace_host_controller/resilient_watchdog.py\", line 538, in _handle_stall_event\n    dump = self.generate_diagnostic_dump(",
+      "File \"/data/data/com.termux/files/home/ACE/code/ace_host_controller/resilient_watchdog.py\", line 573, in generate_diagnostic_dump\n    thread_stacks[f\"{name}:{ident}\"] = [line.strip() for line in traceback.format_stack(frame)]"
+    ]
+  },
+  "error_message": null,
+  "traceback_str": null,
+  "state_summary": {
+    "cycle_count": 323,
+    "active_generation_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C271",
+    "state_digest": "0e7f415279524939a3a99ddef456a80c7d091f55fc7f97e0ca0d7937008044fa",
+    "is_locked": false
+  },
+  "recovery_triggered": true,
+  "recovered_cycle_count": 323,
+  "recovered_from": "recovery_baseline.json"
+}

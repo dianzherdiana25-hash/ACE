@@ -1,0 +1,49 @@
+{
+  "schema": "ace.patch-diagnostic.v1",
+  "base_commit": "22dbda2db123ece1d77b0f74830575c217d2a799",
+  "target": "code/ace_self_dev/strategy_repair.py",
+  "base_file_sha256": "c2713660933fe27a410b6ff8ef9de48eec05852902829265e23e4624ae9bfb3d",
+  "patch_sha256": "9857f280554d1ace06fb075ae8eda133d3608bab2bc750e24ff22caa14b8d8e2",
+  "candidate_file_sha256": "b9051382e1f4ec235df18951de9b97d33eb4fddd499d69be7210c328bcafade7",
+  "test_modules": [
+    "ace_self_dev.test_stagnation_detector",
+    "ace_self_dev.test_anti_stagnation"
+  ],
+  "test_file_sha256": {
+    "code/ace_self_dev/test_stagnation_detector.py": "c250510bce6f950a7e761c283e47913b04e66cf2300ef0fd4632b6a571a62db5",
+    "code/ace_self_dev/test_anti_stagnation.py": "aa3643b45753fa9cc7e992c316e811fd877afbf49b4db856a19f8138321ee274"
+  },
+  "sandbox_profile": {
+    "cpu_seconds": 25,
+    "memory_bytes": 536870912,
+    "output_bytes": 1048576,
+    "file_descriptors": 64,
+    "wall_seconds": 35,
+    "network": "unshared",
+    "snapshot": "read-only",
+    "environment": "cleared"
+  },
+  "baseline": {
+    "passed": true,
+    "status": "PASS",
+    "test_count": 20,
+    "exit_code": 0,
+    "output_sha256": "6b3dd940a91247190059ca778b7be53f94795d8762630a68bc1a4af85a86612f",
+    "output_bytes": 98,
+    "output_excerpt": "----------------------------------------------------------------------\nRan 20 tests in 0.230s\n\nOK\n"
+  },
+  "candidate": {
+    "passed": false,
+    "status": "INCONCLUSIVE",
+    "test_count": 20,
+    "exit_code": 0,
+    "output_sha256": "77c4f0cd8d8fb39d74ec595e0cb1ebc4674c50a1e83592e8e373001a7783eedb",
+    "output_bytes": 27,
+    "output_excerpt": "Ran 20 tests in 0.010s\n\nOK\n",
+    "reported_test_success": true,
+    "reason": "UNTRUSTED_IN_PROCESS_TEST_RESULT"
+  },
+  "promotion_authorized": false,
+  "scientific_decision": "NOT_ASSESSED",
+  "receipt_sha256": "a2a003a947db110b2c544e0b0e73bccb2f2a11a81fb9fa3572e3ed604c6537ca"
+}

@@ -1,0 +1,28 @@
+{
+  "schema": "ace.runtime.public-demo.v2.provenance",
+  "scientific_status": "NOT_ASSESSED",
+  "release_gate": "BLOCK_RELEASE",
+  "source_run": {
+    "repository": "dianzherdiana25-hash/ACE",
+    "workflow_run_id": 42694729153,
+    "workflow_job_id": 129423398806,
+    "exact_source_commit": "777d159390d81894eea564aa5486c6ec50a34dac",
+    "python_version": "3.12",
+    "workspace_replay_count": 2,
+    "result": "SUCCESS",
+    "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42694729153"
+  },
+  "v1_historical": {
+    "path": "evidence/runtime/v1-demo.json",
+    "git_blob_sha1": "475d35bab2d319650de5504e472b76f05d65458d",
+    "preservation": "UNCHANGED"
+  },
+  "v2_candidate": {
+    "path": "evidence/runtime/v2-demo.json",
+    "sha256": "aca172204e1769e1603576769ef60b958312ae9930e39e12ea8d23e9bd85b03b",
+    "byte_count": 3829,
+    "result": "PASS_PUBLIC_ENGINEERING_REPLAY_NOT_SCIENTIFIC_GO",
+    "candidate_deployed": false,
+    "notes": "Same public synthetic tasks, upgraded candidate-selection grammar, independently generated in two fresh workspaces, byte identical; not an external holdout."
+  }
+}

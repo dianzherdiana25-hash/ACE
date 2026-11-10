@@ -122,19 +122,17 @@ class AutonomousSoftwareResearcher:
         # 5. Evaluate in isolated worktree
         exec_result = self.harness.execute_in_worktree(patch, test_commands=test_commands)
 
-        # 6. Independent scientific validation (negative control)
-        # Verify dummy callable if valid
-        neg_control_passed = True
-        try:
-            # Test synthetic callable against negative control
-            sample_fn = lambda l, d, s: 1 if ((s * 2 - d) % 3 == 0) else 0
-            neg_control_passed = self.evaluator.evaluate_negative_control(sample_fn)
-        except Exception:
-            neg_control_passed = False
-
-        if not neg_control_passed:
-            exec_result.decision = "REJECTED"
-            exec_result.rejection_reason = "Failed negative control evaluation."
+        # 6. No synthetic stand-in is permitted as independent evidence.
+        # Previously a constant, unrelated lambda was passed to the negative
+        # control and its result could falsely endorse every candidate patch.
+        # Candidate authorization remains fail-closed until a trusted evaluator
+        # executes the ACTUAL candidate with preregistered controls and baseline.
+        if exec_result.decision == "ACCEPTED":
+            exec_result.decision = "INCONCLUSIVE"
+            exec_result.rejection_reason = (
+                "MISSING_INDEPENDENT_EVIDENCE: acceptance cannot be established "
+                "from an import check or a stand-in negative control."
+            )
 
         # 7. Record to tested patches catalog
         tested_patches[patch_sha] = {
@@ -164,6 +162,9 @@ class AutonomousSoftwareResearcher:
             "patch_sha": patch_sha,
             "decision": exec_result.decision,
             "rejection_reason": exec_result.rejection_reason,
+            "diagnostic_metrics": exec_result.performance_metrics,
+            "scientific_status": "NOT_ASSESSED",
+            "candidate_connected_to_runtime": False,
             "receipt_signature": exec_result.receipt_signature,
             "pr_created": pr_created,
             "commit_sha": pr_meta.commit_sha if pr_meta else "",

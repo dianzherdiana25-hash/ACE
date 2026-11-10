@@ -1,0 +1,54 @@
+{
+  "source_commit": "23082cc4667b682d6354dec283ee466a1a5113f8",
+  "runs": [
+    {
+      "id": 42755001527,
+      "name": "ACE runtime v2 receipt candidate (public engineering replay)",
+      "head_sha": "23082cc4667b682d6354dec283ee466a1a5113f8",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42755001527"
+    },
+    {
+      "id": 42755002249,
+      "name": "ACE W3 development admission and negative controls",
+      "head_sha": "23082cc4667b682d6354dec283ee466a1a5113f8",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42755002249"
+    },
+    {
+      "id": 42755001636,
+      "name": "ACE repair v2 public candidate and provenance (no promotion)",
+      "head_sha": "23082cc4667b682d6354dec283ee466a1a5113f8",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42755001636"
+    },
+    {
+      "id": 42755001584,
+      "name": "ACE R9 Gemini representation transfer",
+      "head_sha": "23082cc4667b682d6354dec283ee466a1a5113f8",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42755001584"
+    },
+    {
+      "id": 42755001322,
+      "name": "ACE research verification",
+      "head_sha": "23082cc4667b682d6354dec283ee466a1a5113f8",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42755001322"
+    },
+    {
+      "id": 42755001310,
+      "name": "ACE full-system verification",
+      "head_sha": "23082cc4667b682d6354dec283ee466a1a5113f8",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42755001310"
+    }
+  ],
+  "note": "R9 uses the PR merge checkout; other listed workflows explicitly pin source HEAD. Public engineering tests, not scientific GO."
+}

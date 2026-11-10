@@ -1,0 +1,33 @@
+name: ACE M1 fenced SQLite lease (public development gate)
+
+on:
+  push:
+    branches:
+      - research/ace-m1-fenced-store-chat-20261110
+  pull_request:
+    paths:
+      - 'code/ace_self_dev/fenced_store.py'
+      - 'code/ace_self_dev/test_fenced_store.py'
+      - '.github/workflows/ace-m1-fenced-store.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fenced-development-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13']
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Focused development regressions (no external AI, no candidate execution)
+        env:
+          PYTHONPATH: code
+        run: python -m unittest -v ace_self_dev.test_fenced_store

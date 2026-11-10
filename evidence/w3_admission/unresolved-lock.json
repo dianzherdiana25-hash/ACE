@@ -1,0 +1,11 @@
+{
+  "source": "code/ace_self_dev/state_manager.py",
+  "source_commit": "23082cc4667b682d6354dec283ee466a1a5113f8",
+  "locked_before_wrong_token_release": true,
+  "locked_after_wrong_token_release": false,
+  "expected_locked_after": true,
+  "bug_reproduced": true,
+  "fixed_in_this_branch": false,
+  "ask_ai_executable_available": false,
+  "scope": "Temporary workspace only; no active state modified"
+}

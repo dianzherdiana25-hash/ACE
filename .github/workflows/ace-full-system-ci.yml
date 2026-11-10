@@ -3,6 +3,7 @@ name: ACE full-system verification
 on:
   push:
     branches:
+      - main
       - validation/ace-full-system-ci-20261107
       - integration/ace-master-verified-20261107
       - engineering/ace-exact-ci-audit-20261107
@@ -14,6 +15,8 @@ on:
       - 'docs/validation/**'
       - 'ace.py'
       - 'autonomy.py'
+      - 'pyproject.toml'
+      - 'install.sh'
       - '.github/workflows/ace-full-system-ci.yml'
   workflow_dispatch:
 
@@ -23,7 +26,7 @@ permissions:
 jobs:
   regressions-and-autonomy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -47,6 +50,15 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Verify imported source bytes
         run: python tools/verify_sources.py
+      - name: Install dependencies for the complete test suite
+        run: python -m pip install 'numpy==2.1.3'
+      - name: Run all discovered test modules
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess, sys
+          modules = sorted('.'.join(p.with_suffix('').parts[1:]) for p in pathlib.Path('code').rglob('test_*.py'))
+          subprocess.run([sys.executable, '-m', 'unittest', *modules], check=True)
+          PY
       - name: Test original research & runtime suites (109 tests)
         run: >-
           python -m unittest
@@ -68,6 +80,12 @@ jobs:
           ace_research_reptransfer.test_reptransfer
           ace_research_reptransfer.test_audit_diagnostics
           -v
+      - name: Verify self-development lease ownership (positive and adversarial controls)
+        run: >-
+          python -m unittest
+          ace_self_dev.test_lease_ownership
+          ace_self_dev.test_self_dev_loop
+          -v
       - name: Verify deterministic composition replay
         run: |
           python -m ace_capability_evolution.compositional --output /tmp/composition.json
@@ -75,10 +93,15 @@ jobs:
           cmp /tmp/composition.json /tmp/composition-replay.json
           gzip -dc evidence/composition/v03.json.gz > /tmp/committed-composition.json
           cmp /tmp/composition.json /tmp/committed-composition.json
-      - name: Verify operational demo receipts
+      - name: Test versioned public runtime demo receipt custody
+        run: python -m unittest tools.test_verify_runtime_demo_v2 -v
+      - name: Verify v1 historical custody and exact v2 public replay
         run: |
-          python ace.py demo --workspace "$RUNNER_TEMP/ace-runtime" > "$RUNNER_TEMP/ace-runtime-demo.json"
-          cmp "$RUNNER_TEMP/ace-runtime-demo.json" evidence/runtime/v1-demo.json
+          test "$(git hash-object evidence/runtime/v1-demo.json)" = "475d35bab2d319650de5504e472b76f05d65458d"
+          python ace.py demo --workspace "$RUNNER_TEMP/ace-runtime-v2-a" > "$RUNNER_TEMP/ace-runtime-v2-a.json"
+          python ace.py demo --workspace "$RUNNER_TEMP/ace-runtime-v2-b" > "$RUNNER_TEMP/ace-runtime-v2-b.json"
+          cmp "$RUNNER_TEMP/ace-runtime-v2-a.json" "$RUNNER_TEMP/ace-runtime-v2-b.json"
+          python tools/verify_runtime_demo_v2.py --candidate "$RUNNER_TEMP/ace-runtime-v2-a.json" --expected evidence/runtime/v2-demo.json
           python autonomy.py --workspace "$RUNNER_TEMP/ace-autonomy-demo" demo > "$RUNNER_TEMP/autonomy-demo.json"
 
   research-and-redteam:
