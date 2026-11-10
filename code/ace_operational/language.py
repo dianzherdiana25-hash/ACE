@@ -14,6 +14,7 @@ Handles:
 """
 from __future__ import annotations
 
+from enum import Enum
 from pathlib import Path
 import re
 from typing import Any
@@ -22,6 +23,25 @@ from .autonomy_loop import AutonomyOrchestrator
 from .coding_loop import CodingAgentLoop
 from .models_backend import ModelRouter
 from .store import OperationalStore
+
+
+class Intent(str, Enum):
+    """Standard Indonesian conversational intent identifiers (Sections 10-12, Appendix A)."""
+
+    CONSCIOUSNESS_INQUIRY = "CONSCIOUSNESS_INQUIRY"
+    EXPLAIN_ONLY = "EXPLAIN_ONLY"
+    EXECUTE_PREVIOUS_PLAN = "EXECUTE_PREVIOUS_PLAN"
+    STOP_OR_PAUSE = "STOP_OR_PAUSE"
+    RESUME_TASK = "RESUME_TASK"
+    STATUS_CHECK = "STATUS_CHECK"
+    SELECT_OPTION = "SELECT_OPTION"
+    MODIFY_PREVIOUS_ARTIFACT = "MODIFY_PREVIOUS_ARTIFACT"
+    LEARN_AND_SOLVE = "LEARN_AND_SOLVE"
+    GREETING_OR_CAPABILITIES = "GREETING_OR_CAPABILITIES"
+    GENERAL_CONVERSATION = "GENERAL_CONVERSATION"
+    DIAGNOSE_OR_FIX_BUG = "DIAGNOSE_OR_FIX_BUG"
+    REFACTOR_CODE = "REFACTOR_CODE"
+    CREATE_OR_MODIFY_CODE = "CREATE_OR_MODIFY_CODE"
 
 
 TYPO_MAP = {
@@ -74,6 +94,7 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
     ctx = conversation_context or {}
     norm = normalize_indonesian_text(raw_text)
     lower = norm.lower()
+    raw_lower = raw_text.lower()
 
     constraints: list[str] = []
     offline_requested = False
@@ -201,21 +222,54 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
             "side_effects_allowed": True,
         }
 
-    # 10. Greeting / Capability question (`A01`, `A02`)
-    if any(
+    # 10. Greeting / General Conversation / Capability question (`A01`, `A02`)
+    is_capability_query = any(
         p in lower
         for p in (
-            "halo ace",
             "kamu bisa bantu apa",
             "bisa apa saja",
             "apa yang bisa kamu lakukan",
             "siapa kamu",
+            "apa yang bisa kamu buat",
             "tawarkan 2 opsi",
             "kasih pilihan",
         )
-    ):
+    )
+    is_short_greeting = any(
+        re.search(r"\b" + re.escape(w) + r"\b", lower)
+        for w in (
+            "halo",
+            "hai",
+            "hi",
+            "hey",
+            "hei",
+            "selamat pagi",
+            "selamat siang",
+            "selamat sore",
+            "selamat malam",
+            "selamat datang",
+            "assalamualaikum",
+            "assalamu'alaikum",
+            "apa kabar",
+            "gimana kabar",
+            "salam",
+        )
+    ) or "halo ace" in lower
+
+    has_coding_action = any(
+        re.search(r"\b" + re.escape(k) + r"\b", lower)
+        for k in (
+            "buat", "buatkan", "bikin", "bikinin", "program", "skrip", "script",
+            "kode", "koding", "aplikasi", "fungsi", "perbaiki", "refactor",
+            "rapikan", "kalkulator", "fibonacci", "csv", "tebak angka", "catat",
+            "pengeluaran", "modul", "hitung", "ubah", "konversi"
+        )
+    )
+
+    if is_capability_query or (is_short_greeting and not has_coding_action):
+        resolved_intent = Intent.GREETING_OR_CAPABILITIES if is_capability_query else Intent.GENERAL_CONVERSATION
         return {
-            "intent": "GREETING_OR_CAPABILITIES",
+            "intent": resolved_intent,
             "offer_options": any(k in lower for k in ("opsi", "pilihan", "cara")),
             "normalized_text": norm,
             "constraints": constraints,
@@ -243,20 +297,72 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
             "side_effects_allowed": True,
         }
 
-    # 13. Coding / Feature Creation (`A03`, `A04`, `A19`, `A20`, `A22`)
-    domain = "expense_tracker"
+    # 13. Coding / Feature Creation (`A03`, `A04`, `A19`, `A20`, `A22`, G04)
     if "csv" in lower:
         domain = "csv_reader"
+        domain_confidence = 0.95
     elif "tebak angka" in lower or "game" in lower:
         domain = "tebak_angka"
-    elif "multi" in lower or "dua file" in lower or "modul" in lower:
+        domain_confidence = 0.95
+    elif (
+        re.search(r"\bmulti\s*[-_ ]?\s*(modul|file|berkas)\b", raw_lower)
+        or re.search(r"\bmulti\s*[-_ ]?\s*(modul|file|berkas)\b", lower)
+        or any(
+            phrase in lower or phrase in raw_lower
+            for phrase in (
+                "multi modul",
+                "multi-modul",
+                "multi file",
+                "multi-file",
+                "multi berkas",
+                "multi-berkas",
+                "dua file",
+                "dua berkas",
+                "banyak file",
+                "banyak berkas",
+                "banyak modul",
+                "struktur berkas",
+                "struktur modul",
+                "paket aplikasi",
+            )
+        )
+    ):
         domain = "multi_file"
+        domain_confidence = 0.95
     elif any(k in lower for k in ("pengeluaran", "catatan", "keuangan", "dompet", "belanja")):
         domain = "expense_tracker"
+        domain_confidence = 0.95
+    else:
+        domain = "general"
+        domain_confidence = 0.90 if any(
+            k in lower
+            for k in (
+                "buat",
+                "buatkan",
+                "bikin",
+                "bikinin",
+                "program",
+                "skrip",
+                "script",
+                "kode",
+                "koding",
+                "aplikasi",
+                "fungsi",
+                "kalkulator",
+                "hitung",
+                "ubah",
+                "konversi",
+                "fibonacci",
+                "modul",
+                "algoritma",
+                "utilitas",
+            )
+        ) else 0.75
 
     return {
-        "intent": "CREATE_OR_MODIFY_CODE",
+        "intent": Intent.CREATE_OR_MODIFY_CODE,
         "domain": domain,
+        "domain_confidence": domain_confidence,
         "normalized_text": norm,
         "constraints": constraints,
         "offline_requested": offline_requested,
@@ -330,8 +436,14 @@ class ConversationalEngine:
                 "dan memverifikasi setiap kode yang kutulis dengan bukti pengujian nyata."
             )
 
-        elif intent == "GREETING_OR_CAPABILITIES":
-            if frame.get("offer_options"):
+        elif intent in ("GREETING_OR_CAPABILITIES", "GENERAL_CONVERSATION", Intent.GREETING_OR_CAPABILITIES, getattr(Intent, "GENERAL_CONVERSATION", None)):
+            if intent in ("GENERAL_CONVERSATION", getattr(Intent, "GENERAL_CONVERSATION", None)) and not frame.get("offer_options"):
+                reply_text = (
+                    f"Halo! Aku **ACE**, asisten kecerdasan otonom kamu (berjalan dalam mode **{mode_label}**).\n"
+                    "Ada yang bisa kubantu hari ini? Kamu bisa meminta pembuatan program Python mandiri, pengolahan CSV, "
+                    "perbaikan bug terverifikasi, atau konsultasi arsitektur tugas."
+                )
+            elif frame.get("offer_options"):
                 offered = [
                     {"index": 1, "domain": "expense_tracker", "title": "Opsi 1: CLI Catatan Pengeluaran JSON (ringkas & cepat)"},
                     {"index": 2, "domain": "csv_reader", "title": "Opsi 2: Utilitas Pembaca & Rekap Tabel CSV"},
@@ -353,50 +465,90 @@ class ConversationalEngine:
                 )
 
         elif intent == "EXPLAIN_ONLY":
-            plan_domain = "expense_tracker" if "pengeluaran" in frame["normalized_text"].lower() else "general"
-            pending_plan = {
-                "goal": frame["normalized_text"],
-                "domain": plan_domain,
-                "steps": [
-                    "Menyiapkan skema data lokal (`pengeluaran.json`) dan antarmuka CLI Bahasa Indonesia (`tambah`, `daftar`, `total`, `hapus`).",
-                    "Menulis kode secara atomik dengan pemeriksaan preimage SHA-256.",
-                    "Menjalankan uji kompilasi dan uji fungsional otomatis untuk memastikan rekap berjalan akurat.",
-                ],
-            }
+            is_expense = any(k in frame["normalized_text"].lower() for k in ("pengeluaran", "catatan", "keuangan", "dompet", "belanja"))
+            plan_domain = "expense_tracker" if is_expense else "general"
+            if plan_domain == "general":
+                clean_goal = frame["normalized_text"][:50].strip()
+                pending_plan = {
+                    "goal": frame["normalized_text"],
+                    "domain": "general",
+                    "steps": [
+                        f"Merancang logika skrip mandiri untuk '{clean_goal}'.",
+                        "Menulis kode Python mandiri dengan pengujian sintaks AST dan fungsi eksekutabel.",
+                        "Menjalankan skrip secara langsung dan mencatat execution receipt terverifikasi.",
+                    ],
+                }
+                reply_text = (
+                    "Siap, aku **jelaskan rencananya dulu tanpa mengubah atau membuat berkas apa pun**:\n"
+                    f"1. Aku akan merancang skrip Python mandiri untuk '{clean_goal}'.\n"
+                    "2. Kode akan diverifikasi sintaksnya (AST) dan dipastikan memiliki fungsi utama serta blok pengujian mandiri.\n"
+                    "3. Setelah kode ditulis, aku akan menjalankan verifikasi otomatis dan menyimpan bukti *receipt*.\n\n"
+                    "Kalau rencana ini sudah cocok, cukup katakan **\"sekarang kerjakan\"**."
+                )
+            else:
+                pending_plan = {
+                    "goal": frame["normalized_text"],
+                    "domain": "expense_tracker",
+                    "steps": [
+                        "Menyiapkan skema data lokal (`pengeluaran.json`) dan antarmuka CLI Bahasa Indonesia (`tambah`, `daftar`, `total`, `hapus`).",
+                        "Menulis kode secara atomik dengan pemeriksaan preimage SHA-256.",
+                        "Menjalankan uji kompilasi dan uji fungsional otomatis untuk memastikan rekap berjalan akurat.",
+                    ],
+                }
+                reply_text = (
+                    "Siap, aku **jelaskan rencananya dulu tanpa mengubah atau membuat berkas apa pun**:\n"
+                    "1. Aku akan merancang skrip CLI Python mandiri dengan subperintah `tambah`, `daftar`, `total`, dan `hapus`.\n"
+                    "2. Data akan disimpan secara lokal dalam format JSON agar tahan restart dan tidak butuh internet.\n"
+                    "3. Setelah kode ditulis, aku akan menjalankan verifikasi otomatis dan menyimpan bukti *receipt*.\n\n"
+                    "Kalau rencana ini sudah cocok, cukup katakan **\"sekarang kerjakan\"**."
+                )
             self.store.update_conversation_context(conversation_id, {"pending_plan": pending_plan})
-            reply_text = (
-                "Siap, aku **jelaskan rencananya dulu tanpa mengubah atau membuat berkas apa pun**:\n"
-                "1. Aku akan merancang skrip CLI Python mandiri dengan subperintah `tambah`, `daftar`, `total`, dan `hapus`.\n"
-                "2. Data akan disimpan secara lokal dalam format JSON agar tahan restart dan tidak butuh internet.\n"
-                "3. Setelah kode ditulis, aku akan menjalankan verifikasi otomatis dan menyimpan bukti *receipt*.\n\n"
-                "Kalau rencana ini sudah cocok, cukup katakan **\"sekarang kerjakan\"**."
-            )
 
         elif intent == "EXECUTE_PREVIOUS_PLAN":
             pending = conv["context"].get("pending_plan") or {
                 "goal": "Membuat aplikasi CLI catatan pengeluaran lokal",
                 "domain": "expense_tracker",
             }
+            plan_domain = str(pending.get("domain", "expense_tracker"))
+            task_title = (
+                f"Eksekusi rencana: {pending.get('goal', 'Solusi Python')[:40]}"
+                if plan_domain == "general"
+                else "Eksekusi rencana: Aplikasi Catatan Pengeluaran CLI"
+            )
             task_obj = self.store.create_task(
                 conversation_id=conversation_id,
-                title_id="Eksekusi rencana: Aplikasi Catatan Pengeluaran CLI",
+                title_id=task_title,
                 user_request=text,
                 normalized_goal=str(pending.get("goal", "Membuat aplikasi CLI catatan pengeluaran")),
                 constraints=frame["constraints"],
                 model_backend=hc["active_backend"],
             )
-            exec_res = self.coding.execute_coding_task(
-                task_obj["task_id"],
-                domain=str(pending.get("domain", "expense_tracker")),
-                options=opts,
-            )
-            task_obj = exec_res["task"]
+            if plan_domain == "general" and hasattr(self.coding, "execute_general_task"):
+                gen_res = self.coding.execute_general_task(
+                    title=task_title,
+                    goal=str(pending.get("goal", text)),
+                    task_id=task_obj["task_id"],
+                    conversation_id=conversation_id,
+                    options=opts,
+                )
+                task_obj = gen_res.get("task") or self.store.get_task(task_obj["task_id"])
+                script_path = gen_res.get("file_path") or gen_res.get("script_path", "")
+            else:
+                exec_res = self.coding.execute_coding_task(
+                    task_obj["task_id"],
+                    domain=plan_domain,
+                    options=opts,
+                )
+                task_obj = exec_res["task"]
+                script_path = exec_res.get("script_path", "")
+
             self.store.update_conversation_context(
                 conversation_id,
-                {"last_task_id": task_obj["task_id"], "last_domain": pending.get("domain", "expense_tracker"), "pending_plan": None},
+                {"last_task_id": task_obj["task_id"], "last_domain": plan_domain, "pending_plan": None},
             )
+            art_name = Path(script_path).name if script_path else "berkas"
             reply_text = (
-                f"Rencana tadi sudah langsung kukerjakan dan diverifikasi! Berkas [`expense_tracker.py`](file://{exec_res['script_path']}) "
+                f"Rencana tadi sudah langsung kukerjakan dan diverifikasi! Berkas [`{art_name}`](file://{script_path}) "
                 f"sudah siap digunakan dan seluruh uji fungsional lulus (`{task_obj['status']}`)."
             )
 
@@ -575,17 +727,22 @@ class ConversationalEngine:
 
         else:
             # CREATE_OR_MODIFY_CODE
-            domain = frame.get("domain", "expense_tracker")
-            default_period = "mingguan" if "mingguan" in frame["normalized_text"].lower() else "bulanan"
+            domain = frame.get("domain", "general")
             title_map = {
                 "expense_tracker": "Aplikasi CLI Catatan Pengeluaran Lokal",
                 "csv_reader": "Utilitas CLI Pembaca & Rekap CSV",
                 "tebak_angka": "Game CLI Tebak Angka Bahasa Indonesia",
                 "multi_file": "Paket Aplikasi Python Multi-Modul",
             }
+            if domain == "general":
+                clean_goal = frame["normalized_text"][:50].strip()
+                task_title = f"Solusi Python: {clean_goal}"
+            else:
+                task_title = title_map.get(domain, "Pembuatan Skrip Python Lokal")
+
             task_obj = self.store.create_task(
                 conversation_id=conversation_id,
-                title_id=title_map.get(domain, "Pembuatan Skrip Python Lokal"),
+                title_id=task_title,
                 user_request=text,
                 normalized_goal=frame["normalized_text"],
                 constraints=frame["constraints"],
@@ -596,36 +753,85 @@ class ConversationalEngine:
                 {
                     "user_intent": intent,
                     "domain": domain,
+                    "domain_confidence": frame.get("domain_confidence", 0.85),
                     "normalized_goal": frame["normalized_text"],
                     "constraints": frame["constraints"],
                     "offline_mode": self.store.is_offline(),
                 },
             )
-            exec_res = self.coding.execute_coding_task(
-                task_obj["task_id"],
-                domain=domain,
-                options={**opts, "default_period": default_period, "include_categories": True},
-            )
-            task_obj = exec_res["task"]
-            self.store.update_conversation_context(
-                conversation_id,
-                {
-                    "last_task_id": task_obj["task_id"],
-                    "last_domain": domain,
-                    "default_period": default_period,
-                    "include_categories": True,
-                },
-            )
-            art_list = ", ".join(f"[`{a['id']}`](file://{a['path']})" for a in task_obj["artifacts"])
-            sample_out = task_obj.get("verification_summary", {}).get("sample_output", "").splitlines()
-            first_line = sample_out[0] if sample_out else "Verifikasi lulus"
-            reply_text = (
-                f"Aku sudah membuat dan menguji **{task_obj['title_id']}** dalam mode **{mode_label}**.\n"
-                f"- Berkas yang dibuat: {art_list}\n"
-                f"- Hasil uji otomatis: `{first_line}`\n"
-                f"- Status: `{task_obj['status']}`\n\n"
-                "Kamu bisa meminta perubahan lanjutan (misalnya *\"yang tadi tambah kategorinya\"* atau *\"bukan mingguan, maksudku bulanan\"*)."
-            )
+
+            if domain == "general":
+                # G04: Route novel coding requests to execute_general_task
+                if hasattr(self.coding, "execute_general_task"):
+                    gen_res = self.coding.execute_general_task(
+                        title=task_title,
+                        goal=frame["normalized_text"],
+                        task_id=task_obj["task_id"],
+                        conversation_id=conversation_id,
+                        options=opts,
+                    )
+                    task_obj = gen_res.get("task") or self.store.get_task(task_obj["task_id"])
+                    script_path = gen_res.get("file_path") or gen_res.get("script_path", "")
+                    output_text = gen_res.get("output", "")
+                else:
+                    exec_res = self.coding.execute_coding_task(
+                        task_obj["task_id"],
+                        domain="general",
+                        options=opts,
+                    )
+                    task_obj = exec_res["task"]
+                    script_path = exec_res.get("script_path", "")
+                    output_text = exec_res.get("verification", {}).get("sample_output", "")
+
+                self.store.update_conversation_context(
+                    conversation_id,
+                    {
+                        "last_task_id": task_obj["task_id"],
+                        "last_domain": domain,
+                        "last_script_path": script_path,
+                    },
+                )
+                art_list = ", ".join(f"[`{a['id']}`](file://{a['path']})" for a in task_obj.get("artifacts", []))
+                if not art_list and script_path:
+                    art_list = f"[`{Path(script_path).name}`](file://{script_path})"
+                sample_out = output_text.splitlines() if output_text else []
+                first_line = sample_out[0] if sample_out else (
+                    task_obj.get("verification_summary", {}).get("sample_output", "").splitlines() or ["Verifikasi lulus"]
+                )[0]
+                reply_text = (
+                    f"Aku sudah membuat dan memverifikasi **{task_obj['title_id']}** dalam mode **{mode_label}**.\n"
+                    f"- Berkas yang dibuat: {art_list}\n"
+                    f"- Hasil uji otomatis: `{first_line}`\n"
+                    f"- Status: `{task_obj['status']}`\n\n"
+                    "Kamu bisa meminta pengujian lebih lanjut, optimasi logika, atau penambahan fitur baru."
+                )
+            else:
+                default_period = "mingguan" if "mingguan" in frame["normalized_text"].lower() else "bulanan"
+                exec_res = self.coding.execute_coding_task(
+                    task_obj["task_id"],
+                    domain=domain,
+                    options={**opts, "default_period": default_period, "include_categories": True},
+                )
+                task_obj = exec_res["task"]
+                self.store.update_conversation_context(
+                    conversation_id,
+                    {
+                        "last_task_id": task_obj["task_id"],
+                        "last_domain": domain,
+                        "default_period": default_period,
+                        "include_categories": True,
+                    },
+                )
+                art_list = ", ".join(f"[`{a['id']}`](file://{a['path']})" for a in task_obj["artifacts"])
+                sample_out = task_obj.get("verification_summary", {}).get("sample_output", "").splitlines()
+                first_line = sample_out[0] if sample_out else "Verifikasi lulus"
+                reply_text = (
+                    f"Aku sudah membuat dan menguji **{task_obj['title_id']}** dalam mode **{mode_label}**.\n"
+                    f"- Berkas yang dibuat: {art_list}\n"
+                    f"- Hasil uji otomatis: `{first_line}`\n"
+                    f"- Status: `{task_obj['status']}`\n\n"
+                    "Kamu bisa meminta perubahan lanjutan (misalnya *\"yang tadi tambah kategorinya\"* atau *\"bukan mingguan, maksudku bulanan\"*)."
+                )
 
         assistant_msg, _ = self.store.add_message(
             conversation_id,
