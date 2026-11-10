@@ -37,11 +37,26 @@ from .runner import compress_deterministic_gzip, decompress_gzip, run_benchmark
 from .sandbox import run_dev_suite
 from .verify import (
     RepairVerificationError,
+    _first_difference_paths,
     verify_ast_isolation,
     verify_report_bytes,
     verify_upstream_pins,
 )
 
+
+class RepairReplayDiagnosticsTests(unittest.TestCase):
+    def test_replay_diff_reports_paths_not_values(self):
+        before = {"final_ace_state": {"runtime_implementation_sha256": "old_secret"},
+                  "target_trials_by_arm": {"R_ace": [{"staged": False}, {"staged": False}]}}
+        after = {"final_ace_state": {"runtime_implementation_sha256": "new_secret"},
+                 "target_trials_by_arm": {"R_ace": [{"staged": False}, {"staged": True}]}}
+        result = _first_difference_paths(before, after)
+        self.assertEqual(result, [
+            "/final_ace_state/runtime_implementation_sha256",
+            "/target_trials_by_arm/R_ace/1/staged",
+        ])
+        self.assertNotIn("secret", " ".join(result))
+        self.assertEqual(_first_difference_paths(before, after, limit=1), result[:1])
 
 class SoftwareRepairTests(unittest.TestCase):
     @classmethod
