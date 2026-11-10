@@ -38,6 +38,38 @@ class RepairVerificationError(ValueError):
     """Raised when a repair evidence bundle fails custody, schema, or replay verification."""
 
 
+def _first_difference_paths(previous: Any, current: Any, *, limit: int = 12) -> list[str]:
+    """Bounded JSON-pointer diagnostics only; never expose terminal values or patch sources."""
+    result: list[str] = []
+
+    def walk(left: Any, right: Any, location: str) -> None:
+        if len(result) >= limit:
+            return
+        if type(left) is not type(right):
+            result.append(location or "/")
+        elif isinstance(left, dict):
+            for key in sorted(set(left) | set(right)):
+                if len(result) >= limit:
+                    break
+                pointer = location + "/" + str(key).replace("~", "~0").replace("/", "~1")
+                if key not in left or key not in right:
+                    result.append(pointer)
+                else:
+                    walk(left[key], right[key], pointer)
+        elif isinstance(left, list):
+            if len(left) != len(right):
+                result.append((location or "/") + "/length")
+            for index, (lv, rv) in enumerate(zip(left, right)):
+                if len(result) >= limit:
+                    break
+                walk(lv, rv, location + "/" + str(index))
+        elif left != right:
+            result.append(location or "/")
+
+    walk(previous, current, "")
+    return result
+
+
 def verify_ast_isolation(package_dir: Path | None = None) -> int:
     """Ensure `evaluator.py` is never imported or dynamically loaded by non-evaluator modules."""
     pkg = (package_dir or Path(__file__).resolve().parent).resolve()
@@ -179,8 +211,16 @@ def verify_report_bytes(
     # 4. Full deterministic replay check
     if replay:
         expected = run_benchmark()
-        if canonical_json(expected) != raw_json:
-            raise RepairVerificationError("reported metrics, patches, or hashes differ from clean replay")
+        expected_bytes = canonical_json(expected)
+        if expected_bytes != raw_json:
+            old_hash = sha256_digest(raw_json)
+            replay_hash = sha256_digest(expected_bytes)
+            paths = _first_difference_paths(report, expected)
+            raise RepairVerificationError(
+                "reported metrics, patches, or hashes differ from clean replay; "
+                f"artifact_sha256={old_hash} replay_sha256={replay_hash}; "
+                f"first_mismatch_paths={json.dumps(paths, sort_keys=True)}"
+            )
 
     return {
         "status": "PASS_PUBLIC_REPLAY_NOT_SCIENTIFIC_GO" if replay else "PASS_STRUCTURE_AND_CUSTODY_ONLY",
