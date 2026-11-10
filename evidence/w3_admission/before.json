@@ -1,0 +1,43 @@
+{
+  "base": "e1fdbf09da6aaec4b7a3e426771af81b989ebe1c",
+  "train": [
+    [
+      "a",
+      true
+    ],
+    [
+      "b",
+      false
+    ]
+  ],
+  "validation": [
+    [
+      "aa",
+      true
+    ],
+    [
+      "bb",
+      false
+    ]
+  ],
+  "actual": {
+    "status": "ADMITTED",
+    "errors": 0,
+    "max_errors_allowed": 0,
+    "pos_accuracy": 1.0,
+    "neg_accuracy": 1.0,
+    "train_accuracy": 1.0,
+    "val_accuracy": 0.5
+  },
+  "zero_validation_accuracy_actual": {
+    "status": "ADMITTED",
+    "errors": 0,
+    "max_errors_allowed": 0,
+    "pos_accuracy": 1.0,
+    "neg_accuracy": 1.0,
+    "train_accuracy": 1.0,
+    "val_accuracy": 0.0
+  },
+  "expected": "REJECTED",
+  "scientific_status": "NOT_ASSESSED"
+}
