@@ -233,6 +233,14 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
             "apa yang bisa kamu buat",
             "tawarkan 2 opsi",
             "kasih pilihan",
+            "apakah kamu sudah bisa",
+            "apakah kamu bisa",
+            "sudah bisa apa",
+            "skill apa",
+            "keterampilan apa",
+            "kemampuan apa",
+            "daftar skill",
+            "daftar kemampuan",
         )
     )
     is_short_greeting = any(
@@ -456,12 +464,17 @@ class ConversationalEngine:
                     "Kamu cukup bilang misalnya *\"yang kedua saja\"* atau *\"pilih opsi 1\"*."
                 )
             else:
+                active_skills = self.store.list_skills(active_only=True)
+                skill_names = ", ".join(f"`{s['name']}`" for s in active_skills) if active_skills else "belum ada skill tambahan"
+                tested_caps = [f for f in self.store.list_frontier() if f.get("status") == "KNOWN_AND_TESTED"]
                 reply_text = (
                     f"Halo! Aku **ACE** (berjalan dalam mode **{mode_label}**). Saat ini kemampuanku yang sudah terverifikasi meliputi:\n"
                     "- Membuat dan menguji aplikasi Python lokal (seperti catatan pengeluaran CLI, pengolah CSV, dan utilitas harian).\n"
                     "- Mereproduksi, mendiagnosis, dan memperbaiki bug kode dengan verifikasi otomatis.\n"
                     "- Mencatat celah kemampuan (*gap*), mempelajari sub-keterampilan baru, dan mendelegasikan tugas ke worker AI jika tersedia.\n"
-                    "- Berjalan 100% lokal/offline tanpa bergantung pada internet saat mode offline aktif."
+                    "- Berjalan 100% lokal/offline tanpa bergantung pada internet saat mode offline aktif.\n"
+                    f"- **Skill hasil belajar aktif ({len(active_skills)})**: {skill_names}\n"
+                    f"- **Frontier terverifikasi**: {len(tested_caps)} kapabilitas berstatus `KNOWN_AND_TESTED`."
                 )
 
         elif intent == "EXPLAIN_ONLY":
