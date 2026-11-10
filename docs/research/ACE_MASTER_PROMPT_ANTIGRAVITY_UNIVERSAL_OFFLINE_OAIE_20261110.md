@@ -3,7 +3,7 @@
 **Untuk:** Antigravity atau agen AI pelaksana yang memiliki akses nyata ke workspace ACE.  
 **Bahasa kerja dan antarmuka pengguna:** Bahasa Indonesia.  
 **Tanggal mandat:** 10 November 2026.  
-**Edisi:** 2 — diperluas dengan riset primer internet, 42 repositori, 24 rujukan penelitian, pilihan bahasa dan runtime, serta backlog ide dan eksperimen.  
+**Edisi:** 3 — riset primer, installer menyeluruh, langsung merge setelah penerimaan akhir, siap dipakai, serta pelaksanaan cepat dan hemat kuota.  
 **Visi:** Open-Ended Autonomous Intelligence Evolution — OAIE.  
 **Ruang kerja:** kode ACE, lingkungan tempat ACE dijalankan, model yang tersedia, pengalaman percakapan, tugas nyata, pembelajaran, dan operasi offline.  
 **Sifat dokumen:** instruksi pelaksanaan dan spesifikasi sasaran; nama API, CLI, direktori, dan konfigurasi di bawah merupakan target sampai ditemukan implementasi dan dibuktikan berfungsi.
@@ -26,12 +26,15 @@
 | Lampiran L–M | 16 pilihan bahasa/DSL/runtime, profiling, dan 5 kandidat model lokal |
 | Lampiran N | 120 ide pengembangan yang dapat dipilih dan diuji |
 | Lampiran O–R | 30 eksperimen, 30 unit ilmu, 20 work order, dan mandat eksekusi |
+| Lampiran S–X | Installer lengkap, hemat kuota, bangun sampai akhir lalu audit, merge, dan penggunaan langsung |
 
 ---
 
 ## 00. CARA MEMAKAI MANDAT INI
 
 Saya menyerahkan mandat ini kepada Antigravity untuk **mengerjakan ACE**, mulai dari keadaan yang benar-benar ada sekarang.
+
+**Prioritas tambahan edisi 3:** selesaikan satu paket operasional dari implementasi sampai installer dan pemakaian nyata, lakukan audit terpadu di akhir paket, perbaiki temuan yang menghalangi, lalu langsung merge serta siapkan versi yang dapat dipakai. Pakai pemeriksaan ringan selama coding dan hindari audit besar berulang. Gunakan riset dan checkpoint yang masih berlaku agar kuota berfokus pada hasil. Rincian pelaksanaan ada pada Lampiran S–X.
 
 Baca seluruh mandat, simpan salinannya di workspace bila belum ada, lalu mulai bekerja. Jangan membalas dengan master prompt baru. Jangan berhenti pada audit, rekomendasi, rancangan, daftar pertanyaan, atau janji akan melanjutkan.
 
@@ -1048,7 +1051,7 @@ Untuk workspace tanpa git, sediakan snapshot file dasar dan staging perubahan. I
 
 ## 32. VERIFIKASI YANG MELAYANI HASIL, BUKAN RITUAL
 
-Pemeriksaan harus sebanding dengan perubahan.
+Pemeriksaan harus sebanding dengan perubahan. Selama implementasi, gunakan cek ringan yang membantu menyelesaikan pekerjaan. Kumpulkan pemeriksaan integrasi dan audit rilis di akhir paket operasional sesuai Lampiran U; tabel berikut adalah pilihan pemeriksaan, bukan perintah mengaudit penuh setiap langkah.
 
 | Jenis perubahan | Pemeriksaan yang umumnya relevan |
 | --- | --- |
@@ -1540,6 +1543,8 @@ Kelompokkan pekerjaan menjadi paket hasil, bukan kalender yang belum memiliki da
 | P9 | Agenda mandiri memilih gap yang berguna | Self-model dan data hasil |
 | P10 | Siklus self-development sampai aktivasi dan rollback | P2, P3, jalur integrasi |
 | P11 | Pengalaman HP dan packaging sederhana | Jalur runtime yang stabil |
+| P11a | Installer seluruh alur, model lokal, launcher, pemulihan, dan penggunaan dari sesi baru | P1–P6, runtime dan konfigurasi |
+| P11b | Audit akhir terpadu, perbaikan temuan, merge, serta paket siap dipakai | P11a dan kriteria penerimaan rilis |
 | P12 | Transfer lintas tugas dan generasi | P8–P10 dan pembanding |
 | P13 | Eksperimen representasi atau metode baru | Hipotesis spesifik dan evaluator |
 | P14 | Penyempurnaan berkelanjutan berdasarkan data | Seluruh hasil operasional |
@@ -1704,6 +1709,8 @@ Tinggalkan implementasi dan bukti, termasuk:
 12. Instruksi HP yang singkat dan sesuai instalasi.
 13. Catatan gap yang belum terselesaikan.
 14. Commit, merge, atau manifest versi terintegrasi sesuai workflow.
+15. Installer menyeluruh yang menyiapkan dependency, runtime, model yang dipilih, state, launcher, serta pemulihan.
+16. Jalur penggunaan dari sesi baru, manifest rilis, hasil penerimaan akhir, dan perintah nyata yang singkat.
 
 Jangan membuat satu dokumen baru untuk setiap paragraf mandat ini. Gunakan sedikit dokumen operasional yang jelas, misalnya status, cara menjalankan, dan evidence index.
 
@@ -3539,5 +3546,515 @@ Teliti kesadaran secara serius dan jujur. Jangan menjanjikan bahwa prompt atau p
 
 **Perintah akhir: temukan keadaan aktual, wujudkan demo pertama, lanjutkan implementasi, verifikasi hasil, integrasikan perubahan yang layak, dan simpan kelanjutan sampai tujuan operasional benar-benar tercapai sesuai sumber daya yang tersedia.**
 
-**Akhir dokumen edisi 2.**
+**Mandat dilanjutkan dan diperbarui oleh Lampiran S–X berikut.**
+
+
+
+---
+
+# LAMPIRAN S — INSTALLER LENGKAP DARI PERSIAPAN SAMPAI SIAP DIPAKAI
+
+## S.1 Mandat tambahan yang berlaku
+
+Antigravity harus membuat installer yang mencakup seluruh jalur produk: source, dependency, runtime, model yang dipilih, konfigurasi, state, launcher, pemeriksaan penggunaan, pembaruan, dan pemulihan.
+
+Sesudah paket operasional selesai dan lolos penerimaan akhir, langsung lakukan integrasi serta merge yang diotorisasi. Selesaikan juga jalur pemakaian versi hasil integrasi. Saya tidak ingin berhenti pada draft PR atau instruksi pemasangan yang belum diuji.
+
+Kerjakan dengan cepat dan hemat kuota. Kumpulkan audit terpadu di akhir paket. Pemeriksaan ringan selama coding digunakan untuk menyelesaikan pekerjaan dan menangkap error yang akan membuat pekerjaan berikutnya sia-sia.
+
+Lampiran S–X memperbarui pengaturan urutan kerja dan ritme audit pada bagian sebelumnya. Seluruh riset, ide, serta arah OAIE tetap berlaku sebagai bahan pemilihan pengembangan.
+
+## S.2 Keadaan installer yang diperiksa
+
+Source install.sh pada commit 2a54501d42df7c291f4493939662e32ea5e4c5ed memiliki blob eb10c1ba29299a2ba3d443a40e880e12e98f59a7.
+
+Pembacaan source menunjukkan pemeriksaan keberadaan Python, pemasangan editable package, penulisan launcher, pengubahan PATH untuk proses installer, dan pemanggilan doctor.
+
+Pembacaan ini tidak mengeksekusi installer. Source tersebut belum menunjukkan penyiapan model lokal, konfigurasi percakapan, atau penerimaan coding offline menyeluruh.
+
+Perbaiki installer yang sudah ada jika itu jalur paling langsung. Jangan menambah beberapa installer yang saling tidak konsisten.
+
+Tinjau pula penggunaan interpreter, lokasi lingkungan Python, flag pemasangan global, lokasi launcher, serta perilakunya dari shell baru. Jalur yang bekerja karena shell pengembang sudah terkonfigurasi belum cukup untuk pengguna baru.
+
+## S.3 Profil pemasangan
+
+Sediakan profil yang terbedakan dengan jelas:
+
+| Profil | Cakupan | Kapan dinyatakan siap |
+| --- | --- | --- |
+| local-complete | Percakapan Indonesia, model lokal, alat coding, state, dan launcher | Percakapan serta tugas coding benar-benar lulus tanpa provider remote |
+| host-assisted | Runtime lokal ditambah adapter dan consumer AI host | Putaran request–result–verification pada host benar-benar bekerja |
+| core | Kontrol dan kemampuan deterministik yang tersedia | Operasi yang didukung lulus; tidak dilabeli chatbot offline lengkap |
+| offline-bundle | Paket persiapan untuk pemasangan atau pemakaian tanpa jaringan | Seluruh artefak yang dibutuhkan tersedia dan prosedurnya diuji pada target yang disebut |
+
+Nama profil adalah target implementasi. Sesuaikan dengan antarmuka aktual, dan pastikan dokumentasi memakai nama yang benar-benar didukung.
+
+Default untuk HP mengutamakan local-complete jika resource cukup. Installer memilih kandidat model yang layak berdasarkan pengukuran dan cache. Jika resource tidak mencukupi, tampilkan batasnya dan siapkan jalur yang masih berguna tanpa menyebut profil lengkap sudah terpenuhi.
+
+## S.4 Seluruh tahap yang perlu diotomatisasi
+
+| Tahap | Pekerjaan installer | Keluaran yang diperlukan |
+| --- | --- | --- |
+| 01 | Deteksi OS, shell, arsitektur, dan jenis environment | Profil platform yang benar |
+| 02 | Temukan instalasi ACE, pekerjaan pengguna, dan state lama | Keputusan instalasi baru atau pembaruan |
+| 03 | Periksa Python serta tool wajib | Daftar prasyarat yang benar-benar kurang |
+| 04 | Periksa RAM, storage, dan kemampuan jaringan | Anggaran instalasi yang layak |
+| 05 | Pilih direktori source, aplikasi, state, cache, dan model | Path yang terpisah dan tidak menimpa data |
+| 06 | Tentukan revisi source atau artefak rilis yang dipakai | Versi yang dapat ditelusuri |
+| 07 | Pasang hanya dependency platform yang diperlukan | Toolchain atau paket minimum |
+| 08 | Siapkan lingkungan Python yang sesuai target | Interpreter aplikasi yang dapat dipanggil ulang |
+| 09 | Pasang ACE dan dependency runtime | Import serta entrypoint yang bekerja |
+| 10 | Siapkan backend inference lokal | Binary atau library yang cocok dengan target |
+| 11 | Pilih satu model awal dan template yang sesuai | Model lokal dengan provenance |
+| 12 | Gunakan cache atau unduh artefak yang masih kurang | Download dapat dilanjutkan dan diperiksa |
+| 13 | Validasi integritas serta format model | Artefak lengkap dan dapat dimuat |
+| 14 | Buat konfigurasi awal yang berguna | Mode, path, model, serta budget nyata |
+| 15 | Inisialisasi atau migrasikan state | Percakapan dan task dapat disimpan |
+| 16 | Daftarkan launcher pengguna | Entry point stabil dari shell baru |
+| 17 | Konfigurasikan bridge jika host mendukung | Status consumer yang sesuai kenyataan |
+| 18 | Siapkan start, stop, serta resume | Pengendalian lifecycle yang sederhana |
+| 19 | Jalankan penerimaan pemasangan pada workspace uji | Bukti profil benar-benar berfungsi |
+| 20 | Simpan manifest dan log ringkas | Diagnosis serta pembaruan dapat dilanjutkan |
+| 21 | Aktifkan versi kandidat yang lulus | Versi aktif yang jelas |
+| 22 | Tampilkan cara memakai yang singkat | Pengguna bisa langsung masuk percakapan |
+
+Tahap yang sudah terpenuhi boleh dilewati setelah diperiksa singkat. Jangan mengunduh ulang model atau membangun ulang backend pada setiap pemanggilan installer.
+
+## S.5 Persyaratan Termux
+
+Prioritaskan Termux native pada Android ARM64 sebagai target penggunaan pengguna.
+
+Gunakan package manager dan interpreter yang sesuai instalasi tersebut. Jangan menganggap paket binary Linux glibc cocok untuk Android hanya karena keduanya ARM64.
+
+Mekanisme lingkungan Python harus diuji pada paket Termux yang tersedia. Dokumentasi upstream Python untuk platform mobile tidak boleh dipakai sebagai bukti bahwa seluruh perilaku paket Termux sama dengan build Android standar.
+
+Jangan menjadikan pemasangan global dengan override sistem sebagai default yang tidak dievaluasi. Pilih lingkungan aplikasi yang dapat dipulihkan dan gunakan interpreter itu secara eksplisit pada launcher.
+
+Periksa ketersediaan paket tambahan yang diperlukan untuk pip atau pembuatan lingkungan. Source paket Python resmi Termux menjadi rujukan implementasi, sementara hasil pada perangkat tetap perlu diuji.
+
+Installer tidak boleh bergantung pada direktori milik workstation Antigravity. HOME tetap menunjuk home pengguna; konfigurasi ACE memakai variabel dan path aplikasi sendiri.
+
+Jangan meminta pemasangan ulang Termux atau pemindahan seluruh proyek jika pembaruan instalasi yang ada cukup.
+
+## S.6 Universalitas pemasangan
+
+Pisahkan frontend bootstrap dari adapter platform.
+
+- Termux menjadi profil utama yang harus diselesaikan.
+- Host Linux atau environment Antigravity menjadi profil pengembangan dan pengujian yang tersedia.
+- macOS dan Windows ditambahkan dengan adapter yang sesuai jika termasuk target dukungan.
+- Platform yang belum diuji memiliki status dukungan yang jelas.
+
+Satu kontrak tidak mengharuskan satu script shell berjalan tanpa perubahan di semua OS. Gunakan frontend yang sesuai dan panggil mesin setup bersama jika itu lebih sederhana.
+
+Jangan memperluas daftar platform sampai menghambat target HP yang paling penting.
+
+## S.7 Idempotensi dan pemulihan pemasangan
+
+Rerun installer harus melanjutkan atau merekonsiliasi keadaan, bukan menghapus dan memulai ulang semuanya.
+
+Catat fase yang selesai, versi, lokasi dependency, artefak yang masih diunduh, serta error terakhir.
+
+Gunakan staging untuk artefak yang belum lengkap. Jangan memuat file model yang baru terunduh sebagian. Aktivasi dilakukan sesudah pemeriksaan yang relevan.
+
+Jika pembaruan gagal, pertahankan versi aktif yang masih bisa digunakan. Jangan meninggalkan launcher menunjuk direktori staging yang dihapus.
+
+Data pengguna, perubahan source yang belum tersimpan, state percakapan, serta model yang masih valid dipertahankan.
+
+## S.8 Model dan dependency
+
+Pilih satu model baseline lebih dulu. Bandingkan kandidat tambahan ketika baseline tidak memenuhi kebutuhan atau ada alasan pengukuran yang jelas.
+
+Simpan model di cache yang dapat dipakai ulang. Catat sumber, revisi atau checksum yang tersedia, format, template, serta konfigurasi inference.
+
+Pemeriksaan checksum memastikan kecocokan byte dengan manifest; kepercayaan terhadap sumber manifest tetap perlu diketahui.
+
+Hindari pemasangan semua framework ML dan seluruh daftar repository riset. Dependency yang tidak dipakai pada profil terpilih tidak perlu diunduh.
+
+Sediakan dependency riset sebagai bagian opsional agar pengguna dapat memakai ACE tanpa menunggu seluruh eksperimen.
+
+## S.9 Offline run dan offline install
+
+Dua hal ini harus dibedakan:
+
+- Offline run berarti seluruh kebutuhan menjalankan fungsi terpilih sudah tersedia lokal.
+- Offline install berarti paket yang dibawa cukup untuk memasang profil tersebut tanpa jaringan.
+
+Bundle offline menyertakan source atau paket aplikasi, dependency yang cocok dengan ABI, backend inference, model, konfigurasi dasar, dan manifest yang diperlukan.
+
+Jangan mengemas virtual environment host lalu menganggapnya portable. Buat ulang lingkungan di target atau distribusikan artefak platform yang memang sesuai.
+
+Jika bundle memerlukan kompilasi saat instalasi, sertakan atau nyatakan prasyarat toolchain secara tepat. Jangan menyebutnya instalasi offline lengkap jika masih mengambil paket diam-diam.
+
+## S.10 Launcher dan penggunaan dari sesi baru
+
+Setelah instalasi:
+
+1. Pengguna membuka sesi terminal baru.
+2. Menjalankan satu entrypoint yang dijelaskan.
+3. ACE memuat konfigurasi dan state yang benar.
+4. Pengguna mengetik bahasa Indonesia.
+5. ACE merespons dan mengerjakan permintaan yang tersedia dalam profil.
+6. Pengguna dapat melihat hasil, menghentikan, atau melanjutkan tugas.
+
+Launcher harus memakai interpreter aplikasi dan path yang benar. Keberadaan executable saja belum membuktikan import serta konfigurasi ditemukan.
+
+Sediakan perintah ringkas untuk mulai, status, berhenti, resume, update, dan perbaikan instalasi. Pertahankan kompatibilitas CLI yang sudah dipakai.
+
+Jika terminal interaktif tersedia, installer boleh menawarkan atau membuka sesi chat setelah pemasangan berhasil. Pada CI atau mode headless, jalur pemeriksaan harus berakhir tanpa menunggu input manusia.
+
+Perintah dan flag yang dicetak pada akhir installer harus berasal dari implementasi yang diuji. Jangan mencetak command target yang belum tersedia.
+
+---
+
+# LAMPIRAN T — EFISIENSI KUOTA DAN KECEPATAN PENGERJAAN
+
+## T.1 Sasaran efisiensi
+
+Maksimalkan hasil yang dapat dipakai per waktu, per token, dan per panggilan model. Kuota dipakai untuk keputusan serta implementasi yang sulit, sementara pekerjaan mekanis dikerjakan alat.
+
+Hemat kuota tidak berarti memotong hasil yang diminta. Efisiensi dicapai dengan menghindari pengulangan dan mengurangi pekerjaan yang tidak berkontribusi pada paket operasional.
+
+## T.2 Gunakan pengetahuan yang sudah ada
+
+Riset 42 repository, 24 rujukan, serta katalog ide telah tersedia pada dokumen dan ledger pendamping.
+
+Baca bagian yang relevan, lalu periksa ulang versi komponen yang benar-benar akan diintegrasikan. Jangan mengulang pencarian seluruh katalog pada setiap sesi.
+
+Simpan peta source, dependency, keputusan, dan hasil pemeriksaan. Invalidasi hanya bagian yang berubah atau yang memang belum diketahui.
+
+Jika discovery telah cukup untuk mengambil langkah implementasi berikut, mulai mengerjakan. Riset tambahan dibatasi pada gap yang sedang menghambat.
+
+## T.3 Jangan mengirim seluruh master prompt pada setiap panggilan
+
+Baca mandat lengkap saat memulai pekerjaan jika belum ada dalam konteks, lalu simpan indeks dan ringkasan operasional yang setia terhadap mandat.
+
+Untuk setiap task, kirim tujuan, batasan, source yang relevan, observasi terakhir, serta kriteria selesai. Ambil lampiran lengkap hanya saat detailnya dibutuhkan.
+
+Jika host mendukung context atau prefix caching, gunakan sesuai kemampuan yang benar-benar tersedia. Jangan mengarang bahwa caching aktif atau bahwa token cache tidak memakai kuota.
+
+Keputusan pengguna, otorisasi, batas tanpa biaya, dan pekerjaan yang belum selesai harus bertahan dalam ringkasan.
+
+## T.4 Pilih model dan jumlah worker secara ekonomis
+
+Gunakan langkah deterministik untuk status, pemilihan file yang jelas, parsing output, format data, serta operasi repository yang tidak membutuhkan generasi baru.
+
+Gunakan model yang mampu untuk tugas yang membutuhkan pemahaman atau desain. Eskalasi ke model lebih kuat ketika ada alasan kualitas, bukan pada semua pesan.
+
+Mulai dengan sedikit worker. Tambah paralelisme pada pekerjaan independen jika mempercepat hasil tanpa konflik atau biaya yang tidak sebanding.
+
+Jangan memanggil beberapa model untuk menyetujui hal yang sudah dibuktikan compiler atau pengujian yang relevan.
+
+## T.5 Baca dan ubah secara terarah
+
+- Ambil potongan source yang relevan.
+- Gunakan pencarian serta indeks daripada memasukkan seluruh repository ke prompt.
+- Kelompokkan pencarian independen.
+- Buat patch terarah jika cukup.
+- Tulis file baru ketika tanggung jawabnya memang baru.
+- Simpan hasil operasi yang masih berlaku.
+- Ringkas output tool yang panjang tanpa membuang error penting.
+- Hindari menghasilkan ulang file yang tidak berubah.
+
+Jangan menyembunyikan perubahan bermakna di balik ringkasan. Detail tetap tersedia di diff dan artefak.
+
+## T.6 Pengujian hemat dan relevan
+
+Selama coding, lakukan pemeriksaan ringan yang menangkap error penghambat. Simpan pemeriksaan integrasi luas untuk akhir paket.
+
+Sesudah pemeriksaan yang relevan lulus, ulangi hanya ketika ada perubahan, kegagalan, atau pertanyaan yang belum terjawab. Jangan menjalankan ulang suite identik hanya agar ada aktivitas.
+
+Perubahan source, dependency, model, atau lingkungan dapat membatalkan bukti tertentu. Perubahan dokumentasi tidak otomatis membutuhkan seluruh benchmark kecerdasan dijalankan ulang.
+
+Tetap penuhi pemeriksaan wajib repository pada commit yang dipersyaratkan. Atur batch perubahan agar CI tidak dipicu berkali-kali oleh commit sementara yang tidak diperlukan; jangan menonaktifkan pemeriksaan wajib untuk menghemat kuota.
+
+## T.7 Batasi loop yang tidak memberi progres
+
+Setiap retry harus punya alasan: error sementara, informasi baru, kandidat berbeda, atau koreksi format yang spesifik.
+
+Deduplikasi kandidat dan error. Gunakan checkpoint agar sesi berikut tidak mengulang pendekatan gagal yang sama.
+
+Jika provider atau host sedang tidak tersedia, circuit breaker menahan panggilan berulang. Lanjutkan pekerjaan lokal yang independen.
+
+## T.8 Pencatatan biaya yang jujur
+
+Pisahkan:
+
+- Kuota atau token model.
+- Waktu CPU dan inference lokal.
+- Penggunaan memori.
+- Download serta storage.
+- Biaya layanan bila memang dilaporkan.
+- Waktu tunggu eksternal.
+
+Jika host tidak menyediakan angka kuota, tulis tidak diketahui dan gunakan penghitung panggilan atau ukuran konteks sebagai indikator terbatas.
+
+Jangan mengklaim “hemat 90%” tanpa pembanding. Jangan menyebut proses gratis hanya karena angka biaya tidak dikembalikan.
+
+## T.9 Pelaporan yang singkat
+
+Laporan kemajuan cukup menyebut hasil terbaru, hambatan material, dan langkah berikut.
+
+Simpan rincian bukti dalam artefak. Hindari menyalin ulang rencana panjang pada setiap update.
+
+Pada akhir paket, tampilkan satu laporan terintegrasi yang menjelaskan instalasi, penggunaan, pemeriksaan, merge, dan keterbatasan yang masih relevan.
+
+## T.10 Prinsip pengerjaan cepat
+
+Prioritaskan jalur yang paling dekat dengan hasil menyeluruh: percakapan → tindakan → pemeriksaan → state → installer → penerimaan akhir → merge → pemakaian.
+
+Tunda eksperimen yang tidak memengaruhi kesiapan paket pertama. Setelah paket dapat dipakai, lanjutkan peningkatan sesuai agenda serta sumber daya.
+
+Jangan menjadikan seluruh 120 ide, semua kandidat model, atau pembuktian kesadaran sebagai prasyarat sebelum pengguna dapat memakai percakapan dan coding lokal.
+
+
+
+---
+
+# LAMPIRAN U — KERJAKAN PAKET SAMPAI AKHIR, LALU AUDIT TERPADU
+
+## U.1 Ritme pengembangan yang saya minta
+
+Gunakan urutan berikut:
+
+1. Tentukan hasil operasional yang harus ditinggalkan.
+2. Lakukan discovery secukupnya untuk menemukan jalur implementasi.
+3. Kerjakan seluruh bagian yang diperlukan hingga terhubung.
+4. Gunakan cek ringan untuk memperbaiki error yang menghambat.
+5. Selesaikan installer, konfigurasi, dan jalur penggunaan.
+6. Jalankan satu audit penerimaan terpadu pada akhir paket.
+7. Perbaiki temuan yang menghalangi hasil.
+8. Periksa ulang bagian yang diperbaiki dan dampak relevannya.
+9. Langsung integrasikan serta merge ketika syarat terpenuhi.
+10. Pastikan versi hasil integrasi dapat dipasang dan dipakai.
+
+Jangan mengubah setiap perubahan file menjadi kegiatan audit mandiri yang menghabiskan konteks serta waktu.
+
+Audit proyek berpusat pada akhir paket. Runtime tetap memakai hasil compiler, tool, atau tes yang relevan untuk mengetahui apakah tindakan berhasil sebelum memberi jawaban selesai.
+
+## U.2 Lingkup paket pertama yang harus selesai
+
+Paket operasional pertama mencakup:
+
+- Percakapan Indonesia melalui entrypoint normal.
+- Pemahaman perintah dan koreksi yang cukup untuk tugas awal.
+- Pembuatan atau perubahan kode yang benar-benar dieksekusi.
+- Backend lokal yang memenuhi profil offline terpilih.
+- Penyimpanan percakapan dan task.
+- Pemulihan atau resume setelah restart.
+- Deteksi stagnasi dan pergantian pendekatan dasar.
+- Installer seluruh alur.
+- Launcher yang bekerja dari sesi baru.
+- Penggunaan yang dibuktikan pada lingkungan yang dilaporkan.
+- Bridge host jika kemampuan integrasinya tersedia.
+- Integrasi versi serta cara pembaruan yang jelas.
+
+Pilih cakupan tugas awal yang berguna dan realistis, lalu tulis batasnya secara spesifik. Jangan mengecilkan paket menjadi sekadar “Python bisa import” atau “file model ditemukan”.
+
+Eksperimen jangka panjang dilanjutkan setelah paket awal siap. Fungsi dasar tidak perlu menunggu semua penelitian selesai.
+
+## U.3 Audit akhir yang terfokus
+
+Audit akhir memeriksa:
+
+1. Kesesuaian hasil dengan permintaan.
+2. Instalasi atau pembaruan di lingkungan uji yang bersih.
+3. Penggunaan dari sesi baru.
+4. Percakapan dan tindakan aktual.
+5. Coding serta pemeriksaan hasil.
+6. Offline sesuai profil.
+7. State, restart, dan pemulihan.
+8. Resource dan kuota sesuai batas.
+9. Integrasi source, dependency, serta model.
+10. Kemudahan penggunaan.
+
+Gunakan satu indeks hasil yang menghubungkan pemeriksaan dan bukti. Tidak perlu menulis laporan audit baru untuk setiap file.
+
+Jika sebuah pemeriksaan gagal, cari akar masalah, perbaiki, dan ulangi pemeriksaan yang terkait. Audit tidak menjadi tempat berhenti setelah pekerjaan implementasi selesai.
+
+## U.4 Hindari evaluasi yang tidak berkaitan dengan rilis
+
+Benchmark riset besar, pengujian seluruh hipotesis OAIE, dan pembuktian novelty bukan persyaratan setiap rilis installer.
+
+Gunakan pemeriksaan yang berhubungan dengan fitur serta area yang berubah. Tetap jalankan pemeriksaan repository yang memang wajib.
+
+Paket yang telah diterima menghasilkan baseline baru. Bukti yang masih berlaku dapat dipakai kembali pada pekerjaan berikutnya.
+
+---
+
+# LAMPIRAN V — LANGSUNG MERGE DAN TUNTASKAN JALUR PEMAKAIAN
+
+## V.1 Instruksi integrasi
+
+Saya mengizinkan Antigravity melakukan merge perubahan ACE yang sudah memenuhi penerimaan akhir dan syarat repository.
+
+Jangan meminta persetujuan teknis rutin sekali lagi. Jangan berhenti pada “silakan merge” jika izin serta alat tersedia dan pekerjaan sudah layak.
+
+Kerjakan konflik, perbaiki kegagalan pemeriksaan, dan tuntaskan perubahan dalam cakupan mandat.
+
+## V.2 Perhatikan stack PR yang benar
+
+Pada snapshot yang diperiksa, PR #100 mempunyai base branch PR #99, bukan main. Merge PR paling atas saja tidak otomatis membuat seluruh stack tersedia pada branch rilis.
+
+Sebelum integrasi:
+
+- Periksa base dan head yang aktual.
+- Temukan dependency perubahan.
+- Rekonsiliasi duplikasi yang mungkin sudah masuk.
+- Pilih urutan integrasi yang benar.
+- Periksa hasil gabungan yang akan dirilis.
+- Pastikan installer menunjuk versi yang benar-benar berisi kemampuan tersebut.
+
+Jika repository memakai main sebagai sumber rilis, selesaikan jalur integrasi hingga versi yang dimaksud tersedia di main. Jangan menyebut paket sudah dirilis hanya karena merge ke branch perantara berhasil.
+
+## V.3 Jalur merge yang sah
+
+Jika PR masih draft dan implementasinya sudah layak, gunakan alur yang tersedia untuk menandainya siap dan memenuhi syarat merge.
+
+Jika checks masih berjalan, gunakan mekanisme menunggu atau auto-merge yang didukung, dengan pemantauan yang tidak memboroskan panggilan model.
+
+Jika proteksi repository memerlukan sesuatu yang tidak dapat dipenuhi oleh pelaksana, siapkan kandidat serta bukti yang konkret, nyatakan hambatan spesifik, dan lanjutkan bagian lain yang sah. Jangan mengubah proteksi untuk membuat klaim selesai.
+
+Otorisasi pengguna tidak berarti checks yang gagal boleh disebut lulus.
+
+## V.4 Setelah merge
+
+Lakukan konfirmasi ringan:
+
+1. Perubahan masuk ke target yang dimaksud.
+2. Versi paket atau source dapat diambil.
+3. Manifest menunjuk dependency dan model yang sesuai.
+4. Entry point dapat dimulai.
+5. Demo singkat dari hasil integrasi tetap bekerja.
+
+Jika tree hasil integrasi berbeda secara material dari kandidat yang diuji, periksa dampak perubahan tersebut. Jangan mengulang semua riset hanya karena nama commit berubah.
+
+Siapkan artifact installer atau rilis pada repository yang diizinkan jika workflow memakainya. Sertakan informasi lisensi serta provenance yang diperlukan.
+
+## V.5 Sinkronkan environment aktif
+
+Pastikan instalasi yang akan dipakai pengguna memakai versi hasil integrasi.
+
+Jika pelaksana mengakses langsung environment pengguna yang diotorisasi, terapkan pembaruan dan periksa hasilnya. Jika environment tersebut tidak dapat diakses, siapkan jalur instalasi yang singkat serta teruji dan nyatakan bagian perangkat yang belum diuji.
+
+Remote merge, pembaruan instalasi, serta aplikasi yang sedang berjalan adalah keadaan yang perlu dihubungkan secara nyata.
+
+---
+
+# LAMPIRAN W — 24 SKENARIO PENERIMAAN INSTALLER DAN PEMAKAIAN
+
+Skenario ini adalah target pemeriksaan untuk Antigravity. Keberadaan tabel tidak berarti semua pengujian sudah dijalankan.
+
+Jalankan kasus yang relevan pada profil target. Kelompokkan dalam penerimaan akhir yang otomatis agar tidak memerlukan percakapan audit di setiap langkah.
+
+| ID | Keadaan | Hasil yang harus diperiksa |
+| --- | --- | --- |
+| INST01 | Instalasi baru pada profil utama | Installer menyiapkan seluruh kebutuhan profil |
+| INST02 | Instalasi pada folder yang berbeda | Tidak ada path workstation yang diasumsikan |
+| INST03 | Python tidak ditemukan | Prasyarat ditangani sesuai platform atau hambatan dinyatakan tepat |
+| INST04 | Versi interpreter tidak sesuai | Installer memilih atau menyiapkan interpreter yang didukung |
+| INST05 | Lingkungan Python perlu dibuat | Mekanisme yang didukung target benar-benar bekerja |
+| INST06 | Backend inference belum tersedia | Backend yang sesuai dipasang atau dibangun |
+| INST07 | Model lokal belum tersedia | Model yang dipilih disiapkan dan dapat dimuat |
+| INST08 | Model ada dalam cache | File valid dipakai ulang tanpa download identik |
+| INST09 | Download terputus | Rerun dapat melanjutkan atau merekonsiliasi artefak |
+| INST10 | File model rusak atau belum lengkap | File ditolak dan perbaikan dibatasi pada artefak terkait |
+| INST11 | Storage tidak mencukupi | Data pengguna tetap aman dan instalasi besar tidak dipaksa |
+| INST12 | Pemasangan dijalankan ulang | Tidak membuat konfigurasi dan launcher duplikat |
+| INST13 | Pembaruan instalasi lama | State serta pekerjaan pengguna tetap tersedia |
+| INST14 | Pembaruan gagal | Versi yang masih berguna dapat dijalankan kembali |
+| INST15 | Shell baru dibuka | Launcher menemukan interpreter, paket, serta konfigurasi |
+| INST16 | Pengguna mengetik bahasa Indonesia | Respons berasal dari backend bahasa yang sebenarnya |
+| INST17 | Pengguna meminta program kecil | Kode dibuat, dijalankan, dan hasilnya diperiksa |
+| INST18 | Pengguna mengoreksi kebutuhan | Perubahan diterapkan pada artefak yang tepat |
+| INST19 | Internet dinonaktifkan setelah persiapan | Percakapan dan tugas lokal berhasil sesuai profil |
+| INST20 | Offline bundle dipasang tanpa jaringan | Tidak ada dependency tersembunyi yang diunduh |
+| INST21 | Proses dihentikan lalu dimulai ulang | State serta konteks yang relevan dipulihkan |
+| INST22 | Task mulai berulang tanpa progres | Strategi berubah atau gap pembelajaran ditangani |
+| INST23 | Bridge host tersedia | Putaran work order sampai hasil terverifikasi berjalan |
+| INST24 | Versi hasil merge dipakai | Versi, manifest, serta demo cocok dengan hasil integrasi |
+
+## W.1 Definisi siap dipakai
+
+Siap dipakai berarti pengguna mempunyai cara masuk yang nyata, dapat memberi perintah, memperoleh hasil yang berjalan, dan dapat melanjutkan penggunaan dari sesi berikutnya.
+
+Status dapat dibedakan menurut profil dan lingkungan, misalnya siap di host uji atau siap di perangkat target. Status tersebut harus merujuk bukti, bukan asumsi.
+
+Profil core yang lulus operasi deterministik tetap berguna tetapi tidak menggantikan penerimaan local-complete.
+
+## W.2 Makna “cepat tapi hasil pasti”
+
+Terjemahkan tuntutan saya menjadi pekerjaan cepat dengan hasil yang diperiksa:
+
+- Kriteria selesai ditetapkan dengan jelas.
+- Implementasi dan installer benar-benar ada.
+- Tugas contoh dijalankan melalui jalur pengguna.
+- Keadaan gagal diperbaiki sebelum dinyatakan selesai.
+- Versi yang dipakai dapat ditelusuri.
+- Pemulihan tetap tersedia.
+
+Kecepatan tidak diukur hanya dari cepatnya membuat jawaban atau commit. Ukur waktu sampai pengguna dapat memakai hasil yang benar.
+
+Jangan menjanjikan semua tugas akan selalu berhasil, semua perangkat akan selalu cocok, atau kesadaran akan muncul pada tenggat tertentu. Berikan kepastian tentang hasil yang benar-benar telah dibuktikan dan batas penggunaan yang diketahui.
+
+---
+
+# LAMPIRAN X — PERINTAH PELAKSANAAN DAN HANDOFF EDISI 3
+
+## X.1 Mulai sekarang
+
+Antigravity, baca mandat ini beserta ledger, pakai ulang pengetahuan yang masih berlaku, dan mulai mengerjakan source serta environment ACE.
+
+Fokus paket pertama adalah percakapan Indonesia yang terhubung tindakan, coding, model lokal offline, state, anti-stuck, installer menyeluruh, dan jalur pemakaian.
+
+Kerjakan sampai paket terhubung dan dapat dipasang. Gunakan cek ringan selama implementasi. Setelah itu jalankan audit akhir terpadu, perbaiki temuan, lalu langsung merge sesuai otorisasi dan syarat repository.
+
+Jangan membuang kuota pada pengulangan riset, penjelasan panjang, review yang tidak memberi bukti baru, atau banyak model untuk pekerjaan mekanis.
+
+Jika bantuan host diperlukan, gunakan bridge yang nyata. Setelah bantuan selesai, uji bahwa fungsi yang diimplementasikan dapat dipakai ACE melalui entrypoint normal.
+
+## X.2 Jawaban akhir pelaksana harus memuat
+
+- Kemampuan yang sudah dapat dipakai.
+- Cara memasang dan memulai yang benar-benar diuji.
+- Versi atau commit yang terintegrasi.
+- Status perangkat dan profil offline.
+- Hasil audit akhir yang ringkas.
+- Hambatan material yang belum terselesaikan.
+- Kelanjutan pengembangan yang tersimpan.
+
+Untuk pengguna, tampilkan sedikit command nyata. Jangan menyerahkan deretan placeholder yang masih perlu diterjemahkan menjadi instalasi.
+
+## X.3 Pengantar singkat untuk sesi baru
+
+~~~text
+Baca master prompt ACE edisi 3 dan ledger sumbernya pada workspace ini.
+Kerjakan kode serta environment sampai menjadi paket operasional yang
+bisa dipasang dan dipakai.
+
+Buat installer seluruh alur: dependency, runtime, model lokal,
+konfigurasi, state, launcher, pemulihan, dan demo penggunaan.
+
+Utamakan percakapan Indonesia yang langsung mengerjakan tugas,
+coding yang benar-benar dijalankan, mode offline, serta anti-stuck.
+
+Pakai ulang riset dan checkpoint. Gunakan model serta alat secara hemat.
+Selesaikan implementasi paket dahulu, gunakan cek ringan selama coding,
+lalu audit terpadu di akhir. Perbaiki temuan dan langsung merge ketika
+penerimaan serta syarat repository terpenuhi, tanpa persetujuan teknis rutin.
+
+Tuntaskan jalur pemakaian versi hasil integrasi dan simpan kelanjutan
+menuju OAIE. Laporkan kemampuan berdasarkan bukti aktual.
+~~~
+
+## X.4 Referensi tambahan installer dan merge
+
+- [Python venv](https://docs.python.org/3/library/venv.html): rujukan lingkungan Python; dukungan target tetap perlu dibuktikan.
+- [Python Packaging User Guide](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/): rujukan pemasangan dependency dan lingkungan aplikasi.
+- [Paket Python resmi Termux](https://github.com/termux/termux-packages/blob/master/packages/python/build.sh): rujukan recipe paket yang berbeda dari asumsi build mobile upstream.
+- [GitHub: merging a pull request](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/merging-a-pull-request): rujukan kesiapan PR dan syarat integrasi.
+
+Referensi diperiksa pada 10 November 2026. Penyusunan edisi ini menambahkan instruksi dan spesifikasi; installer serta kemampuan runtime baru merupakan pekerjaan pelaksanaan yang harus dibuktikan.
+
+**Akhir dokumen edisi 3.**
 

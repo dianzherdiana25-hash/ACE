@@ -1112,6 +1112,21 @@
       "title": "Lua manual",
       "url": "https://www.lua.org/manual/5.4/manual.html",
       "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "Python venv",
+      "url": "https://docs.python.org/3/library/venv.html",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "Python packaging virtual environments",
+      "url": "https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "GitHub pull request merge requirements",
+      "url": "https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/merging-a-pull-request",
+      "inspection": "DOCUMENTATION_PAGE_READ"
     }
   ],
   "additional_source_samples": [
@@ -1138,6 +1153,38 @@
     "Direct GitHub readme API route was unsupported; repository file fetches were used instead.",
     "Direct Codeberg fetch failed; Zig GitHub migration pointer and official language overview were inspected.",
     "README and source excerpts do not prove Termux compatibility or complete dependency licensing.",
-    "No model inference, training or external ACE capability experiment was executed during documentation research."
-  ]
+    "No model inference, training or external ACE capability experiment was executed during documentation research.",
+    "Termux Python wiki returned an access-denied page; official Termux package recipe was read instead."
+  ],
+  "document_revision": 3,
+  "revision_3": {
+    "base_head": "2a54501d42df7c291f4493939662e32ea5e4c5ed",
+    "target_pr_at_revision": 100,
+    "scope": "Installer mandate, implementation speed, quota efficiency, final integrated audit, merge and usable installation; documentation changes only",
+    "installer_source": {
+      "url": "https://github.com/dianzherdiana25-hash/ACE/blob/2a54501d42df7c291f4493939662e32ea5e4c5ed/install.sh",
+      "blob_sha": "eb10c1ba29299a2ba3d443a40e880e12e98f59a7",
+      "inspection": "SOURCE_READ",
+      "executed": false
+    },
+    "termux_python_recipe": {
+      "url": "https://github.com/termux/termux-packages/blob/master/packages/python/build.sh",
+      "blob_sha": "3f5be20aa7a9498c8d4c3537d1e5d01bb8de1936",
+      "inspection": "SOURCE_READ",
+      "built_or_installed": false
+    },
+    "requested_outcomes": [
+      "complete_installer",
+      "merge_after_final_acceptance",
+      "ready_to_use",
+      "quota_efficiency",
+      "minimal_repeated_work",
+      "build_then_final_integrated_audit",
+      "fast_delivery_with_measured_results"
+    ],
+    "installer_acceptance_scenarios": 24,
+    "installer_implemented_in_this_session": false,
+    "runtime_capabilities_implemented_in_this_session": false,
+    "implementation_owner_requested": "Antigravity"
+  }
 }
