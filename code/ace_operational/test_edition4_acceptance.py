@@ -28,7 +28,13 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 from ace_operational.autonomy_loop import AutonomyOrchestrator
-from ace_operational.coding_loop import CodingAgentLoop, StalePreimageError, atomic_write_verified, compute_file_sha256
+from ace_operational.coding_loop import (
+    CodingAgentLoop,
+    FencingLeaseViolationError,
+    StalePreimageError,
+    atomic_write_verified,
+    compute_file_sha256,
+)
 from ace_operational.language import ConversationalEngine
 from ace_operational.models_backend import ModelRouter, extract_and_repair_json
 from ace_operational.store import OperationalStore, StaleLeaseError
@@ -653,6 +659,88 @@ class Edition4IntegratedAcceptanceTests(unittest.TestCase):
             self.assertEqual(item["status"], "PASS", item["deliverable_id"])
             self.assertGreater(len(item["checks_executed"]), 0, item["deliverable_id"])
             self.assertGreater(len(item["artifacts"]), 0, item["deliverable_id"])
+
+    # =========================================================================
+    # 8. VERIFIED GAPS ELIMINATION & LIVE GGUF/SUBPROCESS CRASH SUITE (G01-G12)
+    # =========================================================================
+    def test_g01_g06_g10_live_local_gguf_inference_and_streaming_discovery(self):
+        disc = self.router.discover_local_gguf()
+        self.assertTrue(disc["ready"])
+        self.assertGreaterEqual(len(disc["valid_models"]), 1)
+        res = self.router.generate_text([
+            {"role": "user", "content": "Katakan satu kalimat halo ramah dalam Bahasa Indonesia"}
+        ], max_tokens=40)
+        self.assertIn(res["backend_used"], ("local-gguf-server", f"local-gguf:{disc['valid_models'][0]['name']}"))
+        self.assertGreater(len(res["text"].strip()), 0)
+
+    def test_g04_g11_fencing_lease_violation_rejection(self):
+        target = self.ws / "projects" / "fence_test.py"
+        atomic_write_verified(target, "v = 1\n", expected_lease_epoch=5, current_lease_epoch=5)
+        self.assertEqual(target.read_text(encoding="utf-8"), "v = 1\n")
+        with self.assertRaises(FencingLeaseViolationError):
+            atomic_write_verified(target, "v = 2\n", expected_lease_epoch=5, current_lease_epoch=4)
+
+    def test_g08_cold_subprocess_crash_recovery_and_execution(self):
+        t = self.store.create_task(
+            title_id="Tugas Crash Subprocess",
+            user_request="Uji restart proses dingin",
+            normalized_goal="Uji pemulihan tugas terputus",
+        )
+        self.store.update_task(t["task_id"], status="ACTIVE")
+        self.store.close()
+
+        code = f'''
+import sys
+from pathlib import Path
+from ace_operational.store import OperationalStore
+from ace_operational.coding_loop import CodingAgentLoop
+
+ws = Path({str(self.ws)!r})
+with OperationalStore(ws) as store:
+    recovered = store.recover_interrupted_tasks()
+    assert len(recovered) >= 1, "Gagal memulihkan tugas aktif yang terputus"
+    task = store.get_task({t["task_id"]!r})
+    assert task["status"] == "PAUSED", f"Status salah: {{task['status']}}"
+    coding = CodingAgentLoop(store)
+    res = coding.execute_coding_task(task["task_id"], domain="expense_tracker")
+    assert res["task"]["status"] == "COMPLETED"
+    print("SUBPROCESS_RECOVERY_SUCCESS")
+'''
+        proc = subprocess.run(
+            [sys.executable, "-c", code],
+            cwd=str(REPO_ROOT),
+            env={**os.environ, "PYTHONPATH": str(REPO_ROOT / "code")},
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr + proc.stdout)
+        self.assertIn("SUBPROCESS_RECOVERY_SUCCESS", proc.stdout)
+
+        self.store = OperationalStore(self.ws)
+        self.addCleanup(self.store.close)
+        t_after = self.store.get_task(t["task_id"])
+        self.assertEqual(t_after["status"], "COMPLETED")
+
+    def test_g05_g09_worker_order_lifecycle_with_receipt(self):
+        self.autonomy.set_worker_consumer_active(True)
+        t = self.store.create_task(
+            title_id="Delegasi Worker F14",
+            user_request="Hitung konversi suhu",
+            normalized_goal="Fungsi konversi suhu Celsius ke Fahrenheit terverifikasi",
+        )
+        target = self.ws / "projects" / "worker_test" / "suhu.py"
+        atomic_write_verified(target, "# Placeholder\n")
+        d_res = self.autonomy.dispatch_work_order(
+            parent_task_id=t["task_id"],
+            objective="Buat fungsi celsius_ke_fahrenheit(c) dan assert hasil",
+            target_file=target,
+            worker_kind="host_bridge_worker",
+        )
+        wo_id = d_res["work_order"]["work_order_id"]
+        res = self.autonomy.execute_worker_order_lifecycle(wo_id, worker_id="test_worker_1")
+        self.assertTrue(res["accepted"])
+        self.assertEqual(self.store.get_task(t["task_id"])["status"], "COMPLETED")
 
 
 if __name__ == "__main__":

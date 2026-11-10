@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Run ACE from a source checkout without installing a package."""
 from pathlib import Path
 import sys

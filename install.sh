@@ -120,12 +120,21 @@ if [[ "${FREE_DISK_MB}" -lt "${MIN_DISK_MB}" ]]; then
 fi
 echo "✔ Ruang disk tersedia: ${FREE_DISK_MB} MB (minimal ${MIN_DISK_MB} MB)"
 
-# 5. Backup existing operational database for safe migration & rollback (INST13, INST14)
+# 5. Backup existing operational database for safe migration & rollback (INST13, INST14, G12)
 BACKUP_DB=""
 if [[ -f "${TARGET_DIR}/ace_operational.sqlite3" ]]; then
     BACKUP_DB="${TARGET_DIR}/ace_operational.sqlite3.bak"
-    cp -f "${TARGET_DIR}/ace_operational.sqlite3" "${BACKUP_DB}"
-    echo "✔ Cadangan state operasional dibuat: ${BACKUP_DB}"
+    python3 - "${TARGET_DIR}/ace_operational.sqlite3" "${BACKUP_DB}" << 'PYEOF'
+import sqlite3, sys
+src, dst = sys.argv[1], sys.argv[2]
+try:
+    with sqlite3.connect(src) as conn, sqlite3.connect(dst) as bck:
+        conn.backup(bck)
+except Exception:
+    import shutil
+    shutil.copy2(src, dst)
+PYEOF
+    echo "✔ Cadangan state operasional (WAL-safe) dibuat: ${BACKUP_DB}"
 fi
 
 # 6. Optional Python Editable Package Install (skipped in fast/offline mode or if already importable)
@@ -141,10 +150,12 @@ fi
 # 7. Create portable CLI launchers in BIN_DIR (INST01, INST02, INST12)
 cat << EOF > "${BIN_DIR}/ace"
 #!/usr/bin/env bash
+export PATH="\${HOME}/.local/bin:\${PATH}"
 export ACE_WORKSPACE="\${ACE_WORKSPACE:-${TARGET_DIR}}"
 export ACE_PROFILE="\${ACE_PROFILE:-${PROFILE}}"
 export ACE_MODEL_CACHE="\${ACE_MODEL_CACHE:-${MODEL_CACHE}}"
 export ACE_OFFLINE="\${ACE_OFFLINE:-${OFFLINE_MODE}}"
+export ACE_LLAMA_SERVER_URL="\${ACE_LLAMA_SERVER_URL:-http://127.0.0.1:8081}"
 export PYTHONPATH="${SCRIPT_DIR}/code:\${PYTHONPATH:-}"
 exec python3 "${SCRIPT_DIR}/ace.py" "\$@"
 EOF
@@ -152,17 +163,19 @@ chmod +x "${BIN_DIR}/ace"
 
 cat << EOF > "${BIN_DIR}/ace-autonomy"
 #!/usr/bin/env bash
+export PATH="\${HOME}/.local/bin:\${PATH}"
 export ACE_WORKSPACE="\${ACE_WORKSPACE:-${TARGET_DIR}}"
 export PYTHONPATH="${SCRIPT_DIR}/code:\${PYTHONPATH:-}"
 exec python3 "${SCRIPT_DIR}/autonomy.py" "\$@"
 EOF
 chmod +x "${BIN_DIR}/ace-autonomy"
 
-export PATH="${BIN_DIR}:${PATH}"
+export PATH="${BIN_DIR}:${HOME}/.local/bin:${PATH}"
 export ACE_WORKSPACE="${TARGET_DIR}"
 export ACE_PROFILE="${PROFILE}"
 export ACE_MODEL_CACHE="${MODEL_CACHE}"
 export ACE_OFFLINE="${OFFLINE_MODE}"
+export ACE_LLAMA_SERVER_URL="${ACE_LLAMA_SERVER_URL:-http://127.0.0.1:8081}"
 
 # 8. Initialize / Migrate Operational Store & Verify Model Cache (INST07-INST14)
 PYTHONPATH="${SCRIPT_DIR}/code:${PYTHONPATH:-}" python3 - "${TARGET_DIR}" "${PROFILE}" "${OFFLINE_MODE}" "${MODEL_CACHE}" << 'PYEOF'
