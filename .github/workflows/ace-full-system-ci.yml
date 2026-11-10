@@ -68,6 +68,12 @@ jobs:
           ace_research_reptransfer.test_reptransfer
           ace_research_reptransfer.test_audit_diagnostics
           -v
+      - name: Verify self-development lease ownership (positive and adversarial controls)
+        run: >-
+          python -m unittest
+          ace_self_dev.test_lease_ownership
+          ace_self_dev.test_self_dev_loop
+          -v
       - name: Verify deterministic composition replay
         run: |
           python -m ace_capability_evolution.compositional --output /tmp/composition.json
