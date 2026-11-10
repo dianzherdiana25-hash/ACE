@@ -1,0 +1,123 @@
+{
+  "candidate_deployed": false,
+  "note": "Public synthetic diagnostics, not a sealed evaluator. Behavioral hashes only detect identical outputs on a fixed public grid, not mathematical equivalence across all inputs. No model identity verification, network invocation or candidate promotion.",
+  "records": [
+    {
+      "candidate_python_executed": false,
+      "candidate_source_sha256": "2df40618cdd0a248d52c331cf13147301a93b3a6c42cd613891692e3c75809d5",
+      "connected_to_active_algorithm": false,
+      "declared_provider_label_unverified": "PowerBrain (GPT-5 Engine)",
+      "hypothesis_id": "hyp_anti_stagnation_multi_task",
+      "provider_verified": false,
+      "reason": "invalid source syntax",
+      "scientific_status": "NOT_ASSESSED",
+      "status": "UNSUPPORTED_STATIC_GRAMMAR",
+      "timestamp": "2026-11-09 18:04:20 UTC"
+    },
+    {
+      "candidate_python_executed": false,
+      "candidate_source_sha256": "9aa9cbe2e7f03b33528be7b0a404231679b9b966e250e86904a6e1b90c97bc40",
+      "connected_to_active_algorithm": false,
+      "declared_provider_label_unverified": "Pollinations AI (Multi-Model)",
+      "hypothesis_id": "hyp_expand_dispatch_73",
+      "provider_verified": false,
+      "public_behavior_digest_sha256": "d2281349fbecf63a71820ded3c8aa23b4fd2620fcf59b3495302b0050d0bf7d1",
+      "public_diagnostic": {
+        "candidate_python_executed": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "independent_confirmation": 0.0,
+        "public_joint_candidate": 0.0,
+        "public_joint_root": 0.6042,
+        "public_modular_candidate": 0.2083,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.3125,
+        "public_parity_root": 0.4167,
+        "public_probe_count": 96.0,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "status": "PUBLIC_DIAGNOSTIC_ONLY",
+      "timestamp": "2026-11-09 18:44:30 UTC"
+    },
+    {
+      "candidate_python_executed": false,
+      "candidate_source_sha256": "e7b5e666fc9fa13c95d6a65a5a8e57ca935a1cede178b49da86e3615e2219d51",
+      "connected_to_active_algorithm": false,
+      "declared_provider_label_unverified": "PowerBrain (GPT-5/4) / Pollinations",
+      "hypothesis_id": "test_ace_ai",
+      "provider_verified": false,
+      "public_behavior_digest_sha256": "0b7f0d682b2af2b2c13934b347430130fe137ae4c9ded24f3ffe5bfc1ded7aab",
+      "public_diagnostic": {
+        "candidate_python_executed": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "independent_confirmation": 0.0,
+        "public_joint_candidate": 0.5208,
+        "public_joint_root": 0.6042,
+        "public_modular_candidate": 0.5,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.5833,
+        "public_parity_root": 0.4167,
+        "public_probe_count": 96.0,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "status": "PUBLIC_DIAGNOSTIC_ONLY",
+      "timestamp": "2026-11-09 19:37:20 UTC"
+    },
+    {
+      "candidate_python_executed": false,
+      "candidate_source_sha256": "817a6ccaab3727fd6e7c952297a9c6aae4ad3e54c1fa0a47f36d11ce292c4cbd",
+      "connected_to_active_algorithm": false,
+      "declared_provider_label_unverified": "PowerBrain (GPT-5/4) / Pollinations",
+      "hypothesis_id": "hyp_expand_dispatch_95",
+      "provider_verified": false,
+      "public_behavior_digest_sha256": "fba88396b62a78049faad970cda56527c33c16cd7d824aaa31649fef8bd7ddce",
+      "public_diagnostic": {
+        "candidate_python_executed": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "independent_confirmation": 0.0,
+        "public_joint_candidate": 0.7396,
+        "public_joint_root": 0.6042,
+        "public_modular_candidate": 0.6146,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.5938,
+        "public_parity_root": 0.4167,
+        "public_probe_count": 96.0,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "status": "PUBLIC_DIAGNOSTIC_ONLY",
+      "timestamp": "2026-11-09 19:39:57 UTC"
+    },
+    {
+      "candidate_python_executed": false,
+      "candidate_source_sha256": "03046c3d845bbe91823ef93fe74785865fd3d3f672ed5313e0e5f8122573d24d",
+      "connected_to_active_algorithm": false,
+      "declared_provider_label_unverified": "PowerBrain (GPT-5/4) / Pollinations",
+      "hypothesis_id": "hyp_expand_dispatch_96",
+      "provider_verified": false,
+      "public_behavior_digest_sha256": "fba88396b62a78049faad970cda56527c33c16cd7d824aaa31649fef8bd7ddce",
+      "public_behavior_duplicate_of": "hyp_expand_dispatch_95",
+      "public_diagnostic": {
+        "candidate_python_executed": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "independent_confirmation": 0.0,
+        "public_joint_candidate": 0.7396,
+        "public_joint_root": 0.6042,
+        "public_modular_candidate": 0.6146,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.5938,
+        "public_parity_root": 0.4167,
+        "public_probe_count": 96.0,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "status": "PUBLIC_DIAGNOSTIC_ONLY",
+      "timestamp": "2026-11-09 19:41:53 UTC"
+    }
+  ],
+  "records_scored": 5,
+  "release_gate": "BLOCK_RELEASE",
+  "schema": "ace.ask_ai.public_diagnostic.v1",
+  "scientific_status": "NOT_ASSESSED"
+}
