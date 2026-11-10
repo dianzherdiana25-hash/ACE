@@ -18,6 +18,7 @@ from .coordinator import SelfDevelopmentCoordinator
 from .agenda_engine import AgendaEngine
 from .provenance_engine import ProvenanceEngine
 from .state_manager import StateManager
+from .fenced_store import EventConflict, FencedStore, Lease, LeaseRejected
 from .stagnation_detector import (
     BitvectorRegistry,
     StagnationCheckResult,
@@ -70,6 +71,10 @@ __all__ = [
     "AgendaEngine",
     "ProvenanceEngine",
     "StateManager",
+    "EventConflict",
+    "FencedStore",
+    "Lease",
+    "LeaseRejected",
     "BitvectorRegistry",
     "StagnationCheckResult",
     "StagnationDetector",

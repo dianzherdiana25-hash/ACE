@@ -14,8 +14,13 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import shutil
+import sys
 import tempfile
 import unittest
+
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 
 from ace_code_agent.codebase_reader import CodebaseReader
 from ace_code_agent.controller import AutonomousSoftwareResearcher
@@ -413,6 +418,18 @@ class TestPublicStaticProbe(unittest.TestCase):
         self.assertEqual(result.performance_metrics["connected_to_active_algorithm"], 0.0)
         self.assertEqual(result.performance_metrics["candidate_python_executed"], 0.0)
         self.assertIn("PUBLIC_PROBE_COMPLETED", result.rejection_reason)
+
+
+try:
+    from tools.ace_ai_diagnostic import audit_consultations
+except (ImportError, ModuleNotFoundError):
+    import importlib.util
+    _tools_path = _REPO_ROOT / "tools" / "ace_ai_diagnostic.py"
+    _spec = importlib.util.spec_from_file_location("tools.ace_ai_diagnostic", _tools_path)
+    _mod = importlib.util.module_from_spec(_spec)
+    sys.modules["tools.ace_ai_diagnostic"] = _mod
+    _spec.loader.exec_module(_mod)
+    audit_consultations = _mod.audit_consultations
 
 
 class TestTermuxAiDiagnosticCLI(unittest.TestCase):
