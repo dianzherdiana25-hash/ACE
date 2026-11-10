@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import hmac
 import json
 import os
 from pathlib import Path
@@ -139,8 +140,15 @@ class StateManager:
             return
 
         current_token = lock.get("lock_token", "")
-        if current_token and current_token != token:
-            print(f"[StateManager] Warning: Lock release token mismatch ({current_token} != {token}), releasing anyway")
+        if (
+            not isinstance(current_token, str)
+            or not isinstance(token, str)
+            or not current_token
+            or not hmac.compare_digest(current_token, token)
+        ):
+            # A missing or stale lease token must never release an active owner.
+            # Do not disclose the stored token in diagnostics.
+            raise ConcurrencyLockError("Cannot release research-state lease: invalid owner token")
 
         state.concurrency_lock = {
             "is_locked": False,
