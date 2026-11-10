@@ -3,7 +3,7 @@
 **Untuk:** Antigravity atau agen AI pelaksana yang memiliki akses nyata ke workspace ACE.  
 **Bahasa kerja dan antarmuka pengguna:** Bahasa Indonesia.  
 **Tanggal mandat:** 10 November 2026.  
-**Edisi:** 3 — riset primer, installer menyeluruh, langsung merge setelah penerimaan akhir, siap dipakai, serta pelaksanaan cepat dan hemat kuota.  
+**Edisi:** 4 — seluruh mandat sebelumnya ditambah web localhost bernuansa anime, chat dan cerita aktivitas, penemuan gap, kendali worker AI, frontier pembelajaran, dan pemulihan stagnasi.  
 **Visi:** Open-Ended Autonomous Intelligence Evolution — OAIE.  
 **Ruang kerja:** kode ACE, lingkungan tempat ACE dijalankan, model yang tersedia, pengalaman percakapan, tugas nyata, pembelajaran, dan operasi offline.  
 **Sifat dokumen:** instruksi pelaksanaan dan spesifikasi sasaran; nama API, CLI, direktori, dan konfigurasi di bawah merupakan target sampai ditemukan implementasi dan dibuktikan berfungsi.
@@ -27,6 +27,9 @@
 | Lampiran N | 120 ide pengembangan yang dapat dipilih dan diuji |
 | Lampiran O–R | 30 eksperimen, 30 unit ilmu, 20 work order, dan mandat eksekusi |
 | Lampiran S–X | Installer lengkap, hemat kuota, bangun sampai akhir lalu audit, merge, dan penggunaan langsung |
+| Lampiran Y–Z | Web anime localhost dengan dua blok dan kontrak aktivitas nyata |
+| Lampiran AA–AB | ACE menemukan gap, mengarahkan AI, belajar hal baru, dan memulihkan stagnasi |
+| Lampiran AC–AD | Penerimaan web dan otonomi, integrasi installer, serta handoff edisi 4 |
 
 ---
 
@@ -35,6 +38,8 @@
 Saya menyerahkan mandat ini kepada Antigravity untuk **mengerjakan ACE**, mulai dari keadaan yang benar-benar ada sekarang.
 
 **Prioritas tambahan edisi 3:** selesaikan satu paket operasional dari implementasi sampai installer dan pemakaian nyata, lakukan audit terpadu di akhir paket, perbaiki temuan yang menghalangi, lalu langsung merge serta siapkan versi yang dapat dipakai. Pakai pemeriksaan ringan selama coding dan hindari audit besar berulang. Gunakan riset dan checkpoint yang masih berlaku agar kuota berfokus pada hasil. Rincian pelaksanaan ada pada Lampiran S–X.
+
+**Prioritas tambahan edisi 4:** sertakan web interaktif localhost bernuansa anime dalam paket pertama. Dua blok utamanya adalah percakapan ACE dan cerita singkat tentang aktivitas aktualnya. Hubungkan penemuan kekurangan, pemilihan pekerjaan AI, frontier pembelajaran, serta anti-stagnasi ke loop operasional yang sama. Rincian terukur ada pada Lampiran Y–AD.
 
 Baca seluruh mandat, simpan salinannya di workspace bila belum ada, lalu mulai bekerja. Jangan membalas dengan master prompt baru. Jangan berhenti pada audit, rekomendasi, rancangan, daftar pertanyaan, atau janji akan melanjutkan.
 
@@ -314,7 +319,7 @@ Bangun potongan menyeluruh berikut dan lanjutkan secara bertahap:
 7. **Pembelajaran yang dipakai ulang:** pelajaran meningkatkan penanganan tugas berbeda.
 8. **Pengembangan diri:** ACE menemukan gap, membuat perubahan, memverifikasi, mengintegrasikan, dan menjalankan versi baru.
 9. **Transfer dan riset OAIE:** kemampuan bertahan lintas keluarga tugas dan generasi.
-10. **Penyempurnaan pengalaman HP:** penggunaan sehari-hari ringkas, jelas, dan responsif.
+10. **Web anime lokal untuk HP:** chat dan cerita aktivitas menjadi antarmuka utama yang ringkas, jelas, dan responsif dalam paket operasional pertama.
 
 Sebagian pekerjaan bisa berjalan bersamaan jika tidak saling mengganggu. Jangan menunggu semua fondasi sempurna sebelum mendemokan tahap pertama.
 
@@ -1339,7 +1344,7 @@ Jika pengujian dilakukan di mesin non-Android, tandai sebagai pengujian host ter
 
 ## 40. ANTARMUKA HP YANG MUDAH DIPAKAI
 
-Mulai dari CLI yang dapat digunakan dengan nyaman. Antarmuka web lokal dapat ditambah setelah alur dasar stabil.
+Sediakan CLI untuk bootstrap dan diagnosis, lalu sertakan web lokal bernuansa anime sebagai antarmuka utama paket operasional pertama. Web memiliki dua blok utama: percakapan ACE dan cerita singkat tentang pekerjaan aktualnya. Rincian desain serta data ada pada Lampiran Y–Z.
 
 Tampilan utama cukup memperlihatkan:
 
@@ -1353,7 +1358,7 @@ Tampilan utama cukup memperlihatkan:
 
 Detail internal seperti epoch, schema, hash, dan traceback berada di tampilan bukti atau debug, bukan memenuhi layar percakapan.
 
-Jika ada web lokal:
+Untuk web lokal:
 
 - Bind localhost sebagai default.
 - Asset tersedia lokal untuk mode offline.
@@ -1545,6 +1550,7 @@ Kelompokkan pekerjaan menjadi paket hasil, bukan kalender yang belum memiliki da
 | P11 | Pengalaman HP dan packaging sederhana | Jalur runtime yang stabil |
 | P11a | Installer seluruh alur, model lokal, launcher, pemulihan, dan penggunaan dari sesi baru | P1–P6, runtime dan konfigurasi |
 | P11b | Audit akhir terpadu, perbaikan temuan, merge, serta paket siap dipakai | P11a dan kriteria penerimaan rilis |
+| P11c | Web localhost bernuansa anime, chat dan cerita aktivitas nyata | Event runtime, API tugas, aset lokal, serta P11a |
 | P12 | Transfer lintas tugas dan generasi | P8–P10 dan pembanding |
 | P13 | Eksperimen representasi atau metode baru | Hipotesis spesifik dan evaluator |
 | P14 | Penyempurnaan berkelanjutan berdasarkan data | Seluruh hasil operasional |
@@ -1644,6 +1650,7 @@ Nama perintah di bawah adalah rancangan. Periksa CLI yang sudah ada, pertahankan
 | Kebutuhan | Contoh antarmuka target |
 | --- | --- |
 | Percakapan | ace chat |
+| Web lokal | ace web |
 | Satu tugas | ace do "buat program pencatat pengeluaran" |
 | Lokal tanpa remote | ace chat --offline |
 | Mulai runtime | ace start |
@@ -1711,6 +1718,8 @@ Tinggalkan implementasi dan bukti, termasuk:
 14. Commit, merge, atau manifest versi terintegrasi sesuai workflow.
 15. Installer menyeluruh yang menyiapkan dependency, runtime, model yang dipilih, state, launcher, serta pemulihan.
 16. Jalur penggunaan dari sesi baru, manifest rilis, hasil penerimaan akhir, dan perintah nyata yang singkat.
+17. Web localhost bernuansa anime dengan chat dan cerita aktivitas aktual yang nyaman dipakai dari HP.
+18. Loop ACE untuk menemukan gap, mengarahkan worker AI, memilih pembelajaran baru, dan menangani stagnasi secara terukur.
 
 Jangan membuat satu dokumen baru untuk setiap paragraf mandat ini. Gunakan sedikit dokumen operasional yang jelas, misalnya status, cara menjalankan, dan evidence index.
 
@@ -3582,7 +3591,7 @@ Sediakan profil yang terbedakan dengan jelas:
 
 | Profil | Cakupan | Kapan dinyatakan siap |
 | --- | --- | --- |
-| local-complete | Percakapan Indonesia, model lokal, alat coding, state, dan launcher | Percakapan serta tugas coding benar-benar lulus tanpa provider remote |
+| local-complete | Percakapan Indonesia, model lokal, alat coding, state, launcher, serta web chat dan cerita | Percakapan serta tugas coding benar-benar lulus tanpa provider remote |
 | host-assisted | Runtime lokal ditambah adapter dan consumer AI host | Putaran request–result–verification pada host benar-benar bekerja |
 | core | Kontrol dan kemampuan deterministik yang tersedia | Operasi yang didukung lulus; tidak dilabeli chatbot offline lengkap |
 | offline-bundle | Paket persiapan untuk pemasangan atau pemakaian tanpa jaringan | Seluruh artefak yang dibutuhkan tersedia dan prosedurnya diuji pada target yang disebut |
@@ -3612,7 +3621,7 @@ Default untuk HP mengutamakan local-complete jika resource cukup. Installer memi
 | 15 | Inisialisasi atau migrasikan state | Percakapan dan task dapat disimpan |
 | 16 | Daftarkan launcher pengguna | Entry point stabil dari shell baru |
 | 17 | Konfigurasikan bridge jika host mendukung | Status consumer yang sesuai kenyataan |
-| 18 | Siapkan start, stop, serta resume | Pengendalian lifecycle yang sederhana |
+| 18 | Siapkan start, stop, resume, serta server web lokal | Lifecycle sederhana dan alamat web aktual |
 | 19 | Jalankan penerimaan pemasangan pada workspace uji | Bukti profil benar-benar berfungsi |
 | 20 | Simpan manifest dan log ringkas | Diagnosis serta pembaruan dapat dilanjutkan |
 | 21 | Aktifkan versi kandidat yang lulus | Versi aktif yang jelas |
@@ -3837,12 +3846,14 @@ Audit proyek berpusat pada akhir paket. Runtime tetap memakai hasil compiler, to
 Paket operasional pertama mencakup:
 
 - Percakapan Indonesia melalui entrypoint normal.
+- Web localhost bernuansa anime dengan blok chat dan cerita aktivitas yang benar-benar terhubung runtime.
 - Pemahaman perintah dan koreksi yang cukup untuk tugas awal.
 - Pembuatan atau perubahan kode yang benar-benar dieksekusi.
 - Backend lokal yang memenuhi profil offline terpilih.
 - Penyimpanan percakapan dan task.
 - Pemulihan atau resume setelah restart.
 - Deteksi stagnasi dan pergantian pendekatan dasar.
+- Penemuan gap, delegasi AI melalui kemampuan yang tersedia, dan antrean pembelajaran yang dapat kembali ke tugas awal.
 - Installer seluruh alur.
 - Launcher yang bekerja dari sesi baru.
 - Penggunaan yang dibuktikan pada lingkungan yang dilaporkan.
@@ -4056,5 +4067,853 @@ menuju OAIE. Laporkan kemampuan berdasarkan bukti aktual.
 
 Referensi diperiksa pada 10 November 2026. Penyusunan edisi ini menambahkan instruksi dan spesifikasi; installer serta kemampuan runtime baru merupakan pekerjaan pelaksanaan yang harus dibuktikan.
 
-**Akhir dokumen edisi 3.**
+**Mandat diperluas melalui Lampiran Y–AD berikut.**
+
+
+
+---
+
+# LAMPIRAN Y — WEB LOCALHOST BERNUANSA ANIME DENGAN DUA BLOK UTAMA
+
+## Y.1 Hasil yang harus dibuat
+
+Antigravity harus membuat web interaktif yang benar-benar terhubung ke runtime ACE dan dapat berjalan pada localhost.
+
+Halaman utama memiliki dua blok yang langsung terlihat:
+
+1. **Ngobrol dengan ACE:** percakapan bahasa Indonesia untuk bertanya, menyuruh pekerjaan, mengoreksi, menghentikan, dan melanjutkan.
+2. **Cerita ACE:** narasi pendek yang menceritakan pekerjaan aktual, temuan, pergantian strategi, atau pelajaran yang sedang diproses ACE.
+
+Saya ingin kesan anime yang hangat dan menarik. Tampilannya tetap ringan dan mudah dipakai dari HP. Cerita menggunakan bahasa sehari-hari, ringkas, dan tidak kaku.
+
+Web ini masuk paket operasional pertama beserta installer. Jangan menyelesaikan halaman visual yang tidak mempunyai hubungan dengan model, task executor, serta state sebenarnya.
+
+## Y.2 Arah visual yang dipilih
+
+Gunakan suasana studio kecil bergaya anime: tenang, sedikit futuristis, dan terasa sebagai tempat berinteraksi dengan ACE.
+
+Buat identitas visual orisinal berupa avatar atau maskot ACE. Gunakan SVG, ilustrasi lokal, atau aset ringan yang sesuai. Tidak perlu memuat video atau ilustrasi besar untuk menyampaikan karakter.
+
+Antigravity dapat menyelesaikan detail visual tanpa menunggu saya memilih warna atau nama komponen.
+
+| Elemen | Target desain awal |
+| --- | --- |
+| Latar | Gelap lembut, sekitar #0C1120 |
+| Permukaan blok | Sekitar #151D31 dengan perbedaan kedalaman yang halus |
+| Teks utama | Sekitar #E9EDFF |
+| Teks pendukung | Sekitar #A9B4D0 |
+| Aksen | Lavender #B9A3FF dan mint #70DDD1 |
+| Garis pembatas | Tipis dan tidak mendominasi |
+| Sudut blok | Membulat, sekitar 18–22 px |
+| Teks percakapan | Nyaman dibaca, target awal sekitar 16 px |
+| Tombol sentuh | Target awal minimal sekitar 44 px pada sisi yang disentuh |
+| Gerak | Transisi pendek, target sekitar 120–180 ms |
+| Ornamen anime | Avatar, ilustrasi kecil, aksen bintang atau panel yang tidak mengganggu isi |
+| Ketika gerak dikurangi | Animasi nonesensial dihentikan atau disederhanakan |
+
+Angka serta warna di atas adalah pilihan desain awal, bukan klaim bahwa hasilnya otomatis memenuhi semua kebutuhan aksesibilitas. Periksa keterbacaan, fokus, ukuran sentuh, dan kontras pada hasil nyata.
+
+## Y.3 Susunan layar HP dan desktop
+
+Di HP, blok chat menjadi bagian paling mudah dijangkau. Blok cerita tetap dapat ditemukan dengan sedikit scroll atau melalui tab yang jelas.
+
+Di desktop, dua blok boleh berdampingan, dengan ruang chat lebih besar daripada cerita.
+
+Gunakan layout yang menyesuaikan lebar. Jangan membuat pengguna menggeser halaman ke samping untuk membaca pesan atau menekan tombol.
+
+Area ketik tetap dapat dipakai ketika keyboard Android terbuka. Riwayat chat dapat digulir tanpa menutupi input atau mengganggu pengguna yang sedang membaca pesan lama.
+
+Periksa lebar layar sempit, orientasi berbeda, safe area, serta perilaku saat teks dan kode panjang. Pilih breakpoint dari hasil pengujian, bukan hanya screenshot desktop.
+
+## Y.4 Blok Ngobrol dengan ACE
+
+Blok chat mencakup:
+
+- Riwayat percakapan yang tersimpan.
+- Area ketik dan tombol kirim.
+- Status singkat model serta mode lokal atau host.
+- Respons yang dapat muncul bertahap jika backend mendukung.
+- Hasil pekerjaan serta tautan artefak yang dapat dibuka.
+- Kontrol hentikan atau lanjutkan tugas yang relevan.
+- Pesan kegagalan yang dapat dipahami.
+- Penanda ketika jawaban atau hasil masih diproses.
+
+Saat saya memberi perintah, pesan dikirim ke jalur pemahaman dan eksekusi ACE. Chat tidak cukup hanya menghasilkan teks rencana.
+
+Jika saya bertanya status ketika tugas berjalan, jawab dari keadaan aktual dan pertahankan pekerjaan yang masih berlaku.
+
+Jika saya mengoreksi kebutuhan, perbarui task serta langkah berikutnya. Jika saya meminta berhenti, hentikan pekerjaan yang dimaksud dan tunjukkan konfirmasi berdasarkan hasil pengendalian proses.
+
+Beri contoh permintaan singkat pada keadaan kosong, misalnya “Buat program pencatat pengeluaran” atau “Lanjutkan tugas terakhir”. Contoh tersebut boleh membantu memulai, tetapi bukan daftar perintah yang membatasi pemahaman bahasa.
+
+## Y.5 Blok Cerita ACE
+
+Blok cerita menjawab pertanyaan sederhana:
+
+- ACE sedang mengerjakan apa?
+- Apa yang baru ditemukan?
+- Kenapa pendekatannya berubah?
+- Apa yang sedang dipelajari?
+- Hasil apa yang sudah berhasil?
+- Apa yang sedang menunggu sesuatu?
+
+Utamakan satu cerita terkini sepanjang satu atau dua kalimat. Target awal sekitar 15–45 kata; keadaan yang memerlukan konteks tambahan boleh sedikit lebih panjang.
+
+Riwayat singkat dapat memperlihatkan beberapa peristiwa terakhir. Detail teknis panjang berada di panel rincian yang dapat dibuka, bukan memenuhi cerita utama.
+
+Cerita tidak perlu diperbarui setiap token atau setiap heartbeat. Perbarui ketika tahap, hasil, strategi, atau hambatan berubah secara bermakna.
+
+## Y.6 Contoh bahasa cerita dan kondisi pemicunya
+
+Contoh berikut adalah rancangan copy. Ia hanya boleh ditampilkan ketika kondisi yang sesuai benar-benar terjadi.
+
+| Kondisi aktual | Contoh cerita |
+| --- | --- |
+| Tugas baru diterima | “Aku mulai mengerjakan pencatat pengeluaranmu. Sekarang aku menyiapkan bagian penyimpanan datanya.” |
+| Source relevan sedang diperiksa | “Aku sedang membaca bagian yang berkaitan dengan error tadi supaya perbaikannya tepat.” |
+| Kandidat pertama gagal | “Cara pertama belum berhasil. Aku menemukan satu kondisi yang terlewat dan sedang memperbaikinya.” |
+| Strategi benar-benar berubah | “Pendekatan tadi berulang tanpa kemajuan. Aku sedang mencoba memecah masalahnya menjadi bagian yang lebih kecil.” |
+| Gap pengetahuan ditemukan | “Ada bagian yang belum kuketahui. Aku sedang mempelajari contohnya sebelum melanjutkan pekerjaanmu.” |
+| AI host menerima delegasi | “Aku meminta bantuan AI yang tersedia untuk bagian ini. Setelah hasilnya kembali, aku akan memeriksanya.” |
+| Task menunggu host | “Bagian ini masih menunggu bantuan AI. Sementara itu, aku mengerjakan bagian lain yang sudah bisa dilanjutkan.” |
+| Pembelajaran lolos contoh baru | “Cara yang baru dipelajari berhasil pada contoh berbeda. Aku menyimpannya untuk membantu tugas serupa.” |
+| Artefak telah diperiksa | “Programnya sudah berjalan pada contoh yang diperiksa. Kamu bisa membuka hasilnya di sini.” |
+| Tugas dijeda pengguna | “Pekerjaannya sudah kujeda. Kemajuan terakhir tersimpan untuk dilanjutkan nanti.” |
+| Model belum siap | “Model lokal belum siap dipakai. Aku sedang menyiapkan bagian yang diperlukan.” |
+| Tidak ada tugas aktif | “Belum ada pekerjaan baru yang berjalan. Kamu bisa mengajakku ngobrol atau memberi tugas.” |
+
+Jangan menyatakan tugas selesai, pembelajaran berhasil, atau delegasi diterima sebelum ada event yang mendukungnya.
+
+Jangan mengarang aktivitas untuk mengisi layar. Ketika tidak ada pekerjaan bermakna, tampilkan keadaan yang tenang dan jujur.
+
+## Y.7 Cerita tidak membutuhkan panggilan model tambahan secara rutin
+
+Gunakan pemetaan event ke template sebagai jalur utama. Dengan demikian pergantian tahap dan hasil dapat diceritakan tanpa meminta model menulis ulang setiap kejadian.
+
+Ringkasan bahasa oleh model boleh menjadi opsi terbatas ketika manfaatnya jelas, misalnya merangkum pekerjaan panjang yang telah selesai. Batasi frekuensi dan simpan hasilnya agar tidak digenerasi berulang.
+
+Jangan menjalankan reasoning tambahan hanya agar karakter tampak hidup. Respons chat dan narasi aktivitas boleh menggunakan data yang sama, tetapi fungsi keduanya tetap berbeda.
+
+## Y.8 Avatar dan keadaan visual
+
+Avatar dapat memiliki beberapa keadaan sederhana, seperti mendengar, bekerja, belajar, menunggu, dan selesai.
+
+Pilih keadaan dari task serta backend yang nyata. Efek visual tidak menjadi sumber kebenaran status.
+
+Gerakan kecil boleh menambah karakter, tetapi pengguna harus tetap dapat membaca dengan nyaman. Hindari animasi terus-menerus yang berat untuk HP.
+
+Personalisasi anime tidak boleh menggantikan bukti kemampuan. Antarmuka yang menarik harus tetap memperlihatkan ketika model atau worker tidak tersedia.
+
+## Y.9 Alur penggunaan utama
+
+1. Saya membuka alamat lokal yang diberikan installer.
+2. Dua blok utama terlihat dan status backend dimuat.
+3. Saya mengirim permintaan dalam bahasa Indonesia.
+4. Chat mengonfirmasi konteks yang diperlukan dan ACE mulai bekerja.
+5. Cerita mengikuti perubahan pekerjaan secara ringkas.
+6. Hasil yang terverifikasi muncul sebagai jawaban dan artefak.
+7. Saya dapat memberi koreksi, bertanya status, berhenti, atau melanjutkan.
+8. Setelah refresh atau restart yang didukung, konteks penting tetap tersedia.
+
+Membuka ulang halaman tidak boleh dengan sendirinya mengirim ulang tugas yang sudah dijalankan.
+
+## Y.10 Jaga pengalaman tetap sederhana
+
+Tampilkan informasi yang membantu saya memutuskan tindakan. Nama modul, fencing epoch, raw traceback, log prompt, serta hash panjang cukup berada di rincian pengembangan.
+
+Pesan error utama menjelaskan apa yang terjadi dan langkah berikutnya yang berguna.
+
+Gunakan bahasa Indonesia yang natural. Hindari kalimat panjang seperti laporan administratif untuk setiap perubahan status.
+
+Tema anime dapat memberi kepribadian visual. Klaim pengalaman subjektif atau kesadaran tetap mengikuti batas penelitian pada mandat utama.
+
+---
+
+# LAMPIRAN Z — HUBUNGKAN WEB KE RUNTIME DAN EVENT AKTUAL
+
+## Z.1 Satu mesin ACE untuk CLI dan web
+
+CLI dan web harus memakai task engine, state, model router, serta memori yang sama. Jangan membuat chatbot web terpisah yang tidak mengetahui pekerjaan runtime.
+
+Gunakan komponen yang sudah ada jika sesuai. Pisahkan tanggung jawab dengan kontrak, tanpa harus membuat satu package baru untuk setiap tabel berikut.
+
+| Komponen | Tanggung jawab |
+| --- | --- |
+| Frontend lokal | Dua blok, input, respons, kontrol task, dan tampilan artefak |
+| API lokal | Menerima pesan dan kontrol, membaca status, serta mengirim event |
+| Kendali ACE | Memahami tujuan, memilih langkah, mendelegasikan, dan melanjutkan |
+| Executor | Menggunakan alat dan mengembalikan hasil aktual |
+| Penyimpanan | Menjaga percakapan, task, event, dan checkpoint |
+| Proyektor cerita | Mengubah event bermakna menjadi cerita pendek |
+| Worker AI | Menghasilkan bantuan melalui adapter yang benar-benar tersedia |
+
+Pekerjaan model atau tool yang lama tidak boleh membuat status dan kontrol berhenti tidak dapat diakses.
+
+## Z.2 Stack web yang ringan
+
+Periksa backend dan frontend yang sudah tersedia.
+
+Untuk paket awal, HTML/CSS/JavaScript dengan aset lokal dapat memadai. Jika framework sudah dipakai dan memberikan manfaat, gunakan tanpa membangun ulang fondasi.
+
+FastAPI atau backend lain boleh dipilih jika kompatibel dan memang membantu integrasi. Jangan menjadikan Node.js atau framework besar sebagai kebutuhan runtime HP jika frontend dapat didistribusikan sebagai aset statis.
+
+Jika frontend memerlukan build, siapkan hasil build dalam paket instalasi yang sesuai. Pengguna tidak perlu mengunduh seluruh toolchain frontend untuk membuka halaman yang sudah dibangun.
+
+Defaultkan API dan frontend pada origin yang sama untuk menyederhanakan jalur lokal.
+
+## Z.3 Contoh kontrak API yang harus diimplementasikan
+
+Nama route ini adalah target rancangan. Cocokkan dengan API yang ditemukan dan dokumentasikan route yang benar-benar bekerja.
+
+| Operasi | Contoh route | Perilaku |
+| --- | --- | --- |
+| Keadaan runtime | GET /api/status | Status model, task, mode, dan kemampuan saat ini |
+| Riwayat percakapan | GET /api/conversations/{id} | Pesan dan rujukan task yang dapat ditampilkan |
+| Pesan pengguna | POST /api/chat | Terima pesan, deduplikasi ID klien, dan mulai jalur ACE |
+| Event runtime | GET /api/events | Stream atau daftar event setelah cursor tertentu |
+| Keadaan task | GET /api/tasks/{id} | Kemajuan, hasil, dan hambatan task |
+| Kontrol task | POST /api/tasks/{id}/control | Pause, stop, atau resume sesuai implementasi |
+| Artefak | GET /api/artifacts/{id} | Hasil dalam cakupan yang diotorisasi |
+| Cerita terkini | GET /api/story | Proyeksi cerita dan rujukan event |
+
+Penerimaan request berbeda dari keberhasilan pekerjaan. Jangan mengisi respons request dengan hasil tool yang belum dijalankan.
+
+## Z.4 Stream, reconnect, dan pemulihan
+
+SSE dapat menjadi pilihan untuk event dari backend ke browser. WebSocket boleh digunakan bila pola interaksinya memang membutuhkan. Polling terarah dapat menjadi fallback.
+
+Gunakan ID atau sequence event yang stabil. Saat koneksi kembali, lanjutkan dari cursor atau lakukan sinkronisasi status jika history yang diperlukan sudah dipangkas.
+
+Deduplikasi event yang diterima ulang. Jangan membuat cerita baru atau mengulang efek kerja hanya karena browser reconnect.
+
+Gabungkan event rutin dan batasi history di memori browser. Cursor yang tidak dikenal menghasilkan sinkronisasi yang jelas.
+
+Heartbeat transport dipisahkan dari progres task. Koneksi yang hidup tidak berarti tugas mengalami kemajuan.
+
+## Z.5 Contoh envelope event
+
+Contoh ini adalah spesifikasi data, bukan rekaman aktivitas ACE yang telah terjadi.
+
+~~~json
+{
+  "schema": "ace.activity.v1",
+  "event_id": "EXAMPLE_EVENT",
+  "sequence": 17,
+  "task_id": "EXAMPLE_TASK",
+  "kind": "STRATEGY_CHANGED",
+  "occurred_at": "2026-11-10T15:00:00Z",
+  "summary_data": {
+    "previous_strategy": "pendekatan pertama",
+    "observation": "hasil yang sama berulang tanpa informasi baru",
+    "next_step": "membuat reproduksi yang lebih kecil"
+  },
+  "evidence_refs": ["EXAMPLE_EVIDENCE"],
+  "origin": "ACE_CONTROLLER"
+}
+~~~
+
+Timestamp, task, sequence, dan evidence pada runtime harus berasal dari kejadian aktual. Event yang belum memiliki bukti hasil tidak boleh dirender sebagai keberhasilan.
+
+Cerita dapat menyimpan teks hasil render, ID event asal, task, serta waktu pembaruan. Simpan cukup informasi agar isi cerita dapat ditelusuri.
+
+## Z.6 Chat dan kontrol yang tidak menggandakan efek
+
+Beri pesan pengguna ID yang stabil pada klien. Jika submit diulang akibat koneksi, server mengembalikan keadaan request yang sama atau merekonsiliasinya.
+
+Tombol kirim menampilkan keadaan yang jelas. Pengguna tetap dapat mengirim koreksi atau pertanyaan status sesuai kemampuan runtime.
+
+Kontrol berhenti mengirim permintaan ke backend, lalu menampilkan keadaan yang dikonfirmasi. Jangan mengubah tampilan menjadi “berhenti” sementara proses masih terus berjalan tanpa keterangan.
+
+Menutup tab tidak otomatis harus membatalkan task. Tentukan lifecycle dari runtime, bukan keberadaan halaman browser.
+
+## Z.7 Lokal pada mesin yang benar
+
+Jika ACE berjalan di Termux pada HP, localhost yang dibuka di browser HP mengarah ke server pada HP tersebut.
+
+Jika server berjalan di mesin Antigravity atau cloud, alamat localhost pada HP tidak menunjuk ke mesin itu. Gunakan preview atau akses jarak jauh yang memang disediakan jika diperlukan, dan nyatakan mode tersebut.
+
+Untuk penggunaan offline yang diminta, jalur utama adalah frontend, backend, model, serta state berada lokal pada perangkat yang dipakai.
+
+Installer mencetak alamat dan port aktual. Jika port pilihan terpakai, tangani konflik dan tampilkan alamat yang benar.
+
+## Z.8 Aset serta akses lokal
+
+Simpan CSS, JavaScript, font yang dipilih, avatar, dan aset dekoratif secara lokal. Halaman tidak boleh membutuhkan CDN saat offline.
+
+Bind loopback sebagai default. Akses dari jaringan lain menjadi konfigurasi tersendiri, sesuai kebutuhan yang diotorisasi.
+
+Validasi asal request yang mengubah state, cakupan file, dan identitas sesi sesuai desain lokal. Jangan menaruh secret provider dalam frontend.
+
+Render teks percakapan, kode, dan narasi dengan cara yang tidak mengeksekusi markup tak tepercaya. Artefak dibuka melalui rujukan yang diketahui server, bukan pembacaan path bebas dari browser.
+
+## Z.9 Sumber teknis tambahan
+
+- [MDN: server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).
+- [MDN: prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion).
+- [FastAPI: static files](https://fastapi.tiangolo.com/tutorial/static-files/).
+
+Rujukan membantu memilih mekanisme, bukan bukti bahwa integrasi web ACE telah diimplementasikan.
+
+
+
+---
+
+# LAMPIRAN AA — ACE MENEMUKAN KEKURANGAN, MENGARAHKAN AI, DAN MEMILIH PEMBELAJARAN
+
+## AA.1 Peran ACE yang harus diwujudkan
+
+ACE menjadi pengendali agenda dan alur kerja. Model lokal, AI host, atau provider lain membantu sesuai kemampuan yang benar-benar tersedia.
+
+ACE harus mampu:
+
+1. Mengumpulkan bukti kesulitan dari pekerjaan aktual.
+2. Menentukan kemampuan yang kurang atau belum terbukti.
+3. Memilih perbaikan atau pembelajaran yang paling relevan.
+4. Menentukan apakah bekerja sendiri atau memakai bantuan AI.
+5. Memberi tugas yang jelas kepada worker.
+6. Memeriksa hasil dan meminta revisi bila perlu.
+7. Menerapkan perubahan yang layak.
+8. Mencoba kembali tujuan pengguna.
+9. Menyimpan pelajaran dan memilih langkah selanjutnya.
+
+Dengan demikian saya tidak perlu terus menjadi penghubung manual antara setiap masalah ACE dan AI yang membantunya.
+
+## AA.2 Titik awal dari source yang diperiksa
+
+Pembacaan dilakukan pada snapshot afd0d27e64a4ba487c6c617bc8372307d5b2fe44. Ini pemeriksaan source, bukan hasil eksekusi pada HP.
+
+| Source | Yang terlihat pada pemeriksaan | Pengembangan yang diperlukan |
+| --- | --- | --- |
+| code/ace_self_dev/diagnostic_engine.py | Diagnosis menilai task konfirmasi yang diberikan dan memilih performa terlemah | Perluas observasi ke tugas pengguna, coding, model, alat, serta kesehatan integrasi |
+| code/ace_self_dev/stagnation_detector.py | Ada pemeriksaan duplikasi source, bitvector prediksi, patience window, dan kehabisan strategi | Hubungkan hasilnya ke pemilihan aksi serta progres task nyata |
+| code/ace_cognition/meta_curriculum.py | Ada generator beberapa task family berbasis oracle yang ditulis dalam source | Tambahkan curriculum dari gap nyata; jangan menyebut variasi oracle tetap sebagai penemuan umum |
+| code/ace_code_agent/ai_advisor.py | Adapter memakai ask-ai dan meminta snippet aritmetika murni; provider upstream dinyatakan belum terverifikasi | Tambahkan kontrak delegasi untuk pekerjaan yang lebih umum dan verifikasi kemampuan worker |
+| code/ace_mission | Snapshot menyediakan schema dan jalur mission bus | Pakai atau adaptasikan untuk siklus tugas, hasil, dan kelanjutan |
+
+Jangan menghapus batas workflow riset simbolik agar tampak mendukung coding umum. Buat perluasan atau adapter yang jelas untuk jenis pekerjaan yang berbeda.
+
+## AA.3 Sumber penemuan kekurangan
+
+Kekurangan dapat ditemukan dari:
+
+- Permintaan pengguna yang belum selesai.
+- Kegagalan alat atau program.
+- Koreksi pengguna.
+- Ketidaksesuaian hasil dengan kriteria.
+- Kelemahan yang muncul berulang pada keluarga tugas.
+- Model yang gagal memahami negasi atau konteks.
+- Fitur yang ada dalam source tetapi tidak tercapai dari entrypoint.
+- Resource yang tidak cukup.
+- Skill yang tidak berlaku pada dependency sekarang.
+- Prosedur yang bekerja pada contoh lama tetapi gagal pada variasi baru.
+- Worker yang tersedia secara konfigurasi tetapi tidak bekerja.
+- Installer atau web yang hanya berhasil di environment pengembang.
+
+Pisahkan gejala, bukti, dan dugaan penyebab. Kegagalan sekali dapat menghasilkan pertanyaan, tetapi belum otomatis membuktikan kelemahan umum.
+
+## AA.4 Daftar kemampuan dan frontier pengetahuan
+
+Simpan peta kemampuan dengan cakupan, dependency, bukti terakhir, serta batas yang diketahui.
+
+Status awal dapat meliputi:
+
+| Keadaan | Makna |
+| --- | --- |
+| KNOWN_AND_TESTED | Berfungsi pada cakupan yang telah diperiksa |
+| KNOWN_BUT_WEAK | Ada kemampuan, tetapi hasilnya belum memadai |
+| AVAILABLE_UNVERIFIED | Komponen tersedia, belum dibuktikan lewat penggunaan |
+| UNKNOWN_TO_ACE | ACE belum memiliki pengetahuan atau prosedur yang cukup pada konteks ini |
+| MISSING_TOOL_OR_RESOURCE | Hambatan berasal dari alat, model, data, atau environment |
+| NEW_TASK_VARIANT | Variasi yang belum pernah dinilai pada cakupan sebelumnya |
+| LEARNING_IN_PROGRESS | Ada pekerjaan belajar yang terhubung gap |
+| RETEST_REQUIRED | Bukti lama perlu diperbarui karena perubahan yang relevan |
+
+“Belum dipelajari” berarti belum dikuasai atau diverifikasi oleh ACE pada konteks yang disebut. Itu tidak otomatis berarti baru bagi sains.
+
+Sistem tidak dapat mengetahui seluruh hal yang belum diketahuinya. Ia dapat menemukan frontier melalui tugas baru, counterexample, ketidakpastian, dan observasi yang tidak sesuai prediksi.
+
+## AA.5 Record gap yang dapat ditindaklanjuti
+
+Contoh berikut adalah kontrak rancangan, bukan laporan kejadian aktual.
+
+~~~json
+{
+  "schema": "ace.gap.v1",
+  "gap_id": "EXAMPLE_GAP",
+  "parent_task_id": "EXAMPLE_TASK",
+  "trigger": "FAILED_USER_TASK",
+  "capability": "memperbaiki program dengan penyimpanan CSV",
+  "observed_failure": "hasil belum memenuhi kontrak data lama",
+  "suspected_missing_knowledge": "penanganan perubahan schema data",
+  "classification": "KNOWN_BUT_WEAK",
+  "evidence_refs": ["EXAMPLE_EVIDENCE"],
+  "next_probe": "buat contoh kecil yang membedakan dua dugaan penyebab",
+  "learning_goal": "menerapkan migrasi yang mempertahankan data",
+  "completion_condition": "kasus awal dan variasi baru lulus pemeriksaan",
+  "status": "QUEUED"
+}
+~~~
+
+Record runtime memakai bukti yang benar-benar ada. Dugaan tidak disimpan sebagai akar masalah yang sudah terkonfirmasi.
+
+Gap yang sama dideduplikasi dan diperbarui, bukan membuat ratusan task identik.
+
+## AA.6 Pilih gap yang paling berguna
+
+Prioritaskan gap yang:
+
+- Menghalangi pekerjaan pengguna saat ini.
+- Sering menyebabkan kegagalan.
+- Mempengaruhi banyak kemampuan lain.
+- Dapat dipelajari dengan resource yang tersedia.
+- Memiliki eksperimen yang mampu memberi informasi baru.
+- Membantu kontinuitas dan penggunaan sehari-hari.
+
+Seimbangkan pekerjaan mudah dan penting. Jangan terus memilih tugas kecil untuk menghindari masalah utama.
+
+Gap yang memerlukan resource di luar kemampuan saat ini dapat diparkir dengan kondisi melanjutkan. Simpan konteks dan lanjutkan bagian lain yang relevan.
+
+## AA.7 Arti operasional “ACE mengendalikan AI”
+
+Kendali yang dimaksud adalah orkestrasi kerja:
+
+- ACE memilih kapan bantuan AI diperlukan.
+- ACE memilih worker yang mampu mengerjakan jenis tugasnya.
+- ACE menyusun tujuan, konteks, cakupan, dan kriteria hasil.
+- ACE menetapkan budget dan kondisi berhenti.
+- ACE menerima hasil, menilai bukti, dan melanjutkan.
+- ACE meminta revisi atau berpindah strategi jika hasil tidak sesuai.
+
+Kendali ini bergantung pada API, CLI, session driver, atau integrasi host yang nyata. Mandat tidak menciptakan akses ke model privat yang tidak disediakan host.
+
+Gunakan otorisasi yang tersedia dan batas provider yang berlaku. Tidak perlu meminta saya mengirim ulang tugas teknis yang sudah dapat dibentuk oleh ACE.
+
+## AA.8 Putaran delegasi tanpa perantara manual berulang
+
+Implementasikan putaran berikut:
+
+1. Gap atau tujuan menjadi task yang jelas.
+2. Registry menunjukkan worker yang tersedia dan telah diuji.
+3. ACE membentuk work order beserta dasar source.
+4. Adapter mengirim pekerjaan.
+5. Consumer mengakui penerimaan.
+6. Worker mengembalikan hasil atau hambatan.
+7. ACE memeriksa hasil aktual.
+8. ACE menerima, merevisi, atau menolak kandidat.
+9. State, memori, serta agenda diperbarui.
+10. Tugas pengguna dilanjutkan.
+
+Penerimaan oleh worker, selesai dibuatnya kandidat, dan diterimanya hasil oleh ACE adalah kejadian yang berbeda.
+
+Gunakan status bus yang sudah tersedia atau kontrak versi baru yang jelas. Jangan mengganti arti status lama secara diam-diam.
+
+## AA.9 Worker yang dapat diarahkan
+
+Worker dapat berupa:
+
+- Solver atau prosedur deterministik.
+- Model bahasa lokal.
+- Coding agent lokal.
+- AI dalam sesi Antigravity.
+- CLI AI yang terautentikasi dan tersedia.
+- Provider remote yang diotorisasi.
+- Pemeriksa berbasis compiler atau alat.
+
+Compiler tidak perlu diperlakukan sebagai model yang menghasilkan reasoning. Gunakan kemampuan masing-masing sesuai fungsi.
+
+Jika sesi host berakhir dan tidak ada consumer yang tetap hidup, bantuan host tidak lagi otomatis tersedia. Antarmuka serta scheduler harus mengetahui keadaan itu dan mempertahankan pekerjaan lokal.
+
+## AA.10 Menemukan hal baru yang layak dipelajari
+
+Gunakan beberapa jalur:
+
+1. **Dari permintaan:** ada tujuan yang belum dapat diselesaikan.
+2. **Dari counterexample:** strategi lama gagal pada kasus yang sah.
+3. **Dari source:** ada dependency atau API yang belum dipahami.
+4. **Dari prediksi:** hasil tool berbeda dari ekspektasi.
+5. **Dari transfer:** skill berhasil pada satu proyek tetapi gagal pada proyek lain.
+6. **Dari eksplorasi:** sistem memilih pertanyaan baru yang mendukung visi dan memiliki budget.
+7. **Dari perubahan lingkungan:** versi model, tool, atau runtime berganti.
+
+Periksa apakah hal tersebut benar-benar berbeda dari pengalaman lama. Perubahan kata saja tidak perlu membentuk frontier baru.
+
+Tentukan tujuan belajar yang dapat dipakai: memahami kontrak, membuat prosedur, menambah alat, memperbaiki strategi, atau mengembangkan representasi.
+
+## AA.11 Siklus belajar kembali ke pekerjaan pengguna
+
+Gunakan urutan:
+
+~~~text
+Tujuan pengguna
+→ Gap yang didukung bukti
+→ Pertanyaan pembelajaran
+→ Sumber atau eksperimen kecil
+→ Pemahaman dan kandidat prosedur
+→ Pemeriksaan pada variasi baru
+→ Penerapan pada tujuan awal
+→ Memori dan pembaruan kemampuan
+~~~
+
+Jangan menjadikan “sedang belajar” sebagai keadaan tanpa akhir. Ada kondisi selesai, batas resource, dan jalur kembali.
+
+Saat offline, gunakan source, dokumentasi, model, dan eksperimen lokal. Jika sumber baru membutuhkan internet yang tidak tersedia, catat kebutuhan spesifik dan teruskan bagian lain yang dapat dikerjakan.
+
+Kegagalan tetap bernilai sebagai counterexample. Penerimaan skill mengikuti pemeriksaan yang sesuai, tanpa mengubah semua hasil percobaan menjadi fakta.
+
+## AA.12 Hubungkan ke dua blok web
+
+Chat menerima tujuan dan koreksi. Cerita memperlihatkan perubahan bermakna pada loop tersebut.
+
+Contoh jejak yang harus dapat diperiksa:
+
+- Saya memberi tugas.
+- ACE menemukan gap.
+- ACE memilih belajar atau delegasi.
+- Worker atau eksperimen memberi hasil.
+- ACE memeriksa hasil.
+- Pekerjaan awal selesai atau status hambatannya diperbarui.
+
+Teks cerita harus mengikuti jejak itu. Jangan menampilkan “sedang mengendalikan AI” jika request belum diterima consumer.
+
+---
+
+# LAMPIRAN AB — MEMPERBAIKI KEJENUHAN DAN STAGNASI YANG DILAPORKAN
+
+## AB.1 Tangani kejenuhan sebagai masalah operasional
+
+Keluhan pengguna adalah ACE terasa berulang, tidak berkembang, dan tertahan pada satu masalah.
+
+Ubah keluhan tersebut menjadi observasi yang dapat diperiksa: pengulangan kandidat, kemajuan tugas yang tidak berubah, strategi yang tidak berganti, atau pengetahuan yang tidak bertambah dalam penggunaan berikutnya.
+
+Istilah kejenuhan di sini menjelaskan pola kerja sistem. Jangan menganggapnya bukti pengalaman emosional ACE.
+
+Mulai dengan jejak pekerjaan yang tersedia. Jangan menghabiskan sesi dengan audit seluruh sejarah jika beberapa observasi relevan sudah cukup untuk menentukan tindakan perbaikan.
+
+## AB.2 Bedakan jenis stagnasi
+
+| Jenis | Gejala | Respons yang layak dicoba |
+| --- | --- | --- |
+| Duplikasi kandidat | Patch atau source sama berulang | Deduplikasi, perbarui state, pilih kandidat berbeda |
+| Kesetaraan perilaku pada probe | Kandidat berbeda menghasilkan perilaku sama pada contoh yang dinilai | Cari counterexample pembeda atau ganti representasi |
+| Plateau hasil | Metrik pengembangan tidak bergerak | Tinjau batas strategi atau pilih eksperimen baru |
+| Diagnosis salah | Revisi kode tidak menyentuh akar masalah | Perkecil reproduksi dan uji asumsi |
+| Kekurangan informasi | Tidak ada observasi yang membedakan hipotesis | Pilih pembacaan atau eksperimen yang memberi bukti baru |
+| Kekurangan resource | Semua usaha gagal karena model, alat, atau dependency tidak tersedia | Perbaiki environment atau gunakan jalur yang lebih ringan |
+| Workflow promosi belum lengkap | Kandidat tidak pernah mencapai evaluasi hasil yang relevan | Hubungkan evaluator aktual dan pisahkan jenis penerimaan |
+| Curriculum terlalu mudah | Banyak keberhasilan identik tetapi tidak ada transfer | Tambahkan variasi bermakna yang masih dapat dinilai |
+| Curriculum terlalu sulit | Kegagalan total tanpa pembelajaran antara | Bangun subketerampilan atau tangga kesulitan |
+| Agenda tidak berubah | Satu tugas terus dipilih tanpa alasan baru | Gunakan prioritas, kondisi parkir, dan task independen |
+| Metrik semu | Banyak event atau teks baru tanpa hasil berguna | Ukur artefak, counterexample, kemampuan, serta penyelesaian |
+| Runtime tidak responsif | Pekerjaan berjalan tetapi pengguna kehilangan kontrol | Pisahkan jalur interaktif dan pekerjaan berat |
+
+Kesetaraan pada kumpulan probe terbatas tidak membuktikan kesetaraan program secara umum. Gunakan label yang sesuai cakupan.
+
+## AB.3 Gunakan progres yang bermakna
+
+Indikator progres dapat meliputi:
+
+- Bertambahnya perilaku yang benar pada kebutuhan pengguna.
+- Akar masalah yang lebih sempit.
+- Asumsi yang terbantahkan.
+- Counterexample baru yang berguna.
+- Dependency yang akhirnya tersedia.
+- Strategi yang memberi hasil berbeda secara relevan.
+- Skill yang dipakai ulang dengan berhasil.
+- Tugas awal yang selesai.
+- Pemulihan yang menjaga pekerjaan tetap dapat dilanjutkan.
+
+Jumlah loop, panjang jawaban, pergantian nama task, dan heartbeat tidak dijadikan ukuran utama.
+
+Untuk kelas masalah yang belum memiliki skor numerik yang baik, gunakan peristiwa progres bertipe dan bukti singkat. Jangan membuat angka kecerdasan dari hitungan log.
+
+## AB.4 Perluas mekanisme yang sudah ada
+
+Source menunjukkan bahwa ACE telah mempunyai detektor stagnasi. Periksa jalur pemanggilnya dan pastikan keputusan detektor mengubah tindakan.
+
+Telusuri:
+
+1. Siapa yang memasok histori skor atau failure catalog?
+2. Apakah hasil detektor diteruskan ke planner dan scheduler?
+3. Apakah candidate yang dilewati tetap memperbarui alasan serta langkah berikut?
+4. Apakah state bertahan setelah restart?
+5. Apakah pemilihan strategi mengetahui ruang yang sudah dicoba?
+6. Apakah task pengguna tetap menjadi tujuan akhir?
+7. Apakah kondisi eksperimen berubah ketika ada dependency atau model baru?
+
+Jangan membuat detektor kedua hanya karena belum menelusuri sambungan detektor pertama.
+
+## AB.5 Tangga keluar dari kejenuhan
+
+Ketika pengulangan tidak memberi informasi baru, pilih satu langkah yang paling sesuai:
+
+1. Uji kembali asumsi yang paling rapuh.
+2. Buat reproduksi yang lebih kecil.
+3. Baca source atau dokumentasi yang belum diketahui.
+4. Ganti format masalah.
+5. Ganti algoritma pencarian atau strategi diagnosis.
+6. Uji skill lain yang syaratnya cocok.
+7. Pelajari satu subketerampilan yang menghambat.
+8. Delegasikan bagian sulit ke worker yang mampu.
+9. Gunakan kandidat dari archive yang berbeda.
+10. Buat variasi tugas latihan yang relevan.
+11. Kerjakan bagian independen dari tujuan.
+12. Parkir task dengan kondisi melanjutkan yang jelas.
+
+Tidak semua kegagalan memerlukan model yang lebih besar. Kadang perbaikan path, dependency, atau kontrak hasil sudah cukup.
+
+## AB.6 Policy adaptif yang dapat dituning
+
+Gunakan pengaturan awal yang sederhana, misalnya beberapa duplikasi berturut-turut atau jendela tanpa progres memicu penilaian ulang.
+
+Catat jumlah usaha, budget yang terpakai, informasi baru, serta alasan pivot. Tuning dilakukan berdasarkan hasil, bukan keyakinan bahwa satu angka cocok untuk semua task.
+
+Kegagalan satu task tidak otomatis mematikan ACE. Pertahankan percakapan, status, serta pekerjaan independen.
+
+Pengguna tetap dapat menghentikan atau mengubah prioritas. Sistem tidak boleh mempertahankan tugas lama melawan koreksi terbaru.
+
+## AB.7 Memperluas representasi secara terarah
+
+Jika bukti menunjukkan pendekatan tidak cukup mengekspresikan solusi:
+
+- Tentukan kemampuan apa yang hilang.
+- Buat representasi atau operator kandidat dengan semantics yang jelas.
+- Bandingkan dengan komposisi operator lama yang lebih kuat.
+- Hitung biaya pencarian serta data tambahan.
+- Uji pada variasi baru.
+- Simpan hasil negatif jika tidak memberi manfaat.
+
+Jangan menamai ulang operator lama lalu mengklaim terobosan. Jangan menahan seluruh perbaikan produk sampai expressive power umum dapat dibuktikan.
+
+## AB.8 Reset yang mempertahankan pembelajaran
+
+Reset dapat berarti mengosongkan konteks pencarian sementara, mengganti strategi, membuat worktree kandidat baru, atau merekonstruksi cache yang sudah tidak valid.
+
+Reset tidak berarti menghapus seluruh riwayat, skill, source, data pengguna, atau baseline pemulihan.
+
+Simpan pendekatan yang telah dicoba agar sistem tidak mengulangi kegagalan yang sama sesudah reset.
+
+## AB.9 Ukur apakah perbaikannya bekerja
+
+Bandingkan keadaan sebelum dan sesudah pada kumpulan task yang sesuai.
+
+Periksa:
+
+- Usaha duplikat berkurang.
+- Proporsi langkah yang memberi informasi meningkat.
+- Pergantian strategi terjadi dengan alasan yang benar.
+- Tujuan pengguna lebih sering selesai.
+- Retensi tidak merusak kemampuan lama.
+- Kuota dan waktu keseluruhan tidak membengkak tanpa manfaat.
+- State pemulihan dan kendali pengguna tetap bekerja.
+
+Jangan menyebut masalah stagnasi selesai hanya karena ada status atau animasi baru pada web.
+
+## AB.10 Cerita yang menjelaskan pivot
+
+Ketika detektor menemukan pengulangan, cerita dapat menyebut pendekatan lama belum memberi kemajuan dan langkah berbeda yang sedang dilakukan.
+
+Jika task diparkir, jelaskan secara singkat apa yang sedang ditunggu dan pekerjaan lain yang berjalan.
+
+Jika pendekatan baru berhasil, gunakan bukti hasil yang diperiksa. Perubahan cerita mengikuti perubahan pekerjaan, bukan menggantikannya.
+
+
+
+---
+
+# LAMPIRAN AC — INTEGRASI INSTALLER DAN 40 SKENARIO WEB SERTA OTONOMI
+
+## AC.1 Installer harus menyertakan web
+
+Perluas installer menyeluruh agar menyiapkan aset frontend, backend API, konfigurasi alamat, serta launcher web.
+
+Urutan akhir pemasangan:
+
+1. Core, model, state, dan dependency profil telah siap.
+2. Aset web tersedia lokal.
+3. Server terhubung ke runtime yang sama dengan CLI.
+4. Alamat serta port aktual diketahui.
+5. Browser lokal dapat membuka halaman.
+6. Satu perintah chat menghasilkan pekerjaan nyata.
+7. Cerita mengikuti event pekerjaan.
+8. Pengguna mendapat cara membuka ulang dari sesi berikutnya.
+
+Jika pembukaan browser otomatis tidak tersedia, tampilkan URL yang bisa diketuk atau disalin. Jangan menggagalkan seluruh instalasi hanya karena helper pembuka browser tidak ada.
+
+## AC.2 Entry point harian
+
+Sediakan satu perintah web yang mudah diingat. Contoh targetnya adalah ace web, dengan mode offline dan opsi headless jika memang diimplementasikan.
+
+Nama tersebut belum otomatis menjadi command yang ada. Periksa konflik CLI dan implementasikan sebelum dicetak pada akhir installer.
+
+Menjalankan perintah harian tidak boleh menginstal ulang dependency, mengunduh model lagi, atau memulai audit panjang ketika instalasi masih valid.
+
+Jika model memerlukan waktu dimuat, web dapat menampilkan keadaan startup dengan status yang benar. Setelah backend siap, chat menjadi dapat dipakai tanpa bootstrap manual tambahan.
+
+## AC.3 Penerimaan web
+
+| ID | Skenario | Hasil yang diperiksa |
+| --- | --- | --- |
+| WEB01 | Web dibuka lewat alamat lokal aktual | Halaman dan API dapat diakses |
+| WEB02 | Halaman utama dimuat | Blok chat serta cerita terlihat jelas |
+| WEB03 | Layar HP sempit | Tidak ada horizontal overflow yang menghalangi penggunaan |
+| WEB04 | Keyboard Android terbuka | Area ketik dan tombol kirim tetap dapat dipakai |
+| WEB05 | Pesan dan kode panjang | Konten dapat dibaca tanpa merusak layout |
+| WEB06 | Pengguna mengirim pertanyaan Indonesia | Respons berasal dari backend yang tersedia |
+| WEB07 | Pengguna memberi tugas coding | Task terbuat dan artefak nyata dihasilkan |
+| WEB08 | Status ditanyakan saat task aktif | Status aktual dijawab dan pekerjaan tetap terkelola |
+| WEB09 | Kebutuhan dikoreksi | Task serta langkah berikut diperbarui |
+| WEB10 | Tombol berhenti digunakan | Backend menerima kontrol dan keadaan akhir dikonfirmasi |
+| WEB11 | Tugas dilanjutkan | State yang tepat dipakai kembali |
+| WEB12 | Event bermakna terjadi | Cerita mengikuti tahap atau hasil yang sesuai |
+| WEB13 | Hanya heartbeat yang bertambah | Cerita tidak mengarang progres baru |
+| WEB14 | Kandidat gagal | Kegagalan tidak ditampilkan sebagai keberhasilan |
+| WEB15 | Strategi berubah | Narasi menyebut langkah baru yang memang dijalankan |
+| WEB16 | Browser refresh atau reconnect | Pesan dan efek task tidak digandakan |
+| WEB17 | Backend sedang tidak tersedia | Halaman menjelaskan keadaan dengan jujur |
+| WEB18 | Model lokal sedang dimuat | Status startup dibedakan dari jawaban siap |
+| WEB19 | Koneksi internet dimatikan | Aset lokal dan fungsi profil offline tetap bekerja |
+| WEB20 | Pengguna meminta pengurangan gerak | Animasi nonesensial dikurangi |
+| WEB21 | Teks hasil memuat markup atau kode | Teks tidak menjadi eksekusi frontend tak tepercaya |
+| WEB22 | Browser ditutup lalu dibuka | Lifecycle task mengikuti kebijakan runtime yang benar |
+| WEB23 | Server berjalan pada host lain | URL dan mode akses tidak disalahartikan sebagai localhost HP |
+| WEB24 | Installer selesai dan shell baru dibuka | Web dapat dimulai dengan command yang didokumentasikan |
+
+## AC.4 Penerimaan peran mandiri ACE
+
+| ID | Skenario | Hasil yang diperiksa |
+| --- | --- | --- |
+| AUTO01 | Task pengguna gagal memenuhi kriteria | Gap dibuat berdasarkan bukti yang sesuai |
+| AUTO02 | Gap yang sama muncul lagi | Record diperbarui tanpa task duplikat yang tak perlu |
+| AUTO03 | Kemampuan tersedia tetapi belum diuji | Status tidak langsung menjadi dikuasai |
+| AUTO04 | Permintaan baru tidak tercakup skill lama | Frontier pembelajaran teridentifikasi |
+| AUTO05 | Permintaan hanya berubah kata | Tidak otomatis diklaim sebagai kemampuan baru |
+| AUTO06 | Bantuan AI memang diperlukan | ACE memilih worker dan membuat work order |
+| AUTO07 | Consumer host tidak aktif | Delegasi tidak diklaim sudah berjalan |
+| AUTO08 | Worker mengembalikan kandidat | ACE memeriksa dan menentukan langkah berikut |
+| AUTO09 | Kandidat worker gagal | Revisi, pivot, atau pembelajaran dipilih dengan alasan |
+| AUTO10 | Pembelajaran berhasil pada kasus baru | Skill atau pengetahuan diperbarui sesuai cakupan |
+| AUTO11 | Pembelajaran selesai | Tujuan pengguna semula dilanjutkan |
+| AUTO12 | Kandidat berulang tanpa progres | Detektor mengubah tindakan, bukan hanya membuat log |
+| AUTO13 | Strategi lama kehabisan ruang | Metode lain atau submasalah dipilih |
+| AUTO14 | Resource tidak tersedia | Task diparkir dengan kondisi melanjutkan dan pekerjaan lain tetap terkelola |
+| AUTO15 | Proses dimulai ulang | Gap, delegasi, dan pembelajaran dapat direkonsiliasi |
+| AUTO16 | Pengguna mengubah prioritas atau meminta stop | Kendali pengguna tetap efektif |
+
+## AC.5 Jalankan pengujian yang terintegrasi
+
+Setelah paket web serta kendali ACE terhubung, lakukan satu penerimaan akhir yang mencakup skenario relevan.
+
+Gunakan pengujian backend otomatis serta pemeriksaan browser nyata. Pilih subset regresi yang sesuai ketika memperbaiki temuan, lalu pastikan alur menyeluruh kembali bekerja.
+
+Simpan fixture dan event contoh sebagai data pengembangan yang berlabel. Mode produk memakai runtime nyata.
+
+Tidak semua skenario membutuhkan panggilan model besar. Uji transport, rendering, deduplikasi, dan kontrol dengan fixture yang jelas; uji kemampuan bahasa serta coding dengan backend aktual secara terpisah dan pada demo akhir.
+
+Mock yang dipakai untuk menguji UI tidak menjadi bukti bahwa model lokal atau ACE sudah mampu mengerjakan tugas.
+
+## AC.6 Tambahkan bukti yang mudah dipahami
+
+Hasil penerimaan akhir menyebut:
+
+- Lingkungan dan ukuran layar yang diperiksa.
+- Cara memulai web.
+- Backend serta model yang dipakai.
+- Satu percakapan nyata.
+- Satu task coding yang selesai.
+- Satu contoh gap atau pivot.
+- Keadaan offline.
+- Integrasi installer.
+- Versi hasil merge yang dapat dipakai.
+
+Status dukungan HP mengikuti pengujian perangkat yang sebenarnya. Jika baru diuji pada host pengembang, tulis cakupan tersebut.
+
+---
+
+# LAMPIRAN AD — PERINTAH LENGKAP EDISI 4 UNTUK ANTIGRAVITY
+
+## AD.1 Satukan seluruh mandat
+
+Antigravity, kerjakan ACE pada kode serta environment, dengan tujuan menjadi sistem yang dapat diajak berbicara, memahami permintaan, menjalankan pekerjaan, belajar, menentukan langkah, dan mengembangkan kemampuan menuju OAIE.
+
+Seluruh riset, katalog ide, pilihan bahasa, model lokal, installer, efisiensi kuota, dan pengaturan audit akhir tetap berlaku.
+
+Tambahan yang wajib masuk:
+
+1. Web localhost bernuansa anime.
+2. Blok chatbot ACE berbahasa Indonesia.
+3. Blok cerita pendek tentang aktivitas aktual ACE.
+4. Penemuan kekurangan oleh ACE sendiri.
+5. Orkestrasi worker AI oleh ACE.
+6. Penemuan frontier pengetahuan dan pembelajaran.
+7. Perbaikan stagnasi yang memengaruhi tindakan nyata.
+
+## AD.2 Mulai dengan jejak yang menyeluruh
+
+Gunakan satu permintaan pengguna untuk menelusuri:
+
+~~~text
+Chat web
+→ Pemahaman tujuan
+→ Task dan konteks
+→ Deteksi gap bila diperlukan
+→ Eksekusi lokal atau delegasi AI
+→ Hasil dan pemeriksaan
+→ Cerita aktivitas
+→ Artefak dan jawaban
+→ Memori serta agenda berikut
+~~~
+
+Wujudkan sambungan tersebut sebelum memperbanyak fitur dekoratif atau komponen yang tidak terhubung.
+
+Gunakan modul yang sudah ada. Perbaiki gap integrasi dan kontrak yang sempit. Jika perlu komponen baru, pastikan ia dapat dicapai dari alur pengguna.
+
+## AD.3 Cara bekerja yang saya inginkan
+
+Kerjakan paket operasional sampai terhubung. Gunakan cek ringan untuk menangani error yang menghambat, kemudian audit terpadu di akhir.
+
+Gunakan riset yang sudah tersedia dan fokuskan kuota pada implementasi yang diperlukan. Cerita rutin memakai event serta template, bukan panggilan model tanpa manfaat.
+
+Ketika hasil tidak sesuai, pelajari dan perbaiki. Ketika pendekatan berulang, pilih strategi atau subketerampilan baru. Ketika bantuan AI dibutuhkan, ACE menyusun dan mengelola pekerjaannya melalui integrasi yang nyata.
+
+Sesudah penerimaan akhir serta syarat repository terpenuhi, langsung merge sesuai otorisasi. Tuntaskan installer dan pemakaian versi hasil integrasi.
+
+## AD.4 Laporan akhir ke pengguna
+
+Berikan laporan ringkas dalam bahasa Indonesia yang menyebut:
+
+- Apa yang sekarang bisa dipakai.
+- Satu cara memasang dan membuka web.
+- Mode lokal atau host yang sebenarnya.
+- Hasil chat dan coding yang diperiksa.
+- Contoh bagaimana ACE menemukan gap atau mengganti strategi.
+- Versi yang terintegrasi.
+- Hambatan material yang tersisa.
+
+Jangan menyebut web selesai jika baru berupa mockup. Jangan menyebut ACE mengendalikan AI jika belum ada consumer yang menerima pekerjaannya.
+
+Jangan menyebut pembelajaran berhasil hanya karena memori bertambah. Tunjukkan penerapan pada contoh yang relevan.
+
+## AD.5 Pengantar singkat untuk memulai
+
+~~~text
+Baca master prompt ACE edisi 4 pada repository ini beserta ledger sumbernya.
+Jalankan seluruh mandat pada kode dan environment.
+
+Sertakan web localhost bernuansa anime dengan dua blok:
+chatbot ACE dan cerita singkat tentang aktivitas aktualnya.
+
+Hubungkan chat ke tugas nyata, model lokal offline, coding, state,
+serta pemulihan. Buat ACE menemukan gap, mengarahkan worker AI,
+memilih hal yang belum dikuasai untuk dipelajari, dan mengganti
+pendekatan ketika stagnan.
+
+Pakai ulang riset yang ada dan hemat kuota. Selesaikan paket operasional
+beserta installer, audit terpadu di akhir, perbaiki temuan, lalu langsung
+merge ketika penerimaan dan syarat repository terpenuhi.
+
+Tuntaskan jalur pemakaian. Laporkan berdasarkan hasil yang benar-benar
+dijalankan dan simpan kelanjutan menuju OAIE.
+~~~
+
+**Akhir dokumen edisi 4.**
 

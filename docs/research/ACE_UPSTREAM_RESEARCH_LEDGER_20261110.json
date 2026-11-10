@@ -1127,6 +1127,21 @@
       "title": "GitHub pull request merge requirements",
       "url": "https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/merging-a-pull-request",
       "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "MDN server-sent events",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "MDN reduced motion",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion",
+      "inspection": "DOCUMENTATION_PAGE_READ"
+    },
+    {
+      "title": "FastAPI static files",
+      "url": "https://fastapi.tiangolo.com/tutorial/static-files/",
+      "inspection": "DOCUMENTATION_PAGE_READ"
     }
   ],
   "additional_source_samples": [
@@ -1156,7 +1171,7 @@
     "No model inference, training or external ACE capability experiment was executed during documentation research.",
     "Termux Python wiki returned an access-denied page; official Termux package recipe was read instead."
   ],
-  "document_revision": 3,
+  "document_revision": 4,
   "revision_3": {
     "base_head": "2a54501d42df7c291f4493939662e32ea5e4c5ed",
     "target_pr_at_revision": 100,
@@ -1186,5 +1201,46 @@
     "installer_implemented_in_this_session": false,
     "runtime_capabilities_implemented_in_this_session": false,
     "implementation_owner_requested": "Antigravity"
+  },
+  "revision_4": {
+    "base_head": "afd0d27e64a4ba487c6c617bc8372307d5b2fe44",
+    "target_pr_at_revision": 100,
+    "scope": "Local anime web specification, real chat and event-based activity story, ACE gap discovery, AI worker orchestration, knowledge frontier and stagnation recovery; documentation only",
+    "required_main_web_blocks": [
+      "ACE chat",
+      "Concise story of actual ACE activity"
+    ],
+    "web_acceptance_scenarios": 24,
+    "autonomy_acceptance_scenarios": 16,
+    "routine_narrative_requires_additional_model_call": false,
+    "web_application_implemented_in_this_session": false,
+    "runtime_capabilities_implemented_in_this_session": false,
+    "implementation_owner_requested": "Antigravity",
+    "source_inspections": [
+      {
+        "url": "https://github.com/dianzherdiana25-hash/ACE/blob/afd0d27e64a4ba487c6c617bc8372307d5b2fe44/code/ace_self_dev/stagnation_detector.py",
+        "blob_sha": "4d1104999e7862b6cf7c5b99319a2350748c4ebd",
+        "inspection": "SOURCE_OR_SOURCE_EXCERPTS_READ",
+        "runtime_reproduced": false
+      },
+      {
+        "url": "https://github.com/dianzherdiana25-hash/ACE/blob/afd0d27e64a4ba487c6c617bc8372307d5b2fe44/code/ace_self_dev/diagnostic_engine.py",
+        "blob_sha": "04b43f6abdc36d65086dc88da7b77656be4e169c",
+        "inspection": "SOURCE_OR_SOURCE_EXCERPTS_READ",
+        "runtime_reproduced": false
+      },
+      {
+        "url": "https://github.com/dianzherdiana25-hash/ACE/blob/afd0d27e64a4ba487c6c617bc8372307d5b2fe44/code/ace_cognition/meta_curriculum.py",
+        "blob_sha": "b7bdfc9e9f6776b53e55d401e05fe5bc8865a6f5",
+        "inspection": "SOURCE_OR_SOURCE_EXCERPTS_READ",
+        "runtime_reproduced": false
+      },
+      {
+        "url": "https://github.com/dianzherdiana25-hash/ACE/blob/afd0d27e64a4ba487c6c617bc8372307d5b2fe44/code/ace_code_agent/ai_advisor.py",
+        "blob_sha": "3445c354467a44e1235f67a434ff78159a38b418",
+        "inspection": "SOURCE_OR_SOURCE_EXCERPTS_READ",
+        "runtime_reproduced": false
+      }
+    ]
   }
 }
