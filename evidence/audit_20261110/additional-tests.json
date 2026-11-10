@@ -1,0 +1,25 @@
+{
+  "modules": [
+    "ace_chat.test_task_runner",
+    "ace_code_agent.test_operational_proof",
+    "ace_cognition.test_evolutionary_memory",
+    "ace_cognition.test_meta_curriculum",
+    "ace_cognition.test_substrate_guardian",
+    "ace_host_controller.test_resilient_watchdog",
+    "ace_loop.test_source_evolution",
+    "ace_real_world.test_real_world",
+    "ace_self_dev.test_anti_stagnation",
+    "ace_self_dev.test_generational_evolution",
+    "ace_self_dev.test_metacognitive_abstention",
+    "ace_self_dev.test_self_dev_loop",
+    "ace_self_dev.test_stagnation_detector",
+    "ace_self_dev.test_vision_breakthrough"
+  ],
+  "tests": 135,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "expected_failures": 0,
+  "elapsed_seconds": 5.7101237189999665,
+  "success": true
+}
