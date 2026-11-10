@@ -123,6 +123,9 @@ class AutonomousPRManager:
         if not any(pr_meta.branch_name.startswith(pfx) for pfx in ALLOWED_BRANCH_PREFIXES):
             return False, f"SECURITY VIOLATION: Branch name '{pr_meta.branch_name}' outside allowed namespace {ALLOWED_BRANCH_PREFIXES}"
 
+        # Direct publication must not bypass the candidate evaluation gate.
+        return False, "BLOCKED: candidate-bound independent evaluation unavailable"
+
         base_branch = self.get_current_branch()
 
         try:
