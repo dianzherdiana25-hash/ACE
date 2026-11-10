@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0",
-  "completed_cycles": 96,
+  "completed_cycles": 117,
   "history": [
     {
       "cycle": 1,
@@ -1339,6 +1339,535 @@
       "pr_number": null,
       "pr_url": null,
       "timestamp": "2026-11-09T19:42:28Z"
+    },
+    {
+      "cycle": 97,
+      "problem_id": "prob_rep_saturation_97",
+      "hypothesis_id": "hyp_expand_dispatch_97",
+      "patch_sha": "d7a7f4f921720bf85c960d568031f2c91841a1b1f020e75d19ea82c5452e4110",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: UNSUPPORTED_OR_INCOMPLETE_CANDIDATE; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "61d9d0f5de7791fff5bb3fe8e3af8b796a1578f99eb117e3be4f75eb192da571",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:07:07Z"
+    },
+    {
+      "cycle": 98,
+      "problem_id": "prob_rep_saturation_98",
+      "hypothesis_id": "hyp_expand_dispatch_98",
+      "patch_sha": "ac85e8982c737de73e7819d0cdba49ee71af7d6228f30dbd3e1bd084200cfc0e",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: PUBLIC_PROBE_COMPLETED; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "public_probe_count": 96.0,
+        "public_modular_candidate": 0.6146,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.5938,
+        "public_parity_root": 0.4167,
+        "public_joint_candidate": 0.7188,
+        "public_joint_root": 0.6042,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "2d829dd94edde056d8d14999ab6af6784de71cfc8250e6cfb42504040d223bc2",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:07:45Z"
+    },
+    {
+      "cycle": 99,
+      "problem_id": "prob_rep_saturation_99",
+      "hypothesis_id": "hyp_expand_dispatch_99",
+      "patch_sha": "a3f7914822efce323dff68dd7d727873ff3874a81c4a3b865f9f5e017868470c",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: UNSUPPORTED_OR_INCOMPLETE_CANDIDATE; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "3f07a983b5fa883d662946e7ba8fa7f0278f650f6c9bf4b2c40d10186cd7e4c5",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:08:53Z"
+    },
+    {
+      "cycle": 100,
+      "problem_id": "prob_rep_saturation_100",
+      "hypothesis_id": "hyp_expand_dispatch_100",
+      "patch_sha": "8674517e02a0b4f59408b1420ad886ec3e1441be42df615b4b61f47d3109593b",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: UNSUPPORTED_OR_INCOMPLETE_CANDIDATE; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "cc7e577bd26ad814535e4eac6807caa54772f913a5db11f5d7eef795be5bae97",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:10:22Z"
+    },
+    {
+      "cycle": 101,
+      "problem_id": "prob_rep_saturation_101",
+      "hypothesis_id": "hyp_expand_dispatch_101",
+      "patch_sha": "30663a1e67f615efa3c6f7c2507e6e1108251f7e8aeb3ab04ef72bfb34d06f46",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: PUBLIC_PROBE_COMPLETED; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "public_probe_count": 96.0,
+        "public_modular_candidate": 0.6146,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.5938,
+        "public_parity_root": 0.4167,
+        "public_joint_candidate": 0.7812,
+        "public_joint_root": 0.6042,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "7c82aa1c2db943a970bcfbd21160d096d2e7e48156a1b5f5719401d825707d5e",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:11:26Z"
+    },
+    {
+      "cycle": 102,
+      "problem_id": "prob_rep_saturation_102",
+      "hypothesis_id": "hyp_expand_dispatch_102",
+      "patch_sha": "67e1dd6c87158a34e1dfaa230985b84495a6c85903ddd1b08fd4b984e5af2522",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: UNSUPPORTED_OR_INCOMPLETE_CANDIDATE; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "0037fa62975808a6c5ff47a983538520b18436186244de424f542d0e093ebf3e",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:12:35Z"
+    },
+    {
+      "cycle": 103,
+      "problem_id": "prob_rep_saturation_103",
+      "hypothesis_id": "hyp_expand_dispatch_103",
+      "patch_sha": "732cef001fb0f835113d1962826cb4f06023595c5c570cf49bd788343068b55c",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: UNSUPPORTED_OR_INCOMPLETE_CANDIDATE; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "f947d352ab69face39acdc116dfd200d01ae06abe34f3e21d104d7c151017d89",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:13:52Z"
+    },
+    {
+      "cycle": 104,
+      "problem_id": "prob_rep_saturation_104",
+      "hypothesis_id": "hyp_expand_dispatch_104",
+      "patch_sha": "28f14507faed3a9d4edff94d0718522d77243b49e2d0393714b8b3267d038812",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: UNSUPPORTED_OR_INCOMPLETE_CANDIDATE; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "d554363c62c2b91c2e4d3555b9f7815356e04edced3d98c308294b1e9f9553d7",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:15:07Z"
+    },
+    {
+      "cycle": 105,
+      "problem_id": "prob_rep_saturation_105",
+      "hypothesis_id": "hyp_expand_dispatch_105",
+      "patch_sha": "d8d1d8fb8b049e9537f4f2f02c61f0735bbfde23416ca676795caee1c856dcb5",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: PUBLIC_PROBE_COMPLETED; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "public_probe_count": 96.0,
+        "public_modular_candidate": 0.625,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.6042,
+        "public_parity_root": 0.4167,
+        "public_joint_candidate": 0.7917,
+        "public_joint_root": 0.6042,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "b13a87a85c96a9f21b6bc28203ef1604f564943b469d580178add629495c5225",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:16:14Z"
+    },
+    {
+      "cycle": 106,
+      "problem_id": "prob_rep_saturation_106",
+      "hypothesis_id": "hyp_expand_dispatch_106",
+      "patch_sha": "6490bf72b753da242d0efddc8c0098f9649f6569ded055578f0cdd15483fd94e",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: PUBLIC_PROBE_COMPLETED; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "public_probe_count": 96.0,
+        "public_modular_candidate": 0.625,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.6042,
+        "public_parity_root": 0.4167,
+        "public_joint_candidate": 0.7917,
+        "public_joint_root": 0.6042,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "e342882a21231b9c0408108a66b2d64b1be3d4e69d5efc89d3ac08d9096963e6",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:17:17Z"
+    },
+    {
+      "cycle": 107,
+      "problem_id": "prob_rep_saturation_107",
+      "hypothesis_id": "hyp_expand_dispatch_107",
+      "patch_sha": "25742dc1a87ceebdc718344eb9cd8d1993c748a498e928a79f5c23504b50c2c9",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: UNSUPPORTED_OR_INCOMPLETE_CANDIDATE; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "95a847284d6057f7d9f3ad3f13b4fd726991499eefef6fcf522094e620ce55ed",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:18:19Z"
+    },
+    {
+      "cycle": 108,
+      "problem_id": "prob_rep_saturation_108",
+      "hypothesis_id": "hyp_expand_dispatch_108",
+      "patch_sha": "d31995418184d03c10b59868896cc013b246ada5b19ae1c1d128e01cc7fdc2dc",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: PUBLIC_PROBE_COMPLETED; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "public_probe_count": 96.0,
+        "public_modular_candidate": 0.6146,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.5938,
+        "public_parity_root": 0.4167,
+        "public_joint_candidate": 0.7396,
+        "public_joint_root": 0.6042,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "69572bf75b0ea6b04b6585acc67172d3a22463b5fe2a810d28fabc0fc9b7a178",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:19:20Z"
+    },
+    {
+      "cycle": 109,
+      "problem_id": "prob_rep_saturation_109",
+      "hypothesis_id": "hyp_expand_dispatch_109",
+      "patch_sha": "a1b7dea59831bb82210aeaa03b9c01a956ac3f430399db0d45c6fac1b2883365",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: PUBLIC_PROBE_COMPLETED; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "public_probe_count": 96.0,
+        "public_modular_candidate": 0.6146,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.5938,
+        "public_parity_root": 0.4167,
+        "public_joint_candidate": 0.7396,
+        "public_joint_root": 0.6042,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "e66a6c8246bf48206d26e7ff7c9a7e0f11cd81d007761d87bd5ae93bda77bd5c",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:20:24Z"
+    },
+    {
+      "cycle": 110,
+      "problem_id": "prob_rep_saturation_110",
+      "hypothesis_id": "hyp_expand_dispatch_110",
+      "patch_sha": "0c7408835194dffd0bdf438f61cab71cbdfa2e25d63151e89a4df6101d62f575",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: PUBLIC_PROBE_COMPLETED; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "public_probe_count": 96.0,
+        "public_modular_candidate": 0.625,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.6042,
+        "public_parity_root": 0.4167,
+        "public_joint_candidate": 0.7917,
+        "public_joint_root": 0.6042,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "bb3470cd05f4a1aab9d3bb499152128aac73944cb55b0d62678202d009b1036a",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:21:36Z"
+    },
+    {
+      "cycle": 111,
+      "problem_id": "prob_rep_saturation_111",
+      "hypothesis_id": "hyp_expand_dispatch_111",
+      "patch_sha": "7965eeb2145e8af2554eda00d75e371de2ffcfa9510f835465bf8b4f8a2bd21c",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: PUBLIC_PROBE_COMPLETED; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "public_probe_count": 96.0,
+        "public_modular_candidate": 0.6042,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.6458,
+        "public_parity_root": 0.4167,
+        "public_joint_candidate": 0.7917,
+        "public_joint_root": 0.6042,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "6bb357d8714c27281649646d2668de660157c342ac66651f96642239d8aeebcf",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:22:38Z"
+    },
+    {
+      "cycle": 112,
+      "problem_id": "prob_rep_saturation_112",
+      "hypothesis_id": "hyp_expand_dispatch_112",
+      "patch_sha": "8cc636342c73f2c55528dc457d39d067e66eb5b43aca428f99b60fc544dec0c5",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: UNSUPPORTED_OR_INCOMPLETE_CANDIDATE; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "c1f5825a238ae147dac47c6b49cc497ab63613cd636201710b406c5ee9a9081e",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:23:43Z"
+    },
+    {
+      "cycle": 113,
+      "problem_id": "prob_rep_saturation_113",
+      "hypothesis_id": "hyp_expand_dispatch_113",
+      "patch_sha": "da7bbff008570f4d8ed384b68a0e8a235f9e4ff47ef4f8c55e84c62721e98ae0",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: PUBLIC_PROBE_COMPLETED; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "public_probe_count": 96.0,
+        "public_modular_candidate": 0.6146,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.5938,
+        "public_parity_root": 0.4167,
+        "public_joint_candidate": 0.7188,
+        "public_joint_root": 0.6042,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "16c4a8706ef9baaccf49c8a312957ad4434e2e612d3c16cd7741d641bcfcc190",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:24:49Z"
+    },
+    {
+      "cycle": 114,
+      "problem_id": "prob_rep_saturation_114",
+      "hypothesis_id": "hyp_expand_dispatch_114",
+      "patch_sha": "713fcf92706df401da720b2d4d5839a366cd486044cfda6e57c0d5d19e2f2e80",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: PUBLIC_PROBE_COMPLETED; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "public_probe_count": 96.0,
+        "public_modular_candidate": 0.6146,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.5938,
+        "public_parity_root": 0.4167,
+        "public_joint_candidate": 0.7396,
+        "public_joint_root": 0.6042,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "13ad3b348c4d3cda4a282fefc1bc707b2bb767e6330d60808c7055ab7b1eb72f",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:25:53Z"
+    },
+    {
+      "cycle": 115,
+      "problem_id": "prob_rep_saturation_115",
+      "hypothesis_id": "hyp_expand_dispatch_115",
+      "patch_sha": "6f0f86b7cc118b8135f0d835e76c0de78edaf7286ceb9dcfd058dbf258f3f3a8",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: UNSUPPORTED_OR_INCOMPLETE_CANDIDATE; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "6478283004b579a796090e125e4e739314172bc7aeddd7b1360cf1e3e1ea375b",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:27:06Z"
+    },
+    {
+      "cycle": 116,
+      "problem_id": "prob_rep_saturation_116",
+      "hypothesis_id": "hyp_expand_dispatch_116",
+      "patch_sha": "3830ced71ee97baf465e762f29052216e972abbfeb37910450cf343e73796c43",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: PUBLIC_PROBE_COMPLETED; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0,
+        "public_probe_count": 96.0,
+        "public_modular_candidate": 0.6042,
+        "public_modular_root": 0.5625,
+        "public_parity_candidate": 0.6458,
+        "public_parity_root": 0.4167,
+        "public_joint_candidate": 0.7917,
+        "public_joint_root": 0.6042,
+        "public_strong_baseline": 1.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "07ef16f624a0ff2c644cf709700c17262fe85c88a8ec024ee3584a623163eb8a",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:28:06Z"
+    },
+    {
+      "cycle": 117,
+      "problem_id": "prob_rep_saturation_117",
+      "hypothesis_id": "hyp_expand_dispatch_117",
+      "patch_sha": "6dd9de37cd7510620d4ba417fcf05039821c653a9537a184557e7e0f2c6475aa",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: UNSUPPORTED_OR_INCOMPLETE_CANDIDATE; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "fa871d4ec3768a1c66b0f5ed228503fcc7f67ab078aa5622fe1b6cdba8c45cec",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-10T12:29:10Z"
     }
   ],
   "tested_patches": {
@@ -1917,6 +2446,132 @@
       "decision": "ACCEPTED",
       "hypothesis_id": "hyp_expand_dispatch_96",
       "timestamp": "2026-11-09T19:41:55Z"
+    },
+    "d7a7f4f921720bf85c960d568031f2c91841a1b1f020e75d19ea82c5452e4110": {
+      "cycle": 97,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_97",
+      "timestamp": "2026-11-10T12:07:07Z"
+    },
+    "ac85e8982c737de73e7819d0cdba49ee71af7d6228f30dbd3e1bd084200cfc0e": {
+      "cycle": 98,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_98",
+      "timestamp": "2026-11-10T12:07:45Z"
+    },
+    "a3f7914822efce323dff68dd7d727873ff3874a81c4a3b865f9f5e017868470c": {
+      "cycle": 99,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_99",
+      "timestamp": "2026-11-10T12:08:53Z"
+    },
+    "8674517e02a0b4f59408b1420ad886ec3e1441be42df615b4b61f47d3109593b": {
+      "cycle": 100,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_100",
+      "timestamp": "2026-11-10T12:10:22Z"
+    },
+    "30663a1e67f615efa3c6f7c2507e6e1108251f7e8aeb3ab04ef72bfb34d06f46": {
+      "cycle": 101,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_101",
+      "timestamp": "2026-11-10T12:11:26Z"
+    },
+    "67e1dd6c87158a34e1dfaa230985b84495a6c85903ddd1b08fd4b984e5af2522": {
+      "cycle": 102,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_102",
+      "timestamp": "2026-11-10T12:12:35Z"
+    },
+    "732cef001fb0f835113d1962826cb4f06023595c5c570cf49bd788343068b55c": {
+      "cycle": 103,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_103",
+      "timestamp": "2026-11-10T12:13:52Z"
+    },
+    "28f14507faed3a9d4edff94d0718522d77243b49e2d0393714b8b3267d038812": {
+      "cycle": 104,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_104",
+      "timestamp": "2026-11-10T12:15:07Z"
+    },
+    "d8d1d8fb8b049e9537f4f2f02c61f0735bbfde23416ca676795caee1c856dcb5": {
+      "cycle": 105,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_105",
+      "timestamp": "2026-11-10T12:16:14Z"
+    },
+    "6490bf72b753da242d0efddc8c0098f9649f6569ded055578f0cdd15483fd94e": {
+      "cycle": 106,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_106",
+      "timestamp": "2026-11-10T12:17:17Z"
+    },
+    "25742dc1a87ceebdc718344eb9cd8d1993c748a498e928a79f5c23504b50c2c9": {
+      "cycle": 107,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_107",
+      "timestamp": "2026-11-10T12:18:19Z"
+    },
+    "d31995418184d03c10b59868896cc013b246ada5b19ae1c1d128e01cc7fdc2dc": {
+      "cycle": 108,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_108",
+      "timestamp": "2026-11-10T12:19:20Z"
+    },
+    "a1b7dea59831bb82210aeaa03b9c01a956ac3f430399db0d45c6fac1b2883365": {
+      "cycle": 109,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_109",
+      "timestamp": "2026-11-10T12:20:24Z"
+    },
+    "0c7408835194dffd0bdf438f61cab71cbdfa2e25d63151e89a4df6101d62f575": {
+      "cycle": 110,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_110",
+      "timestamp": "2026-11-10T12:21:36Z"
+    },
+    "7965eeb2145e8af2554eda00d75e371de2ffcfa9510f835465bf8b4f8a2bd21c": {
+      "cycle": 111,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_111",
+      "timestamp": "2026-11-10T12:22:38Z"
+    },
+    "8cc636342c73f2c55528dc457d39d067e66eb5b43aca428f99b60fc544dec0c5": {
+      "cycle": 112,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_112",
+      "timestamp": "2026-11-10T12:23:43Z"
+    },
+    "da7bbff008570f4d8ed384b68a0e8a235f9e4ff47ef4f8c55e84c62721e98ae0": {
+      "cycle": 113,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_113",
+      "timestamp": "2026-11-10T12:24:49Z"
+    },
+    "713fcf92706df401da720b2d4d5839a366cd486044cfda6e57c0d5d19e2f2e80": {
+      "cycle": 114,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_114",
+      "timestamp": "2026-11-10T12:25:53Z"
+    },
+    "6f0f86b7cc118b8135f0d835e76c0de78edaf7286ceb9dcfd058dbf258f3f3a8": {
+      "cycle": 115,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_115",
+      "timestamp": "2026-11-10T12:27:06Z"
+    },
+    "3830ced71ee97baf465e762f29052216e972abbfeb37910450cf343e73796c43": {
+      "cycle": 116,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_116",
+      "timestamp": "2026-11-10T12:28:06Z"
+    },
+    "6dd9de37cd7510620d4ba417fcf05039821c653a9537a184557e7e0f2c6475aa": {
+      "cycle": 117,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_117",
+      "timestamp": "2026-11-10T12:29:10Z"
     }
   },
   "active_problems": [],

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "active_generation_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C271",
-  "cycle_count": 329,
+  "cycle_count": 350,
   "completed_cycles": [
     {
       "cycle_id": 1,
@@ -4937,6 +4937,321 @@
       "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0329.json.gz",
       "prior_digest": "b01978348a0fcd24ee2757899635697de2c224038da21dd7dc7bc9a3f342434b",
       "state_digest": "dff450093303cf729fcb8198f2c69cb549f200563eb875c9e7458cd6b2e0c293"
+    },
+    {
+      "cycle_id": 330,
+      "timestamp": "2026-11-10T12:06:30Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C330",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C330",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C330 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0330.json.gz",
+      "prior_digest": "dff450093303cf729fcb8198f2c69cb549f200563eb875c9e7458cd6b2e0c293",
+      "state_digest": "94f2d96844c243cee8f96bf237c2098e81157da3e34231b86a111c5dee8e1333"
+    },
+    {
+      "cycle_id": 331,
+      "timestamp": "2026-11-10T12:07:45Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C331",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C331",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C331 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0331.json.gz",
+      "prior_digest": "94f2d96844c243cee8f96bf237c2098e81157da3e34231b86a111c5dee8e1333",
+      "state_digest": "49b43b242c4f01344c535069e3390dcf2f52fa490da9fc67951a61ceb96b8c22"
+    },
+    {
+      "cycle_id": 332,
+      "timestamp": "2026-11-10T12:08:53Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C332",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C332",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C332 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0332.json.gz",
+      "prior_digest": "49b43b242c4f01344c535069e3390dcf2f52fa490da9fc67951a61ceb96b8c22",
+      "state_digest": "24182c17d447ead134f4eb32d54a64942facc964c917d6c3a88d6c65fff567a4"
+    },
+    {
+      "cycle_id": 333,
+      "timestamp": "2026-11-10T12:10:22Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C333",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C333",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C333 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0333.json.gz",
+      "prior_digest": "24182c17d447ead134f4eb32d54a64942facc964c917d6c3a88d6c65fff567a4",
+      "state_digest": "86f78c369ce6f44e5a7235422e8f81a9fd48daf316a17aec7f84386fe73fa278"
+    },
+    {
+      "cycle_id": 334,
+      "timestamp": "2026-11-10T12:11:26Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C334",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C334",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C334 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0334.json.gz",
+      "prior_digest": "86f78c369ce6f44e5a7235422e8f81a9fd48daf316a17aec7f84386fe73fa278",
+      "state_digest": "7233186b9b56393ce95bd4aee356c92a90b596dd1b218dfde8d2d8dced1b6fcd"
+    },
+    {
+      "cycle_id": 335,
+      "timestamp": "2026-11-10T12:12:35Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C335",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C335",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C335 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0335.json.gz",
+      "prior_digest": "7233186b9b56393ce95bd4aee356c92a90b596dd1b218dfde8d2d8dced1b6fcd",
+      "state_digest": "76d460642a240b87dbb969bdfa0947e472a2464e3902ff7ce446a0851ef5b452"
+    },
+    {
+      "cycle_id": 336,
+      "timestamp": "2026-11-10T12:13:52Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C336",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C336",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C336 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0336.json.gz",
+      "prior_digest": "76d460642a240b87dbb969bdfa0947e472a2464e3902ff7ce446a0851ef5b452",
+      "state_digest": "e2d86ae7a7dffd0266805d1cdff42c6f3c50865cb7aa6371c33c3f0bb65b08f7"
+    },
+    {
+      "cycle_id": 337,
+      "timestamp": "2026-11-10T12:15:07Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C337",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C337",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C337 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0337.json.gz",
+      "prior_digest": "e2d86ae7a7dffd0266805d1cdff42c6f3c50865cb7aa6371c33c3f0bb65b08f7",
+      "state_digest": "7c9f6e64a513da806a1e9b3942bacb87473f317720ff8392636ed51897cef3a9"
+    },
+    {
+      "cycle_id": 338,
+      "timestamp": "2026-11-10T12:16:14Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C338",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C338",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C338 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0338.json.gz",
+      "prior_digest": "7c9f6e64a513da806a1e9b3942bacb87473f317720ff8392636ed51897cef3a9",
+      "state_digest": "f6aa52ecc97a746cdd0c6c63f088261ed3ae21bd21d6973ebca0306c617db0ce"
+    },
+    {
+      "cycle_id": 339,
+      "timestamp": "2026-11-10T12:17:18Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C339",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C339",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C339 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0339.json.gz",
+      "prior_digest": "f6aa52ecc97a746cdd0c6c63f088261ed3ae21bd21d6973ebca0306c617db0ce",
+      "state_digest": "bab5e43b3db463b8ac127a81c044473025e9841a118a63c33022cf1b30ef1454"
+    },
+    {
+      "cycle_id": 340,
+      "timestamp": "2026-11-10T12:18:19Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C340",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C340",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C340 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0340.json.gz",
+      "prior_digest": "bab5e43b3db463b8ac127a81c044473025e9841a118a63c33022cf1b30ef1454",
+      "state_digest": "6b38cdd35ae3873f7a2ae71f6318dae11e9199c00e141afa97967ebb2001d51c"
+    },
+    {
+      "cycle_id": 341,
+      "timestamp": "2026-11-10T12:19:20Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C341",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C341",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C341 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0341.json.gz",
+      "prior_digest": "6b38cdd35ae3873f7a2ae71f6318dae11e9199c00e141afa97967ebb2001d51c",
+      "state_digest": "05f12bcdec77a92a569ad7f50745b0dc3971840feb974ec97552cac4ff8d0aed"
+    },
+    {
+      "cycle_id": 342,
+      "timestamp": "2026-11-10T12:20:25Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C342",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C342",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C342 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0342.json.gz",
+      "prior_digest": "05f12bcdec77a92a569ad7f50745b0dc3971840feb974ec97552cac4ff8d0aed",
+      "state_digest": "4af65420e93d052e0be72f2a941af820e1f252268d10b1b62a6ec576816b0667"
+    },
+    {
+      "cycle_id": 343,
+      "timestamp": "2026-11-10T12:21:37Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C343",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C343",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C343 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0343.json.gz",
+      "prior_digest": "4af65420e93d052e0be72f2a941af820e1f252268d10b1b62a6ec576816b0667",
+      "state_digest": "ffef8c7e6e77740d8f53d2f6c143a1af8eb1932e08591a69563cf64a837e35c9"
+    },
+    {
+      "cycle_id": 344,
+      "timestamp": "2026-11-10T12:22:38Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C344",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C344",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C344 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0344.json.gz",
+      "prior_digest": "ffef8c7e6e77740d8f53d2f6c143a1af8eb1932e08591a69563cf64a837e35c9",
+      "state_digest": "4a4b18d10084d15bbc192f4fb581208414f1cf9a799acd7d4686b846782bca8d"
+    },
+    {
+      "cycle_id": 345,
+      "timestamp": "2026-11-10T12:23:43Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C345",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C345",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C345 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0345.json.gz",
+      "prior_digest": "4a4b18d10084d15bbc192f4fb581208414f1cf9a799acd7d4686b846782bca8d",
+      "state_digest": "d26bb9aece2aea41cb7fa88c978fa5a0b5cd902dea754b820349e54d256270a6"
+    },
+    {
+      "cycle_id": 346,
+      "timestamp": "2026-11-10T12:24:49Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C346",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C346",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C346 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0346.json.gz",
+      "prior_digest": "d26bb9aece2aea41cb7fa88c978fa5a0b5cd902dea754b820349e54d256270a6",
+      "state_digest": "4e307f56dfd06ab57842fd1ad4b2edf9ef394ed8722aaa14e82cf1bb820f2361"
+    },
+    {
+      "cycle_id": 347,
+      "timestamp": "2026-11-10T12:25:54Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C347",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C347",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C347 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0347.json.gz",
+      "prior_digest": "4e307f56dfd06ab57842fd1ad4b2edf9ef394ed8722aaa14e82cf1bb820f2361",
+      "state_digest": "9eff8f6b488a2dbf5661df854f44bc9da8e1bc2c19156147470219b8379012a2"
+    },
+    {
+      "cycle_id": 348,
+      "timestamp": "2026-11-10T12:27:07Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C348",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C348",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C348 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0348.json.gz",
+      "prior_digest": "9eff8f6b488a2dbf5661df854f44bc9da8e1bc2c19156147470219b8379012a2",
+      "state_digest": "9d0a4730aa0527e3fc36a0f873a1eb3a63aa4e82df37349426bf8d1db2ba0d56"
+    },
+    {
+      "cycle_id": 349,
+      "timestamp": "2026-11-10T12:28:06Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C349",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C349",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C349 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0349.json.gz",
+      "prior_digest": "9d0a4730aa0527e3fc36a0f873a1eb3a63aa4e82df37349426bf8d1db2ba0d56",
+      "state_digest": "615fe0fd6d7bda7bd6065c91b57942bfe0ff48bbdafce4c0697bfbfce283b790"
+    },
+    {
+      "cycle_id": 350,
+      "timestamp": "2026-11-10T12:29:11Z",
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C350",
+      "target_task_id": "multi_task",
+      "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C350",
+      "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+      "decision": "STAGNATED",
+      "holdout_score": 0.4523,
+      "gain_over_parent": 0.0,
+      "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C350 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+      "evidence_path": "/data/data/com.termux/files/home/ACE/evidence/self_dev/ace_self_dev_v02_cycle_0350.json.gz",
+      "prior_digest": "615fe0fd6d7bda7bd6065c91b57942bfe0ff48bbdafce4c0697bfbfce283b790",
+      "state_digest": "e06f636c24f5b7a1035f0a0799d2fc455ef5a614a1aedecc2a110befbbfb3236"
     }
   ],
   "failure_catalog": {
@@ -10911,6 +11226,321 @@
         "gain_over_parent": 0.0,
         "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C329 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
         "timestamp": "2026-11-09T19:40:02Z"
+      },
+      {
+        "cycle_id": 330,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C330",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C330 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:06:30Z"
+      },
+      {
+        "cycle_id": 331,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C331",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C331 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:07:45Z"
+      },
+      {
+        "cycle_id": 332,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C332",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C332 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:08:53Z"
+      },
+      {
+        "cycle_id": 333,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C333",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C333 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:10:22Z"
+      },
+      {
+        "cycle_id": 334,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C334",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C334 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:11:26Z"
+      },
+      {
+        "cycle_id": 335,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C335",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C335 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:12:35Z"
+      },
+      {
+        "cycle_id": 336,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C336",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C336 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:13:52Z"
+      },
+      {
+        "cycle_id": 337,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C337",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C337 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:15:07Z"
+      },
+      {
+        "cycle_id": 338,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C338",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C338 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:16:14Z"
+      },
+      {
+        "cycle_id": 339,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C339",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C339 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:17:18Z"
+      },
+      {
+        "cycle_id": 340,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C340",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C340 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:18:19Z"
+      },
+      {
+        "cycle_id": 341,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C341",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C341 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:19:20Z"
+      },
+      {
+        "cycle_id": 342,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C342",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C342 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:20:25Z"
+      },
+      {
+        "cycle_id": 343,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C343",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C343 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:21:37Z"
+      },
+      {
+        "cycle_id": 344,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C344",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C344 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:22:38Z"
+      },
+      {
+        "cycle_id": 345,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C345",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C345 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:23:43Z"
+      },
+      {
+        "cycle_id": 346,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C346",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C346 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:24:49Z"
+      },
+      {
+        "cycle_id": 347,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C347",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C347 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:25:54Z"
+      },
+      {
+        "cycle_id": 348,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C348",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C348 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:27:07Z"
+      },
+      {
+        "cycle_id": 349,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C349",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C349 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:28:06Z"
+      },
+      {
+        "cycle_id": 350,
+        "candidate_id": "CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C350",
+        "source_sha": "993546ab9c22438d4207bcf619cd87920f49a831324cdbfa28821c1f442bd6cb",
+        "gene_dict": {
+          "is_multi_task_ensemble": true,
+          "ordinal": 1,
+          "true_val": 0,
+          "false_val": 1
+        },
+        "mutation_ordinal": 1,
+        "gain_over_parent": 0.0,
+        "rejection_reason": "STAGNATION_DETECTED: Candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C350 source_sha '993546ab9c22' is an exact syntactic duplicate of historical candidate CAND_HYP_PARADIGM_SHIFT_ENSEMBLE_C292 (Cycle 292).",
+        "timestamp": "2026-11-10T12:29:11Z"
       }
     ]
   },
@@ -12888,6 +13518,132 @@
       "target_task_id": "multi_task",
       "status": "FALSIFIED",
       "cycle_id": 329
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C330",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 330
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C331",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 331
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C332",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 332
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C333",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 333
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C334",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 334
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C335",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 335
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C336",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 336
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C337",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 337
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C338",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 338
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C339",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 339
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C340",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 340
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C341",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 341
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C342",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 342
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C343",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 343
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C344",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 344
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C345",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 345
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C346",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 346
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C347",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 347
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C348",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 348
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C349",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 349
+    },
+    {
+      "hypothesis_id": "HYP_PARADIGM_SHIFT_ENSEMBLE_C350",
+      "target_task_id": "multi_task",
+      "status": "FALSIFIED",
+      "cycle_id": 350
     }
   ],
   "next_agenda_priority": {
@@ -12896,14 +13652,14 @@
     "strategy": "LINEAR_MUTATION",
     "suggested_ordinal": 1,
     "rationalization": "Structural deficit confirmed for MULTI_TASK_ENSEMBLE on 'multi_task' (flat variance=0.0000 < 0.005, ceiling=0.0000 << 0.1500). Representational capacity cannot separate the invariant. Promoting search policy to next representation family 'LINEAR_MUTATION' (ordinal 1) rather than looping ordinals.",
-    "timestamp": "2026-11-09T19:40:02Z"
+    "timestamp": "2026-11-10T12:29:11Z"
   },
   "concurrency_lock": {
     "is_locked": true,
-    "locked_by": "worker_5803_1794253202",
-    "locked_at": "2026-11-09T19:40:02Z",
-    "expires_at": "1794253802.21",
-    "lock_token": "847a3d49d024e388"
+    "locked_by": "worker_16622_1794313751",
+    "locked_at": "2026-11-10T12:29:11Z",
+    "expires_at": "1794314351.02",
+    "lock_token": "f2a96c9512f18f0c"
   },
   "immutable_baseline": {
     "root_candidate_id": "G0_self_dev_root_c0",
@@ -12912,10 +13668,10 @@
     "baseline_accuracy": 0.5,
     "genesis_timestamp": "2026-11-07T00:00:00Z"
   },
-  "state_digest": "dff450093303cf729fcb8198f2c69cb549f200563eb875c9e7458cd6b2e0c293",
+  "state_digest": "e06f636c24f5b7a1035f0a0799d2fc455ef5a614a1aedecc2a110befbbfb3236",
   "fail_closed_recovery": {
-    "last_known_good_cycle": 329,
-    "last_known_good_digest": "dff450093303cf729fcb8198f2c69cb549f200563eb875c9e7458cd6b2e0c293",
+    "last_known_good_cycle": 350,
+    "last_known_good_digest": "e06f636c24f5b7a1035f0a0799d2fc455ef5a614a1aedecc2a110befbbfb3236",
     "recovery_count": 1,
     "last_recovered_at": "2026-11-09T19:30:17.801825+00:00",
     "recovery_reason": "Cycle None hung/stalled after 122.72s (threshold 60.0s)",
