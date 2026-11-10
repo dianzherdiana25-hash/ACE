@@ -1,0 +1,58 @@
+name: ACE W3 development admission and negative controls
+
+on:
+  pull_request:
+    paths:
+      - 'code/ace_core_repair/**'
+      - 'code/ace_runtime/**'
+      - 'tools/ace_w3_admission_benchmark.py'
+      - 'evidence/w3_admission/**'
+      - '.github/workflows/ace-w3-admission.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  development-admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13']
+    env:
+      PYTHONPATH: code
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Verify exact source and immutable imported files
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          python3 tools/verify_sources.py
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run admission regressions and real CLI checks
+        run: python -m unittest ace_core_repair.test_admission_contract ace_core_repair.test_core_repair ace_runtime.test_cli -v
+      - name: Reproduce public evidence without terminal candidate selection
+        run: |
+          python tools/ace_w3_admission_benchmark.py --output "$RUNNER_TEMP/result.json" --profile "$RUNNER_TEMP/profile.json"
+          python tools/ace_w3_admission_benchmark.py --output "$RUNNER_TEMP/replay.json" --profile "$RUNNER_TEMP/profile-replay.json"
+          cmp "$RUNNER_TEMP/result.json" "$RUNNER_TEMP/replay.json"
+          gzip -dc evidence/w3_admission/result.json.gz > "$RUNNER_TEMP/expected.json"
+          cmp "$RUNNER_TEMP/result.json" "$RUNNER_TEMP/expected.json"
+          sha256sum "$RUNNER_TEMP/result.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ace-w3-admission-python-${{ matrix.python-version }}
+          path: |
+            ${{ runner.temp }}/result.json
+            ${{ runner.temp }}/profile.json
+          if-no-files-found: error
+          retention-days: 14

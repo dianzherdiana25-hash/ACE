@@ -1,0 +1,752 @@
+{
+  "cpu_seconds": 3.801251605,
+  "process_peak_rss_kib": 22340,
+  "tasks": [
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1650,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.133451492,
+        "wall_seconds_including_fit": 0.1336069620001581
+      },
+      "family": "equal",
+      "fit_shared": {
+        "cpu_seconds": 0.12815967299999997,
+        "wall_seconds": 0.1282680670001355
+      },
+      "fit_work": {
+        "base_merge_attempts": 36,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 0
+      },
+      "seed": 20261106,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1650,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1639,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.14024448300000003,
+        "wall_seconds_including_fit": 0.1403853000001618
+      },
+      "family": "starts",
+      "fit_shared": {
+        "cpu_seconds": 0.13368754100000002,
+        "wall_seconds": 0.13382359400020505
+      },
+      "fit_work": {
+        "base_merge_attempts": 34,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 16
+      },
+      "seed": 20261106,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1639,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 2421,
+        "predictions": 764
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.14557001099999994,
+        "wall_seconds_including_fit": 0.14569515300081548
+      },
+      "family": "ends",
+      "fit_shared": {
+        "cpu_seconds": 0.13774416999999994,
+        "wall_seconds": 0.13786590900053852
+      },
+      "fit_work": {
+        "base_merge_attempts": 32,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 5
+      },
+      "seed": 20261106,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 2421,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1659,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.13608354,
+        "wall_seconds_including_fit": 0.13621836000038456
+      },
+      "family": "boundaries",
+      "fit_shared": {
+        "cpu_seconds": 0.13090619199999998,
+        "wall_seconds": 0.13103582500025368
+      },
+      "fit_work": {
+        "base_merge_attempts": 26,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 12
+      },
+      "seed": 20261106,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1659,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1650,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.18726800200000004,
+        "wall_seconds_including_fit": 0.1874561149998044
+      },
+      "family": "contains",
+      "fit_shared": {
+        "cpu_seconds": 0.182127559,
+        "wall_seconds": 0.1823098549994029
+      },
+      "fit_work": {
+        "base_merge_attempts": 57,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 14
+      },
+      "seed": 20261106,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1650,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1735,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.13515711899999994,
+        "wall_seconds_including_fit": 0.13524648000020534
+      },
+      "family": "ratio2_boundaries",
+      "fit_shared": {
+        "cpu_seconds": 0.12995795900000007,
+        "wall_seconds": 0.13004276399988157
+      },
+      "fit_work": {
+        "base_merge_attempts": 22,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 3
+      },
+      "seed": 20261106,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1735,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 2292,
+        "dfa_character_upper_bound": 1806,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.13042678100000016,
+        "wall_seconds_including_fit": 0.13052963800055295
+      },
+      "family": "ratio4",
+      "fit_shared": {
+        "cpu_seconds": 0.12433276500000012,
+        "wall_seconds": 0.12443126800008031
+      },
+      "fit_work": {
+        "base_merge_attempts": 69,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 0
+      },
+      "seed": 20261106,
+      "strong_selection_work": {
+        "ast_nodes": 2292,
+        "dfa_character_upper_bound": 3612,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1653,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.13170097000000003,
+        "wall_seconds_including_fit": 0.13185220600007597
+      },
+      "family": "dyck",
+      "fit_shared": {
+        "cpu_seconds": 0.12654167799999994,
+        "wall_seconds": 0.1266879989998415
+      },
+      "fit_work": {
+        "base_merge_attempts": 18,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 14
+      },
+      "seed": 20261106,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1653,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1547,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.12985554600000015,
+        "wall_seconds_including_fit": 0.12999375500021415
+      },
+      "family": "equal",
+      "fit_shared": {
+        "cpu_seconds": 0.12459409300000002,
+        "wall_seconds": 0.1247284179999042
+      },
+      "fit_work": {
+        "base_merge_attempts": 36,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 0
+      },
+      "seed": 20261107,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1547,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1593,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.13623041800000002,
+        "wall_seconds_including_fit": 0.13636069200038037
+      },
+      "family": "starts",
+      "fit_shared": {
+        "cpu_seconds": 0.13088450000000007,
+        "wall_seconds": 0.13101228200048354
+      },
+      "fit_work": {
+        "base_merge_attempts": 34,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 16
+      },
+      "seed": 20261107,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1593,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 2316,
+        "predictions": 764
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.134040253,
+        "wall_seconds_including_fit": 0.13419190000058734
+      },
+      "family": "ends",
+      "fit_shared": {
+        "cpu_seconds": 0.12657257300000002,
+        "wall_seconds": 0.12672127799942245
+      },
+      "fit_work": {
+        "base_merge_attempts": 32,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 5
+      },
+      "seed": 20261107,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 2316,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1645,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.14032271900000004,
+        "wall_seconds_including_fit": 0.14045520200033934
+      },
+      "family": "boundaries",
+      "fit_shared": {
+        "cpu_seconds": 0.12900788000000007,
+        "wall_seconds": 0.12913821399979497
+      },
+      "fit_work": {
+        "base_merge_attempts": 26,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 12
+      },
+      "seed": 20261107,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1645,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1553,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.15917590400000026,
+        "wall_seconds_including_fit": 0.15932321200034494
+      },
+      "family": "contains",
+      "fit_shared": {
+        "cpu_seconds": 0.15384988499999985,
+        "wall_seconds": 0.15399142600017512
+      },
+      "fit_work": {
+        "base_merge_attempts": 57,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 14
+      },
+      "seed": 20261107,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1553,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1713,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.13159529299999972,
+        "wall_seconds_including_fit": 0.13174078799966082
+      },
+      "family": "ratio2_boundaries",
+      "fit_shared": {
+        "cpu_seconds": 0.126027557,
+        "wall_seconds": 0.12617009899986442
+      },
+      "fit_work": {
+        "base_merge_attempts": 22,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 3
+      },
+      "seed": 20261107,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1713,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 2292,
+        "dfa_character_upper_bound": 1746,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.13257533399999977,
+        "wall_seconds_including_fit": 0.13272252200022194
+      },
+      "family": "ratio4",
+      "fit_shared": {
+        "cpu_seconds": 0.1264692300000001,
+        "wall_seconds": 0.1266135759997269
+      },
+      "fit_work": {
+        "base_merge_attempts": 69,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 0
+      },
+      "seed": 20261107,
+      "strong_selection_work": {
+        "ast_nodes": 2292,
+        "dfa_character_upper_bound": 3492,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1631,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.13485501000000033,
+        "wall_seconds_including_fit": 0.1350030589992457
+      },
+      "family": "dyck",
+      "fit_shared": {
+        "cpu_seconds": 0.12909119199999974,
+        "wall_seconds": 0.12923559899991233
+      },
+      "fit_work": {
+        "base_merge_attempts": 18,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 14
+      },
+      "seed": 20261107,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1631,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1605,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.1355893990000001,
+        "wall_seconds_including_fit": 0.13572941399979754
+      },
+      "family": "equal",
+      "fit_shared": {
+        "cpu_seconds": 0.1297789039999997,
+        "wall_seconds": 0.129916066000078
+      },
+      "fit_work": {
+        "base_merge_attempts": 36,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 0
+      },
+      "seed": 20261108,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1605,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1613,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.1373320200000001,
+        "wall_seconds_including_fit": 0.13747427799989964
+      },
+      "family": "starts",
+      "fit_shared": {
+        "cpu_seconds": 0.13196709400000017,
+        "wall_seconds": 0.13210598899968318
+      },
+      "fit_work": {
+        "base_merge_attempts": 34,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 16
+      },
+      "seed": 20261108,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1613,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 2381,
+        "predictions": 764
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.14422317800000028,
+        "wall_seconds_including_fit": 0.14436632300021301
+      },
+      "family": "ends",
+      "fit_shared": {
+        "cpu_seconds": 0.136486208,
+        "wall_seconds": 0.13662398900032713
+      },
+      "fit_work": {
+        "base_merge_attempts": 32,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 5
+      },
+      "seed": 20261108,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 2381,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1638,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.1397397250000001,
+        "wall_seconds_including_fit": 0.13990364500023134
+      },
+      "family": "boundaries",
+      "fit_shared": {
+        "cpu_seconds": 0.13382493400000017,
+        "wall_seconds": 0.13398264799980097
+      },
+      "fit_work": {
+        "base_merge_attempts": 26,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 12
+      },
+      "seed": 20261108,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1638,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1611,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.18019856200000017,
+        "wall_seconds_including_fit": 0.18019840299984935
+      },
+      "family": "contains",
+      "fit_shared": {
+        "cpu_seconds": 0.17139670500000026,
+        "wall_seconds": 0.17139299399968877
+      },
+      "fit_work": {
+        "base_merge_attempts": 57,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 14
+      },
+      "seed": 20261108,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1611,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1713,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.14408542099999977,
+        "wall_seconds_including_fit": 0.14426166900011594
+      },
+      "family": "ratio2_boundaries",
+      "fit_shared": {
+        "cpu_seconds": 0.13877088000000004,
+        "wall_seconds": 0.13894063899988396
+      },
+      "fit_work": {
+        "base_merge_attempts": 22,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 3
+      },
+      "seed": 20261108,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1713,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 2292,
+        "dfa_character_upper_bound": 1759,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.133223455,
+        "wall_seconds_including_fit": 0.13322308300030272
+      },
+      "family": "ratio4",
+      "fit_shared": {
+        "cpu_seconds": 0.12682011000000015,
+        "wall_seconds": 0.1268162160004067
+      },
+      "fit_work": {
+        "base_merge_attempts": 69,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 0
+      },
+      "seed": 20261108,
+      "strong_selection_work": {
+        "ast_nodes": 2292,
+        "dfa_character_upper_bound": 3518,
+        "predictions": 764
+      }
+    },
+    {
+      "admission_work": {
+        "ast_nodes": 1910,
+        "dfa_character_upper_bound": 1648,
+        "predictions": 573
+      },
+      "current": {
+        "cpu_seconds_including_fit": 0.13427827699999995,
+        "wall_seconds_including_fit": 0.13429253600043012
+      },
+      "family": "dyck",
+      "fit_shared": {
+        "cpu_seconds": 0.12899581299999996,
+        "wall_seconds": 0.12900355599958857
+      },
+      "fit_work": {
+        "base_merge_attempts": 18,
+        "proposal_work": {
+          "ast_nodes": 2709,
+          "dfa_character_upper_bound": 0,
+          "predictions": 441
+        },
+        "residual_merge_attempts": 14
+      },
+      "seed": 20261108,
+      "strong_selection_work": {
+        "ast_nodes": 2865,
+        "dfa_character_upper_bound": 1648,
+        "predictions": 764
+      }
+    }
+  ],
+  "unit_note": "Linux ru_maxrss; shared process peak, not per-task memory",
+  "wall_seconds": 3.806315019000067
+}

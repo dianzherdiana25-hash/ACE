@@ -73,6 +73,7 @@ MODULE_GROUPS = {
         "ace_component_synthesis.test_component_synthesizer",
         "ace_conformal.test_conformal_risk",
         "ace_core_repair.test_core_repair",
+        "ace_core_repair.test_admission_contract",
         "ace_dsl_growth.test_dsl_growth",
         "ace_egraph.test_equality_saturation",
         "ace_epistemic.test_active_sampler",
