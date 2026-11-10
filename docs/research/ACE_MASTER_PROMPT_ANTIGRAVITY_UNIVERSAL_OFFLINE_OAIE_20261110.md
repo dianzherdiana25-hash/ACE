@@ -3,10 +3,12 @@
 **Untuk:** Antigravity atau agen AI pelaksana yang memiliki akses nyata ke workspace ACE.  
 **Bahasa kerja dan antarmuka pengguna:** Bahasa Indonesia.  
 **Tanggal mandat:** 10 November 2026.  
-**Edisi:** 4 — seluruh mandat sebelumnya ditambah web localhost bernuansa anime, chat dan cerita aktivitas, penemuan gap, kendali worker AI, frontier pembelajaran, dan pemulihan stagnasi.  
+**Edisi:** 5 — spesifikasi lengkap dengan kontrak eksekusi F01–F24, kelanjutan otomatis antarfase, syarat penutupan, dan pemulihan sesi.  
 **Visi:** Open-Ended Autonomous Intelligence Evolution — OAIE.  
 **Ruang kerja:** kode ACE, lingkungan tempat ACE dijalankan, model yang tersedia, pengalaman percakapan, tugas nyata, pembelajaran, dan operasi offline.  
 **Sifat dokumen:** instruksi pelaksanaan dan spesifikasi sasaran; nama API, CLI, direktori, dan konfigurasi di bawah merupakan target sampai ditemukan implementasi dan dibuktikan berfungsi.
+
+**Mulai dari [Kontrak Eksekusi ACE](ACE_ANTIGRAVITY_EXECUTION_CONTRACT_20261110.md).** Gunakan kontrak tersebut untuk menjalankan dan menutup pekerjaan, lalu dokumen ini sebagai spesifikasi terperinci. Selesai satu fase adalah kemajuan; lanjutkan pekerjaan wajib berikutnya secara otomatis selama masih dapat bertindak. Penutupan normal memerlukan bukti hasil F01–F24, integrasi, installer, dan pemakaian nyata. Batas sesi serta hambatan eksternal ditangani melalui checkpoint dan status belum selesai yang jujur.
 
 **Peta isi:**
 
@@ -36,6 +38,8 @@
 ## 00. CARA MEMAKAI MANDAT INI
 
 Saya menyerahkan mandat ini kepada Antigravity untuk **mengerjakan ACE**, mulai dari keadaan yang benar-benar ada sekarang.
+
+**Kewajiban penyelesaian edisi 5:** catat seluruh hasil wajib F01–F24 dari kontrak eksekusi, kerjakan dependency serta persyaratan yang masih terbuka, dan lanjutkan antarfase tanpa menunggu permintaan lanjutan. Tahap dasar, demo, atau implementasi sebagian tidak menutup mandat keseluruhan. Jika host benar-benar memutus sesi, simpan pekerjaan dan next action; jangan mengklaim kelanjutan latar belakang yang tidak tersedia.
 
 **Prioritas tambahan edisi 3:** selesaikan satu paket operasional dari implementasi sampai installer dan pemakaian nyata, lakukan audit terpadu di akhir paket, perbaiki temuan yang menghalangi, lalu langsung merge serta siapkan versi yang dapat dipakai. Pakai pemeriksaan ringan selama coding dan hindari audit besar berulang. Gunakan riset dan checkpoint yang masih berlaku agar kuota berfokus pada hasil. Rincian pelaksanaan ada pada Lampiran S–X.
 
@@ -4829,7 +4833,7 @@ Status dukungan HP mengikuti pengujian perangkat yang sebenarnya. Jika baru diuj
 
 ---
 
-# LAMPIRAN AD — PERINTAH LENGKAP EDISI 4 UNTUK ANTIGRAVITY
+# LAMPIRAN AD — PERINTAH LENGKAP EDISI 5 UNTUK ANTIGRAVITY
 
 ## AD.1 Satukan seluruh mandat
 
@@ -4896,7 +4900,7 @@ Jangan menyebut pembelajaran berhasil hanya karena memori bertambah. Tunjukkan p
 ## AD.5 Pengantar singkat untuk memulai
 
 ~~~text
-Baca master prompt ACE edisi 4 pada repository ini beserta ledger sumbernya.
+Baca kontrak eksekusi F01–F24 dan master prompt ACE edisi 5 pada repository ini beserta ledger sumbernya.
 Jalankan seluruh mandat pada kode dan environment.
 
 Sertakan web localhost bernuansa anime dengan dua blok:
@@ -4915,5 +4919,5 @@ Tuntaskan jalur pemakaian. Laporkan berdasarkan hasil yang benar-benar
 dijalankan dan simpan kelanjutan menuju OAIE.
 ~~~
 
-**Akhir dokumen edisi 4.**
+**Akhir spesifikasi lengkap edisi 5. Pelaksanaan mengikuti kontrak eksekusi F01–F24.**
 

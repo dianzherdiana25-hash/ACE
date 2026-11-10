@@ -636,6 +636,25 @@ class Edition4IntegratedAcceptanceTests(unittest.TestCase):
         self.assertEqual(fail_smoke.returncode, 4)
         self.assertTrue((target_ws / "ace_operational.sqlite3").exists())
 
+    # =========================================================================
+    # 7. EDITION 5 EXECUTION CONTRACT: FULL F01-F24 VERIFICATION & PERSISTENCE
+    # =========================================================================
+    def test_f01_to_f24_execution_contract_full_verification(self):
+        #Cannot mark PASS without checks_executed
+        with self.assertRaises(ValueError):
+            self.store.update_deliverable("F01", status="PASS", checks_executed=[])
+
+        snapshot = self.autonomy.run_and_verify_f01_f24_contract()
+        self.assertTrue(snapshot["all_passed"], f"Belum semua F01-F24 PASS: {snapshot['counts']}")
+        self.assertEqual(snapshot["counts"].get("PASS"), 24)
+        self.assertTrue((self.ws / "f01_f24_status.json").exists())
+        self.assertTrue((self.ws / "oaie_experiment_report.json").exists())
+        for item in snapshot["deliverables"]:
+            self.assertEqual(item["status"], "PASS", item["deliverable_id"])
+            self.assertGreater(len(item["checks_executed"]), 0, item["deliverable_id"])
+            self.assertGreater(len(item["artifacts"]), 0, item["deliverable_id"])
+
 
 if __name__ == "__main__":
     unittest.main()
+

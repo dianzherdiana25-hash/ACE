@@ -53,7 +53,7 @@ TERMINAL_TASK_STATES = frozenset({
 })
 
 ALLOWED_TASK_TRANSITIONS: dict[str, set[str]] = {
-    "QUEUED": {"ACTIVE", "LEARNING", "PAUSED", "CANCELLED", "WAITING_FOR_DEPENDENCY"},
+    "QUEUED": {"ACTIVE", "LEARNING", "VERIFYING", "COMPLETED", "PAUSED", "CANCELLED", "WAITING_FOR_DEPENDENCY"},
     "ACTIVE": {
         "VERIFYING",
         "LEARNING",
@@ -94,6 +94,42 @@ FRONTIER_STATUSES = frozenset({
     "LEARNING_IN_PROGRESS",
     "RETEST_REQUIRED",
 })
+
+DELIVERABLE_STATUSES = frozenset({
+    "TODO",
+    "IN_PROGRESS",
+    "IMPLEMENTED_UNVERIFIED",
+    "PASS",
+    "FAILED",
+    "BLOCKED_EXTERNAL",
+})
+
+F01_F24_CATALOG: list[tuple[str, str, list[str]]] = [
+    ("F01", "Source, entry point, environment, model, dependency, dan versi aktif ditemukan secara nyata", []),
+    ("F02", "Percakapan Indonesia beberapa giliran berjalan melalui backend aktual, termasuk koreksi, negasi, dan rujukan", ["F01"]),
+    ("F03", "Perintah pengguna menghasilkan tindakan, perubahan, atau artefak yang sesuai", ["F02"]),
+    ("F04", "ACE membuat program baru, menjalankannya, dan memenuhi kebutuhan perilakunya", ["F03"]),
+    ("F05", "ACE memperbaiki bug nyata dan memeriksa regresi yang relevan", ["F03"]),
+    ("F06", "ACE menyelesaikan masalah beberapa langkah serta merevisi keputusan berdasarkan bukti", ["F04", "F05"]),
+    ("F07", "Memori, task, dan langkah berikut dapat dipulihkan setelah restart", ["F01"]),
+    ("F08", "ACE menemukan kekurangan dari hasil kerja dan mengubahnya menjadi pekerjaan yang dapat dieksekusi", ["F06"]),
+    ("F09", "ACE memilih serta menjalankan langkah relevan berikut tanpa instruksi setiap langkah", ["F07", "F08"]),
+    ("F10", "Pengulangan tidak produktif terdeteksi dan menghasilkan perubahan pendekatan", ["F06"]),
+    ("F11", "ACE mempelajari gap kemampuan, memeriksa hasil belajar, dan kembali mencoba tugas awal", ["F08", "F10"]),
+    ("F12", "Kemampuan yang dipelajari membantu tugas berbeda setelah proses dimulai ulang", ["F07", "F11"]),
+    ("F13", "ACE memilih worker AI, memberikan pekerjaan, menerima hasil, memeriksa, dan melanjutkan", ["F08"]),
+    ("F14", "Bridge host menjalankan request, consumer, result, dan verification secara nyata", ["F13"]),
+    ("F15", "Pertanyaan baru serta tugas coding dapat dikerjakan offline memakai model dan alat lokal", ["F02", "F04"]),
+    ("F16", "Kontrak inti serta adapter tidak bergantung pada path atau API satu mesin", ["F01", "F15"]),
+    ("F17", "Web anime localhost responsif untuk HP dan terhubung ke runtime yang sama dengan CLI", ["F02", "F07"]),
+    ("F18", "Blok chatbot mengerjakan tugas; blok cerita merangkum aktivitas aktual secara singkat dan santai", ["F03", "F17"]),
+    ("F19", "Installer menyiapkan dependency, runtime, model, konfigurasi, state, aset web, dan launcher", ["F16", "F17"]),
+    ("F20", "ACE dapat digunakan dari sesi baru tanpa mengulang bootstrap manual", ["F19"]),
+    ("F21", "Instalasi atau pembaruan yang terputus dapat dilanjutkan atau dipulihkan sambil menjaga data", ["F07", "F19"]),
+    ("F22", "Satu perbaikan kemampuan dipilih ACE, diimplementasikan, diperiksa, diintegrasikan, diaktifkan, dan dipakai", ["F09", "F11"]),
+    ("F23", "Riset menghasilkan keputusan atau eksperimen nyata, disertai evaluasi retensi atau transfer yang jujur", ["F12", "F22"]),
+    ("F24", "Versi yang layak masuk target integrasi yang benar, ditunjuk installer, dan dapat dijalankan", ["F19", "F20", "F21", "F22", "F23"]),
+]
 
 
 def utc_now_iso() -> str:
@@ -326,6 +362,33 @@ class OperationalStore:
                 metric_score REAL NOT NULL DEFAULT 0.0,
                 created_at TEXT NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS deliverables (
+                deliverable_id TEXT PRIMARY KEY,
+                title_id TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'TODO',
+                remaining_work TEXT NOT NULL DEFAULT '',
+                dependencies_json TEXT NOT NULL DEFAULT '[]',
+                next_action TEXT NOT NULL DEFAULT '',
+                artifacts_json TEXT NOT NULL DEFAULT '[]',
+                source_version TEXT NOT NULL DEFAULT '',
+                checks_executed_json TEXT NOT NULL DEFAULT '[]',
+                blockers TEXT NOT NULL DEFAULT '',
+                resume_condition TEXT NOT NULL DEFAULT '',
+                updated_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS experiments (
+                experiment_id TEXT PRIMARY KEY,
+                title_id TEXT NOT NULL,
+                hypothesis TEXT NOT NULL,
+                decision TEXT NOT NULL,
+                metrics_json TEXT NOT NULL DEFAULT '{}',
+                retention_passed INTEGER NOT NULL DEFAULT 0,
+                transfer_passed INTEGER NOT NULL DEFAULT 0,
+                report_json TEXT NOT NULL DEFAULT '{}',
+                created_at TEXT NOT NULL
+            );
             """
         )
         self._conn.commit()
@@ -333,7 +396,7 @@ class OperationalStore:
     def _seed_defaults(self) -> None:
         now = utc_now_iso()
         defaults = {
-            "schema_version": "ace.operational.v4",
+            "schema_version": "ace.operational.v5",
             "release_version": RELEASE_VERSION,
             "previous_release_version": "3.9.0-baseline",
             "profile": os.environ.get("ACE_PROFILE", "local-complete"),
@@ -371,6 +434,18 @@ class OperationalStore:
                 VALUES (?, ?, ?, ?, ?, '', ?)
                 """,
                 (cap_id, name_id, cat, status, ev, now),
+            )
+
+        for deliv_id, title_id, deps in F01_F24_CATALOG:
+            self._conn.execute(
+                """
+                INSERT OR IGNORE INTO deliverables(
+                    deliverable_id, title_id, status, remaining_work, dependencies_json,
+                    next_action, artifacts_json, source_version, checks_executed_json,
+                    blockers, resume_condition, updated_at
+                ) VALUES (?, ?, 'TODO', 'Menunggu verifikasi penerimaan', ?, 'jalankan_verifikasi_f01_f24', '[]', ?, '[]', '', '', ?)
+                """,
+                (deliv_id, title_id, json.dumps(deps), RELEASE_VERSION, now),
             )
         self._conn.commit()
 
@@ -1528,3 +1603,170 @@ class OperationalStore:
             )
             self._conn.commit()
             return self.get_work_order(work_order_id)  # type: ignore[return-value]
+
+    # --- F01-F24 Execution Contract Deliverables & OAIE Experiments ---
+    def _row_to_deliverable(self, r: sqlite3.Row) -> dict[str, Any]:
+        return {
+            "deliverable_id": r["deliverable_id"],
+            "title_id": r["title_id"],
+            "status": r["status"],
+            "remaining_work": r["remaining_work"],
+            "dependencies": json.loads(r["dependencies_json"] or "[]"),
+            "next_action": r["next_action"],
+            "artifacts": json.loads(r["artifacts_json"] or "[]"),
+            "source_version": r["source_version"],
+            "checks_executed": json.loads(r["checks_executed_json"] or "[]"),
+            "blockers": r["blockers"],
+            "resume_condition": r["resume_condition"],
+            "updated_at": r["updated_at"],
+        }
+
+    def get_deliverable(self, deliverable_id: str) -> dict[str, Any] | None:
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT * FROM deliverables WHERE deliverable_id = ?",
+                (deliverable_id,),
+            ).fetchone()
+            return self._row_to_deliverable(row) if row else None
+
+    def list_deliverables(self) -> list[dict[str, Any]]:
+        with self._lock:
+            rows = self._conn.execute("SELECT * FROM deliverables ORDER BY deliverable_id ASC").fetchall()
+            return [self._row_to_deliverable(r) for r in rows]
+
+    def update_deliverable(
+        self,
+        deliverable_id: str,
+        *,
+        status: str,
+        remaining_work: str = "",
+        next_action: str = "tidak_ada",
+        artifacts: list[str] | None = None,
+        source_version: str | None = None,
+        checks_executed: list[str] | None = None,
+        blockers: str = "",
+        resume_condition: str = "",
+    ) -> dict[str, Any]:
+        if status not in DELIVERABLE_STATUSES:
+            raise ValueError(f"Status deliverable tidak valid: {status}")
+        if status == "PASS" and not checks_executed:
+            raise ValueError(f"Deliverable {deliverable_id} tidak boleh ditandai PASS tanpa bukti checks_executed")
+        with self._lock:
+            cur = self.get_deliverable(deliverable_id)
+            if not cur:
+                raise KeyError(f"Deliverable tidak dikenal: {deliverable_id}")
+            now = utc_now_iso()
+            self._conn.execute(
+                """
+                UPDATE deliverables SET
+                    status = ?,
+                    remaining_work = ?,
+                    next_action = ?,
+                    artifacts_json = ?,
+                    source_version = ?,
+                    checks_executed_json = ?,
+                    blockers = ?,
+                    resume_condition = ?,
+                    updated_at = ?
+                WHERE deliverable_id = ?
+                """,
+                (
+                    status,
+                    remaining_work,
+                    next_action,
+                    json.dumps(artifacts if artifacts is not None else cur["artifacts"], ensure_ascii=False),
+                    source_version if source_version is not None else self.get_meta("release_version", RELEASE_VERSION),
+                    json.dumps(checks_executed if checks_executed is not None else cur["checks_executed"], ensure_ascii=False),
+                    blockers,
+                    resume_condition,
+                    now,
+                    deliverable_id,
+                ),
+            )
+            self._conn.commit()
+            return self.get_deliverable(deliverable_id)  # type: ignore[return-value]
+
+    def export_deliverables_snapshot(self, target_path: Path | None = None) -> dict[str, Any]:
+        items = self.list_deliverables()
+        counts: dict[str, int] = {}
+        for item in items:
+            st = item["status"]
+            counts[st] = counts.get(st, 0) + 1
+        snapshot = {
+            "schema": "ace.execution_contract.f01_f24.v1",
+            "release_version": self.get_meta("release_version", RELEASE_VERSION),
+            "workspace": str(self.workspace),
+            "updated_at": utc_now_iso(),
+            "counts": counts,
+            "all_passed": all(i["status"] == "PASS" for i in items),
+            "deliverables": items,
+        }
+        out_file = target_path or (self.workspace / "f01_f24_status.json")
+        out_file.parent.mkdir(parents=True, exist_ok=True)
+        out_file.write_text(json.dumps(snapshot, indent=2, ensure_ascii=False), encoding="utf-8")
+        return snapshot
+
+    def save_experiment(
+        self,
+        *,
+        title_id: str,
+        hypothesis: str,
+        decision: str,
+        metrics: dict[str, Any],
+        retention_passed: bool,
+        transfer_passed: bool,
+        report: dict[str, Any],
+    ) -> dict[str, Any]:
+        with self._lock:
+            exp_id = f"oaie_exp_{int(time.time() * 1000)}_{secrets.token_hex(4)}"
+            now = utc_now_iso()
+            self._conn.execute(
+                """
+                INSERT INTO experiments(
+                    experiment_id, title_id, hypothesis, decision,
+                    metrics_json, retention_passed, transfer_passed, report_json, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    exp_id,
+                    title_id,
+                    hypothesis,
+                    decision,
+                    json.dumps(metrics, ensure_ascii=False),
+                    1 if retention_passed else 0,
+                    1 if transfer_passed else 0,
+                    json.dumps(report, ensure_ascii=False),
+                    now,
+                ),
+            )
+            self._conn.commit()
+            return {
+                "experiment_id": exp_id,
+                "title_id": title_id,
+                "hypothesis": hypothesis,
+                "decision": decision,
+                "metrics": metrics,
+                "retention_passed": retention_passed,
+                "transfer_passed": transfer_passed,
+                "report": report,
+                "created_at": now,
+            }
+
+    def list_experiments(self) -> list[dict[str, Any]]:
+        with self._lock:
+            rows = self._conn.execute("SELECT * FROM experiments ORDER BY created_at DESC").fetchall()
+            return [
+                {
+                    "experiment_id": r["experiment_id"],
+                    "title_id": r["title_id"],
+                    "hypothesis": r["hypothesis"],
+                    "decision": r["decision"],
+                    "metrics": json.loads(r["metrics_json"] or "{}"),
+                    "retention_passed": bool(r["retention_passed"]),
+                    "transfer_passed": bool(r["transfer_passed"]),
+                    "report": json.loads(r["report_json"] or "{}"),
+                    "created_at": r["created_at"],
+                }
+                for r in rows
+            ]
+
