@@ -8,8 +8,9 @@ This `main` branch contains a **runnable public research toolkit**, with selecte
 R1 finite-state induction and S2 typed arithmetic search sources imported without
 changes from their pinned research commits. It is a selected integration, not
 the complete historical ACE codebase. Existing research branches and frozen
-experiments remain available. This package uses Python 3.12+ standard library
-on Linux and requires no dependencies, API keys or paid services.
+experiments remain available. The bounded runtime uses Python 3.12+ standard
+library on Linux without API keys or paid services. Some research modules and
+the complete test suite also require NumPy; CI installs `numpy==2.1.3`.
 
 ## Run the operational ACE loop
 

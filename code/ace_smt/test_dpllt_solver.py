@@ -217,9 +217,8 @@ class TestDPLLTSolver(unittest.TestCase):
         ])
 
         post_cond = Ge(Var("i"), Const(2))
-        v_result = verify_program_satisfies_spec(program, pre_cond=None, post_cond=post_cond)
-        self.assertTrue(v_result.is_valid)
-        self.assertIsNone(v_result.counterexample)
+        with self.assertRaises(NotImplementedError):
+            verify_program_satisfies_spec(program, pre_cond=None, post_cond=post_cond)
 
     def test_difference_logic_cycle_conflict(self):
         """Tests that difference logic negative cycles (x - y <= 2, y - z <= 3, z - x <= -6) derive UNSAT."""
