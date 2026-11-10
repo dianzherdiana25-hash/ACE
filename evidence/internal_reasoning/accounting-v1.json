@@ -1,0 +1,17 @@
+{
+  "interpretation": "Raw public-v1 summary unique fields count per-unit label slots, not globally deduplicated oracle queries. These exact counts clarify accounting without changing scored evidence.",
+  "slots": {
+    "train": 288,
+    "validation": 288,
+    "terminal": 576
+  },
+  "unique_rule_input_output_triples_within_each_split": {
+    "train": 224,
+    "validation": 264,
+    "terminal": 544
+  },
+  "global_distinct_nominal_rule_input_output_triples": 968,
+  "external_provider_calls": 0,
+  "retention_label_slots": 576,
+  "hidden_shift_additional_label_slots": 24
+}

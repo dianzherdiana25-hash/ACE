@@ -1,0 +1,122 @@
+{
+  "date": "2026-11-10",
+  "timezone": "Asia/Jakarta",
+  "branch_heads_at_start": [
+    {
+      "ref": "refs/heads/ace-termux-20261110",
+      "sha": "d710ca00d68d6f96b753615ae28261ba4137d988"
+    },
+    {
+      "ref": "refs/heads/fix/ace-ai-evidence-gate-20261110",
+      "sha": "52394dcf6f203197ffa66b2dc7f802c475690a63"
+    },
+    {
+      "ref": "refs/heads/main",
+      "sha": "b5edf411ba5eb386efec945671aefed7091ba892"
+    }
+  ],
+  "pr94": {
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "head_sha": "52394dcf6f203197ffa66b2dc7f802c475690a63"
+  },
+  "pr94_ci": [
+    {
+      "id": 42745002162,
+      "name": "ACE runtime v2 receipt candidate (public engineering replay)",
+      "sha": "52394dcf6f203197ffa66b2dc7f802c475690a63",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42745002162"
+    },
+    {
+      "id": 42745002144,
+      "name": "ACE repair v2 public candidate and provenance (no promotion)",
+      "sha": "52394dcf6f203197ffa66b2dc7f802c475690a63",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42745002144"
+    },
+    {
+      "id": 42745002541,
+      "name": "ACE Autonomous Software Researcher (V0.3 Bootstrap)",
+      "sha": "52394dcf6f203197ffa66b2dc7f802c475690a63",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42745002541"
+    },
+    {
+      "id": 42745002553,
+      "name": "ACE R9 Gemini representation transfer",
+      "sha": "52394dcf6f203197ffa66b2dc7f802c475690a63",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42745002553"
+    },
+    {
+      "id": 42745002496,
+      "name": "ACE research verification",
+      "sha": "52394dcf6f203197ffa66b2dc7f802c475690a63",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42745002496"
+    },
+    {
+      "id": 42745002150,
+      "name": "ACE full-system verification",
+      "sha": "52394dcf6f203197ffa66b2dc7f802c475690a63",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42745002150"
+    }
+  ],
+  "implementation_ci": [
+    {
+      "id": 42748757786,
+      "name": "ACE bounded internal reasoning (public diagnostic)",
+      "head_sha": "7e6f6a78ab10e774c6cdf9784e91f6e9a900ba84",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42748757786",
+      "event": "pull_request"
+    },
+    {
+      "id": 42748758058,
+      "name": "ACE R9 Gemini representation transfer",
+      "head_sha": "7e6f6a78ab10e774c6cdf9784e91f6e9a900ba84",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42748758058",
+      "event": "pull_request"
+    },
+    {
+      "id": 42748757776,
+      "name": "ACE research verification",
+      "head_sha": "7e6f6a78ab10e774c6cdf9784e91f6e9a900ba84",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42748757776",
+      "event": "pull_request"
+    },
+    {
+      "id": 42748757859,
+      "name": "ACE full-system verification",
+      "head_sha": "7e6f6a78ab10e774c6cdf9784e91f6e9a900ba84",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42748757859",
+      "event": "pull_request"
+    },
+    {
+      "id": 42748753896,
+      "name": "ACE bounded internal reasoning (public diagnostic)",
+      "head_sha": "7e6f6a78ab10e774c6cdf9784e91f6e9a900ba84",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/actions/runs/42748753896",
+      "event": "push"
+    }
+  ],
+  "scope": "GitHub API readback, not live Termux verification"
+}
