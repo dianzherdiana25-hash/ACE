@@ -13,7 +13,6 @@ from pathlib import Path
 from ace_research_repair.corpus import sha256_digest
 from ace_research_repair.runner import decompress_gzip
 from ace_research_repair.verify import verify_report_bytes
-from tools.repair_v2_probe import git_blob
 
 ROOT = Path(__file__).resolve().parents[1]
 V1_BLOB = "5ae098a6f28ba0269d3d650b0704c588ef8f9783"
@@ -22,6 +21,10 @@ V2_CANONICAL_SHA256 = "57a8342870e0b9c40dddd4c5c535fd069eb1e8ba081d810e7233cc871
 V2_BYTES = 62731
 V2_CANONICAL_BYTES = 491811
 RUNTIME_IMPLEMENTATION = "068be383bf08ea7301a1425c7ab4c71070744a2f5db11a3136737c9bbf4cb5d5"
+
+
+def git_blob(data: bytes) -> str:
+    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\\0" + data).hexdigest()
 
 
 class RepairV2ReceiptError(ValueError):
