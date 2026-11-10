@@ -9,6 +9,7 @@ import sqlite3
 from typing import Any, Dict, List, Optional
 
 from .schema import validate_mission, MissionSchemaError
+from .admission import MAX_ARTIFACT_BYTES, evaluate_submission
 
 
 class ForbiddenFileViolationError(PermissionError):
@@ -68,6 +69,15 @@ class MissionBus:
                     current_hash TEXT NOT NULL
                 )
             """)
+            # Additive schema: old submissions/evidence remain byte-for-byte intact.
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS mission_evaluations (
+                    submission_id INTEGER PRIMARY KEY,
+                    mission_id TEXT NOT NULL,
+                    receipt_json TEXT NOT NULL,
+                    FOREIGN KEY(submission_id) REFERENCES submissions(id)
+                )
+            """)
             # Initialize genesis block if hash chain is empty
             cur = conn.execute("SELECT COUNT(*) FROM hash_chain")
             if cur.fetchone()[0] == 0:
@@ -103,6 +113,7 @@ class MissionBus:
         acceptance: Dict[str, Any],
         forbidden: List[str],
         deadline_hours: int = 24,
+        reasoning_problem: Optional[Dict[str, Any]] = None,
     ) -> str:
         now = datetime.datetime.now(datetime.timezone.utc)
         deadline = (now + datetime.timedelta(hours=deadline_hours)).isoformat()
@@ -121,6 +132,8 @@ class MissionBus:
             "deadline": deadline,
             "status": "PENDING",
         }
+        if reasoning_problem is not None:
+            mission_doc["reasoning_problem"] = reasoning_problem
         validate_mission(mission_doc)
 
         with self._get_connection() as conn:
@@ -176,29 +189,47 @@ class MissionBus:
                         f"Artifact '{artifact_path}' matches forbidden pattern '{forbidden_pat}'. Access denied."
                     )
 
-            artifact_bytes = Path(artifact_path).read_bytes()
+            artifact_file = Path(artifact_path)
+            if not artifact_file.is_file():
+                raise ValueError("artifact must be a regular file")
+            with artifact_file.open("rb") as stream:
+                artifact_bytes = stream.read(MAX_ARTIFACT_BYTES + 1)
+            if len(artifact_bytes) > MAX_ARTIFACT_BYTES:
+                raise ValueError("artifact exceeds 64 KiB limit")
             artifact_sha = hashlib.sha256(artifact_bytes).hexdigest()
+            evaluation = evaluate_submission(mission, artifact_bytes, decision)
+            requested_decision = decision
+            decision = evaluation["decision"]
             now = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
             mission["status"] = "SUBMITTED"
             mission["submitted_at"] = now
             mission["artifact_sha"] = artifact_sha
             mission["decision"] = decision
+            mission["requested_decision"] = requested_decision
+            mission["evaluation"] = evaluation
             mission["provenance"] = provenance
 
             conn.execute(
                 "UPDATE missions SET status = 'SUBMITTED', submitted_at = ?, data_json = ? WHERE id = ?",
                 (now, json.dumps(mission), mission_id)
             )
-            conn.execute(
+            submission = conn.execute(
                 "INSERT INTO submissions (mission_id, agent_id, artifact_path, artifact_sha, decision, provenance, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)",
                 (mission_id, agent_id, artifact_path, artifact_sha, decision, provenance, now)
             )
+            conn.execute(
+                "INSERT INTO mission_evaluations VALUES (?, ?, ?)",
+                (submission.lastrowid, mission_id, json.dumps(evaluation, sort_keys=True))
+            )
             self._append_hash_chain(conn, "MISSION_SUBMITTED", {
                 "mission_id": mission_id,
+                "submission_id": submission.lastrowid,
                 "agent_id": agent_id,
                 "artifact_sha": artifact_sha,
                 "decision": decision,
+                "requested_decision": requested_decision,
+                "evaluation_digest": hashlib.sha256(json.dumps(evaluation, sort_keys=True).encode()).hexdigest(),
                 "provenance": provenance
             })
             conn.commit()
@@ -208,6 +239,8 @@ class MissionBus:
                 "status": "SUBMITTED",
                 "artifact_sha": artifact_sha,
                 "decision": decision,
+                "requested_decision": requested_decision,
+                "evaluation": evaluation,
                 "provenance": provenance,
                 "timestamp": now
             }
@@ -277,9 +310,63 @@ Hipotesis dan patch yang sama telah diajukan {rejection_count} kali tanpa kemaju
             counts = {row[0]: row[1] for row in cur.fetchall()}
             cur = conn.execute("SELECT COUNT(*) FROM submissions")
             sub_count = cur.fetchone()[0]
+            decisions = dict(conn.execute("SELECT decision, COUNT(*) FROM submissions GROUP BY decision"))
+            evaluated = conn.execute("SELECT COUNT(*) FROM mission_evaluations").fetchone()[0]
             chain_valid = self.verify_hash_chain()
             return {
                 "mission_counts": counts,
                 "total_submissions": sub_count,
+                "submission_decisions": decisions,
+                "evaluated_submissions": evaluated,
+                "historical_unevaluated_submissions": sub_count - evaluated,
+                "scientific_status": "NOT_ASSESSED",
+                "release_gate": "BLOCK_RELEASE",
                 "hash_chain_valid": chain_valid,
+                "evaluation_receipts_valid": self.verify_evaluation_journal(),
             }
+
+    def verify_evaluation_journal(self) -> bool:
+        """Detect local receipt corruption against submission and journal hashes.
+
+        A party able to rewrite the whole database can rewrite this checksum
+        chain too. This is custody bookkeeping within one local trust domain.
+        """
+        if not self.verify_hash_chain():
+            return False
+        with self._get_connection() as conn:
+            events = {}
+            for row in conn.execute("SELECT payload_json FROM hash_chain WHERE event_type = 'MISSION_SUBMITTED'"):
+                payload = json.loads(row[0])
+                if "submission_id" in payload:
+                    if payload["submission_id"] in events:
+                        return False
+                    events[payload["submission_id"]] = payload
+            rows = conn.execute("""
+                SELECT e.submission_id,e.mission_id,e.receipt_json,s.artifact_sha,s.decision
+                FROM mission_evaluations e LEFT JOIN submissions s ON e.submission_id = s.id
+            """)
+            checked = set()
+            for row in rows:
+                event = events.get(row[0])
+                try:
+                    receipt = json.loads(row[2])
+                    checksum = hashlib.sha256(json.dumps(receipt, sort_keys=True).encode()).hexdigest()
+                    if (event is None or event["evaluation_digest"] != checksum or
+                            receipt["mission_id"] != row[1] or receipt["artifact_sha"] != row[3] or
+                            receipt["decision"] != row[4]):
+                        return False
+                except (ValueError, TypeError, KeyError):
+                    return False
+                checked.add(row[0])
+            return checked == set(events)
+
+    def evaluation_history(self, mission_id: str) -> List[Dict[str, Any]]:
+        """Read fresh receipts without reclassifying old unevaluated submissions."""
+        if not self.verify_evaluation_journal():
+            raise ValueError("mission evaluation journal integrity failure")
+        with self._get_connection() as conn:
+            rows = conn.execute(
+                "SELECT receipt_json FROM mission_evaluations WHERE mission_id = ? ORDER BY submission_id",
+                (mission_id,),
+            )
+            return [json.loads(row[0]) for row in rows]

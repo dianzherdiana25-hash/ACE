@@ -86,6 +86,7 @@ MODULE_GROUPS = {
         "ace_inversion.test_bidirectional_transducer",
         "ace_mcts.test_program_mcts",
         "ace_mission.test_mission_bus",
+        "ace_mission.test_admission",
         "ace_neurosymbolic.test_cegar_refinement",
         "ace_neurosymbolic.test_graph_embedding",
         "ace_neurosymbolic.test_neural_guided_search",

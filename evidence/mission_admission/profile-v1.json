@@ -1,0 +1,9 @@
+{
+  "cpu_seconds": 0.713758687,
+  "wall_seconds": 0.71386341599964,
+  "process_peak_rss_kib": 21152,
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "platform": "linux",
+  "raw_receipts_sha256": "11d7258ffab4278245dca7439279a04d18dbb6f9edc45be199dda6116ad3aca1",
+  "limits": "Host measurements, not Android; RSS is a process high water mark. Raw receipt mission IDs vary; deterministic result projection must match."
+}

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import datetime
+import math
 from typing import Any, Dict, List
 
 
@@ -66,6 +67,14 @@ def validate_mission(mission: Dict[str, Any]) -> Dict[str, Any]:
     budget = mission["budget"]
     if not isinstance(budget, dict) or "time_sec" not in budget or "max_candidates" not in budget:
         raise MissionSchemaError("budget must be an object with 'time_sec' and 'max_candidates'")
+    if (type(budget["time_sec"]) not in (int, float) or
+            not math.isfinite(budget["time_sec"]) or budget["time_sec"] <= 0 or
+            type(budget["max_candidates"]) is not int or budget["max_candidates"] < 1):
+        raise MissionSchemaError("budget requires finite positive time and integer candidate count")
+    if "max_primitive_operations" in budget and (
+            type(budget["max_primitive_operations"]) is not int or
+            not 1 <= budget["max_primitive_operations"] <= 300_000):
+        raise MissionSchemaError("primitive operation budget must be in 1..300000")
 
     acceptance = mission["acceptance"]
     if not isinstance(acceptance, dict) or not all(k in acceptance for k in ("metric", "threshold", "comparator")):
@@ -83,5 +92,12 @@ def validate_mission(mission: Dict[str, Any]) -> Dict[str, Any]:
         raise MissionSchemaError(
             f"Invalid status '{mission['status']}', allowed: {sorted(ALLOWED_STATUSES)}"
         )
+
+    if "reasoning_problem" in mission:
+        from ace_cognition.reasoning import Problem
+        try:
+            Problem.from_data(mission["reasoning_problem"])
+        except (ValueError, TypeError, KeyError) as exc:
+            raise MissionSchemaError("invalid reasoning_problem: " + str(exc)) from exc
 
     return mission
