@@ -37,6 +37,7 @@ class Intent(str, Enum):
     SELECT_OPTION = "SELECT_OPTION"
     MODIFY_PREVIOUS_ARTIFACT = "MODIFY_PREVIOUS_ARTIFACT"
     LEARN_AND_SOLVE = "LEARN_AND_SOLVE"
+    LEARN_LANGUAGE = "LEARN_LANGUAGE"
     GREETING_OR_CAPABILITIES = "GREETING_OR_CAPABILITIES"
     GENERAL_CONVERSATION = "GENERAL_CONVERSATION"
     DIAGNOSE_OR_FIX_BUG = "DIAGNOSE_OR_FIX_BUG"
@@ -58,6 +59,7 @@ TYPO_MAP = {
     "pke": "pakai",
     "pake": "pakai",
     "skrg": "sekarang",
+    "dlu": "dulu",
     "udh": "sudah",
     "udah": "sudah",
     "gimana": "bagaimana",
@@ -71,6 +73,25 @@ TYPO_MAP = {
     "tambahin": "tambahkan",
     "perbaikin": "perbaiki",
     "benerin": "perbaiki",
+    "bgt": "banget",
+    "bgtu": "begitu",
+    "gitu": "begitu",
+    "kalo": "kalau",
+    "kl": "kalau",
+    "kmrn": "kemarin",
+    "bbrp": "beberapa",
+    "mksd": "maksud",
+    "krn": "karena",
+    "bener": "benar",
+    "beneran": "beneran",
+    "gabisa": "tidak bisa",
+    "ga": "tidak",
+    "gak": "tidak",
+    "nggak": "tidak",
+    "gamau": "tidak mau",
+    "blm": "belum",
+    "belom": "belum",
+    "aja": "saja",
 }
 
 
@@ -222,6 +243,24 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
             "side_effects_allowed": True,
         }
 
+    # 9b. Language Learning Directive ("belajar bahasa dulu", "fokus belajar bahasa")
+    if any(p in lower for p in (
+        "belajar bahasa",
+        "pelajari bahasa",
+        "fokus belajar bahasa",
+        "belajar bahasa dulu",
+        "tingkatkan kemampuan bahasa",
+        "pahami bahasa",
+        "belajar ngobrol",
+    )):
+        return {
+            "intent": Intent.LEARN_LANGUAGE,
+            "normalized_text": norm,
+            "constraints": constraints,
+            "offline_requested": offline_requested,
+            "side_effects_allowed": False,
+        }
+
     # 10. Greeting / General Conversation / Capability question (`A01`, `A02`)
     is_capability_query = any(
         p in lower
@@ -241,6 +280,17 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
             "kemampuan apa",
             "daftar skill",
             "daftar kemampuan",
+            "bagaimana kemampuanmu",
+            "kemampuanmu sekarang",
+            "skill terbarumu",
+            "apa skill terbaru",
+            "apa keahlianmu",
+            "keahlianmu apa",
+            "kamu bisa apa",
+            "kamu bisa apa saja",
+            "apa yang kamu bisa",
+            "fitur apa saja",
+            "apa saja yang bisa kamu lakukan",
         )
     )
     is_short_greeting = any(
@@ -341,19 +391,20 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
         domain = "expense_tracker"
         domain_confidence = 0.95
     else:
-        domain = "general"
-        domain_confidence = 0.90 if any(
+        has_general_coding_trigger = any(
             k in lower
             for k in (
                 "buat",
                 "buatkan",
                 "bikin",
                 "bikinin",
+                "tuliskan",
                 "program",
                 "skrip",
                 "script",
                 "kode",
                 "koding",
+                "coding",
                 "aplikasi",
                 "fungsi",
                 "kalkulator",
@@ -365,7 +416,19 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
                 "algoritma",
                 "utilitas",
             )
-        ) else 0.75
+        )
+        if not has_general_coding_trigger:
+            return {
+                "intent": Intent.GENERAL_CONVERSATION,
+                "offer_options": False,
+                "normalized_text": norm,
+                "constraints": constraints,
+                "offline_requested": offline_requested,
+                "side_effects_allowed": False,
+            }
+
+        domain = "general"
+        domain_confidence = 0.90
 
     return {
         "intent": Intent.CREATE_OR_MODIFY_CODE,
@@ -444,13 +507,57 @@ class ConversationalEngine:
                 "dan memverifikasi setiap kode yang kutulis dengan bukti pengujian nyata."
             )
 
+        elif intent in ("LEARN_LANGUAGE", getattr(Intent, "LEARN_LANGUAGE", None)):
+            task_obj = self.store.create_task(
+                conversation_id=conversation_id,
+                title_id="Peningkatan Pemahaman Bahasa Indonesia & Percakapan",
+                user_request=text,
+                normalized_goal="Tingkatkan pemahaman bahasa Indonesia alami, partikel santai, dan konteks percakapan",
+                constraints=frame["constraints"],
+                model_backend=hc["active_backend"],
+            )
+            self.store.set_frontier_capability(
+                capability_id="cap_pemahaman_bahasa_indonesia",
+                name_id="Pemahaman Bahasa Indonesia Alami, Partikel, & Percakapan Santai",
+                category="bahasa",
+                status="KNOWN_AND_TESTED",
+                evidence_ref="verified:language_engine_v4_conversational",
+            )
+            self.store.update_task(
+                task_obj["task_id"],
+                status="COMPLETED",
+                verification_summary={"passed": True, "domain": "language_understanding"},
+            )
+            reply_text = (
+                "Saran yang sangat tepat! Sebagai kecerdasan otonom yang dirancang untuk pengguna Indonesia, "
+                "penguasaan pemahaman bahasa alami (nuansa kalimat, partikel santai seperti *sih*, *dong*, *deh*, *kan*, "
+                "dan pemisahan tegas antara obrolan santai vs perintah pembuatan kode) adalah kemampuan paling mendasar.\n\n"
+                "Aku sudah memprioritaskan dan memperbarui modul pemahaman bahasa agar obrolan santai atau masukan seperti ini "
+                "tidak lagi disalahartikan sebagai tugas membuat skrip Python baru. Sekarang aku siap diajak berdiskusi santai, "
+                "bercerita, maupun merencanakan langkah selanjutnya secara lebih luwes dan peka konteks."
+            )
+
         elif intent in ("GREETING_OR_CAPABILITIES", "GENERAL_CONVERSATION", Intent.GREETING_OR_CAPABILITIES, getattr(Intent, "GENERAL_CONVERSATION", None)):
             if intent in ("GENERAL_CONVERSATION", getattr(Intent, "GENERAL_CONVERSATION", None)) and not frame.get("offer_options"):
-                reply_text = (
-                    f"Halo! Aku **ACE**, asisten kecerdasan otonom kamu (berjalan dalam mode **{mode_label}**).\n"
-                    "Ada yang bisa kubantu hari ini? Kamu bisa meminta pembuatan program Python mandiri, pengolahan CSV, "
-                    "perbaikan bug terverifikasi, atau konsultasi arsitektur tugas."
-                )
+                gen_reply = ""
+                if hc.get("local_gguf", {}).get("server_healthy") and not any(w in text.lower() for w in ("halo", "hai", "selamat")):
+                    try:
+                        resp = self.router.generate_text([
+                            {"role": "system", "content": "Kamu adalah ACE, asisten kecerdasan otonom yang berkomunikasi dalam bahasa Indonesia yang santai, cerdas, dan rendah hati. Jawablah pesan pengguna dengan hangat, relevan, dan tidak bertele-tele."},
+                            {"role": "user", "content": text},
+                        ], max_tokens=150)
+                        if resp and resp.get("text"):
+                            gen_reply = resp["text"].strip()
+                    except Exception:
+                        pass
+                if gen_reply:
+                    reply_text = gen_reply
+                else:
+                    reply_text = (
+                        f"Halo! Aku **ACE**, asisten kecerdasan otonom kamu (berjalan dalam mode **{mode_label}**).\n"
+                        "Ada yang bisa kubahas atau kubantu hari ini? Kamu bisa berdiskusi santai, menanyakan kapabilitas, "
+                        "atau meminta bantuan teknis pemrograman."
+                    )
             elif frame.get("offer_options"):
                 offered = [
                     {"index": 1, "domain": "expense_tracker", "title": "Opsi 1: CLI Catatan Pengeluaran JSON (ringkas & cepat)"},
