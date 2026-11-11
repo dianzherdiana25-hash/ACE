@@ -1,11 +1,14 @@
-"""Read-only CLI for domain-neutral ACE capability contracts.
+"""ACE Open-World planning CLI: never executes selected capabilities.
+
+By default this only prints a structural plan. With --workspace/--task-id it
+persists a plan into the existing ACE OperationalStore, and an explicit
+--stage-review flag may create an INTERNAL review-only MissionBus mission.
+No selected provider, code artifact, remote service or model is executed.
 
 Example:
     PYTHONPATH=code python -m ace_operational.open_world_cli \
         --manifest examples/open_world_capabilities.json \
         --have dataset:raw --want report:verified
-
-This prints a structural plan, not an executed task.
 """
 from __future__ import annotations
 
@@ -36,7 +39,7 @@ def load_registry(path: Path) -> CapabilityRegistry:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="ACE open-world typed planning (READ-ONLY, no execution)"
+        description="ACE open-world typed planning (no selected capability execution)"
     )
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--have", action="append", required=True, help="Input type (repeat)")
