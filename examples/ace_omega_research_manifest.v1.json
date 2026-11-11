@@ -1,0 +1,359 @@
+{
+  "schema": "ace.omega.research_program.v1",
+  "created_at": "2026-11-11",
+  "status": "PROPOSAL_ONLY",
+  "oaie_proven": false,
+  "local_model_installed_by_this_document": false,
+  "source_repository": "dianzherdiana25-hash/ACE",
+  "source_branch": "research/ace-omega-evolution-blueprint-20261111",
+  "canonical_documents": [
+    "docs/research/ACE_OMEGA_OPEN_ENDED_EVOLUTION_BLUEPRINT_20261111.md",
+    "docs/research/ACE_OMEGA_EXECUTION_PROGRAM_20261111.md",
+    "docs/research/ACE_OMEGA_ANTIGRAVITY_MASTER_PROMPT_20261111.md"
+  ],
+  "baseline_ref": "PROJECT_CHARTER.md",
+  "dependence_on_unmerged_pilot": {
+    "pr": 102,
+    "required_to_audit_not_merge": true
+  },
+  "guardrails": {
+    "allowed_branch_mutations": "isolated_research_only",
+    "untrusted_code_requires_isolation": true,
+    "cloud_ai_api_required": false,
+    "auto_merge_main": false,
+    "auto_deploy": false,
+    "additional_spend_allowed": false,
+    "evaluator_custody_separate": true
+  },
+  "status_vocabulary": [
+    "PROPOSED",
+    "BLOCKED_ENVIRONMENT",
+    "NOT_ASSESSED",
+    "IN_PROGRESS",
+    "ENGINEERING_CI_PASS",
+    "SCIENTIFIC_HOLD",
+    "SCIENTIFIC_GO",
+    "FAILED",
+    "STOPPED_BUDGET"
+  ],
+  "gates": [
+    {
+      "id": "G0",
+      "claim": "real_local_model_inference",
+      "requires": [
+        "model_digest",
+        "hardware_receipt",
+        "raw_inference",
+        "fail_closed_negative_tests"
+      ]
+    },
+    {
+      "id": "G1",
+      "claim": "general_autonomous_coding",
+      "requires": [
+        "unseen_repository",
+        "no_human_candidate_code",
+        "real_patch",
+        "independent_tests",
+        "resource_receipt",
+        "restart_probe"
+      ]
+    },
+    {
+      "id": "G2",
+      "claim": "candidate_population_improvement",
+      "requires": [
+        "lineage",
+        "two_distinct_candidates",
+        "equal_budget_baseline",
+        "negative_results"
+      ]
+    },
+    {
+      "id": "G3",
+      "claim": "cross_family_capability_transfer",
+      "requires": [
+        "distinct_task_families",
+        "validity_custody",
+        "negative_transfer_control",
+        "heldout_protocol"
+      ]
+    },
+    {
+      "id": "G4",
+      "claim": "meta_evolution_gain",
+      "requires": [
+        "novel_search_policy",
+        "strong_baseline",
+        "fresh_search_problems",
+        "matched_compute",
+        "independent_evaluation"
+      ]
+    },
+    {
+      "id": "G5",
+      "claim": "successor_generational_retention",
+      "requires": [
+        "G0_G1_G2",
+        "inheritance_integrity",
+        "fresh_transfer_tasks",
+        "regression_audit",
+        "independent_evaluator"
+      ]
+    }
+  ],
+  "work_packages": [
+    {
+      "id": "OMEGA-00",
+      "name": "hardware_model_attestation",
+      "depends_on": [],
+      "first_possible_gate": "G0",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-01",
+      "name": "truthful_local_inference",
+      "depends_on": [
+        "OMEGA-00"
+      ],
+      "first_possible_gate": "G0",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-02",
+      "name": "repo_knowledge",
+      "depends_on": [
+        "OMEGA-01"
+      ],
+      "first_possible_gate": "G1",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-03",
+      "name": "autonomous_coding",
+      "depends_on": [
+        "OMEGA-01",
+        "OMEGA-02"
+      ],
+      "first_possible_gate": "G1",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-04",
+      "name": "durable_workflow",
+      "depends_on": [
+        "OMEGA-03"
+      ],
+      "first_possible_gate": "G1",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-05",
+      "name": "sandboxed_execution",
+      "depends_on": [
+        "OMEGA-03",
+        "OMEGA-04"
+      ],
+      "first_possible_gate": "G1",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-06",
+      "name": "independent_evidence",
+      "depends_on": [
+        "OMEGA-01",
+        "OMEGA-03",
+        "OMEGA-05"
+      ],
+      "first_possible_gate": "G1",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-07",
+      "name": "persistent_cognitive_memory",
+      "depends_on": [
+        "OMEGA-04",
+        "OMEGA-06"
+      ],
+      "first_possible_gate": "G2",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-08",
+      "name": "population_lineage_archive",
+      "depends_on": [
+        "OMEGA-06"
+      ],
+      "first_possible_gate": "G2",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-09",
+      "name": "mutation_and_diversity",
+      "depends_on": [
+        "OMEGA-08"
+      ],
+      "first_possible_gate": "G2",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-10",
+      "name": "environment_curriculum_coevolution",
+      "depends_on": [
+        "OMEGA-06",
+        "OMEGA-08"
+      ],
+      "first_possible_gate": "G3",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-11",
+      "name": "representation_algorithm_research",
+      "depends_on": [
+        "OMEGA-03",
+        "OMEGA-06",
+        "OMEGA-09"
+      ],
+      "first_possible_gate": "G3",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-12",
+      "name": "model_improvement_lab",
+      "depends_on": [
+        "OMEGA-01",
+        "OMEGA-06"
+      ],
+      "first_possible_gate": "G3",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-13",
+      "name": "metaevolution",
+      "depends_on": [
+        "OMEGA-08",
+        "OMEGA-09",
+        "OMEGA-10",
+        "OMEGA-11"
+      ],
+      "first_possible_gate": "G4",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-14",
+      "name": "successor_foundry",
+      "depends_on": [
+        "OMEGA-06",
+        "OMEGA-08",
+        "OMEGA-13"
+      ],
+      "first_possible_gate": "G5",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-15",
+      "name": "research_os_observability",
+      "depends_on": [
+        "OMEGA-04",
+        "OMEGA-06"
+      ],
+      "first_possible_gate": "G2",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "OMEGA-16",
+      "name": "cross_domain_interoperability",
+      "depends_on": [
+        "OMEGA-02",
+        "OMEGA-04",
+        "OMEGA-05"
+      ],
+      "first_possible_gate": "G3",
+      "status": "PROPOSED"
+    }
+  ],
+  "research_lanes": [
+    {
+      "id": "R01",
+      "name": "language_and_reasoning",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R02",
+      "name": "causal_world_models",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R03",
+      "name": "planning_search",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R04",
+      "name": "memory_knowledge",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R05",
+      "name": "autonomous_coding",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R06",
+      "name": "tool_invention",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R07",
+      "name": "formal_math",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R08",
+      "name": "program_synthesis",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R09",
+      "name": "representation_discovery",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R10",
+      "name": "continual_metalearning",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R11",
+      "name": "evolutionary_computation",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R12",
+      "name": "environment_curriculum",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R13",
+      "name": "model_architecture",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R14",
+      "name": "scientific_method",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R15",
+      "name": "metaresearch",
+      "physical_worker_reserved": false
+    },
+    {
+      "id": "R16",
+      "name": "successor_evolution",
+      "physical_worker_reserved": false
+    }
+  ],
+  "scientific_status": "NOT_ASSESSED",
+  "notes": "Machine-readable roadmap only; no executable workers, local models, results, or proof are introduced by this JSON."
+}
