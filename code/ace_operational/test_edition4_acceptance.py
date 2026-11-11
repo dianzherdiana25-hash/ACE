@@ -138,7 +138,7 @@ class Edition4IntegratedAcceptanceTests(unittest.TestCase):
         self.assertEqual(self.store.get_task(t["task_id"])["status"], "COMPLETED")
 
         # Test general domain pause and resume (preserves task_id without phantom creation)
-        from .web_server import ACEWebCore
+        from ace_operational.web_server import ACEWebCore
         web_core = ACEWebCore(self.store)
 
         t_gen = self.store.create_task(

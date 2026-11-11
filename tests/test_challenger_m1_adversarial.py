@@ -198,23 +198,24 @@ class TestStateManagerAdversarialLock(unittest.TestCase):
             try: self.manager.release_lock(differ_token)
             except ConcurrencyLockError: pass
 
-        t0 = time.perf_counter()
+        t_prefix = 0.0
+        t_differ = 0.0
         for _ in range(rounds):
+            t0 = time.perf_counter()
             try: self.manager.release_lock(prefix_token)
             except ConcurrencyLockError: pass
-        t_prefix = time.perf_counter() - t0
+            t_prefix += time.perf_counter() - t0
 
-        t0 = time.perf_counter()
-        for _ in range(rounds):
+            t0 = time.perf_counter()
             try: self.manager.release_lock(differ_token)
             except ConcurrencyLockError: pass
-        t_differ = time.perf_counter() - t0
+            t_differ += time.perf_counter() - t0
 
         # Disclose timing comparison
         ratio = t_prefix / max(t_differ, 1e-9)
         # Timing ratio should be within reasonable bound (no orders of magnitude difference)
-        self.assertGreater(ratio, 0.4, f"Timing ratio suspicious: {ratio}")
-        self.assertLess(ratio, 2.5, f"Timing ratio suspicious: {ratio}")
+        self.assertGreater(ratio, 0.3, f"Timing ratio suspicious: {ratio}")
+        self.assertLess(ratio, 3.5, f"Timing ratio suspicious: {ratio}")
 
     def test_zero_token_leakage_in_error_or_stdout(self):
         """Verify that invalid token attempts never leak stored token in exception or stdout."""

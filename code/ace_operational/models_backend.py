@@ -339,7 +339,7 @@ class ModelRouter:
         *,
         prefer_remote: bool = False,
         simulated_remote_error: str | None = None,
-        max_tokens: int = 512,
+        max_tokens: int = 128,
         temperature: float = 0.2,
     ) -> dict[str, Any]:
         """Generate text with strict offline guard, live local GGUF engine, and fallback."""
