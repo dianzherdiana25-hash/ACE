@@ -13,17 +13,16 @@ Trust boundaries:
 """
 from __future__ import annotations
 
-from dataclasses import asdict
 import hashlib
 import json
 from typing import Any, Iterable
 
 from ace_mission.bus import MissionBus
 from .open_world_planner import CapabilityRegistry, plan_capabilities, _tokens
+from .open_world_review_bus import queue_structural_review
 from .store import OperationalStore, utc_now_iso
 
 SCHEMA = "ace.open_world.plan.v1"
-REVIEW_IDEMPOTENCY_PREFIX = "ace.open_world.review.v1:"
 
 
 def _canonical(value: dict[str, Any]) -> str:
@@ -217,23 +216,8 @@ class OpenWorldTaskBridge:
         if not bus.verify_hash_chain():
             raise ValueError("MissionBus chain verification failed")
 
-        mission_id = bus.create_mission(
-            goal=f"Review ACE open-world plan {plan_key}; do NOT execute selected tools",
-            hypothesis=(
-                f"Plan snapshot {snapshot['record_sha256']} may be structurally "
-                "routable; independent execution and evidence are NOT assessed"
-            ),
-            task_family_ids=["open_world_structural_review"],
-            inputs=[],
-            budget={"time_sec": 120, "max_candidates": 1},
-            acceptance={
-                "metric": "contract_review_only",
-                "threshold": 1,
-                "comparator": ">=",
-            },
-            forbidden=[".git/", ".github/workflows/", "main"],
-            deadline_hours=1,
-            idempotency_key=REVIEW_IDEMPOTENCY_PREFIX + plan_key,
+        mission_id = queue_structural_review(
+            bus, plan_key=plan_key, record_sha256=snapshot["record_sha256"]
         )
         return {
             "mission_id": mission_id,
