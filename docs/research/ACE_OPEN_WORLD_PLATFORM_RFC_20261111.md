@@ -198,3 +198,67 @@ the example evidence references are PUBLIC FIXTURES, not certifications.
 The CLI returns 0 for a plan, 2 for no plan/search limit, 3 for invalid
 input. The same code path accepts arbitrary new types and contract
 manifests without source edits; execution and validation require OW-1.
+
+## 9. OW-1 integration pilot: existing ACE task -> durable plan -> review queue
+
+The prototype now includes:
+
+- `open_world_task_bridge.py`: stores a versioned, canonical typed-plan
+  snapshot in the **same SQLite database** as `OperationalStore`. Each record
+  is addressed by a SHA-256 digest of the complete request (including provider
+  contracts, output types and budgets). Retries with the identical snapshot
+  return the same record; altered contract snapshots create new versions.
+- Journal replay on restart, local checksum mismatch rejection, and explicit
+  `NOT_ASSESSED` / `BLOCK_RELEASE` / `execution_performed=false` markers.
+- A backward-compatible `MissionBus.create_mission(idempotency_key=...)`
+  option with a transactional check and one mission-created chain event.
+  Key reuse with different immutable parameters fails closed.
+- An explicitly authorized, **review-only** queue step. It cannot stage any
+  selected capability whose effect is `write` or `external`. This does
+  not attest provider results, authorize remote execution, or run any tool.
+- CLI `--workspace` and `--task-id` arguments for an existing ACE task,
+  with optional `--stage-review --authorize-local-queue`. Review dispatch
+  queues a request for independent plan scrutiny; no selected capability runs.
+
+All changes remain a research pilot, not a replacement for the existing ACE
+state machine, the MissionBus evaluation journal, or externally held evidence.
+
+Example for an **already-existing** ACE task:
+
+```bash
+PYTHONPATH=code python -m ace_operational.open_world_cli \
+  --manifest examples/open_world_capabilities.json \
+  --have dataset:raw --want report:verified \
+  --workspace /path/to/ace/workspace --task-id task_EXISTING
+```
+
+To queue only a contract review after explicit authorization, append:
+
+```bash
+--stage-review --authorize-local-queue
+```
+
+The `create_task` API belongs to existing `OperationalStore`; this CLI
+does not generate user tasks or mark tasks `COMPLETED` by itself.
+
+### Fault-model boundary
+
+The record checksum detects accidental edits to data or checksum separately,
+not a malicious writer who updates both fields. SQLite WAL + uniqueness prevent
+duplicate records under ordinary concurrent writes. `OperationalStore` and
+`MissionBus` are still distinct SQLite databases: cross-store atomic
+transactions are **NOT** claimed. Deterministic mission idempotency permits
+safe retry of the two-stage operation after a crash, not a claim of exactly-once
+delivery from a future networked executor. Future work must add queue
+authorization, snapshot-age policy, worker allowlists, concrete provider
+execution proof and independent receipt custody.
+
+### Acceptance status
+
+- Public code-level integration regression tests added for crash replay,
+  duplicate missions, changed snapshot versions, unauthorized effects, local
+  journal tampering, non-existent tasks, and CLI task-to-review integration.
+- GitHub CI at the exact branch SHA is the engineering gate; test files and
+  implementation are not accepted merely because a commit exists.
+- No blind scientific holdout, novel representation, transfer superiority or
+  OAIE claim has been evaluated.
