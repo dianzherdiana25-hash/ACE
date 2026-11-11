@@ -160,7 +160,8 @@ class LocalRepoWorkflow:
                                                   for p in implementation_paths}
             start = time.monotonic()
             try:
-                baseline = self.sandbox.run_tests(root, evaluator)
+                baseline = self.sandbox.run_tests(root, evaluator,
+                                                  timeout_seconds=min(30, wall_budget_seconds - 10))
                 result["baseline"] = baseline
                 if baseline["status"] == "BLOCKED_ENVIRONMENT":
                     result["status"] = "BLOCKED_ENVIRONMENT"
@@ -286,7 +287,15 @@ class LocalRepoWorkflow:
                         self.store.update_task(task_id, status="VERIFYING", checkpoint={"stage": "verifying"})
                         if _tree_digest(evaluator) != evaluator_digest:
                             raise ValueError("evaluator changed during experiment")
-                        verification = self.sandbox.run_tests(root, evaluator)
+                        remaining = wall_budget_seconds - (time.monotonic() - start)
+                        if remaining <= 6:
+                            result.update(status="STOPPED_BUDGET", reason="no verification budget remaining")
+                            record["status"] = "STOPPED_BUDGET"
+                            (artifacts / f"attempt-{attempt}.json").write_text(_json(record), encoding="utf-8")
+                            break
+                        # Reserve the mandatory isolation probe's five-second cap.
+                        verification = self.sandbox.run_tests(root, evaluator,
+                                                              timeout_seconds=min(30, remaining - 5))
                         record.update(verification=verification, status=verification["status"])
                         result["postimages"] = {p: _digest(text.encode()) for p, text in selected.items()}
                         if verification["status"] == "PASS":

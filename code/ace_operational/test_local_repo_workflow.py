@@ -25,7 +25,7 @@ class FakeSandbox:
         self.outcomes = iter(outcomes)
         self.calls = 0
 
-    def run_tests(self, *args):
+    def run_tests(self, *args, **kwargs):
         self.calls += 1
         status = next(self.outcomes)
         return {"status": status, "stdout": "", "stderr": "development test feedback",
