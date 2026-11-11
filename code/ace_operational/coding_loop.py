@@ -1483,7 +1483,7 @@ if __name__ == "__main__":
                     )
                     conversation_history.append({"role": "user", "content": repair_prompt})
 
-                gen_res = router.generate_text(conversation_history, max_tokens=512, temperature=0.1)
+                gen_res = router.generate_text(conversation_history, max_tokens=256, temperature=0.1)
                 gen_text = gen_res.get("text", "")
                 conversation_history.append({"role": "assistant", "content": gen_text})
 

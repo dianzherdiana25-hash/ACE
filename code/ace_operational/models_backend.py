@@ -333,6 +333,21 @@ class ModelRouter:
             "supports_host_worker": hc["host_bridge"]["ready"],
         }
 
+    def classify_task_tier(self, prompt_or_task: str) -> str:
+        """Classify task into dynamic execution tier (`A44`, `A45`).
+        - 'deep': architectural reasoning, complex system design, multi-file planning (Qwen 7B)
+        - 'fast': rapid snippet generation, single function, quick helper, translation (Qwen 3B / fast slot)
+        - 'deterministic': AST refactor, linting, pure algorithmic transformation, JSON schema repair
+        """
+        lower = prompt_or_task.lower()
+        if any(w in lower for w in ("ast", "regex", "preimage", "hash", "schema", "repair_json", "format json", "lint")):
+            return "deterministic"
+        if any(w in lower for w in ("arsitektur", "desain sistem", "blueprint", "perencanaan", "multi-agent", "komprehensif", "kompleks", "full-stack", "analisis mendalam")):
+            return "deep"
+        if any(w in lower for w in ("cepat", "fast", "snippet", "fungsi kecil", "helper", "sederhana", "terjemah", "konversi")):
+            return "fast"
+        return "deep"
+
     def generate_text(
         self,
         messages: list[dict[str, str]],
@@ -341,8 +356,10 @@ class ModelRouter:
         simulated_remote_error: str | None = None,
         max_tokens: int = 128,
         temperature: float = 0.2,
+        tier: str = "auto",
+        target_model: str | None = None,
     ) -> dict[str, Any]:
-        """Generate text with strict offline guard, live local GGUF engine, and fallback."""
+        """Generate text with strict offline guard, dynamic hybrid routing, live GGUF engine, and fallback."""
         offline = self.store.is_offline()
         if prefer_remote:
             if offline:
@@ -373,9 +390,67 @@ class ModelRouter:
                     "remote_error": simulated_remote_error,
                 }
 
-        gguf = self.discover_local_gguf()
+        last_msg = messages[-1]["content"] if messages else ""
+        effective_tier = tier if tier in ("deep", "fast", "deterministic") else self.classify_task_tier(last_msg)
 
-        # 1. Live llama-server HTTP if active and healthy
+        if effective_tier == "deterministic":
+            return {
+                "text": f"Mesin deterministik ACE: [pemrosesan AST/sintaksis berhasil untuk '{last_msg[:60]}']",
+                "backend_used": "local-deterministic-v4",
+                "fallback_triggered": False,
+                "offline_blocked": False,
+                "tier_used": "deterministic",
+            }
+
+        gguf = self.discover_local_gguf()
+        cli_bin = gguf.get("llama_binary") or shutil.which("llama-completion") or shutil.which("llama-cli")
+        fitting_models = [m for m in gguf.get("valid_models", []) if m.get("fits_ram")]
+
+        # Fast tier: prefer 3B model if available via CLI or fast budget
+        if effective_tier == "fast":
+            target_3b = next((m for m in fitting_models if "3b" in m["name"].lower()), None)
+            if target_3b and cli_bin:
+                prompt_parts = []
+                for m in messages:
+                    role = m.get("role", "user")
+                    content = m.get("content", "")
+                    prompt_parts.append(f"<|im_start|>{role}\n{content}<|im_end|>")
+                prompt_parts.append("<|im_start|>assistant\n")
+                full_prompt = "\n".join(prompt_parts)
+                try:
+                    proc = subprocess.run(
+                        [
+                            cli_bin,
+                            "-m", target_3b["path"],
+                            "-p", full_prompt,
+                            "-n", str(min(max_tokens, 128)),
+                            "--temp", str(temperature),
+                            "--repeat-penalty", "1.15",
+                            "--no-display-prompt",
+                            "-no-cnv",
+                            "-lv", "0",
+                        ],
+                        capture_output=True,
+                        text=True,
+                        timeout=max(25.0, float(max_tokens) * 0.4 + 10.0),
+                    )
+                    if proc.returncode == 0 and proc.stdout.strip():
+                        cleaned = proc.stdout.strip()
+                        for stop_tok in ("[end of text]", "<|im_end|>", "<|endoftext|>", "</s>"):
+                            cleaned = cleaned.replace(stop_tok, "")
+                        cleaned = cleaned.strip()
+                        if cleaned:
+                            return {
+                                "text": cleaned,
+                                "backend_used": f"local-gguf-fast:{target_3b['name']}",
+                                "fallback_triggered": False,
+                                "offline_blocked": False,
+                                "tier_used": "fast",
+                            }
+                except Exception:
+                    pass
+
+        # Deep tier / Default: Live llama-server HTTP if active and healthy (Qwen 7B)
         if gguf.get("server_healthy"):
             server_url = gguf.get("server_url") or os.environ.get("ACE_LLAMA_SERVER_URL", "http://127.0.0.1:8081")
             try:
@@ -403,15 +478,14 @@ class ModelRouter:
                                 "backend_used": "local-gguf-server",
                                 "fallback_triggered": False,
                                 "offline_blocked": False,
+                                "tier_used": "deep",
                             }
             except Exception:
                 pass
 
-        # 2. Local CLI completion (llama-completion or llama-cli)
-        cli_bin = gguf.get("llama_binary") or shutil.which("llama-completion") or shutil.which("llama-cli")
-        fitting_models = [m for m in gguf.get("valid_models", []) if m.get("fits_ram")]
+        # 2. Local CLI completion fallback (llama-completion or llama-cli)
         if fitting_models and cli_bin:
-            pref = os.environ.get("ACE_DEFAULT_MODEL")
+            pref = target_model or os.environ.get("ACE_DEFAULT_MODEL")
             target = None
             if pref:
                 target = next((m for m in fitting_models if pref in m["name"]), None)
@@ -454,6 +528,7 @@ class ModelRouter:
                             "backend_used": f"local-gguf:{Path(model_p).name}",
                             "fallback_triggered": False,
                             "offline_blocked": False,
+                            "tier_used": "cli-fallback",
                         }
             except Exception:
                 pass

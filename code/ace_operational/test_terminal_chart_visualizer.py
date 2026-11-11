@@ -1,4 +1,10 @@
-"""Unit tests untuk modul visualisasi grafik terminal ACE."""
+import sys
+from pathlib import Path
+
+_code_dir = Path(__file__).resolve().parent.parent
+if str(_code_dir) not in sys.path:
+    sys.path.insert(0, str(_code_dir))
+
 import unittest
 
 from ace_operational.terminal_chart_visualizer import (

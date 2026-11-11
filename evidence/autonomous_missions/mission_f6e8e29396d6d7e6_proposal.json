@@ -1,0 +1,13 @@
+{
+  "schema": "ace.mission.proposal.v1",
+  "mission_id": "mission_f6e8e29396d6d7e6",
+  "goal": "Induce count-matched negative examples to resolve order masking",
+  "hypothesis": "Count-balanced negative constraints eliminate false admission on prefix boundaries",
+  "executed_at": "2026-11-11T09:25:25.886084+00:00",
+  "status": "UNVERIFIED_PROPOSAL",
+  "decision": "PENDING_EVALUATION",
+  "metrics": {
+    "benchmark_score": 0.0,
+    "empirical_status": "NO_BEHAVIORAL_EVALUATOR_FOR_TASK"
+  }
+}

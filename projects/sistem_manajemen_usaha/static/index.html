@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACE Smart Enterprise Suite | Dashboard Manajemen Terpadu</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+      <div class="brand">
+        <span class="brand-icon">⚡</span>
+        <div class="brand-text">
+          <h1>ACE Enterprise Suite</h1>
+          <p class="subtitle">Platform Manajemen Usaha, Inventaris & Anggaran Cerdas</p>
+        </div>
+      </div>
+      <div class="nav-status">
+        <span class="badge-status-online" id="server-status">● Sistem Online (Local-Qwen7B)</span>
+        <button class="btn btn-secondary" onclick="exportTransactionsCSV()">📥 Unduh CSV</button>
+        <button class="btn btn-primary" onclick="openModal('modal-transaction')">+ Transaksi Baru</button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+      <!-- KPI Metric Cards Grid -->
+      <section class="kpi-grid">
+        <div class="kpi-card card-income">
+          <div class="kpi-header">
+            <span class="kpi-title">Total Pemasukan</span>
+            <span class="kpi-icon">📈</span>
+          </div>
+          <div class="kpi-value" id="kpi-income">Rp 0</div>
+          <div class="kpi-footer">Pendapatan operasional & penjualan</div>
+        </div>
+
+        <div class="kpi-card card-expense">
+          <div class="kpi-header">
+            <span class="kpi-title">Total Pengeluaran</span>
+            <span class="kpi-icon">📉</span>
+          </div>
+          <div class="kpi-value" id="kpi-expense">Rp 0</div>
+          <div class="kpi-footer">Biaya bahan baku, utilitas & operasional</div>
+        </div>
+
+        <div class="kpi-card card-profit">
+          <div class="kpi-header">
+            <span class="kpi-title">Laba Bersih & Margin</span>
+            <span class="kpi-icon">💰</span>
+          </div>
+          <div class="kpi-value" id="kpi-profit">Rp 0</div>
+          <div class="kpi-footer" id="kpi-margin">Margin Laba: 0.0%</div>
+        </div>
+
+        <div class="kpi-card card-inventory">
+          <div class="kpi-header">
+            <span class="kpi-title">Valuasi Stok & Aset</span>
+            <span class="kpi-icon">📦</span>
+          </div>
+          <div class="kpi-value" id="kpi-inventory-val">Rp 0</div>
+          <div class="kpi-footer" id="kpi-stock-warning">0 Produk Kritis</div>
+        </div>
+      </section>
+
+      <!-- 50-30-20 Budget Visualizer Banner -->
+      <section class="card budget-section">
+        <div class="budget-header">
+          <div>
+            <h2>Evaluasi Anggaran 50-30-20 Bisnis</h2>
+            <p class="section-desc">Kesehatan alokasi kas berdasarkan teori manajemen finansial berkelanjutan</p>
+          </div>
+          <div class="budget-legend">
+            <span class="legend-item"><span class="dot dot-needs"></span> Operasional (50%)</span>
+            <span class="legend-item"><span class="dot dot-wants"></span> Pertumbuhan (30%)</span>
+            <span class="legend-item"><span class="dot dot-savings"></span> Laba/Cadangan (20%)</span>
+          </div>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-segment seg-needs" id="seg-needs" style="width: 50%;"></div>
+          <div class="progress-segment seg-wants" id="seg-wants" style="width: 30%;"></div>
+          <div class="progress-segment seg-savings" id="seg-savings" style="width: 20%;"></div>
+        </div>
+
+        <div class="budget-details-grid" id="budget-details-grid">
+          <!-- Populated dynamically via app.js -->
+        </div>
+      </section>
+
+      <!-- Dual Data Grid: Products & Transactions -->
+      <div class="data-split-grid">
+        <!-- Products Inventory Column -->
+        <section class="card data-panel">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <h2>Inventaris & Stok Produk</h2>
+              <span class="badge" id="product-count-badge">0 SKU</span>
+            </div>
+            <button class="btn btn-sm btn-secondary" onclick="openModal('modal-product')">+ Tambah SKU</button>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Kode</th>
+                  <th>Nama Produk</th>
+                  <th>Kategori</th>
+                  <th>Harga Jual</th>
+                  <th>Stok</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="products-table-body">
+                <tr><td colspan="6" class="text-center">Memuat inventaris...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Transactions Ledger Column -->
+        <section class="card data-panel">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <h2>Buku Besar Transaksi Terakhir</h2>
+              <span class="badge" id="tx-count-badge">0 Transaksi</span>
+            </div>
+            <input type="text" id="tx-search" placeholder="Cari transaksi..." class="search-input" onkeyup="filterTransactions()">
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Keterangan</th>
+                  <th>Kategori</th>
+                  <th>Metode</th>
+                  <th>Nominal</th>
+                </tr>
+              </thead>
+              <tbody id="tx-table-body">
+                <tr><td colspan="5" class="text-center">Memuat mutasi kas...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Modal Tambah Transaksi -->
+    <div id="modal-transaction" class="modal-backdrop">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3>Tambah Transaksi Baru</h3>
+          <button class="modal-close" onclick="closeModal('modal-transaction')">&times;</button>
+        </div>
+        <form id="form-tx" onsubmit="submitTransaction(event)">
+          <div class="form-group">
+            <label>Tipe Transaksi</label>
+            <select id="tx-type" required>
+              <option value="INCOME">Pemasukan (INCOME)</option>
+              <option value="EXPENSE">Pengeluaran (EXPENSE)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Kategori</label>
+            <input type="text" id="tx-cat" placeholder="Contoh: Penjualan F&B, Bahan Baku, Gaji" required>
+          </div>
+          <div class="form-group">
+            <label>Nominal (Rupiah)</label>
+            <input type="number" id="tx-amount" min="1000" placeholder="Contoh: 150000" required>
+          </div>
+          <div class="form-group">
+            <label>Keterangan Lengkap</label>
+            <input type="text" id="tx-desc" placeholder="Contoh: Pembelian cup & sedotan ramah lingkungan" required>
+          </div>
+          <div class="form-group">
+            <label>Metode Pembayaran</label>
+            <select id="tx-method">
+              <option value="QRIS">QRIS</option>
+              <option value="Transfer Bank">Transfer Bank</option>
+              <option value="Tunai">Tunai</option>
+              <option value="Kartu Debit/Kredit">Kartu Debit/Kredit</option>
+            </select>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-transaction')">Batal</button>
+            <button type="submit" class="btn btn-primary">Simpan Transaksi</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Tambah Produk -->
+    <div id="modal-product" class="modal-backdrop">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3>Tambah SKU Produk Baru</h3>
+          <button class="modal-close" onclick="closeModal('modal-product')">&times;</button>
+        </div>
+        <form id="form-prod" onsubmit="submitProduct(event)">
+          <div class="form-group">
+            <label>Kode Produk</label>
+            <input type="text" id="p-code" placeholder="PRD-007" required>
+          </div>
+          <div class="form-group">
+            <label>Nama Produk</label>
+            <input type="text" id="p-name" placeholder="Contoh: Kopi Cold Brew 500ml" required>
+          </div>
+          <div class="form-group">
+            <label>Kategori</label>
+            <input type="text" id="p-cat" placeholder="Contoh: Minuman Botol" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Harga Beli (Modal)</label>
+              <input type="number" id="p-buy" min="0" placeholder="15000" required>
+            </div>
+            <div class="form-group">
+              <label>Harga Jual</label>
+              <input type="number" id="p-sell" min="0" placeholder="30000" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Stok Awal</label>
+              <input type="number" id="p-stock" min="0" placeholder="20" required>
+            </div>
+            <div class="form-group">
+              <label>Batas Minimum Stok</label>
+              <input type="number" id="p-min" min="1" value="5" required>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-product')">Batal</button>
+            <button type="submit" class="btn btn-primary">Simpan Produk</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
