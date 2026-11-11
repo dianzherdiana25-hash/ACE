@@ -540,7 +540,8 @@ class ConversationalEngine:
 
         elif intent in ("GREETING_OR_CAPABILITIES", "GENERAL_CONVERSATION", Intent.GREETING_OR_CAPABILITIES, getattr(Intent, "GENERAL_CONVERSATION", None)):
             if intent in ("GENERAL_CONVERSATION", getattr(Intent, "GENERAL_CONVERSATION", None)) and not frame.get("offer_options"):
-                is_standalone_greeting = len(text.strip().split()) <= 2 and any(w in text.lower() for w in ("halo", "hai", "hei", "oy", "pagi", "siang", "sore", "malam"))
+                gen_reply = ""
+                is_standalone_greeting = len(text.strip().split()) <= 3 and any(w in text.lower() for w in ("halo", "hai", "hei", "oy", "pagi", "siang", "sore", "malam", "kabar", "salam"))
                 if hc.get("local_gguf", {}).get("server_healthy") and not is_standalone_greeting:
                     try:
                         resp = self.router.generate_text([
@@ -552,6 +553,8 @@ class ConversationalEngine:
                     except Exception:
                         pass
                 if gen_reply:
+                    if "ACE" not in gen_reply:
+                        gen_reply = f"Halo! Aku **ACE**. {gen_reply}"
                     reply_text = gen_reply
                 else:
                     reply_text = (

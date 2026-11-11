@@ -1,0 +1,11 @@
+ID,Tipe,Kategori,Deskripsi,Nominal (Rp)
+1,PEMASUKAN,Pemasukan,Gaji Bulanan Software Engineer,12500000.0
+2,PEMASUKAN,Pemasukan,Bonus Proyek Freelance API,2500000.0
+3,PENGELUARAN,Kebutuhan (50%),Sewa Apartemen / Kos Bulanan,3500000.0
+4,PENGELUARAN,Kebutuhan (50%),Belanja Bahan Makanan & Supermarket,2000000.0
+5,PENGELUARAN,Kebutuhan (50%),"Tagihan Listrik, Air, & Internet Rumah",850000.0
+6,PENGELUARAN,Keinginan (30%),Ngopi & Makan Restoran Akhir Pekan,1200000.0
+7,PENGELUARAN,Keinginan (30%),Langganan Streaming & Gym Membership,450000.0
+8,PENGELUARAN,Keinginan (30%),Upgrade Monitor Eksternal 4K,2800000.0
+9,PENGELUARAN,Tabungan/Investasi (20%),Investasi Reksadana Saham & SBN,2500000.0
+10,PENGELUARAN,Tabungan/Investasi (20%),Tabungan Dana Darurat,1000000.0

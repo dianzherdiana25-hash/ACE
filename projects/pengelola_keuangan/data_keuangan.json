@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "tipe": "PEMASUKAN",
+    "kategori": "Pemasukan",
+    "subkategori": "Gaji Pokok",
+    "deskripsi": "Gaji Bulanan Software Engineer",
+    "nominal": 12500000.0
+  },
+  {
+    "id": 2,
+    "tipe": "PEMASUKAN",
+    "kategori": "Pemasukan",
+    "subkategori": "Sampingan",
+    "deskripsi": "Bonus Proyek Freelance API",
+    "nominal": 2500000.0
+  },
+  {
+    "id": 3,
+    "tipe": "PENGELUARAN",
+    "kategori": "Kebutuhan (50%)",
+    "deskripsi": "Sewa Apartemen / Kos Bulanan",
+    "nominal": 3500000.0
+  },
+  {
+    "id": 4,
+    "tipe": "PENGELUARAN",
+    "kategori": "Kebutuhan (50%)",
+    "deskripsi": "Belanja Bahan Makanan & Supermarket",
+    "nominal": 2000000.0
+  },
+  {
+    "id": 5,
+    "tipe": "PENGELUARAN",
+    "kategori": "Kebutuhan (50%)",
+    "deskripsi": "Tagihan Listrik, Air, & Internet Rumah",
+    "nominal": 850000.0
+  },
+  {
+    "id": 6,
+    "tipe": "PENGELUARAN",
+    "kategori": "Keinginan (30%)",
+    "deskripsi": "Ngopi & Makan Restoran Akhir Pekan",
+    "nominal": 1200000.0
+  },
+  {
+    "id": 7,
+    "tipe": "PENGELUARAN",
+    "kategori": "Keinginan (30%)",
+    "deskripsi": "Langganan Streaming & Gym Membership",
+    "nominal": 450000.0
+  },
+  {
+    "id": 8,
+    "tipe": "PENGELUARAN",
+    "kategori": "Keinginan (30%)",
+    "deskripsi": "Upgrade Monitor Eksternal 4K",
+    "nominal": 2800000.0
+  },
+  {
+    "id": 9,
+    "tipe": "PENGELUARAN",
+    "kategori": "Tabungan/Investasi (20%)",
+    "deskripsi": "Investasi Reksadana Saham & SBN",
+    "nominal": 2500000.0
+  },
+  {
+    "id": 10,
+    "tipe": "PENGELUARAN",
+    "kategori": "Tabungan/Investasi (20%)",
+    "deskripsi": "Tabungan Dana Darurat",
+    "nominal": 1000000.0
+  }
+]
