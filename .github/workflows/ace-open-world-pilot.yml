@@ -33,11 +33,13 @@ jobs:
         run: |
           python -m py_compile code/ace_operational/open_world_planner.py \
             code/ace_operational/open_world_cli.py \
+            code/ace_operational/open_world_execution.py \
             code/ace_operational/open_world_task_bridge.py \
             code/ace_operational/open_world_review_bus.py \
             code/ace_mission/bus.py \
             code/ace_operational/test_open_world_planner.py \
             code/ace_operational/test_open_world_cli.py \
+            code/ace_operational/test_open_world_execution.py \
             code/ace_operational/test_open_world_task_bridge.py
       - name: Run focused negative and positive controls
         env:
@@ -46,6 +48,7 @@ jobs:
           python -m unittest -v \
             ace_operational.test_open_world_planner \
             ace_operational.test_open_world_cli \
+            ace_operational.test_open_world_execution \
             ace_operational.test_open_world_task_bridge
       - name: Read-only demo smoke
         env:
