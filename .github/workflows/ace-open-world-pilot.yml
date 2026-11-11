@@ -34,6 +34,7 @@ jobs:
           python -m py_compile code/ace_operational/open_world_planner.py \
             code/ace_operational/open_world_cli.py \
             code/ace_operational/open_world_task_bridge.py \
+            code/ace_operational/open_world_review_bus.py \
             code/ace_mission/bus.py \
             code/ace_operational/test_open_world_planner.py \
             code/ace_operational/test_open_world_cli.py \
