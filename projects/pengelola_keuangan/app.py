@@ -19,6 +19,14 @@ from pathlib import Path
 import sys
 from typing import Any
 
+# Optional import from ACE visualizer engine if available
+try:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "code"))
+    from ace_operational.terminal_chart_visualizer import render_bar_chart, render_distribution_bar
+except Exception:
+    render_bar_chart = None
+    render_distribution_bar = None
+
 
 def format_rupiah(nilai: float | int) -> str:
     """Format angka numerik ke format mata uang Rupiah standar."""
@@ -219,6 +227,13 @@ def render_tabel_ringkasan(pk: PengelolaKeuangan) -> None:
     for kat, data in analisis["kategori"].items():
         print(f" {kat:<28} {format_rupiah(data['nominal']):<15} {data['persen_real']}% ({data['persen_target']}%)  {data['status']}")
     print("-" * 65)
+
+    if render_distribution_bar is not None and render_bar_chart is not None:
+        kat_dict = {k: v["nominal"] for k, v in analisis["kategori"].items() if v["nominal"] > 0}
+        if kat_dict:
+            print(" Visualisasi Distribusi Anggaran:")
+            print(" " + render_distribution_bar(kat_dict, width=32).replace("\n", "\n "))
+            print("-" * 65)
 
     if analisis["saran_rekomendasi"]:
         print(" 💡 Saran Finansial ACE:")
