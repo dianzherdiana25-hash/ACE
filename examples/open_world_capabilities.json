@@ -1,0 +1,45 @@
+{
+  "schema": "ace.capability_manifest.v0.pilot",
+  "capabilities": [
+    {
+      "capability_id": "parse-dataset",
+      "provider": "local:reader",
+      "consumes": ["dataset:raw"],
+      "produces": ["dataset:parsed"],
+      "status": "VERIFIED",
+      "evidence_ref": "public-fixture:parser",
+      "effect": "read",
+      "cost_units": 2
+    },
+    {
+      "capability_id": "research-analysis",
+      "provider": "hpc:analysis-worker",
+      "consumes": ["dataset:parsed"],
+      "produces": ["finding:structured"],
+      "status": "VERIFIED",
+      "evidence_ref": "public-fixture:analysis",
+      "effect": "none",
+      "cost_units": 4
+    },
+    {
+      "capability_id": "create-report",
+      "provider": "a2a:report-worker",
+      "consumes": ["finding:structured"],
+      "produces": ["report:verified"],
+      "status": "VERIFIED",
+      "evidence_ref": "public-fixture:report",
+      "effect": "none",
+      "cost_units": 1
+    },
+    {
+      "capability_id": "untested-black-box",
+      "provider": "remote:unknown",
+      "consumes": ["dataset:raw"],
+      "produces": ["report:verified"],
+      "status": "UNVERIFIED",
+      "evidence_ref": "",
+      "effect": "external",
+      "cost_units": 1
+    }
+  ]
+}
