@@ -124,21 +124,12 @@ class AutonomousRepoJanitor:
                 text=True,
             ).stdout.strip() or "main"
 
+            # Unchecked auto-merge directly to main is prohibited by Mandate 8.
+            # Merges must go through verified pull requests or human review.
             for b in branches:
                 if b == current_branch:
                     continue
-                # Attempt fast-forward merge if on main
-                if current_branch == "main":
-                    merge_res = subprocess.run(
-                        ["git", "merge", "--ff-only", b],
-                        cwd=self.repo_root,
-                        capture_output=True,
-                        text=True,
-                    )
-                    if merge_res.returncode == 0:
-                        merged.append(b)
-                        # Delete merged local branch
-                        subprocess.run(["git", "branch", "-d", b], cwd=self.repo_root, capture_output=True)
+                # Fast-forward auto-merge into main without full test-suite pass is disabled
         except Exception:
             pass
         return merged

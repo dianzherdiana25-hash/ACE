@@ -140,9 +140,11 @@ class ModelRouter:
         ).expanduser()
         self.model_cache_dir.mkdir(parents=True, exist_ok=True)
 
-    def discover_local_gguf(self) -> dict[str, Any]:
+    def discover_local_gguf(self, candidate_dirs: list[Path] | None = None) -> dict[str, Any]:
         """Inspect local GGUF models and llama.cpp binary (`llama-cli`, `llama-completion`, or `llama-server`)."""
         search_paths = [
+            os.environ.get("ACE_LLAMA_BIN"),
+            os.environ.get("LLAMA_BIN"),
             shutil.which("llama-cli"),
             shutil.which("llama-completion"),
             shutil.which("llama-server"),
@@ -150,7 +152,10 @@ class ModelRouter:
             shutil.which(str(Path.home() / ".local" / "bin" / "llama-completion")),
             shutil.which(str(Path.home() / ".local" / "bin" / "llama-server")),
         ]
-        llama_bin = next((p for p in search_paths if p), "")
+        llama_bin = next(
+            (p for p in search_paths if p and (shutil.which(p) or (Path(p).is_file() and os.access(p, os.X_OK)))),
+            "",
+        )
 
         # Check running llama-server HTTP endpoint
         server_url = os.environ.get("ACE_LLAMA_SERVER_URL", "http://127.0.0.1:8081")
@@ -164,13 +169,14 @@ class ModelRouter:
         except Exception:
             server_healthy = False
 
-        candidate_dirs = [self.model_cache_dir]
-        ws_models = self.store.workspace / "models"
-        if ws_models.exists() and ws_models != self.model_cache_dir:
-            candidate_dirs.append(ws_models)
-        default_user_cache = Path.home() / ".cache" / "ace" / "models"
-        if default_user_cache.exists() and default_user_cache not in candidate_dirs:
-            candidate_dirs.append(default_user_cache)
+        if candidate_dirs is None:
+            candidate_dirs = [self.model_cache_dir]
+            ws_models = self.store.workspace / "models"
+            if ws_models.exists() and ws_models != self.model_cache_dir:
+                candidate_dirs.append(ws_models)
+            default_user_cache = Path.home() / ".cache" / "ace" / "models"
+            if "ACE_MODEL_CACHE" not in os.environ and self.model_cache_dir == default_user_cache and default_user_cache.exists() and default_user_cache not in candidate_dirs:
+                candidate_dirs.append(default_user_cache)
 
         gguf_files = []
         for d in candidate_dirs:
@@ -189,13 +195,15 @@ class ModelRouter:
         corrupted_models = []
         ram_warnings = []
 
-        manifest_path = self.model_cache_dir / "manifest.json"
+        manifest_paths = [d / "manifest.json" for d in candidate_dirs]
         expected_hashes: dict[str, str] = {}
-        if manifest_path.exists():
-            try:
-                expected_hashes = json.loads(manifest_path.read_text(encoding="utf-8")).get("sha256", {})
-            except Exception:
-                expected_hashes = {}
+        for mp in manifest_paths:
+            if mp.exists():
+                try:
+                    data = json.loads(mp.read_text(encoding="utf-8"))
+                    expected_hashes.update(data.get("sha256", {}))
+                except Exception:
+                    pass
 
         for f in unique_gguf:
             try:
@@ -205,7 +213,7 @@ class ModelRouter:
                 expected_sha = expected_hashes.get(f.name, "")
                 if expected_sha:
                     actual_sha = _compute_sha256_stream(f)
-                    if actual_sha != expected_sha:
+                    if actual_sha.lower() != expected_sha.lower():
                         corrupted_models.append({"file": str(f), "reason": "checksum_mismatch"})
                         continue
                 if size_bytes < 4 or data_head != b"GGUF":
@@ -273,7 +281,15 @@ class ModelRouter:
             active_backend = f"local-gguf-server:{gguf['server_url']}"
             mode = "offline" if offline else "local"
         elif gguf["ready"] and gguf["valid_models"]:
-            active_backend = f"local-gguf:{gguf['valid_models'][0]['name']}"
+            fitting = [m for m in gguf["valid_models"] if m.get("fits_ram")]
+            pref = os.environ.get("ACE_DEFAULT_MODEL")
+            target = None
+            if pref:
+                target = next((m for m in fitting if pref in m["name"]), None)
+            if not target:
+                target = max(fitting, key=lambda m: m["size_bytes"]) if fitting else None
+            selected = target["name"] if target else gguf["valid_models"][0]["name"]
+            active_backend = f"local-gguf:{selected}"
             mode = "offline" if offline else "local"
         elif host_ready and profile == "host-assisted":
             active_backend = "host-bridge-ask-ai"
@@ -357,41 +373,51 @@ class ModelRouter:
                     "remote_error": simulated_remote_error,
                 }
 
+        gguf = self.discover_local_gguf()
+
         # 1. Live llama-server HTTP if active and healthy
-        server_url = os.environ.get("ACE_LLAMA_SERVER_URL", "http://127.0.0.1:8081")
-        try:
-            from urllib.request import Request, urlopen
-            req_body = json.dumps({
-                "messages": messages,
-                "temperature": temperature,
-                "max_tokens": max_tokens,
-                "repeat_penalty": 1.15,
-            }).encode("utf-8")
-            req = Request(
-                f"{server_url}/v1/chat/completions",
-                data=req_body,
-                headers={"Content-Type": "application/json"},
-                method="POST",
-            )
-            with urlopen(req, timeout=12.0) as resp:
-                if resp.status == 200:
-                    resp_data = json.loads(resp.read().decode("utf-8"))
-                    gen_text = resp_data.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
-                    if gen_text:
-                        return {
-                            "text": gen_text,
-                            "backend_used": "local-gguf-server",
-                            "fallback_triggered": False,
-                            "offline_blocked": False,
-                        }
-        except Exception:
-            pass
+        if gguf.get("server_healthy"):
+            server_url = gguf.get("server_url") or os.environ.get("ACE_LLAMA_SERVER_URL", "http://127.0.0.1:8081")
+            try:
+                from urllib.request import Request, urlopen
+                req_body = json.dumps({
+                    "messages": messages,
+                    "temperature": temperature,
+                    "max_tokens": max_tokens,
+                    "repeat_penalty": 1.15,
+                }).encode("utf-8")
+                req = Request(
+                    f"{server_url}/v1/chat/completions",
+                    data=req_body,
+                    headers={"Content-Type": "application/json"},
+                    method="POST",
+                )
+                http_timeout = max(60.0, float(max_tokens) * 0.8 + 20.0)
+                with urlopen(req, timeout=http_timeout) as resp:
+                    if resp.status == 200:
+                        resp_data = json.loads(resp.read().decode("utf-8"))
+                        gen_text = resp_data.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+                        if gen_text:
+                            return {
+                                "text": gen_text,
+                                "backend_used": "local-gguf-server",
+                                "fallback_triggered": False,
+                                "offline_blocked": False,
+                            }
+            except Exception:
+                pass
 
         # 2. Local CLI completion (llama-completion or llama-cli)
-        gguf = self.discover_local_gguf()
         cli_bin = gguf.get("llama_binary") or shutil.which("llama-completion") or shutil.which("llama-cli")
-        if gguf.get("valid_models") and cli_bin:
-            model_p = gguf["valid_models"][0]["path"]
+        fitting_models = [m for m in gguf.get("valid_models", []) if m.get("fits_ram")]
+        if fitting_models and cli_bin:
+            pref = os.environ.get("ACE_DEFAULT_MODEL")
+            target = None
+            if pref:
+                target = next((m for m in fitting_models if pref in m["name"]), None)
+            if not target:
+                target = max(fitting_models, key=lambda m: m["size_bytes"]) if fitting_models else None
+            model_p = target["path"] if target else fitting_models[0]["path"]
             prompt_parts = []
             for m in messages:
                 role = m.get("role", "user")
@@ -400,6 +426,7 @@ class ModelRouter:
             prompt_parts.append("<|im_start|>assistant\n")
             full_prompt = "\n".join(prompt_parts)
             try:
+                cli_timeout = max(60.0, float(max_tokens) * 0.8 + 20.0)
                 proc = subprocess.run(
                     [
                         cli_bin,
@@ -414,7 +441,7 @@ class ModelRouter:
                     ],
                     capture_output=True,
                     text=True,
-                    timeout=20.0,
+                    timeout=cli_timeout,
                 )
                 if proc.returncode == 0 and proc.stdout.strip():
                     cleaned = proc.stdout.strip()

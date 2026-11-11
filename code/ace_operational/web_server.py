@@ -989,7 +989,17 @@ class ACEWebCore:
             return {"task": updated, "action": "stop"}
         if act == "resume":
             if task["status"] in ("PAUSED", "FAILED_WITH_RECOVERY_STATE", "WAITING_FOR_DEPENDENCY", "QUEUED"):
-                res = self.coding.execute_coding_task(task_id, domain="expense_tracker")
+                ir = self.store.get_problem_ir(task_id) or {}
+                resume_domain = ir.get("domain", "expense_tracker")
+                if resume_domain == "general":
+                    res = self.coding.execute_general_task(
+                        title=task.get("title_id", "Tugas Solusi"),
+                        goal=task.get("user_request") or task.get("normalized_goal", ""),
+                        task_id=task_id,
+                        conversation_id=task.get("conversation_id", "conv_utama"),
+                    )
+                else:
+                    res = self.coding.execute_coding_task(task_id, domain=resume_domain)
                 return {"task": res["task"], "action": "resume"}
             return {"task": task, "action": "resume"}
         raise ValueError(f"Aksi kendali tidak dikenal: {action}")

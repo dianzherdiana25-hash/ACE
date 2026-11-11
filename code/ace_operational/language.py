@@ -391,31 +391,32 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
         domain = "expense_tracker"
         domain_confidence = 0.95
     else:
+        coding_words = (
+            "buat",
+            "buatkan",
+            "bikin",
+            "bikinin",
+            "tuliskan",
+            "program",
+            "skrip",
+            "script",
+            "kode",
+            "koding",
+            "coding",
+            "aplikasi",
+            "fungsi",
+            "kalkulator",
+            "hitung",
+            "ubah",
+            "konversi",
+            "fibonacci",
+            "modul",
+            "algoritma",
+            "utilitas",
+        )
         has_general_coding_trigger = any(
-            k in lower
-            for k in (
-                "buat",
-                "buatkan",
-                "bikin",
-                "bikinin",
-                "tuliskan",
-                "program",
-                "skrip",
-                "script",
-                "kode",
-                "koding",
-                "coding",
-                "aplikasi",
-                "fungsi",
-                "kalkulator",
-                "hitung",
-                "ubah",
-                "konversi",
-                "fibonacci",
-                "modul",
-                "algoritma",
-                "utilitas",
-            )
+            re.search(r"\b" + re.escape(w) + r"\b", lower)
+            for w in coding_words
         )
         if not has_general_coding_trigger:
             return {
@@ -545,7 +546,7 @@ class ConversationalEngine:
                         resp = self.router.generate_text([
                             {"role": "system", "content": "Kamu adalah ACE, asisten kecerdasan otonom yang berkomunikasi dalam bahasa Indonesia yang santai, cerdas, dan rendah hati. Jawablah pesan pengguna dengan hangat, relevan, dan tidak bertele-tele."},
                             {"role": "user", "content": text},
-                        ], max_tokens=150)
+                        ], max_tokens=90)
                         if resp and resp.get("text"):
                             gen_reply = resp["text"].strip()
                     except Exception:
@@ -739,8 +740,17 @@ class ConversationalEngine:
         elif intent == "RESUME_TASK":
             latest = self.store.get_latest_task(conversation_id)
             if latest and latest["status"] in ("PAUSED", "FAILED_WITH_RECOVERY_STATE", "WAITING_FOR_DEPENDENCY", "QUEUED"):
-                domain = conv["context"].get("last_domain", "expense_tracker")
-                exec_res = self.coding.execute_coding_task(latest["task_id"], domain=domain, options=opts)
+                ir = self.store.get_problem_ir(latest["task_id"]) or {}
+                domain = ir.get("domain") or conv["context"].get("last_domain", "expense_tracker")
+                if domain == "general":
+                    exec_res = self.coding.execute_general_task(
+                        title=latest.get("title_id", "Tugas Solusi"),
+                        goal=latest.get("user_request") or latest.get("normalized_goal", ""),
+                        task_id=latest["task_id"],
+                        conversation_id=conversation_id,
+                    )
+                else:
+                    exec_res = self.coding.execute_coding_task(latest["task_id"], domain=domain, options=opts)
                 task_obj = exec_res["task"]
                 reply_text = (
                     f"Tugas **{task_obj['title_id']}** sudah kulanjutkan dari checkpoint terakhir dan sekarang selesai "

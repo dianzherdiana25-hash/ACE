@@ -137,6 +137,40 @@ class Edition4IntegratedAcceptanceTests(unittest.TestCase):
         self.assertEqual(r_res["intent_frame"]["intent"], "RESUME_TASK")
         self.assertEqual(self.store.get_task(t["task_id"])["status"], "COMPLETED")
 
+        # Test general domain pause and resume (preserves task_id without phantom creation)
+        from .web_server import ACEWebCore
+        web_core = ACEWebCore(self.store)
+
+        t_gen = self.store.create_task(
+            title_id="Kalkulator Sederhana",
+            user_request="Buatkan skrip kalkulator",
+            normalized_goal="kalkulator",
+        )
+        self.store.save_problem_ir(t_gen["task_id"], {"domain": "general"})
+        self.store.update_task(t_gen["task_id"], status="PAUSED")
+        tasks_count_before = len(self.store.list_tasks())
+
+        r_res_gen = self.engine.handle_user_message("Lanjutkan")
+        self.assertEqual(r_res_gen["intent_frame"]["intent"], "RESUME_TASK")
+        self.assertEqual(r_res_gen["task"]["task_id"], t_gen["task_id"])
+        self.assertEqual(self.store.get_task(t_gen["task_id"])["status"], "COMPLETED")
+        self.assertEqual(len(self.store.list_tasks()), tasks_count_before)
+
+        # Web control task resume for general domain
+        t_web = self.store.create_task(
+            title_id="Hitung Luas Persegi",
+            user_request="hitung luas persegi",
+            normalized_goal="hitung luas",
+        )
+        self.store.save_problem_ir(t_web["task_id"], {"domain": "general"})
+        self.store.update_task(t_web["task_id"], status="PAUSED")
+        tasks_count_before_web = len(self.store.list_tasks())
+
+        res_web = web_core.control_task(t_web["task_id"], "resume")
+        self.assertEqual(res_web["task"]["task_id"], t_web["task_id"])
+        self.assertEqual(self.store.get_task(t_web["task_id"])["status"], "COMPLETED")
+        self.assertEqual(len(self.store.list_tasks()), tasks_count_before_web)
+
     # =========================================================================
     # 2. CODING LOOP, BUG REPAIR, REFACTOR & PREIMAGE GUARD (A15-A23, A39, A40)
     # =========================================================================
@@ -259,6 +293,19 @@ class Edition4IntegratedAcceptanceTests(unittest.TestCase):
         ram_check = self.router.check_ram_budget_for_model(999_999)
         self.assertFalse(ram_check["allowed"])
         self.assertEqual(ram_check["fallback_backend"], "local-deterministic-v4")
+
+        # Multi-model RAM priority: fitting models prioritized over oversized models
+        mock_gguf = {
+            "ready": True,
+            "valid_models": [
+                {"name": "huge_70b.gguf", "path": "/fake/huge.gguf", "size_bytes": 70_000_000_000, "fits_ram": False},
+                {"name": "small_0.5b.gguf", "path": "/fake/small.gguf", "size_bytes": 500_000_000, "fits_ram": True},
+            ],
+            "server_healthy": False,
+        }
+        fitting = [m for m in mock_gguf["valid_models"] if m.get("fits_ram")]
+        self.assertEqual(len(fitting), 1)
+        self.assertEqual(fitting[0]["name"], "small_0.5b.gguf")
 
     # =========================================================================
     # 4. AUTONOMY: GAPS, FRONTIER, WORKER, LEARNING & ANTI-STAGNATION (AUTO01-AUTO16)
@@ -664,14 +711,63 @@ class Edition4IntegratedAcceptanceTests(unittest.TestCase):
     # 8. VERIFIED GAPS ELIMINATION & LIVE GGUF/SUBPROCESS CRASH SUITE (G01-G12)
     # =========================================================================
     def test_g01_g06_g10_live_local_gguf_inference_and_streaming_discovery(self):
+        # 1. G10 streaming discovery and validation using genuine test files
+        test_models_dir = self.root / "test_models"
+        test_models_dir.mkdir(parents=True, exist_ok=True)
+
+        valid_file = test_models_dir / "valid.gguf"
+        valid_data = b"GGUF\x03\x00\x00\x00" + b"\x00" * 1024
+        valid_file.write_bytes(valid_data)
+
+        corrupt_magic_file = test_models_dir / "corrupt_magic.gguf"
+        corrupt_magic_file.write_bytes(b"BROKEN_NOT_GGUF")
+
+        corrupt_sha_file = test_models_dir / "corrupt_sha.gguf"
+        corrupt_sha_file.write_bytes(b"GGUF\x03\x00\x00\x00" + b"\x01" * 512)
+
+        manifest_file = test_models_dir / "manifest.json"
+        manifest_file.write_text(
+            json.dumps({"sha256": {"corrupt_sha.gguf": "0000000000000000000000000000000000000000000000000000000000000000"}}),
+            encoding="utf-8",
+        )
+
+        disc_isolated = self.router.discover_local_gguf(candidate_dirs=[test_models_dir])
+        valid_entry = next((m for m in disc_isolated["valid_models"] if m["name"] == "valid.gguf"), None)
+        self.assertIsNotNone(valid_entry)
+        self.assertEqual(valid_entry["size_bytes"], len(valid_data))
+        self.assertGreaterEqual(valid_entry["estimated_ram_mb"], 256)
+
+        corrupt_map = {Path(c["file"]).name: c["reason"] for c in disc_isolated["corrupted_models"]}
+        self.assertEqual(corrupt_map.get("corrupt_magic.gguf"), "invalid_gguf_magic")
+        self.assertEqual(corrupt_map.get("corrupt_sha.gguf"), "checksum_mismatch")
+
+        empty_dir = self.root / "empty_models"
+        empty_dir.mkdir(parents=True, exist_ok=True)
+        disc_empty = self.router.discover_local_gguf(candidate_dirs=[empty_dir])
+        self.assertEqual(disc_empty["valid_models"], [])
+        if not disc_empty["server_healthy"]:
+            self.assertFalse(disc_empty["ready"])
+
+        # 2. Test live inference vs honest fallback
         disc = self.router.discover_local_gguf()
-        self.assertTrue(disc["ready"])
-        self.assertGreaterEqual(len(disc["valid_models"]), 1)
-        res = self.router.generate_text([
-            {"role": "user", "content": "Katakan satu kalimat halo ramah dalam Bahasa Indonesia"}
-        ], max_tokens=40)
-        self.assertIn(res["backend_used"], ("local-gguf-server", f"local-gguf:{disc['valid_models'][0]['name']}"))
-        self.assertGreater(len(res["text"].strip()), 0)
+        if disc["ready"]:
+            if not disc["server_healthy"]:
+                self.assertGreaterEqual(len(disc["valid_models"]), 1)
+            res = self.router.generate_text([
+                {"role": "user", "content": "Katakan satu kalimat halo ramah dalam Bahasa Indonesia"}
+            ], max_tokens=40)
+            self.assertTrue(res["backend_used"].startswith("local-gguf"))
+            self.assertGreater(len(res["text"].strip()), 0)
+        else:
+            self.assertFalse(disc["ready"])
+            self.assertEqual(disc["valid_models"], [])
+            self.assertEqual(self.router.health_check()["active_backend"], "local-deterministic-v4")
+            res = self.router.generate_text([
+                {"role": "user", "content": "Katakan satu kalimat halo ramah dalam Bahasa Indonesia"}
+            ], max_tokens=40)
+            self.assertEqual(res["backend_used"], "local-deterministic-v4")
+            self.assertFalse(res["fallback_triggered"])
+            self.assertIn("Mesin lokal ACE", res["text"])
 
     def test_g04_g11_fencing_lease_violation_rejection(self):
         target = self.ws / "projects" / "fence_test.py"

@@ -881,6 +881,19 @@ class OperationalStore:
             self._conn.commit()
             return payload
 
+    def get_problem_ir(self, task_id: str) -> dict[str, Any] | None:
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT schema_json FROM problem_irs WHERE task_id = ? ORDER BY created_at DESC LIMIT 1",
+                (task_id,),
+            ).fetchone()
+            if not row or not row["schema_json"]:
+                return None
+            try:
+                return json.loads(row["schema_json"])
+            except Exception:
+                return None
+
     # --- Activity Events & Story Projection ---
     def emit_event(
         self,

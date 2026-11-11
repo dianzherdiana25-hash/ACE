@@ -1558,25 +1558,49 @@ if __name__ == "__main__":
                 last_error_feedback = f"Eksekusi runtime gagal (Exit Code {res['exit_code']}):\n{err_msg}"
 
         # If repair loop exhausted and still not passed:
-        if not passed and opts.get("allow_deterministic_fallback", True):
-            deterministic_code = self._synthesize_deterministic_general_solution(title, goal)
-            atomic_write_verified(
-                script_path,
-                deterministic_code,
-                expected_lease_epoch=lease_epoch,
-                current_lease_epoch=self.store.current_lease_epoch,
-            )
-            script_path.chmod(0o755)
-            res = self.run_command_with_receipt(
-                task_id=task_id,
-                cmd=[sys.executable, str(script_path)],
-                cwd=proj_dir,
-                action_kind="verify_general_script_deterministic_fallback",
-                artifacts_created=[str(script_path)],
-            )
-            if res.get("receipt"):
-                receipt_ids.append(res["receipt"]["receipt_id"])
-            passed = res["passed"]
+        if not passed:
+            try:
+                self.store.record_gap(
+                    source_task_id=task_id,
+                    error_type="CODING_REPAIR_EXHAUSTED",
+                    missing_skill_or_tool=f"domain_general::{title[:30]}",
+                    description_id=f"Perbaikan kode gagal untuk: {title}. Error: {last_error_feedback[:180]}",
+                    reproduction_ref=str(script_path),
+                    resolution_strategy="synthesize_skill_or_tool",
+                )
+            except Exception:
+                pass
+            if opts.get("allow_deterministic_fallback", True):
+                deterministic_code = self._synthesize_deterministic_general_solution(title, goal)
+                atomic_write_verified(
+                    script_path,
+                    deterministic_code,
+                    expected_lease_epoch=lease_epoch,
+                    current_lease_epoch=self.store.current_lease_epoch,
+                )
+                script_path.chmod(0o755)
+                res = self.run_command_with_receipt(
+                    task_id=task_id,
+                    cmd=[sys.executable, str(script_path)],
+                    cwd=proj_dir,
+                    action_kind="verify_general_script_deterministic_fallback",
+                    artifacts_created=[str(script_path)],
+                )
+                if res.get("receipt"):
+                    receipt_ids.append(res["receipt"]["receipt_id"])
+                passed = res["passed"]
+                if not passed:
+                    try:
+                        self.store.record_gap(
+                            source_task_id=task_id,
+                            error_type="DETERMINISTIC_FALLBACK_FAILED",
+                            missing_skill_or_tool=f"domain_general_fallback::{title[:30]}",
+                            description_id=f"Fallback deterministik gagal untuk: {title}. Error: {res.get('stderr', '')[:180]}",
+                            reproduction_ref=str(script_path),
+                            resolution_strategy="micro_experiment",
+                        )
+                    except Exception:
+                        pass
 
         artifacts = [{"id": script_path.name, "path": str(script_path), "kind": "python_cli"}]
         ver_summary = {
