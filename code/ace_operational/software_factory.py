@@ -49,9 +49,11 @@ class SoftwareFactory:
             max_tokens=64,
         )
         return {
+            "success": bool(tier_res.get("success")),
+            "inference_status": tier_res.get("status", "UNVERIFIED_BACKEND"),
             "project_name": project_name,
             "spec": spec_id,
-            "architecture_overview": tier_res.get("text", "Arsitektur Modular Standar ACE"),
+            "architecture_overview": tier_res.get("text", ""),
             "tier_used": tier_res.get("tier_used", "deep"),
             "backend_used": tier_res.get("backend_used", "local-router"),
         }
