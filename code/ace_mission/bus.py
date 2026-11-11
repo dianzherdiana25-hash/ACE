@@ -114,24 +114,10 @@ class MissionBus:
         forbidden: List[str],
         deadline_hours: int = 24,
         reasoning_problem: Optional[Dict[str, Any]] = None,
-        idempotency_key: Optional[str] = None,
     ) -> str:
-        """Create mission; stable keys prevent duplicate queued work after retries.
-
-        A repeated key must have the same immutable request fields. Runtime
-        status, claim metadata and deadline are intentionally not compared.
-        """
-        if idempotency_key is not None:
-            if not isinstance(idempotency_key, str) or not idempotency_key.strip():
-                raise ValueError("idempotency_key must be a nonblank string")
         now = datetime.datetime.now(datetime.timezone.utc)
         deadline = (now + datetime.timedelta(hours=deadline_hours)).isoformat()
-        if idempotency_key is not None:
-            m_id = "mission_" + hashlib.sha256(
-                ("ace.mission.idempotent.v1:" + idempotency_key).encode("utf-8")
-            ).hexdigest()[:24]
-        else:
-            m_id = f"mission_{hashlib.sha256(f'{goal}:{hypothesis}:{now.isoformat()}'.encode()).hexdigest()[:16]}"
+        m_id = f"mission_{hashlib.sha256(f'{goal}:{hypothesis}:{now.isoformat()}'.encode()).hexdigest()[:16]}"
 
         mission_doc = {
             "schema_version": "ace.mission.v1",
@@ -148,27 +134,9 @@ class MissionBus:
         }
         if reasoning_problem is not None:
             mission_doc["reasoning_problem"] = reasoning_problem
-        if idempotency_key is not None:
-            mission_doc["idempotency_key"] = idempotency_key
         validate_mission(mission_doc)
 
-        immutable = (
-            "goal", "hypothesis", "task_family_ids", "inputs", "budget",
-            "acceptance", "forbidden", "reasoning_problem", "idempotency_key",
-        )
         with self._get_connection() as conn:
-            # SQLite writer serialization prevents two processes from both
-            # observing an absent key. Avoid duplicate hash-chain entries.
-            if idempotency_key is not None:
-                conn.execute("BEGIN IMMEDIATE")
-                existing = conn.execute(
-                    "SELECT data_json FROM missions WHERE id = ?", (m_id,)
-                ).fetchone()
-                if existing is not None:
-                    prior = json.loads(existing[0])
-                    if any(prior.get(k) != mission_doc.get(k) for k in immutable):
-                        raise ValueError("idempotency key reused for a different mission")
-                    return m_id
             conn.execute(
                 "INSERT INTO missions (id, goal, hypothesis, data_json, status, created_at) VALUES (?, ?, ?, ?, ?, ?)",
                 (m_id, goal, hypothesis, json.dumps(mission_doc), "PENDING", now.isoformat())
