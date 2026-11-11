@@ -280,3 +280,38 @@ to the standalone review adapter. Do not edit the existing published
 `evidence/mission_admission/public-v1.json` to hide this regression.
 Re-run both new Open-World CI and original mission admission CI at the exact
 corrected branch SHA. Status remains BLOCK_RELEASE pending successful results.
+
+## 10. OW-1A pre-existing local execution module: explicit verification lane
+
+This branch also contains `code/ace_operational/open_world_execution.py`
+(`OpenWorldLocalExecutor`), which was committed in the initial pilot before
+the durable review bridge. It is an actual **trusted in-process pure-function
+execution** path, unlike the planning CLI's default. The local executor:
+
+1. Creates an ACE task through `OperationalStore.create_task()`.
+2. Derives a typed plan only from capabilities also admitted as
+   `KNOWN_AND_TESTED` in the existing `OperationalStore` frontier, with
+   exactly matching `evidence_ref`.
+3. Requires host-registered local adapters with two separate callbacks for
+   execution and local verification; prohibits model-generated code loading
+   and excludes read/write/external effect classes.
+4. Stores bounded JSON values, checkpoint progress and local step receipts;
+   obtains a fenced lease for task admission.
+5. May mark a task completed after positive **same-process verifier** results.
+
+The new tests `test_open_world_execution.py` check a real two-step
+transformation (not just plan structure), rejection of unknown or mismatched
+providers, verifier failure without task completion, manifest drift, and
+replay of completed tasks after a store restart.
+
+**Scope of this result:** These adapters are explicitly trusted by the host,
+not discovered intelligently. The local verifier shares a process and trust
+domain with the adapter. Receipts and hashes do not prove independently held
+evidence; the executor has no sandbox and no external provider execution. Its
+checkpoint and FencedStore receipt use different SQLite commits. During a
+crash between these commits, duplicates or a conservative conflict require
+repair/reconciliation. Do NOT call this exactly-once tool execution. The
+`COMPLETED` task state is only a LOCAL bounded task status, never an OAIE gate.
+
+These engineering tests must pass on the exact PR SHA before the pilot's
+local execution path is considered accepted.
