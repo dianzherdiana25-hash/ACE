@@ -210,9 +210,12 @@ The prototype now includes:
   return the same record; altered contract snapshots create new versions.
 - Journal replay on restart, local checksum mismatch rejection, and explicit
   `NOT_ASSESSED` / `BLOCK_RELEASE` / `execution_performed=false` markers.
-- A backward-compatible `MissionBus.create_mission(idempotency_key=...)`
-  option with a transactional check and one mission-created chain event.
-  Key reuse with different immutable parameters fails closed.
+- A separate `open_world_review_bus.py` adapter using MissionBus's existing
+  SQLite and hash-chain primitives, with a deterministic review-only mission ID,
+  transactional idempotency and one mission-created chain event.
+  Key reuse with changed immutable parameters fails closed. The original
+  `ace_mission/bus.py` bytes are deliberately UNCHANGED, preserving the
+  published mission admission evaluator identity.
 - An explicitly authorized, **review-only** queue step. It cannot stage any
   selected capability whose effect is `write` or `external`. This does
   not attest provider results, authorize remote execution, or run any tool.
@@ -262,3 +265,18 @@ execution proof and independent receipt custody.
   implementation are not accepted merely because a commit exists.
 - No blind scientific holdout, novel representation, transfer superiority or
   OAIE claim has been evaluated.
+
+### Regression discovered and corrected during integration
+
+The first implementation added an optional idempotency key directly inside
+`ace_mission/bus.py`. Although existing mission unit tests passed, the
+published admission benchmark failed its exact fixture comparison. Root cause:
+`ace_mission.admission.evaluator_digest()` binds the SHA-256 of the entire
+`bus.py` source file, so even compatible changes alter evaluator identity.
+
+**Resolution:** restore `bus.py` exactly to the base SHA
+`9ac1ac5ed328a4382f29f622a8e12109c5b4af30` and move deduplication
+to the standalone review adapter. Do not edit the existing published
+`evidence/mission_admission/public-v1.json` to hide this regression.
+Re-run both new Open-World CI and original mission admission CI at the exact
+corrected branch SHA. Status remains BLOCK_RELEASE pending successful results.
