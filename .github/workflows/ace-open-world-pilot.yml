@@ -63,3 +63,15 @@ jobs:
           assert d['total_cost_units'] == 7, d
           print(json.dumps(d, sort_keys=True))
           PY
+      - name: Prove frozen MissionBus evaluator source is unchanged
+        run: |
+          test "$(git hash-object code/ace_mission/bus.py)" = "6791c55289767759738667c49d5d8a4ffcacb597"
+      - name: Replay unchanged published mission admission benchmark
+        env:
+          PYTHONPATH: code
+        run: |
+          python tools/ace_mission_admission_benchmark.py \
+            --output /tmp/ow-mission-admission.json \
+            --profile /tmp/ow-mission-profile.json \
+            --raw-receipts /tmp/ow-mission-raw.json.gz
+          cmp /tmp/ow-mission-admission.json evidence/mission_admission/public-v1.json
