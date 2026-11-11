@@ -540,8 +540,8 @@ class ConversationalEngine:
 
         elif intent in ("GREETING_OR_CAPABILITIES", "GENERAL_CONVERSATION", Intent.GREETING_OR_CAPABILITIES, getattr(Intent, "GENERAL_CONVERSATION", None)):
             if intent in ("GENERAL_CONVERSATION", getattr(Intent, "GENERAL_CONVERSATION", None)) and not frame.get("offer_options"):
-                gen_reply = ""
-                if hc.get("local_gguf", {}).get("server_healthy") and not any(w in text.lower() for w in ("halo", "hai", "selamat")):
+                is_standalone_greeting = len(text.strip().split()) <= 2 and any(w in text.lower() for w in ("halo", "hai", "hei", "oy", "pagi", "siang", "sore", "malam"))
+                if hc.get("local_gguf", {}).get("server_healthy") and not is_standalone_greeting:
                     try:
                         resp = self.router.generate_text([
                             {"role": "system", "content": "Kamu adalah ACE, asisten kecerdasan otonom yang berkomunikasi dalam bahasa Indonesia yang santai, cerdas, dan rendah hati. Jawablah pesan pengguna dengan hangat, relevan, dan tidak bertele-tele."},
