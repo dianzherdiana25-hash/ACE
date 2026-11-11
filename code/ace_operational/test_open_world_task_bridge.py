@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from ace_mission.bus import MissionBus
 from ace_operational.open_world_planner import Capability, CapabilityRegistry
 from ace_operational.open_world_task_bridge import OpenWorldTaskBridge
+from ace_operational.open_world_review_bus import queue_structural_review
 from ace_operational.store import OperationalStore
 
 
@@ -160,18 +161,17 @@ class BridgeTests(unittest.TestCase):
         self.assertEqual(bus_after_restart.status()["mission_counts"]["CLAIMED"], 1)
         self.assertTrue(bus_after_restart.verify_hash_chain())
 
-    def test_idempotency_key_collision_with_changed_request_rejected(self):
+    def test_review_id_collision_with_changed_snapshot_rejected(self):
         bus = MissionBus(self.workspace / "mission_bus.sqlite3")
-        params = dict(
-            hypothesis="check", task_family_ids=["review"], inputs=[],
-            budget={"time_sec": 10, "max_candidates": 1},
-            acceptance={"metric": "review", "threshold": 1, "comparator": ">="},
-            forbidden=[], idempotency_key="test:reused-key",
+        plan_key = "ow_" + ("a" * 64)
+        first = queue_structural_review(
+            bus, plan_key=plan_key, record_sha256="b" * 64
         )
-        first = bus.create_mission(goal="First goal", **params)
         self.assertTrue(first.startswith("mission_"))
         with self.assertRaises(ValueError):
-            bus.create_mission(goal="Different goal", **params)
+            queue_structural_review(
+                bus, plan_key=plan_key, record_sha256="c" * 64
+            )
         self.assertTrue(bus.verify_hash_chain())
         self.assertEqual(bus.status()["mission_counts"]["PENDING"], 1)
 
