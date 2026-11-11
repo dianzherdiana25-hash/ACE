@@ -70,13 +70,19 @@ class TruthfulInferenceTests(unittest.TestCase):
         self.assertEqual(self.router.generate_text(self.messages, max_tokens=0)["error_code"], "INVALID_BUDGET")
         self.assertEqual(self.router.generate_text(self.messages, max_tokens=100000)["error_code"], "INVALID_BUDGET")
         self.assertEqual(self.router.generate_text(self.messages, timeout_seconds=901)["error_code"], "INVALID_BUDGET")
+        for key, value in (("max_tokens", True), ("temperature", False), ("timeout_seconds", True),
+                           ("repeat_penalty", True), ("repeat_penalty", 0.79), ("repeat_penalty", 1.51),
+                           ("repeat_penalty", float("nan")), ("repeat_penalty", float("inf"))):
+            with self.subTest(key=key, value=value):
+                self.assertEqual(self.router.generate_text(self.messages, **{key: value})["error_code"], "INVALID_BUDGET")
 
     def test_cli_success_has_real_output_model_digest_budget_and_input(self):
         artifact = self.local_model()
         self.empty.update(ready=True, llama_binary="/trusted/llama-completion", valid_models=[artifact])
         completed = subprocess.CompletedProcess([], 0, '"jawaban aktual"[end of text]', "timing evidence")
         with patch("ace_operational.models_backend.subprocess.run", return_value=completed) as run:
-            result = self.router.generate_text(self.messages, max_tokens=123, target_model="model-3b", timeout_seconds=17)
+            result = self.router.generate_text(self.messages, max_tokens=123, target_model="model-3b",
+                                              timeout_seconds=17, repeat_penalty=1.0)
         self.assertTrue(result["success"])
         self.assertEqual(result["text"], '"jawaban aktual"')
         self.assertEqual(result["raw_output"], completed.stdout)
@@ -86,6 +92,8 @@ class TruthfulInferenceTests(unittest.TestCase):
         argv = run.call_args.args[0]
         self.assertEqual(argv[argv.index("-n") + 1], "123")
         self.assertEqual(argv[argv.index("--ctx-size") + 1], "4096")
+        self.assertEqual(argv[argv.index("--repeat-penalty") + 1], "1.0")
+        self.assertEqual(result["inference_config"]["repeat_penalty"], 1.0)
         self.assertIn(self.messages[0]["content"], argv[argv.index("-p") + 1])
         self.assertIn("available_ram_after_mb", result["resource_usage"])
         self.assertGreater(run.call_args.kwargs["timeout"], 0)
@@ -136,6 +144,7 @@ class TruthfulInferenceTests(unittest.TestCase):
         self.assertTrue(result["success"])
         self.assertTrue(result["fallback_triggered"])
         self.assertEqual(result["text"], "real CLI output")
+        self.assertEqual(result["inference_config"]["repeat_penalty"], 1.15)
         self.assertEqual(result["failures"][0]["code"], "SERVER_INFERENCE_FAILED")
 
     def test_server_identity_is_not_misrepresented_as_an_attested_artifact(self):
@@ -143,8 +152,10 @@ class TruthfulInferenceTests(unittest.TestCase):
                           server_models=[{"id": "server-model"}])
         payload = {"model": "server-model", "choices": [{"message": {"content": "actual output"}, "finish_reason": "stop"}],
                    "usage": {"completion_tokens": 2}}
-        with patch("ace_operational.models_backend._local_json", return_value=payload):
-            result = self.router.generate_text(self.messages, target_model="server-model")
+        with patch("ace_operational.models_backend._local_json", return_value=payload) as request:
+            result = self.router.generate_text(self.messages, target_model="server-model", repeat_penalty=1.2)
+        self.assertEqual(request.call_args.kwargs["body"]["repeat_penalty"], 1.2)
+        self.assertEqual(result["inference_config"]["repeat_penalty"], 1.2)
         self.assertTrue(result["success"])
         self.assertEqual(result["model"]["id"], "server-model")
         self.assertIsNone(result["model"]["sha256"])
@@ -185,8 +196,9 @@ class TruthfulInferenceTests(unittest.TestCase):
         self.empty.update(ready=True, llama_binary="/trusted/llama-completion", valid_models=[self.local_model()])
         raw = '{"action":"inspect","status":"proposal"}'
         with patch("ace_operational.models_backend.subprocess.run", return_value=subprocess.CompletedProcess([], 0, raw, "")):
-            result = self.router.generate_structured(self.messages, required_keys=["action", "status"])
+            result = self.router.generate_structured(self.messages, required_keys=["action", "status"], repeat_penalty=1.0)
         self.assertTrue(result["success"])
+        self.assertEqual(result["inference_config"]["repeat_penalty"], 1.0)
         self.assertEqual(result["data"], json.loads(raw))
         self.assertTrue(result["valid_json"])
         self.assertIn("json_object_required_keys", result["verification_trace"])

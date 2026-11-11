@@ -350,7 +350,8 @@ class ModelRouter:
     def generate_text(self, messages: list[dict[str, str]], *, prefer_remote: bool = False,
                       simulated_remote_error: str | None = None, max_tokens: int = 128,
                       temperature: float = 0.2, tier: str = "auto", target_model: str | None = None,
-                      task_id: str | None = None, timeout_seconds: float | None = None) -> dict[str, Any]:
+                      task_id: str | None = None, timeout_seconds: float | None = None,
+                      repeat_penalty: float = 1.15) -> dict[str, Any]:
         started = time.monotonic()
         child_usage_before = resource.getrusage(resource.RUSAGE_CHILDREN) if resource else None
         last_content = messages[-1].get("content", "") if isinstance(messages, list) and messages and isinstance(messages[-1], dict) else ""
@@ -417,12 +418,14 @@ class ModelRouter:
                     threads = min(threads, max(1, (int(quota) + int(period) - 1) // int(period)))
             except (OSError, ValueError):
                 pass
-            if not isinstance(max_tokens, int) or not 1 <= max_tokens <= min(8192, context):
+            if isinstance(max_tokens, bool) or not isinstance(max_tokens, int) or not 1 <= max_tokens <= min(8192, context):
                 raise ValueError("max_tokens exceeds bounded context or 8192")
-            if not isinstance(temperature, (int, float)) or not 0 <= temperature <= 2:
+            if isinstance(temperature, bool) or not isinstance(temperature, (int, float)) or not 0 <= temperature <= 2:
                 raise ValueError("temperature must be 0..2")
-            if timeout_seconds is not None and (not isinstance(timeout_seconds, (int, float)) or not 1 <= timeout_seconds <= 900):
+            if timeout_seconds is not None and (isinstance(timeout_seconds, bool) or not isinstance(timeout_seconds, (int, float)) or not 1 <= timeout_seconds <= 900):
                 raise ValueError("timeout_seconds must be 1..900")
+            if isinstance(repeat_penalty, bool) or not isinstance(repeat_penalty, (int, float)) or not 0.8 <= repeat_penalty <= 1.5:
+                raise ValueError("repeat_penalty must be 0.8..1.5")
             if sum(len(m["content"]) for m in messages) > 131072:
                 raise ValueError("Prompt exceeds 131072 characters")
         except ValueError as exc:
@@ -430,7 +433,7 @@ class ModelRouter:
             return finish()
         receipt["inference_config"] = {"max_tokens": max_tokens, "temperature": temperature,
                                        "context": context, "threads": threads,
-                                       "timeout_seconds": timeout_seconds}
+                                       "timeout_seconds": timeout_seconds, "repeat_penalty": repeat_penalty}
         gguf = self.discover_local_gguf()
         fitting = [m for m in gguf.get("valid_models", []) if m.get("fits_ram")]
         preference = target_model or os.environ.get("ACE_DEFAULT_MODEL")
@@ -451,7 +454,7 @@ class ModelRouter:
             else:
                 try:
                     body: dict[str, Any] = {"messages": messages, "max_tokens": max_tokens,
-                                            "temperature": temperature, "repeat_penalty": 1.15}
+                                            "temperature": temperature, "repeat_penalty": repeat_penalty}
                     if server_model:
                         body["model"] = server_model["id"]
                     response = _local_json(f"{gguf['server_url']}/v1/chat/completions", body=body, timeout=timeout)
@@ -477,7 +480,7 @@ class ModelRouter:
             prompt = "\n".join(f"<|im_start|>{m['role']}\n{m['content']}<|im_end|>" for m in messages)
             prompt += "\n<|im_start|>assistant\n"
             command = [cli_bin, "-m", target["path"], "-p", prompt, "-n", str(max_tokens),
-                       "--temp", str(temperature), "--repeat-penalty", "1.15", "--ctx-size", str(context),
+                       "--temp", str(temperature), "--repeat-penalty", str(repeat_penalty), "--ctx-size", str(context),
                        "--threads", str(threads), "--no-display-prompt", "-no-cnv", "-lv", "0", "--simple-io"]
             receipt["command"] = command
             try:
@@ -515,7 +518,8 @@ class ModelRouter:
     def generate_structured(self, messages: list[dict[str, str]], *, required_keys: list[str] | None = None,
                             raw_candidate_override: str | None = None, max_tokens: int = 256,
                             temperature: float = 0.1, tier: str = "auto", target_model: str | None = None,
-                            task_id: str | None = None, timeout_seconds: float | None = None) -> dict[str, Any]:
+                            task_id: str | None = None, timeout_seconds: float | None = None,
+                            repeat_penalty: float = 1.15) -> dict[str, Any]:
         """Validate actual JSON; no missing values or success statuses are invented."""
         keys = required_keys if required_keys is not None else ["action", "status", "summary_id"]
         if raw_candidate_override is not None:
@@ -527,7 +531,8 @@ class ModelRouter:
         instruction = "Return exactly one valid JSON object, without markdown, with required keys: " + json.dumps(keys)
         augmented = [{"role": "system", "content": instruction}, *messages]
         result = self.generate_text(augmented, max_tokens=max_tokens, temperature=temperature,
-                                    tier=tier, target_model=target_model, task_id=task_id, timeout_seconds=timeout_seconds)
+                                    tier=tier, target_model=target_model, task_id=task_id,
+                                    timeout_seconds=timeout_seconds, repeat_penalty=repeat_penalty)
         result.update(data=None, repaired=False, inference_performed=result["success"], valid_json=False)
         if not result["success"]:
             return result

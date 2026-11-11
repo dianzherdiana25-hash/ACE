@@ -81,7 +81,7 @@ class LocalRepoWorkflow:
     def run(self, *, repository: Path, issue: str, evaluator_dir: Path,
             max_attempts: int = 2, max_tokens: int = 1536,
             task_id: str | None = None, wall_budget_seconds: int = 600,
-            patch_format: str = "file") -> dict[str, Any]:
+            patch_format: str = "file", repeat_penalty: float = 1.15) -> dict[str, Any]:
         if not isinstance(issue, str) or not 1 <= len(issue.strip()) <= 6000:
             raise ValueError("issue must be 1..6000 characters")
         if type(max_attempts) is not int or not 1 <= max_attempts <= 3:
@@ -92,6 +92,8 @@ class LocalRepoWorkflow:
             raise ValueError("wall budget must be 30..1800 seconds")
         if patch_format not in {"file", "symbol"}:
             raise ValueError("patch_format must be file or symbol")
+        if type(repeat_penalty) not in {int, float} or not 0.8 <= repeat_penalty <= 1.5:
+            raise ValueError("repeat_penalty must be 0.8..1.5")
         root, evaluator = Path(repository).resolve(strict=True), Path(evaluator_dir).resolve(strict=True)
         # Requiring a linked worktree prevents accidental mutation of main.
         if not (root / ".git").is_file() or root == evaluator or root in evaluator.parents:
@@ -104,7 +106,8 @@ class LocalRepoWorkflow:
         config = {"repository": str(root), "head": head, "issue": issue,
                   "evaluator_dir": str(evaluator), "max_attempts": max_attempts,
                   "max_tokens": max_tokens, "wall_budget_seconds": wall_budget_seconds,
-                  "evaluator_digest": evaluator_digest, "branch": branch, "patch_format": patch_format}
+                  "evaluator_digest": evaluator_digest, "branch": branch, "patch_format": patch_format,
+                  "repeat_penalty": repeat_penalty}
         contract = _digest(_json(config).encode())
         task = self.store.get_task(task_id) if task_id else None
         if task_id and task is None:
@@ -218,7 +221,8 @@ class LocalRepoWorkflow:
                                            checkpoint={"stage": "inference", "attempt": attempt})
                     inference = self.router.generate_text(messages, tier="deep", max_tokens=max_tokens,
                                                           temperature=0.0, task_id=task_id,
-                                                          timeout_seconds=min(remaining - 10, 240))
+                                                          timeout_seconds=min(remaining - 10, 240),
+                                                          repeat_penalty=repeat_penalty)
                     record = {"attempt": attempt, "inference": inference, "status": "FAIL"}
                     result["attempts"].append(record)
                     (artifacts / f"attempt-{attempt}.json").write_text(_json(record), encoding="utf-8")
@@ -251,8 +255,11 @@ class LocalRepoWorkflow:
                                              if isinstance(node, kinds) and node.name == symbol]
                                 if (len(old_nodes) != 1 or len(new_tree.body) != 1
                                         or not isinstance(new_tree.body[0], kinds)
-                                        or new_tree.body[0].name != symbol or old_nodes[0].decorator_list):
-                                    raise ValueError("symbol edit must replace exactly one undecorated top-level function")
+                                        or new_tree.body[0].name != symbol or old_nodes[0].decorator_list
+                                        or new_tree.body[0].decorator_list
+                                        or type(new_tree.body[0]) is not type(old_nodes[0])
+                                        or ast.dump(new_tree.body[0].args) != ast.dump(old_nodes[0].args)):
+                                    raise ValueError("symbol edit must replace exactly one undecorated top-level function with identical arguments")
                                 lines = selected[path].splitlines(keepends=True)
                                 old_node = old_nodes[0]
                                 content = ("".join(lines[:old_node.lineno - 1]) + content.rstrip() + "\n"
@@ -330,12 +337,13 @@ def main() -> None:
     parser.add_argument("--max-tokens", type=int, default=1536)
     parser.add_argument("--resume-task")
     parser.add_argument("--patch-format", choices=["file", "symbol"], default="file")
+    parser.add_argument("--repeat-penalty", type=float, default=1.15)
     args = parser.parse_args()
     with OperationalStore(args.workspace) as store:
         result = LocalRepoWorkflow(store).run(
             repository=args.repo, issue=args.issue, evaluator_dir=args.evaluator,
             max_attempts=args.attempts, max_tokens=args.max_tokens, task_id=args.resume_task,
-            patch_format=args.patch_format)
+            patch_format=args.patch_format, repeat_penalty=args.repeat_penalty)
     print(_json(result))
 
 

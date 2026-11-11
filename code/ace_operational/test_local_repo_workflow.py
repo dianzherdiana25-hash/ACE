@@ -155,6 +155,19 @@ class LocalRepositoryWorkflowTests(unittest.TestCase):
         self.assertEqual(result["status"], "FAIL")
         self.assertIn("exactly one", result["attempts"][0]["error"])
 
+    def test_symbol_edit_rejects_changed_arguments_and_decorators(self):
+        for content in ["def authorize(other):\n    return True\n",
+                        "@staticmethod\ndef authorize():\n    return True\n"]:
+            with self.subTest(content=content):
+                payload = self.proposal(content=content)
+                parsed = json.loads(payload["text"])
+                parsed["edits"][0]["symbol"] = "authorize"
+                payload["text"] = json.dumps(parsed)
+                result = self.run_flow(FakeRouter(payload), FakeSandbox(["FAIL"]),
+                                       patch_format="symbol", max_attempts=1)
+                self.assertEqual(result["status"], "FAIL")
+                self.assertIn("identical arguments", result["attempts"][0]["error"])
+
     def test_evaluator_change_invalidates_restart(self):
         result = self.run_flow(FakeRouter(self.proposal()), FakeSandbox(["FAIL", "PASS"]))
         (self.evaluator / "test_changed.py").write_text("raise RuntimeError('drift')\n")
