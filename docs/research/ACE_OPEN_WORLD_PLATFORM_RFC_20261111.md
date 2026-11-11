@@ -177,3 +177,24 @@ no credential collection, no purchases, no unrestricted network or filesystem
 mutation, and no autonomous release. The prototype may be reviewed as a draft
 PR. Review and merge require an explicit subsequent authorization consistent
 with the repository charter.
+
+## 8. Run the read-only pilot from any Python 3.12+ environment
+
+```bash
+PYTHONPATH=code python -m ace_operational.open_world_cli \
+  --manifest examples/open_world_capabilities.json \
+  --have dataset:raw \
+  --want report:verified
+
+PYTHONPATH=code python -m unittest \
+  ace_operational.test_open_world_planner \
+  ace_operational.test_open_world_cli -v
+```
+
+Expected demo: structural chain `parse-dataset -> research-analysis ->
+create-report` with 7 cost units; `execution_performed=false`. Example
+providers (HPC and A2A) are labels only. No provider is contacted and
+the example evidence references are PUBLIC FIXTURES, not certifications.
+The CLI returns 0 for a plan, 2 for no plan/search limit, 3 for invalid
+input. The same code path accepts arbitrary new types and contract
+manifests without source edits; execution and validation require OW-1.
