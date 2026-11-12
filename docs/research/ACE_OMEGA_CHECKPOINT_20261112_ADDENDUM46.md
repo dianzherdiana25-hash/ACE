@@ -26,7 +26,14 @@ preregistrations naming their adapter — is preserved).
 
 - `test_operator_discovery` passes **unchanged**: 9 OK.
 - Lineage sweep: **255 OK (17 skipped)** — identical to
-  the pre-refactor baseline.
+  the pre-refactor baseline. (Invocation note, 2026-11-13:
+  `python3 -m unittest discover -s ace_operational -t .`
+  from the P1 worktree's `code/` at the P1 commit, a tree
+  containing no P2 files. The ops post's later full-package
+  discovery reads 259 because `test_pricing_adapter.py`
+  (4 tests, stage P2) exists by then — an invocation/tree
+  difference, not a regression; the P1 diff touches zero
+  test files.)
 - **Replication guard (Task 04 §4): EXACT MATCH.** The
   full v4 protocol re-run through the refactored core
   (1,369 s) reproduces `operator_discovery_v4.json` on
