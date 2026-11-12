@@ -1,0 +1,37 @@
+{
+ "package": "OMEGA-03",
+ "variant": "G1-variant isolation-degraded",
+ "isolation": "ABSENT (plain subprocess, disposable copy) - sandboxed workflow BLOCKED_ENVIRONMENT on this host",
+ "candidate_provenance": "LOCAL_MODEL",
+ "issue": "Test harga gagal. Aturan di README.md: diskon besar 5% bila subtotal >= 500000; diskon member 10% setelah diskon besar; PPN 11% dihitung dari nilai setelah semua diskon, bukan subtotal awal. Perbaiki harga.py agar sesuai aturan.",
+ "baseline_evaluator": {
+  "rc": 1,
+  "tail": "=\nFAIL: test_tepat_di_batas (test_evaluator.TestEvaluatorHarga.test_tepat_di_batas)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/hatch/workspace/ace-omega/g1/evaluator/test_evaluator.py\", line 8, in test_tepat_di_batas\n    self.assertEqual(hitung_total(500000, False), 527250)\nAssertionError: 555000 != 527250\n\n----------------------------------------------------------------------\nRan 6 tests in 0.001s\n\nFAILED (failures=4)\n"
+ },
+ "baseline_dev": {
+  "rc": 1,
+  "tail": "=====\nFAIL: test_member_ppn_dari_harga_diskon (test_harga.TestHarga.test_member_ppn_dari_harga_diskon)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/g1-candidate/test_harga.py\", line 14, in test_member_ppn_dari_harga_diskon\n    self.assertEqual(hitung_total(100000, True), 99900)\nAssertionError: 101000 != 99900\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=2)\n"
+ },
+ "retrieval_selected": [
+  "harga.py",
+  "test_harga.py"
+ ],
+ "inference": {
+  "success": true,
+  "status": "SUCCESS",
+  "error_code": null,
+  "backend_used": "local-gguf:qwen2.5-coder-3b-instruct-q4_k_m.gguf",
+  "model": {
+   "id": "qwen2.5-coder-3b-instruct-q4_k_m.gguf",
+   "source": "/home/hatch/workspace/ace-omega/models/qwen2.5-coder-3b-instruct-q4_k_m.gguf",
+   "sha256": "724fb256bec1ff062b2f65e4569e871ad2e95ab2a3989723d1769c54294730b7",
+   "checksum_verified": false
+  },
+  "duration_seconds": 54.353245,
+  "fallback_triggered": false
+ },
+ "raw_output": "```json\n{\n  \"plan\": [\n    {\n      \"steps\": [\"Identify the error in the `hitung_total` function logic.\"]\n    }\n  ],\n  \"edits\": [\n    {\n      \"path\": \"harga.py\",\n      \"symbol\": \"function_name\",\n      \"content\": \"\"\"\ndef hitung_total(subtotal: int, member: bool) -> int:\n    \"\"\"Total belanja setelah diskon besar, diskon member, lalu PPN 11%.\"\"\"\n    total = subtotal\n    if subtotal > 500000:\n        total -= subtotal * 5 // 100\n    if member:\n        total -= total * 10 // 100\n    total += subtotal * 11 // 100\n    return total\n\"\"\"\n    }\n  ]\n}\n``` [end of text]\n\n\n",
+ "verdict": "PROPOSAL_INVALID",
+ "proposal_error": "ValueError: Gagal mengurai JSON terstruktur setelah pemulihan terbatas: ```json\n{\n  \"plan\": [\n    {\n      \"steps\": [\"Identify the error in the `hitung_total` function logic.\"]\n    }\n  ],\n  \"ed",
+ "elapsed_seconds": 54.59
+}
