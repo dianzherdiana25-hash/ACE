@@ -1,0 +1,25 @@
+name: ACE AVA bridge contract
+on:
+  pull_request:
+    paths:
+      - 'code/ace_visual_bridge/**'
+      - 'tests/test_ace_visual_bridge*.py'
+      - '.github/workflows/ace-ava-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and run ACE AVA contract tests
+        run: |
+          python -m compileall -q code/ace_visual_bridge
+          PYTHONPATH=code python -m unittest discover -s tests -p 'test_ace_visual_bridge*.py' -v

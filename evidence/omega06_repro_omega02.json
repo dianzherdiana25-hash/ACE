@@ -1,0 +1,80 @@
+{
+ "package": "OMEGA-06/repro-omega02",
+ "index_build_seconds": 4.91,
+ "index_file_count": 402,
+ "index_symbol_count": 4026,
+ "queries": [
+  {
+   "query": "ModelRouter",
+   "expected_file": "code/ace_operational/models_backend.py",
+   "grep_confirms_marker_in_expected": true,
+   "top5": [
+    "code/ace_operational/models_backend.py",
+    "code/ace_operational/test_edition4_acceptance.py",
+    "code/ace_operational/autonomous_engine.py",
+    "code/ace_operational/autonomy_loop.py",
+    "code/ace_operational/coding_loop.py"
+   ],
+   "hit@1": true,
+   "hit@5": true
+  },
+  {
+   "query": "BoundedRepositoryRetriever",
+   "expected_file": "code/ace_code_agent/repo_retrieval.py",
+   "grep_confirms_marker_in_expected": true,
+   "top5": [
+    "code/ace_code_agent/repo_retrieval.py",
+    "code/ace_code_agent/test_repo_retrieval.py",
+    "tools/ace_fr01_retrieval_benchmark.py",
+    "code/ace_autonomy/test_core.py",
+    "tools/ace_autonomous_daemon.py"
+   ],
+   "hit@1": true,
+   "hit@5": true
+  },
+  {
+   "query": "CONFIRMED_SEALED",
+   "expected_file": "code/ace_core_repair/doctor.py",
+   "grep_confirms_marker_in_expected": true,
+   "top5": [
+    "code/ace_evaluator/test_sealed_evaluator.py",
+    "code/ace_core_repair/doctor.py",
+    "code/ace_evaluator/sealed_generator.py",
+    "code/ace_report/test_mobile_report.py",
+    "code/ace_research_f12/causal_agent.py"
+   ],
+   "hit@1": false,
+   "hit@5": true
+  },
+  {
+   "query": "OperationalStore",
+   "expected_file": "code/ace_operational/store.py",
+   "grep_confirms_marker_in_expected": true,
+   "top5": [
+    "code/ace_operational/store.py",
+    "code/ace_runtime/cli.py",
+    "ace_self_evolver.py",
+    "code/ace_operational/__init__.py",
+    "code/ace_operational/autonomous_engine.py"
+   ],
+   "hit@1": true,
+   "hit@5": true
+  },
+  {
+   "query": "extract_and_repair_json",
+   "expected_file": "code/ace_operational/models_backend.py",
+   "grep_confirms_marker_in_expected": true,
+   "top5": [
+    "code/ace_operational/models_backend.py",
+    "code/ace_operational/test_edition4_acceptance.py",
+    "code/ace_code_agent/patch_diagnostic.py",
+    "code/ace_self_dev/coordinator.py",
+    "code/ace_operational/coding_loop.py"
+   ],
+   "hit@1": true,
+   "hit@5": true
+  }
+ ],
+ "hit@1": "4/5",
+ "hit@5": "5/5"
+}

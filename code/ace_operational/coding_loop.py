@@ -379,6 +379,15 @@ class CodingAgentLoop:
     def __init__(self, store: OperationalStore):
         self.store = store
 
+    def repair_repository_with_local_model(self, **options: Any) -> dict[str, Any]:
+        """Run the bounded repo workflow using real local inference and OS isolation.
+
+        Separate from template tasks: no supplied solution or deterministic
+        success fallback is admitted on this path.
+        """
+        from .local_repo_workflow import LocalRepoWorkflow
+        return LocalRepoWorkflow(self.store).run(**options)
+
     def run_command_with_receipt(
         self,
         *,

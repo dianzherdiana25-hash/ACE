@@ -1,0 +1,37 @@
+{
+ "gate": "G1",
+ "criteria_version": 2,
+ "definition": "run one digital experiment from task to report with complete records and the ability to resume after interruption (PRD v0.1)",
+ "clauses": {
+  "C1_task_to_report": {
+   "verdict": "PASS",
+   "missing": [],
+   "evidence": {
+    "experiment": "pilot-abc-v1",
+    "protocol_hash": "bce010ab273183f3a6b4459861b5743c9f89ee3fcd6af9fe68becf134c827d42"
+   }
+  },
+  "C2_complete_records": {
+   "verdict": "PASS",
+   "missing": [],
+   "evidence": {
+    "audit_status": "CLEAN",
+    "results_verified": 4,
+    "ledger_entries_verified": 4
+   }
+  },
+  "C3_resume_after_interruption": {
+   "verdict": "PASS",
+   "missing": [],
+   "evidence": {
+    "species": "flagship_interruption",
+    "experiment": "resume-drill-flagship",
+    "package": null,
+    "subject": null,
+    "task_status": null
+   }
+  }
+ },
+ "overall": "DEMONSTRATED",
+ "qualification": "none — C3 is satisfied by a deliberate interruption of the flagship operation itself, resumed by a separate process to its final report with record continuity verified (criteria v2)."
+}

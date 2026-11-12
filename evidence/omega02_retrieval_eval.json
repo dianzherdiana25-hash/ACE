@@ -1,0 +1,149 @@
+{
+ "package": "OMEGA-02",
+ "subject": "ace_code_agent.repo_retrieval.BoundedRepositoryRetriever",
+ "repo_head": "main (ACE clone)",
+ "index_build_seconds": 3.69,
+ "index_stats": {
+  "file_count": 402,
+  "symbol_count": 4026
+ },
+ "index_keys": [
+  "elapsed_ms",
+  "file_count",
+  "files",
+  "head",
+  "parse_errors",
+  "schema",
+  "skipped",
+  "symbol_count"
+ ],
+ "queries": [
+  {
+   "query": "ModelRouter",
+   "expected_file": "code/ace_operational/models_backend.py",
+   "ground_truth": "class ModelRouter defined there (grep)",
+   "top5": [
+    "code/ace_operational/models_backend.py",
+    "code/ace_operational/test_edition4_acceptance.py",
+    "code/ace_operational/autonomous_engine.py",
+    "code/ace_operational/autonomy_loop.py",
+    "code/ace_operational/coding_loop.py"
+   ],
+   "scores": [
+    13.0,
+    9.0,
+    3.0,
+    3.0,
+    3.0
+   ],
+   "hit@1": true,
+   "hit@5": true
+  },
+  {
+   "query": "BoundedRepositoryRetriever",
+   "expected_file": "code/ace_code_agent/repo_retrieval.py",
+   "ground_truth": "class defined there (grep)",
+   "top5": [
+    "code/ace_code_agent/repo_retrieval.py",
+    "code/ace_code_agent/test_repo_retrieval.py",
+    "tools/ace_fr01_retrieval_benchmark.py",
+    "code/ace_autonomy/test_core.py",
+    "tools/ace_autonomous_daemon.py"
+   ],
+   "scores": [
+    13.0,
+    9.0,
+    3.0,
+    2.0,
+    2.0
+   ],
+   "hit@1": true,
+   "hit@5": true
+  },
+  {
+   "query": "CONFIRMED_SEALED",
+   "expected_file": "code/ace_core_repair/doctor.py",
+   "ground_truth": "sealed-evaluator marker; expected file resolved by grep below",
+   "top5": [
+    "code/ace_evaluator/test_sealed_evaluator.py",
+    "code/ace_core_repair/doctor.py",
+    "code/ace_evaluator/sealed_generator.py",
+    "code/ace_report/test_mobile_report.py",
+    "code/ace_research_f12/causal_agent.py"
+   ],
+   "scores": [
+    4.0,
+    3.0,
+    3.0,
+    3.0,
+    3.0
+   ],
+   "hit@1": false,
+   "hit@5": true
+  },
+  {
+   "query": "OperationalStore",
+   "expected_file": "code/ace_operational/store.py",
+   "ground_truth": "class OperationalStore defined there (grep)",
+   "top5": [
+    "code/ace_operational/store.py",
+    "code/ace_runtime/cli.py",
+    "ace_self_evolver.py",
+    "code/ace_operational/__init__.py",
+    "code/ace_operational/autonomous_engine.py"
+   ],
+   "scores": [
+    13.0,
+    4.0,
+    3.0,
+    3.0,
+    3.0
+   ],
+   "hit@1": true,
+   "hit@5": true
+  },
+  {
+   "query": "extract_and_repair_json",
+   "expected_file": "code/ace_operational/models_backend.py",
+   "ground_truth": "function defined there (grep)",
+   "top5": [
+    "code/ace_operational/models_backend.py",
+    "code/ace_operational/test_edition4_acceptance.py",
+    "code/ace_code_agent/patch_diagnostic.py",
+    "code/ace_self_dev/coordinator.py",
+    "code/ace_operational/coding_loop.py"
+   ],
+   "scores": [
+    13.0,
+    4.5,
+    3.5,
+    3.5,
+    3.25
+   ],
+   "hit@1": true,
+   "hit@5": true
+  },
+  {
+   "query": "evaluator tersegel tidak boleh diubah",
+   "expected_file": null,
+   "ground_truth": "Indonesian natural-language probe; no fixed expectation",
+   "top5": [
+    "code/ace_operational/coding_loop.py",
+    "code/ace_operational/store.py",
+    "code/ace_operational/web_server.py",
+    "projects/sistem_manajemen_usaha/db.py",
+    "code/ace_code_agent/independent_evaluator.py"
+   ],
+   "scores": [
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.0
+   ]
+  }
+ ],
+ "scored_queries": 5,
+ "hit@1": "4/5",
+ "hit@5": "5/5"
+}

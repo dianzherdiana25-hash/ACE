@@ -1,0 +1,80 @@
+{
+  "cgroups_v2": [],
+  "cpu": {
+    "affinity_cpus": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "cgroup_quota_cores": null,
+    "effective_core_capacity_upper_bound": 4,
+    "logical_visible": 4,
+    "model_name": "AMD EPYC 9D25 126-Core Processor"
+  },
+  "disk": {
+    "free_bytes": 150699995136,
+    "path": "/home/hatch/workspace/ace-omega/wt-fabric",
+    "total_bytes": 161042399232,
+    "used_bytes": 9290092544
+  },
+  "explicit_llama_binary": {
+    "configured": true,
+    "executable_present": true
+  },
+  "gpu": {
+    "exposed_device_paths": [],
+    "inference_acceleration": "NOT_ASSESSED",
+    "vram_bytes": null
+  },
+  "memory": {
+    "cgroup_limit_bytes": null,
+    "cgroup_unallocated_bytes": null,
+    "host_bytes": {
+      "MemAvailable": 1658224640,
+      "MemFree": 180883456,
+      "MemTotal": 8319897600,
+      "SwapTotal": 1073737728
+    },
+    "unallocated_note": "Excludes reclaimable page cache; this is not a model-fit guarantee."
+  },
+  "model_readiness": "NOT_ASSESSED_REQUIRES_ACTUAL_INFERENCE",
+  "models": [],
+  "network": {
+    "live_access": "NOT_ASSESSED",
+    "startup_http_mode": null,
+    "startup_snapshot_present": false,
+    "vpn_configured": null
+  },
+  "os": {
+    "architecture": "x86_64",
+    "distribution": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.5 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo\nIMAGE_ID=\"hatch-image\"\nIMAGE_VERSION=\"0.1.46\"",
+    "release": "7.0.0-44-generic",
+    "system": "Linux"
+  },
+  "process_lifetime": {
+    "after_session_end": "NOT_ASSESSED",
+    "after_vm_shutdown": "processes_do_not_survive",
+    "daemon_health": "NOT_ASSESSED",
+    "pid_1_command": "systemd"
+  },
+  "recorded_utc": "2026-11-12T08:46:29.520510+00:00",
+  "runtime_presence": {
+    "bwrap": null,
+    "docker": null,
+    "llama-cli": null,
+    "llama-completion": null,
+    "llama-server": null,
+    "ollama": null,
+    "python3": "/usr/bin/python3"
+  },
+  "schema": "ace.omega.environment_snapshot.v1",
+  "scientific_status": "NOT_ASSESSED",
+  "status": "ATTESTED_SNAPSHOT",
+  "virtualization": {
+    "cpu_virtualization_flags": [],
+    "hypervisor_cpu_flag": true,
+    "kvm_device_present": false,
+    "nested_virtualization_usable": "NOT_ASSESSED"
+  }
+}
