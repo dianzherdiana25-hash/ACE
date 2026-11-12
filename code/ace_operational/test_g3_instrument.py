@@ -128,14 +128,14 @@ class G3InstrumentTests(unittest.TestCase):
             evaluations=[("pricing", _report(audit="DIRTY"))]))
         self.assertEqual(out["overall"], "SPECIALIZATION")
         c2 = out["clauses"]["C2_two_distinct_families"]
-        self.assertTrue(any("audit" in m for m in c2["missing"]))
+        self.assertTrue(any("audit" in m for m in c2["rejected"]))
 
     def test_same_family_twice_is_one_family(self):
         out = assess_g3(dossier=self._dossier(
             evaluations=[("grid", _report())]))
         self.assertEqual(out["overall"], "SPECIALIZATION")
         c2 = out["clauses"]["C2_two_distinct_families"]
-        self.assertTrue(any("twice" in m for m in c2["missing"]))
+        self.assertTrue(any("twice" in m for m in c2["rejected"]))
 
     def test_margin_not_met_family_not_counted(self):
         out = assess_g3(dossier=self._dossier(
@@ -153,14 +153,14 @@ class G3InstrumentTests(unittest.TestCase):
             evaluations=[("pricing", rep)]))
         self.assertEqual(out["overall"], "SPECIALIZATION")
         c3 = out["clauses"]["C3_positive_transfer"]
-        self.assertTrue(any("margin_pp" in m for m in c3["missing"]))
+        self.assertTrue(any("margin_pp" in m for m in c3["rejected"]))
 
     def test_unknown_family_fails_c2_by_name(self):
         out = assess_g3(dossier=self._dossier(
             evaluations=[("cooking", _report())]))
         c2 = out["clauses"]["C2_two_distinct_families"]
         self.assertEqual(c2["verdict"], "FAIL")
-        self.assertTrue(any("cooking" in m for m in c2["missing"]))
+        self.assertTrue(any("cooking" in m for m in c2["rejected"]))
 
     def test_source_effect_not_positive_fails_c1(self):
         out = assess_g3(dossier=self._dossier(
@@ -173,6 +173,31 @@ class G3InstrumentTests(unittest.TestCase):
         out = assess_g3(dossier=self._dossier(
             evaluations=[("pricing", _report(held_out=False))]))
         self.assertEqual(out["overall"], "SPECIALIZATION")
+
+    # -- verification findings (Addendum 42 section 2) --------
+
+    def test_source_mismatch_recorded_once(self):
+        # Finding 1 (probe E1b): the source report is checked
+        # in both the C1 block and the family loop; its
+        # identity mismatch must be recorded exactly once.
+        out = assess_g3(dossier=self._dossier(
+            source=_report(digest="sha256:src000")))
+        self.assertEqual(out["overall"], "NOT_DEMONSTRATED")
+        self.assertEqual(len(out["identity_mismatches"]), 1)
+
+    def test_extra_invalid_entry_does_not_fail_c2(self):
+        # Finding 2 (probe E5): two valid positive families
+        # plus one extra invalid evaluation entry — C2's
+        # requirement is met, so C2 passes; the invalid
+        # entry is named as rejected, not as a clause failure.
+        out = assess_g3(dossier=self._dossier(
+            evaluations=[("pricing", _report()),
+                         ("shipping", _report(audit="DIRTY"))]))
+        self.assertEqual(out["overall"], "TRANSFER_DEMONSTRATED")
+        c2 = out["clauses"]["C2_two_distinct_families"]
+        self.assertEqual(c2["verdict"], "PASS")
+        self.assertEqual(c2["missing"], [])
+        self.assertTrue(any("audit" in m for m in c2["rejected"]))
 
     # -- fail-closed loading ----------------------------------
 

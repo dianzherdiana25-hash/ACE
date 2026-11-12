@@ -182,16 +182,16 @@ def assess_g3(*, dossier: str | Path | None) -> dict[str, Any]:
 
     # ---- per-family evaluation validity (shared by C2/C3) -------
     family_records: dict[str, dict[str, Any]] = {}
-    c2_missing: list[str] = []
+    c2_rejected: list[str] = []
     all_entries = [(source_family, source_report, "source report")] + \
         [(fam, rep, f"evaluation ({fam})") for fam, rep in eval_entries]
     for family, report, label in all_entries:
         if report is None:
-            c2_missing.append(f"{label}: report file missing/unparseable")
+            c2_rejected.append(f"{label}: report file missing/unparseable")
             continue
         if family not in FAMILIES:
-            c2_missing.append(f"{label}: family {family!r} is not one of "
-                              f"the design's families {list(FAMILIES)}")
+            c2_rejected.append(f"{label}: family {family!r} is not one of "
+                               f"the design's families {list(FAMILIES)}")
             continue
         problems = _check_report(report, label=label,
                                  improvement=improvement,
@@ -199,16 +199,22 @@ def assess_g3(*, dossier: str | Path | None) -> dict[str, Any]:
         if report.get("held_out") is not True:
             problems.append(f"{label}: tasks not attested held out")
         if problems:
-            c2_missing += problems
+            c2_rejected += problems
             continue
         if family in family_records:
-            c2_missing.append(
+            c2_rejected.append(
                 f"{label}: family {family!r} evaluated twice — the same "
                 f"family twice is one family")
             continue
         family_records[family] = report
 
     # ---- C2: same improvement in >= 2 distinct families ---------
+    # Entry-level problems are REJECTED entries (named in
+    # "rejected"); the clause verdict turns only on the
+    # requirement itself — at least two distinct valid
+    # families — so a PASS verdict and a non-empty rejection
+    # list cohere (verification finding 2, Addendum 42 §2).
+    c2_missing = []
     if len(family_records) < 2:
         c2_missing.append(
             f"only {len(family_records)} distinct valid family "
@@ -216,10 +222,11 @@ def assess_g3(*, dossier: str | Path | None) -> dict[str, Any]:
     clauses["C2_two_distinct_families"] = {
         "verdict": "PASS" if not c2_missing else "FAIL",
         "missing": c2_missing,
+        "rejected": c2_rejected,
         "evidence": {"valid_families": sorted(family_records)}}
 
     # ---- C3: positive transfer effect in >= 2 families ----------
-    c3_missing: list[str] = []
+    c3_rejected: list[str] = []
     positive: list[str] = []
     for family in sorted(family_records):
         report = family_records[family]
@@ -227,15 +234,16 @@ def assess_g3(*, dossier: str | Path | None) -> dict[str, Any]:
             report.get("improvement_score")
         margin = report.get("margin_pp")
         if not _number(base) or not _number(score):
-            c3_missing.append(f"{family}: scores are not numeric")
+            c3_rejected.append(f"{family}: scores are not numeric")
             continue
         if not _number(margin):
-            c3_missing.append(
+            c3_rejected.append(
                 f"{family}: no preregistered margin_pp in the family "
                 f"report — the effect cannot be counted")
             continue
         if score - base >= margin:
             positive.append(family)
+    c3_missing = []
     if len(positive) < 2:
         c3_missing.append(
             f"positive transfer effect in {len(positive)} famil"
@@ -244,9 +252,11 @@ def assess_g3(*, dossier: str | Path | None) -> dict[str, Any]:
     clauses["C3_positive_transfer"] = {
         "verdict": "PASS" if len(positive) >= 2 else "FAIL",
         "missing": c3_missing,
+        "rejected": c3_rejected,
         "evidence": {"positive_families": positive}}
 
     # ---- outcome (single construction point) --------------------
+    mismatches = list(dict.fromkeys(mismatches))
     c1_pass = clauses["C1_identified_improvement"]["verdict"] == "PASS"
     if mismatches:
         overall = "NOT_DEMONSTRATED"
