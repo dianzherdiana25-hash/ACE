@@ -104,3 +104,25 @@ select probe sets (fixed by seed range before
 authoring) and, per two-hats, is not the brain that
 later runs the measured discovery dossier against this
 baseline.
+
+## 6. Digest construction (clarification, 2026-11-13)
+
+Added at the bench second checker's finding: §4 named
+the bundle but not its exact serialisation, so the
+composite could be cross-matched but not recomputed.
+The construction is, in order, one SHA-256 over:
+
+1. the substrate module's raw bytes;
+2. the ASCII bytes of
+   `_variants_threshold,_variants_rebase_basis`;
+3. the ASCII bytes of `max_rounds=6,frontier=4`;
+4. the ASCII bytes of the probe report's SHA-256 hex
+   digest (lowercase, of `b3_probe_report_v2.json` as
+   frozen);
+5. the ASCII bytes of the generator file's SHA-256
+   hex digest (lowercase, of `curriculum_lab.py` as
+   frozen).
+
+No separators, no labels, no trailing newline. The
+bench's re-derivation and the author's both reproduce
+`658b9022…d21` from the frozen components.
