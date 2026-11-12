@@ -15,7 +15,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from ace_operational.models_backend import ModelRouter, _gguf_expected_total_size
+from ace_operational.models_backend import ModelRouter, _estimated_ram_mb, _gguf_expected_total_size
 from ace_operational.store import OperationalStore
 
 
@@ -84,6 +84,21 @@ class GgufIntegrityTests(unittest.TestCase):
         self.assertEqual(result["valid_models"], [])
         self.assertEqual(len(result["corrupted_models"]), 1)
         self.assertIn("gguf_size_mismatch", result["corrupted_models"][0]["reason"])
+
+    def test_ram_estimate_uses_measured_overhead_not_flat_markup(self):
+        # Qwen3-8B Q4_K_M: 5,027,783,488 bytes = 4794 MiB -> +12.5% overhead.
+        self.assertEqual(_estimated_ram_mb(5027783488), 4794 + 4794 // 8)
+        self.assertLess(_estimated_ram_mb(5027783488), int(4794 * 1.25))
+        self.assertEqual(_estimated_ram_mb(1024), 256)
+
+    def test_fits_ram_follows_estimate_when_ram_is_plentiful(self):
+        blob = build_gguf([F32_TENSOR])
+        (self.models / "ok.gguf").write_bytes(blob)
+        with patch("ace_operational.models_backend.get_available_ram_mb", return_value=64000):
+            result = self.discover()
+        entry = result["valid_models"][0]
+        self.assertEqual(entry["estimated_ram_mb"], _estimated_ram_mb(len(blob)))
+        self.assertTrue(entry["fits_ram"])
 
     def test_bad_magic_still_rejected(self):
         (self.models / "junk.gguf").write_bytes(b"NOPE" + b"\x00" * 64)

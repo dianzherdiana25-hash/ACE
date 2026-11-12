@@ -225,6 +225,21 @@ _GGUF_TYPE_BLOCKS: dict[int, tuple[int, int]] = {
 _GGUF_SCALAR_SIZES = {0: 1, 1: 1, 2: 2, 3: 2, 4: 4, 5: 4, 6: 4, 7: 1, 10: 8, 11: 8, 12: 8}
 
 
+def _estimated_ram_mb(size_bytes: int) -> int:
+    """Admission estimate for running a GGUF with llama.cpp on this class of host.
+
+    Basis (measured 2026-11-12, llama.cpp b12316, ctx 4096, q8_0 KV): the
+    Qwen3-8B Q4_K_M server peaked at RSS/file ratio 1.06. The previous flat
+    1.25x multiplier never admitted that model on the operator VM even though
+    it demonstrably runs there, silently demoting routing to a 3B baseline.
+    Estimate is therefore file size + 12.5% (about twice the measured
+    overhead), floored at 256 MB; the caller's available-RAM figure is
+    already capped by the cgroup-v2 remainder, which stays the hard guard.
+    """
+    size_mb = size_bytes // (1024 * 1024)
+    return max(256, size_mb + size_mb // 8)
+
+
 def _gguf_expected_total_size(path: Path) -> int | None:
     """Compute the exact file size a GGUF header declares, or None when a tensor
     type is unknown to this checker (size then stays unverified, never assumed).
@@ -385,7 +400,7 @@ class ModelRouter:
                     digest = self._digest(path) if expected else ""
                     if expected and digest.lower() != expected.lower():
                         raise ValueError("checksum_mismatch")
-                    estimate = max(256, int(size / (1024 * 1024) * 1.25))
+                    estimate = _estimated_ram_mb(size)
                     entry = {"name": path.name, "path": str(path), "size_bytes": size,
                              "estimated_ram_mb": estimate, "fits_ram": estimate <= available,
                              "sha256": digest, "checksum_verified": bool(expected),
