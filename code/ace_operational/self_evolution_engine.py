@@ -93,12 +93,11 @@ class SelfEvolutionEngine:
         """Empirically measure inference latency, token throughput, and memory budget."""
         logger.info("[Self-Evolution] Benchmarking cognitive inference pipeline...")
         hc = self.router.health_check()
-        active_backend = hc.get("active_backend", "unknown")
         avail_ram = hc.get("local_gguf", {}).get("available_ram_mb", 0)
 
         # Run quick synthesis probe
         test_prompt = "def hitung_faktorial(n: int) -> int:\n    return 1 if n <= 1 else n * hitung_faktorial(n - 1)"
-        start_t = time.time()
+        start_t = time.monotonic()
         res = self.router.generate_text(
             [
                 {"role": "system", "content": "Kamu adalah ACE engine internal benchmark."},
@@ -107,18 +106,37 @@ class SelfEvolutionEngine:
             tier="fast",
             max_tokens=32,
         )
-        elapsed = time.time() - start_t
+        elapsed = time.monotonic() - start_t
         resp_text = res.get("text", "")
-        token_estimate = len(resp_text.split()) * 1.3
+        backend = res.get("backend_used", "unavailable")
+        model = res.get("model")
+        healthy = bool(
+            hc.get("local_gguf", {}).get("ready") is True
+            and res.get("success") is True and res.get("status") == "SUCCESS"
+            and isinstance(resp_text, str) and resp_text.strip()
+            and isinstance(backend, str)
+            and (backend.startswith("local-gguf:") or backend == "local-gguf-server")
+            and isinstance(model, dict) and model.get("id")
+            and res.get("evidence_event_id")
+        )
+        token_estimate = len(resp_text.split()) * 1.3 if healthy else 0.0
         throughput_tokens_per_sec = round(token_estimate / max(0.01, elapsed), 2)
 
         return {
-            "active_backend": active_backend,
+            "active_backend": backend,
             "tier_used": res.get("tier_used", "auto"),
             "latency_seconds": round(elapsed, 4),
             "throughput_tokens_per_sec": throughput_tokens_per_sec,
+            "throughput_is_estimate": True,
+            "token_count_method": "word_count_times_1.3",
             "available_ram_mb": avail_ram,
-            "backend_healthy": True,
+            "backend_healthy": healthy,
+            "status": "PASS" if healthy else "HOLD",
+            "error_code": res.get("error_code") if not healthy else None,
+            "model": model,
+            "inference_id": res.get("inference_id"),
+            "evidence_event_id": res.get("evidence_event_id"),
+            "task_verified": False,
         }
 
     def verify_and_promote_self_capabilities(self) -> list[dict[str, Any]]:
@@ -151,15 +169,16 @@ class SelfEvolutionEngine:
             )
             promoted.append({"id": "cap_dynamic_hybrid_router", "status": "KNOWN_AND_TESTED"})
 
-        # 3. Autonomous Multi-Agent Software Factory
-        self.store.set_frontier_capability(
-            capability_id="cap_software_factory",
-            name_id="Autonomous Multi-Agent Software Factory Pipeline",
-            category="coding",
-            status="KNOWN_AND_TESTED",
-            evidence_ref="verified:software_factory_end_to_end_pass",
-        )
-        promoted.append({"id": "cap_software_factory", "status": "KNOWN_AND_TESTED"})
+        # This method does not execute SoftwareFactory. Its existence or an old
+        # status marker cannot justify a new verified frontier promotion.
+        factory = next((c for c in self.store.list_frontier()
+                        if c["capability_id"] == "cap_software_factory"), None)
+        if factory and factory.get("evidence_ref") == "verified:software_factory_end_to_end_pass":
+            self.store.set_frontier_capability(
+                capability_id="cap_software_factory", name_id=factory["name_id"],
+                category=factory["category"], status="RETEST_REQUIRED",
+                failure_reason="Legacy self-evolution marker has no factory execution receipt.",
+            )
 
         return promoted
 
@@ -185,7 +204,8 @@ class SelfEvolutionEngine:
             "recommendation": (
                 f"Seluruh {code_health['total_python_files']} berkas Python bersih tanpa syntax error. "
                 f"Skor kesehatan kode: {code_health['health_score']}%. "
-                f"Kapasitas inferensi: {inference_bench['throughput_tokens_per_sec']} token/detik. "
+                f"Status inferensi: {inference_bench['status']}; perkiraan throughput "
+                f"berdasarkan jumlah kata: {inference_bench['throughput_tokens_per_sec']} token/detik. "
                 f"Terpromosikan {len(promoted)} kapabilitas baru ke Frontier Registry."
             ),
         }

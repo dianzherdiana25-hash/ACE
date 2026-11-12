@@ -1,0 +1,24 @@
+{
+ "checks": {
+  "cycles_survived_kill": 1,
+  "kill_left_no_partial_cycle": true,
+  "memory_chain_ok_after_kill": true,
+  "resumed_cycle_numbering": true,
+  "final_cycles": 3,
+  "numbering_gapless": true,
+  "memory_chain_ok_final": true
+ },
+ "cycle2_resumed": {
+  "cycle_no": 2,
+  "status": "accepted",
+  "proposals": 5,
+  "elapsed_s": 338.0
+ },
+ "cycle3": {
+  "cycle_no": 3,
+  "status": "accepted",
+  "proposals": 4,
+  "elapsed_s": 243.6
+ },
+ "verdict": "RESUME_DRILL_PASS"
+}

@@ -27,7 +27,11 @@ class TestSoftwareFactory(unittest.TestCase):
             spec_id="Sistem manajemen kontak pelanggan dengan SQLite",
         )
         self.assertEqual(plan["project_name"], "Mini CRM")
-        self.assertTrue(len(plan["architecture_overview"]) > 0)
+        # A missing model must not fabricate an architecture overview.
+        if plan["success"]:
+            self.assertTrue(plan["architecture_overview"])
+        else:
+            self.assertEqual(plan["architecture_overview"], "")
 
     def test_synthesize_module_ast_check(self):
         valid_py = "def tambah(a: int, b: int) -> int:\n    return a + b\n"

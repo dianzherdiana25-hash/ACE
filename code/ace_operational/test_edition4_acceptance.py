@@ -269,7 +269,7 @@ class Edition4IntegratedAcceptanceTests(unittest.TestCase):
         self.assertEqual(recovered[0]["status"], "PAUSED")
 
     def test_a41_a42_a43_a44_model_router_circuit_breaker_json_repair_and_ram(self):
-        # A41/A42: Remote quota/429 error trips circuit breaker and falls back to local backend
+        # A41/A42: Remote quota/429 error trips circuit breaker; no fabricated local success.
         res_err = self.router.generate_text(
             [{"role": "user", "content": "Uji fallback"}],
             prefer_remote=True,
@@ -289,10 +289,10 @@ class Edition4IntegratedAcceptanceTests(unittest.TestCase):
         repaired = extract_and_repair_json(malformed, required_keys=["action", "target"])
         self.assertEqual(repaired["action"], "patch_file")
 
-        # A44: Excessive RAM model request is caught and downshifted safely
+        # A44: Excessive RAM model request is blocked without inventing a fallback engine.
         ram_check = self.router.check_ram_budget_for_model(999_999)
         self.assertFalse(ram_check["allowed"])
-        self.assertEqual(ram_check["fallback_backend"], "local-deterministic-v4")
+        self.assertIsNone(ram_check["fallback_backend"])
 
         # Multi-model RAM priority: fitting models prioritized over oversized models
         mock_gguf = {
@@ -715,15 +715,20 @@ class Edition4IntegratedAcceptanceTests(unittest.TestCase):
         test_models_dir = self.root / "test_models"
         test_models_dir.mkdir(parents=True, exist_ok=True)
 
+        # Fixtures must be structurally genuine GGUFs (one tiny F32 tensor):
+        # structural admission (PR #107) rightly rejects header-only stubs.
+        from ace_operational.test_gguf_integrity import build_gguf
+        genuine = build_gguf([("w", [4], 0, b"\x00" * 16)])
+
         valid_file = test_models_dir / "valid.gguf"
-        valid_data = b"GGUF\x03\x00\x00\x00" + b"\x00" * 1024
+        valid_data = genuine
         valid_file.write_bytes(valid_data)
 
         corrupt_magic_file = test_models_dir / "corrupt_magic.gguf"
         corrupt_magic_file.write_bytes(b"BROKEN_NOT_GGUF")
 
         corrupt_sha_file = test_models_dir / "corrupt_sha.gguf"
-        corrupt_sha_file.write_bytes(b"GGUF\x03\x00\x00\x00" + b"\x01" * 512)
+        corrupt_sha_file.write_bytes(genuine)
 
         manifest_file = test_models_dir / "manifest.json"
         manifest_file.write_text(
@@ -761,13 +766,15 @@ class Edition4IntegratedAcceptanceTests(unittest.TestCase):
         else:
             self.assertFalse(disc["ready"])
             self.assertEqual(disc["valid_models"], [])
-            self.assertEqual(self.router.health_check()["active_backend"], "local-deterministic-v4")
+            self.assertEqual(self.router.health_check()["active_backend"], "unavailable")
             res = self.router.generate_text([
                 {"role": "user", "content": "Katakan satu kalimat halo ramah dalam Bahasa Indonesia"}
             ], max_tokens=40)
-            self.assertEqual(res["backend_used"], "local-deterministic-v4")
+            self.assertEqual(res["backend_used"], "unavailable")
             self.assertFalse(res["fallback_triggered"])
-            self.assertIn("Mesin lokal ACE", res["text"])
+            self.assertFalse(res["success"])
+            self.assertEqual(res["error_code"], "NO_LOCAL_MODEL")
+            self.assertEqual(res["text"], "")
 
     def test_g04_g11_fencing_lease_violation_rejection(self):
         target = self.ws / "projects" / "fence_test.py"
