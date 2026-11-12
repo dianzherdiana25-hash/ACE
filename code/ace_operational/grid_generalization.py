@@ -149,7 +149,12 @@ def identifiable_shown(defect_names: tuple[str, ...],
                                                  tuple(subset))
     full = frozenset(defect_names)
     partials[full] = buggy
-    for size in range(min(8, len(failing)), 0, -1):
+    # Cap the shown size so at least 3 failing cases always remain
+    # for a discriminative holdout (the v2/v3 invalidation lesson).
+    cap = min(8, len(failing) - 3)
+    if cap < 1:
+        return None
+    for size in range(cap, 0, -1):
         for shown in itertools.combinations(failing, size):
             shown = list(shown)
             if len(defect_names) > 1:
@@ -170,13 +175,26 @@ def identifiable_shown(defect_names: tuple[str, ...],
 
 def _make_task(rng: random.Random, task_id: str, subset: str,
                defect_names: tuple[str, ...]) -> dict[str, Any] | None:
-    cases = [tuple(c) for c in rng.choice(_GRID_SETS)]
+    # The case pool is BOTH curated sets (20 cases). v2 of this
+    # universe drew shown from a single 10-case set, so the holdout
+    # remainder often contained no failing case at all — the null
+    # control "solved" 64/114 and the run invalidated itself. v3
+    # additionally requires a discriminative holdout: at least 3
+    # holdout cases on which the buggy program actually fails.
+    cases = [tuple(c) for case_set in _GRID_SETS for c in case_set]
+    rng.shuffle(cases)
     truth = [_run(_NAVIGATE_REFERENCE, case) for case in cases]
     buggy = _apply(_NAVIGATE_REFERENCE, defect_names)
     if _passes(buggy, cases, truth) == len(cases):
         return None  # defect not behaviourally real on this case set
     shown = identifiable_shown(defect_names, cases, truth, buggy)
     if shown is None:
+        return None
+    holdout_preview = [case for case in cases if case not in shown]
+    holdout_failing = sum(
+        1 for case in holdout_preview
+        if _run(buggy, case) != truth[cases.index(case)])
+    if holdout_failing < 3:
         return None
     shown_truth = [truth[cases.index(case)] for case in shown]
     holdout = [case for case in cases if case not in shown]

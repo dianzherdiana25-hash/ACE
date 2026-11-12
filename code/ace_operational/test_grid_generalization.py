@@ -59,7 +59,19 @@ class UniverseTests(unittest.TestCase):
             shown = {tuple(c) for c in task["shown_cases"]}
             holdout = {tuple(c) for c in task["holdout_cases"]}
             self.assertFalse(shown & holdout)
-            self.assertEqual(len(shown) + len(holdout), 10)
+            self.assertEqual(len(shown) + len(holdout), 20)
+
+    def test_holdout_is_discriminative(self):
+        # Every task's holdout must contain >= 3 cases the buggy
+        # program fails — the v2 invalidation lesson (null control
+        # solved 64/114 on non-discriminative holdouts).
+        from ace_operational.grid_generalization import _run
+        for task in self.universe["tasks"]:
+            failing = sum(
+                1 for case, want in zip(task["holdout_cases"],
+                                        task["holdout_truth"])
+                if _run(task["buggy_code"], tuple(case)) != want)
+            self.assertGreaterEqual(failing, 3, task["task_id"])
 
 
 if __name__ == "__main__":
