@@ -379,3 +379,38 @@ same prominence as a positive one.
 ACE's registered development-engine brain) from the
 bench's Task 11 draft under the coordinator's
 ratifications; brain of origin recorded.
+
+## Lock-in evidence record (added 2026-11-13, hub condition (b))
+
+The statement_order calibration evidence, stated in
+full here as the hub's lock-in condition requires —
+not only by reference to Addendum 49. Calibration set:
+24 constructed single-defect tasks, seeds 40000–40023
+(now SEALED; in §4's exclusion list alongside the B-3
+probe band). Three arms, holdout-judged:
+
+- **Frozen-substrate baseline (the application's
+  baseline arm): 5/24 = 20.8%** — strictly inside the
+  ratified 10–90% gate. The class is ~79%
+  substrate-blind yet solvable by construction; a
+  near-zero application effect on this stratum is
+  therefore read as a named-cause result (below),
+  NOT saturation and NOT a null by construction.
+- **Generic token-search comparator: 0/24.**
+- **Discovery (mechanism exactly as frozen, digest
+  §2; pool 8 / evaluation 16): 11 operators admitted
+  from the pool; evaluation baseline 4/16, extended
+  4/16 — Δ = 0.**
+
+Named cause, recorded BEFORE the run as a prediction:
+the frozen mechanism's schema space enumerates
+expression-level edits only; it contains no statement
+motion, so no pool-admitted operator can express this
+class's repair. The application measures the frozen
+mechanism as it is; if the run confirms Δ ≈ 0 on this
+stratum, that confirms this boundary prediction —
+it does not explain it away after the fact. The
+falsification consequence (schema-space round 2 with
+statement-level operators) is the escalation
+package's discovery v-next stage and is NOT opened
+before this application is measured.
