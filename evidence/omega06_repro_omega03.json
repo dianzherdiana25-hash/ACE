@@ -1,0 +1,41 @@
+{
+ "package": "OMEGA-06/repro-omega03",
+ "baseline_evaluator": {
+  "command": "cwd=/home/hatch/workspace/ace-omega/g1/evaluator PYTHONPATH=/home/hatch/workspace/ace-omega/g1/fixture python -m unittest test_evaluator -v",
+  "summary": [
+   "Ran 6 tests in 0.002s",
+   "FAILED (failures=4)"
+  ],
+  "exit_code": 1
+ },
+ "baseline_dev": {
+  "command": "cwd=/home/hatch/workspace/ace-omega/g1/fixture PYTHONPATH=/home/hatch/workspace/ace-omega/g1/fixture python -m unittest discover -s . -p test_*.py",
+  "summary": [
+   "Ran 3 tests in 0.001s",
+   "FAILED (failures=2)"
+  ],
+  "exit_code": 1
+ },
+ "final_evaluator": {
+  "command": "cwd=/home/hatch/workspace/ace-omega/g1/evaluator PYTHONPATH=/home/hatch/workspace/ace-omega/g1/fixture-wt python -m unittest test_evaluator -v",
+  "summary": [
+   "Ran 6 tests in 0.001s",
+   "FAILED (failures=4)"
+  ],
+  "exit_code": 1
+ },
+ "final_dev": {
+  "command": "cwd=/home/hatch/workspace/ace-omega/g1/fixture-wt PYTHONPATH=/home/hatch/workspace/ace-omega/g1/fixture-wt python -m unittest discover -s . -p test_*.py",
+  "summary": [
+   "Ran 3 tests in 0.001s",
+   "FAILED (failures=2)"
+  ],
+  "exit_code": 1
+ },
+ "final_state_note": "The attempt-3 verified end state lived only in the disposable candidate dir /tmp/g1-candidate3, which the VM runtime replacement wiped; fixture-wt/harga.py on disk is byte-identical to the buggy fixture. The final legs above therefore re-ran against the wrong directory and failed like baseline.",
+ "reconstruction_check": {
+  "method": "harga.py reconstructed verbatim from the patch content recorded in evidence/omega03_g1_variant_attempt3.json (raw_output edits), placed in g1/repro-final/ with the fixture dev tests",
+  "evaluator": "Ran 6 tests - OK",
+  "dev": "Ran 3 tests - OK"
+ }
+}
