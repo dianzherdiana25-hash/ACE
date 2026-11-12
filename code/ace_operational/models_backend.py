@@ -195,6 +195,116 @@ def _local_json(url: str, *, body: dict[str, Any] | None = None, timeout: float 
         return result
 
 
+class _ThinkingBudgetExhausted(Exception):
+    """The server spent the whole token budget inside reasoning and produced no final content."""
+
+
+# GGML tensor types: id -> (elements per block, bytes per block). Plain types use block size 1.
+_GGUF_TYPE_BLOCKS: dict[int, tuple[int, int]] = {
+    0: (1, 4),      # F32
+    1: (1, 2),      # F16
+    2: (32, 18),    # Q4_0
+    3: (32, 20),    # Q4_1
+    6: (32, 22),    # Q5_0
+    7: (32, 24),    # Q5_1
+    8: (32, 34),    # Q8_0
+    9: (32, 36),    # Q8_1
+    10: (256, 84),  # Q2_K
+    11: (256, 110), # Q3_K
+    12: (256, 144), # Q4_K
+    13: (256, 176), # Q5_K
+    14: (256, 210), # Q6_K
+    15: (256, 292), # Q8_K
+    16: (1, 1),     # I8
+    17: (1, 2),     # I16
+    18: (1, 4),     # I32
+    19: (1, 8),     # I64
+    20: (1, 8),     # F64
+    30: (1, 2),     # BF16
+}
+_GGUF_SCALAR_SIZES = {0: 1, 1: 1, 2: 2, 3: 2, 4: 4, 5: 4, 6: 4, 7: 1, 10: 8, 11: 8, 12: 8}
+
+
+def _gguf_expected_total_size(path: Path) -> int | None:
+    """Compute the exact file size a GGUF header declares, or None when a tensor
+    type is unknown to this checker (size then stays unverified, never assumed).
+
+    Raises ValueError for a malformed header. A truncated download keeps a valid
+    magic and header, so magic-only admission is not structural validation: the
+    declared tensor layout must account for every byte of the file.
+    """
+    import struct
+
+    with path.open("rb") as stream:
+        def read_exact(n: int) -> bytes:
+            data = stream.read(n)
+            if len(data) != n:
+                raise ValueError("truncated_gguf_header")
+            return data
+
+        def u32() -> int:
+            return struct.unpack("<I", read_exact(4))[0]
+
+        def u64() -> int:
+            return struct.unpack("<Q", read_exact(8))[0]
+
+        def gguf_string() -> bytes:
+            return read_exact(u64())
+
+        def skip_value(vtype: int) -> None:
+            if vtype == 8:  # STRING
+                gguf_string()
+            elif vtype == 9:  # ARRAY
+                elem_type = u32()
+                count = u64()
+                if elem_type == 8:
+                    for _ in range(count):
+                        gguf_string()
+                else:
+                    stream.seek(_GGUF_SCALAR_SIZES[elem_type] * count, 1)
+            else:
+                stream.seek(_GGUF_SCALAR_SIZES[vtype], 1)
+
+        if read_exact(4) != b"GGUF":
+            raise ValueError("invalid_gguf_magic")
+        version = u32()
+        if version not in (2, 3):
+            raise ValueError(f"unsupported_gguf_version:{version}")
+        tensor_count = u64()
+        kv_count = u64()
+        alignment = 32
+        for _ in range(kv_count):
+            key = gguf_string()
+            vtype = u32()
+            if key == b"general.alignment" and vtype == 4:
+                alignment = u32()
+            else:
+                skip_value(vtype)
+        data_end = 0
+        verifiable = True
+        for _ in range(tensor_count):
+            gguf_string()  # tensor name
+            n_dims = u32()
+            elements = 1
+            for _ in range(n_dims):
+                elements *= u64()
+            ttype = u32()
+            offset = u64()
+            block = _GGUF_TYPE_BLOCKS.get(ttype)
+            if block is None:
+                verifiable = False
+                continue
+            per_block, block_bytes = block
+            if elements % per_block:
+                raise ValueError("gguf_tensor_not_block_aligned")
+            data_end = max(data_end, offset + elements // per_block * block_bytes)
+        if not verifiable:
+            return None
+        header_end = stream.tell()
+        data_start = (header_end + alignment - 1) // alignment * alignment
+        return data_start + data_end
+
+
 class ModelRouter:
     """Local inference with explicit failure and durable, attributable receipts.
 
@@ -268,9 +378,9 @@ class ModelRouter:
                 seen.add(path.resolve())
                 try:
                     size = path.stat().st_size
-                    with path.open("rb") as stream:
-                        if stream.read(4) != b"GGUF":
-                            raise ValueError("invalid_gguf_magic")
+                    expected_total = _gguf_expected_total_size(path)
+                    if expected_total is not None and expected_total != size:
+                        raise ValueError(f"gguf_size_mismatch expected={expected_total} actual={size}")
                     expected = expected_hashes.get(path.name, "")
                     digest = self._digest(path) if expected else ""
                     if expected and digest.lower() != expected.lower():
@@ -278,7 +388,9 @@ class ModelRouter:
                     estimate = max(256, int(size / (1024 * 1024) * 1.25))
                     entry = {"name": path.name, "path": str(path), "size_bytes": size,
                              "estimated_ram_mb": estimate, "fits_ram": estimate <= available,
-                             "sha256": digest, "checksum_verified": bool(expected)}
+                             "sha256": digest, "checksum_verified": bool(expected),
+                             "size_verified": expected_total is not None,
+                             "expected_size_bytes": expected_total}
                     valid_models.append(entry)
                     if not entry["fits_ram"]:
                         ram_warnings.append({"file": path.name, "estimated_ram_mb": estimate,
@@ -465,13 +577,19 @@ class ModelRouter:
                     receipt["finish_reason"] = choice.get("finish_reason")
                     receipt["resource_usage"]["server_reported_usage"] = response.get("usage")
                     if not isinstance(value, str) or not value.strip():
+                        reasoning = choice.get("message", {}).get("reasoning_content", "")
+                        if isinstance(reasoning, str) and reasoning.strip() and choice.get("finish_reason") == "length":
+                            raise _ThinkingBudgetExhausted(
+                                "token budget exhausted inside reasoning_content; no final content produced")
                         raise ValueError("Empty or non-string model response")
                     return succeed(value.strip(), "local-gguf-server", {
                         "id": response.get("model") or (server_model or {}).get("id"),
                         "source": gguf["server_url"], "sha256": None, "checksum_verified": False,
                         "identity_note": "Server-advertised identity; artifact custody not attested by HTTP"})
                 except Exception as exc:
-                    fail("SERVER_INFERENCE_FAILED", f"{type(exc).__name__}: {exc}", "local-gguf-server")
+                    code = ("THINKING_BUDGET_EXHAUSTED" if isinstance(exc, _ThinkingBudgetExhausted)
+                            else "SERVER_INFERENCE_FAILED")
+                    fail(code, f"{type(exc).__name__}: {exc}", "local-gguf-server")
         cli_bin = gguf.get("llama_binary")
         if preference and not target:
             fail("MODEL_NOT_FOUND", f"Requested model {preference} has no RAM-fitting local artifact")
