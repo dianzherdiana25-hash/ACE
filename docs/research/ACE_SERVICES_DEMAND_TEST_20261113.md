@@ -74,7 +74,7 @@ The bottom is a price war: functionally identical "VAPT + PDF report" offers run
 
 ### Verdict: **Plausible wedge (narrow)**
 
-Evidence: the wedge is only the bundle — *small-scope review + the vulnerability actually fixed + sealed before/after evidence + retest* — in the $300–$1,500 band where transaction evidence exists. Report-only security review is **commoditized** ($15–$325 Fiverr, ~$6 Fastwork floor), and anything compliance- or attestation-shaped is **credential-gated**. ACE's demonstrated SQL-injection repair through an attested pipeline maps precisely onto the bundle; without the fix-and-evidence differentiation, this line would grade commoditized.
+Evidence: the wedge is only the bundle — *small-scope review + the vulnerability actually fixed + sealed before/after evidence + retest* — in the $300–$1,500 band where transaction evidence exists. Report-only security review is **commoditized** ($15–$325 Fiverr, ~$6 Fastwork floor), and anything compliance- or attestation-shaped is **credential-gated**. ACE's demonstrated SQL-injection repair through an attested pipeline maps precisely onto the bundle; without the fix-and-evidence differentiation, this line would grade commoditized. **Scope clarification (verification note, 2026-11-13):** the bundle's *discovery/review* component — finding not-yet-known vulnerabilities in arbitrary client code — is **not yet demonstrated** by ACE; what is demonstrated is the *fix + sealed before/after evidence + retest* on an identified vulnerability (Uji Keamanan-01). The wedge claim covers the bundle only insofar as a review step is supplied or separately proven; it should not be read as evidence that the review half is already in hand.
 
 ---
 
