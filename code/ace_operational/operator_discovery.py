@@ -14,6 +14,17 @@ Honesty boundary, stated in the design: the schema *space* is
 human-designed; the *operators* (which schema, at which site, with
 which parameters) are discovered by the mechanism and admitted
 under a measured protocol. That is the claim — nothing more.
+
+Stage L2 expansion: four more generic schemas (bool_constant,
+name_swap, unary_not, subscript_index) and *pair discovery* —
+for tasks no single edit solves, a bounded search over pairs of
+score-improving edits; a shown-perfect pair credits BOTH of its
+operator keys toward admission (each must still reach the
+admission threshold across the pool). This is the mechanism's
+answer to masked defect pairs, where each single fix is
+individually invisible to the shown set. The operator vocabulary
+stays one-edit; pairs exist only at discovery time — at solve
+time the existing greedy chains admitted singles across rounds.
 """
 from __future__ import annotations
 
@@ -138,6 +149,13 @@ def enumerate_variants(code: str) -> list[tuple[tuple, str]]:
         return []
     params = [a.arg for a in fn.args.args]
     strings = _string_candidates(code)
+    scope_names = set(params)
+    for sub in ast.walk(fn):
+        if isinstance(sub, ast.Name) and isinstance(sub.ctx,
+                                                    ast.Store):
+            scope_names.add(sub.id)
+        if isinstance(sub, ast.arg):
+            scope_names.add(sub.arg)
     out: list[tuple[tuple, str]] = []
     seen: set[str] = set()
 
@@ -151,6 +169,61 @@ def enumerate_variants(code: str) -> list[tuple[tuple, str]]:
             out.append((key, text))
 
     for path, node in _walk_paths(fn):
+        # boolean constants: flip (stage L2)
+        if isinstance(node, ast.Constant) and isinstance(node.value,
+                                                         bool):
+            new_tree = copy.deepcopy(tree)
+            target = _node_at(_function_of(new_tree), path)
+            target.value = not node.value  # type: ignore[attr-defined]
+            emit(("bool_constant", path, target.value), new_tree)
+        # name reference: swap to another in-scope name (stage L2)
+        if isinstance(node, ast.Name) and isinstance(node.ctx,
+                                                     ast.Load):
+            for name in sorted(scope_names - {node.id}):
+                new_tree = copy.deepcopy(tree)
+                target = _node_at(_function_of(new_tree), path)
+                target.id = name  # type: ignore[attr-defined]
+                emit(("name_swap", path, name), new_tree)
+        # condition negation: wrap a comparison/boolop in `not`,
+        # or unwrap an existing one (stage L2)
+        if isinstance(node, (ast.Compare, ast.BoolOp)):
+            new_tree = copy.deepcopy(tree)
+            new_fn = _function_of(new_tree)
+            target = _node_at(new_fn, path)
+            if target is not None and _replace_at(
+                    new_fn, path,
+                    ast.UnaryOp(op=ast.Not(),
+                                operand=copy.deepcopy(target))):
+                emit(("unary_not", path, "wrap"), new_tree)
+        if isinstance(node, ast.UnaryOp) and isinstance(node.op,
+                                                         ast.Not):
+            new_tree = copy.deepcopy(tree)
+            new_fn = _function_of(new_tree)
+            target = _node_at(new_fn, path)
+            if target is not None and _replace_at(
+                    new_fn, path, copy.deepcopy(target.operand)):
+                emit(("unary_not", path, "unwrap"), new_tree)
+        # subscript index anywhere in the body (stage L2): nudge an
+        # int-constant slice, or rebind a name slice to a parameter
+        if isinstance(node, ast.Subscript):
+            sl = node.slice
+            if isinstance(sl, ast.Constant) and isinstance(
+                    sl.value, int) and not isinstance(sl.value, bool):
+                for value in {0, 1, sl.value - 1, sl.value + 1}:
+                    if value == sl.value:
+                        continue
+                    new_tree = copy.deepcopy(tree)
+                    target = _node_at(_function_of(new_tree), path)
+                    target.slice.value = value  # type: ignore[attr-defined]
+                    emit(("subscript_index", path, value), new_tree)
+            elif isinstance(sl, ast.Name):
+                for name in params:
+                    if name == sl.id:
+                        continue
+                    new_tree = copy.deepcopy(tree)
+                    target = _node_at(_function_of(new_tree), path)
+                    target.slice.id = name  # type: ignore[attr-defined]
+                    emit(("subscript_index", path, name), new_tree)
         # int constants: nudge or replace with small canonical values
         if isinstance(node, ast.Constant) and isinstance(node.value,
                                                          int) and \
@@ -230,10 +303,94 @@ def enumerate_variants(code: str) -> list[tuple[tuple, str]]:
     return out
 
 
+_BINOPS = {"Add": ast.Add, "Sub": ast.Sub, "Mult": ast.Mult}
+_COMPARES = {"Lt": ast.Lt, "LtE": ast.LtE, "Gt": ast.Gt,
+             "GtE": ast.GtE, "Eq": ast.Eq, "NotEq": ast.NotEq}
+
+
+def _apply_key_direct(code: str, key: tuple) -> str | None:
+    """Apply an operator key directly: parse, locate the site by
+    its AST path, apply the schema's transformation with the
+    recorded parameter. Semantically identical to enumerating
+    variants and matching the key (the roundtrip test proves it
+    on real task code), but O(parse) instead of O(all variants) —
+    the enumeration-based apply made the expanded schema space
+    too slow to measure (a 25-minute run lost to a VM restart).
+    """
+    schema, path, parameter = key
+    try:
+        tree = ast.parse(code)
+    except SyntaxError:
+        return None
+    fn = _function_of(tree)
+    if fn is None:
+        return None
+    node = _node_at(fn, path)
+    if node is None:
+        return None
+    if schema == "int_constant" and isinstance(node, ast.Constant):
+        node.value = parameter
+    elif schema == "bool_constant" and isinstance(node,
+                                                  ast.Constant):
+        node.value = parameter
+    elif schema == "string_literal" and isinstance(node,
+                                                   ast.Constant):
+        node.value = parameter
+    elif schema == "name_swap" and isinstance(node, ast.Name):
+        node.id = parameter
+    elif schema == "binop_swap" and isinstance(node, ast.BinOp):
+        node.op = _BINOPS[parameter]()
+    elif schema == "binop_unwrap" and isinstance(node, ast.BinOp):
+        if not _replace_at(fn, path, copy.deepcopy(node.left)):
+            return None
+    elif schema == "compare_swap" and isinstance(node, ast.Compare):
+        node.ops = [_COMPARES[parameter]()]
+    elif schema == "unary_not":
+        if parameter == "wrap":
+            if not _replace_at(fn, path, ast.UnaryOp(
+                    op=ast.Not(), operand=copy.deepcopy(node))):
+                return None
+        elif isinstance(node, ast.UnaryOp):
+            if not _replace_at(fn, path,
+                               copy.deepcopy(node.operand)):
+                return None
+        else:
+            return None
+    elif schema == "subscript_index" and isinstance(
+            node, ast.Subscript):
+        if isinstance(parameter, int):
+            node.slice.value = parameter  # type: ignore[attr-defined]
+        else:
+            node.slice.id = parameter  # type: ignore[attr-defined]
+    elif schema == "return_indices" and isinstance(node,
+                                                   ast.Return):
+        names: list[ast.Name] = []
+        walk: ast.AST = node.value
+        while isinstance(walk, ast.Subscript) and isinstance(
+                walk.slice, ast.Name):
+            names.append(walk.slice)
+            walk = walk.value
+        if len(names) != len(parameter):
+            return None
+        for name_node, name in zip(reversed(names), parameter):
+            name_node.id = name
+    else:
+        return None
+    try:
+        text = ast.unparse(ast.fix_missing_locations(tree))
+    except Exception:
+        return None
+    return text if text != code else None
+
+
 def apply_operator(code: str, key: tuple) -> str | None:
     """Re-apply a discovered operator to a fresh program by
-    re-locating its site path and transformation."""
-    schema, path, parameter = key
+    re-locating its site path and transformation. Direct
+    application first; the original enumerate-and-match path is
+    kept as a fallback so behaviour can only stay identical."""
+    direct = _apply_key_direct(code, key)
+    if direct is not None:
+        return direct
     for candidate_key, text in enumerate_variants(code):
         if candidate_key == key:
             return text
@@ -242,31 +399,85 @@ def apply_operator(code: str, key: tuple) -> str | None:
 
 # --- discovery + admission ----------------------------------------------
 
+def _scored_variants(task: dict[str, Any]) -> tuple[int, list]:
+    """(baseline score, [(score, key, text), ...]) over all
+    one-edit variants of the task's buggy code."""
+    budget = _budget_for(task)
+    baseline = _safe_score(budget, task["buggy_code"])
+    scored = [(_safe_score(budget, variant), key, variant)
+              for key, variant in
+              enumerate_variants(task["buggy_code"])]
+    return baseline, scored
+
+
 def discover_for_task(task: dict[str, Any]) -> list[tuple]:
     """Operator keys whose single application makes the task's
     shown cases fully pass."""
-    budget = _budget_for(task)
     shown_total = len(task["shown_cases"])
-    found = []
-    for key, variant in enumerate_variants(task["buggy_code"]):
-        if _safe_score(budget, variant) >= shown_total:
-            found.append(key)
-    return found
+    _, scored = _scored_variants(task)
+    return [key for score, key, _ in scored if score >= shown_total]
+
+
+def discover_pairs_for_task(task: dict[str, Any],
+                            max_partners: int = 10) -> list[tuple]:
+    """Ordered operator-key pairs whose sequential application
+    makes the shown cases fully pass, for tasks no single edit
+    solves (stage L2, masked pairs). Partners are the strongest
+    score-improving single edits; the search is bounded and every
+    candidate is scored under the wall-clock guard."""
+    shown_total = len(task["shown_cases"])
+    baseline, scored = _scored_variants(task)
+    if any(score >= shown_total for score, _, _ in scored):
+        return []
+    improvers = sorted(
+        ((score, key, text) for score, key, text in scored
+         if baseline < score < shown_total),
+        key=lambda item: -item[0])[:max_partners]
+    budget = _budget_for(task)
+    pairs = []
+    for _, key_a, text_a in improvers:
+        for _, key_b, _ in improvers:
+            if key_a == key_b:
+                continue
+            applied = apply_operator(text_a, key_b)
+            if applied is not None and \
+                    _safe_score(budget, applied) >= shown_total:
+                pairs.append((key_a, key_b))
+    return pairs
 
 
 def run_discovery(*, pool: list[dict[str, Any]],
                   evaluation: list[dict[str, Any]],
                   control: list[dict[str, Any]],
+                  pair_pool: list[dict[str, Any]] | None = None,
                   min_pool_fixes: int = 2) -> dict[str, Any]:
     """Pool -> candidate operators -> admission (>= min_pool_fixes
     pool tasks fixed) -> measured transfer on evaluation + control
-    regression, all with the extended greedy solver."""
+    regression, all with the extended greedy solver. `pair_pool`
+    tasks (stage L2) feed pair discovery only: a shown-perfect
+    pair credits both constituent keys toward the admission of
+    each of the task's defect classes."""
     by_class: dict[str, Any] = {}
     admitted_keys: dict[str, list[tuple]] = {}
     pool_by_class: dict[str, list] = {}
     for task in pool:
         for defect in task["defects"]:
             pool_by_class.setdefault(defect, []).append(task)
+    pair_credits: dict[str, dict[tuple, int]] = {}
+    pair_tasks_solved = 0
+    for task in pair_pool or []:
+        pairs = discover_pairs_for_task(task)
+        if not pairs:
+            continue
+        pair_tasks_solved += 1
+        credited: set[tuple] = set()
+        for key_a, key_b in pairs:
+            credited.add(key_a)
+            credited.add(key_b)
+        for defect in task["defects"]:
+            counts = pair_credits.setdefault(defect, {})
+            for key in credited:
+                counts[key] = counts.get(key, 0) + 1
     eval_by_class: dict[str, list] = {}
     for task in evaluation:
         for defect in task["defects"]:
@@ -327,6 +538,9 @@ def run_discovery(*, pool: list[dict[str, Any]],
         for task in class_pool:
             for key in discover_for_task(task):
                 fix_counts[key] = fix_counts.get(key, 0) + 1
+        for key, count in pair_credits.get(defect_class,
+                                           {}).items():
+            fix_counts[key] = fix_counts.get(key, 0) + count
         admitted = [key for key, count in fix_counts.items()
                     if count >= min_pool_fixes]
         admitted_keys[defect_class] = admitted
@@ -347,7 +561,17 @@ def run_discovery(*, pool: list[dict[str, Any]],
     control_ext = sum(1 for t in control
                       if solved(t, all_admitted)) if all_admitted \
         else control_base
+    mixed_eval = [t for t in evaluation if len(t["defects"]) == 2]
+    mixed = {"total": len(mixed_eval),
+             "solved_baseline": sum(1 for t in mixed_eval
+                                    if solved(t, [])),
+             "solved_extended": sum(1 for t in mixed_eval
+                                    if solved(t, all_admitted))
+             if all_admitted else 0}
     return {"by_class": by_class,
+            "pair_pool": {"tasks": len(pair_pool or []),
+                          "tasks_solved_by_pairs": pair_tasks_solved},
+            "mixed_evaluation": mixed,
             "control": {"total": len(control),
                         "solved_baseline": control_base,
                         "solved_extended": control_ext}}
