@@ -414,3 +414,39 @@ falsification consequence (schema-space round 2 with
 statement-level operators) is the escalation
 package's discovery v-next stage and is NOT opened
 before this application is measured.
+
+## Interpretation note + amendment withdrawal (2026-11-13)
+
+**Amendment withdrawal.** A seed amendment ratified
+earlier today (selection of the grid universe seed by
+a size rule) is declared **VOID** by the coordinator
+and is withdrawn here: it was born of a
+counting-convention misreading (below). The §4 seed
+table stands as locked (grid universe seed 20261113);
+no active amendment remains for this registration.
+
+**Interpretation note (not a change of any number).**
+The §4 grid evaluation floor ("≥40 singles + 18
+mixed") reads in the per-class aggregate convention
+of this registration's own reference protocol: in
+composition-discovery v4, the evaluation actually run
+was 11 pure singles + 18 mixed = 29 tasks, whose
+by_class aggregate (a 2-defect task counting toward
+both its classes) is 47. The pure-singles reading is
+structurally impossible in this universe family at
+any seed — a 40-seed scan (20261114–20261153, trail
+preserved in the run record) yields 23–24 new_only
+singles at every seed (ceiling 4 classes × 6). This
+run's grid composition, reported in both conventions
+wherever it appears: **pure 12 singles + 18 mixed;
+aggregate 48** — the floor is met under the
+reference protocol's convention. The family pass rule
+(§6) is computed per task over the exact evaluation
+set; this note touches only the floor-compliance
+statement, never Δ or margin. It applies to the grid
+evaluation row only: pricing floors read pure and
+are met purely (45 singles + 18 pairs), and the
+constructed stratum stands at 40 per the lock. This
+note and the withdrawal were decided in a
+zero-solving state, before any arm of the run had
+executed.
