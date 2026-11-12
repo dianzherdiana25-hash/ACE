@@ -128,9 +128,16 @@ def _gradient_path(partials: dict[frozenset, str], remaining: frozenset,
 def identifiable_shown(defect_names: tuple[str, ...],
                        cases: list[tuple], truth: list,
                        buggy: str) -> list[tuple] | None:
-    """Smallest shown subset of the buggy-failing cases satisfying
+    """Largest shown subset of the buggy-failing cases satisfying
     R1 (every partial fix fails somewhere shown) and R2 (a gradient
-    path exists), or None."""
+    path exists), or None.
+
+    v1 of this universe took the *smallest* identifiable set; the
+    preregistered validity gate caught the flaw (catalog control
+    47% < 80%): a 1–2 case shown set satisfies the letter of R1/R2
+    over defect-removal programs but starves the operator-level
+    greedy search of gradient. Identifiability is a floor, not a
+    target — v2 maximises signal subject to it."""
     failing = [case for case, want in zip(cases, truth)
                if _run(buggy, case) != want]
     if not failing:
@@ -142,7 +149,7 @@ def identifiable_shown(defect_names: tuple[str, ...],
                                                  tuple(subset))
     full = frozenset(defect_names)
     partials[full] = buggy
-    for size in range(1, min(5, len(failing)) + 1):
+    for size in range(min(8, len(failing)), 0, -1):
         for shown in itertools.combinations(failing, size):
             shown = list(shown)
             if len(defect_names) > 1:
