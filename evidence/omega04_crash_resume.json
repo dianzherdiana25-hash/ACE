@@ -1,0 +1,16 @@
+{
+ "package": "OMEGA-04",
+ "subject": "ace_operational.store.OperationalStore (main)",
+ "method": "three separate OS processes: create -> restart+advance -> restart+verify",
+ "task_status": "ACTIVE",
+ "checkpoint": {
+  "stage": "implemented",
+  "contract": "omega04-v1",
+  "step": 2
+ },
+ "event_phases": [
+  "A",
+  "B"
+ ],
+ "verdict": "PASS"
+}
