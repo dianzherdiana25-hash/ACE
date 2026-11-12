@@ -1,0 +1,46 @@
+{
+ "schema": "ace.local_repo.result.v1",
+ "task_id": "task_1794477048180_35781cae",
+ "config": {
+  "repository": "/home/hatch/workspace/ace-omega/g1/fixture-wt",
+  "head": "a7443c9ad7fa099d24548d614f9e3fdd77c1c40f",
+  "issue": "Test harga gagal. Aturan di README.md: diskon besar 5% bila subtotal >= 500000; diskon member 10% setelah diskon besar; PPN 11% dihitung dari nilai setelah semua diskon, bukan subtotal awal. Perbaiki harga.py agar sesuai aturan.",
+  "evaluator_dir": "/home/hatch/workspace/ace-omega/g1/evaluator",
+  "max_attempts": 1,
+  "max_tokens": 512,
+  "wall_budget_seconds": 300,
+  "evaluator_digest": "4ebe023a257b41127e5f93340dbde6ec846fbfc4ebf71cc7d62105ea1bb73877",
+  "branch": "kandidat/perbaikan-harga",
+  "patch_format": "symbol",
+  "repeat_penalty": 1.15
+ },
+ "contract_digest": "ce18df233b1de2ec5d2182f46385fca2ff31850440031ffea5b695aeecee719c",
+ "attempts": [],
+ "status": "BLOCKED_ENVIRONMENT",
+ "postimages": {},
+ "candidate_provenance": "LOCAL_MODEL",
+ "evaluation_scope": "external development tests; same host custody; feedback exposed",
+ "scientific_status": "NOT_ASSESSED",
+ "oaie_proven": false,
+ "implementation_digests": {
+  "ace_operational/local_repo_workflow.py": "78675d469089f649a3c2064f0421cf075b397c6dd9cbbd040476eb0264c1206f",
+  "ace_operational/local_sandbox.py": "6f047da8bfa347ae1803ca416a2c2daadb32a9cebbe12fe12c5fcd6c9f489ddd",
+  "ace_operational/models_backend.py": "5e4aa184b22f19f76b0d53cb001574eb8f7d2fb127c03907817e3f415d1945d3",
+  "ace_operational/coding_loop.py": "4cf075edd26e82fff6a3c689a2b18d3dfa13b51043d889f13ec1275d60c52716",
+  "ace_operational/store.py": "5e44c9c3dfa5123bf83284ba6410d3827a276474b671439d6bdb24050c2b043c",
+  "ace_code_agent/repo_retrieval.py": "b8b5ff3e83444a6a133af7784084bd24bd6ef0c33788248976c4e180b83bdb17"
+ },
+ "baseline": {
+  "schema": "ace.local_sandbox.v1",
+  "status": "BLOCKED_ENVIRONMENT",
+  "passed": false,
+  "isolation": "bubblewrap+seccomp",
+  "independent_scientific_confirmation": false,
+  "supported_workload": "single_process_stdlib_python_unittest",
+  "candidate_digest": "cb34b0cebe4179305ab821b1fe95a888cfc21d44811ef2d15a435739db4295fd",
+  "evaluator_digest": "4ebe023a257b41127e5f93340dbde6ec846fbfc4ebf71cc7d62105ea1bb73877",
+  "error": "RuntimeError: bubblewrap unavailable"
+ },
+ "elapsed_seconds": 0.0136,
+ "candidate_tree_digest": "cb34b0cebe4179305ab821b1fe95a888cfc21d44811ef2d15a435739db4295fd"
+}

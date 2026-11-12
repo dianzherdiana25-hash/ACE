@@ -1,0 +1,92 @@
+{
+ "package": "OMEGA-08 gate demonstration",
+ "evaluator": "g1-heldout-evaluator-v1",
+ "protocol": "g1-fixture-eval-v1",
+ "budget": {
+  "evaluation_passes": 1,
+  "evaluator_tests": 6,
+  "dev_tests": 3
+ },
+ "candidates": {
+  "original": {
+   "candidate_id": "cand_499029210e05e62c7210",
+   "evaluation_id": "eval_82f2f41bc7193c150ffc",
+   "metrics": {
+    "evaluator_pass": 2.0,
+    "evaluator_total": 6,
+    "dev_pass": 1.0,
+    "dev_total": 3
+   },
+   "outcome": "fail",
+   "parents": []
+  },
+  "model-oneshot": {
+   "candidate_id": "cand_b2b7a7d6170be22328f6",
+   "evaluation_id": "eval_2c4c7a965439179cdf35",
+   "metrics": {
+    "evaluator_pass": 4.0,
+    "evaluator_total": 6,
+    "dev_pass": 2.0,
+    "dev_total": 3
+   },
+   "outcome": "fail",
+   "parents": [
+    "cand_499029210e05e62c7210"
+   ]
+  },
+  "model-feedback": {
+   "candidate_id": "cand_107f5d26d24884195901",
+   "evaluation_id": "eval_04c4cb38a654ac586bea",
+   "metrics": {
+    "evaluator_pass": 6.0,
+    "evaluator_total": 6,
+    "dev_pass": 3.0,
+    "dev_total": 3
+   },
+   "outcome": "pass",
+   "parents": [
+    "cand_499029210e05e62c7210",
+    "cand_b2b7a7d6170be22328f6"
+   ]
+  },
+  "scripted-baseline": {
+   "candidate_id": "cand_26f4a3b0349fea901c89",
+   "evaluation_id": "eval_89d3a894044d25cafa3c",
+   "metrics": {
+    "evaluator_pass": 6.0,
+    "evaluator_total": 6,
+    "dev_pass": 3.0,
+    "dev_total": 3
+   },
+   "outcome": "pass",
+   "parents": [
+    "cand_499029210e05e62c7210"
+   ]
+  }
+ },
+ "selection_front": [
+  "model-feedback",
+  "scripted-baseline"
+ ],
+ "selection_dominated": [
+  "original",
+  "model-oneshot"
+ ],
+ "selection_excluded": {},
+ "negatives_archived": 2,
+ "verify": {
+  "candidates": 4,
+  "evaluations": 4,
+  "corrupt": [],
+  "cycles": [],
+  "ledger_chain_ok": true,
+  "state_hash": "36a8cdfc435735050434ad372f44dabe444d6113872374cc21ff210f8064e02f",
+  "replay_hash": "36a8cdfc435735050434ad372f44dabe444d6113872374cc21ff210f8064e02f",
+  "replay_matches": true
+ },
+ "lineage_of_model_feedback": [
+  "original",
+  "model-oneshot"
+ ],
+ "note": "Gate mechanics on real artifacts under one evaluator and one budget. Not a capability claim; OAIE remains unproven."
+}

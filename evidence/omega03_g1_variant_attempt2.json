@@ -1,0 +1,49 @@
+{
+ "package": "OMEGA-03",
+ "variant": "G1-variant isolation-degraded, attempt 2",
+ "isolation": "ABSENT (plain subprocess, disposable copy)",
+ "attestation": "operator-launched llama-server from the recorded GGUF; digest below",
+ "model_file": "/home/hatch/workspace/ace-omega/models/Qwen3-8B-Q4_K_M.gguf",
+ "model_sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+ "candidate_provenance": "LOCAL_MODEL",
+ "issue": "Test harga gagal. Aturan di README.md: diskon besar 5% bila subtotal >= 500000; diskon member 10% setelah diskon besar; PPN 11% dihitung dari nilai setelah semua diskon, bukan subtotal awal. Perbaiki harga.py agar sesuai aturan.",
+ "prompt_switch": "/no_think appended to user message",
+ "baseline_evaluator": {
+  "rc": 1,
+  "tail": "------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/hatch/workspace/ace-omega/g1/evaluator/test_evaluator.py\", line 8, in test_tepat_di_batas\n    self.assertEqual(hitung_total(500000, False), 527250)\nAssertionError: 555000 != 527250\n\n----------------------------------------------------------------------\nRan 6 tests in 0.001s\n\nFAILED (failures=4)\n"
+ },
+ "retrieval_selected": [
+  "harga.py",
+  "test_harga.py"
+ ],
+ "inference": {
+  "success": true,
+  "status": "SUCCESS",
+  "error_code": null,
+  "backend_used": "local-gguf-server",
+  "model": {
+   "id": "/home/hatch/workspace/ace-omega/models/Qwen3-8B-Q4_K_M.gguf",
+   "source": "http://127.0.0.1:8081",
+   "sha256": null,
+   "checksum_verified": false,
+   "identity_note": "Server-advertised identity; artifact custody not attested by HTTP"
+  },
+  "duration_seconds": 113.175349,
+  "fallback_triggered": false
+ },
+ "raw_output": "{\"plan\":[\"steps\"],\"edits\":[{\"path\":\"harga.py\",\"symbol\":\"hitung_total\",\"content\":\"def hitung_total(subtotal: int, member: bool) -> int:\\n    total = subtotal\\n    if subtotal > 500000:\\n        total -= total * 5 // 100\\n    if member:\\n        total -= total * 10 // 100\\n    total += total * 11 // 100\\n    return total\"}]}",
+ "plan": [
+  "steps"
+ ],
+ "patch": "--- a/harga.py\n+++ b/harga.py\n@@ -2,11 +2,10 @@\n \n \n def hitung_total(subtotal: int, member: bool) -> int:\n-    \"\"\"Total belanja setelah diskon besar, diskon member, lalu PPN 11%.\"\"\"\n     total = subtotal\n     if subtotal > 500000:\n         total -= total * 5 // 100\n     if member:\n         total -= total * 10 // 100\n-    total += subtotal * 11 // 100\n+    total += total * 11 // 100\n     return total\n",
+ "patched_evaluator": {
+  "rc": 1,
+  "tail": "------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/hatch/workspace/ace-omega/g1/evaluator/test_evaluator.py\", line 8, in test_tepat_di_batas\n    self.assertEqual(hitung_total(500000, False), 527250)\nAssertionError: 555000 != 527250\n\n----------------------------------------------------------------------\nRan 6 tests in 0.001s\n\nFAILED (failures=2)\n"
+ },
+ "patched_dev": {
+  "rc": 1,
+  "tail": "n_besar)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/g1-candidate2/test_harga.py\", line 11, in test_batas_diskon_besar\n    self.assertEqual(hitung_total(500000, False), 527250)\nAssertionError: 555000 != 527250\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nFAILED (failures=1)\n"
+ },
+ "verdict": "PATCH_FAILED_TESTS",
+ "elapsed_seconds": 219.51
+}
