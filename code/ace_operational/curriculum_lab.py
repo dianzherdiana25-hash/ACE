@@ -116,10 +116,24 @@ def normalized_form(code: str) -> str:
 # owns a defect catalog: name -> (subtlety, transform of correct code).
 
 def _pricing_family(rng: random.Random) -> dict[str, Any]:
-    threshold = rng.choice([100000, 250000, 500000])
-    bulk_pct = rng.choice([5, 10])
-    member_pct = rng.choice([5, 10, 15])
-    tax_pct = rng.choice([10, 11])
+    # Parameter ranges widened ONCE, as a single principled
+    # case-grid lever, at the B-3 freeze (2026-11-13,
+    # coordinator-ratified): the original 36-combination
+    # universe (216 programs) saturated even for a generic
+    # token-search comparator (216/216), so each axis now
+    # spans its realistic commercial range in one step —
+    # rupiah bulk thresholds across two orders of magnitude,
+    # discount percentages across plausible practice, tax
+    # bracketing the 11% PPN rate. No new defect classes,
+    # no structural template change. 10*4*4*3 = 480
+    # combinations. Any further widening is a new lever
+    # decision, not a continuation of this one.
+    threshold = rng.choice([50000, 100000, 150000, 200000,
+                            250000, 300000, 400000, 500000,
+                            750000, 1000000])
+    bulk_pct = rng.choice([5, 10, 15, 20])
+    member_pct = rng.choice([5, 10, 15, 20])
+    tax_pct = rng.choice([10, 11, 12])
     reference = (
         "def total(subtotal, member):\n"
         "    t = subtotal\n"
