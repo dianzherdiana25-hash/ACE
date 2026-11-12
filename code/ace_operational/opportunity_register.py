@@ -72,15 +72,15 @@ ASSETS = {
     "venue_lynk_id": {
         "kind": "venue", "name": "Lynk.id",
         "role": "digital-product checkout",
-        "status": "owner_promised_not_created",
-        "evidence": "owner will set up the account himself (his legal shell)",
+        "status": "created",
+        "evidence": "store live: lynk.id/dianma25 (owner signed in himself 2026-11-13); 0 orders, no product yet",
     },
     # Brains — replaceable organs under multi-brain sovereignty.
     "brain_local_qwen3_8b": {
         "kind": "brain", "name": "Local Qwen3-8B (Research Director)",
         "role": "advisory director over observation packets",
         "status": "measured",
-        "evidence": "director cycles 1-4 accepted; B2A-02 PASS 4/4 with computed tables",
+        "evidence": "director cycles 1-4 accepted; B2A-02 PASS 4/4 with computed tables; defended its seat in bake-off 01 (2026-11-13): challenger Qwen3-4B failed B at 0/4",
     },
     "brain_claude_ian_ila": {
         "kind": "brain", "name": "Claude-class (Ian / ila)",
