@@ -128,14 +128,14 @@ class G3InstrumentTests(unittest.TestCase):
             evaluations=[("pricing", _report(audit="DIRTY"))]))
         self.assertEqual(out["overall"], "SPECIALIZATION")
         c2 = out["clauses"]["C2_two_distinct_families"]
-        self.assertTrue(any("audit" in m for m in c2["rejected"]))
+        self.assertTrue(any("audit" in m for m in c2["warnings"]))
 
     def test_same_family_twice_is_one_family(self):
         out = assess_g3(dossier=self._dossier(
             evaluations=[("grid", _report())]))
         self.assertEqual(out["overall"], "SPECIALIZATION")
         c2 = out["clauses"]["C2_two_distinct_families"]
-        self.assertTrue(any("twice" in m for m in c2["rejected"]))
+        self.assertTrue(any("twice" in m for m in c2["warnings"]))
 
     def test_margin_not_met_family_not_counted(self):
         out = assess_g3(dossier=self._dossier(
@@ -153,14 +153,14 @@ class G3InstrumentTests(unittest.TestCase):
             evaluations=[("pricing", rep)]))
         self.assertEqual(out["overall"], "SPECIALIZATION")
         c3 = out["clauses"]["C3_positive_transfer"]
-        self.assertTrue(any("margin_pp" in m for m in c3["rejected"]))
+        self.assertTrue(any("margin_pp" in m for m in c3["warnings"]))
 
     def test_unknown_family_fails_c2_by_name(self):
         out = assess_g3(dossier=self._dossier(
             evaluations=[("cooking", _report())]))
         c2 = out["clauses"]["C2_two_distinct_families"]
         self.assertEqual(c2["verdict"], "FAIL")
-        self.assertTrue(any("cooking" in m for m in c2["rejected"]))
+        self.assertTrue(any("cooking" in m for m in c2["warnings"]))
 
     def test_source_effect_not_positive_fails_c1(self):
         out = assess_g3(dossier=self._dossier(
@@ -197,7 +197,7 @@ class G3InstrumentTests(unittest.TestCase):
         c2 = out["clauses"]["C2_two_distinct_families"]
         self.assertEqual(c2["verdict"], "PASS")
         self.assertEqual(c2["missing"], [])
-        self.assertTrue(any("audit" in m for m in c2["rejected"]))
+        self.assertTrue(any("audit" in m for m in c2["warnings"]))
 
     # -- fail-closed loading ----------------------------------
 

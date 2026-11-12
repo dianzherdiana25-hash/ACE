@@ -160,12 +160,15 @@ def assess_g3(*, dossier: str | Path | None) -> dict[str, Any]:
         missing.append("improvement artifact has no name")
     if not improvement.get("digest"):
         missing.append("improvement artifact has no digest")
+    source_check: list[str] = []
     if source_report is None:
         missing.append("source report file missing/unparseable")
     else:
-        missing += _check_report(source_report, label="source report",
-                                 improvement=improvement,
-                                 mismatches=mismatches)
+        source_check = _check_report(source_report,
+                                     label="source report",
+                                     improvement=improvement,
+                                     mismatches=mismatches)
+        missing += source_check
         base, score = source_report.get("baseline_score"), \
             source_report.get("improvement_score")
         if not _number(base) or not _number(score):
@@ -183,9 +186,11 @@ def assess_g3(*, dossier: str | Path | None) -> dict[str, Any]:
     # ---- per-family evaluation validity (shared by C2/C3) -------
     family_records: dict[str, dict[str, Any]] = {}
     c2_rejected: list[str] = []
-    all_entries = [(source_family, source_report, "source report")] + \
-        [(fam, rep, f"evaluation ({fam})") for fam, rep in eval_entries]
-    for family, report, label in all_entries:
+    all_entries = [(source_family, source_report, "source report",
+                    source_check)] + \
+        [(fam, rep, f"evaluation ({fam})", None)
+         for fam, rep in eval_entries]
+    for family, report, label, prechecked in all_entries:
         if report is None:
             c2_rejected.append(f"{label}: report file missing/unparseable")
             continue
@@ -193,9 +198,10 @@ def assess_g3(*, dossier: str | Path | None) -> dict[str, Any]:
             c2_rejected.append(f"{label}: family {family!r} is not one of "
                                f"the design's families {list(FAMILIES)}")
             continue
-        problems = _check_report(report, label=label,
-                                 improvement=improvement,
-                                 mismatches=mismatches)
+        problems = prechecked if prechecked is not None else \
+            _check_report(report, label=label,
+                          improvement=improvement,
+                          mismatches=mismatches)
         if report.get("held_out") is not True:
             problems.append(f"{label}: tasks not attested held out")
         if problems:
@@ -209,8 +215,8 @@ def assess_g3(*, dossier: str | Path | None) -> dict[str, Any]:
         family_records[family] = report
 
     # ---- C2: same improvement in >= 2 distinct families ---------
-    # Entry-level problems are REJECTED entries (named in
-    # "rejected"); the clause verdict turns only on the
+    # Entry-level problems are named WARNINGS (the
+    # "warnings" list); the clause verdict turns only on the
     # requirement itself — at least two distinct valid
     # families — so a PASS verdict and a non-empty rejection
     # list cohere (verification finding 2, Addendum 42 §2).
@@ -222,7 +228,7 @@ def assess_g3(*, dossier: str | Path | None) -> dict[str, Any]:
     clauses["C2_two_distinct_families"] = {
         "verdict": "PASS" if not c2_missing else "FAIL",
         "missing": c2_missing,
-        "rejected": c2_rejected,
+        "warnings": c2_rejected,
         "evidence": {"valid_families": sorted(family_records)}}
 
     # ---- C3: positive transfer effect in >= 2 families ----------
@@ -252,11 +258,10 @@ def assess_g3(*, dossier: str | Path | None) -> dict[str, Any]:
     clauses["C3_positive_transfer"] = {
         "verdict": "PASS" if len(positive) >= 2 else "FAIL",
         "missing": c3_missing,
-        "rejected": c3_rejected,
+        "warnings": c3_rejected,
         "evidence": {"positive_families": positive}}
 
     # ---- outcome (single construction point) --------------------
-    mismatches = list(dict.fromkeys(mismatches))
     c1_pass = clauses["C1_identified_improvement"]["verdict"] == "PASS"
     if mismatches:
         overall = "NOT_DEMONSTRATED"
