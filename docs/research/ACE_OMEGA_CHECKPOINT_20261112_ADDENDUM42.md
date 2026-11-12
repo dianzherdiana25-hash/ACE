@@ -20,8 +20,12 @@ prices distinguished from transaction evidence):
 - **Security review + fixing — PLAUSIBLE WEDGE (narrow).**
   Report-only VAPT is commoditized and compliance work is
   credential-gated; the audit+fix+retest bundle at
-  $500–$1,500 has transaction proof (a seller with 46
+  $300–$1,500 has transaction proof (a seller with 46
   reviews at 5.0), and most rivals sell report-only.
+  (Band erratum, 2026-11-13: this section originally read
+  $500–$1,500; the PR #145 document's wedge band is
+  $300–$1,500 — $500 was the floor of the 46-review
+  seller's own tier. Aligned at the ops post's check.)
   Indonesian platforms show listings with near-zero
   visible transactions.
 - **AI-assisted code repair, standalone — COMMODITIZED.**
