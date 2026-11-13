@@ -50,10 +50,10 @@ def _spec_numbers(spec: str) -> set[int]:
     return {int(n) for n in re.findall(r"\d+", spec)}
 
 
-def _boundary(code: str, spec: str) -> list[str]:
+def _boundary(code: str, spec: str, tree: Any = None) -> list[str]:
     numbers = _spec_numbers(spec)
     out = []
-    for node in ast.walk(ast.parse(code)):
+    for node in ast.walk(tree if tree is not None else ast.parse(code)):
         if isinstance(node, ast.Compare) and len(node.ops) == 1:
             comp = node.comparators[0]
             if isinstance(comp, ast.Constant) and comp.value in numbers:
@@ -63,8 +63,8 @@ def _boundary(code: str, spec: str) -> list[str]:
     return out
 
 
-def _basis(code: str, spec: str) -> list[str]:
-    tree = ast.parse(code)
+def _basis(code: str, spec: str, tree: Any = None) -> list[str]:
+    tree = tree if tree is not None else ast.parse(code)
     lines = code.splitlines()
     out = []
     func = next((n for n in tree.body if isinstance(n, ast.FunctionDef)), None)
@@ -87,7 +87,7 @@ def _basis(code: str, spec: str) -> list[str]:
     return out
 
 
-def _nudge(code: str, spec: str) -> list[str]:
+def _nudge(code: str, spec: str, tree: Any = None) -> list[str]:
     out = []
     for n in _spec_numbers(spec):
         for delta in (-1, 1):
@@ -95,11 +95,11 @@ def _nudge(code: str, spec: str) -> list[str]:
     return out
 
 
-def _multiplier(code: str, spec: str) -> list[str]:
+def _multiplier(code: str, spec: str, tree: Any = None) -> list[str]:
     """Restore a dropped multiplier: `x *= <const>` -> spec constants."""
     out = []
     numbers = sorted(_spec_numbers(spec))
-    for node in ast.walk(ast.parse(code)):
+    for node in ast.walk(tree if tree is not None else ast.parse(code)):
         if isinstance(node, ast.AugAssign) and isinstance(node.op, ast.Mult) \
                 and isinstance(node.value, ast.Constant) \
                 and isinstance(node.value.value, int):
@@ -119,14 +119,58 @@ GROUP_FN = {"boundary": _boundary, "basis": _basis,
 
 
 def variants_by_group(code: str, spec: str) -> dict[str, list[str]]:
+    """Candidate variants per operator group.
+
+    Parse-once: the source is parsed a single time here and the tree
+    is shared by every group function (they only read it). Before
+    this, each group re-parsed the same source on every round — the
+    profiling pilot (PR #178) measured source-text processing at
+    87.6% of solver wall. Group functions called without a tree keep
+    the original parse-it-yourself behaviour, so the unshared path
+    remains available as the equivalence reference.
+    """
+    tree = ast.parse(code)
     groups: dict[str, list[str]] = {}
     for name, fn in GROUP_FN.items():
         seen: list[str] = []
-        for variant in fn(code, spec):
+        for variant in fn(code, spec, tree=tree):
             if variant != code and variant not in seen:
                 seen.append(variant)
         groups[name] = seen
     return groups
+
+
+class CachingBudget(Budget):
+    """Budget with compile-once scoring.
+
+    ``compile`` is a pure function of the source text, so the code
+    object for a distinct source is built once per budget and reused;
+    it is still executed in a fresh namespace on every call, exactly
+    as ``Budget.score`` does. Scores, ``used`` accounting and the
+    -1-on-any-exception behaviour are unchanged (equivalence-tested
+    against the plain Budget). This is not a score cache: every call
+    genuinely re-executes; only the redundant re-compilation of an
+    identical source is removed.
+    """
+
+    def __init__(self, *args: Any, **kwargs: Any):
+        super().__init__(*args, **kwargs)
+        self._compiled: dict[str, Any] = {}
+
+    def score(self, code: str) -> int:
+        self.used += 1
+        try:
+            code_obj = self._compiled.get(code)
+            if code_obj is None:
+                code_obj = compile(code, "<cand>", "exec")
+                self._compiled[code] = code_obj
+            namespace: dict[str, Any] = {}
+            exec(code_obj, namespace)
+            fn = namespace[self._entrypoint]
+            return sum(1 for case, expected in self._shown
+                       if fn(*case) == expected)
+        except Exception:
+            return -1
 
 
 def solve_with_config(task: dict[str, Any], budget: Budget,
@@ -163,8 +207,9 @@ def solve_with_config(task: dict[str, Any], budget: Budget,
 def _budget_for(task: dict[str, Any], limit: int) -> Budget:
     shown = [tuple(c) for c in task["shown_cases"]]
     by_case = {tuple(c): e for c, e in zip(task["cases"], task["expected"])}
-    return Budget(limit, entrypoint=task["entrypoint"], shown_cases=shown,
-                  shown_expected=[by_case[c] for c in shown])
+    return CachingBudget(limit, entrypoint=task["entrypoint"],
+                         shown_cases=shown,
+                         shown_expected=[by_case[c] for c in shown])
 
 
 def _public(task: dict[str, Any]) -> dict[str, Any]:
