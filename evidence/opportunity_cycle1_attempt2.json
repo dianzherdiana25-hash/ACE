@@ -1,0 +1,23 @@
+{
+ "cycle": 1,
+ "kind": "opportunity_register",
+ "candidates_offered": 37,
+ "share_before": {
+  "total": 1,
+  "by_origin": {
+   "FOUNDER": 1
+  },
+  "ace_side_share": 0.0
+ },
+ "wall_seconds": 900.4,
+ "raw_reply": "",
+ "status": "REJECTED_NO_JSON",
+ "share_after": {
+  "total": 1,
+  "by_origin": {
+   "FOUNDER": 1
+  },
+  "ace_side_share": 0.0
+ },
+ "chain_valid_after": true
+}

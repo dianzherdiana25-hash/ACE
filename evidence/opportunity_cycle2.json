@@ -1,0 +1,97 @@
+{
+ "cycle": 2,
+ "attempt": 1,
+ "kind": "opportunity_register_cycle2",
+ "candidates_offered": 32,
+ "share_before": {
+  "total": 6,
+  "by_origin": {
+   "FOUNDER": 1,
+   "brain_local_qwen3_8b": 5
+  },
+  "ace_side_share": 0.8333333333333334
+ },
+ "tranches": [
+  {
+   "status": "ACCEPTED",
+   "wall_seconds": 223.5,
+   "reply_chars": 861,
+   "problems": null
+  },
+  {
+   "status": "ACCEPTED",
+   "wall_seconds": 221.6,
+   "reply_chars": 857,
+   "problems": null
+  },
+  {
+   "status": "ACCEPTED",
+   "wall_seconds": 200.7,
+   "reply_chars": 823,
+   "problems": null
+  },
+  {
+   "status": "ACCEPTED",
+   "wall_seconds": 104.3,
+   "reply_chars": 818,
+   "problems": null
+  }
+ ],
+ "appended": [
+  {
+   "seq": 7,
+   "candidate_id": "candidate-9",
+   "combination": [
+    "brain_antigravity_gemini",
+    "venue_kbm"
+   ],
+   "title": "Antigravity Bench + KBM App Integration"
+  },
+  {
+   "seq": 8,
+   "candidate_id": "candidate-3",
+   "combination": [
+    "brain_local_qwen3_8b",
+    "venue_facebook"
+   ],
+   "title": "Local Qwen3-8B + Facebook Pages Integration"
+  },
+  {
+   "seq": 9,
+   "candidate_id": "candidate-16",
+   "combination": [
+    "venue_kbm",
+    "venue_lynk_id"
+   ],
+   "title": "KBM App + Lynk.id Integration"
+  },
+  {
+   "seq": 10,
+   "candidate_id": "candidate-15",
+   "combination": [
+    "cap_serial_fiction",
+    "venue_kbm"
+   ],
+   "title": "Serial Fiction Production via KBM App"
+  },
+  {
+   "seq": 11,
+   "candidate_id": "candidate-24",
+   "combination": [
+    "venue_lynk_id",
+    "venue_threads"
+   ],
+   "title": "Lynk.id + Threads Integration"
+  }
+ ],
+ "status": "ACCEPTED",
+ "share_after": {
+  "total": 11,
+  "by_origin": {
+   "FOUNDER": 1,
+   "brain_local_qwen3_8b": 10
+  },
+  "ace_side_share": 0.9090909090909091
+ },
+ "chain_valid_after": true
+}

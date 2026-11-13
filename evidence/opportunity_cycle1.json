@@ -1,0 +1,96 @@
+{
+ "cycle": 1,
+ "attempt": 3,
+ "kind": "opportunity_register_tranched",
+ "candidates_offered": 37,
+ "share_before": {
+  "total": 1,
+  "by_origin": {
+   "FOUNDER": 1
+  },
+  "ace_side_share": 0.0
+ },
+ "tranches": [
+  {
+   "status": "ACCEPTED",
+   "wall_seconds": 246.3,
+   "reply_chars": 964,
+   "problems": null
+  },
+  {
+   "status": "ACCEPTED",
+   "wall_seconds": 217.2,
+   "reply_chars": 876,
+   "problems": null
+  },
+  {
+   "status": "ACCEPTED",
+   "wall_seconds": 221.1,
+   "reply_chars": 984,
+   "problems": null
+  },
+  {
+   "status": "ACCEPTED",
+   "wall_seconds": 153.0,
+   "reply_chars": 857,
+   "problems": null
+  }
+ ],
+ "appended": [
+  {
+   "seq": 2,
+   "candidate_id": "candidate-9",
+   "combination": [
+    "venue_facebook",
+    "venue_kbm"
+   ],
+   "title": "KBM App Integration with Facebook"
+  },
+  {
+   "seq": 3,
+   "candidate_id": "candidate-7",
+   "combination": [
+    "cap_sealed_evaluation",
+    "venue_facebook"
+   ],
+   "title": "Preregistered Sealed Evaluation Design"
+  },
+  {
+   "seq": 4,
+   "candidate_id": "candidate-11",
+   "combination": [
+    "venue_facebook",
+    "venue_threads"
+   ],
+   "title": "Facebook + Threads Synergy"
+  },
+  {
+   "seq": 5,
+   "candidate_id": "candidate-14",
+   "combination": [
+    "brain_local_qwen3_8b",
+    "venue_kbm"
+   ],
+   "title": "Local Qwen3-8B as Research Director"
+  },
+  {
+   "seq": 6,
+   "candidate_id": "candidate-23",
+   "combination": [
+    "brain_local_qwen3_8b",
+    "venue_lynk_id"
+   ],
+   "title": "Local Qwen3-8B + Lynk.id Checkout Integration"
+  }
+ ],
+ "status": "ACCEPTED",
+ "share_after": {
+  "total": 6,
+  "by_origin": {
+   "FOUNDER": 1,
+   "brain_local_qwen3_8b": 5
+  },
+  "ace_side_share": 0.8333333333333334
+ },
+ "chain_valid_after": true
+}
