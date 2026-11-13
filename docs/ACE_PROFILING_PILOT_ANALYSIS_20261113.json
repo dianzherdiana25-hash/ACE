@@ -1,0 +1,116 @@
+{
+ "bootstrap_phase_shares": {
+  "aggregation": {
+   "ci95_hi": 0.00012596010920970787,
+   "ci95_lo": 7.551223930970049e-05,
+   "share": 9.516422281370531e-05
+  },
+  "checkpoint_io": {
+   "ci95_hi": 0.014395637264702115,
+   "ci95_lo": 0.008157695975940474,
+   "share": 0.010633789203044334
+  },
+  "compile": {
+   "ci95_hi": 0.4369355534668505,
+   "ci95_lo": 0.15994130270943502,
+   "share": 0.29967388067197065
+  },
+  "dedup_frontier": {
+   "ci95_hi": 0.025503232370151153,
+   "ci95_lo": 0.01329699428651796,
+   "share": 0.018109303724023616
+  },
+  "exec_shown": {
+   "ci95_hi": 0.018756712258858374,
+   "ci95_lo": 0.011082642041449917,
+   "share": 0.014067531468722956
+  },
+  "parse": {
+   "ci95_hi": 0.5331533227678945,
+   "ci95_lo": 0.24728423175419084,
+   "share": 0.3880088172864622
+  },
+  "queue_startup": {
+   "ci95_hi": 0.00411425969351402,
+   "ci95_lo": 0.0012858292141413469,
+   "share": 0.0022682431264844085
+  },
+  "transform_serialize": {
+   "ci95_hi": 0.2956054075504046,
+   "ci95_lo": 0.09902620274753134,
+   "share": 0.18864010506892584
+  }
+ },
+ "completeness": {
+  "complete": true,
+  "dropped_events": 0,
+  "events": 1585,
+  "jobs_summarised": 144,
+  "problems": []
+ },
+ "enumeration_inclusive_s": 0.3246609830093803,
+ "heaviest_job": {
+  "duration_s": 0.08512038099979691,
+  "share": 0.051707966192597876,
+  "task_id": "task_97e65db72a0b00e7"
+ },
+ "instrumented_job_wall": {
+  "mean_s": 0.011431773486145226,
+  "stdev_s": 0.019403834364705483,
+  "total_s": 1.6461753820049125
+ },
+ "jobs_instrumented": 144,
+ "note": "Pilot estimates only: variance + phase ranking + first optimisation candidate. Not evidence.",
+ "overhead_paired_per_task": {
+  "median_diff_s": 0.0015029435005544656,
+  "median_ratio_on_over_off": 1.648194620659774,
+  "tasks_paired": 72
+ },
+ "phase_ranking_attributed": [
+  {
+   "attributed_s": 0.6387305630178162,
+   "phase": "parse",
+   "share_of_instrumented_wall": 0.3880088172864622
+  },
+  {
+   "attributed_s": 0.49331576499207586,
+   "phase": "compile",
+   "share_of_instrumented_wall": 0.29967388067197065
+  },
+  {
+   "attributed_s": 0.31053469702328584,
+   "phase": "transform_serialize",
+   "share_of_instrumented_wall": 0.18864010506892584
+  },
+  {
+   "attributed_s": 0.02981108997573756,
+   "phase": "dedup_frontier",
+   "share_of_instrumented_wall": 0.018109303724023616
+  },
+  {
+   "attributed_s": 0.02315762398939114,
+   "phase": "exec_shown",
+   "share_of_instrumented_wall": 0.014067531468722956
+  },
+  {
+   "attributed_s": 0.01750508200348122,
+   "phase": "checkpoint_io",
+   "share_of_instrumented_wall": 0.010633789203044334
+  },
+  {
+   "attributed_s": 0.0037339259952204884,
+   "phase": "queue_startup",
+   "share_of_instrumented_wall": 0.0022682431264844085
+  },
+  {
+   "attributed_s": 0.00015665700084355194,
+   "phase": "aggregation",
+   "share_of_instrumented_wall": 9.516422281370531e-05
+  }
+ ],
+ "run_id": "profiling-pilot-a53e7ecc",
+ "scientific_field_mismatches": [],
+ "tasks": 72,
+ "unattributed_s": 0.11501949800185685,
+ "verify_full_s": 0.014210480005203863
+}
