@@ -1,0 +1,34 @@
+{
+ "package": "crash-safe atomic writing generalized (PR #181 pattern)",
+ "writers_tested": {
+  "round2_gate_run.py": true,
+  "bakeoff02_a.py": true,
+  "bakeoff02_b.py": true,
+  "bakeoff02_c.py": true,
+  "bakeoff02_finalize.py": true,
+  "bakeoff_a.py": true,
+  "bakeoff_b.py": true,
+  "bakeoff_c.py": true,
+  "dashboard_state_build.py": true,
+  "regression_anchor.py": true,
+  "inoculation_demo.py": true,
+  "ctrlreg_stage0_replay.py": true,
+  "ctrlreg_stage1_counterfactual.py": true,
+  "ctrlreg_stage2_dose.py": true,
+  "abc_v3_run.py": true
+ },
+ "all_pass": true,
+ "per_writer_tests": [
+  "round-trip exact",
+  "torn temp write leaves real file intact",
+  "byte-identical to write_text output"
+ ],
+ "in_situ": "dashboard_state_build.py ran end-to-end post-patch (6082 bytes, 2026-11-13 22:41 WIB)",
+ "existing_artifacts_load": [
+  "evidence/round2_gate_run.json",
+  "evidence/bakeoff02_a_run.json",
+  "evidence/bakeoff_a_run.json",
+  "evidence/abc_v3_run.json",
+  "handover/ace_dashboard_state.json"
+ ]
+}
