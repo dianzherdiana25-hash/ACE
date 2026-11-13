@@ -423,9 +423,9 @@ def instrumented_solver(aggregator: PhaseAggregator) -> Iterator[None]:
             return orig_variants(code, spec)
 
     def wrap_group(fn):
-        def group_wrapper(code: str, spec: str, tree=None):
+        def group_wrapper(code: str, spec: str, tree=None, ctx=None):
             with aggregator.measure("transform_serialize"):
-                return fn(code, spec, tree=tree)
+                return fn(code, spec, tree=tree, ctx=ctx)
         return group_wrapper
 
     pilot_abc.variants_by_group = variants_wrapper

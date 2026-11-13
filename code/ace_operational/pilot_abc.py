@@ -50,11 +50,39 @@ def _spec_numbers(spec: str) -> set[int]:
     return {int(n) for n in re.findall(r"\d+", spec)}
 
 
-def _boundary(code: str, spec: str, tree: Any = None) -> list[str]:
-    numbers = _spec_numbers(spec)
+def _round_context(tree: Any, spec: str) -> dict[str, Any]:
+    """Per-round generation context: the invariants the operator
+    groups all derive from the same source + spec, computed once.
+
+    Profiling pilot 2 (PR #183) found transform_serialize is the
+    largest remaining product phase, and inside it each group was
+    recomputing these per round: the spec-number set (three groups)
+    and full tree walks for their own node kinds. One walk here
+    collects the Compare and AugAssign nodes in walk order; group
+    functions consume the context when present and compute the
+    values themselves when it is absent (the no-context path stays
+    the equivalence reference). The context is read-only.
+    """
+    compares: list[Any] = []
+    augassigns: list[Any] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Compare):
+            compares.append(node)
+        elif isinstance(node, ast.AugAssign):
+            augassigns.append(node)
+    return {"numbers": _spec_numbers(spec),
+            "compares": compares, "augassigns": augassigns}
+
+
+def _boundary(code: str, spec: str, tree: Any = None,
+              ctx: Any = None) -> list[str]:
+    numbers = ctx["numbers"] if ctx is not None else _spec_numbers(spec)
+    nodes = ctx["compares"] if ctx is not None else (
+        n for n in ast.walk(tree if tree is not None else ast.parse(code))
+        if isinstance(n, ast.Compare))
     out = []
-    for node in ast.walk(tree if tree is not None else ast.parse(code)):
-        if isinstance(node, ast.Compare) and len(node.ops) == 1:
+    for node in nodes:
+        if len(node.ops) == 1:
             comp = node.comparators[0]
             if isinstance(comp, ast.Constant) and comp.value in numbers:
                 for old, new in ((">=", ">"), (">", ">="), ("<=", "<"), ("<", "<=")):
@@ -63,7 +91,8 @@ def _boundary(code: str, spec: str, tree: Any = None) -> list[str]:
     return out
 
 
-def _basis(code: str, spec: str, tree: Any = None) -> list[str]:
+def _basis(code: str, spec: str, tree: Any = None,
+           ctx: Any = None) -> list[str]:
     tree = tree if tree is not None else ast.parse(code)
     lines = code.splitlines()
     out = []
@@ -87,20 +116,26 @@ def _basis(code: str, spec: str, tree: Any = None) -> list[str]:
     return out
 
 
-def _nudge(code: str, spec: str, tree: Any = None) -> list[str]:
+def _nudge(code: str, spec: str, tree: Any = None,
+           ctx: Any = None) -> list[str]:
     out = []
-    for n in _spec_numbers(spec):
+    for n in (ctx["numbers"] if ctx is not None else _spec_numbers(spec)):
         for delta in (-1, 1):
             out.append(re.sub(rf"\b{n}\b", str(n + delta), code, count=1))
     return out
 
 
-def _multiplier(code: str, spec: str, tree: Any = None) -> list[str]:
+def _multiplier(code: str, spec: str, tree: Any = None,
+                ctx: Any = None) -> list[str]:
     """Restore a dropped multiplier: `x *= <const>` -> spec constants."""
     out = []
-    numbers = sorted(_spec_numbers(spec))
-    for node in ast.walk(tree if tree is not None else ast.parse(code)):
-        if isinstance(node, ast.AugAssign) and isinstance(node.op, ast.Mult) \
+    numbers = sorted(ctx["numbers"] if ctx is not None
+                     else _spec_numbers(spec))
+    nodes = ctx["augassigns"] if ctx is not None else (
+        n for n in ast.walk(tree if tree is not None else ast.parse(code))
+        if isinstance(n, ast.AugAssign))
+    for node in nodes:
+        if isinstance(node.op, ast.Mult) \
                 and isinstance(node.value, ast.Constant) \
                 and isinstance(node.value.value, int):
             segment = ast.get_source_segment(code, node)
@@ -130,10 +165,11 @@ def variants_by_group(code: str, spec: str) -> dict[str, list[str]]:
     remains available as the equivalence reference.
     """
     tree = ast.parse(code)
+    ctx = _round_context(tree, spec)
     groups: dict[str, list[str]] = {}
     for name, fn in GROUP_FN.items():
         seen: list[str] = []
-        for variant in fn(code, spec, tree=tree):
+        for variant in fn(code, spec, tree=tree, ctx=ctx):
             if variant != code and variant not in seen:
                 seen.append(variant)
         groups[name] = seen
