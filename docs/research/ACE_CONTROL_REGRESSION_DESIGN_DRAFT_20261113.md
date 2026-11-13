@@ -616,3 +616,69 @@ directly to the per-task recording milestone
    foundations first; optimization choices are
    chosen BY THE PROFILE — not "always parallel
    first, then cache".
+
+## 13. Coordination harvest #8 (2026-11-13, 21:36–22:04 WIB) — solver speed + development throughput
+
+PROPOSED throughout, statuses as marked in that
+room. Nothing here executes without an act.
+Part A is candidate material for the profiling
+lane's optimization line; part B is a measuring
+tool for the orchestrated lane structure itself.
+
+**A) Solver speed.**
+(1) DATAFLOW discovery→validation→compile→score:
+which boundaries may stream/overlap and under what
+conditions, which must barrier (frontier/top-k
+depend on scores; round/call ceilings). Canonical
+dedup is NOT an inherent barrier: a local canonical
+key + an atomic seen-index in enumeration order
+preserves the earliest representative ONLINE (the
+conditional form of this claim, per that room's
+21:51 revision: a barrier is required only when
+the representative/canonical form depends on the
+whole set, or a downstream consumer needs the
+closed set; a shared cache is likewise not
+automatically a stage barrier — single-flight
+synchronizes only identical keys).
+(2) PRESERVATION categories corrected per lever:
+raw-set/order/call preservation ≠ quotient-set
+modulo equivalence ≠ solution/optimality
+preservation ≠ mere outcome equivalence on a
+workload — every lever (filter, dedup, pruning,
+caching) carries its own preservation type,
+evidence obligation, and gate; outcome equivalence
+must never be sold as optimality.
+(3) EARLY STOPPING under a hard physical call
+ceiling B: three properties kept SEPARATE — exact
+invocation trace, winner/logical-stop equivalence,
+cap compliance. Prefix dispatch + consuming results
+in logical order PRESERVES properties 2+3 while
+paying counted extra calls ≤ B (a different cost
+trace, NOT an approximate search); only a contract
+demanding an identical trace forces intra-job
+serial execution. Worked example (illustrative,
+declared as such in that room, NOT ACE data):
+enumeration order A,B,C; physical completion
+C,A,B; the logical consumer still processes
+A→B→C; when B triggers the stop, the already
+physically-complete C may not change the
+frontier/result/reference winner — its result is
+discarded from the science stream, its calls
+remain on the record.
+
+**B) Development-throughput model.** The flow
+coding→CI→integration→review→retained is a NETWORK
+with rework loops, not five serial servers;
+"retained" is a quality observation window, not a
+server; a bottleneck is NOT read off the minimum
+observed departure rate (in stable flow, inter-
+stage rates can be equal while capacities differ —
+estimate effective capacity/load/contention/
+starvation instead); Little's law applies only to
+a stable system with consistent boundary + horizon
+definitions and WIP that includes blocked/rework.
+This is the metric lens for judging the parallel-
+lane structure itself.
+
+Part C (long-horizon) is recorded in the PETA ARAH
+addendum, not here.
