@@ -1,0 +1,8 @@
+path_inventory.json sha256=0e2987210f2534287a4fa9e01fafc8e65783825c5df19251b4e62763d2d81815
+verify_inventory.py sha256=55f1d6c92e8849926e1034767104cd12a96f75e885ac0e450bf4161ede2d0052
+python=3.12.14
+{"summary": {"all_open_draft": true, "category_occurrence_counts": {"design_data": 3, "documentation": 34, "evidence": 47, "other": 2, "python_non_test": 74, "python_test": 46, "workflow": 4}, "classification_counts": {"python_non_test_with_test_file_changes": 17, "python_non_test_without_test_file_changes": 1}, "file_occurrences": 210, "git_api_changed_paths_match_count": 18, "heads_ancestor_of_main_count": 0, "pr_count": 18, "unique_paths": 196}, "verification": "PATH_INVENTORY_MATCH"}
+verifier_exit_code=0
+negative_control=altered_head_blob
+INVENTORY_MISMATCH: PR 15: head entry CURRENT_STATE.md
+negative_control_exit_code=1 (expected)

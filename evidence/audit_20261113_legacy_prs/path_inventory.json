@@ -1,0 +1,3455 @@
+{
+  "classification_rules_in_order": [
+    [
+      "evidence",
+      "path starts with evidence/"
+    ],
+    [
+      "workflow",
+      "path starts with .github/workflows/"
+    ],
+    [
+      "python_test",
+      ".py basename starts with test_ or ends with _test.py"
+    ],
+    [
+      "python_non_test",
+      "remaining .py paths, including scaffolding and verification harnesses"
+    ],
+    [
+      "documentation",
+      "remaining .md paths, case-insensitive suffix"
+    ],
+    [
+      "design_data",
+      "remaining design/ paths"
+    ],
+    [
+      "other",
+      "remaining paths"
+    ]
+  ],
+  "git_version": "git version 2.52.0",
+  "main_sha": "bb22c44b5563a680190c06a89f2c7004d3ada8ec",
+  "metadata_source": "GET /repos/dianzherdiana25-hash/ACE/pulls?state=open&sort=updated&direction=desc&per_page=100",
+  "method_limits": [
+    "Diffs use each pinned PR base/head merge-base, not main-to-head.",
+    "Test naming is a mechanical classifier; it does not measure coverage or execution.",
+    "A shared path does not establish a textual conflict or semantic equivalence.",
+    "Same-path tree-entry comparison does not detect moved, adapted or selectively imported code.",
+    "The normalized snapshot deliberately omits PR bodies, author identities and personal data."
+  ],
+  "not_assessed": {
+    "behavioral_test_coverage": "TIDAK TAHU: requires source-level behavioral mapping",
+    "scientific_claims": "TIDAK TAHU: no experiment evidence replayed",
+    "semantic_integration_in_main": "TIDAK TAHU: ancestry and same-path entries alone are insufficient",
+    "test_pass_or_fail_at_pr_heads": "TIDAK TAHU: no suites or CI logs assessed"
+  },
+  "observed_at_utc": "2026-11-13 05:48:47 UTC",
+  "paths_source": "GitHub list_pr_changed_filenames (all pages), cross-checked against pinned git merge-base diff",
+  "pulls": [
+    {
+      "api_filenames": [
+        "CURRENT_STATE.md",
+        "NEXT_ACTION.md",
+        "RESEARCH_LEDGER.md",
+        "code/e14/e14_integrated_graph.py",
+        "code/e14/e14_integrated_isolation.py",
+        "code/e14/e14_integrated_policy.py",
+        "code/e14/e14t_audit.py",
+        "code/e14/e14t_bank.py",
+        "code/e14/e14t_extension.py",
+        "code/e14/e14t_run.py",
+        "code/e14/e14t_sandbox.py",
+        "code/e14/e14t_worker.py",
+        "code/e14/test_e14_integrated_graph.py",
+        "code/e14/test_e14_integrated_isolation.py",
+        "code/e14/test_e14_integrated_policy.py",
+        "code/e14/test_e14_issue13_smoke.py",
+        "code/e14/test_e14t.py",
+        "code/e14/test_e14t_audit.py",
+        "code/e14/test_e14t_extension.py",
+        "design/e1.4/E14T_INTEGRATED_GRAPH_PROTOCOL_DRAFT_v0.md",
+        "design/e1.4/E14T_LOCK_v1.json",
+        "design/e1.4/E14T_POSTSCORE_SEMANTIC_AUDIT_v1.md",
+        "design/e1.4/E14T_PROTOCOL_v1.md",
+        "design/e1.4/E14T_RESULT_v1.md",
+        "docs/ACE_E14_INTEGRATED_GRAPH_ENGINEERING_v1.md",
+        "evidence/e14/e14t_all_local_80_tests_v1.log",
+        "evidence/e14/e14t_audit_v1.json",
+        "evidence/e14/e14t_local_unit_tests_v1.log",
+        "evidence/e14/e14t_postscore_semantic_audit_v1.json",
+        "evidence/e14/e14t_public_bank_v1.json.gz",
+        "evidence/e14/e14t_public_development_v1.json.gz",
+        "evidence/e14/e14t_replay_ledger_v1.sqlite.xz",
+        "evidence/e14/e14t_replay_v1.json.gz",
+        "evidence/e14/e14t_result_summary_v1.json",
+        "evidence/e14/e14t_score_ledger_v1.sqlite.xz",
+        "tools/ace_e14t_semantic_audit.py",
+        "tools/ace_issue13_gate.py",
+        "tools/ace_issue13_smoke.py",
+        "tools/test_ace_e14t_semantic_audit.py"
+      ],
+      "base_ref": "research/e1.3-design",
+      "base_sha": "a5d0d1aabae2805baa76199857e1d6926f2f744d",
+      "category_counts": {
+        "design_data": 1,
+        "documentation": 8,
+        "evidence": 10,
+        "other": 0,
+        "python_non_test": 12,
+        "python_test": 8,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 39,
+      "files": [
+        {
+          "category": "documentation",
+          "change": "M",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "f6406b88915e021e8afe5e2dcd9d6e237891ed35",
+            "type": "blob"
+          },
+          "main_entry": {
+            "mode": "100644",
+            "oid": "ebb2e80818595eed1c9c2879ca7a843f2df2c04b",
+            "type": "blob"
+          },
+          "main_relation": "different_tree_entry",
+          "path": "CURRENT_STATE.md"
+        },
+        {
+          "category": "documentation",
+          "change": "M",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "ce6e5cd68ba35d7388e472392ed98fe577e8c11d",
+            "type": "blob"
+          },
+          "main_entry": {
+            "mode": "100644",
+            "oid": "2a7ae6b901e461b2c21eb34eff422459a00de6d3",
+            "type": "blob"
+          },
+          "main_relation": "different_tree_entry",
+          "path": "NEXT_ACTION.md"
+        },
+        {
+          "category": "documentation",
+          "change": "M",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "5ffccba07730965f1e8f53e98aec3b4997c538ce",
+            "type": "blob"
+          },
+          "main_entry": {
+            "mode": "100644",
+            "oid": "5ffccba07730965f1e8f53e98aec3b4997c538ce",
+            "type": "blob"
+          },
+          "main_relation": "identical_tree_entry",
+          "path": "RESEARCH_LEDGER.md"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "0f8045a7d9cf5df2fdc048ba561857923c4af425",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14_integrated_graph.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "0e02744516fa77183be8fffa6c776f29d2461975",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14_integrated_isolation.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "a0a3fc73d36c7092dfbf28906d958674544ba234",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14_integrated_policy.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "1b897ac1b3cb2bfbc01d9aa5fc79ea7b1b204f61",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14t_audit.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "f90c4a873e79dccdffa789fa592523c4c1040bbb",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14t_bank.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "bc8fa145e7a7eec771a29cc820bd698c97a3e6bd",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14t_extension.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "8f3ccb16dd7dab895eca5f0a104cc67c2147fb2c",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14t_run.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "135e9ff1c8c5a6b2ed990c0438247ba0ade90318",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14t_sandbox.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "5b718ebe642ece1f93234a4547e96e73e1961616",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14t_worker.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "5c88b28969081892758413d33ae3d9eee786055e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14_integrated_graph.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "cd34228ad9aba9eff6b0c15554f380c963cc06d9",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14_integrated_isolation.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "fcffd2f39fd7963bd7f9062bd5dff5d4a5132aff",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14_integrated_policy.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "cb4ecd38d34585c187f21f4ddcce922bb39a0a86",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14_issue13_smoke.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "3892fac5dee900d8d7b623cfa1c2503a149b03cb",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14t.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "f72820faf842d75e6822b186f3ad497c6b482574",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14t_audit.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "8a309720490c76353278f683e96ea8a36b279aa0",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14t_extension.py"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "f0b54719e8ea19e2eb55c4c8c932fb9ca451acc5",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14T_INTEGRATED_GRAPH_PROTOCOL_DRAFT_v0.md"
+        },
+        {
+          "category": "design_data",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "a0973b89f500f7837ce075ce9bde61b1ff10e857",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14T_LOCK_v1.json"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "a4880737f8c8b55d7bda4647dca05271793ebe0f",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14T_POSTSCORE_SEMANTIC_AUDIT_v1.md"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "95c78afea67b4cc7542050b340faad570e161865",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14T_PROTOCOL_v1.md"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "e8936d710b99fcf5c2bded89ac2d303ee806879b",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14T_RESULT_v1.md"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "1f4083fbfbbfb8c6e6641183013f4a95bf79a96f",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "docs/ACE_E14_INTEGRATED_GRAPH_ENGINEERING_v1.md"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "ed96c97093b853f8c4c36df504b6fa4e3eccd4f3",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14t_all_local_80_tests_v1.log"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "5a614fa048adfc1c76541f397216921c12f11b0b",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14t_audit_v1.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "82bccb435cdf32ddd5f8b66319d95ad1536d644b",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14t_local_unit_tests_v1.log"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "3023c9aeebc0752a2f14e6d52665e29e370644d2",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14t_postscore_semantic_audit_v1.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "0b8b78f4b33dae98afc42c9ba8897fe2bcb8c8fc",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14t_public_bank_v1.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "aa6c1dbd50b37d46ccadcecfa08b9cb1faf3be8d",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14t_public_development_v1.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "192f597f0290c011398075673aa226c8e7e764db",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14t_replay_ledger_v1.sqlite.xz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "3f898f6bf32163bc5377f4be4919664f8137b815",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14t_replay_v1.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "61c132e9955dbba131465335c78bf0bbd3f79725",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14t_result_summary_v1.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "970b4e4369e4d693132509fa6d43fae389be128b",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14t_score_ledger_v1.sqlite.xz"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "c7c319ac4d79d446c2ac5a8533a95d9b0dca21e8",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_e14t_semantic_audit.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "b715d7ca2fc233ddb28a9b2fd959a88ab152d95e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_issue13_gate.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "9a1010cc4c6e2a7670ae51b9cf4c381096390d3c",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_issue13_smoke.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "1865b7cdebf65ad76f77612ec515771240fd9538",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/test_ace_e14t_semantic_audit.py"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "a5d0d1aabae2805baa76199857e1d6926f2f744d",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "codex/13-integrated-graph-loop",
+      "head_sha": "cb295d2cf0413f2f1008307ed8d8b72ce3600049",
+      "main_relation_counts": {
+        "absent_at_same_path": 36,
+        "different_tree_entry": 2,
+        "identical_tree_entry": 1
+      },
+      "number": 15,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/15"
+    },
+    {
+      "api_filenames": [
+        "README_E14U_HANDOFF.md",
+        "code/e14/e14u_audit.py",
+        "code/e14/e14u_dev.py",
+        "code/e14/e14u_isolated.py",
+        "code/e14/e14u_primitive.py",
+        "code/e14/e14u_robustness.py",
+        "code/e14/e14u_worker.py",
+        "code/e14/test_e14u_audit_worker.py",
+        "code/e14/test_e14u_primitive.py",
+        "code/e14/test_e14u_robustness.py",
+        "design/e1.4/E14U_PROTOCOL_DEV_v0.md",
+        "docs/ACE_E14U_DEVELOPMENT_v0.md",
+        "evidence/e14/e14u_public_development_summary_v0.json"
+      ],
+      "base_ref": "codex/13-integrated-graph-loop",
+      "base_sha": "cb295d2cf0413f2f1008307ed8d8b72ce3600049",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 3,
+        "evidence": 1,
+        "other": 0,
+        "python_non_test": 6,
+        "python_test": 3,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 13,
+      "files": [
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "6e8195fde5878dd8d2a4b048c84289e8a9827d38",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "README_E14U_HANDOFF.md"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "07c134ebae0e4a83b486eef931ee4ae6bb7bd88e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14u_audit.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "61a5712538d74aa112e6800b520a9c154c8609ac",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14u_dev.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "eda330a02818c5c90d0712440a1c0003c20ce2c9",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14u_isolated.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "0ea31eea02c2eeb2d74119196d3166c609518fb9",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14u_primitive.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "953b585d5b7bd5cedfeeb129c643cd8abba37cf8",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14u_robustness.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "7c136b8647abd23621091a6c4eac256c1bc4e9bd",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14u_worker.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "c9ed9d6360a82ee2344e4c3e4225eaec14b9a2ef",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14u_audit_worker.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "c2220c275ca86751e76376636920575b558fb613",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14u_primitive.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "71710687bfae4fd9e80d03f99338f2d76615dbb0",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14u_robustness.py"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "b402bbcee8b20322c60de12c3eacfe1a6babd237",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14U_PROTOCOL_DEV_v0.md"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "39415197fb265cab82e4e08b2ea16124e90491e3",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "docs/ACE_E14U_DEVELOPMENT_v0.md"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "eb795e146370fd3feeed433d4e6858a7b8e90dd4",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14u_public_development_summary_v0.json"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "cb295d2cf0413f2f1008307ed8d8b72ce3600049",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "research/e14u-two-route-primitive",
+      "head_sha": "518827c5b7635f1d8d097e1b927c5f4b96aedf45",
+      "main_relation_counts": {
+        "absent_at_same_path": 13
+      },
+      "number": 16,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/16"
+    },
+    {
+      "api_filenames": [
+        "code/e14/e14v_operator.py",
+        "code/e14/e14v_study.py",
+        "code/e14/e14v_topology.py",
+        "code/e14/e14v_topology_audit.py",
+        "code/e14/test_e14v_operator.py",
+        "code/e14/test_e14v_topology.py",
+        "code/e14/test_e14v_topology_audit.py",
+        "design/e1.4/E14V_OPERATOR_INDUCTION_DEVELOPMENT_PROTOCOL_v0.md",
+        "design/e1.4/E14V_OPERATOR_INDUCTION_RESULT_DEV_v0.md"
+      ],
+      "base_ref": "research/e14u-two-route-primitive",
+      "base_sha": "518827c5b7635f1d8d097e1b927c5f4b96aedf45",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 2,
+        "evidence": 0,
+        "other": 0,
+        "python_non_test": 4,
+        "python_test": 3,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 9,
+      "files": [
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "c0800bc4e04ddcccd3238b7f31c0c84ce2c7959d",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14v_operator.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "2f99db36468f52b2ea580cbe9c2ce4d511dbd155",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14v_study.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "de510c2094a4a32a0d53034353c1403c2a4d2748",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14v_topology.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "8aba0e991e9286b3276b3ce1222a5fe9ff3a8d48",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14v_topology_audit.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "d568108b55d8aab48e9bc706945ada71e4b33523",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14v_operator.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "833550bbdbc510e5033102c28d2362392ff0c8dc",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14v_topology.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "7b58a229a59306e7bc94c8d133a3267f68d2ce54",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14v_topology_audit.py"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "2712616d6c03eca4ba5a34cc167d179d2d650ad7",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14V_OPERATOR_INDUCTION_DEVELOPMENT_PROTOCOL_v0.md"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "425849c744eff075cd04b515a76b9c1f7da7dfd3",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14V_OPERATOR_INDUCTION_RESULT_DEV_v0.md"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "518827c5b7635f1d8d097e1b927c5f4b96aedf45",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "research/e14v-operator-induction",
+      "head_sha": "da071eb87bc050f803ed5fe66f018fac866c1f86",
+      "main_relation_counts": {
+        "absent_at_same_path": 9
+      },
+      "number": 18,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/18"
+    },
+    {
+      "api_filenames": [
+        "code/e14/e14w_audit.py",
+        "code/e14/e14w_isolated.py",
+        "code/e14/e14w_source.py",
+        "code/e14/e14w_source_run.py",
+        "code/e14/e14w_study.py",
+        "code/e14/e14w_synthesis.py",
+        "code/e14/e14w_worker.py",
+        "code/e14/test_e14w_integration.py",
+        "code/e14/test_e14w_synthesis.py",
+        "code/e14/test_e14w_worker.py",
+        "design/e1.4/E14W_COMPOSITIONAL_PROGRAM_SEARCH_PROTOCOL_DEV_v0.md",
+        "design/e1.4/E14W_COMPOSITIONAL_PROGRAM_SEARCH_RESULT_DEV_v0.md",
+        "docs/ACE_E14W_EXECUTION_CHECKPOINT_20261105.md",
+        "evidence/e14/e14w_development_summary_v0.json"
+      ],
+      "base_ref": "research/e14v-operator-induction",
+      "base_sha": "da071eb87bc050f803ed5fe66f018fac866c1f86",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 3,
+        "evidence": 1,
+        "other": 0,
+        "python_non_test": 7,
+        "python_test": 3,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 14,
+      "files": [
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "a3bc862c0e866fb48cc0d2652867fb9bd2dbbe6d",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14w_audit.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "186b60860676f73e00c3714eed65bd3493c13cea",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14w_isolated.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "2d58b83cdd5db4ad7255a7251fc8d9a6313c2ad6",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14w_source.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "2521d8ae3907d6cbf8e16a9f796cb08025a3d357",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14w_source_run.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "66d78f8e953bae605da40073a8c5ad54f4f9529a",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14w_study.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "d73b9df4a4dd34b408307691161899f5b73c54f8",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14w_synthesis.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "91c9428a79d70581053ea760a1e109c170d783e0",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14w_worker.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "0d873869d25a5e4a8c4d830bd10fc13160707bc4",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14w_integration.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "2cec695a59d3884cb02da38d40c3b1a3bcedbe0c",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14w_synthesis.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "83663b2cc233fad69ed117717956398760d7ee9d",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14w_worker.py"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "d828f3fbf19b2f2f087abfde6cd5d40de8ce4f1e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14W_COMPOSITIONAL_PROGRAM_SEARCH_PROTOCOL_DEV_v0.md"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "1b945dcf95934927818ff1d85de52fe05d2854ac",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14W_COMPOSITIONAL_PROGRAM_SEARCH_RESULT_DEV_v0.md"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "02063d43d781672bd0cb39a2b07edfa5130f246f",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "docs/ACE_E14W_EXECUTION_CHECKPOINT_20261105.md"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "b59ac0a4334a6cf8de15982f6fc80b4d76d64302",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14w_development_summary_v0.json"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "da071eb87bc050f803ed5fe66f018fac866c1f86",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "research/e14w-compositional-search",
+      "head_sha": "63633f5dbff3f3153b9e36dba5b438aadcad7f6f",
+      "main_relation_counts": {
+        "absent_at_same_path": 14
+      },
+      "number": 19,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/19"
+    },
+    {
+      "api_filenames": [
+        "code/e14/e14x_assumption_contract.py",
+        "code/e14/e14x_identifiability.py",
+        "code/e14/e14x_replay.py",
+        "code/e14/test_e14x_assumption_contract.py",
+        "code/e14/test_e14x_identifiability.py",
+        "code/e14/test_e14x_replay.py",
+        "design/e1.4/E14X_IDENTIFIABILITY_PROTOCOL_DEV_v0.md",
+        "design/e1.4/E14X_IDENTIFIABILITY_RESULT_DEV_v0.md",
+        "evidence/e14/e14x-countermodel-replay.json.gz",
+        "evidence/e14/e14x-identifiability-main.json.gz",
+        "evidence/e14/e14x-independently-audited-batch0.json",
+        "evidence/e14/e14x-independently-audited-batch1.json",
+        "evidence/e14/e14x-independently-audited-batch2.json",
+        "evidence/e14/e14x-run-aggregate.json",
+        "evidence/e14/e14x_claim_scope_v0.json",
+        "evidence/e14/e14x_summary_v0.json",
+        "tools/ace_e14x_regression.py"
+      ],
+      "base_ref": "research/e14w-compositional-search",
+      "base_sha": "63633f5dbff3f3153b9e36dba5b438aadcad7f6f",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 2,
+        "evidence": 8,
+        "other": 0,
+        "python_non_test": 4,
+        "python_test": 3,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 17,
+      "files": [
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "e3770d4b9cf5c9952c6b72679b0611fecd8a187b",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14x_assumption_contract.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "1589f4a4f6c61ed8ac8df384d57d7cb53abd0755",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14x_identifiability.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "bba378b56f1371f9659ff30bc574af361d620202",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14x_replay.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "41fee4aee40d30aeb7415e425179f59cc259439e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14x_assumption_contract.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "8018e817d3c5fa95ff9840f0e0b01686f2271a93",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14x_identifiability.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "d042debc5cc43b57aba3fbbc7423b346329914f7",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14x_replay.py"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "2cebba7ef74c0bc751ca8d261badd0f4355ad411",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14X_IDENTIFIABILITY_PROTOCOL_DEV_v0.md"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "fad73f8e000343134832bd9b0283212949d9c0ca",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14X_IDENTIFIABILITY_RESULT_DEV_v0.md"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "7896d65661b2f6a084abd7b998bf92e0eda0bc9b",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14x-countermodel-replay.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "9e9c418a9416e16793fa564428f520e53554dba1",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14x-identifiability-main.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "0936eca0b6d38fc05f894fc709829d68f245d3a8",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14x-independently-audited-batch0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "18fdf6195c059bf4f5b702dc14303a571dd1b6d1",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14x-independently-audited-batch1.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "e1ea124c6a0eba42f07b2da04a05d79e1dc2b117",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14x-independently-audited-batch2.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "96200fda6ebdc8e83cda8887ba1804a71132f2a5",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14x-run-aggregate.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "5b6ebca6a7dcc15c21dad45ff843c68abcb3aec6",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14x_claim_scope_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "1e94dc92753b9dcd125e5fa6cf433f2d4f0956b4",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14x_summary_v0.json"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "68c1a488dfd0b46daec72b8d563e2c7e6e2d8992",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_e14x_regression.py"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "63633f5dbff3f3153b9e36dba5b438aadcad7f6f",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "research/e14x-indistinguishability",
+      "head_sha": "864f49f4f3259814ac00de8ac49b59a61768647b",
+      "main_relation_counts": {
+        "absent_at_same_path": 17
+      },
+      "number": 20,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/20"
+    },
+    {
+      "api_filenames": [
+        "MANIFEST_E14Y_SHA256.txt",
+        "code/e14/e14y_audit.py",
+        "code/e14/e14y_bank.py",
+        "code/e14/e14y_induction.py",
+        "code/e14/e14y_study.py",
+        "code/e14/e14y_witness.py",
+        "code/e14/test_e14y_audit.py",
+        "code/e14/test_e14y_induction.py",
+        "code/e14/test_e14y_witness.py",
+        "design/e1.4/E14Y_PRESCORE_LOCK_v0.json",
+        "design/e1.4/E14Y_TRANSFER_DEVELOPMENT_PROTOCOL_v0.md",
+        "design/e1.4/E14Y_TRANSFER_RESULT_DEV_v0.md",
+        "evidence/e14/e14y_audit_v0.json",
+        "evidence/e14/e14y_prescore_bank_v0.json",
+        "evidence/e14/e14y_prescore_source_verification_v0.json",
+        "evidence/e14/e14y_regression_summary_v0.json",
+        "evidence/e14/e14y_replay_verification_v0.json",
+        "evidence/e14/e14y_score_00-09_v0.json.gz",
+        "evidence/e14/e14y_score_10-19_v0.json.gz",
+        "evidence/e14/e14y_score_20-29_v0.json.gz",
+        "evidence/e14/e14y_score_30-39_v0.json.gz",
+        "evidence/e14/e14y_witness_v0.json.gz",
+        "tools/ace_e14y_package.py",
+        "tools/ace_e14y_regression.py",
+        "tools/ace_e14y_verify_lock.py"
+      ],
+      "base_ref": "research/e14x-indistinguishability",
+      "base_sha": "864f49f4f3259814ac00de8ac49b59a61768647b",
+      "category_counts": {
+        "design_data": 1,
+        "documentation": 2,
+        "evidence": 10,
+        "other": 1,
+        "python_non_test": 8,
+        "python_test": 3,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 25,
+      "files": [
+        {
+          "category": "other",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "9d7c1c390cb2ee194dbba8750dc1bd3c2c4b26b1",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "MANIFEST_E14Y_SHA256.txt"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "61ecbaec40478449770c5eaa100c553b07d72cbf",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14y_audit.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "7413ad6ed32fac0810ad62053e09dbc2873ea9f5",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14y_bank.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "ee827fd68bfc80093b3c50e681fe405b70cdabca",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14y_induction.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "b38718cb6f77d14acacc81e3ca5070d4ebce67c5",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14y_study.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "94547e00545acb82d1b382a073c78f40f05971d7",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14y_witness.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "ceceb9ada146604bbce0686616b9f8a28dcd787d",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14y_audit.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "d8cbd75b9aec8ad53bbb2612fbb22b3b1af737a5",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14y_induction.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "55a9fceeb65b450c0700b9ffbaf4572178b97a2d",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14y_witness.py"
+        },
+        {
+          "category": "design_data",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "d15657e7ab92c604d5727d01da622c64022be3dc",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14Y_PRESCORE_LOCK_v0.json"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "897dee3dfd3fc6cc306b326e73f0e7decd114b46",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14Y_TRANSFER_DEVELOPMENT_PROTOCOL_v0.md"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "47a41a65215a3a9332ec3900a8f60633e4e64415",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14Y_TRANSFER_RESULT_DEV_v0.md"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "8bae95031059c31cdc56e611ec1454fe8b81c9e8",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14y_audit_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "fd9bac114f067946abeff545059c3512b08dc494",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14y_prescore_bank_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "ca2d5606a4b1b20859653c6015f9e7f63a064935",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14y_prescore_source_verification_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "cb71cb0834f12df11d40adda40428388ccac061e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14y_regression_summary_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "2e6f9384835419740eb25a6943c054857857af78",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14y_replay_verification_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "f41c15b39d888eaff697d295bd01d05284e82f30",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14y_score_00-09_v0.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "683f43a81cf2efe7fb5eb8b8ad4f282fa5deb13f",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14y_score_10-19_v0.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "7be653e62dcf1d61bcf7eb5dc17c81130d3aa24e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14y_score_20-29_v0.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "3dc38e79df01f82b5cceade57169a11a1ae23abe",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14y_score_30-39_v0.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "23d31886eb47b567fdbefaf71824b4438948a067",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14y_witness_v0.json.gz"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "c1dd3c6a51497134d45bcbd84c03733c288cfb44",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_e14y_package.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "eed953f01c71a64202e5287436123d060b07908e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_e14y_regression.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "7e6c8c40fe4c32734d507e453553b028d04386ba",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_e14y_verify_lock.py"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "864f49f4f3259814ac00de8ac49b59a61768647b",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "research/e14y-cross-task-operator-transfer",
+      "head_sha": "93418742f830a5437667f825f16682bc91822529",
+      "main_relation_counts": {
+        "absent_at_same_path": 25
+      },
+      "number": 21,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/21"
+    },
+    {
+      "api_filenames": [
+        "code/e14/e14z_audit.py",
+        "code/e14/e14z_detection_limits.py",
+        "code/e14/e14z_witness.py",
+        "code/e14/test_e14z_audit.py",
+        "code/e14/test_e14z_detection_limits.py",
+        "design/e1.4/E14Z_POSTSCORE_FINDINGS_v0.md",
+        "design/e1.4/E14Z_SEMANTIC_DRIFT_RESULT_DEV_v0.md"
+      ],
+      "base_ref": "research/e14z-semantic-drift",
+      "base_sha": "9f81e6e4487250d7bf77cd88dce6648c3134b47a",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 2,
+        "evidence": 0,
+        "other": 0,
+        "python_non_test": 3,
+        "python_test": 2,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 7,
+      "files": [
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "6bb9951d2894aeab6701c38667569334fae8c82a",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14z_audit.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "4ce641f67c571c7c044006512d5f30b82409fb54",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14z_detection_limits.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "9a761df56cbf1294260afee554224e0710f4e1a4",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14z_witness.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "f1fab45361f328d3b1163c22cbb760c189686501",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14z_audit.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "e7f33c5834f9ad50c59b31871888c5b8968d67f7",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14z_detection_limits.py"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "8d9c4415a0a78fa19ae3760d2401747bce41e6c0",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14Z_POSTSCORE_FINDINGS_v0.md"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "3ed2a2ad8a9e7d0a2272818e8325b845e545b7d6",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14Z_SEMANTIC_DRIFT_RESULT_DEV_v0.md"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "9f81e6e4487250d7bf77cd88dce6648c3134b47a",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "research/e14z-postscore-audit",
+      "head_sha": "988b077dc2ff12d01d1f93fd6b1dca94036cc579",
+      "main_relation_counts": {
+        "absent_at_same_path": 7
+      },
+      "number": 22,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/22"
+    },
+    {
+      "api_filenames": [
+        "MANIFEST_E14Z_SHA256.txt",
+        "code/e14/e14z_audit.py",
+        "code/e14/e14z_detection_limits.py",
+        "code/e14/e14z_drift.py",
+        "code/e14/e14z_witness.py",
+        "code/e14/test_e14z_audit.py",
+        "code/e14/test_e14z_detection_limits.py",
+        "code/e14/test_e14z_drift.py",
+        "design/e1.4/E14Z_PRESCORE_LOCK_v0.json",
+        "design/e1.4/E14Z_SEMANTIC_DRIFT_PROTOCOL_DEV_v0.md",
+        "design/e1.4/E14Z_SEMANTIC_DRIFT_RESULT_DEV_v0.md",
+        "evidence/e14/e14z_audit_v0.json",
+        "evidence/e14/e14z_detection_limits_v0.json",
+        "evidence/e14/e14z_prescore_drift_bank_v0.json",
+        "evidence/e14/e14z_prescore_source_verification_v0.json",
+        "evidence/e14/e14z_regression_summary_v0.json",
+        "evidence/e14/e14z_replay_verification_v0.json",
+        "evidence/e14/e14z_score_00-04_v0.json.gz",
+        "evidence/e14/e14z_score_05-09_v0.json.gz",
+        "evidence/e14/e14z_score_10-14_v0.json.gz",
+        "evidence/e14/e14z_score_15-19_v0.json.gz",
+        "evidence/e14/e14z_witness_v0.json.gz",
+        "tools/ace_e14y_regression.py",
+        "tools/ace_e14z_package.py"
+      ],
+      "base_ref": "research/e14y-cross-task-operator-transfer",
+      "base_sha": "93418742f830a5437667f825f16682bc91822529",
+      "category_counts": {
+        "design_data": 1,
+        "documentation": 2,
+        "evidence": 11,
+        "other": 1,
+        "python_non_test": 6,
+        "python_test": 3,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 24,
+      "files": [
+        {
+          "category": "other",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "42d3750b92a0821f3e28111285882fa4963c97a6",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "MANIFEST_E14Z_SHA256.txt"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "6bb9951d2894aeab6701c38667569334fae8c82a",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14z_audit.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "4ce641f67c571c7c044006512d5f30b82409fb54",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14z_detection_limits.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "2206d309b5d7b6f93524a484f27bc43bf512bce9",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14z_drift.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "9a761df56cbf1294260afee554224e0710f4e1a4",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/e14z_witness.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "f1fab45361f328d3b1163c22cbb760c189686501",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14z_audit.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "e7f33c5834f9ad50c59b31871888c5b8968d67f7",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14z_detection_limits.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "5d6ea111a35f08df661ddec15f28227949cef145",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/e14/test_e14z_drift.py"
+        },
+        {
+          "category": "design_data",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "4948a308788aec21cf8fac595168769049a3bf28",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14Z_PRESCORE_LOCK_v0.json"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "e58a69c0712208385a58dccafcbff007e32ac3b1",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14Z_SEMANTIC_DRIFT_PROTOCOL_DEV_v0.md"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "3ed2a2ad8a9e7d0a2272818e8325b845e545b7d6",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "design/e1.4/E14Z_SEMANTIC_DRIFT_RESULT_DEV_v0.md"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "b703936545b9c4bad0017639c6c06e139e495137",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14z_audit_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "28aa7908998fcc0b01509f98698a7819c3c86d79",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14z_detection_limits_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "0a57e0c4fc02f3cc44c2625012e120d56a42c558",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14z_prescore_drift_bank_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "277cedd119205ad456aba2a267cac2fbb6e85996",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14z_prescore_source_verification_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "fa14530ed416ba929f31185138e485e524481331",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14z_regression_summary_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "820ad34cd38764b4ae63d55b515618a554423ed1",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14z_replay_verification_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "e8ca79ec8f2aff2d137db8b2b4a71db7530c57df",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14z_score_00-04_v0.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "f2dc8307408a67bef5aa535a0179cb022edea734",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14z_score_05-09_v0.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "94d13c0a2a82a9f9d3de611db16f0247e64f206d",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14z_score_10-14_v0.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "511a87b4feb0fe0393b12aa23138eacaf8f6c7c3",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14z_score_15-19_v0.json.gz"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "ae7b51027f700eb0fca5ede31012b86a4709a376",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e14/e14z_witness_v0.json.gz"
+        },
+        {
+          "category": "python_non_test",
+          "change": "M",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "52894c1a131427ee363457c8408805fc11eea850",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_e14y_regression.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "dc2e91517bdadbce4fd51d01bdf3eba675b8e080",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_e14z_package.py"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "93418742f830a5437667f825f16682bc91822529",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "research/e14z-semantic-drift",
+      "head_sha": "c2fa5ecea43d9bfb6d1c915a73c189d6af846c15",
+      "main_relation_counts": {
+        "absent_at_same_path": 24
+      },
+      "number": 23,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/23"
+    },
+    {
+      "api_filenames": [
+        "docs/ACE_E14AA_RECOVERY_AUDIT_20261105.md",
+        "tools/ace_e14aa_prescore_gate.py",
+        "tools/ace_e14aa_recovery_audit.py",
+        "tools/test_ace_e14aa_prescore_gate.py",
+        "tools/test_ace_e14aa_recovery_audit.py"
+      ],
+      "base_ref": "research/e14aa-online-semantic-guard",
+      "base_sha": "4cbe8630f21db7ae58a64018fcf07547d8bcdb30",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 1,
+        "evidence": 0,
+        "other": 0,
+        "python_non_test": 2,
+        "python_test": 2,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 5,
+      "files": [
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "2769a9bf14ce0bc83dbe9d1188706a259d9d2dba",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "docs/ACE_E14AA_RECOVERY_AUDIT_20261105.md"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "89593f1a3303f0d19d60eae610c25cc879e36a6d",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_e14aa_prescore_gate.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "d433f4f8aef5a51e708f527ffcb781631a8f658f",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_e14aa_recovery_audit.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "796ee23ccde4c2273079817ab00bf73bf4b32532",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/test_ace_e14aa_prescore_gate.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "8825943dffab0876d75190cd1eb72fbd9d5303d1",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/test_ace_e14aa_recovery_audit.py"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "4cbe8630f21db7ae58a64018fcf07547d8bcdb30",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "research/e14aa-recovery-audit",
+      "head_sha": "1c16c6aa24907645ad303047fc728d627ba4af0f",
+      "main_relation_counts": {
+        "absent_at_same_path": 5
+      },
+      "number": 24,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/24"
+    },
+    {
+      "api_filenames": [
+        "CURRENT_STATE.md",
+        "NEXT_ACTION.md",
+        "code/ace_loop/__init__.py",
+        "code/ace_loop/cli.py",
+        "code/ace_loop/engine.py",
+        "code/ace_loop/operators.py",
+        "code/ace_loop/portfolio.py",
+        "code/ace_loop/test_engine.py",
+        "code/ace_loop/test_portfolio.py",
+        "docs/ACE_E15_AUTONOMOUS_RESEARCH_HARNESS_DEV.md",
+        "evidence/e15/E15_DEVELOPMENT_SUMMARY_v0.json",
+        "evidence/e15/E15_REGRESSION_AGGREGATE.json",
+        "tools/ace_e15_regression.py",
+        "tools/test_ace_e15_regression.py"
+      ],
+      "base_ref": "research/e14aa-recovery-audit",
+      "base_sha": "1c16c6aa24907645ad303047fc728d627ba4af0f",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 3,
+        "evidence": 2,
+        "other": 0,
+        "python_non_test": 6,
+        "python_test": 3,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 14,
+      "files": [
+        {
+          "category": "documentation",
+          "change": "M",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "eb52d946e681fb1b678854050dda0fd8030a6d0e",
+            "type": "blob"
+          },
+          "main_entry": {
+            "mode": "100644",
+            "oid": "ebb2e80818595eed1c9c2879ca7a843f2df2c04b",
+            "type": "blob"
+          },
+          "main_relation": "different_tree_entry",
+          "path": "CURRENT_STATE.md"
+        },
+        {
+          "category": "documentation",
+          "change": "M",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "685ba0ead492325f92c7de6089a90966c0bf676b",
+            "type": "blob"
+          },
+          "main_entry": {
+            "mode": "100644",
+            "oid": "2a7ae6b901e461b2c21eb34eff422459a00de6d3",
+            "type": "blob"
+          },
+          "main_relation": "different_tree_entry",
+          "path": "NEXT_ACTION.md"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "1d842c1002b7e7160df9cad663672f0738e287c6",
+            "type": "blob"
+          },
+          "main_entry": {
+            "mode": "100644",
+            "oid": "0a3ee0a5d50016b11906ec806d7df4feb46f88c5",
+            "type": "blob"
+          },
+          "main_relation": "different_tree_entry",
+          "path": "code/ace_loop/__init__.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "a52627405f2e09e4e59a4ddaf7a083f0a0d3aa9e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/cli.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "4ebef377e730e2e403c1d437903e04a202ac0bea",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/engine.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "9d93ce3131f09136f0ae90f4ce2bafda14d7ed4e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/operators.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "274fb494e127a25c7b5ecf4523e246fdf0f23501",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/portfolio.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "22e20faa822fbd4acb7d544366edc413d78492af",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/test_engine.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "9aced2e3ac311fa6387a10d8d53850fca3cb27db",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/test_portfolio.py"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "25b08d67853739000266d289cd86807286f9b136",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "docs/ACE_E15_AUTONOMOUS_RESEARCH_HARNESS_DEV.md"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "2561d8ee47f84a85388cbd4c7de7737f1266342b",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e15/E15_DEVELOPMENT_SUMMARY_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "08ad38a70f2bd004c15da4f4708d668f5f085833",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e15/E15_REGRESSION_AGGREGATE.json"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "8fd416b9b9adaf5094b63dbeb24dc7ecb3f8cbbe",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_e15_regression.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "25c6c357d39f1064590fe1977b3adbdcdb2f0890",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/test_ace_e15_regression.py"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "1c16c6aa24907645ad303047fc728d627ba4af0f",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "research/e15-autonomous-research-loop",
+      "head_sha": "1359ebbea0cc0e3e21aa9b4380347025d9a8165d",
+      "main_relation_counts": {
+        "absent_at_same_path": 11,
+        "different_tree_entry": 3
+      },
+      "number": 25,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/25"
+    },
+    {
+      "api_filenames": [
+        ".github/workflows/ace-e16-pr-verification.yml",
+        "code/ace_loop/cli.py",
+        "code/ace_loop/mission.py",
+        "code/ace_loop/portfolio.py",
+        "code/ace_loop/receipt_escrow.py",
+        "code/ace_loop/source_evolution.py",
+        "code/ace_loop/test_mission.py",
+        "code/ace_loop/test_portfolio.py",
+        "code/ace_loop/test_receipt_escrow.py",
+        "code/ace_loop/test_source_evolution.py",
+        "docs/ACE_E16_SOURCE_EVOLUTION_AND_ESCROW_DEV.md",
+        "evidence/e16/E16_LOCAL_ENGINEERING_REPORT_v0.json",
+        "evidence/e16/E16_MISSION_INTEGRATION_STATUS_v1.json"
+      ],
+      "base_ref": "research/e15-autonomous-research-loop",
+      "base_sha": "1359ebbea0cc0e3e21aa9b4380347025d9a8165d",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 1,
+        "evidence": 2,
+        "other": 0,
+        "python_non_test": 5,
+        "python_test": 4,
+        "workflow": 1
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 13,
+      "files": [
+        {
+          "category": "workflow",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "982b5c7d15bb4006a45dc9f9072d7372c5fe7ae3",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": ".github/workflows/ace-e16-pr-verification.yml"
+        },
+        {
+          "category": "python_non_test",
+          "change": "M",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "6b26e38062b2bd0ee3146d9755dfb9308b0f8e91",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/cli.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "7a11826dd66c3aff1eb3995f273b43a16ea37f99",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/mission.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "M",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "7e1b8c8e4a8582a02c089f2f03a42010b4d25aa2",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/portfolio.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "6e3678a39cd4078de5af300a7cc6d3b79eb50b39",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/receipt_escrow.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "f6be5d3cf0f2d0018545fa520d35aac1ed6dba08",
+            "type": "blob"
+          },
+          "main_entry": {
+            "mode": "100644",
+            "oid": "c16f6137c154bdda0560ef4ed1d1467060acd8b9",
+            "type": "blob"
+          },
+          "main_relation": "different_tree_entry",
+          "path": "code/ace_loop/source_evolution.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "5b4fba12148a577402e0a103f93864236b0e7a9d",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/test_mission.py"
+        },
+        {
+          "category": "python_test",
+          "change": "M",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "033467be240c0664d99282d53f2abbeab30e579e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/test_portfolio.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "05e1c341e9567ad0e9b1c62af7507d44ff289f18",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_loop/test_receipt_escrow.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "8b24818828b8c434e32aaca302b023d57ea1718a",
+            "type": "blob"
+          },
+          "main_entry": {
+            "mode": "100644",
+            "oid": "ba93e04398aded8d1971427054b74b3107e51ee6",
+            "type": "blob"
+          },
+          "main_relation": "different_tree_entry",
+          "path": "code/ace_loop/test_source_evolution.py"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "2bd8cdc4a98b497d78bf93579c59b16a764ec73b",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "docs/ACE_E16_SOURCE_EVOLUTION_AND_ESCROW_DEV.md"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "f4e8d428cd8eb9dbc9d8a04a134a05ecc48d9550",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e16/E16_LOCAL_ENGINEERING_REPORT_v0.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "ca4b7af1667e5a4b5f284d2c2b675dbff028b211",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/e16/E16_MISSION_INTEGRATION_STATUS_v1.json"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "1359ebbea0cc0e3e21aa9b4380347025d9a8165d",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "research/e16-source-evolution-and-escrow",
+      "head_sha": "aba67d6c7572550b84ff464eba850cf2b6fdccc7",
+      "main_relation_counts": {
+        "absent_at_same_path": 11,
+        "different_tree_entry": 2
+      },
+      "number": 26,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/26"
+    },
+    {
+      "api_filenames": [
+        ".github/workflows/ace-e15-source-evolution.yml",
+        "code/ace_loop/source_evolution.py",
+        "code/ace_loop/test_source_evolution.py",
+        "docs/ACE_E15_SOURCE_EVOLUTION_DEV.md"
+      ],
+      "base_ref": "research/e15-autonomous-research-loop",
+      "base_sha": "1359ebbea0cc0e3e21aa9b4380347025d9a8165d",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 1,
+        "evidence": 0,
+        "other": 0,
+        "python_non_test": 1,
+        "python_test": 1,
+        "workflow": 1
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 4,
+      "files": [
+        {
+          "category": "workflow",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "537be777f1fd1ea031d62ae27764bbabd1877e53",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": ".github/workflows/ace-e15-source-evolution.yml"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "8a8c2c729db3072612830c03d7bd1eb0a2371ce9",
+            "type": "blob"
+          },
+          "main_entry": {
+            "mode": "100644",
+            "oid": "c16f6137c154bdda0560ef4ed1d1467060acd8b9",
+            "type": "blob"
+          },
+          "main_relation": "different_tree_entry",
+          "path": "code/ace_loop/source_evolution.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "9443215338ce7b33c33a0fdf882aceb7a96ebf41",
+            "type": "blob"
+          },
+          "main_entry": {
+            "mode": "100644",
+            "oid": "ba93e04398aded8d1971427054b74b3107e51ee6",
+            "type": "blob"
+          },
+          "main_relation": "different_tree_entry",
+          "path": "code/ace_loop/test_source_evolution.py"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "aca80c979ff6b543f5d1d32433f452ac84e5de1e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "docs/ACE_E15_SOURCE_EVOLUTION_DEV.md"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "1359ebbea0cc0e3e21aa9b4380347025d9a8165d",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "research/e15-source-evolution",
+      "head_sha": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+      "main_relation_counts": {
+        "absent_at_same_path": 2,
+        "different_tree_entry": 2
+      },
+      "number": 27,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/27"
+    },
+    {
+      "api_filenames": [
+        "code/ace_evolution/test_typed_search.py",
+        "code/ace_evolution/typed_search.py",
+        "docs/evolution/ACE_TYPED_SEARCH_PUBLIC_DEV.md"
+      ],
+      "base_ref": "research/e15-source-evolution",
+      "base_sha": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 1,
+        "evidence": 0,
+        "other": 0,
+        "python_non_test": 1,
+        "python_test": 1,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 3,
+      "files": [
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "c9d70984c4110c548ef845ca6e492086d173a65f",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_evolution/test_typed_search.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "758803bf3115174fd4abbdb8668cbaff497d8107",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_evolution/typed_search.py"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "20faa6ea7288875330617c37c928fa6317432c15",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "docs/evolution/ACE_TYPED_SEARCH_PUBLIC_DEV.md"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "automation/ace-evolution-typed-search-v1",
+      "head_sha": "4366fb6aed548eb44838ac3be2b1f85e801b0725",
+      "main_relation_counts": {
+        "absent_at_same_path": 3
+      },
+      "number": 28,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/28"
+    },
+    {
+      "api_filenames": [
+        ".github/workflows/ace-coordinator-pr-gate.yml",
+        "docs/ACE_PR_INTEGRATION_GATE.md",
+        "evidence/coordination/pr26_pr27_audit_20261105.json",
+        "evidence/coordination/pr26_pr27_snapshot_20261105.json",
+        "tools/ace_pr_collision_gate.py",
+        "tools/test_ace_pr_collision_gate.py"
+      ],
+      "base_ref": "main",
+      "base_sha": "5b0059b85055404a46adcdef305de81f5257486c",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 1,
+        "evidence": 2,
+        "other": 0,
+        "python_non_test": 1,
+        "python_test": 1,
+        "workflow": 1
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 6,
+      "files": [
+        {
+          "category": "workflow",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "da6822c8cc55947ed279cfa6a969a6a3f199dfcf",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": ".github/workflows/ace-coordinator-pr-gate.yml"
+        },
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "ea2f2bd69febc5442bda3fbb5ebf8bffda0f1aed",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "docs/ACE_PR_INTEGRATION_GATE.md"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "01355ecaf82c495b06bf1856628178c241df79c0",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/coordination/pr26_pr27_audit_20261105.json"
+        },
+        {
+          "category": "evidence",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "153c20869dda053d680f2c8d2bf05517bfc2c6c0",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "evidence/coordination/pr26_pr27_snapshot_20261105.json"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "e72bcdeeed329559b7073a9022353308f0fec874",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_pr_collision_gate.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "8057828b3392db62ca1bbbb6dd01e39dd083615e",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/test_ace_pr_collision_gate.py"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "5b0059b85055404a46adcdef305de81f5257486c",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "coordination/pr-integration-preflight-20261105",
+      "head_sha": "3ebed0a6dece19c603f4e56e2fddc29722fda79c",
+      "main_relation_counts": {
+        "absent_at_same_path": 6
+      },
+      "number": 29,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/29"
+    },
+    {
+      "api_filenames": [
+        "code/ace_redteam/README.md",
+        "code/ace_redteam/__init__.py",
+        "code/ace_redteam/test_adversarial.py",
+        "code/ace_redteam/test_adversarial_v2.py",
+        "code/ace_redteam/test_adversarial_v3.py",
+        "code/ace_redteam/test_portfolio_redteam.py",
+        "code/ace_redteam/verify_expected_failures.py"
+      ],
+      "base_ref": "research/e15-source-evolution",
+      "base_sha": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 1,
+        "evidence": 0,
+        "other": 0,
+        "python_non_test": 2,
+        "python_test": 4,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 7,
+      "files": [
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "f863a17f8e8e0f176411e605d73b6e316facbd2d",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_redteam/README.md"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "0879455f957b628b1abeb402481c7607abda4e1c",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_redteam/__init__.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "8f52866d76a93956beb8dcd18ce9181ac2f1bde0",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_redteam/test_adversarial.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "0c3b7ae9f76d1f3f6dba5d23bd2fff2aeb2b6d59",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_redteam/test_adversarial_v2.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "ca5b0088e8cc19de1599dab7cbfb57b63a5512e5",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_redteam/test_adversarial_v3.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "9d1a4594534e98ce4aa0c3cef228e5e0ed754c49",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_redteam/test_portfolio_redteam.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "a19fe24190e7583f946ad64f5d474a28f2a030a6",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_redteam/verify_expected_failures.py"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "chat/ace-redteam",
+      "head_sha": "ff77cbef72e5b813c1abf85500dfdf0d2173ace8",
+      "main_relation_counts": {
+        "absent_at_same_path": 7
+      },
+      "number": 30,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/30"
+    },
+    {
+      "api_filenames": [
+        "code/ace_meta_controller/README.md",
+        "code/ace_meta_controller/__init__.py",
+        "code/ace_meta_controller/cli.py",
+        "code/ace_meta_controller/controller.py",
+        "code/ace_meta_controller/test_controller.py"
+      ],
+      "base_ref": "research/e15-source-evolution",
+      "base_sha": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 1,
+        "evidence": 0,
+        "other": 0,
+        "python_non_test": 3,
+        "python_test": 1,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 5,
+      "files": [
+        {
+          "category": "documentation",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "5afaa1ea0b1f3b923d84f416004d306ecba103b7",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_meta_controller/README.md"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "ade4e62e36707565425ebb873432b13dddb7bc29",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_meta_controller/__init__.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "1431acc13031458d853c36f861fa972c92cceba6",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_meta_controller/cli.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "cba709c62114696558ef74822b18242191f31d6f",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_meta_controller/controller.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "d04ecea917dde0e26d34f964a2c55686bffe9b3a",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_meta_controller/test_controller.py"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "chat/ace-meta-controller",
+      "head_sha": "08c8233e6641eab2fc2ab1a48ab6c9cb4a4e564a",
+      "main_relation_counts": {
+        "absent_at_same_path": 5
+      },
+      "number": 31,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/31"
+    },
+    {
+      "api_filenames": [
+        ".github/workflows/ace-automation-ci-exact-head.yml",
+        "tools/ace_ci_exact_head.py"
+      ],
+      "base_ref": "research/e15-source-evolution",
+      "base_sha": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 0,
+        "evidence": 0,
+        "other": 0,
+        "python_non_test": 1,
+        "python_test": 0,
+        "workflow": 1
+      },
+      "classification": "python_non_test_without_test_file_changes",
+      "draft": true,
+      "file_count": 2,
+      "files": [
+        {
+          "category": "workflow",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "b2e08316c96fc72004d96c8831df58ce4e72a2e0",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": ".github/workflows/ace-automation-ci-exact-head.yml"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "d00470e0f9fa7a531fea4b5295701ff8faab5194",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "tools/ace_ci_exact_head.py"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "automation/ace-ci-exact-head-20261105",
+      "head_sha": "f50722919d59772ae2f0bcc5eafc04aba1d7d5ff",
+      "main_relation_counts": {
+        "absent_at_same_path": 2
+      },
+      "number": 32,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/32"
+    },
+    {
+      "api_filenames": [
+        "code/ace_receipts/__init__.py",
+        "code/ace_receipts/contract.py",
+        "code/ace_receipts/test_contract.py"
+      ],
+      "base_ref": "research/e15-source-evolution",
+      "base_sha": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+      "category_counts": {
+        "design_data": 0,
+        "documentation": 0,
+        "evidence": 0,
+        "other": 0,
+        "python_non_test": 2,
+        "python_test": 1,
+        "workflow": 0
+      },
+      "classification": "python_non_test_with_test_file_changes",
+      "draft": true,
+      "file_count": 3,
+      "files": [
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "37f303ff1238e6702a389e23b8f646408adb7430",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_receipts/__init__.py"
+        },
+        {
+          "category": "python_non_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "374c16883039aa36929e2abf3a9f307ceb7339af",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_receipts/contract.py"
+        },
+        {
+          "category": "python_test",
+          "change": "A",
+          "head_entry": {
+            "mode": "100644",
+            "oid": "bc2219b6359b7adf024e73ffe6af3700fcd0c054",
+            "type": "blob"
+          },
+          "main_entry": null,
+          "main_relation": "absent_at_same_path",
+          "path": "code/ace_receipts/test_contract.py"
+        }
+      ],
+      "git_api_changed_paths_equal": true,
+      "git_merge_base": "965640786cbf2f8adcd89eb1d980945f78c2da77",
+      "head_is_ancestor_of_main": false,
+      "head_ref": "automation/ace-receipts-contract",
+      "head_sha": "2aa08f78201ed3c4578ed4489e48ce132aaf9033",
+      "main_relation_counts": {
+        "absent_at_same_path": 3
+      },
+      "number": 33,
+      "state": "open",
+      "url": "https://github.com/dianzherdiana25-hash/ACE/pull/33"
+    }
+  ],
+  "repository": "https://github.com/dianzherdiana25-hash/ACE",
+  "schema": "ace.audit.legacy_pr_paths.v1",
+  "scope": "Open PRs numbered 15 through 33 observed in the API response; missing numbers are outside this snapshot.",
+  "shared_python_paths": {
+    "code/ace_loop/cli.py": [
+      25,
+      26
+    ],
+    "code/ace_loop/portfolio.py": [
+      25,
+      26
+    ],
+    "code/ace_loop/source_evolution.py": [
+      26,
+      27
+    ],
+    "code/ace_loop/test_portfolio.py": [
+      25,
+      26
+    ],
+    "code/ace_loop/test_source_evolution.py": [
+      26,
+      27
+    ],
+    "code/e14/e14z_audit.py": [
+      22,
+      23
+    ],
+    "code/e14/e14z_detection_limits.py": [
+      22,
+      23
+    ],
+    "code/e14/e14z_witness.py": [
+      22,
+      23
+    ],
+    "code/e14/test_e14z_audit.py": [
+      22,
+      23
+    ],
+    "code/e14/test_e14z_detection_limits.py": [
+      22,
+      23
+    ],
+    "tools/ace_e14y_regression.py": [
+      21,
+      23
+    ]
+  },
+  "summary": {
+    "all_open_draft": true,
+    "category_occurrence_counts": {
+      "design_data": 3,
+      "documentation": 34,
+      "evidence": 47,
+      "other": 2,
+      "python_non_test": 74,
+      "python_test": 46,
+      "workflow": 4
+    },
+    "classification_counts": {
+      "python_non_test_with_test_file_changes": 17,
+      "python_non_test_without_test_file_changes": 1
+    },
+    "file_occurrences": 210,
+    "git_api_changed_paths_match_count": 18,
+    "heads_ancestor_of_main_count": 0,
+    "pr_count": 18,
+    "unique_paths": 196
+  }
+}
