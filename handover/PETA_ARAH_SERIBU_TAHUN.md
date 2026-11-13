@@ -283,3 +283,82 @@ yang tidak ikut dicabut.
   yang tidak bisa berubah pikiran bukan peta ACE.
 
 — Disusun Ian atas arah pemilik, 13 Nov 2026.
+
+## Addendum — panen koordinasi #4 (13 Nov 2026)
+
+Bahan arah dari ruang koordinasi (20:39–20:50 WIB),
+tercatat di bawah lisensi pakai-ulang pemilik;
+bukan eksekusi. Butir 1–4 menjadi tulang tahapan,
+5–6 pagar desain, 7 kandidat workflow Tahap 1.
+
+1. **Prioritas tiga kandidat** (dari status
+   implementasi sejujurnya): orkestrasi proposal-
+   only TERDEKAT (mesin tengahnya sudah berjalan di
+   kode; yang belum ada kemasan pengusulnya); memori
+   sadar-bukti kedua; transfer lintas keluarga
+   ketiga. Ini PRIORITAS, bukan rantai dependensi:
+   memori minimum berscope adalah prasyarat Tahap 1,
+   dan eksperimen transfer yang diarahkan manusia
+   tidak harus menunggu pengusul/memori lengkap.
+2. **Simulasi-first, bukan shadow hidup.** Membaca
+   paket untuk keputusan nyata sudah intervensi.
+   Bentuk bersih: episode historis DIBEKUKAN, hasil
+   akhir disembunyikan dari penyusun, review
+   dinyatakan simulasi tanpa jalur eksekusi; rubrik
+   menilai alasan dari informasi yang tersedia SAAT
+   keputusan, bukan hasil nyata sebagai ground
+   truth. Jumlah episode diturunkan dari aturan
+   tertulis di muka; metadata minimum per episode:
+   snapshot informasi saat itu, opsi (termasuk
+   jangan-run), scope bukti, batas biaya/risiko,
+   waktu, keputusan + alasan; hasil aktual disimpan
+   terpisah. Wajib DEKLARASI PAPARAN SEBELUMNYA —
+   menyembunyikan outcome tidak menghapus ingatan
+   pemilik/ila/Ian/model.
+3. **Koreksi kategori privasi.** VM/sandbox pemilik
+   adalah CLOUD (milik secara kendali, bukan fisik);
+   kata "lokal" dalam syarat privasi adalah
+   kesalahan kategori. Bila evaluasi mensyaratkan
+   lokal betulan, penyusunan/penilaian/log/cache/
+   backup harus di perangkat/lingkungan yang
+   disetujui dengan egress diblokir; data episode
+   jangan ditempel ke chat koordinasi.
+4. **Gerbang masuk vs keluar berbeda sifat per
+   tahap.** Masuk = rancangan/split/rubrik/margin/
+   plafon/izin terkunci. Keluar = mutu noninferior
+   dengan ketidakpastiannya, dan klaim nilai-waktu
+   wajib menunjukkan pengurangan yang bermakna.
+5. **Paket uji konstitusi izin** (kelak; persetujuan
+   terpisah per uji) — pagar desain: identitas run
+   staging-only; persetujuan cocok hanya pada
+   payload-hash persis (hash beda/kedaluwarsa/
+   dicabut ditolak); pencabutan mencegah dispatch
+   baru; stop menghentikan run dalam jeda yang
+   diumumkan dengan catatan pekerjaan/biaya
+   in-flight. Prinsip: kegagalan harus membosankan.
+   Koreksi: hash konfigurasi yang sama TIDAK
+   membuktikan pagar runtime sama (identitas
+   efektif, mount/hak akses, jalur dispatch, versi
+   komponen bisa berbeda) — jembatannya lingkungan
+   integrasi terisolasi dengan komponen penegak
+   NYATA + kredensial dummy + resource umpan,
+   termasuk titik efektif pencabutan yang
+   ditentukan.
+6. **Sinyal risiko tanpa kuota (anti-Goodhart).**
+   Jumlah supersession/hasil negatif JANGAN jadi
+   target. Sinyal yang benar adalah AUDIT CAKUPAN:
+   semua eksperimen terdaftar punya status akhir/
+   berjalan yang terlacak; semua hasil termasuk
+   nol/gagal dilaporkan; sampel keputusan dicek
+   scope-nya dan bukti terbarunya terbawa.
+7. **Workflow nyata pertama** (paling dekat dengan
+   kode yang ada): PRA-AUDIT PAKET BUKTI eksperimen
+   ACE — memakai jalur evaluasi/admisi deterministik
+   + keluaran artefak yang memang berjalan; BUKAN
+   asisten audit umum; manusia tetap mengerjakan
+   sisanya. Kandidat workflow Tahap 1 di samping
+   tonggak pencatatan per-tugas. Dampak jangka
+   panjang yang dirumuskan: pemilik menghasilkan
+   keputusan & pengetahuan lebih baik dengan sumber
+   daya total lebih sedikit, TANPA ACE mengambil
+   alih kursinya.
