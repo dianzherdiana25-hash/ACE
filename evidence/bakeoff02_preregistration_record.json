@@ -1,0 +1,8 @@
+{
+ "experiment": "brain-bakeoff-02",
+ "text_sha256": "8b2fa02e6ec2c7b71f22ad8a708d6b952027ee62d46aa2128bcadbe8ccfd3dd0",
+ "kernel_protocol_hash": "6f2bfcd52d40d8302885c65cd894b274fb36862116e7dede3ebe9ce340edb802",
+ "canary": "CANARY-BAKEOFF02-9285",
+ "budget_wall_seconds": 7200,
+ "budget_note": "kernel-side execution metadata set at lock; the locked text fixes the pass rule, not the wall budget"
+}
