@@ -340,7 +340,8 @@ class ProfilingBudget:
 
     def __init__(self, limit: int, *, entrypoint: str,
                  shown_cases: list[tuple], shown_expected: list[Any],
-                 aggregator: PhaseAggregator):
+                 aggregator: PhaseAggregator,
+                 cache_compiles: bool = False):
         from ace_operational.reasoning_lab import Budget
         self._inner = Budget(limit, entrypoint=entrypoint,
                              shown_cases=shown_cases,
@@ -351,6 +352,11 @@ class ProfilingBudget:
         self._agg = aggregator
         self._seen_keys: set[str] = set()
         self.potential_hits = 0
+        # Post-parse-once profiling: mirror the shipped CachingBudget
+        # (compile is a pure function of the source; memoising it
+        # changes no score). Default off = the PR #178 instrument.
+        self._cache_compiles = cache_compiles
+        self._compiled: dict[str, Any] = {}
 
     @property
     def used(self) -> int:
@@ -377,7 +383,12 @@ class ProfilingBudget:
             with agg.measure("parse"):
                 ast.parse(code)
             with agg.measure("compile"):
-                code_obj = compile(code, "<cand>", "exec")
+                code_obj = self._compiled.get(code) \
+                    if self._cache_compiles else None
+                if code_obj is None:
+                    code_obj = compile(code, "<cand>", "exec")
+                    if self._cache_compiles:
+                        self._compiled[code] = code_obj
             namespace: dict[str, Any] = {}
             exec(code_obj, namespace)
             fn = namespace[self._entrypoint]
@@ -579,7 +590,6 @@ def _run_one_job(task: dict[str, Any], *, mode: str, rep: int,
     """
     from ace_operational import pilot_abc
     from ace_operational.curriculum_lab import verify_candidate
-    from ace_operational.reasoning_lab import Budget
 
     on = mode == "on" and collector is not None
     job_id = f"job-{task['task_id']}-{mode}-r{rep}"
@@ -621,11 +631,11 @@ def _run_one_job(task: dict[str, Any], *, mode: str, rep: int,
                 budget_limit, entrypoint=task["entrypoint"],
                 shown_cases=shown,
                 shown_expected=[by_case[c] for c in shown],
-                aggregator=agg)
+                aggregator=agg, cache_compiles=True)
         else:
-            budget = Budget(budget_limit, entrypoint=task["entrypoint"],
-                            shown_cases=shown,
-                            shown_expected=[by_case[c] for c in shown])
+            # The shipped factory — post-parse-once this returns a
+            # CachingBudget, so the off baseline is the real path.
+            budget = pilot_abc._budget_for(task, budget_limit)
         startup_s = time.perf_counter() - t0
         if on:
             collector.emit({
@@ -806,6 +816,9 @@ def run_dev_pilot(*, out_dir: str | Path,
               "budget_limit": budget_limit,
               "solver_config": pilot_abc.BASE_CONFIG,
               "timeout_soft_s": timeout_soft_s,
+              "budget_path": "pilot_abc._budget_for (CachingBudget); "
+                             "instrumented twin ProfilingBudget with "
+                             "cache_compiles=True",
               "job_order": "ABBA per task (off,on,on,off)"}
     modes: list[str] = []
     for r in range(reps):

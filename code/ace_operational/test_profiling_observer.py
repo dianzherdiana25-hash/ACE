@@ -67,6 +67,31 @@ class BudgetEquivalenceTests(unittest.TestCase):
                                      "observer changed a score")
                 self.assertEqual(plain.used, prof.used)
 
+    def test_cache_compiles_budget_scores_identically(self):
+        # Post-parse-once instrument mirror: memoised compile must
+        # not change any score (mirrors pilot_abc.CachingBudget).
+        with tempfile.TemporaryDirectory() as td:
+            collector = Collector(Path(td), "run-x")
+            for task in self.tasks[:3]:
+                agg = PhaseAggregator(collector, "job-x")
+                shown = [tuple(c) for c in task["shown_cases"]]
+                by_case = {tuple(c): e for c, e in
+                           zip(task["cases"], task["expected"])}
+                kw = dict(entrypoint=task["entrypoint"],
+                          shown_cases=shown,
+                          shown_expected=[by_case[c] for c in shown])
+                from ace_operational.reasoning_lab import Budget
+                plain = Budget(200, **kw)
+                prof = ProfilingBudget(200, aggregator=agg,
+                                       cache_compiles=True, **kw)
+                codes = [task["buggy_code"], task["reference_code"],
+                         "def broken(:\n", task["buggy_code"],
+                         task["reference_code"]]
+                for code in codes:
+                    self.assertEqual(plain.score(code), prof.score(code))
+                self.assertEqual(plain.used, prof.used)
+                self.assertEqual(len(prof._compiled), 2)
+
     def test_shadow_counter_is_not_a_cache(self):
         with tempfile.TemporaryDirectory() as td:
             collector = Collector(Path(td), "run-x")
