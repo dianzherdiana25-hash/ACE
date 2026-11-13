@@ -69,3 +69,22 @@ dispatched; there is no execution path in the code.
 - proposer_rubric.py: `97f7b423b0ce9d55e8a7c8c7d27805ff7f14b3f4cceb447ba5d6806b9cfa1e25`
 - proposer_episodes.py: `edd331fb125cb28bf4d4b6ad5617a91289c36b7f14cd83e59f6b78e9a4f3b7b8`
 - proposer_simulation.py: `5f874bc8239bdedf1361d6467f1535c2ed25b5fe7f42d18e5486865e164652c9`
+
+## AMENDMENT A1 (2026-11-13 ~23:10 WIB, declared BEFORE the corrected run)
+The locked generation interface (llama-cli) is defective for this
+build: llama-cli b12316 forces conversation mode on chat-template
+models; given `-f`, it echoed the prompt as a user turn and exited
+on stdin EOF with "Generation: 0.0 t/s" — zero tokens generated
+(attempt archived as VOID, harness fault, not a model result).
+Interface corrected to **llama-server (same b12316) + POST
+/completion** with the identical raw ChatML prompts, identical
+model, -t 1, temperature 0, seed 42, max 900 tokens, stop
+`<|im_end|>`. One server load serves all six episodes (no per-
+episode reload). Everything else in this lock is unchanged.
+Earlier VOID attempts, for the record: (1) MCP-door runs
+22:22–22:36 WIB and (2) SSH-door runs 22:42–22:47 WIB — all killed
+during model load by the sandbox's earlyoom (journal-verified,
+VmRSS ≈14.8 GiB at kill, zero tokens); (3) the 22:49–23:08 WIB
+SSH-door run whose six processes completed rc=0 but generated zero
+tokens due to the conversation-mode defect above. The counted run
+is the first run that produces tokens.
