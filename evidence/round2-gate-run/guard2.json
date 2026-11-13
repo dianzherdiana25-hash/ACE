@@ -1,0 +1,8 @@
+{
+ "phase": "guard2_substrate_probe_20000_20999",
+ "total": 1000,
+ "solved": 1000,
+ "coverage": 1.0,
+ "wall_seconds": 3.5,
+ "pass": true
+}

@@ -1,0 +1,188 @@
+{
+ "experiment": "round2-gate-01",
+ "guards": {
+  "guard1": {
+   "phase": "guard1_v4_replication_lifted",
+   "exact_match": true,
+   "wall_seconds": 1342.3,
+   "pass": true
+  },
+  "guard2": {
+   "phase": "guard2_substrate_probe_20000_20999",
+   "total": 1000,
+   "solved": 1000,
+   "coverage": 1.0,
+   "wall_seconds": 3.5,
+   "pass": true
+  },
+  "guard3": {
+   "phase": "guard3_sandbox_replication_lifted",
+   "checks": {
+    "built": true,
+    "pool": true,
+    "evaluation": true,
+    "discriminating_n": true,
+    "discriminating_ids": true,
+    "arm_a": true,
+    "arm_b": true,
+    "arm_c": true,
+    "admitted_keys": true,
+    "controls": true
+   },
+   "controls": {
+    "L1": {
+     "n": 30,
+     "a": 30,
+     "b": 30
+    },
+    "L2": {
+     "n": 15,
+     "a": 15,
+     "b": 15
+    },
+    "L3": {
+     "n": 15,
+     "a": 15,
+     "b": 15
+    }
+   },
+   "admitted_motion_keys": [
+    "('move_stmt', ('augassign', 't', 'Add', 't'), ('return',))"
+   ],
+   "pass": true
+  }
+ },
+ "app": {
+  "a_disc_pct": 77.77777777777777,
+  "a_on_discriminating": 14,
+  "admitted_motion_keys": [
+   "('move_stmt', ('augassign', 't', 'Add', 't'), ('return',))"
+  ],
+  "b_disc_pct": 100.0,
+  "b_on_discriminating": 18,
+  "built": 100,
+  "capture": 1.0,
+  "discriminating_ids": [
+   "pricing-order-72010",
+   "pricing-order-72011",
+   "pricing-order-72012",
+   "pricing-order-72013",
+   "pricing-order-72014",
+   "pricing-order-72016",
+   "pricing-order-72020",
+   "pricing-order-72021",
+   "pricing-order-72023",
+   "pricing-order-72026",
+   "pricing-order-72027",
+   "pricing-order-72030",
+   "pricing-order-72031",
+   "pricing-order-72032",
+   "pricing-order-72033",
+   "pricing-order-72034",
+   "pricing-order-72037",
+   "pricing-order-72039"
+  ],
+  "discriminating_n": 18,
+  "evaluation": 30,
+  "outcome": "INDEX_COMPUTED",
+  "phase": "application_band_72000_72099",
+  "pool": 10,
+  "round2_index": 0.0,
+  "skipped": 0,
+  "solved_counts": {
+   "a": 14,
+   "b": 18,
+   "r": 18
+  }
+ },
+ "kernel_record": {
+  "seq": 1,
+  "prev": "GENESIS",
+  "result": {
+   "experiment_id": "round2-gate-01",
+   "protocol_hash": "743a2e9c3c9092e9071637ae70ea2866e902bf2158ddad36f34684e55dbab11c",
+   "candidate_id": "lifted-mechanism-round2",
+   "candidate_digest": "7cf3b62a05a6550107d723bfbf2761292ac4455d2fff554bc11b911feab2b849",
+   "evaluator_digest": "e08c15860e37765abe6195a438b2db1ade29004b4824fdb57a24cd41a0c3aa3c",
+   "fixture_digest": "7b3af96c87ed57dd8dbcf1a517767ae72ad9f69fa5d1f46568c9061d6d894f3c",
+   "metrics": {
+    "round2_index": 0.0
+   },
+   "verdict": "pass",
+   "abstain_reason": null,
+   "raw_telemetry": {
+    "app": {
+     "solved_counts": {
+      "a": 14,
+      "b": 18,
+      "r": 18
+     },
+     "discriminating_n": 18,
+     "b_disc_pct": 100.0,
+     "a_disc_pct": 77.77777777777777,
+     "capture": 1.0
+    },
+    "guards_pass": true
+   }
+  },
+  "hash": "d0ebae48aab62d77d3a558200d9527fd1d846733c294e37992db1242078ced23"
+ },
+ "audit": {
+  "experiment_id": "round2-gate-01",
+  "status": "CLEAN",
+  "problems": [],
+  "results_verified": 1,
+  "ledger_entries_verified": 1,
+  "chain_break_at": null
+ },
+ "assessment": {
+  "gate": "ROUND2",
+  "criteria_version": 1,
+  "definition": "a core lift holds its effect on a fresh order-sensitive universe without regressing the frozen mechanism's home family",
+  "clauses": {
+   "C1_identified_improvement": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "improvement": {
+      "name": "lifted-mechanism-round2",
+      "digest": "47a5afc4b6c6222e6ee4050f620898aeb885ceaec2dc22a489e2914e490e9f81"
+     },
+     "source_family": "statement_order"
+    }
+   },
+   "C2_two_distinct_families": {
+    "verdict": "PASS",
+    "missing": [],
+    "warnings": [],
+    "evidence": {
+     "valid_families": [
+      "grid",
+      "statement_order"
+     ]
+    }
+   },
+   "C3_positive_lift_effect": {
+    "verdict": "PASS",
+    "missing": [],
+    "warnings": [],
+    "evidence": {
+     "target_family": "statement_order",
+     "effect_shown": true
+    }
+   },
+   "stability_no_regression": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "stability_family": "grid",
+     "regression_free": true
+    }
+   }
+  },
+  "identity_mismatches": [],
+  "overall": "LIFT_DEMONSTRATED",
+  "qualification": "none \u2014 the lifted mechanism shows a positive audited effect on the target family with no regression on the stability family."
+ },
+ "overall": "LIFT_DEMONSTRATED"
+}
