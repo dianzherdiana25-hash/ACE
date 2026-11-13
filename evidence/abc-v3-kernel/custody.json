@@ -1,0 +1,23 @@
+{
+ "candidates": {
+  "arm-a-catalog-only": {
+   "artifact_digest": "d541695498cbd1857d3e73a17f40d6a0ef31e1c48046c88f090f11d69ed0be41",
+   "candidate_id": "arm-a-catalog-only",
+   "signature": "f5b31b449f846a28e2cbe424757abcd6ad17dab419a14f3191d48064e8577c6e"
+  },
+  "v3-strategy-arms": {
+   "artifact_digest": "b042614d90bc7b632cf4f5844443a9f736e2b59df0458651eb247da553575f9b",
+   "candidate_id": "v3-strategy-arms",
+   "signature": "c41636d92169ea5116e06b388d7153b848eaebf9eebee03120b9e92d38b70498"
+  }
+ },
+ "evaluator": {
+  "artifact_digest": "c6ca3421eca3ff4f086b324820ad5168a57cea645ff83bfa922f95b47fd3b6c1",
+  "evaluator_id": "v3-scorer-v1",
+  "signature": "2691c53c2d70430d2f42fd64df6b0d73f82937ee2b936e97e80c2f85635a0170"
+ },
+ "fixture": {
+  "fixture_digest": "18d854cf6c191938454a519de8ef5f71aba6b7d0f871814e772f7f3f815f4915",
+  "signature": "f758660415f01a46602ff51d4b11d60a8e0e1c7547bc01161bc7f8a25e3a7610"
+ }
+}
