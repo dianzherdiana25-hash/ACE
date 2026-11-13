@@ -1,0 +1,47 @@
+{
+ "milestone": "per-task control recording (first-usefulness #1)",
+ "band": 20261501,
+ "arm_recomputed": "C",
+ "checks": {
+  "control_entries_34": true,
+  "control_solved_32": true,
+  "failures_exactly_020_021": true,
+  "aggregate_unchanged": true,
+  "legacy_arms_empty_maps": true,
+  "eval_entries_present": true,
+  "checkpoint_carries_per_task": true
+ },
+ "all_pass": true,
+ "control_failed_ids": [
+  "catalog_control-020",
+  "catalog_control-021"
+ ],
+ "counts": {
+  "A": [
+   0,
+   30
+  ],
+  "B": [
+   30,
+   30
+  ],
+  "C": [
+   30,
+   30
+  ]
+ },
+ "control_counts": {
+  "A": [
+   34,
+   34
+  ],
+  "B": [
+   32,
+   34
+  ],
+  "C": [
+   32,
+   34
+  ]
+ }
+}
