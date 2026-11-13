@@ -260,6 +260,19 @@ Gated/parallel checks: Docker presence in the sandbox
 (unlocks or kills #9 and parts of #6/#8) — one command,
 do it in Wave 1.
 
+## Gate checks (2026-11-13, evening)
+
+- **Docker in the sandbox: ABSENT** (verified firsthand
+  via the MCP door: `docker: command not found`, no
+  podman either). Consequences: candidate #9
+  (SWE-bench Lite slice) is CLOSED for this home until
+  a Docker host exists — its official evaluation is
+  Docker-per-instance. Candidate #6's full toolkit is
+  likewise closed; the strategies-only adoption stands
+  as the plan. Candidate #8 (Inspect AI) loses its
+  Docker sandbox mode; `local` mode (no isolation)
+  remains usable for non-agentic evals, with care.
+
 — Ian, 2026-11-13. Sources: three parallel research
 lanes over public repos/docs, 2026-11-13; every
 version figure is a point-in-time read to be re-read
