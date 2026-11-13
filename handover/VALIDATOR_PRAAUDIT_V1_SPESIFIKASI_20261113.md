@@ -108,3 +108,32 @@ terbukti.
 ## Status bangun (diperbarui 13 Nov 2026 malam)
 
 DIBANGUN oleh jalur validator (ruang "ila — bangun validator pra-audit ACE") sebagai alat yang berjalan: PR #179 (head 59e4211) — code/ace_operational/preaudit_validator.py, stdlib-only, offline, penegakan read-only fisik (O_RDONLY + CLI menolak out-dir yang bersinggungan root sumber). Tangga uji-dirinya LULUS PENUH per laporan jalur dan TAHAN hub terverifikasi mandiri: oracle independen sepakat state-per-state; probe varian sah FP 0/6 per cek; cacat semaian 9/9 tertangkap; fuzz parser bersih; corpus holdout ditulis SESUDAH beku dan lulus 5/5 tanpa validator disentuh; sweep paket 283 OK. Pilot nyata: paket v3 beku (23 berkas) C1/C2/C3 SESUAI; rekaman bake-off C1 SESUAI, C2/C3 UNKNOWN jujur; demo verdict dibalik tertangkap TIDAK SESUAI. Batas jujur yang dinyatakan laporannya sendiri: validator membuktikan paket cocok dengan manifestnya — BUKAN bahwa manifestnya benar. Integrasi Ian: keadaan ini dicatat di sini; PR #179 tetap draft tanpa merge seperti PR lainnya.
+
+## Kriteria review integrasi (kontrak berdiri, panen #9 — diadopsi pemilik 22:08)
+
+Kontrak empat-keadaan + kunci idempotency
+server-side + validation_spec_digest (desain garis
+regresi-kontrol §14, PR #173) adalah kontrak berdiri
+untuk setiap bangun runner/koordinator/validator
+berikutnya, dan daftar v2 untuk garis validator
+ini. Ian menerapkannya sebagai kriteria review
+integrasi. Untuk validator, terjemahannya:
+
+- Setiap keluaran validator menyatakan keadaan
+  kontraknya (OBSERVATION vs VERDICT) dan tidak
+  pernah menyajikan observasi sebagai vonis.
+- Vonis terikat validation_spec_digest yang
+  tercantum di laporan (closure bukti + ruleset +
+  build/dependensi/konfigurasi validator); vonis
+  tanpa digest itu UNKNOWN, bukan SESUAI.
+- Galat proses validator (crash/infra) dilaporkan
+  sebagai status PROSES dan tidak pernah tersimpan
+  sebagai vonis; UNKNOWN selalu membawa alasan
+  machine-readable.
+- Spec sama + keluaran beda pada paket yang sama =
+  nondeterminisme yang diaudit, tidak pernah
+  ditimpa diam-diam.
+- Paket masuk lewat STAGED yang content-addressed
+  dan terverifikasi digest (path bernama staging
+  tidak dianggap immutable — TOCTOU ditutup),
+  sesuai arsitektur read-only §1 spesifikasi ini.
