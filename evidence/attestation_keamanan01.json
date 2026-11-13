@@ -1,0 +1,32 @@
+{
+ "schema": "ace.attested_server.v1",
+ "server_url": "http://127.0.0.1:8081",
+ "model_id": "/home/hatch/workspace/ace-omega/models/Qwen3-8B-Q4_K_M.gguf",
+ "model_path": "/home/hatch/workspace/ace-omega/models/Qwen3-8B-Q4_K_M.gguf",
+ "model_sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+ "binary_path": "/home/hatch/workspace/tools/llama.cpp/llama-b12316/llama-server",
+ "binary_sha256": "c25f12e9d7f92705d6329e170e91ca0db30f6f43bb2494316d42c1046f78a928",
+ "launch_argv": [
+  "/home/hatch/workspace/tools/llama.cpp/llama-b12316/llama-server",
+  "-m",
+  "/home/hatch/workspace/ace-omega/models/Qwen3-8B-Q4_K_M.gguf",
+  "--host",
+  "127.0.0.1",
+  "--port",
+  "8081",
+  "-c",
+  "4096",
+  "-t",
+  "4",
+  "-ctk",
+  "q8_0",
+  "-ctv",
+  "q8_0",
+  "-fa",
+  "on"
+ ],
+ "launch_param_hash": "9ed6cc795d733b4df9b89df1b11ddf7d96e3d10ad3fd98498f42ff99b0c3bb54",
+ "pid": 4119,
+ "spawned_by": "ace-harness",
+ "created_at": "2026-11-12T16:40:36.587225+00:00"
+}
