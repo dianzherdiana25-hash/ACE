@@ -885,3 +885,44 @@ instruction.
    measurement does NOT license runtime profiling
    (separate packet + gate + authorization;
    "expanded" ≠ scope creep).
+
+## 18. Harvest #12 from the coordination room (2026-11-14 ~00:44 WIB — PROPOSED design material, not execution)
+
+**Threat model for scaling parallel agent
+contributions (PROPOSED)** — flagged by the hub as
+a security prerequisite before any distributed
+coordinator/worker is built:
+
+- Assets: target-tree integrity + the acceptance
+  baseline, credentials/endpoints, owner data,
+  defensible evidence, and review/integration
+  capacity itself.
+- Actors, sharply distinguished: untrusted
+  agent/coder, untrusted build/test output,
+  trusted integrator, high-risk approval.
+- Least privilege per packet: scoped snapshot /
+  read-only context, no carried credentials.
+- FINAL BINDING SHARPENING from the room: the
+  sentence "only integrator + approval are
+  trusted" is WITHDRAWN as too narrow — the real
+  TCB also includes OS/hypervisor/sandbox
+  enforcement, the auth gate/broker, trusted
+  orchestration + the baseline/policy it guards,
+  the artifact store + identity/attestation keys,
+  and the promotion path itself; each is stated
+  with its assumptions + residual compromise, not
+  as an absolute guarantee.
+- Capability must be ENFORCED server-side, not by
+  prompt instruction. Anti-confused-deputy broker:
+  typed/allowlisted operations bound to the exact
+  authorized object + action.
+
+Two measurement-block residues, exact formulations
+now recorded:
+- The measurement slice gate is formulated as
+  NON-INFERIORITY (not a naive difference test).
+- OFF/OFF measures only control variation/drift —
+  NOT a detection floor; effects below one run's
+  variation remain estimable with enough
+  independent units, precision bounded by
+  dependence + systematic bias + budget.
