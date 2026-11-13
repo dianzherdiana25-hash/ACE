@@ -828,3 +828,60 @@ Explicitly NOT ratified here: the official run
 itself. Draft + harness (PR #184) + this
 ratification are complete and ready; the run waits
 until the desk chooses to run it.
+
+## 17. Harvest #11 from the coordination room (2026-11-14 ~00:42 WIB — PROPOSED design material, not execution)
+
+Six items, all PROPOSED, stored for the design line;
+none of this is measured ACE evidence or a build
+instruction.
+
+1. **Finder-operator verification architecture for
+   a private typed DSL without trusting the
+   proposer:** candidate → obligation generator →
+   untrusted prover/SMT → small trusted proof
+   kernel → admission → verified lowering. Room
+   correction to the TCB: the obligation generator
+   is INSIDE the TCB list (deterministic ≠ sound)
+   unless the kernel checks the theorem connecting
+   the VCs to program semantics; the proposer may
+   not choose its own obligations/axioms.
+2. **Candidate admission pipeline from AST:** parse
+   without execution; pinned grammar/parser +
+   source digest; size/depth/node/time bounds; name
+   resolution to lexical binding identities (not
+   strings); ACCEPT does not smuggle equivalence —
+   a Python-like frontend ≠ Python equivalence;
+   builtin meanings are set by the DSL or by an
+   explicit closed-world assumption, else UNKNOWN.
+3. **Staged execution engine:** reference
+   interpreter → bytecode/VM → JIT ONLY if
+   profiling proves it; each stage must earn its
+   existence; one CPU-seconds break-even objective
+   (N_eff counts reuse only after compile finishes
+   and before expiry/deadline; no double-counting
+   per-access cost); a hard deadline is a physical
+   fact that can change outcomes, not a semantic
+   footnote.
+4. **Two-throughput operations plan:** engineering
+   throughput = accepted durable change per
+   owner-hour; runtime throughput = task results
+   per budget — metrics/cohorts/causal claims are
+   not mixed. Lever order follows the symptom
+   (repeated compile → test reuse/cache first;
+   interpreter dispatch dominance → only then a
+   VM); remote workers and JIT are SEPARATE
+   branches, not one chain.
+5. **A bounded, defensible concurrency experiment:**
+   matched cohort-block trial — task batches
+   equated BEFORE assignment, whole batch+queue
+   randomized to k vs k+1 slots, same
+   reviewer/integrator/source policy, inference
+   unit = block/cohort, not task count. This is the
+   design for answering "does adding a worker raise
+   retained value per owner-hour?" with evidence.
+6. **One consolidated evidence-gated roadmap** with
+   decision points + the evidence that opens each
+   stage; final fence: a PASS on edit→test
+   measurement does NOT license runtime profiling
+   (separate packet + gate + authorization;
+   "expanded" ≠ scope creep).
