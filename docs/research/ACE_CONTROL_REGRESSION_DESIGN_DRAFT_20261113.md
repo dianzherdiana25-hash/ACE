@@ -327,3 +327,31 @@ measure):
   fresh band, no solver change, record and close. The maximum this
   phenomenon has earned is the replay; a fresh-band confirmation is
   earned only by a surviving mechanism with a confirmed signature.
+
+## 7. Design input — ila×kancuto coordination room (2026-11-13)
+
+Recorded as DESIGN MATERIAL for Stage 3 / intervention
+design under the owner's reuse license (2026-11-13
+20:15 WIB). Not an execution order. To be read
+alongside the locked Stage 1/2 attribution (single-key
+distractor diversion by the 'nc' key):
+
+1. **One-variable discipline, split strictly.**
+   Raising the round cap alone (frontier width held)
+   and raising frontier width alone (round cap held)
+   are TWO separate tests. Raising both at once makes
+   any recovery unattributable.
+2. **Logging-invariance gate before any intervention.**
+   Logging alone must not change solver outputs or
+   decision traces on the A–B comparison; if it does,
+   diagnosis stops until the instrumentation itself
+   is understood.
+3. **Most informative discriminating signal —
+   "never generated" vs "pruned".** The per-round
+   ranking trace of the true-path candidate relative
+   to the frontier cutoff. Candidate identity is
+   taken from arm A's own returned_sha256 (both
+   witness tasks: 6504b23b…) and matched against
+   variant_sha256 entries in the failed arm's log;
+   the holdout is never touched. This pattern is an
+   INDICATION, not a guarantee.
