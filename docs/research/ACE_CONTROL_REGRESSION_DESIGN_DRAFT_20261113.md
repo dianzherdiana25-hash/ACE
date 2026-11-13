@@ -398,3 +398,52 @@ through hub acts as usual.
    (width 4, rounds 6, identical logging) must
    still reproduce the failure before any
    comparison may be read as valid.
+
+## 9. Design input — panen koordinasi #3 (2026-11-13)
+
+Recorded as DESIGN MATERIAL under the owner's reuse
+license (coordination room, 20:27–20:35 WIB). Named
+harvest; nothing here executes without a hub act.
+
+1. **Orchestration milestone candidate — "mesin
+   pengusul" (proposer engine).** ACE composes its
+   next task proposal + catalog strategy as a package
+   that can be REJECTED WITH REASONS (claim under
+   test, rationale, cost, evidence). Thinking
+   capability grows; acting permission stays with
+   the owner/hub. The approval package's shape:
+   preregistration link + artifact hash, estimate vs
+   cost ceiling, main risks/uncertainties, and
+   VISIBLE, ENFORCED stop controls (call/time/cost
+   caps, abort conditions, sealed-target status, a
+   no-auto-retry guarantee).
+2. **Transfer experiment — smallest credible form**
+   (directly relevant to G3 SPECIALIZATION and the
+   text_transform family as next ground): one source
+   family → one target family of DIFFERENT
+   CONSTRUCTION (not a new seed band); the catalog
+   is built ONLY from the source; the comparator is
+   a STRONG, legitimate static library (built
+   seriously from equally-accessible information,
+   frozen before the target is opened — not a weak
+   random catalog); the result is stated as a
+   sentence carrying its own fences (family types,
+   transfer direction, the baselines beaten — both
+   no-catalog AND the static library — solver
+   version, "no observed regression on the specified
+   controls", sampling uncertainty + cost bounds).
+   Target-family selection rules are FIXED BEFORE
+   results are seen: structural eligibility criteria,
+   calibration-access separation (catalog + procedure
+   frozen from the source FIRST, then target
+   calibration; or full access separation), a fixed
+   pick rule when several families qualify (recorded
+   order/lottery), and a REGISTER of all candidate
+   families including rejected ones with reasons.
+   Statistical note: a deterministic solver still
+   carries SAMPLING uncertainty (tasks are a sample
+   of a population) — paired tests/intervals are
+   legitimate when the sampling assumptions are
+   explicit; re-running an artifact proves
+   reproducibility, independent-sample replication
+   adds transfer evidence.
