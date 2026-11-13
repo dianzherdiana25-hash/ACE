@@ -1,0 +1,46 @@
+{
+ "experiment": "loo_0",
+ "wall_seconds": 98.0,
+ "records": {
+  "catalog_control-020": {
+   "task_id": "catalog_control-020",
+   "solved": false,
+   "score_calls": 359,
+   "shown_score": 3,
+   "shown_total": 8,
+   "returned_sha256": "a00e8c37e40cfbf610cd165d09b0a6c1d56a16015e3cb826a648ac8bac5b6c9c",
+   "a_solution_scored": false,
+   "scored_multiset_sha256": "0d310a460f06613b970e6df37886cc0d059cf5149da275c79848956a4293678e",
+   "n_scored": 359,
+   "trace": [
+    [
+     "key",
+     "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "timeout": false
+  },
+  "catalog_control-021": {
+   "task_id": "catalog_control-021",
+   "solved": false,
+   "score_calls": 157,
+   "shown_score": 2,
+   "shown_total": 8,
+   "returned_sha256": "6577e3eecf247df1555e9279b8057bb2ce5d882fa8de2a6fa95a0dbe3c49062b",
+   "a_solution_scored": false,
+   "scored_multiset_sha256": "6b14a65521813cc5f9c3956242d99cade7e3a681c0f1911873ac8e9b70cfa618",
+   "n_scored": 157,
+   "trace": [
+    [
+     "key",
+     "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+    ]
+   ],
+   "timeout": false
+  }
+ }
+}
