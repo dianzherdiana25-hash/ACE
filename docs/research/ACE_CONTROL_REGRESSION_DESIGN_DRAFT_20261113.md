@@ -355,3 +355,46 @@ distractor diversion by the 'nc' key):
    variant_sha256 entries in the failed arm's log;
    the holdout is never touched. This pattern is an
    INDICATION, not a guarantee.
+
+## 8. Design input — panen koordinasi #2 (2026-11-13)
+
+Recorded as DESIGN MATERIAL under the owner's reuse
+license (2026-11-13 20:26 WIB: coordination-room
+results may be used for ACE even where they were
+framed there as discussion only). Provenance:
+ila×kancuto coordination room. Decisions still pass
+through hub acts as usual.
+
+1. **Candidate FIRST-USEFULNESS milestone** (raised
+   by the harvest; assessed at Ian's desk, NOT
+   executed on receipt): one small real engineering
+   job with a checked result — make the run driver
+   record PER-TASK control results by default. The
+   gap is named and lived: its absence forced the
+   Stage 0 identification replay of this very line
+   just to recover two failing task ids (the v3 run
+   state kept aggregate flips, not per-task control
+   outcomes). The underlying rule ("future runs must
+   record per-task control results") has stood since
+   the v3 seal; this harvest raises it to a milestone
+   candidate. Desk assessment (Ian): the fix is
+   small, mechanical, and additive to run state
+   (per-task solved maps), verifiable on a small
+   band, and it pays into this line (witness
+   identification without replays), the inoculation
+   battery, and Stage 3's per-task traces. Worth
+   adopting as a named milestone candidate; adoption
+   itself awaits a hub act.
+2. **Evaluation rules for the Stage 3 design:**
+   (a) benefit and control-protection are read
+   PAIRED, with search cost visible — catalog
+   governance judged only on "does no harm" can be
+   won by doing nothing; (b) controls reused
+   repeatedly gradually become development data —
+   treat long-lived evaluations with that hygiene;
+   (c) the recovery criterion in intervention tests
+   is SOLVED (passes the holdout), NOT hash-equal
+   to arm A's solution; (d) the uncapped control
+   (width 4, rounds 6, identical logging) must
+   still reproduce the failure before any
+   comparison may be read as valid.
