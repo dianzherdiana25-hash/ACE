@@ -1,0 +1,20 @@
+{
+ "improvement": {
+  "name": "operator-discovery-mechanism",
+  "digest": "e2a59960f8ccc7f8e991e77af99481ad603ce84c50a1b7f8299897b39c9975f8"
+ },
+ "source": {
+  "family": "grid",
+  "report": "grid_family_report.json"
+ },
+ "evaluations": [
+  {
+   "family": "grid",
+   "report": "grid_family_report.json"
+  },
+  {
+   "family": "pricing",
+   "report": "pricing_family_report.json"
+  }
+ ]
+}

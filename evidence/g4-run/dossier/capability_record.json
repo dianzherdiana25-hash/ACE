@@ -1,0 +1,56 @@
+{
+ "artifact_name": "operator_catalog_v4",
+ "artifact_digest": "e7925aa7ea0f7d766b70e2b3855b2377b017959426d370a8cba43b6eff07a808",
+ "discovery_record": {
+  "artifact_name": "operator_catalog_v4",
+  "artifact_digest": "e7925aa7ea0f7d766b70e2b3855b2377b017959426d370a8cba43b6eff07a808",
+  "admission_evidence": {
+   "source_evidence": "evidence/operator_discovery_v4.json",
+   "source_evidence_note": "Stage I / v4 discovering configuration (predecessor cand_fdfec59807ead1abee00); NOT kernel-preregistered \u2014 accepted with provenance per D-G4-2",
+   "min_pool_fixes": 2,
+   "pool_tasks": 12,
+   "per_class_admitted_operators": {
+    "bounds_off_by_one": [
+     "('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult')",
+     "('binop_unwrap', (5, 2, 3, 0, 1, 4), 'left')",
+     "('int_constant', (5, 2, 3, 0, 1, 4, 2), 0)"
+    ],
+    "dist_step_2": [
+     "('int_constant', (5, 2, 3, 1, 1, 2), 1)"
+    ],
+    "returns_start_distance": [
+     "('return_indices', (6,), ('gr', 'gc'))"
+    ],
+    "wall_char_x": [
+     "('string_literal', (5, 2, 3, 0, 4, 2), '#')"
+    ]
+   },
+   "per_class_admitted_chains": {
+    "bounds_off_by_one": [
+     "(('return_indices', (6,), ('gr', 'gc')), ('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult'))"
+    ],
+    "dist_step_2": [],
+    "returns_start_distance": [
+     "(('return_indices', (6,), ('gr', 'gc')), ('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult'))"
+    ],
+    "wall_char_x": []
+   },
+   "evaluation": {
+    "tasks": 29,
+    "by_class_eval_total": 47,
+    "baseline_solved": 0,
+    "extended_solved": 15
+   },
+   "mixed_evaluation": {
+    "total": 18,
+    "solved_baseline": 0,
+    "solved_extended": 18
+   },
+   "control": {
+    "total": 34,
+    "solved_baseline": 34,
+    "solved_extended": 34
+   }
+  }
+ }
+}

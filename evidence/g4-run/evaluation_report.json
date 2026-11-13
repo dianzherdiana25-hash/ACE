@@ -1,0 +1,48 @@
+{
+ "protocol_hash": "841b3f167d80c3c98ecf04b7f5a33f077b0fc13e4173605766fc7b9d9f2512d9",
+ "audit": "CLEAN",
+ "successor_id": "cand_ec7dcbcb674a08899097",
+ "artifact_digest_loaded": "e7925aa7ea0f7d766b70e2b3855b2377b017959426d370a8cba43b6eff07a808",
+ "discovery_invoked": false,
+ "margin_pp": 20.0,
+ "with_floor": 0.25,
+ "without_ceiling": 0.1,
+ "min_capability_tasks": 40,
+ "seeds": [
+  20261401,
+  20261402
+ ],
+ "capability": {
+  "n": 48,
+  "with_solved": 48,
+  "without_solved": 0,
+  "with_fraction": 1.0,
+  "without_fraction": 0.0,
+  "delta_pp": 100.0
+ },
+ "control": {
+  "n": 68,
+  "with_solved": 68,
+  "without_solved": 68
+ },
+ "mixed_new_pairs": {
+  "n": 48,
+  "with_solved": 48,
+  "without_solved": 0
+ },
+ "mixed": {
+  "n": 64,
+  "with_solved": 63,
+  "without_solved": 4
+ },
+ "wall_seconds": {
+  "without": 10.738,
+  "with": 2740.863,
+  "total": 2751.601
+ },
+ "arm_reports": {
+  "without": "/home/hatch/workspace/ace-omega/g4-run/arm_without.json",
+  "with": "/home/hatch/workspace/ace-omega/g4-run/arm_with.json"
+ },
+ "runner": "g4_run.py + g4_arm.py (P-G4-5 successor runner)"
+}
