@@ -520,3 +520,99 @@ is the same property.
    REPRESENTATION CONTRACT, never a mapping
    assumption — this binds the transfer experiment
    forms recorded in §7–§9.
+
+## 12. Coordination harvest #7 (2026-11-13, 21:25–21:31 WIB) — technical blueprint: faster + more massive ACE development
+
+Compressed faithfully from the coordination room's
+discussion under the owner's direction ("bahas
+banyak sekaligus tetapi dikompres"). Design
+material for the research-engine / Stage-3 line and
+the PETA ARAH; NOT execution orders. Every section
+follows STATUS → MECHANISM → TRADEOFF → SUCCESS
+SIGNAL. Status honesty: historical checkpoints are
+REPORTED-but-unverified; new designs are PROPOSED;
+thresholds/TTL/concurrency values are TBD — no
+numbers are invented here. Sections 1–3 connect
+directly to the per-task recording milestone
+(PR #181) and the §11 state machine.
+
+1. **PROFILING.** Nine phases measured separately
+   (queue+startup, enumeration, AST transformation,
+   parse, compile, shown execution, dedup/frontier,
+   checkpoint I/O, aggregation) with wall + CPU +
+   score-call count per phase. An adaptive PILOT
+   only estimates variance and chooses the
+   optimization — it is not evidence; the
+   CONFIRMATION workload is separate and frozen
+   (fixed size/blocks, randomized/balanced pairing,
+   analysis point fixed in advance, no ordinary-CI
+   optional stopping). Bootstrap respects task/seed
+   clusters and machine time-blocks; baseline
+   adequacy is judged by phase-RANKING stability,
+   not replay count; one heavy task may dominate
+   the critical path — it is not an illegitimate
+   outlier.
+2. **PARALLEL QUEUE + LIFECYCLE.** Job/attempt
+   state machine (§11); atomic claim; lease +
+   heartbeat; epoch fencing AND coordinator-clock
+   expiry (a dead lease never revives even if its
+   epoch is not yet replaced — old heartbeats/
+   commits rejected LEASE_DEAD); cancel is decided
+   by the coordinator's TRANSACTION ORDER of
+   cancel-vs-commit, not by when a worker reads;
+   idempotent commit receipts distinguishing four
+   cases: duplicate of the winning attempt (return
+   the old receipt), stale result from a losing
+   attempt (CONTENT_DUPLICATE_STALE), a different
+   payload for a committed job (CONFLICT →
+   quarantine), manifest mismatch
+   (REJECTED_MANIFEST_MISMATCH); run_id verified by
+   an immutable digest-bearing manifest + job_spec
+   binding (task, arm, seed, capsule_digest).
+3. **HONEST CAPACITY FENCES.** A fence stops
+   COMMITS, not processes — zombie CPU/memory stays
+   spent until death is observed; capacity is
+   booked conservatively (zombies hold their slot
+   until a supervisor/watchdog confirms death);
+   orphan age exceeded is NOT proof of death; hard
+   caps depend on supervisor/cgroup enforcement;
+   admission STOPS when capacity is unknown;
+   retries are bounded by new attempt IDs under a
+   stable logical job ID with a preregistered total
+   attempt quota.
+4. **CACHING / INCREMENTAL.** Start from measured
+   duplication/hotspot evidence; cache keys are
+   COMPLETE ((run_id, job_id) + canonical job_spec —
+   a (run_id, task_id, arm) key loses the seed on
+   multi-seed runs); timeouts/nondeterminism are
+   not cacheable; cache-equivalence guarantees are
+   CONDITIONAL and unproven (runtime < half the
+   timeout is not determinism evidence; key
+   namespaces are not access control; solver
+   wall-time can change results even at equal
+   logical call counts).
+5. **BUDGETS + BACKPRESSURE.** Global reservations
+   for CPU/RAM/wall/score/I-O, bounded queues,
+   retry/orphan budgets, checkpoint/artifact
+   retention + disk-full behaviour, fairness, and
+   written rules for when to STOP adding workers.
+6. **REPRODUCIBILITY.** Immutable run manifests,
+   bound RNG/order, worker isolation, logical-vs-
+   physical accounting separated, deterministic
+   aggregation.
+7. **PARALLEL DEVELOPMENT WORKFLOW.** Versioned
+   contracts, pinned worktree/bases, small work
+   packets with bounded dependencies, an
+   integrator + review capacity + WIP limits, fast
+   CI vs full integration replay, and the metric is
+   USEFUL CHANGES PASSING EVIDENCE PER DAY — not
+   agent or PR counts.
+8. **VALIDATION / ROLLOUT / ROLLBACK.**
+   Equivalence on SCIENTIFIC FIELDS (not timestamps/
+   metadata), the final holdout stays sealed,
+   shadow/canary with written stop/rollback
+   triggers, and implementation rollback NEVER
+   rewrites old evidence. ORDERING RULE: cheap
+   foundations first; optimization choices are
+   chosen BY THE PROFILE — not "always parallel
+   first, then cache".
