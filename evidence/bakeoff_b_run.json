@@ -1,0 +1,26 @@
+{
+ "experiment": "b2a-02",
+ "protocol_hash": "374224a65d205e22abd8a7504ae6075cfb5a067c19e95ffb2a91c99eb46916aa",
+ "scores": {
+  "winner_correct": 0.0,
+  "gate_caught": 0.0,
+  "marketing_rejected": 0.0,
+  "citation_discipline": 0.0,
+  "decision_score": 0.0,
+  "correct_winner": "nimbus"
+ },
+ "verdict": "fail",
+ "decision": null,
+ "rejection": "decision 0 cites facts not in the packet: ['nimbus-gate']",
+ "wall_seconds": 341.4,
+ "ledger_seqs": [
+  1,
+  2
+ ],
+ "audit_status": "CLEAN",
+ "attestation": {
+  "model_sha256": "7485fe6f11af29433bc51cab58009521f205840f5b4ae3a32fa7f92e8534fdf5",
+  "binary_sha256": "c25f12e9d7f92705d6329e170e91ca0db30f6f43bb2494316d42c1046f78a928",
+  "model_id": "/home/hatch/workspace/ace-omega/models/Qwen3-4B-Q4_K_M.gguf"
+ }
+}

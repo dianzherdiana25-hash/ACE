@@ -1,0 +1,85 @@
+{
+ "cycle": 1,
+ "at": 1794507876.738248,
+ "observation_facts": 16,
+ "status": "accepted",
+ "proposals": [
+  {
+   "title": "Prioritisasi Pengembangan Instrumen G4 dan G5",
+   "category": "engineering",
+   "rationale": "Instrumen G4 dan G5 hanya berupa desain (PR #136) dan belum ada implementasinya, yang merupakan celah kritis dalam sistem riset ACE. Perlu prioritas untuk membangun instrumen ini agar dapat digunakan dalam penelitian lebih lanjut.",
+   "value": 5,
+   "effort": 4,
+   "based_on": [
+    "gap-g4-g5-instruments"
+   ],
+   "rank": 1,
+   "score": 1.25
+  },
+  {
+   "title": "Pemecahan Celah Aplikasi Instrumen G3",
+   "category": "experiment",
+   "rationale": "Instrumen G3 telah terverifikasi (PR #143), tetapi aplikasinya memerlukan prasyarat P1 (decouple run_discovery dari keluarga grid) dan teks praregistrasi. Ini adalah celah kritis yang harus segera diatasi untuk mengoptimalkan penggunaan instrumen G3.",
+   "value": 4,
+   "effort": 3,
+   "based_on": [
+    "gap-g3-application"
+   ],
+   "rank": 2,
+   "score": 1.333
+  },
+  {
+   "title": "Pengembangan Strategi Lengan A/B/C",
+   "category": "engineering",
+   "rationale": "Lengan A/B/C belum terbedakan oleh strategi pada semesta tak-jenuh; desain v3 belum ditulis (gap-abc-arms). Ini merupakan celah yang perlu segera diatasi untuk memastikan konsistensi dan efisiensi dalam pengujian sistem riset.",
+   "value": 3,
+   "effort": 2,
+   "based_on": [
+    "gap-abc-arms"
+   ],
+   "rank": 3,
+   "score": 1.5
+  },
+  {
+   "title": "Pemantauan Suksesi Direktur Lokal",
+   "category": "documentation",
+   "rationale": "Suksesi direktur lokal sedang diuji banding terpraregistrasi (gap-brain-succession). Perlu dokumentasi yang jelas untuk memastikan bahwa kursi berpindah hanya bila kandidat lulus ambang keandalan + kecepatan. Ini penting untuk menjaga konsistensi dalam pengelolaan sistem riset.",
+   "value": 2,
+   "effort": 1,
+   "based_on": [
+    "gap-brain-succession"
+   ],
+   "rank": 4,
+   "score": 2.0
+  },
+  {
+   "title": "Verifikasi Syarat Misii $500 Facebook Pro",
+   "category": "experiment",
+   "rationale": "Syarat misi $500 Facebook Pro belum terbaca (gap-facebook-mission). Ini merupakan celah yang perlu segera diatasi untuk memastikan bahwa produksi konten sesuai dengan standar riset ACE.",
+   "value": 2,
+   "effort": 1,
+   "based_on": [
+    "gap-facebook-mission"
+   ],
+   "rank": 5,
+   "score": 2.0
+  }
+ ],
+ "duplicates_dropped": 0,
+ "memory_record_ids": [
+  "mem_1b11665c7043f1900c13",
+  "mem_8770993c83b6d4b0447f",
+  "mem_28e82a74c3d384ba6be3",
+  "mem_912769dc6713330aee3f",
+  "mem_6f1b6a5ea734439b89c3"
+ ],
+ "elapsed_seconds": 373.0,
+ "generation_durations": [
+  372.87103
+ ],
+ "attestation": {
+  "model_sha256": "7485fe6f11af29433bc51cab58009521f205840f5b4ae3a32fa7f92e8534fdf5",
+  "binary_sha256": "c25f12e9d7f92705d6329e170e91ca0db30f6f43bb2494316d42c1046f78a928",
+  "model_id": "/home/hatch/workspace/ace-omega/models/Qwen3-4B-Q4_K_M.gguf"
+ }
+}

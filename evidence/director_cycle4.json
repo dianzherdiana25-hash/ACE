@@ -1,0 +1,77 @@
+{
+ "cycle": 7,
+ "at": 1794495052.3881876,
+ "observation_facts": 16,
+ "status": "accepted",
+ "proposals": [
+  {
+   "title": "Integrasi Tumpukan PR #103-#133",
+   "category": "engineering",
+   "rationale": "Tumpukan PR #103-#133 belum terintegrasi ke main, sehingga menghambat kemampuan sistem untuk beroperasi secara komprehensif.",
+   "value": 5,
+   "effort": 4,
+   "based_on": [
+    "gap-stack-unintegrated"
+   ],
+   "rank": 1,
+   "score": 1.25
+  },
+  {
+   "title": "Pengembangan Instrumen untuk G3",
+   "category": "measurement",
+   "rationale": "G3 (generalisasi lintas keluarga masalah) belum punya instrumen pengukuran, sehingga perlu dirancang untuk memungkinkan penilaian yang valid dan andal.",
+   "value": 5,
+   "effort": 4,
+   "based_on": [
+    "gap-g3-no-instrument"
+   ],
+   "rank": 2,
+   "score": 1.25
+  },
+  {
+   "title": "Pengukuran G4 dan G5",
+   "category": "measurement",
+   "rationale": "G4 (garis keturunan kapabilitas lintas generasi) dan G5 (pemilik membaca ringkasan via ponsel) belum dinilai sama sekali, sehingga perlu dilakukan untuk memperoleh data yang komprehensif.",
+   "value": 5,
+   "effort": 4,
+   "based_on": [
+    "gap-g4-g5-unassessed"
+   ],
+   "rank": 3,
+   "score": 1.25
+  },
+  {
+   "title": "Peningkatan Diferensiasi Lengan A/B/C",
+   "category": "engineering",
+   "rationale": "Lengan A/B/C identik pada semua pengukuran karena ruang operator kecil; diferensiasi lengan butuh katalog/ruang operator lebih kaya.",
+   "value": 4,
+   "effort": 3,
+   "based_on": [
+    "gap-arms-indistinguishable"
+   ],
+   "rank": 4,
+   "score": 1.333
+  },
+  {
+   "title": "Peningkatan Transfer Operator",
+   "category": "engineering",
+   "rationale": "Transfer operator hasil penemuan masih parsial (3/15 per kelas); pasangan defek bermasking belum terpecahkan; ruang skema edit masih dirancang manusia.",
+   "value": 4,
+   "effort": 4,
+   "based_on": [
+    "gap-operator-transfer"
+   ],
+   "rank": 5,
+   "score": 1.0
+  }
+ ],
+ "duplicates_dropped": 0,
+ "memory_record_ids": [
+  "mem_db4c537d0547edfd57df",
+  "mem_b22593c5ec8fe5170438",
+  "mem_76d3470a50db80071680",
+  "mem_a89c0c300cffcf2c7f2c",
+  "mem_3777d8b0d0cca2163286"
+ ],
+ "elapsed_seconds": 359.8
+}
