@@ -4,8 +4,12 @@ Experiment: `g5-harvest-01`. Status: **DRAFT** —
 this text fixes the period rule, the thresholds,
 the roles, and the sealing before any harvest;
 it submits nothing to any kernel and locks
-nothing until the cutoff is set by the hub or
-the owner (a single ⟨TBD-GATE⟩ field, §2).
+nothing. The one open decision the draft carried
+— the §2 cutoff — was SET by hub decision
+2026-11-13 (under the owner's full delegation of
+2026-11-13 16:07 WIB): the period is locked
+below; the text remains a DRAFT and the §7
+mechanics stay ⟨TBD-GATE⟩ until lock time.
 Design sources: the G5 dossier design
 (D-G5-1..5 RATIFIED, Task 09), the harvest
 checklist (Task 15), the instrument
@@ -28,11 +32,13 @@ window would score well.
   Emancipation amendment, the point at which
   reporting to the owner became the program's
   governance channel (D-G5-1).
-- End (cutoff): ⟨TBD-GATE — set by the hub or
-  the owner at lock time, by naming a milestone;
-  the draft proposes the next gate-board
-  addendum after this draft as the natural
-  milestone, but the value is theirs to set⟩.
+- End (cutoff): **2026-11-30** (end of day,
+  Asia/Jakarta) — SET by hub decision
+  2026-11-13 under the owner's full delegation
+  (harvest period: 12 Nov 2026 → 30 Nov 2026).
+  The hub named the period by date rather than
+  by the milestone rule this draft proposed;
+  the value is recorded as decided.
 - Records after the cutoff are out of period:
   the instrument reports them as warnings and
   never counts them.
