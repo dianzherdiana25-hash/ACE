@@ -1,0 +1,106 @@
+{
+ "experiment": "ctrlreg-stage2-dose (PR #173)",
+ "tasks": [
+  "catalog_control-020",
+  "catalog_control-021"
+ ],
+ "nc_key_position_1based": 31,
+ "grid": [
+  {
+   "k": 0,
+   "nc_key_present": false,
+   "records": {
+    "catalog_control-020": {
+     "solved": true,
+     "score_calls": 4,
+     "a_solution_scored": true
+    },
+    "catalog_control-021": {
+     "solved": true,
+     "score_calls": 4,
+     "a_solution_scored": true
+    }
+   }
+  },
+  {
+   "k": 6,
+   "nc_key_present": false,
+   "records": {
+    "catalog_control-020": {
+     "solved": true,
+     "score_calls": 8,
+     "a_solution_scored": true
+    },
+    "catalog_control-021": {
+     "solved": true,
+     "score_calls": 7,
+     "a_solution_scored": true
+    }
+   }
+  },
+  {
+   "k": 12,
+   "nc_key_present": false,
+   "records": {
+    "catalog_control-020": {
+     "solved": true,
+     "score_calls": 30,
+     "a_solution_scored": true
+    },
+    "catalog_control-021": {
+     "solved": true,
+     "score_calls": 28,
+     "a_solution_scored": true
+    }
+   }
+  },
+  {
+   "k": 24,
+   "nc_key_present": false,
+   "records": {
+    "catalog_control-020": {
+     "solved": true,
+     "score_calls": 90,
+     "a_solution_scored": true
+    },
+    "catalog_control-021": {
+     "solved": true,
+     "score_calls": 88,
+     "a_solution_scored": true
+    }
+   }
+  },
+  {
+   "k": 48,
+   "nc_key_present": true,
+   "records": {
+    "catalog_control-020": {
+     "solved": false,
+     "score_calls": 206,
+     "a_solution_scored": false
+    },
+    "catalog_control-021": {
+     "solved": false,
+     "score_calls": 85,
+     "a_solution_scored": false
+    }
+   }
+  },
+  {
+   "k": 60,
+   "nc_key_present": true,
+   "records": {
+    "catalog_control-020": {
+     "solved": false,
+     "score_calls": 410,
+     "a_solution_scored": false
+    },
+    "catalog_control-021": {
+     "solved": false,
+     "score_calls": 159,
+     "a_solution_scored": false
+    }
+   }
+  }
+ ]
+}
