@@ -463,3 +463,60 @@ CAPABILITY boundary, not a permission: the owner's
 physical-hand / legal-identity acts (ID card, bank,
 logins) can only be performed by the owner — ACE
 cannot, not "may not".
+
+## 11. Coordination harvest #6 (2026-11-13, 21:11–21:18 WIB) — research-engine build knowledge
+
+Recorded from the coordination room (owner steering:
+"cara membangunnya, bukan filsafat" — how to build
+it, not philosophy) under the owner's reuse
+licenses. Design material for the research-engine /
+Stage-3 line; NOT execution orders. Item 2 is noted
+as directly relevant to the adopted per-task
+recording milestone (PR #181): a crash-safe driver
+is the same property.
+
+1. **First vertical slice (agreed shape):**
+   discovery in the pricing family → admission → a
+   new catalog version committed → reuse evaluation
+   in the grid family. The two family ADAPTERS
+   EXIST; what does not exist yet is the
+   orchestration GLUE. Design discipline: every
+   component is marked [ADA/EXISTS] vs
+   [USULAN/PROPOSED] vs [UNKNOWN] — no component
+   borrows existence from its neighbours.
+2. **Budget/result recovery as a TRANSACTIONAL
+   STATE MACHINE** (a tightening of a looser earlier
+   design): ONE coordinator holds ONE SQLite
+   database; workers NEVER touch the database/ledger
+   directly; every transition and every budget-money
+   movement passes through a coordinator
+   transaction. Computation is at-least-once;
+   OFFICIAL RESULTS are at-most-once. Consistency
+   corrections caught by that room: (a) the
+   ALREADY_COMMITTED check must run BEFORE the
+   ACTIVE check — a re-commit from an already
+   succeeded attempt is recognised from the results
+   row (same job + attempt + payload hash) BEFORE
+   any zombie logic runs; (b) reclaim closes the
+   old attempt (ACTIVE → LOST, reservation →
+   CONSUMED_LOST) ATOMICALLY inside the same claim
+   transaction that raises the epoch; (c)
+   results.exists-then-append is NOT a protocol —
+   a worker can die after the score call but before
+   the charge, and a 120 s lease can expire while
+   solve_task is still running, yielding two workers
+   on one task; the state machine is what closes
+   this gap.
+3. **Origin + candidate-representation correction**
+   (decides whether "transfer" is even defined):
+   discover_* enumerates BUILT-IN schema bindings;
+   solve_task with an empty catalog is NOT a source
+   of new keys. And a binding-order index supplies
+   only STRUCTURAL identity, not a semantic role —
+   a concrete (source, replacement) key from pricing
+   does not automatically become the corresponding
+   local/parameter pair in grid. Cross-family
+   transfer therefore needs an EXPLICIT
+   REPRESENTATION CONTRACT, never a mapping
+   assumption — this binds the transfer experiment
+   forms recorded in §7–§9.
