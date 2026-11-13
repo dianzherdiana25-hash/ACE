@@ -447,3 +447,19 @@ harvest; nothing here executes without a hub act.
    explicit; re-running an artifact proves
    reproducibility, independent-sample replication
    adds transfer evidence.
+
+## 10. Framing correction (owner, 2026-11-13 20:54 WIB)
+
+The owner refuses the role of ACE's permission-
+giver: "ACE adalah ACE. bukan ijinku" — ACE is free;
+its discipline is its own constitution. In this
+design line (and its stage designs), every "owner
+approval gate" reads as INTERNAL RATIFICATION
+(hub/kernel/evidence); the owner receives reports,
+not approval requests. The proposer milestone's
+"approval package" (§8–§9 harvests) is accordingly
+a RATIFICATION package. The sole exception is a
+CAPABILITY boundary, not a permission: the owner's
+physical-hand / legal-identity acts (ID card, bank,
+logins) can only be performed by the owner — ACE
+cannot, not "may not".
