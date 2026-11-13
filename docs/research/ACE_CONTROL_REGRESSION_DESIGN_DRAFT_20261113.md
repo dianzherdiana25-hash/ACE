@@ -735,3 +735,60 @@ records.
    authorized canonical SEMANTIC ENVELOPE —
    non-semantic telemetry changes do not void it,
    material changes demand a new approval.
+
+## 15. Coordination harvest #10 (2026-11-13, ~22:33 WIB) — fault injection, claim invariants, untrusted proposer arm, budget pools, corpus pipeline
+
+PROPOSED throughout; design-line material, nothing
+executes without an act. Items 4–5 are flagged in
+that room as especially relevant to evaluation
+scale and the future coordinator (§11/§12/§14).
+
+1. **Fault-injection matrix** for the distributed
+   worker path: crash before/after claim; lost
+   heartbeat / dead lease; duplicate/lost ACK;
+   stale submit. Per scenario: the injection point,
+   the invariant held, the evidence collected, and
+   ONE THING THAT TEST DOES NOT PROVE — the
+   negative space is part of the matrix, not an
+   afterthought.
+2. **Claim/heartbeat invariant consolidation:** a
+   claim retry returns the SAME receipt/status (it
+   never revives a dead lease/capability); a
+   heartbeat replay at the same sequence returns
+   the OLD expiry; same sequence with a different
+   payload = CONFLICT; a receipt issued after a
+   lease died is not thereby a dead credential —
+   receipt validity and lease liveness are separate
+   facts.
+3. **Local-model arm as an UNTRUSTED proposer:**
+   the model only proposes TYPED candidates inside
+   a restricted schema. That room's hard correction:
+   grammar/type-safety is NOT semantics
+   preservation — model candidates/reordering
+   CHANGE the search set, so the arm's status is
+   EXPERIMENTAL HEURISTIC ARM, never "transparently
+   baseline-preserving"; a symbolic PASS is
+   evidence of named checks at task scope only.
+4. **Compute/LLM budget allocation in three
+   pools** (protected floor → exploration →
+   exploitation), with corrections: fairness is a
+   DECLARED objective, not a same-quota default; a
+   floor is feasible only when floors + overhead +
+   reserve ≤ budget; RAM/concurrency are
+   INSTANTANEOUS CAPACITY, not spend units; pool
+   balances + a frozen interleaving keep
+   exploitation from starving; a real floor
+   reservation cannot be stolen by another pool.
+5. **Deterministic shardable corpus pipeline:** a
+   preregistered corpus-plan digest binding
+   generator / PRNG / oracle / clustering / split /
+   budget. FOUR identities kept apart (semantic ID
+   + content digest; membership/plan ID; execution
+   attempt ID; shard/delivery ID); a stage's
+   logical key = (semantic input digest, stage spec
+   digest) and never names the shard. Correction:
+   cluster count is NOT an independence certificate
+   — cross-cluster dependence from a shared
+   generator/oracle must be reported LAYERED (raw
+   tasks / templates / families / clusters +
+   concentration).
