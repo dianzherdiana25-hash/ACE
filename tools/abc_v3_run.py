@@ -31,6 +31,7 @@ string bug voided the first band-2 calibration run).
 import ast
 import hashlib
 import json
+import os
 import signal
 import sys
 import time
@@ -80,10 +81,26 @@ def _tuples_in(obj):
     return obj
 
 
+def _atomic_write(path, text):
+    """Crash-safe write: temp file in the same
+    directory, fsync, then os.replace. A host death
+    mid-write (this VM rebooted five times on
+    2026-11-13) leaves either the old file or the new
+    one, never a torn one — the transactional
+    discipline of harvest #6 §2 applied to the
+    driver's own state."""
+    tmp = path.with_name(path.name + ".tmp")
+    with open(tmp, "w") as fh:
+        fh.write(text)
+        fh.flush()
+        os.fsync(fh.fileno())
+    os.replace(tmp, path)
+
+
 def _save_checkpoint(name, obj):
     STATE_DIR.mkdir(parents=True, exist_ok=True)
-    (STATE_DIR / name).write_text(
-        json.dumps(_tuples_out(obj), indent=1))
+    _atomic_write(STATE_DIR / name,
+                  json.dumps(_tuples_out(obj), indent=1))
 
 
 def _load_checkpoint(name):
@@ -96,8 +113,8 @@ def _load_checkpoint(name):
 def _heartbeat(**fields):
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     fields["updated_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
-    (STATE_DIR / "heartbeat.json").write_text(
-        json.dumps(fields, indent=1))
+    _atomic_write(STATE_DIR / "heartbeat.json",
+                  json.dumps(fields, indent=1))
 
 
 class _TaskTimeout(Exception):
