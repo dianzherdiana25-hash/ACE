@@ -1,0 +1,47 @@
+{
+ "schema": "ace.preaudit_manifest.v1",
+ "package_id": "s3-dev-pilot (PR #184 dev harness outputs, band 20261501 witnesses)",
+ "artifacts": [
+  {
+   "path": "cell_control.json",
+   "sha256": "e1887c4093e546aa9c3d55a1a5d7e0926e1c22b5489e096d5f53c53eb3c74263",
+   "size_bytes": 4632
+  },
+  {
+   "path": "cell_frontier_only.json",
+   "sha256": "1dfb4ed09e97bb92eade3b671cf883f8bfd5ff0a2f75c2c9909e9c54951771f8",
+   "size_bytes": 4638
+  },
+  {
+   "path": "cell_rounds_only.json",
+   "sha256": "06ccccb938a680645c398a098394c849098c329dcf20967b2d58980bdc48b453",
+   "size_bytes": 4637
+  }
+ ],
+ "stage3_check": {
+  "task_maps": [
+   {
+    "artifact": "cell_control.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "cell_frontier_only.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "cell_rounds_only.json",
+    "pointer": "/records"
+   }
+  ],
+  "frontier_logs": [
+   {
+    "artifact": "cell_control.json",
+    "pointer": "/records/catalog_control-020/round_log"
+   },
+   {
+    "artifact": "cell_control.json",
+    "pointer": "/records/catalog_control-021/round_log"
+   }
+  ]
+ }
+}

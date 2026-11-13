@@ -38,8 +38,8 @@ import sys
 
 SCHEMA_MANIFEST = "ace.preaudit_manifest.v1"
 SCHEMA_REPORT = "ace.preaudit_report.v2"
-VALIDATOR_VERSION = "preaudit-validator-2.0.0"
-REASON_CODE_REGISTRY_VERSION = "1"
+VALIDATOR_VERSION = "preaudit-validator-2.1.0"
+REASON_CODE_REGISTRY_VERSION = "2"
 STAGE_MODEL_VERSION = "1"
 
 STAGES = ["STAGED", "REGISTERED OBSERVATION", "VALIDATION VERDICT", "PUBLISHED RESULT"]
@@ -64,6 +64,7 @@ FP_CLASS = {
     "C1": "canonicalization/path errors (symlink, separator, case) — measured by valid-variant probes",
     "C2": "numeric-representation brittleness (0 vs 0.0 vs 1e2) — measured by valid-variant probes",
     "C3": "rule-shape rigidity — unsupported rule shapes fail toward UNKNOWN, never toward false TIDAK SESUAI",
+    "C4": "shape rigidity of the Stage-3 artifact forms (task maps, frontier logs) — fails toward UNKNOWN; measured on PR #184 dev-harness shapes",
 }
 
 REASON_CODES.update({
@@ -78,6 +79,9 @@ REASON_CODES.update({
     "VERDICT_UNDECIDABLE": "UNKNOWN", "RULE_AMBIGUOUS": "UNKNOWN",
     "RULE_UNSUPPORTED": "UNKNOWN", "DEPENDENCY_UNRESOLVED": "UNKNOWN",
     "EMPTY_INPUT": "UNKNOWN", "RATE_UNDEFINED": "UNKNOWN",
+    "TASK_STATE_CONTRADICTION": "TIDAK SESUAI", "DUPLICATE_RECORD": "TIDAK SESUAI",
+    "ROUND_SEQUENCE_BROKEN": "TIDAK SESUAI", "PROVENANCE_BROKEN": "TIDAK SESUAI",
+    "PROVENANCE_MISSING": "UNKNOWN",
 })
 
 
@@ -736,6 +740,247 @@ def check_c3(package: Package, manifest: dict, integrity: dict, result: CheckRes
 
 
 
+
+# --------------------------------------------------------------------------
+# C4 — Stage-3 artifact consistency (task maps + frontier provenance logs)
+# Design: docs/research/PREAUDIT_VALIDATOR_S3_EXTENSION_DESIGN.md
+# Activates ONLY when the manifest declares a stage3_check block.
+# --------------------------------------------------------------------------
+
+def check_c4(package: Package, manifest: dict, integrity: dict, result: CheckResult):
+    spec = manifest.get("stage3_check")
+    result.dependencies = ["C1 integrity of every artifact C4 touches",
+                           "stage3_check declared in the manifest"]
+    if not isinstance(spec, dict):
+        result.add("stage3_check", UNKNOWN,
+                   "stage3_check is present but not an object", "INPUT_MALFORMED")
+        result.next_step = "Declare stage3_check as an object with task_maps and/or frontier_logs."
+        return
+    task_maps = spec.get("task_maps") or []
+    frontier_logs = spec.get("frontier_logs") or []
+    if not task_maps and not frontier_logs:
+        result.add("stage3_check", UNKNOWN,
+                   "stage3_check declares neither task_maps nor frontier_logs", "NOT_DECLARED")
+        result.evidence_missing.append("stage3_check.task_maps / stage3_check.frontier_logs")
+        result.next_step = "Declare at least one task map or frontier log, or omit stage3_check."
+        return
+    for i, entry in enumerate(task_maps):
+        _check_task_map(package, integrity, entry, result, "task_map[%d]" % i)
+    for i, entry in enumerate(frontier_logs):
+        _check_frontier_log(package, integrity, entry, result, "frontier_log[%d]" % i)
+    result.next_step = ("For TIDAK SESUAI: the named record/round contradicts the declared "
+                        "Stage-3 shapes on complete inputs. For UNKNOWN: supply the missing "
+                        "shape or identity fields; the checker does not guess them.")
+
+
+def _load_declared(package, integrity, ref, result):
+    if not isinstance(ref, dict):
+        return None
+    return _load_for_assertion(package, integrity, ref, result)
+
+
+def _check_task_map(package, integrity, entry, result: CheckResult, label):
+    if not isinstance(entry, dict):
+        result.add(label, UNKNOWN, "task map entry is not an object", "INPUT_MALFORMED")
+        return
+    doc = _load_declared(package, integrity, entry, result)
+    if doc is None:
+        result.add(label, UNKNOWN, "task map could not be loaded (see items above)",
+                   "DEPENDENCY_UNRESOLVED")
+        return
+    try:
+        value = _resolve(doc, entry)
+    except PointerError as exc:
+        result.add(label, UNKNOWN, "pointer problem: %s" % exc, "POINTER_UNRESOLVED")
+        return
+    if isinstance(value, dict):
+        records = [(tid, rec) for tid, rec in value.items()]
+    elif isinstance(value, list):
+        records = [(rec.get("task_id") if isinstance(rec, dict) else None, rec)
+                   for rec in value]
+    else:
+        result.add(label, UNKNOWN, "task map is neither an object nor a list", "INPUT_MALFORMED")
+        return
+    seen = set()
+    solved_count = 0
+    decidable = True
+    for tid, rec in records:
+        rlabel = "%s:%s" % (label, tid if tid is not None else "?")
+        if tid is None or not isinstance(rec, dict):
+            result.add(rlabel, UNKNOWN, "record lacks a task_id or is not an object",
+                       "INPUT_MALFORMED")
+            decidable = False
+            continue
+        if tid in seen:
+            result.add(rlabel, TIDAK_SESUAI, "task_id appears twice in the map", "DUPLICATE_RECORD")
+            continue
+        seen.add(tid)
+        solved, timeout = rec.get("solved"), rec.get("timeout")
+        if not isinstance(solved, bool) or not isinstance(timeout, bool):
+            result.add(rlabel, UNKNOWN,
+                       "solved/timeout are not both present booleans; record shape undecidable",
+                       "INPUT_MALFORMED")
+            decidable = False
+            continue
+        if solved and timeout:
+            result.add(rlabel, TIDAK_SESUAI,
+                       "record claims the task is both solved and timed out",
+                       "TASK_STATE_CONTRADICTION")
+            continue
+        if solved:
+            solved_count += 1
+    total = len(records)
+    counts_ref = entry.get("counts_ref")
+    if counts_ref is not None:
+        cdoc = _load_declared(package, integrity, counts_ref, result)
+        if cdoc is None:
+            result.add(label + ":counts", UNKNOWN, "counts_ref could not be loaded",
+                       "DEPENDENCY_UNRESOLVED")
+            return
+        try:
+            pair = _pair(_resolve(cdoc, counts_ref))
+        except PointerError as exc:
+            result.add(label + ":counts", UNKNOWN, "counts_ref pointer problem: %s" % exc,
+                       "POINTER_UNRESOLVED")
+            return
+        if pair is None:
+            result.add(label + ":counts", UNKNOWN, "counts_ref is not an integer [solved, total] pair",
+                       "INPUT_MALFORMED")
+            return
+        if not decidable:
+            result.add(label + ":counts", UNKNOWN,
+                       "some records were undecidable; the aggregate cannot be proven",
+                       "INPUT_MALFORMED")
+            return
+        if (solved_count, total) == pair:
+            result.add(label + ":counts", SESUAI,
+                       "map aggregate [%d, %d] equals counts_ref" % (solved_count, total), "OK")
+            result.evidence_present.append(label)
+        else:
+            result.add(label + ":counts", TIDAK_SESUAI,
+                       "map aggregate [%d, %d] != counts_ref %s" % (solved_count, total, pair),
+                       "COUNT_MISMATCH")
+    else:
+        if decidable:
+            result.add(label, SESUAI,
+                       "%d records decidable, %d solved, no contradictions" % (total, solved_count),
+                       "OK")
+            result.evidence_present.append(label)
+
+
+def _check_frontier_log(package, integrity, entry, result: CheckResult, label):
+    if not isinstance(entry, dict):
+        result.add(label, UNKNOWN, "frontier log entry is not an object", "INPUT_MALFORMED")
+        return
+    doc = _load_declared(package, integrity, entry, result)
+    if doc is None:
+        result.add(label, UNKNOWN, "frontier log could not be loaded (see items above)",
+                   "DEPENDENCY_UNRESOLVED")
+        return
+    try:
+        series = _resolve(doc, entry)
+    except PointerError as exc:
+        result.add(label, UNKNOWN, "pointer problem: %s" % exc, "POINTER_UNRESOLVED")
+        return
+    if not isinstance(series, list) or not series:
+        result.add(label, UNKNOWN, "frontier log does not resolve to a non-empty list of rounds",
+                   "EMPTY_INPUT")
+        return
+    seen_ids = set()
+    problems = 0
+    for idx, rnd in enumerate(series):
+        rlabel = "%s:round[%d]" % (label, idx)
+        if not isinstance(rnd, dict) or not isinstance(rnd.get("round"), int) \
+                or isinstance(rnd.get("round"), bool):
+            result.add(rlabel, UNKNOWN, "round entry lacks an integer 'round'", "INPUT_MALFORMED")
+            problems += 1
+            continue
+        if rnd["round"] != idx + 1:
+            result.add(rlabel, TIDAK_SESUAI,
+                       "round sequence broken: expected %d, found %d" % (idx + 1, rnd["round"]),
+                       "ROUND_SEQUENCE_BROKEN")
+            problems += 1
+            continue
+        gen, scored = rnd.get("n_candidates_generated"), rnd.get("n_scored")
+        if isinstance(gen, int) and isinstance(scored, int) and scored > gen:
+            result.add(rlabel, TIDAK_SESUAI,
+                       "n_scored %d exceeds n_candidates_generated %d" % (scored, gen),
+                       "COUNT_MISMATCH")
+            problems += 1
+            continue
+        fsize = rnd.get("frontier_size")
+        if fsize is not None and (not isinstance(fsize, int) or isinstance(fsize, bool) or fsize < 0):
+            result.add(rlabel, UNKNOWN, "frontier_size is not a non-negative integer",
+                       "INPUT_MALFORMED")
+            problems += 1
+            continue
+        members = rnd.get("frontier")
+        if isinstance(members, list):
+            if fsize is not None and len(members) != fsize:
+                result.add(rlabel, TIDAK_SESUAI,
+                           "frontier member count %d != frontier_size %d" % (len(members), fsize),
+                           "COUNT_MISMATCH")
+                problems += 1
+                continue
+            round_ids = set()
+            bad = False
+            for m in members:
+                if not isinstance(m, dict):
+                    result.add(rlabel, UNKNOWN, "frontier member is not an object",
+                               "PROVENANCE_MISSING")
+                    bad = True
+                    break
+                ident = m.get("candidate", m.get("id", m.get("hash")))
+                if ident is None:
+                    result.add(rlabel, UNKNOWN,
+                               "frontier member carries no identity (candidate/id/hash)",
+                               "PROVENANCE_MISSING")
+                    bad = True
+                    break
+                parents = m.get("parents") or []
+                if not isinstance(parents, list):
+                    result.add(rlabel, UNKNOWN, "member parents is not a list", "INPUT_MALFORMED")
+                    bad = True
+                    break
+                for parent in parents:
+                    if parent not in seen_ids:
+                        result.add(rlabel, TIDAK_SESUAI,
+                                   "member %r names parent %r, which never appears in an "
+                                   "earlier round of this complete log" % (ident, parent),
+                                   "PROVENANCE_BROKEN")
+                        bad = True
+                        break
+                if bad:
+                    break
+                round_ids.add(ident)
+            if bad:
+                problems += 1
+                continue
+            seen_ids |= round_ids
+        tp = rnd.get("true_path")
+        if isinstance(tp, dict):
+            generated = tp.get("generated")
+            scored_tp = tp.get("scored")
+            in_frontier = tp.get("in_frontier")
+            rank = tp.get("rank")
+            contradiction = (
+                (in_frontier is True and generated is not True)
+                or (scored_tp is True and generated is not True)
+                or (scored_tp is True and rank is None)
+                or (scored_tp is False and rank is not None))
+            if contradiction:
+                result.add(rlabel, TIDAK_SESUAI,
+                           "true_path block is internally inconsistent: %s" % show(tp),
+                           "FIELD_MISMATCH")
+                problems += 1
+                continue
+    if problems == 0:
+        result.add(label, SESUAI,
+                   "%d rounds: sequence intact, counts consistent, provenance resolvable" % len(series),
+                   "OK")
+        result.evidence_present.append(label)
+
+
 # --------------------------------------------------------------------------
 # V2-2 — validation_spec_digest
 # --------------------------------------------------------------------------
@@ -777,6 +1022,7 @@ def compute_spec_digest(manifest: dict, build_stamp: dict) -> str:
         "ruleset": {
             "count_assertions": manifest.get("count_assertions"),
             "verdict_check": manifest.get("verdict_check"),
+            "stage3_check": manifest.get("stage3_check"),
         },
         "validator_build": build_stamp,
         "configuration": {
@@ -809,9 +1055,14 @@ def validate(manifest_bytes: bytes, source_root: Path, build_stamp: dict = None)
     check_c2(package, manifest, integrity, c2)
     c3 = CheckResult("C3", "Verdict vs preregistration rule")
     check_c3(package, manifest, integrity, c3)
-    for c in (c1, c2, c3):
+    check_results = [c1, c2, c3]
+    if "stage3_check" in manifest:
+        c4 = CheckResult("C4", "Stage-3 artifact consistency (task maps + frontier provenance)")
+        check_c4(package, manifest, integrity, c4)
+        check_results.append(c4)
+    for c in check_results:
         c.spec_digest = spec_digest
-    checks = [c1.to_dict(), c2.to_dict(), c3.to_dict()]
+    checks = [c.to_dict() for c in check_results]
     # Self-audit: every item must carry a registry code matching its state,
     # and the lifecycle order must be exactly the frozen stage order.
     for check in checks:

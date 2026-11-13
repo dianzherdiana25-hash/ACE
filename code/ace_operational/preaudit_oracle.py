@@ -110,6 +110,8 @@ def oracle_spec_digest(manifest, validator_source_bytes):
         "ruleset": {
             "count_assertions": manifest.get("count_assertions"),
             "verdict_check": manifest.get("verdict_check"),
+            # Stage-3 extension: the declared stage3_check joins the ruleset.
+            "stage3_check": manifest.get("stage3_check"),
         },
         "validator_build": {
             "version": version_match.group(1),
@@ -118,7 +120,7 @@ def oracle_spec_digest(manifest, validator_source_bytes):
         "configuration": {
             "report_schema": "ace.preaudit_report.v2",
             "manifest_schema": "ace.preaudit_manifest.v1",
-            "reason_code_registry_version": "1",
+            "reason_code_registry_version": "2",  # registry v2: Stage-3 extension codes
             "stage_model_version": "1",
         },
     }
@@ -131,3 +133,47 @@ def oracle_spec_digest(manifest, validator_source_bytes):
     blob = json.dumps(spec, sort_keys=True, ensure_ascii=False,
                       separators=(",", ":"), default=default).encode("utf-8")
     return hashlib.sha256(blob).hexdigest()
+
+
+# ---------------------------------------------------------------------------
+# Stage-3 extension (PREAUDIT_VALIDATOR_S3_EXTENSION_DESIGN.md). From the
+# design text only; no validator code shared.
+# ---------------------------------------------------------------------------
+
+def oracle_task_map(records):
+    """records: dict task_id -> record, or list of records with task_id.
+    Returns (solved_count, total, contradictions, duplicates)."""
+    if isinstance(records, dict):
+        items = list(records.items())
+    else:
+        items = [(r.get("task_id"), r) for r in records]
+    seen, contradictions, duplicates = set(), [], []
+    solved = 0
+    for tid, rec in items:
+        if tid in seen:
+            duplicates.append(tid)
+            continue
+        seen.add(tid)
+        if rec.get("solved") is True and rec.get("timeout") is True:
+            contradictions.append(tid)
+        elif rec.get("solved") is True:
+            solved += 1
+    return solved, len(items), contradictions, duplicates
+
+
+def oracle_round_series(rounds):
+    """Returns the index of the first round breaking the 1..N sequence, or
+    the first round whose true_path is internally inconsistent; else None."""
+    for i, rnd in enumerate(rounds):
+        if rnd.get("round") != i + 1:
+            return i
+        tp = rnd.get("true_path") or {}
+        if tp.get("in_frontier") and not tp.get("generated"):
+            return i
+        if tp.get("scored") and not tp.get("generated"):
+            return i
+        if tp.get("scored") and tp.get("rank") is None:
+            return i
+        if tp.get("scored") is False and tp.get("rank") is not None:
+            return i
+    return None
