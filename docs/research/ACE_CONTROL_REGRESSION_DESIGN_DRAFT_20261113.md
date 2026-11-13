@@ -792,3 +792,39 @@ scale and the future coordinator (§11/§12/§14).
    generator/oracle must be reported LAYERED (raw
    tasks / templates / families / clusters +
    concentration).
+
+## 16. Internal ratification of the Stage 3 draft's §3 decisions (hub, 2026-11-13 ~22:42 WIB)
+
+The three open decisions of the Stage 3
+preregistration draft (PR #184) are RATIFIED by
+internal ratification (hub), on the formulations
+from Ian's desk delta of the same evening:
+
+1. **Bands SELECTED: 20261601–20261603.** Ian's
+   collision check was clean across the whole
+   program record (bands in use: 20261501–20261503
+   for v3/round-2 lineage; short seeds 501–512 and
+   901–912 are profiling confirmations, a different
+   namespace).
+2. **Infected construction AS FORMULATED:** the
+   same measured causal key —
+   ('name_swap', (5, 2, 3, 0, 1, 4), 'nc') —
+   inserted at its natural admission position into
+   each fresh band's DISCOVERED catalog. The
+   random-distractor alternative is REJECTED for
+   the recorded reason: it would test a different
+   claim than the development record's; P1 must
+   reproduce the same phenomenon.
+3. **Cost threshold 3× AS FORMULATED:** the
+   infected arm's per-task cost ceiling = 3× the
+   same band's clean-arm median; an exceedance is
+   recorded as COST-ABORT, never as solved or
+   failed. (Development witnesses burned 410/159
+   calls against a typical tens, so 3× separates
+   diversion cost from unbounded burn while staying
+   above every recorded clean task.)
+
+Explicitly NOT ratified here: the official run
+itself. Draft + harness (PR #184) + this
+ratification are complete and ready; the run waits
+until the desk chooses to run it.
