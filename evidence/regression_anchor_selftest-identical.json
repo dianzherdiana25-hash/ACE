@@ -1,0 +1,146 @@
+{
+ "artifact": "ace.regression_anchor.v1",
+ "battery_id": "ea56bd623023d59c1614b0cceac6cb84fc8fb2030a9921acc41bdd3645fed457",
+ "battery_tasks": [
+  "new_only-005",
+  "new_only-010",
+  "new_only-016",
+  "new_only-022",
+  "new_only-031",
+  "new_only-006",
+  "new_only-011",
+  "new_only-017",
+  "new_only-023",
+  "new_only-032",
+  "new_only-012",
+  "new_only-018",
+  "new_only-024",
+  "new_only-033",
+  "new_only-034",
+  "new_only-035"
+ ],
+ "baseline": {
+  "catalog": {
+   "spec": "v4",
+   "description": "v4 (operator_discovery_v4.json)",
+   "digest": "388a464fb6c60706ce2a11d3ea82dd5f6022b0352370fed3f717bf80af03cb1f",
+   "operators": 6,
+   "chains": 2
+  },
+  "per_class": {
+   "bounds_off_by_one": {
+    "tasks": 2,
+    "solved": 2,
+    "solved_ids": [
+     "new_only-005",
+     "new_only-006"
+    ]
+   },
+   "dist_step_2": {
+    "tasks": 3,
+    "solved": 3,
+    "solved_ids": [
+     "new_only-010",
+     "new_only-011",
+     "new_only-012"
+    ]
+   },
+   "returns_start_distance": {
+    "tasks": 3,
+    "solved": 3,
+    "solved_ids": [
+     "new_only-016",
+     "new_only-017",
+     "new_only-018"
+    ]
+   },
+   "wall_char_x": {
+    "tasks": 3,
+    "solved": 3,
+    "solved_ids": [
+     "new_only-022",
+     "new_only-023",
+     "new_only-024"
+    ]
+   },
+   "mixed": {
+    "tasks": 5,
+    "solved": 5,
+    "solved_ids": [
+     "new_only-031",
+     "new_only-032",
+     "new_only-033",
+     "new_only-034",
+     "new_only-035"
+    ]
+   }
+  },
+  "total": 16,
+  "tasks": 16
+ },
+ "candidate": {
+  "catalog": {
+   "spec": "v4",
+   "description": "v4 (operator_discovery_v4.json)",
+   "digest": "388a464fb6c60706ce2a11d3ea82dd5f6022b0352370fed3f717bf80af03cb1f",
+   "operators": 6,
+   "chains": 2
+  },
+  "per_class": {
+   "bounds_off_by_one": {
+    "tasks": 2,
+    "solved": 2,
+    "solved_ids": [
+     "new_only-005",
+     "new_only-006"
+    ]
+   },
+   "dist_step_2": {
+    "tasks": 3,
+    "solved": 3,
+    "solved_ids": [
+     "new_only-010",
+     "new_only-011",
+     "new_only-012"
+    ]
+   },
+   "returns_start_distance": {
+    "tasks": 3,
+    "solved": 3,
+    "solved_ids": [
+     "new_only-016",
+     "new_only-017",
+     "new_only-018"
+    ]
+   },
+   "wall_char_x": {
+    "tasks": 3,
+    "solved": 3,
+    "solved_ids": [
+     "new_only-022",
+     "new_only-023",
+     "new_only-024"
+    ]
+   },
+   "mixed": {
+    "tasks": 5,
+    "solved": 5,
+    "solved_ids": [
+     "new_only-031",
+     "new_only-032",
+     "new_only-033",
+     "new_only-034",
+     "new_only-035"
+    ]
+   }
+  },
+  "total": 16,
+  "tasks": 16
+ },
+ "regressions": [],
+ "improvements": [],
+ "verdict": "NO_REGRESSION",
+ "deduped": false,
+ "code_dir": "/home/hatch/workspace/ace-omega/wt-p1/code",
+ "wall_seconds": 270.5
+}
