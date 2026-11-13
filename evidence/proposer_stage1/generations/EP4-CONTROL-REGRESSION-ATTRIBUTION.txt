@@ -1,0 +1,41 @@
+{
+  "package_version": "ace.proposal.v1",
+  "proposal_id": "EP4-CONTROL-REGRESSION-ATTRIBUTION",
+  "task_kind": "task",
+  "claim": "If the 'nc' key is removed, the v3 control regression will be resolved (i.e., the number of failed calls will drop below 4/8 for both witness tasks).",
+  "rationale": "The failing traces for both witness tasks share the same distractor key 'nc', suggesting that its presence may be causing the regression. Removing 'nc' could isolate its impact, and the forensic replay setup allows for this without altering the sealed band. The hypothesis is that 'nc' is interfering with the search path or causing key-order sensitivity.",
+  "options_considered": [
+    {"name": "run_key_removal_attribution", "assessment": "Directly tests the impact of 'nc' and 'gc' removal on the regression, aligning with the hypothesis of key interference."},
+    {"name": "run_permutation_only", "assessment": "Could reveal key-order sensitivity, but lacks the specificity of key removal to isolate the cause."},
+    {"name": "do_not_run", "assessment": "Leaves the regression unexplained, risking prolonged uncertainty in the control system."}
+  ],
+  "recommended_option": "run_key_removal_attribution",
+  "cost_estimate": {"calls": 1200, "wall_seconds": 900, "cost_units": 0.8},
+  "cost_ceiling": {"max_calls": 2000, "max_wall_seconds": 1800, "max_cost_units": 1.0},
+  "evidence": [
+    {"artifact": "band 20261501 admitted catalog digest", "sha256": "a67685635cffb2c20a1c48bedd797b34ab71e93d7325eaae734231036418ee68"},
+    {"artifact": "docs/research/ACE_CONTROL_REGRESSION_DESIGN_DRAFT_20261113.md (PR #173 branch)", "sha256": "8f6023d6fdd1991f35caf24d8c0f73afca1895fa012799094e28ce57b0d460b8"}
+  ],
+  "preregistration": {
+    "link": "evidence/proposer_stage1/episodes.json#EP4-CONTROL-REGRESSION-ATTRIBUTION",
+    "artifact_sha256": "a67685635cffb2c20a1c48bedd797b34ab71e93d7325eaae734231036418ee68"
+  },
+  "risks": [
+    "The 'nc' key may not be the root cause, leading to a false positive in the attribution.",
+    "The forensic replay may not fully capture the original execution context, leading to inconsistent results."
+  ],
+  "uncertainties": "The exact mechanism by which 'nc' affects the control regression is not fully understood, making it difficult to predict the outcome of its removal.",
+  "stop_controls": {
+    "abort_conditions": [
+      "If the 'nc' key removal does not resolve the regression.",
+      "If the test exceeds the cost ceiling."
+    ],
+    "sealed_target_status": "sealed_bands_read_only_forensic",
+    "no_auto_retry": true,
+    "stop_visible": true
+  },
+  "ratification": {
+    "type": "internal_ratification",
+    "audience": ["hub", "kernel", "evidence"]
+  }
+}

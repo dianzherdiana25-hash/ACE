@@ -1,0 +1,62 @@
+{
+  "package_version": "ace.proposal.v1",
+  "proposal_id": "prop-20261113-abc-v3",
+  "task_kind": "task",
+  "claim": "If the DI threshold is met (DI >= 0), then the G2 differentiation will be measurable with the abc-v3-01 protocol, with a minimum of 15pp improvement in C-A and 5pp in B-A.",
+  "rationale": "The v3 design explicitly targets saturation by introducing fresh bands and varying catalog enrichment. The DI calculation includes terms that could be falsified if the control margin regresses, which is a known risk. The budget and time constraints are within the envelope, and the sealed bands are unopened, so the run can be initiated safely.",
+  "options_considered": [
+    {
+      "name": "run_v3_as_locked",
+      "assessment": "This option uses the fully defined protocol, with the potential to measure G2 differentiation. It is within the budget and time constraints, but carries the risk of control regression."
+    },
+    {
+      "name": "run_single_band_first",
+      "assessment": "This option reduces initial risk by testing one band before full deployment. However, it may not be efficient given the sealed band status and the need to measure across all bands."
+    },
+    {
+      "name": "do_not_run",
+      "assessment": "This option avoids risk but also avoids any potential gain from G2 differentiation measurement. It is not optimal given the locked preregistration and the goal of measurement."
+    }
+  ],
+  "recommended_option": "run_v3_as_locked",
+  "cost_estimate": {
+    "calls": 3900,
+    "wall_seconds": 4800,
+    "cost_units": 0.95
+  },
+  "cost_ceiling": {
+    "max_calls": 4000,
+    "max_wall_seconds": 5400,
+    "max_cost_units": 1.0
+  },
+  "evidence": [
+    {
+      "artifact": "abc-v3-01 preregistration locked text",
+      "sha256": "55b6331eeed0cfc4779b09114cc74d7c48c47b1a125759bc6296105e3e6529be"
+    },
+    {
+      "artifact": "abc-v3-01 kernel protocol",
+      "sha256": "8591b93814759d5485be3f9e8b47e31a08aa7b1fc41e14b2707b2aa46b975c1a"
+    }
+  ],
+  "preregistration": {
+    "link": "evidence/proposer_stage1/episodes.json#EP2-ABC-V3",
+    "artifact_sha256": "55b6331eeed0cfc4779b09114cc74d7c48c47b1a125759bc6296105e3e6529be"
+  },
+  "risks": [
+    "Control regression could occur if enriched catalogs interfere with solving, potentially failing the DI requirement.",
+    "The total wall time may exceed 5400 seconds, especially if some bands require more than 60s per task."
+  ],
+  "uncertainties": "It is unknown whether the enriched catalogs in B and C will interfere with the control task solving, which is critical for the DI calculation.",
+  "stop_controls": {
+    "abort_conditions": [
+      "If any control task shows regression versus arm A",
+      "If the total wall time exceeds 5400 seconds"
+    ],
+    "sealed_target_status": "sealed_bands_unopened",
+    "no_auto_retry": true,
+    "stop_visible": true
+  },
+  "ratification": {
+    "type": "internal_ratification",
+    "audience": ["hub", "kernel",
