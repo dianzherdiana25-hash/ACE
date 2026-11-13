@@ -1,0 +1,1003 @@
+#!/usr/bin/env python3
+"""
+ACE Visual Mobile Web Dashboard (Human-Friendly Edition V2)
+-----------------------------------------------------------
+Dashboard web visual interaktif dengan penjelasan 5 fokus utama:
+- Sedang melakukan apa?
+- Menyelesaikan apa?
+- Menambah apa?
+- Mengurangi / membersihkan apa?
+- Menggunakan AI apa?
+
+Berjalan di http://localhost:8080 (bisa dibuka langsung di browser HP Android).
+"""
+from __future__ import annotations
+
+import html
+import http.server
+from datetime import datetime, timedelta, timezone
+import json
+import os
+from pathlib import Path
+import re
+import socketserver
+import sys
+import threading
+import time
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+PORT = int(os.environ.get("ACE_DASHBOARD_PORT", "8080"))
+HOST = os.environ.get("ACE_DASHBOARD_HOST", "")
+STATE_PATH = Path(os.environ.get(
+    "ACE_DASHBOARD_STATE",
+    Path(__file__).resolve().parent / "ace_dashboard_state.json",
+))
+STATE_STALE_SECONDS = 1800
+WIB = timezone(timedelta(hours=7))
+
+
+def load_json(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def get_focus_breakdown(log_lines: list[str], research_state: dict, heartbeat: dict, live_status: bool = False) -> dict:
+    """Describe recorded evidence, never fabricate activity or model providers."""
+    history = research_state.get("history") or []
+    last = history[-1] if isinstance(history, list) and history and isinstance(history[-1], dict) else {}
+    c_soft = research_state.get("completed_cycles", 0)
+    c_param = heartbeat.get("last_cycle_id", 0)
+    last_lines = "\n".join(log_lines[-10:])
+    if not live_status:
+        doing, doing_status = (
+            "Tidak ada heartbeat daemon terbaru; yang tampil adalah catatan historis.",
+            "TIDAK ADA HEARTBEAT",
+        )
+    elif "Running external verifier" in last_lines:
+        doing, doing_status = ("Aktivitas terakhir: menjalankan verifikasi integritas.", "VERIFIKASI")
+    elif "Autonomous Repo Janitor" in last_lines or "Pruned" in last_lines:
+        doing, doing_status = ("Aktivitas terakhir: housekeeping repositori.", "HOUSEKEEPING")
+    elif "Executing Autonomous Software-Development" in last_lines:
+        doing, doing_status = (f"Aktivitas terakhir: percobaan patch (siklus {c_soft}).", "RISET KODE")
+    elif "Pushing to origin" in last_lines or "Committing" in last_lines:
+        doing, doing_status = ("Aktivitas terakhir: menyimpan checkpoint/commit pada branch Git.", "SINKRONISASI")
+    elif "Sleeping" in last_lines or "Active heartbeat" in last_lines:
+        doing, doing_status = ("Heartbeat tersedia; daemon tercatat sedang jeda.", "JEDA")
+    else:
+        doing, doing_status = (f"Heartbeat tersedia; siklus parameter terakhir {c_param}.", "STATUS DIREKAM")
+
+    problem = next(
+        (line.partition("Problem:")[2].strip()
+         for line in reversed(log_lines) if "Problem:" in line),
+        "",
+    )
+    solving = f"Masalah terakhir tercatat: {problem}" if problem else "Belum ada diagnosis masalah terbaru di log."
+    decision = str(last.get("decision", "BELUM ADA KEPUTUSAN"))
+    adding = (
+        f"Siklus kode terakhir: {c_soft}; keputusan: {decision}. "
+        "Status ACCEPTED pada tes lokal bukan bukti peningkatan kemampuan; "
+        "lihat metrik kandidat dan konfirmasi independen."
+    )
+    janitor_line = next(
+        (line.partition("Janitor:")[2].strip()
+         for line in reversed(log_lines) if "Janitor:" in line),
+        "",
+    )
+    removing = (
+        f"Housekeeping terakhir (log): {janitor_line}" if janitor_line
+        else "Tidak ada bukti housekeeping di log terbaru."
+    )
+
+    consultations = load_json(REPO_ROOT / "checkpoints" / "self_dev" / "ai_consultations.json")
+    if isinstance(consultations, list) and consultations and isinstance(consultations[-1], dict):
+        latest = consultations[-1]
+        ai_used = (
+            f"Konsultasi ask-ai terakhir tercatat: {latest.get('timestamp', 'tidak diketahui')}; "
+            f"status: {latest.get('status', 'tidak diketahui')}. "
+            "Provider/model sebenarnya dan biaya belum diverifikasi; "
+            "hasil konsultasi bukan bukti peningkatan kemampuan."
+        )
+    else:
+        ai_used = "Belum ada bukti konsultasi AI yang tercatat."
+
+    return {
+        "doing": doing,
+        "doing_status": doing_status,
+        "solving": solving,
+        "adding": adding,
+        "removing": removing,
+        "ai_used": ai_used,
+    }
+
+
+def parse_logs_to_stories(raw_lines: list[str]) -> list[dict]:
+    """Mengubah log teknis rumit menjadi cerita aktivitas yang mudah dipahami manusia."""
+    stories = []
+    for line in raw_lines:
+        line_clean = re.sub(r"^\[.*?\]\s*\[Daemon\]\s*", "", line).strip()
+        if not line_clean:
+            continue
+
+        if "Executing Autonomous Software-Development" in line_clean:
+            stories.append({
+                "type": "think",
+                "icon": "🧠",
+                "title": "Merancang Pembaruan Kode Baru",
+                "desc": "ACE sedang menganalisis titik kelemahan logika sebelumnya.",
+                "badge": "Riset Kode"
+            })
+        elif "Problem:" in line_clean:
+            prob = line_clean.replace("Problem:", "").strip()
+            stories.append({
+                "type": "target",
+                "icon": "🎯",
+                "title": f"Tantangan: {prob}",
+                "desc": "Mencari cara agar logika penalaran tidak mentok di pola yang sama.",
+                "badge": "Fokus"
+            })
+        elif "Hypothesis:" in line_clean:
+            hyp = line_clean.replace("Hypothesis:", "").strip()
+            stories.append({
+                "type": "idea",
+                "icon": "💡",
+                "title": "Merumuskan Ide Solusi Baru",
+                "desc": hyp[:120] + ("..." if len(hyp) > 120 else ""),
+                "badge": "Hipotesis"
+            })
+        elif "Decision:   ACCEPTED" in line_clean or "Decision: ACCEPTED" in line_clean:
+            stories.append({
+                "type": "success",
+                "icon": "🎉",
+                "title": "Solusi Berhasil Diterima!",
+                "desc": "Patch lulus tes internal; peningkatan kemampuan belum terverifikasi.",
+                "badge": "BERHASIL"
+            })
+        elif "Push successful for Cycle" in line_clean:
+            cycle_match = re.search(r"Cycle\s+(\d+)", line_clean)
+            c_num = cycle_match.group(1) if cycle_match else ""
+            stories.append({
+                "type": "saved",
+                "icon": "📦",
+                "title": f"Hasil Evolusi Siklus {c_num} Disimpan",
+                "desc": "Checkpoint tersimpan di Git; belum membuktikan perbaikan algoritma.",
+                "badge": "Tersimpan"
+            })
+        elif "(Param):" in line_clean:
+            task_match = re.search(r"Task=([\w_]+)", line_clean)
+            gain_match = re.search(r"Gain=([+-]?[\d\.]+)", line_clean)
+            t_name = task_match.group(1) if task_match else "tugas"
+            g_val = gain_match.group(1) if gain_match else "+0.00"
+            stories.append({
+                "type": "test",
+                "icon": "🔬",
+                "title": f"Uji Kemampuan: {t_name}",
+                "desc": f"Menguji variasi parameter matematika (Peningkatan: {g_val}).",
+                "badge": "Uji Coba"
+            })
+        elif "External verifier: ALL CHECKS PASSED" in line_clean:
+            stories.append({
+                "type": "shield",
+                "icon": "🛡️",
+                "title": "Audit Integritas Lolos 100%",
+                "desc": "Verifikasi internal dilaporkan lulus; bukan konfirmasi ilmiah.",
+                "badge": "Aman"
+            })
+        elif "Host Status:" in line_clean:
+            ram_match = re.search(r"RAM:\s*(\d+)MB", line_clean)
+            ram_str = f"{ram_match.group(1)} MB" if ram_match else "Lega"
+            stories.append({
+                "type": "health",
+                "icon": "🔋",
+                "title": "Kondisi HP Prima & Terkendali",
+                "desc": f"RAM bebas {ram_str}; suhu tidak diukur oleh dashboard.",
+                "badge": "Kesehatan"
+            })
+        elif "Janitor:" in line_clean:
+            stories.append({
+                "type": "broom",
+                "icon": "🧹",
+                "title": "Pembersihan Otomatis Repositori",
+                "desc": line_clean.replace("Janitor:", "").strip(),
+                "badge": "Kebersihan"
+            })
+
+    return stories[::-1][:10]
+
+
+
+def load_omega_state():
+    """Read the Omega-program state file; (None, None) when absent/unreadable."""
+    if not STATE_PATH.exists():
+        return None, None
+    try:
+        data = json.loads(STATE_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return None, None
+    age = None
+    try:
+        moment = datetime.strptime(
+            str(data.get("generated_at", "")).replace(" WIB", ""), "%Y-%m-%d %H:%M:%S"
+        ).replace(tzinfo=WIB)
+        age = (datetime.now(WIB) - moment).total_seconds()
+    except (ValueError, TypeError):
+        pass
+    return data, age
+
+
+def _rp(value) -> str:
+    try:
+        return "Rp" + f"{int(value):,}".replace(",", ".")
+    except (TypeError, ValueError):
+        return "Rp?"
+
+
+def omega_panels(state: dict):
+    """Map the Omega state file into the SAME five human questions."""
+    gb = state.get("gate_board") or {}
+    gates = gb.get("gates") or {}
+    runs = state.get("runs") or {}
+    v3 = runs.get("abc_v3") or {}
+    r2 = runs.get("round2_guard") or {}
+    kbm = (state.get("venues") or {}).get("kbm") or {}
+    led = state.get("ledger") or {}
+    ops = state.get("operators") or {}
+    board_lines = [
+        f"{g}: {(gates.get(g) or {}).get('status', '?')}"
+        for g in ("G0", "G1", "G2", "G3", "G4", "G5")
+    ]
+    focus = {
+        "doing": (
+            f"Program \u03a9 \u2014 run A/B/C v3 (penentu G2): status {v3.get('status', '?')}, "
+            f"pita {v3.get('band', '?')}, fase {v3.get('phase', '?')} "
+            f"(heartbeat {v3.get('heartbeat_updated_at', '?')}). "
+            f"Gerbang round-2: {r2.get('status', '?')}."
+        ),
+        "doing_status": "PROGRAM \u03a9",
+        "solving": (
+            f"Papan gerbang \u03a9 (per {gb.get('as_of', '?')}): "
+            + "; ".join(board_lines) + "."
+        ),
+        "adding": (
+            f"Venue berjalan: KBM {kbm.get('published_count', '?')} bab terbit "
+            f"({', '.join(kbm.get('published_titles') or [])}); "
+            "Threads & Facebook terjadwal malam ini; register peluang 11 entri (origin share 0.909)."
+        ),
+        "removing": (
+            f"Utang awal: tersisa {_rp(led.get('utang_awal_remaining_rp'))} "
+            f"({led.get('utang_awal_pct', '?')}% tertebus) dari baseline "
+            f"{_rp(led.get('utang_awal_baseline_rp'))}; penghasilan tunai "
+            f"terverifikasi {_rp(led.get('income_total_rp'))}."
+        ),
+        "ai_used": (
+            f"{ops.get('director', '?')}. Model lokal: {ops.get('local_model', '?')}"
+        ),
+    }
+    gen = state.get("generated_at", "?")
+    ts = {
+        "doing": f"sumber: heartbeat run v3 ({v3.get('source_stamp', '?')}); berkas status {gen}",
+        "solving": f"sumber: {gb.get('source', '?')} ({gb.get('source_stamp', '?')}); berkas status {gen}",
+        "adding": f"sumber: KBM state ({kbm.get('source_stamp', '?')}); berkas status {gen}",
+        "removing": f"sumber: ledger ({led.get('source_stamp', '?')}); berkas status {gen}",
+        "ai_used": f"sumber: {ops.get('source', '?')} ({ops.get('source_stamp', '?')})",
+    }
+    return focus, ts, board_lines
+
+
+def apply_omega_overlay(focus: dict):
+    """Fresh state -> Omega panels. Stale state -> honest dead-feed message.
+    Absent state -> the original feed, untouched (fallback)."""
+    state, age = load_omega_state()
+    if state is None:
+        return focus, {"active": False}, {}, []
+    gen = state.get("generated_at", "?")
+    if age is None or age > STATE_STALE_SECONDS:
+        msg = (
+            f"DATA STATUS \u03a9 BASI \u2014 terakhir dibuat {gen}. Panel ini tidak "
+            "menampilkan angka lama sebagai angka segar; segarkan dengan "
+            "dashboard_state_build.py."
+        )
+        stale = {k: msg for k in ("doing", "solving", "adding", "removing", "ai_used")}
+        stale["doing_status"] = "DATA BASI"
+        ts = {k: f"berkas status terakhir: {gen}" for k in stale if k != "doing_status"}
+        return stale, {"active": True, "stale": True, "generated_at": gen}, ts, []
+    focus2, ts, board_lines = omega_panels(state)
+    meta = {"active": True, "stale": False, "generated_at": gen}
+    return focus2, meta, ts, board_lines
+
+
+def render_page() -> str:
+    """Serve the template with the current focus values as first paint."""
+    page = HTML_TEMPLATE
+    try:
+        data = get_dashboard_data()
+    except Exception:
+        return page
+    focus = data.get("focus") or {}
+    placeholders = (
+        ("Menganalisis dan merancang ide kode baru...", "doing"),
+        ("Mendobrak kejenuhan representasi modular...", "solving"),
+        ("Menambahkan 1 patch kode baru dan commit permanen...", "adding"),
+        ("Memangkas snapshot usang dan menghapus cache sampah...", "removing"),
+        ("PowerBrain (GPT-5/4) & Pollinations AI (100% Gratis)...", "ai_used"),
+    )
+    for placeholder, key in placeholders:
+        if key in focus:
+            page = page.replace(placeholder, html.escape(str(focus[key])))
+    ts = data.get("focus_ts") or {}
+    for token, key in (
+        ("%%STAMP_DOING%%", "doing"), ("%%STAMP_SOLVING%%", "solving"),
+        ("%%STAMP_ADDING%%", "adding"), ("%%STAMP_REMOVING%%", "removing"),
+        ("%%STAMP_AI%%", "ai_used"),
+    ):
+        page = page.replace(token, html.escape(str(ts.get(key, ""))))
+    lines = data.get("omega_board_lines") or []
+    board = "\n".join(lines) if lines else (
+        "Status \u03a9 belum tersedia \u2014 panel di atas memakai umpan lama apa adanya.")
+    page = page.replace("%%OMEGA_BOARD%%", html.escape(board))
+    return page
+
+
+def get_dashboard_data() -> dict:
+    heartbeat = load_json(REPO_ROOT / "checkpoints" / "self_dev" / "daemon_heartbeat.json")
+    research_state = load_json(REPO_ROOT / "checkpoints" / "self_dev" / "v03_researcher_state.json")
+    
+    log_file = REPO_ROOT / "checkpoints" / "self_dev" / "daemon.log"
+    log_lines = []
+    if log_file.exists():
+        try:
+            lines = log_file.read_text(encoding="utf-8").splitlines()
+            log_lines = lines[-60:]
+        except Exception:
+            pass
+
+    last_beacon = heartbeat.get("timestamp", "")
+    try:
+        moment = datetime.fromisoformat(str(last_beacon).replace("Z", "+00:00"))
+        age_seconds = (datetime.now(timezone.utc) - moment).total_seconds()
+        live_status = 0 <= age_seconds <= 90
+    except (ValueError, TypeError):
+        live_status = False
+
+    stories = parse_logs_to_stories(log_lines)
+    focus = get_focus_breakdown(log_lines, research_state, heartbeat, live_status)
+    focus, omega_meta, focus_ts, omega_lines = apply_omega_overlay(focus)
+
+    completed_cycles = int(heartbeat.get("last_cycle_id") or 0)
+    soft_cycles = int(research_state.get("completed_cycles") or 0)
+    level = max(1, completed_cycles // 50)
+    level_progress = (completed_cycles % 50) * 2
+
+    return {
+        "heartbeat": heartbeat,
+        "research_state": research_state,
+        "live_status": live_status,
+        "completed_cycles": completed_cycles,
+        "soft_cycles": soft_cycles,
+        "level": level,
+        "level_progress": level_progress,
+        "focus": focus,
+        "omega": omega_meta,
+        "focus_ts": focus_ts,
+        "omega_board_lines": omega_lines,
+        "stories": stories,
+        "raw_logs": log_lines[-20:],
+        "timestamp": time.strftime("%H:%M:%S UTC", time.gmtime()),
+    }
+
+
+HTML_TEMPLATE = """<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ACE — Pusat Pantauan Evolusi Mandiri</title>
+    <style>
+        :root {
+            --bg: #090d16;
+            --surface: #131b2e;
+            --surface-hover: #1b2640;
+            --border: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.35);
+            --accent: #06b6d4;
+            --green: #10b981;
+            --yellow: #f59e0b;
+            --purple: #a855f7;
+            --red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg) 60%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 16px;
+            padding-bottom: 50px;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0 16px 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 0 16px var(--primary-glow);
+        }
+
+        .brand-text h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-text p {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #34d399;
+            box-shadow: 0 0 8px #34d399;
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.8; }
+        }
+
+        /* Section Title */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 22px 0 10px 0;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 5 Key Focus Cards */
+        .focus-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .focus-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .focus-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .focus-doing::before { background: var(--accent); }
+        .focus-solving::before { background: var(--yellow); }
+        .focus-adding::before { background: var(--green); }
+        .focus-removing::before { background: var(--purple); }
+        .focus-ai::before { background: var(--primary); }
+
+        .focus-tag {
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tag-doing { color: var(--accent); }
+        .tag-solving { color: var(--yellow); }
+        .tag-adding { color: var(--green); }
+        .tag-removing { color: #c084fc; }
+        .tag-ai { color: #818cf8; }
+
+        .focus-body {
+            font-size: 0.82rem;
+            color: var(--text-main);
+            line-height: 1.45;
+            font-weight: 500;
+        }
+
+        /* Level Card */
+        .level-card {
+            background: linear-gradient(145deg, rgba(30, 27, 75, 0.7), rgba(19, 27, 46, 0.9));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .level-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .level-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .level-number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #fff, #c7d2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            height: 100%;
+            border-radius: 10px;
+            width: 50%;
+            transition: width 0.6s ease;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .level-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* 3-Column Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 10px;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: 2px;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Story Feed */
+        .story-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .story-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .story-icon {
+            font-size: 18px;
+            margin-top: 1px;
+        }
+
+        .story-content {
+            flex: 1;
+        }
+
+        .story-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .story-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .story-badge {
+            font-size: 0.65rem;
+            padding: 2px 7px;
+            border-radius: 6px;
+            background: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+            font-weight: 600;
+        }
+
+        .story-desc {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Raw log accordion */
+        .toggle-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .raw-log-box {
+            display: none;
+            background: #000;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 0.65rem;
+            color: #a3e635;
+            max-height: 160px;
+            overflow-y: auto;
+            margin-top: 8px;
+            white-space: pre-wrap;
+        }
+
+        .focus-stamp {
+            font-size: 0.62rem;
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        .omega-board {
+            white-space: pre-line;
+            font-size: 0.8rem;
+            line-height: 1.55;
+            margin-top: 8px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="brand">
+                <div class="logo-icon">🧬</div>
+                <div class="brand-text">
+                    <h1>ACE Evolution</h1>
+                    <p>Visi Riset: OAIE Mandiri</p>
+                </div>
+            </div>
+            <div class="status-pill">
+                <div class="pulse-dot"></div>
+                <span id="healthLabel">BERPIKIR</span>
+            </div>
+        </div>
+
+        <!-- 5 Key Focus Cards: Apa yang sedang dilakukan, diselesaikan, ditambah, dikurangi, dipakai -->
+        <div class="section-header" style="margin-top: 6px;">
+            <div class="section-title">🔍 Status Live: Apa yang Sedang Dikerjakan?</div>
+            <span style="font-size: 0.65rem; color: #64748b;" id="syncTime">Auto-refresh 3s</span>
+        </div>
+        <div class="focus-stack">
+            <!-- 1. Sedang Melakukan Apa -->
+            <div class="focus-card focus-doing">
+                <div class="focus-tag tag-doing">⚡ 1. Sedang Melakukan Apa?</div>
+                <div class="focus-body" id="focusDoing">Menganalisis dan merancang ide kode baru...</div>
+                <div class="focus-stamp" id="stampDoing">%%STAMP_DOING%%</div>
+            </div>
+
+            <!-- 2. Menyelesaikan Masalah Apa -->
+            <div class="focus-card focus-solving">
+                <div class="focus-tag tag-solving">🎯 2. Menyelesaikan Masalah Apa?</div>
+                <div class="focus-body" id="focusSolving">Mendobrak kejenuhan representasi modular...</div>
+                <div class="focus-stamp" id="stampSolving">%%STAMP_SOLVING%%</div>
+            </div>
+
+            <!-- 3. Menambah Apa -->
+            <div class="focus-card focus-adding">
+                <div class="focus-tag tag-adding">➕ 3. Menambah Apa?</div>
+                <div class="focus-body" id="focusAdding">Menambahkan 1 patch kode baru dan commit permanen...</div>
+                <div class="focus-stamp" id="stampAdding">%%STAMP_ADDING%%</div>
+            </div>
+
+            <!-- 4. Mengurangi / Membersihkan Apa -->
+            <div class="focus-card focus-removing">
+                <div class="focus-tag tag-removing">➖ 4. Mengurangi / Membersihkan Apa?</div>
+                <div class="focus-body" id="focusRemoving">Memangkas snapshot usang dan menghapus cache sampah...</div>
+                <div class="focus-stamp" id="stampRemoving">%%STAMP_REMOVING%%</div>
+            </div>
+
+            <!-- 5. Menggunakan AI Apa -->
+            <div class="focus-card focus-ai">
+                <div class="focus-tag tag-ai">🤖 5. Menggunakan AI Apa?</div>
+                <div class="focus-body" id="focusAI">PowerBrain (GPT-5/4) & Pollinations AI (100% Gratis)...</div>
+                <div class="focus-stamp" id="stampAI">%%STAMP_AI%%</div>
+            </div>
+        </div>
+
+        <!-- Papan Gerbang Omega -->
+        <div class="level-card" id="omegaBoardCard">
+            <div class="level-title">\U0001F9ED Papan Gerbang \u03a9 \u2014 Program Saat Ini</div>
+            <div class="omega-board" id="omegaBoard">%%OMEGA_BOARD%%</div>
+        </div>
+
+        <!-- Level Progress -->
+        <div class="level-card">
+            <div class="level-top">
+                <div>
+                    <div class="level-title">Tahap Generasi Evolusi</div>
+                    <div class="level-number" id="levelDisplay">Generasi 6</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.7rem; color: var(--text-muted);">Total Ide Selesai</div>
+                    <div style="font-size: 1.1rem; font-weight: 800; color: #fff;" id="cycleCount">308</div>
+                </div>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBar" style="width: 84%;"></div>
+            </div>
+            <div class="level-desc">
+                <span>Progres Menuju Generasi Berikutnya</span>
+                <span id="progressText">84%</span>
+            </div>
+        </div>
+
+        <!-- Quick 3 Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Kecepatan Belajar</div>
+                <div class="stat-val" id="speedVal">60/jam</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">RAM Termux</div>
+                <div class="stat-val" id="ramVal">24 MB</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Suhu HP & Daya</div>
+                <div class="stat-val" style="color: #94a3b8;">N/A</div>
+            </div>
+        </div>
+
+        <!-- Storyline Feed -->
+        <div class="section-header">
+            <div class="section-title">📖 Catatan Aktivitas Terkini</div>
+        </div>
+        <div class="story-list" id="storyList">
+            <div style="text-align: center; color: #64748b; font-size: 0.75rem; padding: 20px;">
+                Memuat aktivitas terbaru ACE...
+            </div>
+        </div>
+
+        <!-- Mode Ahli (Raw Log) -->
+        <button class="toggle-btn" onclick="toggleRawLog()">🛠️ Intip Log Terminal Teknis</button>
+        <div class="raw-log-box" id="rawLogBox">Memuat log mentah...</div>
+
+        <div class="footer">
+            ACE Autonomous Capability Evolution • Berjalan di Android Termux
+        </div>
+    </div>
+
+    <script>
+        function toggleRawLog() {
+            const box = document.getElementById('rawLogBox');
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+
+        async function updateDashboard() {
+            try {
+                const res = await fetch('/api/data');
+                const data = await res.json();
+                
+                const hb = data.heartbeat || {};
+                const stats = hb.resource_stats || {};
+                const focus = data.focus || {};
+                
+                // 5 Key Focus Updates
+                document.getElementById('focusDoing').textContent = focus.doing || '-';
+                document.getElementById('focusSolving').textContent = focus.solving || '-';
+                document.getElementById('focusAdding').textContent = focus.adding || '-';
+                document.getElementById('focusRemoving').textContent = focus.removing || '-';
+                document.getElementById('focusAI').textContent = focus.ai_used || '-';
+                const omegaLive = data.omega && data.omega.active && !data.omega.stale;
+                document.getElementById('healthLabel').textContent = (data.live_status || omegaLive) ? (focus.doing_status || 'AKTIF') : 'OFFLINE / BELUM TERVERIFIKASI';
+                document.querySelector('.pulse-dot').style.display = data.live_status ? '' : 'none';
+
+                // Cycles & Levels
+                const cycles = Number.isFinite(data.completed_cycles) ? data.completed_cycles : 0;
+                document.getElementById('cycleCount').textContent = cycles;
+                document.getElementById('levelDisplay').textContent = 'Generasi ' + data.level;
+                document.getElementById('progressBar').style.width = data.level_progress + '%';
+                document.getElementById('progressText').textContent = data.level_progress + '%';
+
+                // Stats
+                const tput = Number(hb.cycle_throughput_per_hour || 0);
+                document.getElementById('speedVal').textContent = tput.toFixed(0) + '/jam';
+                document.getElementById('ramVal').textContent = Number(stats.rss_memory_mb || 0).toFixed(0) + ' MB';
+                document.getElementById('syncTime').textContent = 'Update: ' + data.timestamp;
+                const tsMap = data.focus_ts || {};
+                const stampIds = {doing: 'stampDoing', solving: 'stampSolving', adding: 'stampAdding', removing: 'stampRemoving', ai_used: 'stampAI'};
+                for (const k in stampIds) { const el = document.getElementById(stampIds[k]); if (el) el.textContent = tsMap[k] || ''; }
+                const boardEl = document.getElementById('omegaBoard');
+                if (boardEl && data.omega_board_lines && data.omega_board_lines.length) boardEl.textContent = data.omega_board_lines.join('\n');
+
+                // Stories Feed
+                const list = document.getElementById('storyList');
+                if (data.stories && data.stories.length > 0) {
+                    list.innerHTML = data.stories.map(s => `
+                        <div class="story-card">
+                            <div class="story-icon">${s.icon}</div>
+                            <div class="story-content">
+                                <div class="story-header">
+                                    <div class="story-title">${s.title}</div>
+                                    <div class="story-badge">${s.badge}</div>
+                                </div>
+                                <div class="story-desc">${s.desc}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                // Raw logs
+                const rawBox = document.getElementById('rawLogBox');
+                if (data.raw_logs) {
+                    rawBox.textContent = data.raw_logs.join('\\n');
+                }
+
+            } catch (err) {
+                console.error("Gagal sinkronasi dashboard:", err);
+            }
+        }
+
+        setInterval(updateDashboard, 3000);
+        updateDashboard();
+    </script>
+</body>
+</html>
+"""
+
+
+class DashboardHandler(http.server.BaseHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == "/" or self.path == "/index.html":
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+            self.wfile.write(render_page().encode("utf-8"))
+        elif self.path == "/api/data":
+            data = get_dashboard_data()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(json.dumps(data).encode("utf-8"))
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+    def log_message(self, format, *args):
+        pass
+
+
+class ReusableTCPServer(socketserver.TCPServer):
+    allow_reuse_address = True
+
+
+def run_dashboard(port: int = PORT, host: str = HOST):
+    print(f"\n🚀 [ACE Web Dashboard V2] Berhasil dinyalakan di: http://localhost:{port}")
+    print("   Buka browser di HP Anda untuk melihat tampilan visual real-time.\n")
+    with ReusableTCPServer((host, port), DashboardHandler) as httpd:
+        httpd.serve_forever()
+
+
+if __name__ == "__main__":
+    run_dashboard()

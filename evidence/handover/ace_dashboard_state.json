@@ -1,0 +1,139 @@
+{
+  "schema": "ace.dashboard_state.v1",
+  "generated_at": "2026-11-13 16:52:20 WIB",
+  "gate_board": {
+    "as_of": "Addendum 58 (2026-11-13)",
+    "source": "staging/add58/docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM58.md",
+    "source_stamp": "2026-11-13 11:08:12 WIB",
+    "add58_phrase_verified": {
+      "G3": true,
+      "G4": true,
+      "G5": true
+    },
+    "gates": {
+      "G0": {
+        "status": "PASS (session-scoped only)",
+        "source": "program record, Addenda 1-53"
+      },
+      "G1": {
+        "status": "MEASURED — DEMONSTRATED",
+        "source": "Stage J, Addendum 32"
+      },
+      "G2": {
+        "status": "MEASURED — null x2 (pilot v1, v2); v3 decider IN FLIGHT",
+        "source": "Addendum 45 + v3 preregistration (protocol 8591b938…)"
+      },
+      "G3": {
+        "status": "MEASURED — SPECIALIZATION",
+        "source": "Addendum 58"
+      },
+      "G4": {
+        "status": "MEASURED — INHERITANCE_DEMONSTRATED",
+        "source": "Addendum 58"
+      },
+      "G5": {
+        "status": "NOT_ASSESSED",
+        "source": "Addendum 58"
+      }
+    },
+    "note": "Papan gerbang hanya bergerak lewat addendum terverifikasi dua pemeriksa; OAIE belum terbukti (oaie_proven=false)."
+  },
+  "runs": {
+    "abc_v3": {
+      "source": "abc-v3-run-state/heartbeat.json",
+      "source_stamp": "2026-11-13 16:50:34 WIB",
+      "evidence_exists": false,
+      "band": 20261503,
+      "phase": "arm_C",
+      "heartbeat_updated_at": "2026-11-13 09:50:34",
+      "checkpoints": [
+        "arm_20261501_A.json",
+        "arm_20261501_B.json",
+        "arm_20261501_C.json",
+        "arm_20261502_A.json",
+        "arm_20261502_B.json",
+        "arm_20261502_C.json",
+        "arm_20261503_A.json",
+        "arm_20261503_B.json",
+        "band_20261501.json",
+        "band_20261502.json",
+        "discovery_20261501.json",
+        "discovery_20261502.json",
+        "discovery_20261503.json"
+      ],
+      "status": "RUNNING"
+    },
+    "round2_guard": {
+      "source": "round2-gate-run",
+      "source_stamp": "2026-11-13 16:33:45 WIB",
+      "kernel_results_bytes": 0,
+      "guard_outputs": [
+        "app.json",
+        "guard1.json",
+        "guard2.json",
+        "guard3.json"
+      ],
+      "status": "guard outputs present"
+    }
+  },
+  "venues": {
+    "kbm": {
+      "source": "handover/KBM_SERIALISASI_STATE.md",
+      "source_stamp": "2026-11-13 12:40:41 WIB",
+      "published_count": 3,
+      "published_titles": [
+        "Malam Aku Diusir dari Rumah Itu",
+        "Kos Kecil, Dapur Orang, Kesempatan Pertama",
+        "Nama yang Tak Pernah Disebut"
+      ],
+      "next_in_queue": [
+        "4",
+        "5"
+      ],
+      "cadence": "2 bab/hari (cron kbm-serial-harian); Bab 8 = ambang monetisasi"
+    },
+    "threads": {
+      "source": "cron runonce defs (goal crons) + MEMORY record",
+      "source_stamp": "2026-11-13 16:52:20 WIB",
+      "first_post": "Terbit 2026-11-13 ~00:33 WIB di @dianzherdiana16 (kode undangan di self-reply pertama)",
+      "scheduled_tonight": [
+        "Threads UTAMA — utas tutorial daftar 19.30 (menggantikan F1)",
+        "Threads @jejaktaaruf — pos pertama B1 + self-reply undangan 21.15",
+        "Threads — delta konsolidasi kampanye tutorial (metrik 24 jam + log)",
+        "Threads @mellowdymusik — pos pertama A1 + self-reply undangan 20.45",
+        "Threads @silentofnectares — varian tutorial suara Nectares 20.15",
+        "Threads — sapuan balasan MALAM kampanye (21.32)",
+        "Threads — sapuan balasan PAGI kampanye (08.30)"
+      ]
+    },
+    "facebook": {
+      "source": "cron runonce defs (goal crons) + FACEBOOK_PAGE_BASELINE_20261113.md",
+      "source_stamp": "2026-11-13 16:52:20 WIB",
+      "scheduled_verifications": [
+        "Verifikasi tayang A2/A3/A4 Anhedonia + delta tautan ke hub",
+        "Verifikasi tayang G2/G3/G4 Goresan + delta tautan ke hub",
+        "Baca komentar P1 (~48 jam) + draf Episode 2 ke hub",
+        "Verifikasi tayang P2/P3 Facebook + delta tautan ke hub",
+        "Verifikasi tayang T2/T3 Teman + delta tautan ke hub"
+      ],
+      "mission_note": "Misi $500 di profil Facebook Pro — syarat BELUM terverifikasi (menunggu panel misi pemilik); profil utama gerbang-kualitas."
+    }
+  },
+  "ledger": {
+    "source": "handover/LEDGER_PENGHASILAN.md",
+    "source_stamp": "2026-11-13 02:40:20 WIB",
+    "income_total_rp": 0,
+    "utang_awal_baseline_rp": 4208328,
+    "utang_awal_paid_rp": 0,
+    "utang_awal_remaining_rp": 4208328,
+    "utang_awal_pct": 0.0,
+    "coverage_note": "Rasio cakupan biaya ACE: BELUM BERMAKNA (pembilang Rp0, penyebut Rp0 tercatat)."
+  },
+  "operators": {
+    "source": "perintah pemilik 2026-11-13 (ruang diskusi + MEMORY.md)",
+    "source_stamp": "2026-11-13 11:03 WIB",
+    "director": "Muse — Ian (ruang eksekusi utama) + ila (direktur program, ruang diskusi)",
+    "local_model": "Qwen3-8B (direktur riset lokal) — ISTIRAHAT TOTAL atas perintah pemilik; tidak ada run model lokal berjalan",
+    "note": "Multi-brain sovereignty: otak adalah organ tergantikan; identitas ACE hidup di konstitusi, ledger, dan memorinya."
+  }
+}

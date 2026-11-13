@@ -1,0 +1,38 @@
+<!-- excerpt of full render; full page sha256 e4c6f6f93dd6901f181ae4ec0a21961c4459e3e17b8e4cb397f30ae996f82d2b, 21062 bytes, fetched in-sandbox from 127.0.0.1:8081 -->
+        .focus-body {
+            font-size: 0.82rem;
+            color: var(--text-main);
+--
+                <div class="focus-body" id="focusDoing">Program Ω — run A/B/C v3 (penentu G2): status RUNNING, pita 20261501, fase arm_C (heartbeat 2026-11-13 07:26:14). Gerbang round-2: not started — antre di belakang run v3.</div>
+                <div class="focus-stamp" id="stampDoing">sumber: heartbeat run v3 (2026-11-13 14:26:14 WIB); berkas status 2026-11-13 14:53:10 WIB</div>
+            </div>
+--
+                <div class="focus-body" id="focusSolving">Papan gerbang Ω (per Addendum 58 (2026-11-13)): G0: PASS (session-scoped only); G1: MEASURED — DEMONSTRATED; G2: MEASURED — null x2 (pilot v1, v2); v3 decider IN FLIGHT; G3: MEASURED — SPECIALIZATION; G4: MEASURED — INHERITANCE_DEMONSTRATED; G5: NOT_ASSESSED.</div>
+                <div class="focus-stamp" id="stampSolving">sumber: staging/add58/docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM58.md (2026-11-13 11:08:12 WIB); berkas status 2026-11-13 14:53:10 WIB</div>
+            </div>
+--
+                <div class="focus-body" id="focusAdding">Venue berjalan: KBM 3 bab terbit (Malam Aku Diusir dari Rumah Itu, Kos Kecil, Dapur Orang, Kesempatan Pertama, Nama yang Tak Pernah Disebut); Threads &amp; Facebook terjadwal malam ini; register peluang 11 entri (origin share 0.909).</div>
+                <div class="focus-stamp" id="stampAdding">sumber: KBM state (2026-11-13 12:40:41 WIB); berkas status 2026-11-13 14:53:10 WIB</div>
+            </div>
+--
+                <div class="focus-body" id="focusRemoving">Utang awal: tersisa Rp4.208.328 (0.0% tertebus) dari baseline Rp4.208.328; penghasilan tunai terverifikasi Rp0.</div>
+                <div class="focus-stamp" id="stampRemoving">sumber: ledger (2026-11-13 02:40:20 WIB); berkas status 2026-11-13 14:53:10 WIB</div>
+            </div>
+--
+                <div class="focus-body" id="focusAI">Muse — Ian (ruang eksekusi utama) + ila (direktur program, ruang diskusi). Model lokal: Qwen3-8B (direktur riset lokal) — ISTIRAHAT TOTAL atas perintah pemilik; tidak ada run model lokal berjalan</div>
+                <div class="focus-stamp" id="stampAI">sumber: perintah pemilik 2026-11-13 (ruang diskusi + MEMORY.md) (2026-11-13 11:03 WIB)</div>
+            </div>
+        <div class="level-card" id="omegaBoardCard">
+            <div class="level-title">🧭 Papan Gerbang Ω — Program Saat Ini</div>
+            <div class="omega-board" id="omegaBoard">G0: PASS (session-scoped only)
+G1: MEASURED — DEMONSTRATED
+G2: MEASURED — null x2 (pilot v1, v2); v3 decider IN FLIGHT
+G3: MEASURED — SPECIALIZATION
+G4: MEASURED — INHERITANCE_DEMONSTRATED
+G5: NOT_ASSESSED</div>
+        </div>
+
+        <!-- Level Progress -->
+--
+                const boardEl = document.getElementById('omegaBoard');
+                if (boardEl && data.omega_board_lines && data.omega_board_lines.length) boardEl.textContent = data.omega_board_lines.join('

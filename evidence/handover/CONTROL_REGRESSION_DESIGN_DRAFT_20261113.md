@@ -1,0 +1,329 @@
+# ACE Ω — Design Draft: The Control-Regression Phenomenon Under Catalog Enrichment (2026-11-13)
+
+**Status: DRAFT — design only. No run, no kernel submission, no
+preregistration is locked by this document.**
+Agenda item born in Addendum 59 §2 (falsification consequence of
+abc-v3-01), per the agenda-source doctrine. Recorded by Ian (main
+execution room), Muse (ACE Omega operator).
+
+**Fences, stated before anything else.** This item is NOT a re-run of
+A/B/C v3 and must never become one: bands 20261501–20261503 are not
+re-measured, the v3 kernel record is not touched, and no outcome of
+this item moves the G2 board (G2 stands MEASURED — NOT_DEMONSTRATED,
+Addendum 59). The replay stages below are forensic: they re-execute
+already-recorded configurations to explain an already-recorded
+result. They produce design evidence only, never a gate measurement.
+
+---
+
+## 1. Phenomenon statement (measured facts, verified from run state)
+
+In abc-v3-01 (completed 2026-11-13; Addendum 59), the three arms share
+one substrate and one score-call budget (cap 4,000 per task, 60 s wall
+per task): A = catalog-only; B = catalog + admitted discovered
+singles; C = B + admitted chains with per-step re-enumeration. The
+solver is `solve_task` in `operator_discovery.py` (branch
+`research/ace-omega-abc-v3-design-20261113`): greedy best-first, 6
+rounds, frontier of the top 4, scored on shown cases; a task counts
+solved iff the returned code passes ALL holdout cases.
+
+| Band | Admitted catalog | Control A | Control B | Control C | Band DI |
+|---|---|---|---|---|---|
+| 20261501 | 60 keys + 1 chain | **34/34** | **32/34** | **32/34** | −5.88pp |
+| 20261502 | 6 keys + 2 chains | 34/34 | 34/34 | 34/34 | 0.0 |
+| 20261503 | 6 keys + 1 chain | 33/33 | 33/33 | 33/33 | 0.0 |
+
+Pooled control: A 101/101, B 99/101, C 99/101. The pooled
+differentiation index DI = −1.9801980198019749pp binds on exactly this
+control margin (the effect terms are +85.0 and +95.0); it is the sole
+reason abc-v3-01 reads NOT_DEMONSTRATED. Band 20261501's catalog
+digest: `a67685635cffb2c20a1c48bedd797b34ab71e93d7325eaae734231036418ee68`.
+
+Three further facts from the checkpoints, all load-bearing:
+
+1. **No timeouts.** The `timeouts` lists are empty for every arm in
+   every band. The 2 failing control solves in band 20261501 were not
+   cut off by the 60 s wall; each terminated inside the solver's own
+   loop (round exhaustion, frontier exhaustion, or shown-perfect
+   early exit) and returned a best code that fails holdout.
+2. **The regressed task identities are NOT recorded.** The driver
+   (`abc_v3_run.py`) persisted control results as aggregate counts
+   only; the arm checkpoints hold `counts` / `control_counts` /
+   `timeouts`, and traces were recorded only for arm B's *evaluation*
+   solves. Therefore this design states explicitly: **which 2 of the
+   34 control tasks arms B and C failed is unknown, and whether B and
+   C failed the SAME 2 tasks is unknown** — only |failed_B| =
+   |failed_C| = 2 over the same 34-task set is measured. The control
+   set itself is deterministic and reconstructible
+   (`build_universe(seed=20261501)` → the driver's `split_universe` →
+   subset `catalog_control`, 34 tasks). Recovering the identities is
+   Stage 0 of the plan in §4, and it is a defect this item exposes in
+   its own right: per-task control outcomes must be recorded by any
+   future run (see §5, no-survivor consequence).
+3. **A pre-existing discriminating observation.** The discovery
+   checkpoint for band 20261501 records the discovery phase's own
+   control measurement — baseline 34, extended 32 — and that
+   measurement was made with the **uncapped** solver
+   (`run_discovery` calls `solve_task` with `max_score_calls=None`,
+   the v4 behaviour), using all admitted keys + chains (arm C's
+   variant configuration). The same −2 therefore appears with no
+   4,000-call cap in force. Caveats, stated plainly: the identities
+   are unrecorded there too, so identity with the arm failures is
+   unproven; and "uncapped" removes only the score-call cap — the
+   6-round loop, frontier-4, and shown-perfect early exit still bound
+   the search. This observation weakens the narrow cap-truncation
+   form of M1 (§2) before any new work; it does not kill the broader
+   bounded-loop form.
+
+The dose pattern is a prior, not a conclusion: regression appears
+only in the one band whose admitted catalog is an order of magnitude
+larger (60 keys vs 6). All three candidate mechanisms are
+size-sensitive, and so is "no phenomenon below some catalog size";
+the pattern alone separates nothing.
+
+## 2. Solver mechanics the mechanisms act through
+
+Read from the run's own solver source (wt-abcv3,
+`operator_discovery.py::solve_task`); every mechanism below is a
+claim about these exact lines, not about search in general.
+
+- **Enumeration order.** Per frontier code, variants are generated
+  as: baseline variants first, then one variant per extra key in
+  `extra_keys` order, then one per extra chain. A global `seen` set
+  dedups by code text; first source wins the provenance.
+- **Cap break.** Each round scores candidates in enumeration order
+  and **breaks** the scoring loop when `calls >= max_score_calls`.
+  Candidates past the break are never scored that round — and,
+  having been added to `seen`, can never be scored in any later
+  round either. The cap does not merely delay variants; it deletes
+  them.
+- **Selection.** Scored pairs are sorted by shown score descending
+  with a stable sort: **ties resolve by enumeration order**. Best
+  updates only on strict improvement. The loop **exits early when
+  best_score == len(shown_cases)** (shown-perfect), checked at round
+  start.
+- **Frontier.** After scoring, the frontier is the top-4 scored
+  candidates with score ≥ the (possibly just-updated) best score.
+  Among tied scores, frontier membership is decided by enumeration
+  order.
+
+## 3. Candidate mechanisms, predictions, discriminators
+
+### M1 — Score-call budget contention
+
+The enriched variant stream consumes the search budget — in calls
+(M1a) or in the bounded loop's rounds and frontier slots (M1b) —
+before the catalog-only solution path is scored or expanded, so the
+solver returns a sub-perfect best on tasks arm A solves.
+
+- **M1a (cap truncation).** Falsifiable prediction: replaying a
+  regressed task under its failing arm's configuration with the
+  run's cap terminates with `calls == 4000`, and the variant arm A
+  returns (the A-solution) is absent from the scored log — either
+  never generated, or generated in a round whose scoring loop broke
+  before reaching it (and thus lost via `seen`). Trace signature:
+  **calls-at-termination == cap, A-solution unscored or
+  cap-orphaned.**
+- **M1b (bounded-loop contention).** Prediction: uncapped replay
+  still fails, but the A-solution variant IS scored, with a shown
+  score below that round's frontier cutoff, and the loop terminates
+  by round-limit or frontier exhaustion — the enriched stream spent
+  the 6 rounds / 4 frontier slots elsewhere. Trace signature:
+  **A-solution scored but frontier-starved; termination by round
+  exhaustion, calls below cap or uncapped.**
+- **Discriminators.** Against M2: under M1 the returned best code is
+  never a shown-perfect holdout failure selected over the A-path;
+  the search simply never completes the A-path. Against M3: raising
+  the cap (M1a) or the round/frontier limits (M1b) with enumeration
+  order held fixed recovers the task; pure order permutations with
+  budget structure held fixed do not. Prior evidence (§1, fact 3)
+  already counts against M1a; the replay must confirm or refute it
+  per task, not by counts.
+
+### M2 — Distractor interference
+
+An admitted key or chain generates a variant that scores at or above
+the A-path's candidates on shown cases but is wrong on holdout. In
+this solver the sharp form is premature capture: the distractor
+reaches shown-perfect, becomes best, and the shown-perfect early
+exit ends the search before the genuinely correct variant is found;
+or the distractor's neighbourhood captures the frontier and the
+A-path is never expanded.
+
+- **Falsifiable prediction:** under the failing configuration, the
+  returned best code has shown score == len(shown_cases) and fails
+  ≥1 holdout case; the provenance of the winning improving step is
+  `("key", k)` or `("chain", c)` — an enriched source, not baseline;
+  and removing (blacklisting) exactly that key/chain from the
+  configuration recovers the task, returning arm A's code.
+- **Trace signature: returned code shown-perfect but
+  holdout-failing, winning step provenance enriched, termination by
+  shown-perfect early exit, calls well below cap.**
+- **Discriminators.** Against M1: budget is not exhausted and the
+  A-solution's absence is explained by early exit, not by cap or
+  frontier starvation — blacklisting the distractor recovers the
+  task at the SAME cap and round limits. Against M3: the failure
+  follows the distractor's presence, not its position — permuting
+  `extra_keys` order with the distractor present does not recover
+  the task (the distractor still wins whenever generated), while
+  removing it does.
+
+### M3 — Search-order effects
+
+The catalog's content is innocent; its enumeration order is not.
+Because ties in shown score resolve by enumeration order (stable
+sort), `seen` dedup assigns first-source-wins, frontier membership
+among ties is order-decided, and the cap break cuts by position, a
+different ordering of the same admitted keys/chains selects a
+different winner or a different frontier and loses tasks the
+recorded order's arm A analogue never had at risk.
+
+- **Falsifiable prediction:** replaying a regressed task with
+  identical catalog content, identical cap and loop limits, and only
+  the `extra_keys` order permuted changes the outcome (solved ↔
+  failed) for at least one permutation; the divergence point in the
+  trace is a shown-score tie resolved differently, or a frontier
+  slot assigned differently among tied candidates.
+- **Trace signature: same scored-variant multiset across orders,
+  different returned code; divergence located at a tie.** If the
+  scored set itself changes across orders only because candidates
+  fall on different sides of the cap break, that is recorded as
+  M1a with order as moderator — not M3 proper.
+- **Discriminators.** Against M1: the effect persists with the cap
+  non-binding (calls < cap in every order, or uncapped). Against
+  M2: no single key/chain is necessary for the failure — removing
+  any one enriched source leaves some order that still fails, and
+  the winning variant under the failing order need not be
+  shown-perfect.
+
+## 4. Staged experiment plan
+
+All stages use the run's solver **byte-identical**; instrumentation
+is harness-side only (the stock trace hook plus a wrapped score
+counter and a per-round candidate log recording, per variant: text
+hash, provenance, shown score, scored-vs-cap-skipped, round). Any
+edit to the solver voids the replay as evidence about abc-v3-01.
+
+- **Stage 0 — Identification replay (existing evidence only).**
+  Reconstruct band 20261501's control set deterministically and
+  replay all 34 tasks under configurations A, B, C × {capped 4000,
+  uncapped}, fully instrumented. Deliverables: the regressed task
+  ids per arm; whether B ∩ C fail the same ids; per regressed task —
+  calls at termination, termination reason, winning provenance,
+  returned code's shown/holdout profile. Negative controls: replay
+  bands 20261502/20261503 control sets identically (expect no
+  regression in any configuration). **Reproduction fence:** if
+  replay does not reproduce A 34 / B 32 / C 32 exactly, STOP — the
+  recorded band-1 arms executed across two driver invocations with
+  checkpoint resume after VM reboots; a non-reproducing phenomenon
+  is artifact-suspect and this item closes (§5).
+- **Stage 1 — Mechanism separation (identified tasks only).** Three
+  counterfactual replays per regressed task: (i) budget axis — cap
+  raised to uncapped, then rounds 6→12 and frontier 4→8 (M1a/M1b);
+  (ii) distractor axis — leave-one-out over the winning step's
+  provenance source, then blacklist of the implicated variant (M2);
+  (iii) order axis — ≥8 seeded permutations of `extra_keys` at fixed
+  content and budget (M3). Each task leaves Stage 1 attributed to
+  exactly one mechanism, to a named interaction (e.g. M1a×order), or
+  UNATTRIBUTED.
+- **Stage 2 — Dose-response on existing sets.** Replay band
+  20261501's control tasks under prefix catalogs of the band's
+  admitted keys (k = 0, 6, 12, 24, 48, 60, order as recorded) and
+  locate the onset of regression; the surviving mechanism must
+  predict the onset's trace signature, not merely its existence.
+  Consistency check: bands 2/3's small catalogs over band 1's
+  control tasks (all mechanisms predict no regression; a regression
+  here falsifies the size framing itself).
+- **Stage 3 — Fresh-band confirmation (entry-gated, NOT executed by
+  this draft).** Only if §5's promotion rule fires: a NEW
+  preregistration — fresh seed band, catalog admitted from that
+  band's own discovery, fresh control set with **per-task control
+  outcomes recorded** — in which the surviving mechanism's
+  per-task trace signature is predicted in advance and the §5
+  solver consequence is A/B-tested against the stock solver. This
+  stage is a separate design act; nothing in Stages 0–2 is a gate
+  measurement and nothing here pre-approves it.
+
+## 5. Decision rules and pre-written consequences
+
+Per-task kills (a mechanism is dead for a task when its signature is
+absent under the Stage 1 counterfactual that should reveal it):
+
+- **M1a dies** for a task if capped replay terminates with
+  calls < 4000, or the A-solution appears in the scored log and
+  still loses. (Prior: the uncapped discovery measurement already
+  showed 32/34 at count level; if Stage 0 confirms the same ids
+  fail uncapped, M1a is dead globally.)
+- **M1b dies** for a task if its termination reason is shown-perfect
+  early exit, or if doubling rounds and frontier (uncapped) does
+  not recover it.
+- **M2 dies** for a task if the returned code is not shown-perfect,
+  or its winning provenance is baseline, or blacklisting the
+  winning key/chain does not recover it.
+- **M3 dies** for a task if ≥8 order permutations never change its
+  outcome, or outcomes change only via cap-position changes to the
+  scored set (reclassified M1a×order).
+
+**Promotion rule.** A mechanism is promoted to a Stage 3
+preregistration iff it accounts for **every** identified regressed
+task (if B and C regress on different ids, each id must be
+attributed to the promoted mechanism) **and** its Stage 2
+dose-response prediction holds. If the tasks split across
+mechanisms, the phenomenon is declared MIXED and no mechanism is
+promoted on this evidence alone.
+
+**Pre-written solver-design consequences** (design statements only;
+implementation belongs to a future preregistered change, and the
+regression anchor runs before any changed solver is used to
+measure):
+
+- **If M1 (either form) survives:** budget partitioning per catalog
+  tier — a guaranteed score-call and round share is reserved for
+  baseline variants before any enriched variant is scored
+  (baseline-first quota), or equivalently two-phase solving:
+  catalog-only solve first, and an enriched result may replace the
+  incumbent only under a stricter shown bar.
+- **If M2 survives:** a selection guard — shown-perfect early exit
+  is reserved for baseline-provenance solutions; an
+  enriched-provenance shown-perfect candidate must survive an extra
+  confirmation step (a validation slice disjoint from the shown
+  cases, or one further expansion round) before it can terminate
+  the search.
+- **If M3 survives:** order canonicalization — admitted keys/chains
+  are sorted by a content-derived canonical order before solving,
+  and shown-score ties break by a content hash of the variant text
+  rather than enumeration order, making outcomes order-invariant by
+  construction.
+- **If no mechanism survives, or Stage 0 fails to reproduce:** no
+  solver change. The item closes as ARTIFACT or UNATTRIBUTED with
+  the replay record as its evidence, and one standing consequence
+  still applies, because the identity gap of §1 is a defect
+  regardless of which mechanism is real: **future runs record
+  per-task control outcomes (task id × arm × solved × termination
+  reason) as a required checkpoint field.**
+
+## 6. Honest limits
+
+- **n = 2 tasks, one band, one catalog.** The phenomenon may be two
+  unrelated single-task accidents wearing a shared label; the
+  design's early stages are sized accordingly (replay before any
+  fresh band, always).
+- **The identity gap is real.** Regressed ids and the B∩C overlap
+  are unrecorded; even the suggestive uncapped 32/34 from discovery
+  is count-level only. Any retelling of abc-v3-01 that names
+  specific failed control tasks is inventing them.
+- **Replay determinism is an assumption Stage 0 tests, not a
+  premise.** The solver is deterministic given task set + catalog,
+  but band 20261501's arms ran across invocations 2–3 under
+  checkpoint resume between VM reboots. Non-reproduction is a
+  possible and decisive outcome.
+- **All three mechanisms predict the same dose pattern.** Bands
+  2–3's clean controls are consistent with M1, M2, M3, and with no
+  phenomenon at all; only trace-level signatures separate them,
+  which is why this design spends its effort on instrumentation
+  rather than on more counts.
+- **Worth-it exit.** If Stage 0 does not reproduce, or Stage 1
+  attributes neither task to any mechanism, the item stops: no
+  fresh band, no solver change, record and close. The maximum this
+  phenomenon has earned is the replay; a fresh-band confirmation is
+  earned only by a surviving mechanism with a confirmed signature.
