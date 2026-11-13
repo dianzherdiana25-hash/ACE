@@ -117,8 +117,9 @@ class Fixture:
                         "--source-root", str(self.src),
                         "--out-dir", str(out)])
         report = None
-        if (out / "report.json").is_file():
-            report = json.loads((out / "report.json").read_text(encoding="utf-8"))
+        found = sorted(out.glob("report-*.json"))
+        if found:
+            report = json.loads(found[0].read_text(encoding="utf-8"))
         return code, report
 
     def states(self, report):
@@ -295,8 +296,8 @@ class MetamorphicTests(Base):
     def test_report_is_byte_deterministic(self):
         _, r1 = self.fx.run("out1")
         _, r2 = self.fx.run("out2")
-        b1 = (Path(self.temp.name) / "out1" / "report.json").read_bytes()
-        b2 = (Path(self.temp.name) / "out2" / "report.json").read_bytes()
+        b1 = next((Path(self.temp.name) / "out1").glob("report-*.json")).read_bytes()
+        b2 = next((Path(self.temp.name) / "out2").glob("report-*.json")).read_bytes()
         self.assertEqual(b1, b2)
         self.assertEqual(r1, r2)
 
@@ -432,7 +433,7 @@ class ReportLanguageTests(Base):
     def test_disclaimer_and_no_aggregate_pass(self):
         _, report = self.fx.run()
         self.assertIn("bukan persetujuan", report["disclaimer"])
-        md = (Path(self.temp.name) / "out" / "report.md").read_text(encoding="utf-8")
+        md = next((Path(self.temp.name) / "out").glob("report-*.md")).read_text(encoding="utf-8")
         self.assertIn("bukan persetujuan", md)
         self.assertNotIn('"overall"', json.dumps(report))
         for check in report["checks"]:

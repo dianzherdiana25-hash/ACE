@@ -1,0 +1,61 @@
+{
+ "schema": "ace.preaudit_manifest.v1",
+ "package_id": "bakeoff-records-intake (branch research/ace-omega-bakeoff-records-20261113 @ e8a3feb)",
+ "artifacts": [
+  {
+   "path": "evidence/BAKEOFF02_RATIFIKASI_PREP_20261113.md",
+   "sha256": "772597b3825c8c40bb0d3c3c7c5461ccdf96e10cc2f6ae9524633be30b4a2557",
+   "size_bytes": 5957
+  },
+  {
+   "path": "evidence/bakeoff02_custody_harness.py",
+   "sha256": "e350ad2bcc192688cfaea836e494b43ed5183c749739e10efede89885f26b0ca",
+   "size_bytes": 3890
+  },
+  {
+   "path": "evidence/bakeoff02_custody_record.json",
+   "sha256": "eeee6a24b5bb73d330e26ce2ef45d7713ad9f556d2ff4793e201aa303ecc0f5c",
+   "size_bytes": 553
+  },
+  {
+   "path": "evidence/bakeoff02_dryintake_fix_harness.py",
+   "sha256": "594a61cbae84fe026c7ccd29543d525b214569c8f1271406767ea69c47460aab",
+   "size_bytes": 3403
+  },
+  {
+   "path": "evidence/bakeoff02_dryintake_harness.py",
+   "sha256": "ab4d5a24d2521f3c3a6437fdee2035bdd335219f34087257f654a31643ea4eed",
+   "size_bytes": 2621
+  },
+  {
+   "path": "evidence/bakeoff02_dryintake_record.json",
+   "sha256": "75bfead8f00bb8230c21892691971ea27a994ffa512b927e3fc29d66dbb9b8e7",
+   "size_bytes": 682
+  },
+  {
+   "path": "evidence/bakeoff02_intake_record.json",
+   "sha256": "21dc69d1f62c69aab31ca0e21a8ad60d6897a32f14c71c90149292cba199ea90",
+   "size_bytes": 2273
+  },
+  {
+   "path": "evidence/bakeoff02_preregistration_record.json",
+   "sha256": "fdda52663c83e9d00ac2aab0ddc161d630159cfd352ff64c1c146963d9baf126",
+   "size_bytes": 400
+  },
+  {
+   "path": "evidence/bakeoff02_submit_harness.py",
+   "sha256": "da7a7ab39fd96cc87ae02ca2c5c6cbe859053a3a747c70b5937986f4a8e4899d",
+   "size_bytes": 2960
+  },
+  {
+   "path": "evidence/bakeoff_arena30b_benchmark.json",
+   "sha256": "d09901bb8a2e1488f9926f916a17f1c55248402e34836da08fe56ee2ebe5fc91",
+   "size_bytes": 4120
+  },
+  {
+   "path": "evidence/bakeoff_arena30b_intake_record.json",
+   "sha256": "413084ffac7291a1938d4ab42a3d2ba4bd441e91c09c08089a5fad7ef9224301",
+   "size_bytes": 3050
+  }
+ ]
+}

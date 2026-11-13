@@ -84,3 +84,50 @@ def oracle_rate(pair):
     num, den = pair
     g = math.gcd(num, den)
     return (num // g, den // g)
+
+
+# ---------------------------------------------------------------------------
+# v2 extension (design freeze PREAUDIT_VALIDATOR_V2_DESIGN_FREEZE.md).
+# Written from the freeze text only; shares no code with the validator.
+# ---------------------------------------------------------------------------
+
+def oracle_spec_digest(manifest, validator_source_bytes):
+    """Recompute the validation_spec_digest independently: SHA-256 over the
+    canonical JSON closing evidence closure + ruleset + validator build +
+    configuration. Canonical = sorted keys, Decimals tagged by exact string.
+    """
+    import re
+    from decimal import Decimal
+
+    version_match = re.search(r'VALIDATOR_VERSION = "([^"]+)"',
+                              validator_source_bytes.decode("utf-8"))
+    closure = sorted(
+        [[a["path"], a["sha256"], a["size_bytes"]] for a in manifest["artifacts"]],
+        key=lambda triple: triple[0])
+    closure = [{"path": p, "sha256": h, "size_bytes": n} for p, h, n in closure]
+    spec = {
+        "evidence_closure": closure,
+        "ruleset": {
+            "count_assertions": manifest.get("count_assertions"),
+            "verdict_check": manifest.get("verdict_check"),
+        },
+        "validator_build": {
+            "version": version_match.group(1),
+            "source_sha256": hashlib.sha256(validator_source_bytes).hexdigest(),
+        },
+        "configuration": {
+            "report_schema": "ace.preaudit_report.v2",
+            "manifest_schema": "ace.preaudit_manifest.v1",
+            "reason_code_registry_version": "1",
+            "stage_model_version": "1",
+        },
+    }
+
+    def default(obj):
+        if isinstance(obj, Decimal):
+            return {"__decimal__": str(obj)}
+        raise TypeError(repr(obj))
+
+    blob = json.dumps(spec, sort_keys=True, ensure_ascii=False,
+                      separators=(",", ":"), default=default).encode("utf-8")
+    return hashlib.sha256(blob).hexdigest()

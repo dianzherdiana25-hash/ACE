@@ -91,7 +91,7 @@ class HoldoutFixture:
         out = self.root / "out"
         code = pv.main(["--manifest", str(self.manifest_path),
                         "--source-root", str(self.src), "--out-dir", str(out)])
-        report = json.loads((out / "report.json").read_text(encoding="utf-8"))
+        report = json.loads(next(out.glob("report-*.json")).read_text(encoding="utf-8"))
         return code, {c["check_id"]: c["state"] for c in report["checks"]}, report
 
 
