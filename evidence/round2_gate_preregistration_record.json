@@ -1,0 +1,9 @@
+{
+ "experiment": "round2-gate-01",
+ "text_sha256": "89dbb6f105ebfcb4cc4767abcbbd2a5c0f59bc99193267d5989bc8c8c8668521",
+ "kernel_protocol_hash": "743a2e9c3c9092e9071637ae70ea2866e902bf2158ddad36f34684e55dbab11c",
+ "candidate_digest_kernel": "7cf3b62a05a6550107d723bfbf2761292ac4455d2fff554bc11b911feab2b849",
+ "baseline_digest_kernel": "2652adaf7f4dbbb6d5f03465ac14ae753f7cb9b7cf458a7fb98c200c3466d047",
+ "evaluator_digest": "e08c15860e37765abe6195a438b2db1ade29004b4824fdb57a24cd41a0c3aa3c",
+ "fixture_digest": "7b3af96c87ed57dd8dbcf1a517767ae72ad9f69fa5d1f46568c9061d6d894f3c"
+}
