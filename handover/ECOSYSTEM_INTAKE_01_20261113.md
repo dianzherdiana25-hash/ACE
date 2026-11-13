@@ -260,6 +260,37 @@ Gated/parallel checks: Docker presence in the sandbox
 (unlocks or kills #9 and parts of #6/#8) — one command,
 do it in Wave 1.
 
+## Wave 1 results — config tuning (2026-11-13, evening)
+
+Measured in the sandbox, same pinned b12316 build, same
+A3B Q4_K_M file, `llama-bench -p 512 -n 128`. Recorded
+baseline (arena session, -t 8): pp 6.26, tg 0.91 t/s.
+
+Screening grid (-r 1), pp512 / tg128 t/s: t1 FA-off
+8.62/2.52; t1 FA-on 8.18/2.56; t2 FA-off 7.64/2.05;
+t2 FA-on 7.36/1.96; t4 FA-off 6.83/1.50; t4 FA-on
+6.91/1.48; t8 FA-off 5.81/0.44; t8 FA-on — cell died
+silently after backend load (sandbox service/cgroup
+failure mode), not re-run: FA was a wash at t1/t2/t4
+and t8 was already worst, so it cannot change the
+conclusion. Both metrics fall MONOTONICALLY as
+threads rise — the oversubscription diagnosis is
+confirmed by measurement.
+
+Confirmation of the winning cell (-r 3, t1, default
+KV): **pp 7.96 ± 0.35, tg 2.46 ± 0.10 t/s**. KV cache
+q4_0 at t1 (-r 1): pp 5.36, tg 2.22 — worse on both
+axes; NOT adopted.
+
+**ADOPTED serving configuration for the A3B brain in
+the sandbox home: `-t 1`, flash-attn indifferent,
+default KV.** Bars: tg 2.46 vs the ≥ 1.05 adoption
+bar (2.3×); tg vs recorded baseline = 2.70×; pp
++27% (6.26 → 7.96). Future sandbox benches of this
+brain use -t 1; candidate #2's (ik_llama.cpp) intake
+bench must also sweep threads — a -t 8 comparison
+would measure this artifact, not the engine.
+
 ## Gate checks (2026-11-13, evening)
 
 - **Docker in the sandbox: ABSENT** (verified firsthand
