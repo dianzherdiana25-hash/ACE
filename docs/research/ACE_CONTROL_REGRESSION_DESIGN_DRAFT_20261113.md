@@ -926,3 +926,35 @@ now recorded:
   variation remain estimable with enough
   independent units, precision bounded by
   dependence + systematic bias + budget.
+
+## 19. Harvest #13 from the coordination room (2026-11-14 ~00:48 WIB — PROPOSED design material, not execution)
+
+**Tiered review + integration (PROPOSED**, draft
+parked in the room):
+
+- A Tier × reviewer × required-gate × escalation
+  matrix governs how work is reviewed and
+  integrated.
+- Tier classification is DERIVED from the diff +
+  dependency/dataflow + blast radius — not from
+  folder names, not from author labels.
+- Classification ambiguity RAISES the tier or
+  HOLDS the packet; it never defaults down.
+- An agent may PROPOSE a tier together with its
+  evidence; an agent cannot classify, demote, or
+  approve its own work.
+- FINAL SHARPENING: the review / risk-approval /
+  promotion functions are SEPARATED — but Tier
+  Low does not demand three humans: ONE reviewer
+  independent of the author gives the technical +
+  risk decision inside a valid envelope, then a
+  trusted MECHANICAL gate verifies
+  policy/checks/binding and promotes exactly that
+  artifact. Tier High keeps separation/quorum.
+  No author self-approval at any tier.
+
+Recorded purpose (hub's gloss): this is the
+pattern that keeps routine low-risk work from
+queueing behind a single reviewer while
+authoritative output remains independently
+verified.
