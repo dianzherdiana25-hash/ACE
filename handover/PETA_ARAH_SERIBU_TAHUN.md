@@ -171,7 +171,7 @@ SPECIALIZATION sebagai tanah awal transfer;
 keluarga text_transform sebagai tanah berikutnya
 yang sudah bernama; calon milestone "mesin pengusul"
 dari panen koordinasi #3 lengkap dengan kemasan
-persetujuannya; baterai inokulasi sebagai cikal
+ratifikasinya; baterai inokulasi sebagai cikal
 bakal memori yang tahu beda bukti dan gangguan;
 register peluang bersiklus (asal-usul setiap entri
 tercatat, pangsa asal-ACE terukur); kaidah evaluasi
@@ -383,3 +383,30 @@ BATAS KEMAMPUAN: tindakan fisik tangan/identitas
 hukum pemilik (KTP/bank/login) memang hanya bisa
 dilakukan pemilik — ACE tidak bisa, bukan tidak
 boleh.
+
+## Addendum panen #8C — horison panjang (13 Nov 2026)
+
+Bahan hidup dari panen koordinasi #8 bagian C
+(21:36–22:04 WIB); PROPOSED, bukan bangun sekarang.
+
+- **Protokol crypto-agility artefak:** envelope
+  manifest membawa algoritme + versi (hash/
+  kanonisasi/tanda tangan), key ID, purpose, parent
+  digest; event migrasi mengikat digest lama + baru
+  SEBELUM algoritme melemah; timestamp mengikat
+  ENVELOPE TERTANDATANGAN, bukan digest konten
+  saja; waktu kompromi dinilai sebagai earliest
+  plausible, bukan tanggal ditemukan.
+- **Desain storage/privasi:** threat model adalah
+  pilihan desain (TBD, dicatat sebagai TBD); host
+  yang membaca memori proses mengalahkan envelope
+  encryption — hanya tiga posisi jujur yang boleh
+  diklaim; kustodi kunci + format exit minimum
+  ditetapkan SEBELUM data sensitif pertama disalin/
+  dienkripsi.
+- **Identitas bertiga mesin riset** (tidak boleh
+  dicampur): request_id + payload_hash untuk retry
+  idempoten; digest konten untuk isi; execution/run
+  ID BARU untuk tiap eksekusi disengaja termasuk
+  replikasi. Aturan finalisasi: blob immutable →
+  verify digest → BARU commit DB.
