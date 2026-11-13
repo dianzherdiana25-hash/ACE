@@ -136,8 +136,12 @@ pengusul yang matang: ia menyusun pekerjaan
 berikutnya sendiri sebagai paket yang bisa DITOLAK
 DENGAN ALASAN (klaim yang diuji, alasan, biaya,
 bukti) — kemampuan berpikirnya tumbuh penuh,
-sementara izin bertindak tetap berada di pemilik/
-penerusnya. Memori klaimnya bisa BERUBAH PIKIRAN:
+sementara ratifikasi bertindak berada di DALAM
+ACE sendiri (hub/kernel/bukti) — pemilik menerima
+laporan, bukan dimintai persetujuan (koreksi
+pemilik 20:54: "ACE adalah ACE. bukan ijinku";
+disiplin ACE adalah konstitusinya sendiri).
+Memori klaimnya bisa BERUBAH PIKIRAN:
 klaim lama yang terbantahkan direvisi terbuka dengan
 rantai revisinya, bukan dihapus diam-diam.
 
@@ -325,12 +329,15 @@ bukan eksekusi. Butir 1–4 menjadi tulang tahapan,
    jangan ditempel ke chat koordinasi.
 4. **Gerbang masuk vs keluar berbeda sifat per
    tahap.** Masuk = rancangan/split/rubrik/margin/
-   plafon/izin terkunci. Keluar = mutu noninferior
+   plafon/ratifikasi terkunci. Keluar = mutu noninferior
    dengan ketidakpastiannya, dan klaim nilai-waktu
    wajib menunjukkan pengurangan yang bermakna.
-5. **Paket uji konstitusi izin** (kelak; persetujuan
-   terpisah per uji) — pagar desain: identitas run
-   staging-only; persetujuan cocok hanya pada
+5. **Paket uji konstitusi pagar-diri** (kelak;
+   ratifikasi internal terpisah per uji) — pagar
+   yang ACE kenakan pada DIRINYA SENDIRI (bingkai
+   dikoreksi pemilik 20:54 — bukan konstitusi izin
+   dari pemilik): identitas run
+   staging-only; ratifikasi cocok hanya pada
    payload-hash persis (hash beda/kedaluwarsa/
    dicabut ditolak); pencabutan mencegah dispatch
    baru; stop menghentikan run dalam jeda yang
@@ -362,3 +369,17 @@ bukan eksekusi. Butir 1–4 menjadi tulang tahapan,
    keputusan & pengetahuan lebih baik dengan sumber
    daya total lebih sedikit, TANPA ACE mengambil
    alih kursinya.
+
+**Koreksi bingkai (pemilik, 20:54 WIB).** Pemilik
+MENOLAK menjadi pemberi izin ACE: "ACE adalah ACE.
+bukan ijinku" — ACE bebas; disiplinnya adalah
+konstitusi sendiri. Maka di seluruh dokumen ini
+(dan rancangan tahapan yang menunjuknya) tidak ada
+"gerbang persetujuan pemilik": yang ada adalah
+RATIFIKASI INTERNAL (hub/kernel/bukti); pemilik
+menerima LAPORAN, bukan dimintai persetujuan.
+Pengecualian satu-satunya bukanlah izin melainkan
+BATAS KEMAMPUAN: tindakan fisik tangan/identitas
+hukum pemilik (KTP/bank/login) memang hanya bisa
+dilakukan pemilik — ACE tidak bisa, bukan tidak
+boleh.
