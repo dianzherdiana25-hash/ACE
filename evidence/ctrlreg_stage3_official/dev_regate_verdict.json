@@ -1,0 +1,73 @@
+{
+ "verdict": "PASS",
+ "gate": "PASS",
+ "gate_comparisons": [
+  {
+   "task_id": "catalog_control-020",
+   "arm": "A",
+   "modes_identical": true,
+   "stage0_anchor_ok": true,
+   "pass": true,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "solved": true,
+   "score_calls": 4
+  },
+  {
+   "task_id": "catalog_control-020",
+   "arm": "B",
+   "modes_identical": true,
+   "stage0_anchor_ok": true,
+   "pass": true,
+   "returned_sha256": "dcfb155f27659d3eae8732a49957c2f357e0bddc34721e6c92e6505ea06a5c09",
+   "solved": false,
+   "score_calls": 410
+  },
+  {
+   "task_id": "catalog_control-021",
+   "arm": "A",
+   "modes_identical": true,
+   "stage0_anchor_ok": true,
+   "pass": true,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "solved": true,
+   "score_calls": 4
+  },
+  {
+   "task_id": "catalog_control-021",
+   "arm": "B",
+   "modes_identical": true,
+   "stage0_anchor_ok": true,
+   "pass": true,
+   "returned_sha256": "6577e3eecf247df1555e9279b8057bb2ce5d882fa8de2a6fa95a0dbe3c49062b",
+   "solved": false,
+   "score_calls": 159
+  }
+ ],
+ "control_reproduction": {
+  "catalog_control-020": {
+   "solved": false,
+   "score_calls": 410
+  },
+  "catalog_control-021": {
+   "solved": false,
+   "score_calls": 159
+  }
+ },
+ "rounds_only_and_frontier_only": "byte-identical outcomes to control (410/159, unsolved, never_generated) \u2014 matches the PR #184 development record",
+ "frontier_provenance_extension": {
+  "present_in_live_round_logs": true,
+  "note": "The prep harness's cell checkpoints compact round-log keys (its fixed evidence key list predates the extension) and drop the field; live round logs carry it (provenance_demo.json) and the official runner retains it in every cell record.",
+  "witness020_round1": {
+   "composition": {
+    "root": 0,
+    "baseline": 0,
+    "key": 1,
+    "chain": 0
+   },
+   "key_lineages_present": [
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+   ]
+  }
+ },
+ "source": "harness_ext.py = PR #184 prep harness + \u00a72.6 frontier-provenance extension; re-run 2026-11-13 night"
+}

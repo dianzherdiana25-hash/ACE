@@ -1,0 +1,20 @@
+{
+ "band": 20261602,
+ "verdict": "PASS",
+ "comparisons": [
+  {
+   "task_id": "catalog_control-001",
+   "identical": true,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "solved": true,
+   "score_calls": 3
+  },
+  {
+   "task_id": "catalog_control-002",
+   "identical": true,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "solved": true,
+   "score_calls": 3
+  }
+ ]
+}
