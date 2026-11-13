@@ -682,3 +682,56 @@ lane structure itself.
 
 Part C (long-horizon) is recorded in the PETA ARAH
 addendum, not here.
+
+## 14. Coordination harvest #9 (2026-11-13, 22:04–22:08 WIB) — research-engine API contract, ADOPTED as standing contract
+
+Owner act (2026-11-13 22:08 WIB): adoption of the
+harvests has been too thin — this one is therefore
+not "material" but ADOPTED: the four-state contract,
+the server-side idempotency key, and the
+validation_spec_digest binding are the STANDING
+CONTRACT for every future runner / coordinator /
+validator build on this line, and the v2 list for
+the validator line after v1. Ian applies them as
+integration-review criteria (checklist in the
+validator spec document, PR #182). The invariants
+themselves were marked ILLUSTRATIVE/PROPOSED in
+that room; their ADOPTION is what this section
+records.
+
+1. **Idempotency key** = (principal/tenant,
+   operation, request_id). The SERVER computes the
+   canonical payload hash itself and compares: same
+   request_id with a different payload = CONFLICT,
+   never a new key. A retry of an already-committed
+   createRun returns the OLD receipt BEFORE any
+   single-use approval-consumption path is touched
+   (even seeing a receipt requires authorization).
+2. **FOUR STATES, none skippable:** STAGED (freeze
+   into a content-addressed object + digest/size/
+   ownership verified; a path NAMED staging is not
+   immutable — prevent TOCTOU) → REGISTERED
+   OBSERVATION (a submitAttempt receipt is an
+   accepted OBSERVATION, not a scientific verdict;
+   the runner/supervisor is not a general oracle) →
+   VALIDATION VERDICT → PUBLISHED RESULT (only what
+   passes the NAMED checks of the validation spec).
+3. **Validation bound to validation_spec_digest**
+   (evidence closure + ruleset + validator build/
+   dependencies/configuration). Validator PROCESS
+   errors (crash/infra) are a PROCESS status, never
+   cached as a verdict; UNKNOWN carries a machine-
+   readable reason; same spec + different output =
+   audited nondeterminism/conflict, never an
+   overwrite.
+4. **Reports:** pagination over a pinned snapshot
+   (report_revision_digest) with an opaque cursor;
+   authorization/redaction applies to counts and
+   metadata too; completeness ≠ correctness.
+5. **Approval:** atomic consumption with claim +
+   reservation; the run carries an execution lease;
+   an offline runner may proceed only until the
+   lease expires; what must match exactly is the
+   authorized canonical SEMANTIC ENVELOPE —
+   non-semantic telemetry changes do not void it,
+   material changes demand a new approval.
