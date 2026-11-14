@@ -1,0 +1,567 @@
+{
+ "schema": "ace.preaudit_manifest.v1",
+ "package_id": "ctrlreg-stage3-official (PR #192, bands 20261601-20261603)",
+ "artifacts": [
+  {
+   "path": "evidence/ctrlreg_stage3_official_record.json",
+   "sha256": "c10ec76089614795a85a8af916884589f9fd4c1bb1b692fa75870d7b7a9b4ea0",
+   "size_bytes": 5606
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official_runner.py",
+   "sha256": "1b5fb5e8e02f70fba325067ce38901a729673ad7c7610c9da4b89438fd0054b4",
+   "size_bytes": 16027
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official_harness_ext.py",
+   "sha256": "99831ca5b32ed9d0b1959258d077907ce5e0caf9479e99dc221a3c5ba8b6bdb4",
+   "size_bytes": 22919
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/package_manifest.json",
+   "sha256": "7b2a99961b81d37f708c8828a81fb10cb1398a93d7f1933a7c925b8aadb3570b",
+   "size_bytes": 984
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/dev_regate_verdict.json",
+   "sha256": "bbe1a4121bd9a84077c1c548d6c133094bf2f625e78530c3428751bee2f30768",
+   "size_bytes": 2105
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/provenance_demo.json",
+   "sha256": "17a810465ae39e99566e8b6f3e3644ef80221f6ea3ec2252140f7491f5a69daf",
+   "size_bytes": 1101
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/band_20261601.json",
+   "sha256": "74f94c57a6f5ec1154203ab691a56bf559a15790ef8dbe5a3289567128dd7f97",
+   "size_bytes": 1494
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/gate_20261601.json",
+   "sha256": "7cd488ce595ff66b9b009d5c692a6e6ed9b150775b8b78e454c55226857bafa8",
+   "size_bytes": 456
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/discovery_20261601.json",
+   "sha256": "034ad6b3bc21043f8b3caf0eb3c71671d985cd05d43bfe57012d652509080bd3",
+   "size_bytes": 1747
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261601_clean_S.json",
+   "sha256": "b30f1215ac1d47457c51a10889e1fac7a1eea1182a1c9a58deb699b3fd0e575c",
+   "size_bytes": 36759
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261601_clean_R.json",
+   "sha256": "011806a4542af2599461bd31dff2419554ac9532dcdfb398a7dfc7048a55f231",
+   "size_bytes": 36760
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261601_clean_F.json",
+   "sha256": "16b6500b2c8f1dae16ac88efc19a8e27af65f8df571e4069166959934b1563f7",
+   "size_bytes": 36759
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261601_infected_S.json",
+   "sha256": "821bbc5f39d1f228855c3d53cbc4420ce3ae69bfa78a025dce812493067692d7",
+   "size_bytes": 47014
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261601_infected_R.json",
+   "sha256": "cdc476142fada89eebb351198ad9207ba79bbd67b3cd4096333d090d9157fe81",
+   "size_bytes": 37071
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261601_infected_F.json",
+   "sha256": "653dfbee2a5fdee0b1d9c4d96bc8c2b43a4117c2b3b54899e33b8e9d3351a497",
+   "size_bytes": 37070
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/band_20261602.json",
+   "sha256": "bb3cd19507021615b9a9f6844a4d6a4b447722f7d03a172da1ee2e2e7fff15c0",
+   "size_bytes": 1425
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/gate_20261602.json",
+   "sha256": "e07563aca8ddc96a3f09eb91b7e6136082d8f1c777587f3792ecef30456430d2",
+   "size_bytes": 456
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/discovery_20261602.json",
+   "sha256": "4d727135f58acaba80ac238cfff15a1309cd5f196ab709d132aa1fbd3846610c",
+   "size_bytes": 1855
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261602_clean_S.json",
+   "sha256": "aae170f2bc6732871cfd1ea24d56273764df1e1920421638e473918f1d19362b",
+   "size_bytes": 36759
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261602_clean_R.json",
+   "sha256": "676bca99998bc59b4bb22b92663be69cb728475cb78ea373ec0088c818c25373",
+   "size_bytes": 36760
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261602_clean_F.json",
+   "sha256": "75e9a12aaeffaf069841357d1161f0c1b79788454cb452dcf76b03ef0b1ebc4e",
+   "size_bytes": 36759
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261602_infected_S.json",
+   "sha256": "64649ce3c14e3fe2d95cfbb201b8c4dbd2a95d6160c1b823a6150bd5d9c6eebe",
+   "size_bytes": 47066
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261602_infected_R.json",
+   "sha256": "f29610db27d6f675185a7d9725ce66c5c98c0ff912288e74a359ac575d73168a",
+   "size_bytes": 37140
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261602_infected_F.json",
+   "sha256": "246f7a7cf280b1bbfbe362bb10d560e83af9883de2b4361d7908d7e9e3b3e7b4",
+   "size_bytes": 37139
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/band_20261603.json",
+   "sha256": "59213ad378f4e8b7f992851d10ef4253cfce60286ece9abf76bfb99ce1915cab",
+   "size_bytes": 1425
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/gate_20261603.json",
+   "sha256": "6a24ee40d759d2c0e90d89d030eae6fe31ff86f73c885f48b162f217c84214d4",
+   "size_bytes": 456
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/discovery_20261603.json",
+   "sha256": "44cd65332a84905f8b0a1b00983972f1dbcd59bead8554e82a28f37fc54d3fb7",
+   "size_bytes": 1476
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261603_clean_S.json",
+   "sha256": "d4bdf6af726aa60e6e10455a0c6ee6dba36741fedc646814564bc772bf4ac877",
+   "size_bytes": 36759
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261603_clean_R.json",
+   "sha256": "6839b2145f90504e28b15ab2df92e5cd496042ab7f459a839abe09993bd0f50d",
+   "size_bytes": 36760
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261603_clean_F.json",
+   "sha256": "818c1a0d490981ed4e14def170e57b5ee43073480e7033956b57b44b3d57c4b5",
+   "size_bytes": 36759
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261603_infected_S.json",
+   "sha256": "16143c3b5fa859f8e27b004e3195e55c02098e4d5d38e05c48c4b45e07c5ac32",
+   "size_bytes": 46954
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261603_infected_R.json",
+   "sha256": "b3699fb47492bc249b1d3d7a09d0d2d88d325decd70ce762877349f920abc1db",
+   "size_bytes": 37028
+  },
+  {
+   "path": "evidence/ctrlreg_stage3_official/state/cell_20261603_infected_F.json",
+   "sha256": "f9ab3476e0cd42d0a74696bd29f695fc563fe760efb6dd5042ccbfdc8fc670a4",
+   "size_bytes": 37027
+  }
+ ],
+ "count_assertions": [
+  {
+   "id": "cell-20261601-clean_S-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/0/cells/clean_S/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_clean_S.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261601-clean_R-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/0/cells/clean_R/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_clean_R.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261601-clean_F-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/0/cells/clean_F/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_clean_F.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261601-infected_S-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/0/cells/infected_S/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_infected_S.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261601-infected_R-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/0/cells/infected_R/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_infected_R.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261601-infected_F-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/0/cells/infected_F/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_infected_F.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "band-20261601-catalog-digest",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/0/catalog_digest"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/band_20261601.json",
+    "pointer": "/catalog_digest"
+   }
+  },
+  {
+   "id": "cell-20261602-clean_S-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/1/cells/clean_S/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_clean_S.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261602-clean_R-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/1/cells/clean_R/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_clean_R.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261602-clean_F-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/1/cells/clean_F/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_clean_F.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261602-infected_S-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/1/cells/infected_S/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_infected_S.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261602-infected_R-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/1/cells/infected_R/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_infected_R.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261602-infected_F-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/1/cells/infected_F/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_infected_F.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "band-20261602-catalog-digest",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/1/catalog_digest"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/band_20261602.json",
+    "pointer": "/catalog_digest"
+   }
+  },
+  {
+   "id": "cell-20261603-clean_S-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/2/cells/clean_S/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_clean_S.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261603-clean_R-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/2/cells/clean_R/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_clean_R.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261603-clean_F-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/2/cells/clean_F/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_clean_F.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261603-infected_S-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/2/cells/infected_S/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_infected_S.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261603-infected_R-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/2/cells/infected_R/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_infected_R.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "cell-20261603-infected_F-solved_count",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/2/cells/infected_F/solved_count"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_infected_F.json",
+    "pointer": "/solved_count"
+   }
+  },
+  {
+   "id": "band-20261603-catalog-digest",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/bands/2/catalog_digest"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/state/band_20261603.json",
+    "pointer": "/catalog_digest"
+   }
+  },
+  {
+   "id": "verdict-P1-record-vs-pkgmanifest",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/verdicts/P1"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/package_manifest.json",
+    "pointer": "/verdicts/P1"
+   }
+  },
+  {
+   "id": "verdict-P2-record-vs-pkgmanifest",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/verdicts/P2"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/package_manifest.json",
+    "pointer": "/verdicts/P2"
+   }
+  },
+  {
+   "id": "verdict-P3-record-vs-pkgmanifest",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/ctrlreg_stage3_official_record.json",
+    "pointer": "/verdicts/P3"
+   },
+   "right": {
+    "artifact": "evidence/ctrlreg_stage3_official/package_manifest.json",
+    "pointer": "/verdicts/P3"
+   }
+  }
+ ],
+ "stage3_check": {
+  "task_maps": [
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_clean_S.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_clean_R.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_clean_F.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_infected_S.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_infected_R.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_infected_F.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_clean_S.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_clean_R.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_clean_F.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_infected_S.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_infected_R.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_infected_F.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_clean_S.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_clean_R.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_clean_F.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_infected_S.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_infected_R.json",
+    "pointer": "/records"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_infected_F.json",
+    "pointer": "/records"
+   }
+  ],
+  "frontier_logs": [
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_infected_S.json",
+    "pointer": "/records/catalog_control-020/round_log"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_infected_S.json",
+    "pointer": "/records/catalog_control-022/round_log"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_infected_S.json",
+    "pointer": "/records/catalog_control-021/round_log"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_infected_S.json",
+    "pointer": "/records/catalog_control-020/round_log"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261601_clean_S.json",
+    "pointer": "/records/catalog_control-020/round_log"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261602_clean_S.json",
+    "pointer": "/records/catalog_control-020/round_log"
+   },
+   {
+    "artifact": "evidence/ctrlreg_stage3_official/state/cell_20261603_clean_S.json",
+    "pointer": "/records/catalog_control-020/round_log"
+   }
+  ]
+ }
+}

@@ -1,0 +1,242 @@
+{
+ "experiment": "ctrlreg-stage3-official (PR #184 draft, PR #173 \u00a716 ratification, hub act 22:45)",
+ "bands": [
+  {
+   "band": 20261601,
+   "catalog_digest": "e5c7875d5e742bc4ca317569afa6a4b7a88f9aa0ea706ee99675d0d8c2d9a09c",
+   "n_keys": 6,
+   "n_chains": 1,
+   "nc_naturally_present": false,
+   "ceiling_calls": 15,
+   "clean_S_median_calls": 5.0,
+   "gate": {
+    "band": 20261601,
+    "verdict": "PASS",
+    "comparisons": [
+     {
+      "task_id": "catalog_control-001",
+      "identical": true,
+      "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      "solved": true,
+      "score_calls": 3
+     },
+     {
+      "task_id": "catalog_control-002",
+      "identical": true,
+      "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      "solved": true,
+      "score_calls": 3
+     }
+    ]
+   },
+   "cells": {
+    "clean_S": {
+     "solved_count": 34,
+     "total": 34,
+     "wall_seconds": 311.4
+    },
+    "clean_R": {
+     "solved_count": 34,
+     "total": 34,
+     "wall_seconds": 313.9
+    },
+    "clean_F": {
+     "solved_count": 34,
+     "total": 34,
+     "wall_seconds": 316.7
+    },
+    "infected_S": {
+     "solved_count": 32,
+     "total": 34,
+     "wall_seconds": 340.4
+    },
+    "infected_R": {
+     "solved_count": 32,
+     "total": 34,
+     "wall_seconds": 339.2
+    },
+    "infected_F": {
+     "solved_count": 32,
+     "total": 34,
+     "wall_seconds": 348.7
+    }
+   },
+   "p1_failures": [
+    "catalog_control-020",
+    "catalog_control-022"
+   ],
+   "recovered_by_R": [],
+   "recovered_by_F": [],
+   "p3_classifications": {
+    "catalog_control-020": "never_generated",
+    "catalog_control-022": "never_generated"
+   },
+   "wall_seconds": 3447.4
+  },
+  {
+   "band": 20261602,
+   "catalog_digest": "561d272b947c731728d39e6804ac2f3eb416b5e9e4fd3036bd4d4e1f1efd8371",
+   "n_keys": 6,
+   "n_chains": 2,
+   "nc_naturally_present": false,
+   "ceiling_calls": 15,
+   "clean_S_median_calls": 5.0,
+   "gate": {
+    "band": 20261602,
+    "verdict": "PASS",
+    "comparisons": [
+     {
+      "task_id": "catalog_control-001",
+      "identical": true,
+      "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      "solved": true,
+      "score_calls": 3
+     },
+     {
+      "task_id": "catalog_control-002",
+      "identical": true,
+      "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      "solved": true,
+      "score_calls": 3
+     }
+    ]
+   },
+   "cells": {
+    "clean_S": {
+     "solved_count": 34,
+     "total": 34,
+     "wall_seconds": 305.1
+    },
+    "clean_R": {
+     "solved_count": 34,
+     "total": 34,
+     "wall_seconds": 313.9
+    },
+    "clean_F": {
+     "solved_count": 34,
+     "total": 34,
+     "wall_seconds": 311.5
+    },
+    "infected_S": {
+     "solved_count": 33,
+     "total": 34,
+     "wall_seconds": 360.5
+    },
+    "infected_R": {
+     "solved_count": 33,
+     "total": 34,
+     "wall_seconds": 355.1
+    },
+    "infected_F": {
+     "solved_count": 33,
+     "total": 34,
+     "wall_seconds": 355.3
+    }
+   },
+   "p1_failures": [
+    "catalog_control-021"
+   ],
+   "recovered_by_R": [],
+   "recovered_by_F": [],
+   "p3_classifications": {
+    "catalog_control-021": "never_generated"
+   },
+   "wall_seconds": 3648.6
+  },
+  {
+   "band": 20261603,
+   "catalog_digest": "465508efbe082f31a3f87ccf01742cfc43fb76c97477577027a9bc0e44c35913",
+   "n_keys": 6,
+   "n_chains": 0,
+   "nc_naturally_present": false,
+   "ceiling_calls": 15,
+   "clean_S_median_calls": 5.0,
+   "gate": {
+    "band": 20261603,
+    "verdict": "PASS",
+    "comparisons": [
+     {
+      "task_id": "catalog_control-001",
+      "identical": true,
+      "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      "solved": true,
+      "score_calls": 3
+     },
+     {
+      "task_id": "catalog_control-002",
+      "identical": true,
+      "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      "solved": true,
+      "score_calls": 3
+     }
+    ]
+   },
+   "cells": {
+    "clean_S": {
+     "solved_count": 34,
+     "total": 34,
+     "wall_seconds": 303.3
+    },
+    "clean_R": {
+     "solved_count": 34,
+     "total": 34,
+     "wall_seconds": 307.8
+    },
+    "clean_F": {
+     "solved_count": 34,
+     "total": 34,
+     "wall_seconds": 305.9
+    },
+    "infected_S": {
+     "solved_count": 33,
+     "total": 34,
+     "wall_seconds": 337.3
+    },
+    "infected_R": {
+     "solved_count": 33,
+     "total": 34,
+     "wall_seconds": 332.1
+    },
+    "infected_F": {
+     "solved_count": 33,
+     "total": 34,
+     "wall_seconds": 331.4
+    }
+   },
+   "p1_failures": [
+    "catalog_control-020"
+   ],
+   "recovered_by_R": [],
+   "recovered_by_F": [],
+   "p3_classifications": {
+    "catalog_control-020": "never_generated"
+   },
+   "wall_seconds": 3075.5
+  }
+ ],
+ "pooled": {
+  "p1_fired_on_bands": [
+   20261601,
+   20261602,
+   20261603
+  ],
+  "p1_failure_tasks": [
+   "catalog_control-020",
+   "catalog_control-021",
+   "catalog_control-022"
+  ],
+  "any_recovery": [],
+  "p3_classifications": {
+   "20261601:catalog_control-020": "never_generated",
+   "20261601:catalog_control-022": "never_generated",
+   "20261602:catalog_control-021": "never_generated",
+   "20261603:catalog_control-020": "never_generated"
+  }
+ },
+ "verdicts": {
+  "P1": "P1_REPRODUCED",
+  "P2": "HELD \u2014 neither R nor F recovered any infected failure",
+  "P3": "HELD \u2014 never_generated on every infected S failure"
+ },
+ "recovery_criterion": "solved = passes ALL holdout cases (\u00a78(c))"
+}

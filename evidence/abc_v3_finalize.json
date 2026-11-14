@@ -1,0 +1,130 @@
+{
+ "experiment": "abc-v3-01",
+ "assessment": {
+  "gate": "G2",
+  "criteria_version": 1,
+  "definition": "strategy differentiation is real, not a universe artefact: arms differentiated by strategy over one substrate and one score-call budget (PR #147)",
+  "clauses": {
+   "report_validity": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "arms": {
+      "A": 0.0,
+      "B": 100.0,
+      "C": 100.0
+     },
+     "control": {
+      "A": 100.0,
+      "B": 98.01980198019803,
+      "C": 98.01980198019803
+     }
+    }
+   },
+   "calibration_gate": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "calibration_gate_passed": true
+    }
+   },
+   "completeness": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "complete": true
+    }
+   },
+   "differentiation_index": {
+    "verdict": "FAIL",
+    "missing": [
+     "differentiation index is negative (-1.98pp < 0)"
+    ],
+    "evidence": {
+     "differentiation_index_pp": -1.9801980198019749,
+     "c_minus_a_minus_15pp": 85.0,
+     "b_minus_a_minus_5pp": 95.0,
+     "control_margin_pp": -1.9801980198019749
+    }
+   }
+  },
+  "differentiation_index_pp": -1.9801980198019749,
+  "overall": "NOT_DEMONSTRATED",
+  "qualification": "The composite index is negative; see the differentiation-index terms for which margin binds."
+ },
+ "kernel_record": {
+  "seq": 1,
+  "prev": "GENESIS",
+  "result": {
+   "experiment_id": "abc-v3-01",
+   "protocol_hash": "8591b93814759d5485be3f9e8b47e31a08aa7b1fc41e14b2707b2aa46b975c1a",
+   "candidate_id": "v3-strategy-arms",
+   "candidate_digest": "b042614d90bc7b632cf4f5844443a9f736e2b59df0458651eb247da553575f9b",
+   "evaluator_digest": "c6ca3421eca3ff4f086b324820ad5168a57cea645ff83bfa922f95b47fd3b6c1",
+   "fixture_digest": "18d854cf6c191938454a519de8ef5f71aba6b7d0f871814e772f7f3f815f4915",
+   "metrics": {
+    "differentiation_index_pp": -1.9801980198019749
+   },
+   "verdict": "fail",
+   "abstain_reason": null,
+   "raw_telemetry": {
+    "admitted_catalog": "discovery output of the run protocol (frozen per band)",
+    "pooled_counts": {
+     "A": [
+      0,
+      90
+     ],
+     "B": [
+      90,
+      90
+     ],
+     "C": [
+      90,
+      90
+     ]
+    },
+    "pooled_control_counts": {
+     "A": [
+      101,
+      101
+     ],
+     "B": [
+      99,
+      101
+     ],
+     "C": [
+      99,
+      101
+     ]
+    },
+    "band_catalog_digests": {
+     "20261501": "a67685635cffb2c20a1c48bedd797b34ab71e93d7325eaae734231036418ee68",
+     "20261502": "561d272b947c731728d39e6804ac2f3eb416b5e9e4fd3036bd4d4e1f1efd8371",
+     "20261503": "5005072890bf608dc78a98965e6c9a3bf729a517c9689a12a9ccc051cbbaf62a"
+    },
+    "s2_usage_total": 53,
+    "wall_seconds": 619.8,
+    "band_failures": []
+   }
+  },
+  "hash": "ebbfe054943c8de9546d743bdba55cd792082ad568119646dbd240a29582c8f5"
+ },
+ "audit": {
+  "experiment_id": "abc-v3-01",
+  "status": "CLEAN",
+  "problems": [],
+  "results_verified": 1,
+  "ledger_entries_verified": 1,
+  "chain_break_at": null
+ },
+ "run_totals": {
+  "bands": [
+   20261501,
+   20261502,
+   20261503
+  ],
+  "wall_seconds": 619.8,
+  "complete": true,
+  "band_failures": []
+ }
+}

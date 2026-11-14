@@ -1,0 +1,10 @@
+{
+ "protocol_hash": "743a2e9c3c9092e9071637ae70ea2866e902bf2158ddad36f34684e55dbab11c",
+ "audit_status": "CLEAN",
+ "improvement_name": "lifted-mechanism-round2",
+ "improvement_digest": "47a5afc4b6c6222e6ee4050f620898aeb885ceaec2dc22a489e2914e490e9f81",
+ "held_out": true,
+ "baseline_score": 77.77777777777777,
+ "improvement_score": 100.0,
+ "margin_pp": 2.2222222222222285
+}

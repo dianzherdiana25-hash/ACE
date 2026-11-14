@@ -1,0 +1,9 @@
+{
+ "step": "custodies",
+ "kernel_root": "/home/hatch/workspace/ace-omega/bakeoff02-kernel",
+ "candidate_digest_kernel": "396c050823028cc22aa55f75d4c86e93338cb9f3dd428b37143ee6405a64ae60",
+ "baseline_digest_kernel": "bee370c42769b196492d6751c52054cb07b39237b0a3ed6279f9a086c57a2bf2",
+ "evaluator_digest": "b18e9d3a25b19f2d57797fafcd27d4e8d9b1d7d10e6f530c2acd2559cc3700ba",
+ "fixture_digest": "e7351263f4688cf7b1f004414cfc5b8cf304bb543272d97c5eaf7d378a9767fa",
+ "validator_code_digest": "b18e9d3a25b19f2d57797fafcd27d4e8d9b1d7d10e6f530c2acd2559cc3700ba"
+}

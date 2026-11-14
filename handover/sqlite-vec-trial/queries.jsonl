@@ -1,0 +1,50 @@
+{"query": "which document collects the whole research history so the work can move to another platform without relying on chat memory", "gold": 0}
+{"query": "how is the first generation of the system defined and what do its benchmark scores actually measure", "gold": 45}
+{"query": "the experiment where the system had to invent its own questions and use label sequences when needed, and the cases outside the two-label guarantee abstained", "gold": 93}
+{"query": "where does it say passing CI only proves the adapters and replay work, not that the model got smarter, with all three status flags still negative", "gold": 718}
+{"query": "the predeclared diagnostic gates for the capability pilot, including the drift control that must be flagged as not safely generalizable", "gold": 8407}
+{"query": "the continuous integration run that executed all scoped tests twice with byte-identical output and the canonical file hash that was recorded", "gold": 8448}
+{"query": "kriteria kapan generasi pertama boleh disebut platform penelitian yang berfungsi, termasuk evaluasi independen yang bisa mereproduksi satu klaim primer", "gold": 8496}
+{"query": "summary of what the earlier pilots established, from DFA induction on short strings to the flat symbol-counter grammar work", "gold": 8542}
+{"query": "the audit confirming all imported source files match their recorded git blob identifiers, checked offline", "gold": 8584}
+{"query": "which feature sets could express the U and L task groups in the stratum expressibility check", "gold": 8629}
+{"query": "the eight stage repair pipeline from goal to remember, and the evidence flag saying the base runtime really was executed", "gold": 8673}
+{"query": "the execution specification document header: version, date, parent PRD and vision, and the starting budget constraint of zero extra cost", "gold": 8714}
+{"query": "bagian yang menyatakan seluruh fase awal belum dijalankan sama sekali, termasuk benchmark held-out dan klaim peningkatan kecerdasan", "gold": 8756}
+{"query": "the long-term vision definition about continuously formulating new problems and representation classes without stagnation, and why even full success would not prove it", "gold": 8812}
+{"query": "requirements that the first system be simple, modular, measurable and recoverable, designed for a non-expert owner to follow honestly", "gold": 8858}
+{"query": "why an evolving agent must never be allowed to grade itself, inspect holdouts, or change its own evaluation thresholds", "gold": 8897}
+{"query": "instruksi untuk tidak berhenti di batas fase dengan kalimat fondasi sudah siap, dan menjawab status secara singkat lalu lanjut bekerja", "gold": 8946}
+{"query": "the control arm where source training labels were deterministically shuffled to break the input-label relationship while keeping counts identical", "gold": 8984}
+{"query": "the preregistration with the discovery pool of twelve, the evaluation singles and mixed pairs, and the pricing band for the catalog stratum", "gold": 9027}
+{"query": "the protocol that was registered before any implementation or scoring of the internal reasoning integration, with its base commit", "gold": 9066}
+{"query": "tolok ukur pemahaman bahasa: parafrasa di luar parser, bahasa informal, salah ketik, negasi, dan rujukan ke pembicaraan sebelumnya", "gold": 9145}
+{"query": "checklist of what must be known about a backend: identity, local or remote, context size, streaming, tool calling, quotas and privacy limits", "gold": 9182}
+{"query": "when asked about the system's state, answer from the live runtime and task store rather than old summaries; remote embeddings must not be required offline", "gold": 9216}
+{"query": "the list of what the tooling must provide, from device checks and repeatable installs to resume after a stop and state backup, using project-specific config names instead of overriding HOME", "gold": 9252}
+{"query": "daftar pekerjaan lanjutan yang belum selesai, termasuk installer menyeluruh, web localhost yang nyaman di HP, dan loop penemu gap", "gold": 9295}
+{"query": "the example skill record format with fields for objective, contracts, examples, success and failure counts, and provenance", "gold": 9352}
+{"query": "jangan memasang seluruh katalog dependensi sekaligus; pilih berdasarkan gap yang sedang membatasi lalu integrasikan yang terbukti berguna", "gold": 9387}
+{"query": "mengganti bahasa pemrograman tidak otomatis membuat sistem paham bahasa pengguna; pemahaman harus dibuktikan lewat tindakan dan hasil tugas", "gold": 9448}
+{"query": "the agenda rows about activating useful development work, completing candidate evaluation paths, rollback testing, profiling one bottleneck, and running a transfer pilot", "gold": 9507}
+{"query": "changes to source, dependencies, models or environment can invalidate specific evidence, while documentation changes do not force rerunning every intelligence benchmark", "gold": 9547}
+{"query": "checking narrow screens, different orientations and safe areas, choosing breakpoints from actual testing rather than desktop screenshots", "gold": 9588}
+{"query": "what it means that something is not yet learned, and how the system can find its frontier through new tasks, counterexamples and failed predictions", "gold": 9629}
+{"query": "memakai pengujian backend otomatis dan pemeriksaan browser nyata, menyimpan fixture berlabel sebagai data pengembangan sementara mode produk memakai runtime asli", "gold": 9671}
+{"query": "the meta-evolution steps after the first generations are ready: new mutation operators and selection policies, isolated snapshots, and proving transfer on fresh task families", "gold": 9713}
+{"query": "the audit table rows covering model optimization, scientific discovery, meta-research and successor evolution with what each still lacks", "gold": 9763}
+{"query": "agenda items that fall inside the mandate and pass the evidence gate get taken as the next work stage, starting with what needs no reserved decision", "gold": 9809}
+{"query": "antrean kalibrasi estimasi RAM terhadap RSS nyata, lalu paket workflow tugas durable, lalu pengulangan uji pada host yang mendukung namespace", "gold": 9846}
+{"query": "the new attestation tests: file-change rejection, parameter tampering, URL mismatch, fake registration, and the full sweep count that followed", "gold": 9883}
+{"query": "the amendment that changes governance rather than physical capability, noting there are no money rails and accounts need a legal person", "gold": 9923}
+{"query": "the composition discovery addendum about the second-level diagnosis that was fixed and measured", "gold": 9969}
+{"query": "the test where an artifact name matches across families but its digest differs, and the total test count on that lineage", "gold": 10011}
+{"query": "the composite decision index built as the minimum of the two margin terms and the control margin, with thresholds from measured effect sizes", "gold": 10052}
+{"query": "catatan tentang komentar bukti yang diposting ulang karena ID komentar penutup pertama tidak tertangkap alat, dan jumlah PR terbuka yang turun tepat enam", "gold": 10094}
+{"query": "the midday package: the three-arm build with its decision scorer and trace hook, the exact-match gate rerun, and the round-two design with its fresh seed band", "gold": 10134}
+{"query": "the session checkpoint noting no population or lineage candidates were produced yet and the local model's agenda output is still untested against baselines", "gold": 10176}
+{"query": "work order rules: never touch the main branch, merged history, or frozen evaluator custody files; new pull requests are drafts", "gold": 10221}
+{"query": "the blueprint's list of populations under evolution, from search algorithms and quality-diversity archives to research-method populations with negative-result interpretation", "gold": 10266}
+{"query": "the audit whose canonical readback sources are the repository and a specific list of pull requests, pinning exact head identifiers", "gold": 10306}
+{"query": "the residual probe asking whether lookahead or beam capability classes can cross the fitness plateau that stopped all three pilot arms", "gold": 10345}
+{"query": "pengaman pendanaan mandiri: amplop per tujuan dengan plafon, ledger hash-chained, larangan utang dalam bentuk apa pun, dan kill switch pemilik", "gold": 10384}

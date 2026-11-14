@@ -1,0 +1,191 @@
+{
+  "checks": [
+    {
+      "check_id": "C1",
+      "dependencies": [
+        "the manifest itself (its custody is out of scope)"
+      ],
+      "evidence_missing": [],
+      "evidence_present": [
+        "evidence/BAKEOFF02_RATIFIKASI_PREP_20261113.md",
+        "evidence/bakeoff02_custody_harness.py",
+        "evidence/bakeoff02_custody_record.json",
+        "evidence/bakeoff02_dryintake_fix_harness.py",
+        "evidence/bakeoff02_dryintake_harness.py",
+        "evidence/bakeoff02_dryintake_record.json",
+        "evidence/bakeoff02_intake_record.json",
+        "evidence/bakeoff02_preregistration_record.json",
+        "evidence/bakeoff02_submit_harness.py",
+        "evidence/bakeoff_arena30b_benchmark.json",
+        "evidence/bakeoff_arena30b_intake_record.json"
+      ],
+      "false_positive_class": "canonicalization/path errors (symlink, separator, case) — measured by valid-variant probes",
+      "items": [
+        {
+          "item": "evidence/BAKEOFF02_RATIFIKASI_PREP_20261113.md",
+          "reason": "present, 5957 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/bakeoff02_custody_harness.py",
+          "reason": "present, 3890 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/bakeoff02_custody_record.json",
+          "reason": "present, 553 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/bakeoff02_dryintake_fix_harness.py",
+          "reason": "present, 3403 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/bakeoff02_dryintake_harness.py",
+          "reason": "present, 2621 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/bakeoff02_dryintake_record.json",
+          "reason": "present, 682 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/bakeoff02_intake_record.json",
+          "reason": "present, 2273 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/bakeoff02_preregistration_record.json",
+          "reason": "present, 400 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/bakeoff02_submit_harness.py",
+          "reason": "present, 2960 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/bakeoff_arena30b_benchmark.json",
+          "reason": "present, 4120 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/bakeoff_arena30b_intake_record.json",
+          "reason": "present, 3050 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        }
+      ],
+      "next_step": "No action for matching artifacts. For any TIDAK SESUAI: re-freeze the package or correct the manifest, then re-run. For UNKNOWN: repair the manifest entry.",
+      "stage": "VALIDATION VERDICT",
+      "state": "SESUAI",
+      "title": "Artifact completeness + hash integrity",
+      "validation_spec_digest": "2697651478ebb71ce81e975646b75478e4ec49ce00a5ff180bd57a05ab66fd2c"
+    },
+    {
+      "check_id": "C2",
+      "dependencies": [],
+      "evidence_missing": [
+        "manifest.count_assertions"
+      ],
+      "evidence_present": [],
+      "false_positive_class": "numeric-representation brittleness (0 vs 0.0 vs 1e2) — measured by valid-variant probes",
+      "items": [
+        {
+          "item": "manifest.count_assertions",
+          "reason": "no count assertions declared; the validator invents no formula of its own",
+          "reason_code": "NOT_DECLARED",
+          "stage": "VALIDATION VERDICT",
+          "state": "UNKNOWN"
+        }
+      ],
+      "next_step": "Declare the mechanical recomputations to check, or accept UNKNOWN for C2.",
+      "stage": "VALIDATION VERDICT",
+      "state": "UNKNOWN",
+      "title": "Result-count consistency (declared recomputations only)",
+      "validation_spec_digest": "2697651478ebb71ce81e975646b75478e4ec49ce00a5ff180bd57a05ab66fd2c"
+    },
+    {
+      "check_id": "C3",
+      "dependencies": [],
+      "evidence_missing": [
+        "manifest.verdict_check"
+      ],
+      "evidence_present": [],
+      "false_positive_class": "rule-shape rigidity — unsupported rule shapes fail toward UNKNOWN, never toward false TIDAK SESUAI",
+      "items": [
+        {
+          "item": "manifest.verdict_check",
+          "reason": "no verdict check declared in the manifest",
+          "reason_code": "NOT_DECLARED",
+          "stage": "VALIDATION VERDICT",
+          "state": "UNKNOWN"
+        }
+      ],
+      "next_step": "Declare preregistration + results artifacts, or accept UNKNOWN for C3.",
+      "stage": "VALIDATION VERDICT",
+      "state": "UNKNOWN",
+      "title": "Verdict vs preregistration rule",
+      "validation_spec_digest": "2697651478ebb71ce81e975646b75478e4ec49ce00a5ff180bd57a05ab66fd2c"
+    }
+  ],
+  "disclaimer": "PRE-AUDIT MEKANIS — bukan persetujuan, bukan validasi eksperimen. Laporan ini hanya menyatakan hasil perbandingan mekanis atas paket beku terhadap manifest eksplisit. Keadaan SESUAI pada semua cek tidak berarti eksperimen sah, benar, atau disetujui.",
+  "honest_limits": [
+    "Proves the package matches its manifest on the declared mechanical checks only.",
+    "Does not prove the manifest is the right manifest, that the preregistration predates the results, or that declared recomputations are scientifically correct.",
+    "Does not approve or validate any experiment, result, or gate claim."
+  ],
+  "lifecycle": {
+    "input_stage": "REGISTERED OBSERVATION",
+    "note": "This report is a VALIDATION VERDICT-stage artifact. Publication is a separate act the validator never performs.",
+    "output_stage": "VALIDATION VERDICT",
+    "stage_model_version": "1",
+    "stages": [
+      "STAGED",
+      "REGISTERED OBSERVATION",
+      "VALIDATION VERDICT",
+      "PUBLISHED RESULT"
+    ],
+    "stages_not_performed": [
+      "PUBLISHED RESULT"
+    ]
+  },
+  "manifest_sha256": "a8efd3d957ad929d61545602f25a6f6b74ba6c4e9cf4153b10dccb5e93f64602",
+  "package_id": "bakeoff-records-intake (branch research/ace-omega-bakeoff-records-20261113 @ e8a3feb)",
+  "schema": "ace.preaudit_report.v2",
+  "summary_by_state": {
+    "SESUAI": 1,
+    "TIDAK SESUAI": 0,
+    "UNKNOWN": 2
+  },
+  "unlisted_files_informational_only": 0,
+  "validation_spec_digest": "2697651478ebb71ce81e975646b75478e4ec49ce00a5ff180bd57a05ab66fd2c",
+  "validator_build": {
+    "source_sha256": "e8451ae804c23faa0ba74cde5ebfeda4badb1f6d1ecfce1b276930642187dfd1",
+    "version": "preaudit-validator-2.0.0"
+  },
+  "validator_version": "preaudit-validator-2.0.0"
+}

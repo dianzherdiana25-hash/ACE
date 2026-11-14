@@ -1,0 +1,61 @@
+{
+ "acceptance": {
+  "gguf_magic": "GGUF",
+  "note": "size == official LFS pointer size AND sha256 == official LFS oid AND first 4 bytes GGUF; custody gate PASSED",
+  "sha256_match": true,
+  "size_match": true,
+  "verdict": "ACCEPTED",
+  "verified_local": "2026-11-13 ~16:31 WIB"
+ },
+ "candidate": {
+  "expected_lfs_sha256": "7b064f5842bf9532c91456deda288a1b672397a54fa729aa665952863033557c",
+  "expected_size_bytes": 4920739232,
+  "file": "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf",
+  "identity_source": "Hugging Face official API /api/models/bartowski/Meta-Llama-3.1-8B-Instruct-GGUF?blobs=true (fetched 2026-11-13 before any download)",
+  "repo": "bartowski/Meta-Llama-3.1-8B-Instruct-GGUF",
+  "repo_revision": "bf5b95e96dac0462e2a09145ec66cae9a3f12067"
+ },
+ "date": "2026-11-13",
+ "download": {
+  "completed_local": "2026-11-13 ~16:31 WIB",
+  "route_used": "Muse VM fallback (sandbox MCP 502 at first attempt)",
+  "sha256": "7b064f5842bf9532c91456deda288a1b672397a54fa729aa665952863033557c",
+  "size_bytes": 4920739232
+ },
+ "dry_intake_checks": [
+  {
+   "check": "identity fixed (repo + revision + filename)",
+   "pass": true
+  },
+  {
+   "check": "expected size 4920739232 <= incumbent cap 5027783488 (margin 107044256 B)",
+   "pass": true
+  },
+  {
+   "check": "expected LFS sha256 obtained from official pointer BEFORE download",
+   "pass": true
+  },
+  {
+   "check": "GGUF format, llama.cpp-native quantization repo (loadable by pinned llama.cpp b12316 path in principle; magic + load verified at acceptance)",
+   "pass": true
+  },
+  {
+   "check": "destination disk space sufficient",
+   "pass": true
+  },
+  {
+   "check": "no other download in flight; corrupted 14B partial untouched",
+   "pass": true
+  }
+ ],
+ "dry_intake_verdict": "PASS",
+ "experiment": "brain-bakeoff-02",
+ "route": {
+  "destination": "~/workspace/ace-omega/models/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf",
+  "fallback": "Muse VM, per hub instruction (sandbox fails -> VM)",
+  "first_choice": "Manus Sandbox (internet active)",
+  "method": "curl -L -C - (resumable), detached; network-bound, parallel to the v3 run",
+  "sandbox_attempt": "FAILED \u2014 MCP endpoint HTTP 502 three times (job ping 15:52 WIB, retries ~15:56 and ~16:0x WIB); sandbox-side checks could not run"
+ },
+ "stage": "accepted"
+}

@@ -1,0 +1,216 @@
+{
+ "cell": "frontier_only",
+ "config": {
+  "rounds": 6,
+  "frontier_width": 8
+ },
+ "cap": null,
+ "wall_seconds": 121.2,
+ "records": {
+  "catalog_control-020": {
+   "task_id": "catalog_control-020",
+   "solved": false,
+   "holdout_passes": 5,
+   "holdout_total": 12,
+   "shown_score": 4,
+   "shown_total": 8,
+   "score_calls": 410,
+   "returned_sha256": "dcfb155f27659d3eae8732a49957c2f357e0bddc34721e6c92e6505ea06a5c09",
+   "returned_is_a_solution": false,
+   "trace": [
+    [
+     "key",
+     "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+    ],
+    [
+     "baseline",
+     null
+    ],
+    [
+     "key",
+     "('name_swap', (5, 2, 3, 0, 1, 4), 'gc')"
+    ]
+   ],
+   "termination": "frontier_empty",
+   "true_path_classification": "never_generated",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 57,
+     "n_scored": 57,
+     "cap_break": false,
+     "best_score_after": 2,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 2,
+     "true_path": {
+      "generated": false,
+      "scored": false,
+      "rank": null,
+      "score": null,
+      "in_frontier": false,
+      "is_best": false
+     }
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 49,
+     "n_scored": 49,
+     "cap_break": false,
+     "best_score_after": 2,
+     "frontier_size": 2,
+     "frontier_cutoff_score": 2,
+     "true_path": {
+      "generated": false,
+      "scored": false,
+      "rank": null,
+      "score": null,
+      "in_frontier": false,
+      "is_best": false
+     }
+    },
+    {
+     "round": 3,
+     "n_candidates_generated": 105,
+     "n_scored": 105,
+     "cap_break": false,
+     "best_score_after": 3,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 3,
+     "true_path": {
+      "generated": false,
+      "scored": false,
+      "rank": null,
+      "score": null,
+      "in_frontier": false,
+      "is_best": false
+     }
+    },
+    {
+     "round": 4,
+     "n_candidates_generated": 53,
+     "n_scored": 53,
+     "cap_break": false,
+     "best_score_after": 4,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 4,
+     "true_path": {
+      "generated": false,
+      "scored": false,
+      "rank": null,
+      "score": null,
+      "in_frontier": false,
+      "is_best": false
+     }
+    },
+    {
+     "round": 5,
+     "n_candidates_generated": 47,
+     "n_scored": 47,
+     "cap_break": false,
+     "best_score_after": 4,
+     "frontier_size": 2,
+     "frontier_cutoff_score": 4,
+     "true_path": {
+      "generated": false,
+      "scored": false,
+      "rank": null,
+      "score": null,
+      "in_frontier": false,
+      "is_best": false
+     }
+    },
+    {
+     "round": 6,
+     "n_candidates_generated": 98,
+     "n_scored": 98,
+     "cap_break": false,
+     "best_score_after": 4,
+     "frontier_size": 0,
+     "frontier_cutoff_score": null,
+     "true_path": {
+      "generated": false,
+      "scored": false,
+      "rank": null,
+      "score": null,
+      "in_frontier": false,
+      "is_best": false
+     }
+    }
+   ],
+   "timeout": false
+  },
+  "catalog_control-021": {
+   "task_id": "catalog_control-021",
+   "solved": false,
+   "holdout_passes": 3,
+   "holdout_total": 12,
+   "shown_score": 2,
+   "shown_total": 8,
+   "score_calls": 159,
+   "returned_sha256": "6577e3eecf247df1555e9279b8057bb2ce5d882fa8de2a6fa95a0dbe3c49062b",
+   "returned_is_a_solution": false,
+   "trace": [
+    [
+     "key",
+     "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+    ]
+   ],
+   "termination": "frontier_empty",
+   "true_path_classification": "never_generated",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 57,
+     "n_scored": 57,
+     "cap_break": false,
+     "best_score_after": 2,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 2,
+     "true_path": {
+      "generated": false,
+      "scored": false,
+      "rank": null,
+      "score": null,
+      "in_frontier": false,
+      "is_best": false
+     }
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 49,
+     "n_scored": 49,
+     "cap_break": false,
+     "best_score_after": 2,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 2,
+     "true_path": {
+      "generated": false,
+      "scored": false,
+      "rank": null,
+      "score": null,
+      "in_frontier": false,
+      "is_best": false
+     }
+    },
+    {
+     "round": 3,
+     "n_candidates_generated": 52,
+     "n_scored": 52,
+     "cap_break": false,
+     "best_score_after": 2,
+     "frontier_size": 0,
+     "frontier_cutoff_score": null,
+     "true_path": {
+      "generated": false,
+      "scored": false,
+      "rank": null,
+      "score": null,
+      "in_frontier": false,
+      "is_best": false
+     }
+    }
+   ],
+   "timeout": false
+  }
+ }
+}

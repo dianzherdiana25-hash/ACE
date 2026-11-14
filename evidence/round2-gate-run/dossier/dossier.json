@@ -1,0 +1,16 @@
+{
+ "improvement": {
+  "name": "lifted-mechanism-round2",
+  "digest": "47a5afc4b6c6222e6ee4050f620898aeb885ceaec2dc22a489e2914e490e9f81"
+ },
+ "source": {
+  "family": "statement_order",
+  "report": "target.json"
+ },
+ "evaluations": [
+  {
+   "family": "grid",
+   "report": "stability.json"
+  }
+ ]
+}

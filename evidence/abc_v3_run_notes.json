@@ -1,0 +1,48 @@
+{
+ "events": [
+  {
+   "cpu_consumed": "~100 minutes at ~99.5% CPU (last measured 88:58 CPU time at 12:37 WIB, still in band work)",
+   "died": "2026-11-13 12:49 WIB \u2014 the Muse VM was replaced/rebooted (system boot 12:49:54 WIB; uptime verified 13:17 WIB); every process on the VM died with it",
+   "disposition": "VOID \u2014 no band result from invocation 1 is used, estimated, or reconstructed. The run is re-executed from band 1 under the SAME locked preregistration (text 55b6331e, kernel protocol 8591b938). Recorded openly per the G4 VOID precedent.",
+   "event": "INVOCATION_1_VOID",
+   "evidence_written": "none \u2014 the driver wrote its evidence only once, at the end of all three bands; evidence/abc_v3_run.json does not exist; the run log is 0 bytes (buffered output lost)",
+   "kernel_state": "untouched \u2014 abc-v3-kernel/results.jsonl is 0 bytes; no result was recorded; the preregistration and custodies are intact",
+   "kind": "infrastructure_failure",
+   "launched": "2026-11-13 ~11:10 WIB (detached driver, PID 8304)",
+   "recorded_by": "Ian (main), 2026-11-13 ~13:20 WIB, on hub instruction after hub disk verification"
+  },
+  {
+   "event": "DRIVER_HARDENING",
+   "kind": "harness_change_not_protocol",
+   "protocol_impact": "none \u2014 the locked preregistration text, kernel protocol, bands, caps, and pass rule are unchanged",
+   "recorded_by": "Ian (main), 2026-11-13 ~13:20 WIB",
+   "what": "abc_v3_run.py now checkpoints incrementally under abc-v3-run-state/: the discovery report per band, each arm's results per band (tuple-preserving JSON), and each completed band record; a heartbeat.json tracks progress. On startup the driver resumes from checkpoints instead of recomputing. Measurement code (universe, split, discovery, arms, scorer calls, caps, walls) is byte-identical in behavior; only persistence was added.",
+   "why": "invocation 1 lost ~100 minutes because the driver held all results in memory until the final write; a VM replacement must never again be able to take a whole run"
+  },
+  {
+   "cpu_consumed": "arm A + arm B completed and checkpointed; arm C mid-flight, no output",
+   "died": "2026-11-13 14:32 WIB \u2014 the Muse VM was replaced/rebooted a SECOND time today (system boot 2026-11-13 07:32 UTC; uptime verified 33 min at 15:05 WIB); the invocation-2 driver (PID 4711) died with it",
+   "disposition": "VOID for invocation 2's unfinished arm-C work \u2014 nothing from arm C is used, estimated, or reconstructed. The relaunch (invocation 3) RESUMES from the surviving checkpoints (discovery_20261501.json, arm_20261501_A.json, arm_20261501_B.json) under the SAME locked preregistration (text 55b6331e, kernel protocol 8591b938); discovery, arm A and arm B are NOT re-run. Recorded openly per the G4 VOID precedent. Note: the 14:26 WIB heartbeat (band 20261501, phase arm_C) is a FROZEN heartbeat from before the reboot \u2014 it was briefly misread as a live signal in a hub report at ~14:44 WIB; the boot-time check is the deciding evidence.",
+   "event": "INVOCATION_2_VOID",
+   "evidence_written": "checkpoints only \u2014 discovery_20261501.json (14:09 WIB), arm_20261501_A.json (14:09 WIB), arm_20261501_B.json (14:26 WIB), heartbeat.json (14:26 WIB); evidence/abc_v3_run.json does not exist",
+   "kernel_state": "untouched \u2014 abc-v3-kernel/results.jsonl is 0 bytes; no result was recorded; the preregistration and custodies are intact",
+   "kind": "infrastructure_failure",
+   "launched": "2026-11-13 13:18 WIB (hardened checkpointing driver, PID 4711)",
+   "recorded_by": "Ian (main), 2026-11-13 ~15:05 WIB, on hub instruction after firsthand disk verification"
+  },
+  {
+   "cpu_consumed": "bands 20261501 + 20261502 completed in full; band 20261503 discovery + arms A/B completed; arm C interrupted mid-flight",
+   "died": "2026-11-13 16:43 WIB \u2014 the Muse VM was replaced/rebooted a THIRD time today (system boot 2026-11-13 09:43 UTC; verified from a fresh shell: uptime 7 min at 09:50 UTC and the driver PID gone); the invocation-3 driver died mid arm_C of band 20261503 \u2014 the final arm of the final band",
+   "disposition": "VOID for invocation 3's unfinished arm-C work \u2014 nothing from the interrupted arm C is used, estimated, or reconstructed. Invocation 4 (relaunched 2026-11-13 16:50 WIB, PID 2701) RESUMES from the surviving checkpoints under the SAME locked preregistration (text 55b6331e, kernel protocol 8591b938): completed bands and arms are NOT re-run; only band 20261503 arm C and the pooled finalize remain. Resume verified firsthand from a separate shell: heartbeat re-written 09:50:34 UTC (band 20261503, phase arm_C) and the driver at 99.4% CPU. Recorded openly per the G4 VOID precedent.",
+   "event": "INVOCATION_3_VOID",
+   "evidence_written": "checkpoints only \u2014 band records 20261501 + 20261502 COMPLETE; band 20261503: discovery (09:34 UTC), arm A (09:34 UTC), arm B (09:43 UTC) checkpointed; the interrupted arm C wrote nothing; evidence/abc_v3_run.json does not exist",
+   "kernel_state": "untouched \u2014 abc-v3-kernel/results.jsonl is 0 bytes; the preregistration and custodies are intact",
+   "kind": "infrastructure_failure",
+   "launched": "2026-11-13 15:05 WIB (resumed hardened driver, PID 5559)",
+   "recorded_by": "Ian (main), 2026-11-13 ~16:52 WIB, firsthand disk + boot-time verification"
+  }
+ ],
+ "experiment": "abc-v3-01",
+ "kernel_protocol_hash": "8591b93814759d5485be3f9e8b47e31a08aa7b1fc41e14b2707b2aa46b975c1a",
+ "preregistration_text_sha256": "55b6331eeed0cfc4779b09114cc74d7c48c47b1a125759bc6296105e3e6529be"
+}

@@ -1,0 +1,341 @@
+{
+  "checks": [
+    {
+      "check_id": "C1",
+      "dependencies": [
+        "the manifest itself (its custody is out of scope)"
+      ],
+      "evidence_missing": [],
+      "evidence_present": [
+        "evidence/abc-v3-kernel/custody.json",
+        "evidence/abc-v3-kernel/preregistrations/abc-v3-01.json",
+        "evidence/abc-v3-kernel/results.jsonl",
+        "evidence/abc-v3-run-state/arm_20261501_A.json",
+        "evidence/abc-v3-run-state/arm_20261501_B.json",
+        "evidence/abc-v3-run-state/arm_20261501_C.json",
+        "evidence/abc-v3-run-state/arm_20261502_A.json",
+        "evidence/abc-v3-run-state/arm_20261502_B.json",
+        "evidence/abc-v3-run-state/arm_20261502_C.json",
+        "evidence/abc-v3-run-state/arm_20261503_A.json",
+        "evidence/abc-v3-run-state/arm_20261503_B.json",
+        "evidence/abc-v3-run-state/arm_20261503_C.json",
+        "evidence/abc-v3-run-state/band_20261501.json",
+        "evidence/abc-v3-run-state/band_20261502.json",
+        "evidence/abc-v3-run-state/band_20261503.json",
+        "evidence/abc-v3-run-state/discovery_20261501.json",
+        "evidence/abc-v3-run-state/discovery_20261502.json",
+        "evidence/abc-v3-run-state/discovery_20261503.json",
+        "evidence/abc-v3-run-state/heartbeat.json",
+        "evidence/abc_v3_finalize.json",
+        "evidence/abc_v3_preregistration_record.json",
+        "evidence/abc_v3_run.json",
+        "evidence/abc_v3_run_notes.json"
+      ],
+      "false_positive_class": "canonicalization/path errors (symlink, separator, case) — measured by valid-variant probes",
+      "items": [
+        {
+          "item": "evidence/abc-v3-kernel/custody.json",
+          "reason": "present, 921 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-kernel/preregistrations/abc-v3-01.json",
+          "reason": "present, 1206 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-kernel/results.jsonl",
+          "reason": "present, 1143 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/arm_20261501_A.json",
+          "reason": "present, 99 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/arm_20261501_B.json",
+          "reason": "present, 12885 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/arm_20261501_C.json",
+          "reason": "present, 100 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/arm_20261502_A.json",
+          "reason": "present, 99 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/arm_20261502_B.json",
+          "reason": "present, 12639 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/arm_20261502_C.json",
+          "reason": "present, 100 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/arm_20261503_A.json",
+          "reason": "present, 99 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/arm_20261503_B.json",
+          "reason": "present, 12885 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/arm_20261503_C.json",
+          "reason": "present, 100 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/band_20261501.json",
+          "reason": "present, 2206 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/band_20261502.json",
+          "reason": "present, 2078 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/band_20261503.json",
+          "reason": "present, 2106 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/discovery_20261501.json",
+          "reason": "present, 4278 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/discovery_20261502.json",
+          "reason": "present, 1856 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/discovery_20261503.json",
+          "reason": "present, 1667 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc-v3-run-state/heartbeat.json",
+          "reason": "present, 96 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc_v3_finalize.json",
+          "reason": "present, 3126 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc_v3_preregistration_record.json",
+          "reason": "present, 574 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc_v3_run.json",
+          "reason": "present, 8882 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "evidence/abc_v3_run_notes.json",
+          "reason": "present, 5552 bytes, sha256 matches manifest",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        }
+      ],
+      "next_step": "No action for matching artifacts. For any TIDAK SESUAI: re-freeze the package or correct the manifest, then re-run. For UNKNOWN: repair the manifest entry.",
+      "stage": "VALIDATION VERDICT",
+      "state": "SESUAI",
+      "title": "Artifact completeness + hash integrity",
+      "validation_spec_digest": "77298db3605f3bcf6078c8601b45f96988e302f374ad2b46ece01ee21ef59b92"
+    },
+    {
+      "check_id": "C2",
+      "dependencies": [
+        "C1 integrity of every artifact an assertion touches"
+      ],
+      "evidence_missing": [],
+      "evidence_present": [
+        "bands-to-pooled-counts",
+        "bands-to-pooled-control-counts",
+        "pooled-rates-vs-finalize-arms",
+        "pooled-rates-vs-finalize-control",
+        "protocol-hash-results-vs-prereg",
+        "record-hash-results-vs-finalize",
+        "di-results-vs-finalize"
+      ],
+      "false_positive_class": "numeric-representation brittleness (0 vs 0.0 vs 1e2) — measured by valid-variant probes",
+      "items": [
+        {
+          "item": "bands-to-pooled-counts",
+          "reason": "summed pairs equal target: {\"A\": [0, 90], \"B\": [90, 90], \"C\": [90, 90]}",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "bands-to-pooled-control-counts",
+          "reason": "summed pairs equal target: {\"A\": [101, 101], \"B\": [99, 101], \"C\": [99, 101]}",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "pooled-rates-vs-finalize-arms",
+          "reason": "all rates within tolerance 0.000001: A (diff 0.0), B (diff 0.0), C (diff 0.0)",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "pooled-rates-vs-finalize-control",
+          "reason": "all rates within tolerance 0.000001: A (diff 0.0), B (diff 1.019801980198E-14), C (diff 1.019801980198E-14)",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "protocol-hash-results-vs-prereg",
+          "reason": "both sides equal: 8591b93814759d5485be3f9e8b47e31a08aa7b1fc41e14b2707b2aa46b975c1a",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "record-hash-results-vs-finalize",
+          "reason": "both sides equal: ebbfe054943c8de9546d743bdba55cd792082ad568119646dbd240a29582c8f5",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        },
+        {
+          "item": "di-results-vs-finalize",
+          "reason": "both sides equal: -1.9801980198019749",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        }
+      ],
+      "next_step": "For TIDAK SESUAI: the declared recomputation disagrees with the recorded values — inspect the named pointers. For UNKNOWN: supply the missing artifact/pointer or a supported assertion kind.",
+      "stage": "VALIDATION VERDICT",
+      "state": "SESUAI",
+      "title": "Result-count consistency (declared recomputations only)",
+      "validation_spec_digest": "77298db3605f3bcf6078c8601b45f96988e302f374ad2b46ece01ee21ef59b92"
+    },
+    {
+      "check_id": "C3",
+      "dependencies": [
+        "C1 integrity of the preregistration and results artifacts",
+        "the preregistration rule shape {metric, op, threshold}"
+      ],
+      "evidence_missing": [],
+      "evidence_present": [
+        "pass_rule: differentiation_index_pp gte 0",
+        "entry[0]"
+      ],
+      "false_positive_class": "rule-shape rigidity — unsupported rule shapes fail toward UNKNOWN, never toward false TIDAK SESUAI",
+      "items": [
+        {
+          "item": "entry[0]",
+          "reason": "metric differentiation_index_pp=-1.9801980198019749 gte 0 -> expected fail, recorded fail",
+          "reason_code": "OK",
+          "stage": "VALIDATION VERDICT",
+          "state": "SESUAI"
+        }
+      ],
+      "next_step": "For TIDAK SESUAI: the recorded verdict contradicts the preregistered rule on complete inputs. For UNKNOWN: supply the metric/rule in the supported shape, or record the entry's verdict as pass/fail.",
+      "stage": "VALIDATION VERDICT",
+      "state": "SESUAI",
+      "title": "Verdict vs preregistration rule",
+      "validation_spec_digest": "77298db3605f3bcf6078c8601b45f96988e302f374ad2b46ece01ee21ef59b92"
+    }
+  ],
+  "disclaimer": "PRE-AUDIT MEKANIS — bukan persetujuan, bukan validasi eksperimen. Laporan ini hanya menyatakan hasil perbandingan mekanis atas paket beku terhadap manifest eksplisit. Keadaan SESUAI pada semua cek tidak berarti eksperimen sah, benar, atau disetujui.",
+  "honest_limits": [
+    "Proves the package matches its manifest on the declared mechanical checks only.",
+    "Does not prove the manifest is the right manifest, that the preregistration predates the results, or that declared recomputations are scientifically correct.",
+    "Does not approve or validate any experiment, result, or gate claim."
+  ],
+  "lifecycle": {
+    "input_stage": "REGISTERED OBSERVATION",
+    "note": "This report is a VALIDATION VERDICT-stage artifact. Publication is a separate act the validator never performs.",
+    "output_stage": "VALIDATION VERDICT",
+    "stage_model_version": "1",
+    "stages": [
+      "STAGED",
+      "REGISTERED OBSERVATION",
+      "VALIDATION VERDICT",
+      "PUBLISHED RESULT"
+    ],
+    "stages_not_performed": [
+      "PUBLISHED RESULT"
+    ]
+  },
+  "manifest_sha256": "b1d76e277dfb00ce4d178799304d1b4516dabe13cd1fd0aaa280a70676ee47cb",
+  "package_id": "abc-v3-01-frozen-evidence (branch research/ace-omega-v3-evidence-20261113 @ 0b3eac3)",
+  "schema": "ace.preaudit_report.v2",
+  "summary_by_state": {
+    "SESUAI": 3,
+    "TIDAK SESUAI": 0,
+    "UNKNOWN": 0
+  },
+  "unlisted_files_informational_only": 0,
+  "validation_spec_digest": "77298db3605f3bcf6078c8601b45f96988e302f374ad2b46ece01ee21ef59b92",
+  "validator_build": {
+    "source_sha256": "e8451ae804c23faa0ba74cde5ebfeda4badb1f6d1ecfce1b276930642187dfd1",
+    "version": "preaudit-validator-2.0.0"
+  },
+  "validator_version": "preaudit-validator-2.0.0"
+}

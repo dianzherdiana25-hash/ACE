@@ -1,0 +1,36 @@
+{
+ "phase": "guard3_sandbox_replication_lifted",
+ "checks": {
+  "built": true,
+  "pool": true,
+  "evaluation": true,
+  "discriminating_n": true,
+  "discriminating_ids": true,
+  "arm_a": true,
+  "arm_b": true,
+  "arm_c": true,
+  "admitted_keys": true,
+  "controls": true
+ },
+ "controls": {
+  "L1": {
+   "n": 30,
+   "a": 30,
+   "b": 30
+  },
+  "L2": {
+   "n": 15,
+   "a": 15,
+   "b": 15
+  },
+  "L3": {
+   "n": 15,
+   "a": 15,
+   "b": 15
+  }
+ },
+ "admitted_motion_keys": [
+  "('move_stmt', ('augassign', 't', 'Add', 't'), ('return',))"
+ ],
+ "pass": true
+}

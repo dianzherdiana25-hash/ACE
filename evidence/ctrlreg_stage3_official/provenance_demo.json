@@ -1,0 +1,69 @@
+{
+ "task": "catalog_control-020",
+ "round_log_provenance": [
+  {
+   "composition": {
+    "root": 0,
+    "baseline": 0,
+    "key": 1,
+    "chain": 0
+   },
+   "key_lineages_present": [
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+   ]
+  },
+  {
+   "composition": {
+    "root": 0,
+    "baseline": 1,
+    "key": 1,
+    "chain": 0
+   },
+   "key_lineages_present": [
+    "('compare_swap', (5, 2, 3, 0, 4), 'Gt')"
+   ]
+  },
+  {
+   "composition": {
+    "root": 0,
+    "baseline": 1,
+    "key": 0,
+    "chain": 0
+   },
+   "key_lineages_present": []
+  },
+  {
+   "composition": {
+    "root": 0,
+    "baseline": 0,
+    "key": 1,
+    "chain": 0
+   },
+   "key_lineages_present": [
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'gc')"
+   ]
+  },
+  {
+   "composition": {
+    "root": 0,
+    "baseline": 0,
+    "key": 2,
+    "chain": 0
+   },
+   "key_lineages_present": [
+    "('compare_swap', (5, 2, 3, 0, 4), 'Gt')",
+    "('compare_swap', (5, 2, 3, 0, 4), 'GtE')"
+   ]
+  },
+  {
+   "composition": {
+    "root": 0,
+    "baseline": 0,
+    "key": 0,
+    "chain": 0
+   },
+   "key_lineages_present": []
+  }
+ ],
+ "score_calls": 410
+}
