@@ -47,6 +47,33 @@ class AutonomousEvolver:
         # Epoch F: Commercial CLI product factory, anti-slop publisher & O(1) B2A receipts
         epoch_f = run_commercial_factory_cycle(gen_dir / "epoch_f")
 
+        # Epoch A: Register newly synthesized skills monotonically into supervisor certified_skills
+        existing_skill_ids = {s["skill_id"] for s in self.supervisor._state["certified_skills"]}
+        for rep in epoch_a.get("reports", []):
+            sk = rep["skill"]
+            gen_skill_id = f"{sk['skill_id']}__{generation_id}"
+            if gen_skill_id not in existing_skill_ids:
+                self.supervisor._state["certified_skills"].append(
+                    {
+                        "skill_id": gen_skill_id,
+                        "base_skill_id": sk["skill_id"],
+                        "birth_sha256": sk["birth_certificate_sha256"],
+                        "generation_id": generation_id,
+                    }
+                )
+                existing_skill_ids.add(gen_skill_id)
+
+        # Epoch B/E: Inject generation-scoped adversarial reflex probe to compile a new antibody fossil
+        probe_res = self.supervisor.run_single_tick(
+            {
+                "task_id": f"probe_{generation_id}",
+                "expected_benefit": 1.0,
+                "estimated_dt": 0.3,
+                "remaining_budget_ratio": 1.0,
+                "payload_code": f"import os; os.system('probe_{generation_id}')",
+            }
+        )
+
         # Epoch E: Commit unified proof pheromone into StigmergicDAGMemory & export SubstrateSpore
         gen_digest = hashlib.sha256(
             json.dumps(
@@ -90,6 +117,9 @@ class AutonomousEvolver:
             "epoch_f_receipts_verified": epoch_f["receipts_verified_o1"],
             "epoch_f_remaining_debt_idr": epoch_f["remaining_debt_idr"],
             "epoch_e_tick_status": tick_res["status"],
+            "probe_antibody_status": probe_res["status"],
+            "total_certified_skills": len(self.supervisor.state["certified_skills"]),
+            "total_antibodies": self.supervisor.state["antibodies_compiled"],
             "spore_sha256": spore["spore_sha256"],
             "dag_chain_valid": self.supervisor.dag.verify_chain(),
         }

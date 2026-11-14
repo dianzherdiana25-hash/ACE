@@ -32,6 +32,9 @@ class AutonomousEvolverTests(unittest.TestCase):
             self.assertEqual(multi["generations_completed"], 2)
             self.assertTrue(multi["all_continuity_exams_passed"])
             self.assertEqual(multi["total_forgetting_count"], 0)
+            g1, g2 = multi["generations"]
+            self.assertGreater(g2["total_certified_skills"], g1["total_certified_skills"])
+            self.assertGreater(g2["total_antibodies"], g1["total_antibodies"])
 
 
 if __name__ == "__main__":
