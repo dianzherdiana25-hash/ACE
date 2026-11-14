@@ -14,7 +14,7 @@ class AutonomousEvolverTests(unittest.TestCase):
             evolver = AutonomousEvolver(d1)
             res = evolver.run_evolution_generation("gen-1")
 
-            self.assertEqual(res["epoch_a_skills_synthesized"], 4)
+            self.assertEqual(res["epoch_a_skills_synthesized"], 5)
             self.assertEqual(res["epoch_a_forgetting"], 0)
             self.assertEqual(res["epoch_b_waves_solved"], 3)
             self.assertEqual(res["epoch_c_mutation_kill_rate"], 1.0)
@@ -24,6 +24,7 @@ class AutonomousEvolverTests(unittest.TestCase):
             self.assertEqual(len(res["spore_sha256"]), 64)
             self.assertTrue((Path(d1) / "gen-1" / "generation_spore.json").exists())
             self.assertTrue((Path(d1) / "gen-1" / "evolution_summary.json").exists())
+            self.assertTrue((Path(d1) / "gen-1" / "synthesized_skills" / f"{res['novel_skill_id']}.py").exists())
 
     def test_multi_generation_continuity_exam(self) -> None:
         with tempfile.TemporaryDirectory() as d1:
@@ -35,6 +36,8 @@ class AutonomousEvolverTests(unittest.TestCase):
             g1, g2 = multi["generations"]
             self.assertGreater(g2["total_certified_skills"], g1["total_certified_skills"])
             self.assertGreater(g2["total_antibodies"], g1["total_antibodies"])
+            self.assertNotEqual(g1["novel_skill_birth_sha256"], g2["novel_skill_birth_sha256"])
+            self.assertNotEqual(g1["novel_skill_source"], g2["novel_skill_source"])
 
 
 if __name__ == "__main__":
