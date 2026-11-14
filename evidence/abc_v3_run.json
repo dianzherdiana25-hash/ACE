@@ -1,0 +1,445 @@
+{
+ "experiment": "abc-v3-01",
+ "bands": [
+  20261501,
+  20261502,
+  20261503
+ ],
+ "score_call_cap": 4000,
+ "wall_per_task_seconds": 60.0,
+ "band_records": [
+  {
+   "seed": 20261501,
+   "pool": 12,
+   "evaluation": 30,
+   "control": 34,
+   "admitted_keys": 60,
+   "admitted_chains": 1,
+   "catalog_digest": "a67685635cffb2c20a1c48bedd797b34ab71e93d7325eaae734231036418ee68",
+   "counts": {
+    "A": [
+     0,
+     30
+    ],
+    "B": [
+     30,
+     30
+    ],
+    "C": [
+     30,
+     30
+    ]
+   },
+   "control_counts": {
+    "A": [
+     34,
+     34
+    ],
+    "B": [
+     32,
+     34
+    ],
+    "C": [
+     32,
+     34
+    ]
+   },
+   "timeouts": {
+    "A": [],
+    "B": [],
+    "C": []
+   },
+   "s2_usage_task_ids": [
+    "new_only-031",
+    "new_only-032",
+    "new_only-033",
+    "new_only-034",
+    "new_only-035",
+    "new_only-036",
+    "new_only-037",
+    "new_only-038",
+    "new_only-039",
+    "new_only-040",
+    "new_only-041",
+    "new_only-042",
+    "new_only-043",
+    "new_only-044",
+    "new_only-045",
+    "new_only-046",
+    "new_only-047",
+    "new_only-048"
+   ],
+   "s2_usage_n": 18,
+   "calibration_gate_passed": true,
+   "arm_A_pooled_rate": 0.53125,
+   "assessment": {
+    "gate": "G2",
+    "criteria_version": 1,
+    "definition": "strategy differentiation is real, not a universe artefact: arms differentiated by strategy over one substrate and one score-call budget (PR #147)",
+    "clauses": {
+     "report_validity": {
+      "verdict": "PASS",
+      "missing": [],
+      "evidence": {
+       "arms": {
+        "A": 0.0,
+        "B": 100.0,
+        "C": 100.0
+       },
+       "control": {
+        "A": 100.0,
+        "B": 94.11764705882354,
+        "C": 94.11764705882354
+       }
+      }
+     },
+     "calibration_gate": {
+      "verdict": "PASS",
+      "missing": [],
+      "evidence": {
+       "calibration_gate_passed": true
+      }
+     },
+     "completeness": {
+      "verdict": "PASS",
+      "missing": [],
+      "evidence": {
+       "complete": true
+      }
+     },
+     "differentiation_index": {
+      "verdict": "FAIL",
+      "missing": [
+       "differentiation index is negative (-5.88pp < 0)"
+      ],
+      "evidence": {
+       "differentiation_index_pp": -5.882352941176464,
+       "c_minus_a_minus_15pp": 85.0,
+       "b_minus_a_minus_5pp": 95.0,
+       "control_margin_pp": -5.882352941176464
+      }
+     }
+    },
+    "differentiation_index_pp": -5.882352941176464,
+    "overall": "NOT_DEMONSTRATED",
+    "qualification": "The composite index is negative; see the differentiation-index terms for which margin binds."
+   },
+   "wall_seconds": 1111.5
+  },
+  {
+   "seed": 20261502,
+   "pool": 12,
+   "evaluation": 30,
+   "control": 34,
+   "admitted_keys": 6,
+   "admitted_chains": 2,
+   "catalog_digest": "561d272b947c731728d39e6804ac2f3eb416b5e9e4fd3036bd4d4e1f1efd8371",
+   "counts": {
+    "A": [
+     0,
+     30
+    ],
+    "B": [
+     30,
+     30
+    ],
+    "C": [
+     30,
+     30
+    ]
+   },
+   "control_counts": {
+    "A": [
+     34,
+     34
+    ],
+    "B": [
+     34,
+     34
+    ],
+    "C": [
+     34,
+     34
+    ]
+   },
+   "timeouts": {
+    "A": [],
+    "B": [],
+    "C": []
+   },
+   "s2_usage_task_ids": [
+    "new_only-031",
+    "new_only-032",
+    "new_only-033",
+    "new_only-034",
+    "new_only-035",
+    "new_only-036",
+    "new_only-038",
+    "new_only-039",
+    "new_only-040",
+    "new_only-041",
+    "new_only-042",
+    "new_only-043",
+    "new_only-044",
+    "new_only-045",
+    "new_only-046",
+    "new_only-047",
+    "new_only-048"
+   ],
+   "s2_usage_n": 17,
+   "calibration_gate_passed": true,
+   "arm_A_pooled_rate": 0.53125,
+   "assessment": {
+    "gate": "G2",
+    "criteria_version": 1,
+    "definition": "strategy differentiation is real, not a universe artefact: arms differentiated by strategy over one substrate and one score-call budget (PR #147)",
+    "clauses": {
+     "report_validity": {
+      "verdict": "PASS",
+      "missing": [],
+      "evidence": {
+       "arms": {
+        "A": 0.0,
+        "B": 100.0,
+        "C": 100.0
+       },
+       "control": {
+        "A": 100.0,
+        "B": 100.0,
+        "C": 100.0
+       }
+      }
+     },
+     "calibration_gate": {
+      "verdict": "PASS",
+      "missing": [],
+      "evidence": {
+       "calibration_gate_passed": true
+      }
+     },
+     "completeness": {
+      "verdict": "PASS",
+      "missing": [],
+      "evidence": {
+       "complete": true
+      }
+     },
+     "differentiation_index": {
+      "verdict": "PASS",
+      "missing": [],
+      "evidence": {
+       "differentiation_index_pp": 0.0,
+       "c_minus_a_minus_15pp": 85.0,
+       "b_minus_a_minus_5pp": 95.0,
+       "control_margin_pp": 0.0
+      }
+     }
+    },
+    "differentiation_index_pp": 0.0,
+    "overall": "DIFFERENTIATION_DEMONSTRATED",
+    "qualification": "none \u2014 the composite index meets its bar with the calibration gate passed and the run complete."
+   },
+   "wall_seconds": 2951.6
+  },
+  {
+   "seed": 20261503,
+   "pool": 12,
+   "evaluation": 30,
+   "control": 33,
+   "admitted_keys": 6,
+   "admitted_chains": 1,
+   "catalog_digest": "5005072890bf608dc78a98965e6c9a3bf729a517c9689a12a9ccc051cbbaf62a",
+   "counts": {
+    "A": [
+     0,
+     30
+    ],
+    "B": [
+     30,
+     30
+    ],
+    "C": [
+     30,
+     30
+    ]
+   },
+   "control_counts": {
+    "A": [
+     33,
+     33
+    ],
+    "B": [
+     33,
+     33
+    ],
+    "C": [
+     33,
+     33
+    ]
+   },
+   "timeouts": {
+    "A": [],
+    "B": [],
+    "C": []
+   },
+   "s2_usage_task_ids": [
+    "new_only-031",
+    "new_only-032",
+    "new_only-033",
+    "new_only-034",
+    "new_only-035",
+    "new_only-036",
+    "new_only-037",
+    "new_only-038",
+    "new_only-039",
+    "new_only-040",
+    "new_only-041",
+    "new_only-042",
+    "new_only-043",
+    "new_only-044",
+    "new_only-045",
+    "new_only-046",
+    "new_only-047",
+    "new_only-048"
+   ],
+   "s2_usage_n": 18,
+   "calibration_gate_passed": true,
+   "arm_A_pooled_rate": 0.5238095238095238,
+   "assessment": {
+    "gate": "G2",
+    "criteria_version": 1,
+    "definition": "strategy differentiation is real, not a universe artefact: arms differentiated by strategy over one substrate and one score-call budget (PR #147)",
+    "clauses": {
+     "report_validity": {
+      "verdict": "PASS",
+      "missing": [],
+      "evidence": {
+       "arms": {
+        "A": 0.0,
+        "B": 100.0,
+        "C": 100.0
+       },
+       "control": {
+        "A": 100.0,
+        "B": 100.0,
+        "C": 100.0
+       }
+      }
+     },
+     "calibration_gate": {
+      "verdict": "PASS",
+      "missing": [],
+      "evidence": {
+       "calibration_gate_passed": true
+      }
+     },
+     "completeness": {
+      "verdict": "PASS",
+      "missing": [],
+      "evidence": {
+       "complete": true
+      }
+     },
+     "differentiation_index": {
+      "verdict": "PASS",
+      "missing": [],
+      "evidence": {
+       "differentiation_index_pp": 0.0,
+       "c_minus_a_minus_15pp": 85.0,
+       "b_minus_a_minus_5pp": 95.0,
+       "control_margin_pp": 0.0
+      }
+     }
+    },
+    "differentiation_index_pp": 0.0,
+    "overall": "DIFFERENTIATION_DEMONSTRATED",
+    "qualification": "none \u2014 the composite index meets its bar with the calibration gate passed and the run complete."
+   },
+   "wall_seconds": 619.8
+  }
+ ],
+ "band_failures": [],
+ "pooled_counts": {
+  "A": [
+   0,
+   90
+  ],
+  "B": [
+   90,
+   90
+  ],
+  "C": [
+   90,
+   90
+  ]
+ },
+ "pooled_control_counts": {
+  "A": [
+   101,
+   101
+  ],
+  "B": [
+   99,
+   101
+  ],
+  "C": [
+   99,
+   101
+  ]
+ },
+ "pooled_calibration_gate_passed": true,
+ "pooled_assessment": {
+  "gate": "G2",
+  "criteria_version": 1,
+  "definition": "strategy differentiation is real, not a universe artefact: arms differentiated by strategy over one substrate and one score-call budget (PR #147)",
+  "clauses": {
+   "report_validity": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "arms": {
+      "A": 0.0,
+      "B": 100.0,
+      "C": 100.0
+     },
+     "control": {
+      "A": 100.0,
+      "B": 98.01980198019803,
+      "C": 98.01980198019803
+     }
+    }
+   },
+   "calibration_gate": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "calibration_gate_passed": true
+    }
+   },
+   "completeness": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "complete": true
+    }
+   },
+   "differentiation_index": {
+    "verdict": "FAIL",
+    "missing": [
+     "differentiation index is negative (-1.98pp < 0)"
+    ],
+    "evidence": {
+     "differentiation_index_pp": -1.9801980198019749,
+     "c_minus_a_minus_15pp": 85.0,
+     "b_minus_a_minus_5pp": 95.0,
+     "control_margin_pp": -1.9801980198019749
+    }
+   }
+  },
+  "differentiation_index_pp": -1.9801980198019749,
+  "overall": "NOT_DEMONSTRATED",
+  "qualification": "The composite index is negative; see the differentiation-index terms for which margin binds."
+ },
+ "complete": true,
+ "wall_seconds": 619.8
+}

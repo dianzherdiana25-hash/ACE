@@ -1,0 +1,24 @@
+{
+ "step": "dry-intake",
+ "scratch_kernel": "/home/hatch/workspace/ace-omega/bakeoff02-dryintake-kernel",
+ "checks": [
+  {
+   "experiment": "dryintake-pos",
+   "margin": 0.25,
+   "claimed": "pass",
+   "derived": "pass",
+   "audit": "CLEAN",
+   "ok": true
+  },
+  {
+   "experiment": "dryintake-neg",
+   "margin": -0.75,
+   "claimed": "fail",
+   "derived": "fail",
+   "audit": "CLEAN",
+   "ok": true
+  }
+ ],
+ "verdict": "PASS",
+ "harness_note": "first script (bakeoff02_dryintake.py) recorded dryintake-pos correctly, then raised KeyError reading rec['verdict'] instead of rec['result']['verdict']; completed by bakeoff02_dryintake_fix.py; the kernel intake path itself never failed"
+}

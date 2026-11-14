@@ -1,0 +1,32 @@
+{
+ "baseline_candidate_id": "arm-a-catalog-only",
+ "budget": {
+  "wall_seconds": 10800
+ },
+ "canary_tokens": [
+  "CANARY-V3APP01-7c2e"
+ ],
+ "candidate_digests": {
+  "arm-a-catalog-only": "d541695498cbd1857d3e73a17f40d6a0ef31e1c48046c88f090f11d69ed0be41",
+  "v3-strategy-arms": "b042614d90bc7b632cf4f5844443a9f736e2b59df0458651eb247da553575f9b"
+ },
+ "candidate_ids": [
+  "arm-a-catalog-only",
+  "v3-strategy-arms"
+ ],
+ "evaluator_digest": "c6ca3421eca3ff4f086b324820ad5168a57cea645ff83bfa922f95b47fd3b6c1",
+ "evaluator_id": "v3-scorer-v1",
+ "experiment_id": "abc-v3-01",
+ "fixture_digest": "18d854cf6c191938454a519de8ef5f71aba6b7d0f871814e772f7f3f815f4915",
+ "hypothesis": "Strategy differentiation is real: C > B > A on held-out grid tasks over one substrate and one score-call budget (DI >= 0).",
+ "negative_control_id": null,
+ "protocol": {
+  "calibration_gate": "pooled denominator; PASS on bands 20261201 (50.8%) and 20261301 (53.12%)",
+  "pass_rule": {
+   "gte": 0,
+   "metric": "differentiation_index_pp"
+  },
+  "preregistration_text_sha256": "55b6331eeed0cfc4779b09114cc74d7c48c47b1a125759bc6296105e3e6529be"
+ },
+ "protocol_hash": "8591b93814759d5485be3f9e8b47e31a08aa7b1fc41e14b2707b2aa46b975c1a"
+}

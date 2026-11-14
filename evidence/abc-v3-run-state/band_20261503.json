@@ -1,0 +1,116 @@
+{
+ "seed": 20261503,
+ "pool": 12,
+ "evaluation": 30,
+ "control": 33,
+ "admitted_keys": 6,
+ "admitted_chains": 1,
+ "catalog_digest": "5005072890bf608dc78a98965e6c9a3bf729a517c9689a12a9ccc051cbbaf62a",
+ "counts": {
+  "A": [
+   0,
+   30
+  ],
+  "B": [
+   30,
+   30
+  ],
+  "C": [
+   30,
+   30
+  ]
+ },
+ "control_counts": {
+  "A": [
+   33,
+   33
+  ],
+  "B": [
+   33,
+   33
+  ],
+  "C": [
+   33,
+   33
+  ]
+ },
+ "timeouts": {
+  "A": [],
+  "B": [],
+  "C": []
+ },
+ "s2_usage_task_ids": [
+  "new_only-031",
+  "new_only-032",
+  "new_only-033",
+  "new_only-034",
+  "new_only-035",
+  "new_only-036",
+  "new_only-037",
+  "new_only-038",
+  "new_only-039",
+  "new_only-040",
+  "new_only-041",
+  "new_only-042",
+  "new_only-043",
+  "new_only-044",
+  "new_only-045",
+  "new_only-046",
+  "new_only-047",
+  "new_only-048"
+ ],
+ "s2_usage_n": 18,
+ "calibration_gate_passed": true,
+ "arm_A_pooled_rate": 0.5238095238095238,
+ "assessment": {
+  "gate": "G2",
+  "criteria_version": 1,
+  "definition": "strategy differentiation is real, not a universe artefact: arms differentiated by strategy over one substrate and one score-call budget (PR #147)",
+  "clauses": {
+   "report_validity": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "arms": {
+      "A": 0.0,
+      "B": 100.0,
+      "C": 100.0
+     },
+     "control": {
+      "A": 100.0,
+      "B": 100.0,
+      "C": 100.0
+     }
+    }
+   },
+   "calibration_gate": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "calibration_gate_passed": true
+    }
+   },
+   "completeness": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "complete": true
+    }
+   },
+   "differentiation_index": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "differentiation_index_pp": 0.0,
+     "c_minus_a_minus_15pp": 85.0,
+     "b_minus_a_minus_5pp": 95.0,
+     "control_margin_pp": 0.0
+    }
+   }
+  },
+  "differentiation_index_pp": 0.0,
+  "overall": "DIFFERENTIATION_DEMONSTRATED",
+  "qualification": "none \u2014 the composite index meets its bar with the calibration gate passed and the run complete."
+ },
+ "wall_seconds": 619.8
+}

@@ -1,0 +1,51 @@
+{
+ "k": 6,
+ "nc_key_present": false,
+ "wall_seconds": 30.5,
+ "records": {
+  "catalog_control-020": {
+   "task_id": "catalog_control-020",
+   "solved": true,
+   "score_calls": 8,
+   "shown_score": 8,
+   "shown_total": 8,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "a_solution_scored": true,
+   "scored_multiset_sha256": "5fcca4e19021df042ce8e77d4c7e8b5c5d412acf208739fc76362a53b9f357d7",
+   "n_scored": 8,
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "timeout": false
+  },
+  "catalog_control-021": {
+   "task_id": "catalog_control-021",
+   "solved": true,
+   "score_calls": 7,
+   "shown_score": 8,
+   "shown_total": 8,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "a_solution_scored": true,
+   "scored_multiset_sha256": "eaf365a5e547f6955edaa2281c47ea5cd53e8ce897050dd1aae3e3cf82fb804f",
+   "n_scored": 7,
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "timeout": false
+  }
+ }
+}

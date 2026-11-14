@@ -1,0 +1,32 @@
+{
+ "baseline_candidate_id": "frozen-mechanism",
+ "budget": {
+  "wall_seconds": 14400
+ },
+ "canary_tokens": [
+  "CANARY-R2GATE01-4b7d"
+ ],
+ "candidate_digests": {
+  "frozen-mechanism": "2652adaf7f4dbbb6d5f03465ac14ae753f7cb9b7cf458a7fb98c200c3466d047",
+  "lifted-mechanism-round2": "7cf3b62a05a6550107d723bfbf2761292ac4455d2fff554bc11b911feab2b849"
+ },
+ "candidate_ids": [
+  "frozen-mechanism",
+  "lifted-mechanism-round2"
+ ],
+ "evaluator_digest": "e08c15860e37765abe6195a438b2db1ade29004b4824fdb57a24cd41a0c3aa3c",
+ "evaluator_id": "round2-instrument-v1",
+ "experiment_id": "round2-gate-01",
+ "fixture_digest": "7b3af96c87ed57dd8dbcf1a517767ae72ad9f69fa5d1f46568c9061d6d894f3c",
+ "hypothesis": "The lifted mechanism (frozen + statement-motion schema) holds its effect on a fresh order-sensitive universe behind the replication guard: B_disc >= 80%, capture >= 60%, no stability/control regression (round2_index >= 0).",
+ "negative_control_id": null,
+ "protocol": {
+  "pass_rule": {
+   "gte": 0,
+   "metric": "round2_index"
+  },
+  "preregistration_text_sha256": "89dbb6f105ebfcb4cc4767abcbbd2a5c0f59bc99193267d5989bc8c8c8668521",
+  "replication_guard": "v4 grid EXACT + B-3 probe 1.000 + sandbox round-2 replication; any failure = abstain"
+ },
+ "protocol_hash": "743a2e9c3c9092e9071637ae70ea2866e902bf2158ddad36f34684e55dbab11c"
+}

@@ -1,0 +1,58 @@
+{
+ "experiment": "ctrlreg-stage0-replay (design PR #173)",
+ "seed": 20261501,
+ "catalog_digest": "a67685635cffb2c20a1c48bedd797b34ab71e93d7325eaae734231036418ee68",
+ "n_keys": 60,
+ "n_chains": 1,
+ "fence_expected_capped": {
+  "A": 34,
+  "B": 32,
+  "C": 32
+ },
+ "fence_reproduced": true,
+ "configurations": {
+  "A_capped": {
+   "solved": 34,
+   "total": 34,
+   "wall_seconds": 0.4
+  },
+  "B_capped": {
+   "solved": 32,
+   "total": 34,
+   "wall_seconds": 548.6
+  },
+  "C_capped": {
+   "solved": 32,
+   "total": 34,
+   "wall_seconds": 627.4
+  },
+  "A_uncapped": {
+   "solved": 34,
+   "total": 34,
+   "wall_seconds": 0.4
+  },
+  "B_uncapped": {
+   "solved": 32,
+   "total": 34,
+   "wall_seconds": 546.3
+  },
+  "C_uncapped": {
+   "solved": 32,
+   "total": 34,
+   "wall_seconds": 628.7
+  }
+ },
+ "capped_failed_task_ids": {
+  "B": [
+   "catalog_control-020",
+   "catalog_control-021"
+  ],
+  "C": [
+   "catalog_control-020",
+   "catalog_control-021"
+  ]
+ },
+ "same_tasks_B_C": true,
+ "verdict": "REPRODUCED",
+ "note": "Capped replay reproduced 34/32/32 exactly; per-task records in ctrlreg-stage0-state/. Mechanism attribution is Stage 1, not claimed here."
+}

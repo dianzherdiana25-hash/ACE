@@ -1,0 +1,51 @@
+{
+ "k": 0,
+ "nc_key_present": false,
+ "wall_seconds": 0.0,
+ "records": {
+  "catalog_control-020": {
+   "task_id": "catalog_control-020",
+   "solved": true,
+   "score_calls": 4,
+   "shown_score": 8,
+   "shown_total": 8,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "a_solution_scored": true,
+   "scored_multiset_sha256": "390119128d9c4082e9bc6293fe51c0549feaa8f97f7843ab132c4becbfde2966",
+   "n_scored": 4,
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "timeout": false
+  },
+  "catalog_control-021": {
+   "task_id": "catalog_control-021",
+   "solved": true,
+   "score_calls": 4,
+   "shown_score": 8,
+   "shown_total": 8,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "a_solution_scored": true,
+   "scored_multiset_sha256": "390119128d9c4082e9bc6293fe51c0549feaa8f97f7843ab132c4becbfde2966",
+   "n_scored": 4,
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "timeout": false
+  }
+ }
+}

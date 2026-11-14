@@ -1,0 +1,51 @@
+{
+ "k": 48,
+ "nc_key_present": true,
+ "wall_seconds": 56.9,
+ "records": {
+  "catalog_control-020": {
+   "task_id": "catalog_control-020",
+   "solved": false,
+   "score_calls": 206,
+   "shown_score": 4,
+   "shown_total": 8,
+   "returned_sha256": "dcfb155f27659d3eae8732a49957c2f357e0bddc34721e6c92e6505ea06a5c09",
+   "a_solution_scored": false,
+   "scored_multiset_sha256": "eb49f0342f835cc37e67bf309385d18b61dbe2458c0dbc42fa4817385b0bdff1",
+   "n_scored": 206,
+   "trace": [
+    [
+     "key",
+     "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+    ],
+    [
+     "baseline",
+     null
+    ],
+    [
+     "key",
+     "('name_swap', (5, 2, 3, 0, 1, 4), 'gc')"
+    ]
+   ],
+   "timeout": false
+  },
+  "catalog_control-021": {
+   "task_id": "catalog_control-021",
+   "solved": false,
+   "score_calls": 85,
+   "shown_score": 2,
+   "shown_total": 8,
+   "returned_sha256": "6577e3eecf247df1555e9279b8057bb2ce5d882fa8de2a6fa95a0dbe3c49062b",
+   "a_solution_scored": false,
+   "scored_multiset_sha256": "faf04577062ba41a4580e9b1876cfbefe91a42a4199972dc75b7b72a01892535",
+   "n_scored": 85,
+   "trace": [
+    [
+     "key",
+     "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+    ]
+   ],
+   "timeout": false
+  }
+ }
+}

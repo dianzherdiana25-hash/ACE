@@ -1,0 +1,1081 @@
+{
+ "counts": [
+  30,
+  30
+ ],
+ "control_counts": [
+  32,
+  34
+ ],
+ "timeouts": [],
+ "b_traces": {
+  "new_only-004": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "binop_swap",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         1,
+         4
+        ]
+       },
+       "Mult"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-005": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "binop_swap",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         1,
+         4
+        ]
+       },
+       "Mult"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-006": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "binop_swap",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         1,
+         4
+        ]
+       },
+       "Mult"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-010": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "int_constant",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         1,
+         1,
+         2
+        ]
+       },
+       1
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-011": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "int_constant",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         1,
+         1,
+         2
+        ]
+       },
+       1
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-012": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "int_constant",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         1,
+         1,
+         2
+        ]
+       },
+       1
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-016": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-017": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-018": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-022": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-023": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-024": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-031": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "binop_swap",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         1,
+         4
+        ]
+       },
+       "Mult"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-032": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "binop_swap",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         1,
+         4
+        ]
+       },
+       "Mult"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-033": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "binop_swap",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         1,
+         4
+        ]
+       },
+       "Mult"
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-034": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "binop_swap",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         1,
+         4
+        ]
+       },
+       "Mult"
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-035": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "binop_swap",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         1,
+         4
+        ]
+       },
+       "Mult"
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-036": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "binop_swap",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         1,
+         4
+        ]
+       },
+       "Mult"
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-037": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "int_constant",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         1,
+         1,
+         2
+        ]
+       },
+       1
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-038": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "int_constant",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         1,
+         1,
+         2
+        ]
+       },
+       1
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-039": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "int_constant",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         1,
+         1,
+         2
+        ]
+       },
+       1
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-040": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "int_constant",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         1,
+         1,
+         2
+        ]
+       },
+       1
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-041": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "int_constant",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         1,
+         1,
+         2
+        ]
+       },
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-042": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "int_constant",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         1,
+         1,
+         2
+        ]
+       },
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-043": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "int_constant",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         1,
+         1,
+         2
+        ]
+       },
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-044": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "int_constant",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         1,
+         1,
+         2
+        ]
+       },
+       1
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-045": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-046": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-047": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ],
+  "new_only-048": [
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "return_indices",
+       {
+        "__tuple__": [
+         6
+        ]
+       },
+       {
+        "__tuple__": [
+         "gr",
+         "gc"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "__tuple__": [
+     "key",
+     {
+      "__tuple__": [
+       "string_literal",
+       {
+        "__tuple__": [
+         5,
+         2,
+         3,
+         0,
+         4,
+         2
+        ]
+       },
+       "#"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}

@@ -1,0 +1,80 @@
+name: ACE open-world pilot verification
+
+on:
+  pull_request:
+    paths:
+      - 'code/ace_operational/open_world_*.py'
+      - 'code/ace_mission/bus.py'
+      - 'code/ace_operational/test_open_world_*.py'
+      - 'examples/open_world_capabilities.json'
+      - '.github/workflows/ace-open-world-pilot.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  planner-regression:
+    name: Open-world planner (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile implementation and tests
+        run: |
+          python -m py_compile code/ace_operational/open_world_planner.py \
+            code/ace_operational/open_world_cli.py \
+            code/ace_operational/open_world_execution.py \
+            code/ace_operational/open_world_task_bridge.py \
+            code/ace_operational/open_world_review_bus.py \
+            code/ace_mission/bus.py \
+            code/ace_operational/test_open_world_planner.py \
+            code/ace_operational/test_open_world_cli.py \
+            code/ace_operational/test_open_world_execution.py \
+            code/ace_operational/test_open_world_task_bridge.py
+      - name: Run focused negative and positive controls
+        env:
+          PYTHONPATH: code
+        run: |
+          python -m unittest -v \
+            ace_operational.test_open_world_planner \
+            ace_operational.test_open_world_cli \
+            ace_operational.test_open_world_execution \
+            ace_operational.test_open_world_task_bridge
+      - name: Read-only demo smoke
+        env:
+          PYTHONPATH: code
+        run: |
+          python -m ace_operational.open_world_cli \
+            --manifest examples/open_world_capabilities.json \
+            --have dataset:raw --want report:verified > /tmp/ace-plan.json
+          python - <<'PY'
+          import json
+          d = json.load(open('/tmp/ace-plan.json', encoding='utf-8'))
+          assert d['status'] == 'READY', d
+          assert d['execution_performed'] is False, d
+          assert d['capability_ids'] == ['parse-dataset', 'research-analysis', 'create-report'], d
+          assert d['total_cost_units'] == 7, d
+          print(json.dumps(d, sort_keys=True))
+          PY
+      - name: Prove frozen MissionBus evaluator source is unchanged
+        run: |
+          test "$(git hash-object code/ace_mission/bus.py)" = "6791c55289767759738667c49d5d8a4ffcacb597"
+      - name: Replay unchanged published mission admission benchmark
+        env:
+          PYTHONPATH: code
+        run: |
+          python tools/ace_mission_admission_benchmark.py \
+            --output /tmp/ow-mission-admission.json \
+            --profile /tmp/ow-mission-profile.json \
+            --raw-receipts /tmp/ow-mission-raw.json.gz
+          cmp /tmp/ow-mission-admission.json evidence/mission_admission/public-v1.json

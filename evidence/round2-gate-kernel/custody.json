@@ -1,0 +1,23 @@
+{
+ "candidates": {
+  "frozen-mechanism": {
+   "artifact_digest": "2652adaf7f4dbbb6d5f03465ac14ae753f7cb9b7cf458a7fb98c200c3466d047",
+   "candidate_id": "frozen-mechanism",
+   "signature": "72c94570f4890f2e0e69720433ff16c7273d8bc478b069acf86c04a9f7d59194"
+  },
+  "lifted-mechanism-round2": {
+   "artifact_digest": "7cf3b62a05a6550107d723bfbf2761292ac4455d2fff554bc11b911feab2b849",
+   "candidate_id": "lifted-mechanism-round2",
+   "signature": "473b6ae60a7f74a6c556ffa803e48a41902b06fca03d57a261f3c94eae0cc0ae"
+  }
+ },
+ "evaluator": {
+  "artifact_digest": "e08c15860e37765abe6195a438b2db1ade29004b4824fdb57a24cd41a0c3aa3c",
+  "evaluator_id": "round2-instrument-v1",
+  "signature": "f2d0e3072e200a3599ebfeb8bbca2f053c59db56950fed98dce43e660c9af5b0"
+ },
+ "fixture": {
+  "fixture_digest": "7b3af96c87ed57dd8dbcf1a517767ae72ad9f69fa5d1f46568c9061d6d894f3c",
+  "signature": "64aa1b3ea15538cedf2041ed73e19728c301b94239f72addc29a21c956d302ef"
+ }
+}

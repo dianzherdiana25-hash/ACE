@@ -1,0 +1,30 @@
+{
+ "package": "ctrlreg-stage3-official",
+ "experiment": "ACE Omega control-regression Stage 3 \u2014 OFFICIAL run",
+ "authority": "PR #184 draft + PR #173 \u00a716 internal ratification + hub act 2026-11-13 22:45 WIB",
+ "bands": [
+  20261601,
+  20261602,
+  20261603
+ ],
+ "record": "evidence/ctrlreg_stage3_official_record.json",
+ "runner": "evidence/ctrlreg_stage3_official_runner.py",
+ "harness_extension": "evidence/ctrlreg_stage3_official_harness_ext.py",
+ "state_dir": "evidence/ctrlreg_stage3_official/state",
+ "verdicts": {
+  "P1": "P1_REPRODUCED",
+  "P2": "HELD",
+  "P3": "HELD"
+ },
+ "stage3_check": {
+  "declared": true,
+  "checks": [
+   "C1",
+   "C2",
+   "C3",
+   "C4"
+  ],
+  "task_map_source": "evidence/ctrlreg_stage3_official/state (per-band cell records carry per-task maps + round-log frontier provenance)",
+  "note": "Declaration for the pre-audit validator Stage-3 extension (PR #189): this package requests the C1-C4 pre-audit under one validation_spec_digest."
+ }
+}

@@ -1,0 +1,221 @@
+{
+ "schema": "ace.preaudit_manifest.v1",
+ "package_id": "abc-v3-01-frozen-evidence (branch research/ace-omega-v3-evidence-20261113 @ 0b3eac3)",
+ "artifacts": [
+  {
+   "path": "evidence/abc-v3-kernel/custody.json",
+   "sha256": "e9f8e3118391618b9f952fd87aa0846a4447fb4869e215b9e78ae9aaad8c8ce5",
+   "size_bytes": 921
+  },
+  {
+   "path": "evidence/abc-v3-kernel/preregistrations/abc-v3-01.json",
+   "sha256": "8075f90f999d682e5ab7bc97855bd326c0127322b22b3c866cce2d5784b56df8",
+   "size_bytes": 1206
+  },
+  {
+   "path": "evidence/abc-v3-kernel/results.jsonl",
+   "sha256": "e1479c347f80171271cf8f688b2a0d5fad3813dad85a7096800c195de8a4a8ee",
+   "size_bytes": 1143
+  },
+  {
+   "path": "evidence/abc-v3-run-state/arm_20261501_A.json",
+   "sha256": "cc9261b01d8e92e69af08da55a78486955585c5cbed9462d59965c3711c0e1dd",
+   "size_bytes": 99
+  },
+  {
+   "path": "evidence/abc-v3-run-state/arm_20261501_B.json",
+   "sha256": "dec00c912c2633756581b04cc0e842246a8b8ea3e369be56b3a21f99d6e09ce0",
+   "size_bytes": 12885
+  },
+  {
+   "path": "evidence/abc-v3-run-state/arm_20261501_C.json",
+   "sha256": "93d7432b784fe2109bfd54c7ae9088e0614d925c0d71a55433d42766fe6029cf",
+   "size_bytes": 100
+  },
+  {
+   "path": "evidence/abc-v3-run-state/arm_20261502_A.json",
+   "sha256": "cc9261b01d8e92e69af08da55a78486955585c5cbed9462d59965c3711c0e1dd",
+   "size_bytes": 99
+  },
+  {
+   "path": "evidence/abc-v3-run-state/arm_20261502_B.json",
+   "sha256": "68ec81cd823759b7dc55b6360e8348e42063c193d3f1e4687efd04a236e543f1",
+   "size_bytes": 12639
+  },
+  {
+   "path": "evidence/abc-v3-run-state/arm_20261502_C.json",
+   "sha256": "4b3299fea263c20e7b2d67bfd8b792827b08ca7cf52a568377d980e0d1a049a7",
+   "size_bytes": 100
+  },
+  {
+   "path": "evidence/abc-v3-run-state/arm_20261503_A.json",
+   "sha256": "750a760116792dee7740376893506854d2d984038f0513c5728d599d07c20991",
+   "size_bytes": 99
+  },
+  {
+   "path": "evidence/abc-v3-run-state/arm_20261503_B.json",
+   "sha256": "77a2c0fb467532cdd170769e9446c5b1a08b45132616be74ca35c45958736ca0",
+   "size_bytes": 12885
+  },
+  {
+   "path": "evidence/abc-v3-run-state/arm_20261503_C.json",
+   "sha256": "d66cd98b6980f985534f0e1281829af237cad37d6be62030623720e644e20025",
+   "size_bytes": 100
+  },
+  {
+   "path": "evidence/abc-v3-run-state/band_20261501.json",
+   "sha256": "4aab59bdc6a4062123390025a56d5ce2aa0367df083e3352d848d387edd3204d",
+   "size_bytes": 2206
+  },
+  {
+   "path": "evidence/abc-v3-run-state/band_20261502.json",
+   "sha256": "f91ff320e55221c627f649db572c98c8ae31db2084b70368d9f2f72e5b6dcd75",
+   "size_bytes": 2078
+  },
+  {
+   "path": "evidence/abc-v3-run-state/band_20261503.json",
+   "sha256": "b4129206059980a18768e836db8beb802eb17cdb50a653a422c937672cc46454",
+   "size_bytes": 2106
+  },
+  {
+   "path": "evidence/abc-v3-run-state/discovery_20261501.json",
+   "sha256": "9d398f639eaf2fc6367401b7d6f978bc4c8d732c1006e83d541130f5571aead5",
+   "size_bytes": 4278
+  },
+  {
+   "path": "evidence/abc-v3-run-state/discovery_20261502.json",
+   "sha256": "6f0f547f237db8df8729644202caac0c5274180d2a481d98df933c56fd238e56",
+   "size_bytes": 1856
+  },
+  {
+   "path": "evidence/abc-v3-run-state/discovery_20261503.json",
+   "sha256": "7ba867965054b8199c727edf0245db4fa6a93137de6ba15a4db0be7ef47dc35d",
+   "size_bytes": 1667
+  },
+  {
+   "path": "evidence/abc-v3-run-state/heartbeat.json",
+   "sha256": "c4d8da1f849cf395decc47213c6ea317d77e65dc2a59515778338c1f3abf72be",
+   "size_bytes": 96
+  },
+  {
+   "path": "evidence/abc_v3_finalize.json",
+   "sha256": "7b7b13fe78600dc50bfe2c89a2b2099040d8ad262e5bee56fb12a814077f008d",
+   "size_bytes": 3126
+  },
+  {
+   "path": "evidence/abc_v3_preregistration_record.json",
+   "sha256": "a0de6578cad2a3b0dd7946606c7e731eddb7cd415dda3e565af9d08fff4cd13e",
+   "size_bytes": 574
+  },
+  {
+   "path": "evidence/abc_v3_run.json",
+   "sha256": "ae7909bd4d695f5dbc43379d41cbff9427d8c058042e7b30fd246498944296ee",
+   "size_bytes": 8882
+  },
+  {
+   "path": "evidence/abc_v3_run_notes.json",
+   "sha256": "5cee585f4cc6de8edf50b0f93735066386645fc0faffaec1f23a430fe7f59418",
+   "size_bytes": 5552
+  }
+ ],
+ "count_assertions": [
+  {
+   "id": "bands-to-pooled-counts",
+   "kind": "sum_pairs_equals",
+   "source": {
+    "artifact": "evidence/abc_v3_run.json",
+    "pointer": "/band_records"
+   },
+   "key": "counts",
+   "target": {
+    "artifact": "evidence/abc-v3-kernel/results.jsonl",
+    "pointer": "/entry_seq:1/result/raw_telemetry/pooled_counts"
+   }
+  },
+  {
+   "id": "bands-to-pooled-control-counts",
+   "kind": "sum_pairs_equals",
+   "source": {
+    "artifact": "evidence/abc_v3_run.json",
+    "pointer": "/band_records"
+   },
+   "key": "control_counts",
+   "target": {
+    "artifact": "evidence/abc-v3-kernel/results.jsonl",
+    "pointer": "/entry_seq:1/result/raw_telemetry/pooled_control_counts"
+   }
+  },
+  {
+   "id": "pooled-rates-vs-finalize-arms",
+   "kind": "rate_equals",
+   "source": {
+    "artifact": "evidence/abc-v3-kernel/results.jsonl",
+    "pointer": "/entry_seq:1/result/raw_telemetry/pooled_counts"
+   },
+   "target": {
+    "artifact": "evidence/abc_v3_finalize.json",
+    "pointer": "/assessment/clauses/report_validity/evidence/arms"
+   },
+   "scale": 100,
+   "tolerance": "0.000001"
+  },
+  {
+   "id": "pooled-rates-vs-finalize-control",
+   "kind": "rate_equals",
+   "source": {
+    "artifact": "evidence/abc-v3-kernel/results.jsonl",
+    "pointer": "/entry_seq:1/result/raw_telemetry/pooled_control_counts"
+   },
+   "target": {
+    "artifact": "evidence/abc_v3_finalize.json",
+    "pointer": "/assessment/clauses/report_validity/evidence/control"
+   },
+   "scale": 100,
+   "tolerance": "0.000001"
+  },
+  {
+   "id": "protocol-hash-results-vs-prereg",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/abc-v3-kernel/results.jsonl",
+    "pointer": "/entry_seq:1/result/protocol_hash"
+   },
+   "right": {
+    "artifact": "evidence/abc-v3-kernel/preregistrations/abc-v3-01.json",
+    "pointer": "/protocol_hash"
+   }
+  },
+  {
+   "id": "record-hash-results-vs-finalize",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/abc-v3-kernel/results.jsonl",
+    "pointer": "/entry_seq:1/hash"
+   },
+   "right": {
+    "artifact": "evidence/abc_v3_finalize.json",
+    "pointer": "/kernel_record/hash"
+   }
+  },
+  {
+   "id": "di-results-vs-finalize",
+   "kind": "field_equals",
+   "left": {
+    "artifact": "evidence/abc-v3-kernel/results.jsonl",
+    "pointer": "/entry_seq:1/result/metrics/differentiation_index_pp"
+   },
+   "right": {
+    "artifact": "evidence/abc_v3_finalize.json",
+    "pointer": "/assessment/differentiation_index_pp"
+   }
+  }
+ ],
+ "verdict_check": {
+  "preregistration": {
+   "artifact": "evidence/abc-v3-kernel/preregistrations/abc-v3-01.json"
+  },
+  "results": {
+   "artifact": "evidence/abc-v3-kernel/results.jsonl"
+  }
+ }
+}

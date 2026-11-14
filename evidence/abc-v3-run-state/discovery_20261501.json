@@ -1,0 +1,126 @@
+{
+ "by_class": {
+  "bounds_off_by_one": {
+   "pool_tasks": 3,
+   "candidate_operators": 3,
+   "admitted_operators": [
+    "('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult')",
+    "('binop_unwrap', (5, 2, 3, 0, 1, 4), 'left')",
+    "('int_constant', (5, 2, 3, 0, 1, 4, 2), 0)"
+   ],
+   "admitted_chains": [
+    "(('return_indices', (6,), ('gr', 'gc')), ('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult'))"
+   ],
+   "eval_tasks": 9,
+   "eval_solved_baseline": 0,
+   "eval_solved_extended": 5
+  },
+  "dist_step_2": {
+   "pool_tasks": 3,
+   "candidate_operators": 1,
+   "admitted_operators": [
+    "('int_constant', (5, 2, 3, 1, 1, 2), 1)"
+   ],
+   "admitted_chains": [],
+   "eval_tasks": 11,
+   "eval_solved_baseline": 0,
+   "eval_solved_extended": 3
+  },
+  "returns_start_distance": {
+   "pool_tasks": 3,
+   "candidate_operators": 1,
+   "admitted_operators": [
+    "('return_indices', (6,), ('gr', 'gc'))"
+   ],
+   "admitted_chains": [
+    "(('return_indices', (6,), ('gr', 'gc')), ('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult'))"
+   ],
+   "eval_tasks": 13,
+   "eval_solved_baseline": 0,
+   "eval_solved_extended": 5
+  },
+  "wall_char_x": {
+   "pool_tasks": 3,
+   "candidate_operators": 55,
+   "admitted_operators": [
+    "('name_swap', (5, 2, 2, 1, 0, 0), 'c')",
+    "('name_swap', (5, 2, 2, 1, 0, 0), 'cols')",
+    "('name_swap', (5, 2, 2, 1, 0, 0), 'dc')",
+    "('name_swap', (5, 2, 2, 1, 0, 0), 'sc')",
+    "('name_swap', (5, 2, 2, 1, 0, 0), 'sr')",
+    "('name_swap', (5, 2, 2, 1, 0, 2), 'cols')",
+    "('name_swap', (5, 2, 2, 1, 0, 2), 'gc')",
+    "('name_swap', (5, 2, 2, 1, 0, 2), 'r')",
+    "('name_swap', (5, 2, 2, 1, 0, 2), 'rows')",
+    "('name_swap', (5, 2, 2, 1, 0, 2), 'sc')",
+    "('name_swap', (5, 2, 2, 1, 0, 2), 'sr')",
+    "('name_swap', (5, 2, 2, 1, 1, 0), 'cols')",
+    "('name_swap', (5, 2, 2, 1, 1, 0), 'dr')",
+    "('name_swap', (5, 2, 2, 1, 1, 0), 'r')",
+    "('name_swap', (5, 2, 2, 1, 1, 0), 'rows')",
+    "('name_swap', (5, 2, 2, 1, 1, 2), 'cols')",
+    "('name_swap', (5, 2, 2, 1, 1, 2), 'gr')",
+    "('name_swap', (5, 2, 2, 1, 1, 2), 'rows')",
+    "('int_constant', (5, 2, 3, 0, 1, 0), 2)",
+    "('name_swap', (5, 2, 3, 0, 1, 3), 'cols')",
+    "('name_swap', (5, 2, 3, 0, 1, 3), 'rows')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'dc')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'dr')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'gc')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'gr')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'nr')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'r')",
+    "('int_constant', (5, 2, 3, 0, 2, 0), 2)",
+    "('name_swap', (5, 2, 3, 0, 2, 3), 'cols')",
+    "('name_swap', (5, 2, 3, 0, 2, 4), 'c')",
+    "('name_swap', (5, 2, 3, 0, 2, 4), 'dc')",
+    "('name_swap', (5, 2, 3, 0, 2, 4), 'gc')",
+    "('name_swap', (5, 2, 3, 0, 2, 4), 'nc')",
+    "('unary_not', (5, 2, 3, 0, 3), 'wrap')",
+    "('compare_swap', (5, 2, 3, 0, 3), 'Lt')",
+    "('compare_swap', (5, 2, 3, 0, 3), 'Gt')",
+    "('compare_swap', (5, 2, 3, 0, 3), 'NotEq')",
+    "('subscript_index', (5, 2, 3, 0, 3, 0, 0), 'sr')",
+    "('subscript_index', (5, 2, 3, 0, 3, 0, 0), 'sc')",
+    "('name_swap', (5, 2, 3, 0, 3, 0, 0, 0), 'grid')",
+    "('name_swap', (5, 2, 3, 0, 3, 0, 0, 1), 'r')",
+    "('int_constant', (5, 2, 3, 0, 3, 2, 1), 0)",
+    "('int_constant', (5, 2, 3, 0, 3, 2, 1), 2)",
+    "('unary_not', (5, 2, 3, 0, 4), 'wrap')",
+    "('compare_swap', (5, 2, 3, 0, 4), 'Gt')",
+    "('compare_swap', (5, 2, 3, 0, 4), 'GtE')",
+    "('compare_swap', (5, 2, 3, 0, 4), 'Eq')",
+    "('string_literal', (5, 2, 3, 0, 4, 2), '#')",
+    "('name_swap', (5, 2, 3, 2, 0, 0, 0), 'dist')",
+    "('name_swap', (5, 2, 3, 2, 0, 1, 0), 'nc')",
+    "('name_swap', (5, 2, 3, 2, 0, 1, 0), 'r')",
+    "('name_swap', (5, 2, 3, 2, 0, 1, 0), 'sc')",
+    "('name_swap', (5, 2, 3, 2, 0, 1, 0), 'sr')",
+    "('name_swap', (5, 2, 3, 2, 0, 1, 1), 'nr')"
+   ],
+   "admitted_chains": [],
+   "eval_tasks": 15,
+   "eval_solved_baseline": 0,
+   "eval_solved_extended": 3
+  }
+ },
+ "pair_pool": {
+  "tasks": 6,
+  "tasks_solved_by_pairs": 0
+ },
+ "chain_pool": {
+  "tasks": 6,
+  "tasks_solved_by_chains": 3
+ },
+ "mixed_evaluation": {
+  "total": 18,
+  "solved_baseline": 0,
+  "solved_extended": 18
+ },
+ "control": {
+  "total": 34,
+  "solved_baseline": 34,
+  "solved_extended": 32
+ }
+}
