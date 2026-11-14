@@ -1,0 +1,452 @@
+{
+ "historical_package_note": "Historical packages are reconstructions of the decision actually taken, authored from the official record (rationale, locked terms, budgets) for rubric comparison only. They are labelled reconstructions, not contemporaneous artifacts.",
+ "outcomes": {
+  "EP1-G3-APPLICATION": {
+   "historical_package": {
+    "claim": "The G3 composite index will show whether transfer is general: grid gains of at least +50pp with pricing delta 0 would still leave the composite at or below 0 because the claim is a conjunction across families.",
+    "cost_ceiling": {
+     "max_calls": 1,
+     "max_cost_units": 1.0,
+     "max_wall_seconds": 2700
+    },
+    "cost_estimate": {
+     "calls": 0,
+     "cost_units": 1.0,
+     "wall_seconds": 2400
+    },
+    "evidence": [
+     {
+      "artifact": "docs/research/ACE_G3_PREREGISTRATION_20261113.md",
+      "sha256": "44093f49e8236515e392136e895e0c66540155e4a0a3431ad51bb06dff76bc4a"
+     },
+     {
+      "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM50.md",
+      "sha256": "20f424f1338469c63eab5977e8c70670acfe64e08458b067d67d6e7f6a25e791"
+     }
+    ],
+    "options_considered": [
+     {
+      "assessment": "chosen path",
+      "name": "run_full_application"
+     },
+     {
+      "assessment": "considered and not chosen at the time",
+      "name": "run_grid_only"
+     },
+     {
+      "assessment": "considered and not chosen at the time",
+      "name": "do_not_run"
+     }
+    ],
+    "package_version": "ace.proposal.v1",
+    "preregistration": {
+     "artifact_sha256": "44093f49e8236515e392136e895e0c66540155e4a0a3431ad51bb06dff76bc4a",
+     "link": "evidence/proposer_stage1/episodes.json#EP1-G3-APPLICATION"
+    },
+    "proposal_id": "hist-ep1-g3-application",
+    "ratification": {
+     "audience": [
+      "hub",
+      "kernel",
+      "evidence"
+     ],
+     "type": "internal_ratification"
+    },
+    "rationale": "Calibration separates the families: grid has headroom, pricing catalog stratum is saturated at 100% and the constructed stratum carries a preregistered boundary prediction (expression-level schemas add 0pp where repair is statement motion). Running the full application tests the conjunction honestly instead of reporting only the favourable family.",
+    "recommended_option": "run_full_application",
+    "risks": [
+     "Pricing catalog stratum is saturated, so the conjunction can fail on pricing alone",
+     "The composite index pools families, so a boundary-confirmed zero on pricing drags the composite negative"
+    ],
+    "stop_controls": {
+     "abort_conditions": [
+      "Abort if phase walls exceed the 2700 s budget",
+      "Abort if sham negative controls fail to reproduce baseline solved sets"
+     ],
+     "no_auto_retry": true,
+     "sealed_target_status": "not_sealed_application_run",
+     "stop_visible": true
+    },
+    "task_kind": "task",
+    "uncertainties": [
+     "Whether the boundary prediction holds exactly at 35% baseline on the constructed stratum"
+    ]
+   },
+   "outcome": "SPECIALIZATION: grid +75.0pp on pure evaluation singles, pricing delta 0 (boundary prediction confirmed), composite g3_composite_index_pp = -10.0, kernel verdict fail on the transfer conjunction, audit CLEAN, walls 2126.5 s of 2700 s budget.",
+   "source": "Addendum 54 (official record)"
+  },
+  "EP2-ABC-V3": {
+   "historical_package": {
+    "claim": "DI >= 0 on the pooled composite, with the control margin term binding: evaluation gains of +85pp or more cannot rescue a control regression below arm A.",
+    "cost_ceiling": {
+     "max_calls": 4000,
+     "max_cost_units": 1.0,
+     "max_wall_seconds": 5400
+    },
+    "cost_estimate": {
+     "calls": 4000,
+     "cost_units": 1.0,
+     "wall_seconds": 4800
+    },
+    "evidence": [
+     {
+      "artifact": "abc-v3-01 preregistration locked text",
+      "sha256": "55b6331eeed0cfc4779b09114cc74d7c48c47b1a125759bc6296105e3e6529be"
+     },
+     {
+      "artifact": "abc-v3-01 kernel protocol",
+      "sha256": "8591b93814759d5485be3f9e8b47e31a08aa7b1fc41e14b2707b2aa46b975c1a"
+     }
+    ],
+    "options_considered": [
+     {
+      "assessment": "chosen path",
+      "name": "run_v3_as_locked"
+     },
+     {
+      "assessment": "considered and not chosen at the time",
+      "name": "run_single_band_first"
+     },
+     {
+      "assessment": "considered and not chosen at the time",
+      "name": "do_not_run"
+     }
+    ],
+    "package_version": "ace.proposal.v1",
+    "preregistration": {
+     "artifact_sha256": "55b6331eeed0cfc4779b09114cc74d7c48c47b1a125759bc6296105e3e6529be",
+     "link": "evidence/proposer_stage1/episodes.json#EP2-ABC-V3"
+    },
+    "proposal_id": "hist-ep2-abc-v3",
+    "ratification": {
+     "audience": [
+      "hub",
+      "kernel",
+      "evidence"
+     ],
+     "type": "internal_ratification"
+    },
+    "rationale": "v1 and v2 nulled by saturation; v3's fresh bands and the min-composite force every term, including control margin, to be faced at once. The run is the cheapest way to learn whether catalog enrichment ever harms control solving.",
+    "recommended_option": "run_v3_as_locked",
+    "risks": [
+     "Enriched catalogs may interfere with control solving - a control regression of even 2 tasks can bind the whole verdict",
+     "Saturation may recur on the fresh bands despite the redesign",
+     "VM reboots may void invocations mid-run"
+    ],
+    "stop_controls": {
+     "abort_conditions": [
+      "Abort a band if its calibration gate fails",
+      "Void any invocation interrupted by a VM reboot; never reuse its numbers"
+     ],
+     "no_auto_retry": true,
+     "sealed_target_status": "sealed_bands_unopened",
+     "stop_visible": true
+    },
+    "task_kind": "task",
+    "uncertainties": [
+     "True size of the differentiation effect on fresh bands is unknown"
+    ]
+   },
+   "outcome": "NOT_DEMONSTRATED: pooled DI = -1.98pp; evaluation A 0/90, B 90/90, C 90/90; controls A 101/101, B 99/101, C 99/101 - the control margin was the sole binding term (band 20261501). G2 board: MEASURED NOT_DEMONSTRATED (third measured null).",
+   "source": "Addendum 59 (official record)"
+  },
+  "EP3-ROUND2-GATE": {
+   "historical_package": {
+    "claim": "round2_index >= 0 with B_disc at or above the 80% bar and capture at or above 0.6 on the fresh band, provided the control margin stays at 0pp.",
+    "cost_ceiling": {
+     "max_calls": 1,
+     "max_cost_units": 1.0,
+     "max_wall_seconds": 3600
+    },
+    "cost_estimate": {
+     "calls": 0,
+     "cost_units": 1.0,
+     "wall_seconds": 3000
+    },
+    "evidence": [
+     {
+      "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM57.md",
+      "sha256": "a9de206843de45a589a6d8e64e5a7c5205f33e299d8bce16cb773705d812f3df"
+     },
+     {
+      "artifact": "round2-gate-01 extended six-component manifest",
+      "sha256": "47a5afc4b6c6222e6ee4050f620898aeb885ceaec2dc22a489e2914e490e9f81"
+     }
+    ],
+    "options_considered": [
+     {
+      "assessment": "chosen path",
+      "name": "run_gate_as_locked"
+     },
+     {
+      "assessment": "considered and not chosen at the time",
+      "name": "run_guard_only_first"
+     },
+     {
+      "assessment": "considered and not chosen at the time",
+      "name": "do_not_run"
+     }
+    ],
+    "package_version": "ace.proposal.v1",
+    "preregistration": {
+     "artifact_sha256": "a9de206843de45a589a6d8e64e5a7c5205f33e299d8bce16cb773705d812f3df",
+     "link": "evidence/proposer_stage1/episodes.json#EP3-ROUND2-GATE"
+    },
+    "proposal_id": "hist-ep3-round2-gate",
+    "ratification": {
+     "audience": [
+      "hub",
+      "kernel",
+      "evidence"
+     ],
+     "type": "internal_ratification"
+    },
+    "rationale": "The same move_stmt key captured the whole effect in both the exploratory and confirmatory rounds; lifting that family into the core schema space is the minimal mechanism change, and the three-part replication guard de-risks measurement before it counts.",
+    "recommended_option": "run_gate_as_locked",
+    "risks": [
+     "Single-key concentration: if the fresh band lacks that key's shape, B_disc falls under 80%",
+     "Any control regression makes the index negative regardless of lift"
+    ],
+    "stop_controls": {
+     "abort_conditions": [
+      "Abort if any of the three replication guards fails",
+      "Abort if controls regress at any level during the guard"
+     ],
+     "no_auto_retry": true,
+     "sealed_target_status": "sealed_fresh_band_unopened",
+     "stop_visible": true
+    },
+    "task_kind": "task",
+    "uncertainties": [
+     "Whether the exploratory effect survives a fully fresh band (seeds 72000-72099)"
+    ]
+   },
+   "outcome": "LIFT_DEMONSTRATED: round2_index = 0.0 exactly on the pass threshold; B_disc 100.0%, capture 1.0, control margin 0.0pp; all three replication guards passed; verifier TAHAN 6/6.",
+   "source": "Addendum 60 (official record)"
+  },
+  "EP4-CONTROL-REGRESSION-ATTRIBUTION": {
+   "historical_package": {
+    "claim": "Removing exactly the 'nc' distractor key will restore both witness tasks (020 and 021) to solved, while removing the sibling 'gc' key restores neither - a single-key distractor diversion effect.",
+    "cost_ceiling": {
+     "max_calls": 2000,
+     "max_cost_units": 1.0,
+     "max_wall_seconds": 1800
+    },
+    "cost_estimate": {
+     "calls": 1200,
+     "cost_units": 1.0,
+     "wall_seconds": 1500
+    },
+    "evidence": [
+     {
+      "artifact": "band 20261501 admitted catalog digest",
+      "sha256": "a67685635cffb2c20a1c48bedd797b34ab71e93d7325eaae734231036418ee68"
+     },
+     {
+      "artifact": "docs/research/ACE_CONTROL_REGRESSION_DESIGN_DRAFT_20261113.md (PR #173 branch)",
+      "sha256": "8f6023d6fdd1991f35caf24d8c0f73afca1895fa012799094e28ce57b0d460b8"
+     }
+    ],
+    "options_considered": [
+     {
+      "assessment": "chosen path",
+      "name": "run_key_removal_attribution"
+     },
+     {
+      "assessment": "considered and not chosen at the time",
+      "name": "run_permutation_only"
+     },
+     {
+      "assessment": "considered and not chosen at the time",
+      "name": "do_not_run"
+     }
+    ],
+    "package_version": "ace.proposal.v1",
+    "preregistration": {
+     "artifact_sha256": "a67685635cffb2c20a1c48bedd797b34ab71e93d7325eaae734231036418ee68",
+     "link": "evidence/proposer_stage1/episodes.json#EP4-CONTROL-REGRESSION-ATTRIBUTION"
+    },
+    "proposal_id": "hist-ep4-control-regression-attribution",
+    "ratification": {
+     "audience": [
+      "hub",
+      "kernel",
+      "evidence"
+     ],
+     "type": "internal_ratification"
+    },
+    "rationale": "Stage 0 killed the budget axis (cap never hit) and both failing traces open with the same 'nc' distractor key; key removal is the discriminating test between search-path diversion (M2 family) and never-generated (M1b), with key-order permutations checking M3.",
+    "recommended_option": "run_key_removal_attribution",
+    "risks": [
+     "Forensic replay must not touch the sealed bands' verdict - readings are design evidence only",
+     "A distractor effect on 2 tasks may not generalise to other catalog keys"
+    ],
+    "stop_controls": {
+     "abort_conditions": [
+      "Abort if the uncapped control replay fails to reproduce the original failure",
+      "Stop at the two witness tasks; no band re-measurement"
+     ],
+     "no_auto_retry": true,
+     "sealed_target_status": "sealed_bands_read_only_forensic",
+     "stop_visible": true
+    },
+    "task_kind": "task",
+    "uncertainties": [
+     "Whether A's winning code is ever among the scored variants under the full catalog"
+    ]
+   },
+   "outcome": "Attribution CONFIRMED: single-key distractor diversion by the 'nc' key for both witness tasks (removal restores 020 at 260 calls and 021 at 258 calls; 'gc' removal restores neither); 8/8 key-order permutations reproduce the failures with byte-identical scored-variant multisets (M3 inert).",
+   "source": "Control-regression Stage 1 record, PR #174 (official record)"
+  },
+  "EP5-G4-INHERITANCE": {
+   "historical_package": {
+    "claim": "A successor configuration using only the inherited frozen artifacts will reproduce the demonstrated mechanism's solves within the binding strata, showing inheritance rather than re-discovery.",
+    "cost_ceiling": {
+     "max_calls": 1,
+     "max_cost_units": 1.0,
+     "max_wall_seconds": 3600
+    },
+    "cost_estimate": {
+     "calls": 0,
+     "cost_units": 1.0,
+     "wall_seconds": 3000
+    },
+    "evidence": [
+     {
+      "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM57.md",
+      "sha256": "a9de206843de45a589a6d8e64e5a7c5205f33e299d8bce16cb773705d812f3df"
+     },
+     {
+      "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM54.md",
+      "sha256": "10301eb7059b6e3dcc7cf4409b61f130c3ec4c6f6ae5b781c8cafea89cf68cf6"
+     }
+    ],
+    "options_considered": [
+     {
+      "assessment": "chosen path",
+      "name": "run_g4_application"
+     },
+     {
+      "assessment": "considered and not chosen at the time",
+      "name": "run_reduced_strata_first"
+     },
+     {
+      "assessment": "considered and not chosen at the time",
+      "name": "do_not_run"
+     }
+    ],
+    "package_version": "ace.proposal.v1",
+    "preregistration": {
+     "artifact_sha256": "a9de206843de45a589a6d8e64e5a7c5205f33e299d8bce16cb773705d812f3df",
+     "link": "evidence/proposer_stage1/episodes.json#EP5-G4-INHERITANCE"
+    },
+    "proposal_id": "hist-ep5-g4-inheritance",
+    "ratification": {
+     "audience": [
+      "hub",
+      "kernel",
+      "evidence"
+     ],
+     "type": "internal_ratification"
+    },
+    "rationale": "G3 showed specialization, not general transfer; the open question is narrower - whether what was demonstrated passes to a successor that did not discover it. The application states its binding strata in advance, avoiding the conjunction trap that a pooled composite sets.",
+    "recommended_option": "run_g4_application",
+    "risks": [
+     "A pooled composite can be dragged negative by a single stratum, as in G3",
+     "Apparent inheritance may be mere re-use of code rather than capability transfer"
+    ],
+    "stop_controls": {
+     "abort_conditions": [
+      "Abort if inherited artifact digests differ from the frozen record",
+      "Abort if any stratum's controls regress versus the frozen baseline"
+     ],
+     "no_auto_retry": true,
+     "sealed_target_status": "not_sealed_application_run",
+     "stop_visible": true
+    },
+    "task_kind": "task",
+    "uncertainties": [
+     "Which strata the verdict should bind on was contested at design time"
+    ]
+   },
+   "outcome": "INHERITANCE_DEMONSTRATED: gate board moved to G4 MEASURED - INHERITANCE_DEMONSTRATED.",
+   "source": "Addendum 58 (official record)"
+  },
+  "EP6-PER-TASK-RECORDING": {
+   "historical_package": {
+    "claim": "Recording per-task solved maps by default will remove the need for forensic replays to identify regressed tasks, at zero change to solver outputs (logging-invariance on the A-B comparison).",
+    "cost_ceiling": {
+     "max_calls": 1,
+     "max_cost_units": 1.0,
+     "max_wall_seconds": 1800
+    },
+    "cost_estimate": {
+     "calls": 0,
+     "cost_units": 1.0,
+     "wall_seconds": 1200
+    },
+    "evidence": [
+     {
+      "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261113_ADDENDUM59.md",
+      "sha256": "387da1259a8f9f6b4f09189944ef5a2ad89d51d08878b2d92026085743253b7d"
+     },
+     {
+      "artifact": "docs/research/ACE_CONTROL_REGRESSION_DESIGN_DRAFT_20261113.md (PR #173 branch)",
+      "sha256": "8f6023d6fdd1991f35caf24d8c0f73afca1895fa012799094e28ce57b0d460b8"
+     }
+    ],
+    "options_considered": [
+     {
+      "assessment": "chosen path",
+      "name": "build_per_task_recording"
+     },
+     {
+      "assessment": "considered and not chosen at the time",
+      "name": "record_controls_only_manually"
+     },
+     {
+      "assessment": "considered and not chosen at the time",
+      "name": "do_not_run"
+     }
+    ],
+    "package_version": "ace.proposal.v1",
+    "preregistration": {
+     "artifact_sha256": "387da1259a8f9f6b4f09189944ef5a2ad89d51d08878b2d92026085743253b7d",
+     "link": "evidence/proposer_stage1/episodes.json#EP6-PER-TASK-RECORDING"
+    },
+    "proposal_id": "hist-ep6-per-task-recording",
+    "ratification": {
+     "audience": [
+      "hub",
+      "kernel",
+      "evidence"
+     ],
+     "type": "internal_ratification"
+    },
+    "rationale": "The absence of per-task records just cost a full Stage 0 replay to recover two task ids. The fix is small, mechanical and additive, and it pays into the regression line, the inoculation battery and Stage 3 traces.",
+    "recommended_option": "build_per_task_recording",
+    "risks": [
+     "Instrumentation risk: logging could change solver outputs or decision traces if it touches the search path",
+     "Per-task state grows run-state size on long runs"
+    ],
+    "stop_controls": {
+     "abort_conditions": [
+      "Abort if the logging-invariance check changes any solver output",
+      "Abort if run-state size grows beyond the driver's budget"
+     ],
+     "no_auto_retry": true,
+     "sealed_target_status": "no_sealed_target_touched",
+     "stop_visible": true
+    },
+    "task_kind": "task",
+    "uncertainties": [
+     "Whether the added state stays cheap on the largest bands"
+    ]
+   },
+   "outcome": "ADOPTED as a named milestone candidate (hub act pending at record time); build assigned to Ian's desk in the main chat.",
+   "source": "PR #173 section 8 desk assessment (official record)"
+  }
+ },
+ "separation_note": "SEPARATE STORE. Read only by the scoring/exit-gate step AFTER generations are frozen. The prompt builder (proposer_episodes.build_prompt) never opens this file; a unit test asserts no outcome text or historical-package content appears in any prompt.",
+ "store": "proposer_stage1_outcomes_v1"
+}

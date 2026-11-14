@@ -1,0 +1,64 @@
+{
+  "package_version": "ace.proposal.v1",
+  "proposal_id": "G4-20261113",
+  "task_kind": "task",
+  "claim": "If a successor configuration inherits the G4 mechanism, then the G4 instrument will validate it with a score of at least 0.95; a score below 0.95 would falsify the claim.",
+  "rationale": "The G4 question is about whether a successor configuration can inherit the demonstrated mechanism without re-discovering it. The G3 risk pattern shows that a composite claim can fail if any conjunct fails, so the G4 application must explicitly define which strata bind the verdict. The cost is similar to G3, and the evidence supports the feasibility of the G4 application.",
+  "options_considered": [
+    {
+      "name": "run_g4_application",
+      "assessment": "The G4 application is the direct test of the inheritance claim, and the evidence supports its feasibility within the budget."
+    },
+    {
+      "name": "run_reduced_strata_first",
+      "assessment": "This could reduce risk, but it would delay the main test and may not address the core inheritance question."
+    },
+    {
+      "name": "do_not_run",
+      "assessment": "This would leave the G4 question unresolved, potentially blocking future applications that depend on inheritance."
+    }
+  ],
+  "recommended_option": "run_g4_application",
+  "cost_estimate": {
+    "calls": 95000,
+    "wall_seconds": 3400,
+    "cost_units": 0.95
+  },
+  "cost_ceiling": {
+    "max_calls": 100000,
+    "max_wall_seconds": 3600,
+    "max_cost_units": 1.0
+  },
+  "evidence": [
+    {
+      "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM57.md",
+      "sha256": "a9de206843de45a589a6d8e64e5a7c5205f33e299d8bce16cb773705d812f3df"
+    },
+    {
+      "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM54.md",
+      "sha256": "10301eb7059b6e3dcc7cf4409b61f130c3ec4c6f6ae5b781c8cafea89cf68cf6"
+    }
+  ],
+  "preregistration": {
+    "link": "evidence/proposer_stage1/episodes.json#EP5-G4-INHERITANCE",
+    "artifact_sha256": "a9de206843de45a589a6d8e64e5a7c5205f33e299d8bce16cb773705d812f3df"
+  },
+  "risks": [
+    "The G4 instrument may not correctly distinguish between inheritance and re-use of code, leading to a false positive or negative.",
+    "The strata definitions may not be precise enough, leading to ambiguous results."
+  ],
+  "uncertainties": "It is uncertain whether the G4 instrument will correctly apply the inheritance logic as intended, given the complexity of the mechanism.",
+  "stop_controls": {
+    "abort_conditions": [
+      "If the score falls below 0.95",
+      "If the wall time exceeds 3600 seconds"
+    ],
+    "sealed_target_status": "not_sealed_application_run",
+    "no_auto_retry": true,
+    "stop_visible": true
+  },
+  "ratification": {
+    "type": "internal_ratification",
+    "audience": ["hub", "kernel", "evidence"]
+  }
+}

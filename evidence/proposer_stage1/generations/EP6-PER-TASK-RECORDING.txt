@@ -1,0 +1,64 @@
+{
+  "package_version": "ace.proposal.v1",
+  "proposal_id": "EP6-PER-TASK-RECORDING",
+  "task_kind": "task",
+  "claim": "Adopting per-task control recording will reduce the average time to identify regressed witness tasks by at least 70% in future forensic analyses.",
+  "rationale": "The current v3 run state does not record per-task control outcomes by default, leading to costly replay operations for forensic analysis. The proposed fix is small, mechanical, and additive, and it directly addresses the identified gap. The risk of logging-invariance is mitigated by existing A-B comparison checks, and the benefits include faster regression identification, better support for Stage 3 traces, and reduced replay costs.",
+  "options_considered": [
+    {
+      "name": "build_per_task_recording",
+      "assessment": "This option directly addresses the identified gap, with low risk and high payoff. It is the most aligned with the current needs and future design goals."
+    },
+    {
+      "name": "record_controls_only_manually",
+      "assessment": "This is a suboptimal solution that would require additional effort and coordination, and it does not fully resolve the problem of replay costs."
+    },
+    {
+      "name": "do_not_run",
+      "assessment": "This would leave the current gap unaddressed, leading to recurring inefficiencies and potential future regressions."
+    }
+  ],
+  "recommended_option": "build_per_task_recording",
+  "cost_estimate": {
+    "calls": 5000,
+    "wall_seconds": 300,
+    "cost_units": 0.5
+  },
+  "cost_ceiling": {
+    "max_calls": 100000,
+    "max_wall_seconds": 1800,
+    "max_cost_units": 1.0
+  },
+  "evidence": [
+    {
+      "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261113_ADDENDUM59.md",
+      "sha256": "387da1259a8f9f6b4f09189944ef5a2ad89d51d08878b2d92026085743253b7d"
+    },
+    {
+      "artifact": "docs/research/ACE_CONTROL_REGRESSION_DESIGN_DRAFT_20261113.md",
+      "sha256": "8f6023d6fdd1991f35caf24d8c0f73afca1895fa012799094e28ce57b0d460b8"
+    }
+  ],
+  "preregistration": {
+    "link": "evidence/proposer_stage1/episodes.json#EP6-PER-TASK-RECORDING",
+    "artifact_sha256": "387da1259a8f9f6b4f09189944ef5a2ad89d51d08878b2d92026085743253b7d"
+  },
+  "risks": [
+    "Instrumentation could inadvertently alter solver outputs or decision traces, violating logging-invariance.",
+    "The proposed change may not be fully compatible with existing Stage 3 trace mechanisms, requiring additional integration work."
+  ],
+  "uncertainties": "It is uncertain whether the logging-invariance check will fully capture all potential side effects of the instrumentation.",
+  "stop_controls": {
+    "abort_conditions": [
+      "If logging-invariance is violated during testing",
+      "If the cost estimate exceeds the budget envelope"
+    ],
+    "sealed_target_status": "no_sealed_target_touched",
+    "no_auto_retry": true,
+    "stop_visible": true
+  },
+  "ratification": {
+    "type": "internal_ratification",
+    "audience": ["hub", "kernel", "evidence"]
+  }
+}

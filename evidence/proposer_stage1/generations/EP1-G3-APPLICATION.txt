@@ -1,0 +1,64 @@
+{
+  "package_version": "ace.proposal.v1",
+  "proposal_id": "G3-APP-20261113",
+  "task_kind": "task",
+  "claim": "H1 passes if transfer appears on both grid and pricing families; otherwise, H1 is falsified.",
+  "rationale": "The G3 protocol is locked, and the grid family has discovery headroom, while the pricing catalog stratum is saturated. The pricing constructed stratum has a boundary prediction that transfer cannot be added. Since H1 requires transfer on both families, and the pricing family has no room for it, running the full application risks a negative composite index. However, the grid family may still yield gains, and the full application is the only way to test the conjunction claim.",
+  "options_considered": [
+    {
+      "name": "run_full_application",
+      "assessment": "May yield H1 confirmation if transfer appears on both families, but risks negative composite index due to pricing stratum saturation."
+    },
+    {
+      "name": "run_grid_only",
+      "assessment": "Could show grid family gains, but would not test the conjunction claim required for H1."
+    },
+    {
+      "name": "do_not_run",
+      "assessment": "Avoids risk, but also avoids testing the full claim, potentially leaving H1 unverified."
+    }
+  ],
+  "recommended_option": "run_full_application",
+  "cost_estimate": {
+    "calls": 85000,
+    "wall_seconds": 2400,
+    "cost_units": 0.95
+  },
+  "cost_ceiling": {
+    "max_calls": 100000,
+    "max_wall_seconds": 2700,
+    "max_cost_units": 1.0
+  },
+  "evidence": [
+    {
+      "artifact": "docs/research/ACE_G3_PREREGISTRATION_20261113.md",
+      "sha256": "44093f49e8236515e392136e895e0c66540155e4a0a3431ad51bb06dff76bc4a"
+    },
+    {
+      "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM50.md",
+      "sha256": "20f424f1338469c63eab5977e8c70670acfe64e08458b067d67d6e7f6a25e791"
+    }
+  ],
+  "preregistration": {
+    "link": "evidence/proposer_stage1/episodes.json#EP1-G3-APPLICATION",
+    "artifact_sha256": "44093f49e8236515e392136e895e0c66540155e4a0a3431ad51bb06dff76bc4a"
+  },
+  "risks": [
+    "Pricing stratum saturation may result in a negative composite index, even if grid family shows gains.",
+    "Full application run may exceed budget limits if unexpected computational demands arise."
+  ],
+  "uncertainties": "Uncertainty remains about whether the pricing constructed stratum's boundary prediction is fully accurate or if there is latent discovery headroom in the pricing family.",
+  "stop_controls": {
+    "abort_conditions": [
+      "If composite index becomes negative and remains so for 30 minutes.",
+      "If wall time exceeds 2500 seconds."
+    ],
+    "sealed_target_status": "not_sealed_application_run",
+    "no_auto_retry": true,
+    "stop_visible": true
+  },
+  "ratification": {
+    "type": "internal_ratification",
+    "audience": ["hub", "kernel", "evidence"]
+  }
+}
