@@ -1,0 +1,17 @@
+{
+ "verdict_ref": "PR #192 merged on main (c6d58af7f63ad0aef8bb8ad77676e715795ebaa2) — evidence/ctrlreg_stage3_official_record.json confirming P1+P2+P3 on bands 20261601-20261603",
+ "seeds": [
+  20261701,
+  20261702,
+  20261703
+ ],
+ "registry_snapshot": {
+  "path": "/workspace/ace-custody-lineage-guard/wt-battery/code/ace_operational/distractor_registry.json",
+  "sha256": "f9d8982a1314cc5807f815dc700affd0c3dd9cf42ff2b35855a7704dc0911680",
+  "ids": [
+   "name-swap-523014-nc-band20261501"
+  ]
+ },
+ "operator": "Antigravity autonomous execution (Manus Sandbox 2887726280f4 under owner mandate 2026-11-14)",
+ "window": "2026-11-14 clean-RAM R3 custody window post Bake-off 02 (zero model processes resident)"
+}

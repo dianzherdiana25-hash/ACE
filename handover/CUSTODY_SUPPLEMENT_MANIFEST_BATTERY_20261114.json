@@ -1,0 +1,24 @@
+{
+ "manifest": "ACE custody population SUPPLEMENT \u2014 lineage-guard step-4 battery (PR #175 module + registry), frozen by Ian 2026-11-14. Transfer follows route (a) only after kancuto confirms this digest.",
+ "source_root": "~/workspace/ace-omega",
+ "target": "/workspace/ace-custody-lineage-guard (sandbox host 2887726280f4), paths preserved relative to source_root",
+ "requirements_doc": "handover/CUSTODY_REQUIREMENTS_LINEAGE_GUARD_20261114.md + PR #188 A.6 step 4",
+ "file_count": 2,
+ "total_bytes": 6605,
+ "tree_digest_sha256": "f4d3c43bc86576e9c0eb16b95da7bb1eb42f62805b4733bcf558b1905654c5ef",
+ "files": [
+  {
+   "class": "battery-step4-supplement",
+   "path": "wt-battery/code/ace_operational/distractor_inoculation.py",
+   "bytes": 5052,
+   "sha256": "cbc5e7df386f3187074a1b834f354293ff3bd07f1a7e8b62baecd4db7857589d"
+  },
+  {
+   "class": "battery-step4-supplement",
+   "path": "wt-battery/code/ace_operational/distractor_registry.json",
+   "bytes": 1553,
+   "sha256": "f9d8982a1314cc5807f815dc700affd0c3dd9cf42ff2b35855a7704dc0911680"
+  }
+ ],
+ "tree_digest_method": "sha256 over the UTF-8 concatenation, in the 'files' array order, of one line per file: '<sha256>  <path>\\n' (two spaces between hash and path, newline-terminated). Verify: recompute each file's sha256 from its bytes, rebuild the concatenation from the manifest's own entries, hash it, compare with tree_digest_sha256."
+}
