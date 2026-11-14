@@ -1,0 +1,23 @@
+{
+  "item": "ik_llama.cpp intake (ACE serving speed lane)",
+  "date_wib": "2026-11-13",
+  "repo": "https://github.com/ikawrakow/ik_llama.cpp",
+  "pinned_commit": "7aa7e01482db892b023bb9aace9a40567ab5297a",
+  "ref": "main (HEAD at intake, git ls-remote)",
+  "license": "MIT (LICENSE file, Copyright ggml/llama.cpp authors)",
+  "tarball_url": "https://github.com/ikawrakow/ik_llama.cpp/archive/7aa7e01482db892b023bb9aace9a40567ab5297a.tar.gz",
+  "tarball_bytes": 35244900,
+  "tarball_sha256_local": "405b6c45219dbe72e174e7e6c8c11a79d4ac917113972cea3c03190d0ebfcb19",
+  "tarball_sha256_sandbox": "405b6c45219dbe72e174e7e6c8c11a79d4ac917113972cea3c03190d0ebfcb19",
+  "stage": "accepted: sandbox sha256 == local sha256 (HASH_OK in /workspace/tools/ik_build.log); build in progress",
+  "build_target": "Manus Sandbox, CPU-only, GGML_NATIVE=ON GGML_AVX512=ON GGML_AVX512_VNNI=ON (CPU has AVX512F/DQ/BW/VL/VNNI; no VBMI/BF16)",
+  "baseline_to_beat": {
+    "engine": "llama.cpp b12316 (5d4c8eeb2)",
+    "model": "Qwen3-30B-A3B-Q4_K_M.gguf",
+    "threads": 1,
+    "pp512": "7.96 \u00b1 0.35",
+    "tg128": "2.46 \u00b1 0.10"
+  },
+  "adoption_threshold": "tg >= 1.30x baseline (3.198 t/s) with no pp regression",
+  "sandbox_cpu_quota": "cgroup cpu.max 100000/100000 = 1.0 CPU total for MCP-door process tree"
+}
