@@ -242,3 +242,31 @@ class SelfEvolutionEngine:
 
         logger.info(f"=== ACE Self-Evolution Cycle Completed in {cycle_result['duration_seconds']}s ===")
         return cycle_result
+
+    def run_oaie_evolution_cycle(self, *, seed: int = 20261114) -> dict[str, Any]:
+        """Run the unified offline OAIE closed-loop (G0 -> G3) anchored to ``self.store``."""
+        from .oaie_engine import run_oaie_closed_loop
+
+        result = run_oaie_closed_loop(self.store.workspace, seed=seed, store=self.store)
+        try:
+            with open(self.evolution_log_path, "a", encoding="utf-8") as f:
+                f.write(json.dumps({"kind": "oaie_closed_loop", **result}, ensure_ascii=False) + "\n")
+            self.status_path.write_text(
+                json.dumps(
+                    {
+                        "schema": "ace.self_evolution.oaie.status.v1",
+                        "running": True,
+                        "last_cycle_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                        "oaie_verified_ok": result["verified_ok"],
+                        "oaie_replay_digest": result["replay_digest"],
+                        "oaie_generations": result["generations"],
+                        "forgetting_count": result["forgetting_count"],
+                    },
+                    indent=2,
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+        except Exception as e:
+            logger.warning(f"Failed to record OAIE evolution telemetry: {e}")
+        return result

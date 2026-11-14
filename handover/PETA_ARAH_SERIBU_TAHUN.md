@@ -28,7 +28,7 @@ Prinsip yang tidak berubah di semua era:
 
 ## Keadaan tahun-0 (terukur, 13 Nov 2026)
 
-Gerbang: G1 DEMONSTRATED; G2 NOT_DEMONSTRATED
+Gerbang historis 13 Nov: G1 DEMONSTRATED; G2 NOT_DEMONSTRATED
 (terukur nol tiga kali); G3 SPECIALIZATION;
 G4 INHERITANCE_DEMONSTRATED; G5 NOT_ASSESSED
 (panen terpraregistrasi, periode 12–30 Nov 2026).
@@ -41,6 +41,23 @@ dengan wali otomatis. Otak kerja lokal: Qwen3-30B-A3B
 tg 2,46 t/s). Venue penghasilan terbuka: KBM,
 Lynk.id + QRIS, Facebook, Threads, Instagram —
 terpasang, belum menghasilkan.
+
+**Pembaruan terukur offline (14 Nov 2026 — zero local LLM, zero Manus VM):**
+- Substrat evolusi tertutup terpadu ([`oaie_engine.py`](../code/ace_operational/oaie_engine.py),
+  [`lexical_ops.py`](../code/ace_operational/lexical_ops.py),
+  [`admission_hygiene.py`](../code/ace_operational/admission_hygiene.py),
+  [`abstraction_engine.py`](../code/ace_operational/abstraction_engine.py)) terverifikasi
+  ujung-ke-ujung (`G0 4/16 -> G1 11/16 -> G2 14/16 -> G3 16/16`, `forgetting_count = 0`).
+- Kebersihan admisi menghilangkan 54/55 pengganggu Band `20261501` dan mencapai G2
+  `DIFFERENTIATION_DEMONSTRATED` (`0.0pp` margin kontrol) serta `NOT_SUSCEPTIBLE` di bawah `Lineage-Guard`.
+- Kompresi makro Wake-Sleep E4 menyatukan pola `Compare`/`IfGuard` lintas `pricing`,
+  `shipping`, dan `text_transform` (`2.225x` rasio MDL) dengan transfer nol-sampel ke domain
+  keempat `quota_policy` (`3/3`, penghematan evaluasi `45.05%`).
+- Eksekusi tetap dikawal konstitusi Stage-2 (`proposer_stage2.py`, ratifikasi internal `kernel`,
+  `preaudit` exit `0`), audit split-custody `ExperimentKernel` `CLEAN`, arsip ber-hash
+  `PopulationArchive` (`replay_matches = true`), promosi Frontier + `OpenWorldLocalExecutor`,
+  serta [`OpportunityRegister`](../code/ace_operational/opportunity_register.py) (`verify_chain = true`).
+  Lihat laporan lengkap: [`ACE_OAIE_CLOSED_LOOP_VERDICT_20261114.md`](../docs/validation/ACE_OAIE_CLOSED_LOOP_VERDICT_20261114.md).
 
 ---
 
