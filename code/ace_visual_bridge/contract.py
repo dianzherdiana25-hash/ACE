@@ -34,6 +34,18 @@ class Anchor:
             raise ValueError("anchor asset_id required")
         if self.provenance not in {"USER_ORIGINAL", "GENERATED_RESULT"}:
             raise ValueError("unknown image provenance")
+        # Exact boolean validation: dataclasses do not enforce
+        # declared types, and a JSON string "false" is truthy —
+        # without this, an unadopted generated result passes
+        # the adoption check in plan_edit (PR #105 finding).
+        if not isinstance(self.approved_by_user, bool):
+            raise ValueError(
+                "approved_by_user must be a boolean, got "
+                f"{self.approved_by_user!r}")
+        if not isinstance(self.real_or_possible_person, bool):
+            raise ValueError(
+                "real_or_possible_person must be a boolean, got "
+                f"{self.real_or_possible_person!r}")
 
 
 @dataclass(frozen=True)
@@ -64,6 +76,24 @@ class Observation:
     scores: Mapping[str, float] | None
     independently_reviewed: bool = False
     accepted_by_user: bool = False
+
+
+    def __post_init__(self) -> None:
+        # Exact collection validation: a bare string here is
+        # split into characters by frozenset(...) at the CLI
+        # boundary, so drift on a locked axis evades the
+        # intersection check in assess (PR #105 finding).
+        # Every element must be a known axis name.
+        if not isinstance(self.drifted_axes, (set, frozenset)):
+            raise ValueError(
+                "drifted_axes must be a set of axis names, got "
+                f"{self.drifted_axes!r}")
+        unknown = sorted(
+            axis for axis in self.drifted_axes
+            if not isinstance(axis, str) or axis not in LOCKED)
+        if unknown:
+            raise ValueError(
+                f"unknown drifted axis name(s): {unknown}")
 
 
 @dataclass(frozen=True)

@@ -34,7 +34,15 @@ def process(mode: str, request: dict) -> dict:
     observations = []
     for item in request.get("observations", []):
         data = dict(item)
-        data["drifted_axes"] = frozenset(data.get("drifted_axes", []))
+        # Validate at the JSON boundary: frozenset("face_identity")
+        # silently becomes a set of characters, so a bare string
+        # here would let locked-axis drift evade detection.
+        raw_axes = data.get("drifted_axes", [])
+        if isinstance(raw_axes, str) or not isinstance(
+                raw_axes, (list, tuple)):
+            raise ValueError(
+                "drifted_axes must be a list of axis names")
+        data["drifted_axes"] = frozenset(raw_axes)
         observations.append(Observation(**data))
     result = review_batch(source, plan, observations, int(request.get("expected", 5)))
     return {
