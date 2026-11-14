@@ -6,6 +6,7 @@ import unittest
 from ace_indo_nlp.morphology import (
     analyze_morphology,
     bounded_edit_distance,
+    is_laughter_token,
     normalize_colloquial,
     stem_candidates,
     stem_word,
@@ -14,7 +15,7 @@ from ace_indo_nlp.morphology import (
 
 class MorphologyTests(unittest.TestCase):
     def test_nazief_adriani_nasalization_clitics_and_multi_prefix(self) -> None:
-        known = {"tulis", "sapu", "pukul", "kirim", "baik", "jelas", "hati", "sayang", "ajar"}
+        known = {"tulis", "sapu", "pukul", "kirim", "baik", "jelas", "hati", "sayang", "ajar", "cari", "cerita"}
         cases = {
             "menulis": "tulis",
             "menyapu": "sapu",
@@ -25,6 +26,9 @@ class MorphologyTests(unittest.TestCase):
             "memperhatikan": "hati",
             "menyayangiku": "sayang",
             "pelajarannya": "ajar",
+            "nyari": "cari",
+            "nulis": "tulis",
+            "ceritain": "cerita",
         }
         for surface, expected_root in cases.items():
             info = analyze_morphology(surface, known_roots=known)
@@ -44,6 +48,13 @@ class MorphologyTests(unittest.TestCase):
         self.assertEqual(norm, "bagaimana kabar kamu sekarang sudah belum bicara sama aku")
         self.assertEqual(rewrites["gmn"], "bagaimana")
         self.assertEqual(rewrites["ngomong"], "bicara")
+
+        self.assertTrue(is_laughter_token("wkwkwk"))
+        self.assertTrue(is_laughter_token("hahahaha"))
+        self.assertFalse(is_laughter_token("bahasa"))
+        laugh_norm, laugh_rw = normalize_colloquial("wkwkwk bosen bgt laper nih")
+        self.assertEqual(laugh_norm, "haha bosan sangat lapar nih")
+        self.assertEqual(laugh_rw["wkwkwk"], "haha")
 
         # Keep imperative coding verb "buat" untouched
         norm_code, rw_code = normalize_colloquial("Tolong buat catatan pengeluaran sederhana")

@@ -10,6 +10,8 @@ COLLOQUIAL_SLANG_MAP: dict[str, str] = {
     "gw": "aku",
     "gue": "aku",
     "w": "aku",
+    "sy": "saya",
+    "sya": "saya",
     "kmu": "kamu",
     "km": "kamu",
     "lu": "kamu",
@@ -17,6 +19,7 @@ COLLOQUIAL_SLANG_MAP: dict[str, str] = {
     "loe": "kamu",
     "yg": "yang",
     "dgn": "dengan",
+    "dg": "dengan",
     "sm": "sama",
     "utk": "untuk",
     "dr": "dari",
@@ -30,12 +33,14 @@ COLLOQUIAL_SLANG_MAP: dict[str, str] = {
     "aja": "saja",
     "doang": "saja",
     "bgt": "sangat",
+    "skli": "sekali",
     "bener": "benar",
     "bnr": "benar",
     "emg": "memang",
     "emang": "memang",
     "kyk": "seperti",
     "kayak": "seperti",
+    "spt": "seperti",
     "org": "orang",
     "skrg": "sekarang",
     "bsk": "besok",
@@ -52,16 +57,21 @@ COLLOQUIAL_SLANG_MAP: dict[str, str] = {
     "ga": "tidak",
     "gak": "tidak",
     "gk": "tidak",
+    "g": "tidak",
+    "tdk": "tidak",
     "ngga": "tidak",
     "nggak": "tidak",
     "kagak": "tidak",
     "tak": "tidak",
     "bkn": "bukan",
+    "blh": "boleh",
+    "hrs": "harus",
     "bs": "bisa",
     "dpt": "dapat",
     "mo": "mau",
     "pengen": "ingin",
     "pgn": "ingin",
+    "mgkn": "mungkin",
     "tau": "tahu",
     "tw": "tahu",
     "ngerti": "paham",
@@ -74,29 +84,45 @@ COLLOQUIAL_SLANG_MAP: dict[str, str] = {
     "ngobrol": "bicara",
     "dgr": "dengar",
     "denger": "dengar",
+    "dengerin": "dengar",
     "liat": "lihat",
     "lht": "lihat",
+    "ngeliat": "lihat",
     "bljr": "belajar",
     "belajr": "belajar",
     "tgs": "tugas",
     "mksd": "maksud",
+    "mksud": "maksud",
     "gmn": "bagaimana",
     "gmna": "bagaimana",
     "gimana": "bagaimana",
     "knp": "kenapa",
     "napa": "kenapa",
+    "kpn": "kapan",
+    "dmn": "dimana",
+    "kmn": "kemana",
     "krn": "karena",
     "bbrp": "beberapa",
-    "skli": "sekali",
+    "jd": "jadi",
+    "jdi": "jadi",
     "bkin": "buat",
     "bikin": "buat",
     "bikinin": "buatkan",
     "jelasin": "jelaskan",
     "ajarin": "ajarkan",
     "artiin": "artikan",
+    "ceritain": "ceritakan",
+    "bantuin": "bantu",
+    "tanyain": "tanya",
+    "ingetin": "ingat",
+    "ingatin": "ingat",
+    "kerjain": "kerjakan",
     "mksh": "terima",
     "makasih": "terima",
+    "mksih": "terima",
     "trims": "terima",
+    "thx": "terima",
+    "thanks": "terima",
     "maap": "maaf",
     "tlg": "tolong",
     "plis": "tolong",
@@ -111,11 +137,28 @@ COLLOQUIAL_SLANG_MAP: dict[str, str] = {
     "btul": "betul",
     "sbr": "sabar",
     "smngt": "semangat",
+    "smg": "semoga",
+    "slmt": "selamat",
     "kbr": "kabar",
-    "mksud": "maksud",
+    "cape": "capek",
+    "bosen": "bosan",
+    "seneng": "senang",
+    "binggung": "bingung",
+    "laper": "lapar",
+    "ngantuk": "mengantuk",
+    "gabut": "bosan",
+    "mikir": "pikir",
 }
 
 _NON_SPLITTING_REDUPS = frozenset({"kupu", "kura", "laba", "lumba", "cumicumi", "cumi", "paru", "ubur"})
+
+_LAUGH_RE = re.compile(r"^(?:wk+|wkwk(?:wk)*|ha(?:ha)+h?|he(?:he)+h?|hi(?:hi)+h?|xi(?:xi)+|hu(?:hu)+)$")
+
+
+def is_laughter_token(token: str) -> bool:
+    """Return True when an Indonesian token represents chat laughter (wkwk, haha, hehe)."""
+    clean = re.sub(r"[^a-z]", "", str(token or "").lower())
+    return bool(clean and _LAUGH_RE.match(clean))
 
 
 def bounded_edit_distance(a: str, b: str) -> int:
@@ -141,6 +184,11 @@ def normalize_colloquial(text: str) -> tuple[str, dict[str, str]]:
     rewrites: dict[str, str] = {}
     for tok in tokens:
         low = tok.lower()
+        if is_laughter_token(low):
+            if low != "haha":
+                rewrites[low] = "haha"
+            out_tokens.append("haha")
+            continue
         mapped = COLLOQUIAL_SLANG_MAP.get(low, low)
         if mapped != low:
             rewrites[low] = mapped
@@ -201,6 +249,11 @@ def _expand_prefix_rules(base: str) -> list[tuple[str, list[str]]]:
         ("di", ("",)),
         ("ke", ("",)),
         ("se", ("",)),
+        ("nge", ("",)),
+        ("ng", ("", "k")),
+        ("ny", ("s", "c")),
+        ("n", ("", "t")),
+        ("m", ("p",)),
     )
     inner_candidates = pref_rules[:12] + (("per", ("",)), ("ke", ("",)), ("ber", ("",)), ("bel", ("",)))
     for pref, restores in pref_rules:
@@ -216,7 +269,7 @@ def _expand_prefix_rules(base: str) -> list[tuple[str, list[str]]]:
 
 def _expand_suffix_rules(stem: str) -> list[tuple[str, list[str]]]:
     variants: list[tuple[str, list[str]]] = [(stem, [])]
-    for suf in ("kan", "an", "i"):
+    for suf in ("kan", "an", "in", "i"):
         if stem.endswith(suf) and len(stem) > len(suf) + 2:
             variants.append((stem[: -len(suf)], [suf]))
     return variants

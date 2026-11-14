@@ -30,6 +30,7 @@ from ace_indo_nlp.discourse import (
     format_lexicon_qa_clauses,
     parse_teaching_or_correction,
     realize_indonesian_clauses,
+    realize_indonesian_turn,
 )
 from ace_indo_nlp.lexicon_kb import (
     CORE_INDONESIAN_LEXICON,
@@ -45,6 +46,7 @@ from ace_indo_nlp.morphology import (
     COLLOQUIAL_SLANG_MAP,
     analyze_morphology,
     bounded_edit_distance,
+    is_laughter_token,
     normalize_colloquial,
     stem_candidates,
 )
@@ -555,7 +557,13 @@ class SpeechDevelopmentEngine:
 
         with self.store._lock:
             for tok in tokens:
-                if len(tok) < 4 or tok in seen_turn or tok in STOPWORDS_ID or tok in COLLOQUIAL_SLANG_MAP:
+                if (
+                    len(tok) < 4
+                    or tok in seen_turn
+                    or tok in STOPWORDS_ID
+                    or tok in COLLOQUIAL_SLANG_MAP
+                    or is_laughter_token(tok)
+                ):
                     continue
                 seen_turn.add(tok)
                 morph = analyze_morphology(tok, known_roots=lex_words | STOPWORDS_ID)
@@ -700,9 +708,9 @@ class SpeechDevelopmentEngine:
         allow_fuzzy: bool = True,
         lex_map: dict[str, dict[str, Any]] | None = None,
     ) -> dict[str, Any] | None:
-        """Resolve an input word against persisted SQLite lexicon via exact, stem, slang, or fuzzy lookup."""
+        """Resolve an input word against persisted SQLite lexicon via exact, stem, slang, or strict fuzzy lookup."""
         clean = re.sub(r"[^a-z-]", "", str(raw_token or "").lower()).strip("-")
-        if not clean:
+        if not clean or is_laughter_token(clean):
             return None
         lmap = lex_map if lex_map is not None else {item["word"]: item for item in self.list_lexicon()}
         if not lmap:
@@ -717,12 +725,14 @@ class SpeechDevelopmentEngine:
                 return lmap[cand]
 
         plain = mapped.replace("-", "")
-        if not allow_fuzzy or len(plain) < 4:
+        if not allow_fuzzy or len(plain) < 6 or clean in STOPWORDS_ID or plain in STOPWORDS_ID:
             return None
         max_dist = 1 if len(plain) < 7 else 2
         best_dist = max_dist + 1
         best_entry: dict[str, Any] | None = None
         for known, entry in lmap.items():
+            if not known or known[0] != plain[0] or (max_dist == 2 and known[:2] != plain[:2]):
+                continue
             dist = bounded_edit_distance(plain, known)
             if dist < best_dist:
                 best_dist = dist
@@ -736,7 +746,10 @@ class SpeechDevelopmentEngine:
         seen: set[str] = set()
         matches: list[dict[str, Any]] = []
         for tok in tokens:
-            entry = self.lookup_word(tok, allow_fuzzy=len(tok) >= 4, lex_map=lex_map)
+            if is_laughter_token(tok):
+                continue
+            can_fuzzy = len(tok) >= 6 and tok not in STOPWORDS_ID
+            entry = self.lookup_word(tok, allow_fuzzy=can_fuzzy, lex_map=lex_map)
             if entry and entry["word"] not in seen:
                 seen.add(entry["word"])
                 matches.append(entry)
@@ -1361,7 +1374,15 @@ class SpeechDevelopmentEngine:
         candidates: list[tuple[tuple[int, int, int, int, int, str], dict[str, Any]]] = []
         for item in heard:
             w = item["word"]
-            if w == exclude_word or f"`{w}`" in recent_joined or f"'{w}'" in recent_joined:
+            if (
+                w == exclude_word
+                or len(w) < 4
+                or w in STOPWORDS_ID
+                or w in COLLOQUIAL_SLANG_MAP
+                or is_laughter_token(w)
+                or f"`{w}`" in recent_joined
+                or f"'{w}'" in recent_joined
+            ):
                 continue
             if w in turn_tokens or item["exposure_count"] >= 2:
                 prefixed = 1 if w.startswith(("me", "di", "ber", "ter")) and len(w) > 5 else 0
@@ -1376,6 +1397,16 @@ class SpeechDevelopmentEngine:
                 candidates.append((score, item))
         candidates.sort(key=lambda pair: pair[0])
         return candidates[0][1] if candidates else None
+
+    @staticmethod
+    def _should_ask_curiosity(stage_id: int, cues: dict[str, Any], user_text: str) -> bool:
+        if stage_id < 2:
+            return False
+        if cues.get("is_greeting") or cues.get("asks_wellbeing") or cues.get("is_thanks"):
+            return False
+        if cues.get("dialogue_act", "general") != "general":
+            return False
+        return len(re.findall(r"[a-zA-Z]+", str(user_text or ""))) > 3
 
     def _compose_stage1_utterance(self, user_text: str, mode_label: str, history_turns: int) -> tuple[list[str], dict[str, Any] | None]:
         user_syls = echo_input_syllables(user_text, max_words=2)
@@ -1445,9 +1476,10 @@ class SpeechDevelopmentEngine:
         ask = f" Kata `{curious['word']}` maksudnya apa?" if curious else ""
         return [f"*\"{tele}\"* [ACE Tahap `3/4`: telegrafik, {profile['vocab_count']} kata, {mode_label}{note}].{ask}"], curious
 
-    def _compose_stage4_dialogue_reply(
+    def _compose_natural_dialogue_turn(
         self,
         *,
+        stage_id: int,
         user_text: str,
         cues: dict[str, Any],
         grounded: list[dict[str, Any]],
@@ -1456,7 +1488,9 @@ class SpeechDevelopmentEngine:
         latest_task: dict[str, Any] | None,
         recent_assistant_texts: list[str],
         history_turns: int,
-    ) -> tuple[list[str], dict[str, Any] | None]:
+        conversation_context: dict[str, Any] | None = None,
+        recent_messages: list[dict[str, Any]] | None = None,
+    ) -> tuple[list[str], dict[str, Any] | None, dict[str, str]]:
         q_target = cues.get("lexicon_qa_target")
         if q_target:
             lex_map = {item["word"]: item for item in self.list_lexicon()}
@@ -1468,10 +1502,14 @@ class SpeechDevelopmentEngine:
                 mode_label=mode_label,
                 known_roots=set(lex_map.keys()),
             )
-            return clauses, None
+            return clauses, None, {"last_topic": q_target["word"], "last_bot_question": ""}
 
-        curious = self._pick_curiosity_word(user_text=user_text, recent_assistant_texts=recent_assistant_texts)
-        clauses = realize_indonesian_clauses(
+        curious = (
+            self._pick_curiosity_word(user_text=user_text, recent_assistant_texts=recent_assistant_texts)
+            if self._should_ask_curiosity(stage_id, cues, user_text)
+            else None
+        )
+        turn = realize_indonesian_turn(
             user_text=user_text,
             cues=cues,
             grounded=grounded,
@@ -1481,8 +1519,12 @@ class SpeechDevelopmentEngine:
             recent_assistant_texts=recent_assistant_texts,
             history_turns=history_turns,
             curious_word=curious,
+            conversation_context=conversation_context,
+            recent_messages=recent_messages,
+            stage_id=stage_id,
         )
-        return clauses, curious
+        ctx_meta = {"last_topic": turn["next_topic"], "last_bot_question": turn["bot_question"]}
+        return turn["clauses"], curious, ctx_meta
 
     def _build_stage_clauses(
         self,
@@ -1496,42 +1538,45 @@ class SpeechDevelopmentEngine:
         latest_task: dict[str, Any] | None,
         recent_assistant_texts: list[str],
         history_turns: int,
-    ) -> tuple[list[str], dict[str, Any] | None]:
-        if stage_id == 0:
-            return [
-                f"Halo! Aku **ACE** (mode **{mode_label}**, tahap berbicara `0/4` — masih tahap awal sebelum latihan).",
-                "Kalau ingin aku berlatih mulai dari tahap bayi, kirim *\"latih tahap 1\"*, atau kirim *\"belajar berbicara\"* untuk kurikulum 4 tahap sekaligus.",
-            ], None
-        if stage_id == 1:
-            return self._compose_stage1_utterance(user_text, mode_label, history_turns)
-        if stage_id == 2:
-            return self._compose_stage2_utterance(
-                user_text=user_text,
-                grounded=grounded,
-                profile=profile,
-                mode_label=mode_label,
-                recent_assistant_texts=recent_assistant_texts,
-            )
-        if stage_id == 3:
-            return self._compose_stage3_utterance(
+        conversation_context: dict[str, Any] | None = None,
+        recent_messages: list[dict[str, Any]] | None = None,
+    ) -> tuple[list[str], dict[str, Any] | None, dict[str, str]]:
+        if stage_id in (0, 4):
+            return self._compose_natural_dialogue_turn(
+                stage_id=stage_id,
                 user_text=user_text,
                 cues=cues,
                 grounded=grounded,
                 profile=profile,
                 mode_label=mode_label,
+                latest_task=latest_task,
+                recent_assistant_texts=recent_assistant_texts,
                 history_turns=history_turns,
+                conversation_context=conversation_context,
+                recent_messages=recent_messages,
+            )
+        if stage_id == 1:
+            c1, cur1 = self._compose_stage1_utterance(user_text, mode_label, history_turns)
+            return c1, cur1, {}
+        if stage_id == 2:
+            c2, cur2 = self._compose_stage2_utterance(
+                user_text=user_text,
+                grounded=grounded,
+                profile=profile,
+                mode_label=mode_label,
                 recent_assistant_texts=recent_assistant_texts,
             )
-        return self._compose_stage4_dialogue_reply(
+            return c2, cur2, {}
+        c3, cur3 = self._compose_stage3_utterance(
             user_text=user_text,
             cues=cues,
             grounded=grounded,
             profile=profile,
             mode_label=mode_label,
-            latest_task=latest_task,
-            recent_assistant_texts=recent_assistant_texts,
             history_turns=history_turns,
+            recent_assistant_texts=recent_assistant_texts,
         )
+        return c3, cur3, {}
 
     def record_verified_utterance(
         self,
@@ -1610,6 +1655,7 @@ class SpeechDevelopmentEngine:
         persist_utterance: bool = True,
         observe_turn: bool = True,
         conversation_context: dict[str, Any] | None = None,
+        recent_messages: list[dict[str, Any]] | None = None,
     ) -> dict[str, Any]:
         """Compose and verify a stage-appropriate grounded Indonesian utterance."""
         if persist_utterance and observe_turn:
@@ -1620,7 +1666,7 @@ class SpeechDevelopmentEngine:
         cues = self._extract_conversational_cues(user_text, pending_word=pending_word)
         grounded = self.find_grounded_words(user_text)
 
-        clauses, asked_curious = self._build_stage_clauses(
+        clauses, asked_curious, ctx_meta = self._build_stage_clauses(
             stage_id=stage_id,
             user_text=user_text,
             cues=cues,
@@ -1630,6 +1676,8 @@ class SpeechDevelopmentEngine:
             latest_task=latest_task,
             recent_assistant_texts=recent_assistant_texts,
             history_turns=history_turns,
+            conversation_context=conversation_context,
+            recent_messages=recent_messages,
         )
         reply = "\n\n".join(clauses)
         ver = self.verify_utterance(
@@ -1641,11 +1689,12 @@ class SpeechDevelopmentEngine:
             recent_assistant_texts=recent_assistant_texts,
         )
         if persist_utterance:
-            if asked_curious is not None and not conversation_id.startswith("__"):
-                self.store.update_conversation_context(
-                    conversation_id,
-                    {"pending_curiosity_word": asked_curious["word"]},
-                )
+            if not conversation_id.startswith("__"):
+                ctx_updates: dict[str, Any] = dict(ctx_meta)
+                if asked_curious is not None:
+                    ctx_updates["pending_curiosity_word"] = asked_curious["word"]
+                if ctx_updates:
+                    self.store.update_conversation_context(conversation_id, ctx_updates)
             self.record_verified_utterance(
                 conversation_id=conversation_id,
                 stage_id=stage_id,
@@ -1687,7 +1736,7 @@ def _format_teach_word_reply(
     phrase = engine.compose_telegraphic_phrase(("aktor", "aksi", "objek"), preferred_words=[entry], user_text=entry["word"])
     sample_phrase = f" Contoh gabungan: *\"{phrase['phrase']}\"*." if phrase.get("valid") else ""
     if is_corr:
-        action_prefix = f"Arti kata **`{entry['word']}`** sudah kuralat dan perbarui (revisi ke-`{entry['revision_count']}`)"
+        action_prefix = f"Arti kata **`{entry['word']}`** kuralat dan perbarui (revisi ke-`{entry['revision_count']}`)"
     elif is_ana:
         action_prefix = f"Terima kasih penjelasannya! Kata **`{entry['word']}`** yang baru kubahas"
     else:

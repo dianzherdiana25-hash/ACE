@@ -118,6 +118,31 @@ def normalize_indonesian_text(raw: str) -> str:
     return out.strip()
 
 
+def _format_mode_label(hc: dict[str, Any]) -> str:
+    if hc.get("offline_mode"):
+        return "Offline Lokal"
+    backend = str(hc.get("active_backend", "") or "").strip()
+    if not backend or backend == "unavailable":
+        return "Lokal Mandiri"
+    return f"Lokal ({backend})"
+
+
+def _is_status_check_query(lower: str) -> bool:
+    if any(
+        p in lower
+        for p in (
+            "sudah sampai mana",
+            "udah sampai mana",
+            "status sekarang",
+            "status tugas",
+            "progresnya bagaimana",
+            "progres tugas",
+        )
+    ):
+        return True
+    return "lagi ngapain" in lower and any(w in lower for w in ("tugas", "progres", "proyek", "kerjaan", "skrip"))
+
+
 def _classify_greeting_or_capability(
     lower: str,
     norm: str,
@@ -128,9 +153,11 @@ def _classify_greeting_or_capability(
         p in lower
         for p in (
             "kamu bisa bantu apa",
+            "bisa bantu apa",
+            "bantu apa saja",
             "bisa apa saja",
+            "bisa ngapain",
             "apa yang bisa kamu lakukan",
-            "siapa kamu",
             "apa yang bisa kamu buat",
             "tawarkan 2 opsi",
             "kasih pilihan",
@@ -261,10 +288,7 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
         }
 
     # 6. Status check (`A10`: "udah sampai mana?")
-    if any(
-        p in lower
-        for p in ("sudah sampai mana", "udah sampai mana", "lagi ngapain", "status sekarang", "progresnya bagaimana")
-    ):
+    if _is_status_check_query(lower):
         return {
             "intent": "STATUS_CHECK",
             "normalized_text": norm,
@@ -553,6 +577,7 @@ class ConversationalEngine:
             history_turns=len(msgs),
             observe_turn=not observed_already,
             conversation_context=ctx,
+            recent_messages=msgs[-8:],
         )
         return str(speech_out["reply"])
 
@@ -609,6 +634,38 @@ class ConversationalEngine:
         )
         return reply, task_obj
 
+    def _handle_resume_intent(
+        self,
+        conversation_id: str,
+        conv: dict[str, Any],
+        opts: dict[str, Any],
+    ) -> tuple[str, dict[str, Any] | None]:
+        latest = self.store.get_latest_task(conversation_id)
+        if latest and latest["status"] in ("PAUSED", "FAILED_WITH_RECOVERY_STATE", "WAITING_FOR_DEPENDENCY", "QUEUED"):
+            ir = self.store.get_problem_ir(latest["task_id"]) or {}
+            domain = ir.get("domain") or conv["context"].get("last_domain", "expense_tracker")
+            if domain == "general":
+                exec_res = self.coding.execute_general_task(
+                    title=latest.get("title_id", "Tugas Solusi"),
+                    goal=latest.get("user_request") or latest.get("normalized_goal", ""),
+                    task_id=latest["task_id"],
+                    conversation_id=conversation_id,
+                )
+            else:
+                exec_res = self.coding.execute_coding_task(latest["task_id"], domain=domain, options=opts)
+            task_obj = exec_res["task"]
+            return (
+                f"Tugas **{task_obj['title_id']}** sudah kulanjutkan dari checkpoint terakhir dan sekarang selesai "
+                f"dengan status `{task_obj['status']}`!"
+            ), task_obj
+        if not latest or latest.get("kind") == "learning_task":
+            return (
+                "Belum ada tugas yang tertunda saat ini nih, jadi kita bisa lanjut ngobrol atau membuat sesuatu yang baru!"
+            ), None
+        return (
+            "Semua tugas sebelumnya sudah selesai (`COMPLETED`). Beri tahu aku jika ada tugas baru yang ingin dikerjakan."
+        ), None
+
     def handle_user_message(
         self,
         text: str,
@@ -654,7 +711,7 @@ class ConversationalEngine:
 
         intent = frame["intent"]
         hc = self.router.health_check()
-        mode_label = "Offline Lokal" if hc["offline_mode"] else f"Lokal ({hc['active_backend']})"
+        mode_label = _format_mode_label(hc)
         task_obj: dict[str, Any] | None = None
         reply_text = ""
 
@@ -849,26 +906,7 @@ class ConversationalEngine:
                 reply_text = "Tidak ada tugas yang sedang berjalan saat ini, sehingga tidak ada proses yang perlu dihentikan."
 
         elif intent == "RESUME_TASK":
-            latest = self.store.get_latest_task(conversation_id)
-            if latest and latest["status"] in ("PAUSED", "FAILED_WITH_RECOVERY_STATE", "WAITING_FOR_DEPENDENCY", "QUEUED"):
-                ir = self.store.get_problem_ir(latest["task_id"]) or {}
-                domain = ir.get("domain") or conv["context"].get("last_domain", "expense_tracker")
-                if domain == "general":
-                    exec_res = self.coding.execute_general_task(
-                        title=latest.get("title_id", "Tugas Solusi"),
-                        goal=latest.get("user_request") or latest.get("normalized_goal", ""),
-                        task_id=latest["task_id"],
-                        conversation_id=conversation_id,
-                    )
-                else:
-                    exec_res = self.coding.execute_coding_task(latest["task_id"], domain=domain, options=opts)
-                task_obj = exec_res["task"]
-                reply_text = (
-                    f"Tugas **{task_obj['title_id']}** sudah kulanjutkan dari checkpoint terakhir dan sekarang selesai "
-                    f"dengan status `{task_obj['status']}`!"
-                )
-            else:
-                reply_text = "Semua tugas sebelumnya sudah selesai (`COMPLETED`). Beri tahu aku jika ada tugas baru yang ingin dikerjakan."
+            reply_text, task_obj = self._handle_resume_intent(conversation_id, conv, opts)
 
         elif intent == "MODIFY_PREVIOUS_ARTIFACT":
             latest = self.store.get_latest_task(conversation_id)

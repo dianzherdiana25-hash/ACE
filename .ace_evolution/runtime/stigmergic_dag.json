@@ -32,8 +32,51 @@
       },
       "prev_chain_hash": "0000000000000000000000000000000000000000000000000000000000000000",
       "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "90a7e61795ca760f3b90dd470651efc0032f3f79c8d3dbbe839181cfbe1c3609",
+      "node_id": "proof_ratify_mission_mission-0001b-dialog-alami",
+      "parent_ids": [
+        "proof_ratify_mission_mission-0001-skill-berbicara"
+      ],
+      "payload": {
+        "birth_sha256": "494cf5cc4963f859e993e71af358fbba87684ca2f13cb6e2fcb4521aba56d63a",
+        "changed_files": [
+          "code/ace_indo_nlp/discourse.py",
+          "code/ace_indo_nlp/lexicon_kb.py",
+          "code/ace_indo_nlp/morphology.py",
+          "code/ace_indo_nlp/test_discourse.py",
+          "code/ace_indo_nlp/test_lexicon_kb.py",
+          "code/ace_indo_nlp/test_morphology.py",
+          "code/ace_operational/language.py",
+          "code/ace_operational/speech_acquisition.py",
+          "code/ace_operational/test_speech_acquisition.py",
+          "code/ace_operational/web_server.py"
+        ],
+        "mission_type": "user_mission",
+        "order_id": "mission-0001b-dialog-alami",
+        "post_hashes": {
+          "code/ace_indo_nlp/discourse.py": "8c729d5e4ef476b18102c995cec4559e6a88e0cbfb4053ac44e8727209c0c975",
+          "code/ace_indo_nlp/lexicon_kb.py": "1eaa00a6c38ff6e0045407d4b829511a0b10324bac2943fe02a3351b141b3110",
+          "code/ace_indo_nlp/morphology.py": "6f46020b8d2e82318a723ac22542b3493690f9e1993dac623edc11689cd68eb7",
+          "code/ace_indo_nlp/test_discourse.py": "17ede3656978bc3d4702c2ff34601014db74588e821124bc1eabde69e057f367",
+          "code/ace_indo_nlp/test_lexicon_kb.py": "649c30c98eb343d4e05ddef0b7f9235216c3050506d654b7b7ba4c36e7485ab0",
+          "code/ace_indo_nlp/test_morphology.py": "c2f6c22a9c5726b1f2d8604fbf3edf4fc774a529936e3fc3d2bb0626492529ba",
+          "code/ace_operational/language.py": "d88cc96d5e11698a218e5d5bad6cd25c419e3922bb28a208bb80e3f8f2d21b90",
+          "code/ace_operational/speech_acquisition.py": "7a88cea1a3d899c01aab62b373b655bad78615f9105d3c22e7d1e2f3a5192c7c",
+          "code/ace_operational/test_speech_acquisition.py": "c0c6059656d4f4d2945b992057dc85fad3d13485056299c1d600e5aea4f78d2f",
+          "code/ace_operational/web_server.py": "479c2b968ce9e01324ec0bb86aeba20be833420e2297cb1f5a23605f6c742623"
+        },
+        "task_id": "ratify_mission_mission-0001b-dialog-alami",
+        "title": "Dialog Alami & Perbaikan Obrolan Web/Termux (Misi 0001b)",
+        "verified": true
+      },
+      "prev_chain_hash": "8968cdc3c6a2ca1f8dcd4caffc42baefc6a2032b16e1fe510c41ad0c71f59477",
+      "weight": 1.0
     }
   ],
   "schema": "ace.stigmergic_dag.v1",
-  "tail_hash": "8968cdc3c6a2ca1f8dcd4caffc42baefc6a2032b16e1fe510c41ad0c71f59477"
+  "tail_hash": "90a7e61795ca760f3b90dd470651efc0032f3f79c8d3dbbe839181cfbe1c3609"
 }

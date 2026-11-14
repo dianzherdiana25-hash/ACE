@@ -7,10 +7,11 @@
       "skill_id": "core_stage2_guard"
     }
   ],
-  "cycle_count": 1,
-  "health_score": 0.6,
+  "cycle_count": 2,
+  "health_score": 0.7,
   "processed_task_ids": [
-    "ratify_mission_mission-0001-skill-berbicara"
+    "ratify_mission_mission-0001-skill-berbicara",
+    "ratify_mission_mission-0001b-dialog-alami"
   ],
   "quarantined_faults": 0,
   "unhandled_crashes": 0

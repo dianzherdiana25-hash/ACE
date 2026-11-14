@@ -289,10 +289,41 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
       border-bottom-left-radius: 6px;
     }
 
+    .msg-bubble code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      background: rgba(12, 17, 32, 0.72);
+      padding: 1px 6px;
+      border-radius: 6px;
+      color: var(--accent-secondary);
+    }
+
+    .msg-bubble strong {
+      color: #F4F0FF;
+    }
+
     .msg-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
       font-size: 11px;
       color: var(--text-secondary);
       margin-top: 6px;
+    }
+
+    .msg-error {
+      border-color: rgba(248, 113, 113, 0.55);
+    }
+
+    .speak-btn {
+      background: transparent;
+      border: 1px solid rgba(112, 221, 209, 0.3);
+      color: var(--accent-secondary);
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      padding: 2px 8px;
+      cursor: pointer;
     }
 
     /* Task Control Strip inside Chat Panel */
@@ -672,6 +703,9 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
       </div>
 
       <div class="starter-chips" aria-label="Contoh perintah cepat">
+        <button type="button" class="chip-btn" onclick="sendQuickPrompt('Halo ACE, apa kabar?')">
+          Sapa ACE
+        </button>
         <button type="button" class="chip-btn" onclick="sendQuickPrompt('Buatkan aplikasi catatan pengeluaran sederhana')">
           Buat catatan pengeluaran
         </button>
@@ -807,6 +841,59 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
       headline.textContent = customHeadline || STATE_HEADLINES[valid];
     }
 
+    function appendInlineFormatted(parent, line) {
+      const tokenRe = /(\*\*[^*\n]+\*\*|`[^`\n]+`|\*[^*\n]+\*)/g;
+      let lastIdx = 0;
+      let match;
+      while ((match = tokenRe.exec(line)) !== null) {
+        if (match.index > lastIdx) {
+          parent.appendChild(document.createTextNode(line.slice(lastIdx, match.index)));
+        }
+        const tok = match[0];
+        let el;
+        if (tok.startsWith("**") && tok.endsWith("**")) {
+          el = document.createElement("strong");
+          appendInlineFormatted(el, tok.slice(2, -2));
+        } else if (tok.startsWith("`") && tok.endsWith("`")) {
+          el = document.createElement("code");
+          el.textContent = tok.slice(1, -1);
+        } else {
+          el = document.createElement("em");
+          el.textContent = tok.slice(1, -1);
+        }
+        parent.appendChild(el);
+        lastIdx = tokenRe.lastIndex;
+      }
+      if (lastIdx < line.length) {
+        parent.appendChild(document.createTextNode(line.slice(lastIdx)));
+      }
+    }
+
+    function formatSafeMarkdown(container, rawText) {
+      const text = String(rawText || "");
+      container.textContent = "";
+      const lines = text.split("\n");
+      lines.forEach((line, idx) => {
+        if (idx > 0) {
+          container.appendChild(document.createElement("br"));
+        }
+        appendInlineFormatted(container, line);
+      });
+    }
+
+    function speakIndonesian(text) {
+      if (!("speechSynthesis" in window) || !text) return;
+      try {
+        window.speechSynthesis.cancel();
+        const plain = String(text).replace(/[`*_#]/g, "").trim();
+        const utter = new SpeechSynthesisUtterance(plain);
+        utter.lang = "id-ID";
+        window.speechSynthesis.speak(utter);
+      } catch (_err) {
+        // Ignore TTS unsupported environments cleanly
+      }
+    }
+
     function appendChatBubble(msg) {
       const container = document.getElementById("chat-messages");
       if (document.getElementById("msg-" + msg.message_id)) {
@@ -817,17 +904,42 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
       bubble.className = "msg-bubble " + (msg.role === "user" ? "msg-user" : "msg-assistant");
 
       const textNode = document.createElement("div");
-      // Always use textContent so user/model HTML strings are safely escaped (WEB21)
+      // Always use textContent/DOM nodes so user/model HTML strings are safely escaped (WEB21)
       textNode.textContent = msg.text;
+      formatSafeMarkdown(textNode, msg.text);
       bubble.appendChild(textNode);
 
       const meta = document.createElement("div");
       meta.className = "msg-meta";
-      meta.textContent = (msg.role === "user" ? "Kamu" : "ACE") + " • " + (msg.created_at || "");
+      const metaLabel = document.createElement("span");
+      metaLabel.textContent = (msg.role === "user" ? "Kamu" : "ACE") + " • " + (msg.created_at || "");
+      meta.appendChild(metaLabel);
+      if (msg.role !== "user" && "speechSynthesis" in window) {
+        const spBtn = document.createElement("button");
+        spBtn.type = "button";
+        spBtn.className = "speak-btn";
+        spBtn.textContent = "Dengarkan";
+        spBtn.setAttribute("aria-label", "Bacakan balasan ACE");
+        spBtn.onclick = () => speakIndonesian(msg.text);
+        meta.appendChild(spBtn);
+      }
       bubble.appendChild(meta);
 
       container.appendChild(bubble);
       container.scrollTop = container.scrollHeight;
+    }
+
+    function appendSystemNotice(text, isError) {
+      appendChatBubble({
+        message_id: "sys_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+        role: "assistant",
+        text: text,
+        created_at: new Date().toLocaleTimeString(),
+      });
+      if (isError) {
+        const last = document.getElementById("chat-messages").lastElementChild;
+        if (last) last.classList.add("msg-error");
+      }
     }
 
     function prependStoryCard(evt) {
@@ -915,9 +1027,14 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
         ]);
         if (stRes.ok) {
           const st = await stRes.json();
-          const modeLabel = st.offline_mode ? "Mode: Offline Lokal" : "Mode: " + String(st.mode || "lokal").toUpperCase();
-          document.getElementById("text-mode").textContent = modeLabel;
-          document.getElementById("badge-model").textContent = "Model: " + (st.active_backend || "lokal");
+          const modeDisplay = st.offline_mode
+            ? "Offline Lokal"
+            : (st.mode === "local_only" ? "Lokal Mandiri" : String(st.mode || "lokal").toUpperCase());
+          document.getElementById("text-mode").textContent = "Mode: " + modeDisplay;
+          const modelDisplay = (st.active_backend && st.active_backend !== "unavailable")
+            ? st.active_backend
+            : "Bahasa Lokal";
+          document.getElementById("badge-model").textContent = "Model: " + modelDisplay;
           if (st.speech_profile) {
             document.getElementById("badge-speech").textContent =
               "Bicara: Tahap " + st.speech_profile.current_stage + "/4 (" + st.speech_profile.vocab_count + " kata)";
@@ -978,8 +1095,22 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
             document.getElementById("active-task-badge").textContent =
               data.task.title_id + " [" + data.task.status + "]";
           }
+          if (data.avatar_state) {
+            updateCompanionAvatar(data.avatar_state);
+          }
           await refreshStatusAndHistory();
+        } else {
+          let errMsg = "HTTP " + res.status;
+          try {
+            const errData = await res.json();
+            if (errData && errData.error) errMsg = errData.error;
+          } catch (_ignore) {}
+          appendSystemNotice("Maaf, permintaan gagal diproses: " + errMsg, true);
+          updateCompanionAvatar("mendengar");
         }
+      } catch (_err) {
+        appendSystemNotice("Koneksi ke server ACE terputus sementara. Pastikan ACE Studio masih berjalan.", true);
+        updateCompanionAvatar("mendengar");
       } finally {
         btn.disabled = false;
       }
@@ -1111,6 +1242,15 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
     }
 
     window.addEventListener("DOMContentLoaded", () => {
+      const chatInput = document.getElementById("chat-input");
+      if (chatInput) {
+        chatInput.addEventListener("keydown", (ev) => {
+          if (ev.key === "Enter" && !ev.shiftKey && !ev.isComposing) {
+            ev.preventDefault();
+            submitChatForm(ev);
+          }
+        });
+      }
       refreshStatusAndHistory();
       setInterval(() => {
         refreshStatusAndHistory();
@@ -1268,6 +1408,26 @@ class ACEWebCore:
                     return match, match.read_text(encoding="utf-8", errors="replace")
         return None
 
+    def handle_chat_post(self, body: dict[str, Any]) -> tuple[int, dict[str, Any]]:
+        """Process POST /api/chat safely and return (http_status, json_payload)."""
+        text = str(body.get("text", "")).strip()
+        if not text:
+            return int(HTTPStatus.BAD_REQUEST), {"error": "Pesan 'text' tidak boleh kosong"}
+        conv_id = str(body.get("conversation_id") or "conv_utama")
+        client_msg_id = body.get("client_message_id")
+        try:
+            res = self.chat_engine.handle_user_message(
+                text,
+                conversation_id=conv_id,
+                client_message_id=str(client_msg_id) if client_msg_id else None,
+            )
+        except Exception as exc:
+            return int(HTTPStatus.INTERNAL_SERVER_ERROR), {"error": f"Gagal memproses pesan: {exc}"}
+        events = self.store.list_events(include_heartbeats=False, limit=10)
+        res["story_cards"] = [e for e in reversed(events) if e.get("story_text")]
+        res["avatar_state"] = self.get_status_payload()["avatar_state"]
+        return int(HTTPStatus.OK), res
+
 
 def create_http_handler(core: ACEWebCore):
     class ACEHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -1411,21 +1571,8 @@ def create_http_handler(core: ACEWebCore):
                 return
 
             if path == "/api/chat":
-                text = str(body.get("text", "")).strip()
-                if not text:
-                    self._send_json({"error": "Pesan 'text' tidak boleh kosong"}, status=HTTPStatus.BAD_REQUEST)
-                    return
-                conv_id = str(body.get("conversation_id") or "conv_utama")
-                client_msg_id = body.get("client_message_id")
-                res = core.chat_engine.handle_user_message(
-                    text,
-                    conversation_id=conv_id,
-                    client_message_id=str(client_msg_id) if client_msg_id else None,
-                )
-                events = core.store.list_events(include_heartbeats=False, limit=10)
-                res["story_cards"] = [e for e in reversed(events) if e.get("story_text")]
-                res["avatar_state"] = core.get_status_payload()["avatar_state"]
-                self._send_json(res)
+                status_code, payload = core.handle_chat_post(body)
+                self._send_json(payload, status=status_code)
                 return
 
             if path.startswith("/api/tasks/") and path.endswith("/control"):

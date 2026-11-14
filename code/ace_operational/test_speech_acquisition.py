@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 from ace_operational.autonomous_engine import ContinuousAutonomousEngine
@@ -499,6 +500,93 @@ class SpeechAcquisitionTests(unittest.TestCase):
             sp_data = json.loads(r_sp.read().decode("utf-8"))
         self.assertGreaterEqual(sp_data["vocab_count"], 180)
         self.assertTrue(any(w["word"] == "lentera" for w in sp_data["user_taught_words"]))
+
+    def test_v4_natural_casual_conversation_stage0_and_stage4(self) -> None:
+        chat = ConversationalEngine(self.store)
+
+        r_halo = chat.handle_user_message("Halo ACE")
+        self.assertIn("0/4", r_halo["reply"])
+        self.assertNotIn("unavailable", r_halo["reply"].lower())
+
+        r_kabar = chat.handle_user_message("apa kabar?")
+        self.assertIn("kabar", r_kabar["reply"].lower())
+        self.assertNotIn("0/4", r_kabar["reply"])
+
+        r_act = chat.handle_user_message("kamu lagi ngapain sekarang?")
+        self.assertNotEqual(r_act["intent_frame"]["intent"], "STATUS_CHECK")
+        self.assertNotIn("belum ada tugas aktif", r_act["reply"].lower())
+
+        r_tired = chat.handle_user_message("aku cape bgt")
+        self.assertIn("capek", r_tired["reply"].lower())
+        self.assertNotIn("sabar", r_tired["reply"].lower())
+        self.assertNotIn("bingung", r_tired["reply"].lower())
+
+        r_id = chat.handle_user_message("siapa namamu?")
+        self.assertIn("Lokal Mandiri", r_id["reply"])
+        self.assertNotIn("unavailable", r_id["reply"].lower())
+
+        r_laugh = chat.handle_user_message("wkwkwk lucu")
+        self.assertTrue("ketawa" in r_laugh["reply"].lower() or "haha" in r_laugh["reply"].lower())
+        heard_words = {h["word"] for h in self.speech.list_heard_words(ungrounded_only=False, limit=30)}
+        self.assertNotIn("wkwkwk", heard_words)
+
+        r_rep = chat.handle_user_message("kata teman nasi goreng itu enak")
+        self.assertNotEqual(r_rep["intent_frame"]["intent"], "TEACH_WORD")
+        self.assertIsNone(self.speech.lookup_word("teman", allow_fuzzy=False))
+
+        r_col = chat.handle_user_message("kamu suka warna apa?")
+        self.assertIn("biru", r_col["reply"].lower())
+        r_col_follow = chat.handle_user_message("biru")
+        self.assertIn("biru", r_col_follow["reply"].lower())
+
+        r_lanjut_empty = chat.handle_user_message("lanjut")
+        self.assertNotIn("COMPLETED", r_lanjut_empty["reply"])
+
+        self.speech.train_and_graduate()
+        r_s4 = chat.handle_user_message("kamu lagi ngapain?")
+        self.assertEqual(r_s4["intent_frame"]["intent"], "GENERAL_CONVERSATION")
+        self.assertNotIn("Kata kunci yang kutangkap", r_s4["reply"])
+        self.assertNotIn("Pesanmu kuterima", r_s4["reply"])
+
+        r_bored = chat.handle_user_message("aku bosen banget nih")
+        self.assertIn("bosan", r_bored["reply"].lower())
+        r_story = chat.handle_user_message("ceritain sesuatu dong")
+        self.assertIn("cerita", r_story["reply"].lower())
+
+    def test_v4_web_studio_natural_ui_and_chat_api(self) -> None:
+        server = ACEWebServer(self.store, host="127.0.0.1", port=0)
+        url = server.start_background()
+        self.addCleanup(server.stop)
+
+        with urlopen(f"{url}/") as home:
+            html = home.read().decode("utf-8")
+        self.assertIn("textContent = msg.text", html)
+        self.assertIn("formatSafeMarkdown", html)
+        self.assertIn("Bahasa Lokal", html)
+        self.assertIn("Sapa ACE", html)
+        self.assertIn("speechSynthesis", html)
+
+        chat_req = Request(
+            f"{url}/api/chat",
+            data=json.dumps({"conversation_id": "conv_utama", "text": "aku cape bgt"}).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urlopen(chat_req) as r_chat:
+            data = json.loads(r_chat.read().decode("utf-8"))
+        self.assertIn("capek", data["reply"].lower())
+        self.assertNotIn("unavailable", data["reply"].lower())
+        self.assertEqual(data["avatar_state"], "mendengar")
+
+        bad_req = Request(
+            f"{url}/api/chat",
+            data=json.dumps({"text": "   "}).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with self.assertRaises(HTTPError) as ctx_err:
+            urlopen(bad_req)
+        self.assertEqual(ctx_err.exception.code, 400)
 
 
 if __name__ == "__main__":
