@@ -285,6 +285,29 @@ class UniversalBrainGovernor:
             "brains": efficiency_ranking,
         }
 
+    @staticmethod
+    def evaluate_epistemic_zone(
+        *,
+        deterministic_proof: bool,
+        mutation_kill_rate: float,
+        empirical_errors: int,
+        sample_size: int,
+        kl_divergence: float,
+        calibration_scores: list[float],
+    ) -> dict[str, Any]:
+        """Classify a brain proposal into PROVED, CONFORMAL_BOUNDED, or ABSTAIN_FOR_EXPERIMENT."""
+        from .causal_repo_evolution import CartographyOfIgnorance
+
+        return CartographyOfIgnorance().classify(
+            deterministic_proof=deterministic_proof,
+            mutation_kill_rate=mutation_kill_rate,
+            empirical_errors=empirical_errors,
+            sample_size=sample_size,
+            kl_divergence=kl_divergence,
+            calibration_nonconformity_scores=calibration_scores,
+        ).to_dict()
+
+
 
 # ============================================================================
 # PILLAR II: UNLIMITED AUTOPOIETIC SKILL & COMPOSITE SCHEMA FORGE
