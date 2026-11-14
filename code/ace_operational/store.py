@@ -443,6 +443,10 @@ class OperationalStore:
                 finished_at TEXT NOT NULL DEFAULT ''
             );
 
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_stage2_blocked_run_per_staging
+            ON proposer_stage2_runs(staging_id)
+            WHERE status IN ('RUNNING', 'FINALIZING', 'FINALIZE_FAILED', 'STOPPED', 'ABORTED_CEILING', 'FAILED');
+
             CREATE TABLE IF NOT EXISTS proposer_stage2_ledger (
                 seq INTEGER PRIMARY KEY AUTOINCREMENT,
                 event_type TEXT NOT NULL,

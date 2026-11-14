@@ -728,6 +728,97 @@ class ProposerStage2Tests(unittest.TestCase):
         for chk in report["checks"]:
             self.assertTrue(chk["passed"], msg=f"Battery check failed: {chk}")
 
+    def test_concurrent_cross_engine_dispatch_is_atomic_no_auto_retry(self):
+        pkg = self._pkg(max_calls=10, max_wall=60, max_cost=5.0)
+        staged, _ = self.engine.stage_package(pkg, request_id="req-cross-engine-race")
+        sha = staged["payload_sha256"]
+        self.engine.ratify_staged(staged["staging_id"], audience="hub", payload_sha256=sha)
+
+        store_b = OperationalStore(workspace=self.ws)
+        self.addCleanup(store_b.close)
+        engine_b = Stage2StagingEngine(store_b, mission_bus=self.bus, now_fn=self.clock)
+
+        entered = threading.Event()
+        release = threading.Event()
+        barrier = threading.Barrier(2)
+        results: list[tuple[str, Any]] = []
+        res_lock = threading.Lock()
+
+        def worker(ctx, _pkg):
+            ctx.record_step(step_name="hold", calls=1, cost_units=0.1, work_units=1)
+            entered.set()
+            release.wait(timeout=5.0)
+            return {"ok": True}
+
+        def invoke(label: str, eng: Stage2StagingEngine):
+            barrier.wait(timeout=5.0)
+            try:
+                out = eng.dispatch_staged(
+                    staged["staging_id"],
+                    expected_payload_sha256=sha,
+                    worker=worker,
+                )
+                with res_lock:
+                    results.append((label, ("OK", out["execution_run_id"], out["status"])))
+            except Exception as exc:
+                with res_lock:
+                    results.append((label, ("ERR", type(exc).__name__, str(exc))))
+
+        t1 = threading.Thread(target=invoke, args=("eng_a", self.engine), daemon=True)
+        t2 = threading.Thread(target=invoke, args=("eng_b", engine_b), daemon=True)
+        t1.start()
+        t2.start()
+        self.assertTrue(entered.wait(timeout=5.0))
+        release.set()
+        t1.join(timeout=5.0)
+        t2.join(timeout=5.0)
+
+        self.assertEqual(len(results), 2)
+        ok_res = [r for _, r in results if r[0] == "OK"]
+        err_res = [r for _, r in results if r[0] == "ERR"]
+        self.assertEqual(len(ok_res), 1)
+        self.assertEqual(len(err_res), 1)
+        self.assertEqual(err_res[0][1], "AutoRetryBlockedError")
+        self.assertEqual(len(self.engine.list_runs(staged["staging_id"])), 1)
+        self.assertTrue(self.engine.verify_ledger())
+        self.assertTrue(engine_b.verify_ledger())
+
+    def test_non_json_worker_output_rejected_before_retaining(self):
+        pkg = self._pkg()
+        staged, _ = self.engine.stage_package(pkg, request_id="req-bad-worker-out")
+        sha = staged["payload_sha256"]
+        self.engine.ratify_staged(staged["staging_id"], audience="kernel", payload_sha256=sha)
+
+        def bad_bytes_worker(ctx, _pkg):
+            ctx.record_step(step_name="step1", calls=1, cost_units=0.1, work_units=1)
+            return {"artifact": b"data"}
+
+        run = self.engine.dispatch_staged(
+            staged["staging_id"],
+            expected_payload_sha256=sha,
+            worker=bad_bytes_worker,
+        )
+        self.assertEqual(run["status"], "FAILED")
+        self.assertIn("JSON-compatible", run["stop_reason"])
+        self.assertEqual(run["result_summary"]["worker_output"], {})
+        self.assertEqual(run["preaudit_exit_code"], 0)
+        self.assertTrue(self.engine.verify_ledger())
+
+        pkg2 = self._pkg()
+        staged2, _ = self.engine.stage_package(pkg2, request_id="req-non-dict-worker-out")
+        sha2 = staged2["payload_sha256"]
+        self.engine.ratify_staged(staged2["staging_id"], audience="evidence", payload_sha256=sha2)
+
+        run2 = self.engine.dispatch_staged(
+            staged2["staging_id"],
+            expected_payload_sha256=sha2,
+            worker=lambda _ctx, _pkg: ["not-a-dict"],  # type: ignore[return-value]
+        )
+        self.assertEqual(run2["status"], "FAILED")
+        self.assertIn("expected dict or None", run2["stop_reason"])
+        self.assertEqual(run2["result_summary"]["worker_output"], {})
+        self.assertEqual(run2["preaudit_exit_code"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -44,6 +44,7 @@ import os
 from pathlib import Path
 import secrets
 import shutil
+import sqlite3
 import threading
 import time
 from typing import Any, Callable
@@ -1222,13 +1223,19 @@ class Stage2StagingEngine:
         exc: Exception,
     ) -> None:
         with self.store._lock:
-            self._append_ledger_locked(
-                event_type=event_type,
-                staging_id=staging_id,
-                payload_sha256=payload_sha256,
-                detail=detail,
-            )
-            self.store._conn.commit()
+            if not self.store._conn.in_transaction:
+                self.store._conn.execute("BEGIN IMMEDIATE")
+            try:
+                self._append_ledger_locked(
+                    event_type=event_type,
+                    staging_id=staging_id,
+                    payload_sha256=payload_sha256,
+                    detail=detail,
+                )
+                self.store._conn.commit()
+            except Exception:
+                self.store._conn.rollback()
+                raise
         raise exc
 
     def _export_and_verify_bundle(
@@ -1582,7 +1589,6 @@ class Stage2StagingEngine:
         # Mint fresh execution_run_id (#8C: unique per intentional execution / replication).
         run_id = f"stgrun_{int(now_ep * 1000)}_{secrets.token_hex(4)}"
         run_dummy_root = (dummy_root / run_id).resolve()
-        run_dummy_root.mkdir(parents=True, exist_ok=True)
         env_snap = profile.to_snapshot()
         created_iso = _utc_iso(now_ep)
 
@@ -1591,37 +1597,115 @@ class Stage2StagingEngine:
             self._stop_events[run_id] = stop_event
             self._stop_meta[run_id] = {"staging_id": staging_id}
 
-        with self.store._lock:
-            self.store._conn.execute(
-                """
-                INSERT INTO proposer_stage2_runs(
-                    execution_run_id, staging_id, request_id, bound_payload_sha256,
-                    ratification_id, identity_mode, status, env_snapshot_json, created_at
-                ) VALUES (?, ?, ?, ?, ?, 'staging-only', 'RUNNING', ?, ?)
-                """,
-                (
-                    run_id,
-                    staging_id,
-                    staged["request_id"],
-                    staged["payload_sha256"],
-                    active_rat["ratification_id"],
-                    json.dumps(env_snap, sort_keys=True, ensure_ascii=False),
-                    created_iso,
-                ),
-            )
-            self._append_ledger_locked(
-                event_type="RUN_DISPATCHED",
-                staging_id=staging_id,
-                execution_run_id=run_id,
-                payload_sha256=staged["payload_sha256"],
-                detail={
-                    "ratification_id": active_rat["ratification_id"],
-                    "audience": active_rat["audience"],
-                    "identity_mode": "staging-only",
-                },
-            )
-            self.store._conn.commit()
+        inserted = False
+        try:
+            with self.store._lock:
+                self.store._conn.execute("BEGIN IMMEDIATE")
+                try:
+                    # Re-check active/blocked states & revocation inside write lock so
+                    # concurrent dispatches across engine instances cannot both start.
+                    blocked_placeholders = ",".join("?" for _ in blocked_states)
+                    conflict_row = self.store._conn.execute(
+                        f"SELECT execution_run_id, status FROM proposer_stage2_runs "
+                        f"WHERE staging_id = ? AND status IN ({blocked_placeholders}) "
+                        f"ORDER BY created_at DESC, rowid DESC LIMIT 1",
+                        (staging_id, *blocked_states),
+                    ).fetchone()
+                    if conflict_row is not None:
+                        self._append_ledger_locked(
+                            event_type="DISPATCH_REJECTED_NO_AUTO_RETRY",
+                            staging_id=staging_id,
+                            payload_sha256=staged["payload_sha256"],
+                            detail={
+                                "prior_run_id": conflict_row["execution_run_id"],
+                                "prior_status": conflict_row["status"],
+                            },
+                        )
+                        self.store._conn.commit()
+                        raise AutoRetryBlockedError(
+                            f"no_auto_retry=True forbids re-dispatch after {conflict_row['status']} "
+                            f"(run {conflict_row['execution_run_id']})"
+                        )
 
+                    pkg_rev_row = self.store._conn.execute(
+                        "SELECT revoked, revocation_ledger_seq FROM proposer_staged_packages WHERE staging_id = ?",
+                        (staging_id,),
+                    ).fetchone()
+                    if pkg_rev_row is not None and bool(pkg_rev_row["revoked"]):
+                        seq = int(pkg_rev_row["revocation_ledger_seq"])
+                        self._append_ledger_locked(
+                            event_type="DISPATCH_REJECTED_REVOKED",
+                            staging_id=staging_id,
+                            payload_sha256=staged["payload_sha256"],
+                            detail={"revocation_ledger_seq": seq},
+                        )
+                        self.store._conn.commit()
+                        raise RevokedError(
+                            f"dispatch refused: staging_id {staging_id} revoked at seq {seq}"
+                        )
+
+                    self.store._conn.execute(
+                        """
+                        INSERT INTO proposer_stage2_runs(
+                            execution_run_id, staging_id, request_id, bound_payload_sha256,
+                            ratification_id, identity_mode, status, env_snapshot_json, created_at
+                        ) VALUES (?, ?, ?, ?, ?, 'staging-only', 'RUNNING', ?, ?)
+                        """,
+                        (
+                            run_id,
+                            staging_id,
+                            staged["request_id"],
+                            staged["payload_sha256"],
+                            active_rat["ratification_id"],
+                            json.dumps(env_snap, sort_keys=True, ensure_ascii=False),
+                            created_iso,
+                        ),
+                    )
+                    self._append_ledger_locked(
+                        event_type="RUN_DISPATCHED",
+                        staging_id=staging_id,
+                        execution_run_id=run_id,
+                        payload_sha256=staged["payload_sha256"],
+                        detail={
+                            "ratification_id": active_rat["ratification_id"],
+                            "audience": active_rat["audience"],
+                            "identity_mode": "staging-only",
+                        },
+                    )
+                    self.store._conn.commit()
+                    inserted = True
+                except sqlite3.IntegrityError as exc:
+                    self.store._conn.rollback()
+                    conflict_row = self.store._conn.execute(
+                        f"SELECT execution_run_id, status FROM proposer_stage2_runs "
+                        f"WHERE staging_id = ? AND status IN ({','.join('?' for _ in blocked_states)}) "
+                        f"ORDER BY created_at DESC, rowid DESC LIMIT 1",
+                        (staging_id, *blocked_states),
+                    ).fetchone()
+                    prior_id = conflict_row["execution_run_id"] if conflict_row else ""
+                    prior_status = conflict_row["status"] if conflict_row else "ACTIVE"
+                    self.store._conn.execute("BEGIN IMMEDIATE")
+                    self._append_ledger_locked(
+                        event_type="DISPATCH_REJECTED_NO_AUTO_RETRY",
+                        staging_id=staging_id,
+                        payload_sha256=staged["payload_sha256"],
+                        detail={"prior_run_id": prior_id, "prior_status": prior_status},
+                    )
+                    self.store._conn.commit()
+                    raise AutoRetryBlockedError(
+                        f"no_auto_retry=True forbids re-dispatch after {prior_status} (run {prior_id})"
+                    ) from exc
+                except BaseException:
+                    if self.store._conn.in_transaction:
+                        self.store._conn.rollback()
+                    raise
+        finally:
+            if not inserted:
+                with self._active_lock:
+                    self._stop_events.pop(run_id, None)
+                    self._stop_meta.pop(run_id, None)
+
+        run_dummy_root.mkdir(parents=True, exist_ok=True)
         ctx = StagingRunContext(
             engine=self,
             execution_run_id=run_id,
@@ -1673,8 +1757,27 @@ class Stage2StagingEngine:
                     )
                 else:
                     res = worker(ctx, worker_pkg)
-                    if isinstance(res, dict):
-                        worker_holder["out"] = res
+                    if res is not None:
+                        if not isinstance(res, dict):
+                            raise ValidationRejectedError(
+                                f"worker returned {type(res).__name__}, expected dict or None"
+                            )
+                        try:
+                            serialized_out = json.dumps(
+                                res,
+                                sort_keys=True,
+                                ensure_ascii=False,
+                                allow_nan=False,
+                            )
+                            snapshot_out = json.loads(serialized_out)
+                        except (TypeError, ValueError) as exc:
+                            raise ValidationRejectedError(
+                                f"worker output is not JSON-compatible: {exc}"
+                            ) from exc
+                        if not isinstance(snapshot_out, dict):
+                            raise ValidationRejectedError("worker output snapshot must be a JSON object")
+                        _check_no_forbidden_terms(snapshot_out, field_name="worker_output")
+                        worker_holder["out"] = snapshot_out
                 ctx.check_gates()
             except _StopTriggered as exc:
                 worker_holder["status"] = "STOPPED"
@@ -1747,7 +1850,7 @@ class Stage2StagingEngine:
             final_status = str(worker_holder["status"])
             stop_requested = bool(worker_holder["stop_requested"])
             stop_reason = str(worker_holder["stop_reason"])
-            worker_out = dict(worker_holder["out"]) if isinstance(worker_holder["out"], dict) else {}
+            worker_out = dict(worker_holder["out"]) if final_status == "COMPLETED" and isinstance(worker_holder["out"], dict) else {}
         else:
             if worker_done.is_set() and worker_holder["status"] in ("STOPPED", "ABORTED_CEILING"):
                 final_status = str(worker_holder["status"])
