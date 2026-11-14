@@ -1,0 +1,112 @@
+{
+ "model": "Qwen3-4B-Instruct-2507-Q4_K_M",
+ "model_alias": "qwen3-4b-instruct-2507",
+ "instrument_A": {
+  "loop_status": "accepted",
+  "accepted": true,
+  "wall_seconds": [
+   176.12
+  ],
+  "proposal_count": 5,
+  "rejected_proposals": [],
+  "extract_err": null,
+  "meta": [
+   {
+    "usage": {
+     "completion_tokens": 700,
+     "prompt_tokens": 851,
+     "total_tokens": 1551,
+     "prompt_tokens_details": {
+      "cached_tokens": 0
+     }
+    },
+    "timings": {
+     "cache_n": 0,
+     "prompt_n": 851,
+     "prompt_ms": 36747.084,
+     "prompt_per_token_ms": 43.181062279670975,
+     "prompt_per_second": 23.158300125256197,
+     "predicted_n": 700,
+     "predicted_ms": 139290.903,
+     "predicted_per_token_ms": 199.27167811158796,
+     "predicted_per_second": 5.018274596152199
+    }
+   }
+  ],
+  "raw_reply": "{\n  \"proposals\": [\n    {\n      \"title\": \"Implementasi Instrumen G4 dan G5 dengan Desain Awal\",\n      \"category\": \"engineering\",\n      \"rationale\": \"Instrumen G4 dan G5 hanya berupa desain (PR #136) dan belum diimplementasikan, meskipun G3 telah terverifikasi. Kehilangan instrumen ini menghambat kemampuan pengukuran yang komprehensif dan menyebabkan gap dalam evaluasi sistem secara menyeluruh.\",\n      \"value\": 5,\n      \"effort\": 4,\n      \"based_on\": [\"gap-g4-g5-instruments\"]\n    },\n    {\n      \"title\": \"Pengembangan Aplikasi Pertama Instrumen G3 dengan Prasyarat P1\",\n      \"category\": \"experiment\",\n      \"rationale\": \"Instrumen G3 telah terbangun dan terverifikasi (PR #143), namun aplikasinya memerlukan prasyarat P1 (decouple run_discovery dari keluarga grid) dan teks praregistrasi. Tanpa ini, nilai pengukuran G3 tidak dapat diuji secara independen atau terukur secara praktis.\",\n      \"value\": 5,\n      \"effort\": 4,\n      \"based_on\": [\"gap-g3-application\"]\n    },\n    {\n      \"title\": \"Desain Strategi Lengan A/B/C untuk Semesta Tak-Jenuh\",\n      \"category\": \"measurement\",\n      \"rationale\": \"Lengan A/B/C belum terbedakan secara strategis dalam semesta tak-jenuh, dan desain v3 belum ditulis. Hal ini menghambat kemampuan untuk membedakan efek perubahan dan mengukur dampak eksperimen secara terpisah.\",\n      \"value\": 4,\n      \"effort\": 5,\n      \"based_on\": [\"gap-abc-arms\"]\n    },\n    {\n      \"title\": \"Verifikasi Syarat Misinya Facebook Pro\",\n      \"category\": \"engineering\",\n      \"rationale\": \"Syarat misi $500 Facebook Pro belum terbaca karena hanya bisa ditunjukkan pemilik; produksi konten menunggu verifikasi. Ini menghambat eksekusi misi dan mempercepat risiko kegagalan dalam ekosistem produksi konten.\",\n      \"value\": 4,\n      \"effort\": 3,\n      \"based_on\": [\"gap-facebook-mission\"]\n    },\n    {\n      \"title\": \"Pemantauan Suksesi Direktur Lokal dengan Kriteria Keandalan dan Kecepatan\",\n      \"category\": \"documentation\",\n      \"rationale\": \"Suksesi direktur lokal sedang diuji banding terpraregistrasi, dan kursi hanya berpindah jika kandidat melewati ambang keandalan dan kecepatan. Keterbatasan dokumentasi dan kriteria ini menyebabkan ketidakpastian dalam proses penggantian kepemilikan.\",\n      \"value\": 3,\n      \"effort\": 3,\n      \"based_on\": [\"gap-brain-succession\"]\n    }\n  ]\n}"
+ },
+ "instrument_B_vanilla": {
+  "scores": {
+   "winner_correct": 1.0,
+   "gate_caught": 1.0,
+   "marketing_rejected": 1.0,
+   "citation_discipline": 1.0,
+   "decision_score": 4.0,
+   "correct_winner": "nimbus"
+  },
+  "semantic_correct_4_of_4": true,
+  "rejection": null,
+  "citation_violation": false,
+  "rejected_proposals": [],
+  "wall_seconds": 190.0,
+  "usage": {
+   "completion_tokens": 355,
+   "prompt_tokens": 1680,
+   "total_tokens": 2035,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  },
+  "timings": {
+   "cache_n": 0,
+   "prompt_n": 1680,
+   "prompt_ms": 108893.255,
+   "prompt_per_token_ms": 64.81741369047619,
+   "prompt_per_second": 15.42795281489198,
+   "predicted_n": 355,
+   "predicted_ms": 80907.723,
+   "predicted_per_token_ms": 228.55288983050846,
+   "predicted_per_second": 4.375354871870513
+  },
+  "raw_reply": "{\n  \"decisions\": [\n    {\n      \"vendor\": \"nimbus\",\n      \"disposition\": \"selected\",\n      \"based_on\": [\n        \"need\",\n        \"criteria-bounds\",\n        \"criteria-score\",\n        \"criteria-gate\",\n        \"nimbus-claim\",\n        \"nimbus-attested\",\n        \"nimbus-digest\",\n        \"nimbus-price-per-ram\",\n        \"computed-ranking\"\n      ]\n    },\n    {\n      \"vendor\": \"stabilo\",\n      \"disposition\": \"eligible_not_selected\",\n      \"based_on\": [\n        \"need\",\n        \"criteria-bounds\",\n        \"criteria-score\",\n        \"criteria-gate\",\n        \"stabilo-claim\",\n        \"stabilo-attested\",\n        \"stabilo-digest\",\n        \"stabilo-price-per-ram\",\n        \"computed-ranking\"\n      ]\n    },\n    {\n      \"vendor\": \"spektra\",\n      \"disposition\": \"ineligible_bounds\",\n      \"based_on\": [\n        \"need\",\n        \"criteria-bounds\",\n        \"criteria-gate\",\n        \"spektra-claim\",\n        \"spektra-attested\",\n        \"spektra-digest\",\n        \"spektra-price-per-ram\",\n        \"computed-ranking\"\n      ]\n    },\n    {\n      \"vendor\": \"murah\",\n      \"disposition\": \"rejected_identity_gate\",\n      \"based_on\": [\n        \"need\",\n        \"criteria-gate\",\n        \"murah-claim\",\n        \"murah-attested\",\n        \"murah-digest\",\n        \"murah-price-per-ram\"\n      ]\n    }\n  ],\n  \"winner\": \"nimbus\"\n}"
+ },
+ "instrument_B_whitelist_schema": {
+  "scores": {
+   "winner_correct": 1.0,
+   "gate_caught": 1.0,
+   "marketing_rejected": 1.0,
+   "citation_discipline": 1.0,
+   "decision_score": 4.0,
+   "correct_winner": "nimbus"
+  },
+  "semantic_correct_4_of_4": true,
+  "rejection": null,
+  "citation_violation": false,
+  "rejected_proposals": [],
+  "wall_seconds": 78.32,
+  "usage": {
+   "completion_tokens": 344,
+   "prompt_tokens": 1680,
+   "total_tokens": 2024,
+   "prompt_tokens_details": {
+    "cached_tokens": 1679
+   }
+  },
+  "timings": {
+   "cache_n": 1679,
+   "prompt_n": 1,
+   "prompt_ms": 201.502,
+   "prompt_per_token_ms": 201.502,
+   "prompt_per_second": 4.962729898462546,
+   "predicted_n": 344,
+   "predicted_ms": 78078.994,
+   "predicted_per_token_ms": 227.63555102040817,
+   "predicted_per_second": 4.392986928084652
+  },
+  "raw_reply": "{\n  \"decisions\": [\n    {\n      \"vendor\": \"nimbus\",\n      \"disposition\": \"selected\",\n      \"based_on\": [\n        \"need\",\n        \"criteria-bounds\",\n        \"criteria-score\",\n        \"criteria-gate\",\n        \"nimbus-claim\",\n        \"nimbus-attested\",\n        \"nimbus-digest\",\n        \"nimbus-price-per-ram\",\n        \"computed-ranking\"\n      ]\n    },\n    {\n      \"vendor\": \"stabilo\",\n      \"disposition\": \"eligible_not_selected\",\n      \"based_on\": [\n        \"need\",\n        \"criteria-bounds\",\n        \"criteria-score\",\n        \"criteria-gate\",\n        \"stabilo-claim\",\n        \"stabilo-attested\",\n        \"stabilo-digest\",\n        \"stabilo-price-per-ram\",\n        \"computed-ranking\"\n      ]\n    },\n    {\n      \"vendor\": \"spektra\",\n      \"disposition\": \"ineligible_bounds\",\n      \"based_on\": [\n        \"need\",\n        \"criteria-bounds\",\n        \"spektra-claim\",\n        \"spektra-attested\",\n        \"spektra-digest\",\n        \"spektra-price-per-ram\"\n      ]\n    },\n    {\n      \"vendor\": \"murah\",\n      \"disposition\": \"rejected_identity_gate\",\n      \"based_on\": [\n        \"need\",\n        \"criteria-gate\",\n        \"murah-claim\",\n        \"murah-attested\",\n        \"murah-digest\",\n        \"murah-price-per-ram\"\n      ]\n    }\n  ],\n  \"winner\": \"nimbus\"\n}"
+ },
+ "instrument_C": {
+  "status": "BLOCKED_MISSING_SEALED_EVALUATOR",
+  "reason": "security-test/evaluator (sha256 6b0610f0...) is absent on Manus Sandbox post-rollback; Keamanan-01 is omitted cleanly without mock substitution."
+ }
+}

@@ -1,0 +1,117 @@
+{
+ "model": "Qwen3.5-4B-Q4_K_M",
+ "model_alias": "qwen3.5-4b-q4_k_m",
+ "instrument_A": {
+  "loop_status": "accepted",
+  "accepted": true,
+  "wall_seconds": [
+   96.38
+  ],
+  "proposal_count": 5,
+  "rejected_proposals": [],
+  "extract_err": null,
+  "meta": [
+   {
+    "usage": {
+     "completion_tokens": 449,
+     "prompt_tokens": 824,
+     "total_tokens": 1273,
+     "prompt_tokens_details": {
+      "cached_tokens": 820
+     }
+    },
+    "timings": {
+     "cache_n": 820,
+     "prompt_n": 4,
+     "prompt_ms": 2248.99,
+     "prompt_per_token_ms": 562.2475,
+     "prompt_per_second": 1.7785761608544282,
+     "predicted_n": 449,
+     "predicted_ms": 93886.26,
+     "predicted_per_token_ms": 209.56754464285714,
+     "predicted_per_second": 4.77173124161086
+    }
+   }
+  ],
+  "raw_reply": "{\"proposals\":[{\"title\":\"Implementasi Instrumen G4 dan G5 dari Desain ke Kode\",\"category\":\"engineering\",\"rationale\":\"Gap G4-G5 saat ini hanya desain (PR #136) tanpa implementasi, menghambat kemajuan riset. Riset v2 menunjukkan bahwa instrumen yang diverifikasi (seperti G3) adalah prasyarat untuk validasi kontrol.\",\"value\":5,\"effort\":4,\"based_on\":[\"gap-g4-g5-instruments\",\"g3-instrument-verified\"]},{\"title\":\"Verifikasi Prasyarat P1 untuk Aplikasi G3\",\"category\":\"engineering\",\"rationale\":\"Aplikasi pertama G3 (gap-g3-application) tidak dapat berjalan tanpa pemisahan run_discovery dan teks praregistrasi. Tanpa ini, instrumen G3 yang sudah diverifikasi tidak dapat digunakan untuk aplikasi nyata.\",\"value\":4,\"effort\":3,\"based_on\":[\"gap-g3-application\",\"g3-instrument-verified\"]},{\"title\":\"Desain dan Implementasi Strategi Lengan A/B/C\",\"category\":\"engineering\",\"rationale\":\"Strategi saat ini tidak membedakan lengan A/B/C pada semesta tak-jenuh, dan desain v3 belum ada (gap-abc-arms). Ini adalah hambatan struktural untuk eksplorasi semesta yang lebih luas.\",\"value\":4,\"effort\":5,\"based_on\":[\"gap-abc-arms\"]},{\"title\":\"Klarifikasi Syarat Misi $500 Facebook Pro\",\"category\":\"measurement\",\"rationale\":\"Panel hanya bisa menunjukkan syarat kepada pemilik, sehingga produksi konten terhambat. Perlu klarifikasi formal untuk mengaktifkan jalur produksi (gap-facebook-mission).\",\"value\":3,\"effort\":2,\"based_on\":[\"gap-facebook-mission\"]},{\"title\":\"Penyusunan Protokol Ambang Keandalan untuk Suksesi Direksi\",\"category\":\"documentation\",\"rationale\":\"Suksesi direktur lokal sedang diuji banding terpraregistrasi. Perlu dokumen formal yang mendefinisikan ambang keandalan dan kecepatan untuk transisi kursi (gap-brain-succession).\",\"value\":2,\"effort\":2,\"based_on\":[\"gap-brain-succession\"]}]}"
+ },
+ "instrument_B_vanilla": {
+  "scores": {
+   "winner_correct": 0.0,
+   "gate_caught": 0.0,
+   "marketing_rejected": 0.0,
+   "citation_discipline": 0.0,
+   "decision_score": 0.0,
+   "correct_winner": "nimbus"
+  },
+  "semantic_correct_4_of_4": true,
+  "rejection": "decision 0 cites facts not in the packet: ['[criteria-gate]', '[criteria-bounds]', '[criteria-score]']",
+  "citation_violation": true,
+  "rejected_proposals": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "wall_seconds": 29.95,
+  "usage": {
+   "completion_tokens": 143,
+   "prompt_tokens": 1561,
+   "total_tokens": 1704,
+   "prompt_tokens_details": {
+    "cached_tokens": 1557
+   }
+  },
+  "timings": {
+   "cache_n": 1557,
+   "prompt_n": 4,
+   "prompt_ms": 553.078,
+   "prompt_per_token_ms": 138.2695,
+   "prompt_per_second": 7.232252955279364,
+   "predicted_n": 143,
+   "predicted_ms": 29247.264,
+   "predicted_per_token_ms": 205.96664788732394,
+   "predicted_per_second": 4.8551549984299385
+  },
+  "raw_reply": "{\"decisions\": [{\"vendor\": \"nimbus\", \"disposition\": \"selected\", \"based_on\": [\"[criteria-gate]\", \"[criteria-bounds]\", \"[criteria-score]\"]}, {\"vendor\": \"stabilo\", \"disposition\": \"eligible_not_selected\", \"based_on\": [\"[criteria-gate]\", \"[criteria-bounds]\", \"[criteria-score]\"]}, {\"vendor\": \"spektra\", \"disposition\": \"ineligible_bounds\", \"based_on\": [\"[criteria-bounds]\"]}, {\"vendor\": \"murah\", \"disposition\": \"rejected_identity_gate\", \"based_on\": [\"[criteria-gate]\"]}], \"winner\": \"nimbus\"}"
+ },
+ "instrument_B_whitelist_schema": {
+  "scores": {
+   "winner_correct": 1.0,
+   "gate_caught": 1.0,
+   "marketing_rejected": 0.0,
+   "citation_discipline": 1.0,
+   "decision_score": 3.0,
+   "correct_winner": "nimbus"
+  },
+  "semantic_correct_4_of_4": false,
+  "rejection": null,
+  "citation_violation": false,
+  "rejected_proposals": [],
+  "wall_seconds": 53.59,
+  "usage": {
+   "completion_tokens": 251,
+   "prompt_tokens": 1561,
+   "total_tokens": 1812,
+   "prompt_tokens_details": {
+    "cached_tokens": 1557
+   }
+  },
+  "timings": {
+   "cache_n": 1557,
+   "prompt_n": 4,
+   "prompt_ms": 396.666,
+   "prompt_per_token_ms": 99.1665,
+   "prompt_per_second": 10.084050561429516,
+   "predicted_n": 251,
+   "predicted_ms": 53174.994,
+   "predicted_per_token_ms": 212.699976,
+   "predicted_per_second": 4.701457982298973
+  },
+  "raw_reply": "{\"decisions\": [{\"vendor\": \"nimbus\", \"disposition\": \"selected\", \"based_on\": [\"nimbus-claim\", \"nimbus-attested\", \"nimbus-digest\", \"nimbus-price-per-ram\", \"criteria-bounds\", \"criteria-gate\", \"criteria-score\"]}, {\"vendor\": \"stabilo\", \"disposition\": \"eligible_not_selected\", \"based_on\": [\"stabilo-claim\", \"stabilo-attested\", \"stabilo-digest\", \"stabilo-price-per-ram\", \"criteria-bounds\", \"criteria-gate\", \"criteria-score\"]}, {\"vendor\": \"spektra\", \"disposition\": \"eligible_not_selected\", \"based_on\": [\"spektra-claim\", \"spektra-attested\", \"spektra-digest\", \"spektra-price-per-ram\", \"criteria-bounds\", \"criteria-gate\", \"criteria-score\"]}, {\"vendor\": \"murah\", \"disposition\": \"rejected_identity_gate\", \"based_on\": [\"murah-claim\", \"murah-attested\", \"murah-digest\", \"criteria-gate\"]}], \"winner\": \"nimbus\"}"
+ },
+ "instrument_C": {
+  "status": "BLOCKED_MISSING_SEALED_EVALUATOR",
+  "reason": "security-test/evaluator (sha256 6b0610f0...) is absent on Manus Sandbox post-rollback; Keamanan-01 is omitted cleanly without mock substitution."
+ }
+}

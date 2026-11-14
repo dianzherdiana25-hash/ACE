@@ -1,0 +1,112 @@
+{
+ "model": "Meta-Llama-3.1-8B-Instruct-Q4_K_M",
+ "model_alias": "llama-3.1-8b-instruct",
+ "instrument_A": {
+  "loop_status": "accepted",
+  "accepted": true,
+  "wall_seconds": [
+   238.64
+  ],
+  "proposal_count": 5,
+  "rejected_proposals": [],
+  "extract_err": null,
+  "meta": [
+   {
+    "usage": {
+     "completion_tokens": 537,
+     "prompt_tokens": 851,
+     "total_tokens": 1388,
+     "prompt_tokens_details": {
+      "cached_tokens": 0
+     }
+    },
+    "timings": {
+     "cache_n": 0,
+     "prompt_n": 851,
+     "prompt_ms": 67186.792,
+     "prompt_per_token_ms": 78.95040188014102,
+     "prompt_per_second": 12.666179983708702,
+     "predicted_n": 537,
+     "predicted_ms": 171373.486,
+     "predicted_per_token_ms": 319.7266529850746,
+     "predicted_per_second": 3.127671686622515
+    }
+   }
+  ],
+  "raw_reply": "{\"proposals\": [\n  {\"title\": \"Prioritaskan Implementasi Instrumen G4 dan G5\", \"category\": \"engineering\", \"rationale\": \"Instrumen G4 dan G5 baru berupa desain, tetapi implementasinya belum dibangun (gap-g4-g5-instruments). Implementasi ini perlu segera dilakukan untuk mengisi celah ini.\", \"value\": 5, \"effort\": 4, \"based_on\": [\"gap-g4-g5-instruments\"]},\n  {\"title\": \"Decouple Run Discovery dari Keluarga Grid\", \"category\": \"engineering\", \"rationale\": \"Aplikasi pertama instrumen G3 butuh prasyarat P1, yaitu decouple run_discovery dari keluarga grid (gap-g3-application). Ini perlu dilakukan untuk mengaktifkan instrumen G3.\", \"value\": 4, \"effort\": 3, \"based_on\": [\"gap-g3-application\"]},\n  {\"title\": \"Tulis Desain V3 untuk Lengan A/B/C\", \"category\": \"engineering\", \"rationale\": \"Lengan A/B/C belum terbedakan oleh strategi pada semesta tak-jenuh; desain v3 belum ditulis (gap-abc-arms). Desain ini perlu segera ditulis untuk mengisi celah ini.\", \"value\": 4, \"effort\": 3, \"based_on\": [\"gap-abc-arms\"]},\n  {\"title\": \"Verifikasi Syarat Misi $500 Facebook Pro\", \"category\": \"measurement\", \"rationale\": \"Syarat misi $500 Facebook Pro belum terbaca (panel hanya bisa ditunjukkan pemilik); produksi konten menunggu verifikasi (gap-facebook-mission). Verifikasi ini perlu dilakukan untuk mengisi celah ini.\", \"value\": 3, \"effort\": 2, \"based_on\": [\"gap-facebook-mission\"]},\n  {\"title\": \"Uji Suksesi Direktur Lokal\", \"category\": \"experiment\", \"rationale\": \"Suksesi direktur lokal sedang diuji banding terpraregistrasi; kursi berpindah hanya bila kandidat lulus ambang keandalan + kecepatan (gap-brain-succession). Uji ini perlu dilakukan untuk mengisi celah ini.\", \"value\": 3, \"effort\": 2, \"based_on\": [\"gap-brain-succession\"]}\n]}"
+ },
+ "instrument_B_vanilla": {
+  "scores": {
+   "winner_correct": 1.0,
+   "gate_caught": 0.0,
+   "marketing_rejected": 0.0,
+   "citation_discipline": 1.0,
+   "decision_score": 2.0,
+   "correct_winner": "nimbus"
+  },
+  "semantic_correct_4_of_4": false,
+  "rejection": null,
+  "citation_violation": false,
+  "rejected_proposals": [],
+  "wall_seconds": 221.92,
+  "usage": {
+   "completion_tokens": 287,
+   "prompt_tokens": 1448,
+   "total_tokens": 1735,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  },
+  "timings": {
+   "cache_n": 0,
+   "prompt_n": 1448,
+   "prompt_ms": 124242.784,
+   "prompt_per_token_ms": 85.8030276243094,
+   "prompt_per_second": 11.654600399166844,
+   "predicted_n": 287,
+   "predicted_ms": 97567.557,
+   "predicted_per_token_ms": 341.1453041958042,
+   "predicted_per_second": 2.93130225654825
+  },
+  "raw_reply": "```json\n{\n  \"decisions\": [\n    {\"vendor\": \"nimbus\", \"disposition\": \"selected\", \"based_on\": [\"criteria-score\", \"criteria-gate\", \"criteria-bounds\"]},\n    {\"vendor\": \"stabilo\", \"disposition\": \"ineligible_bounds\", \"based_on\": [\"criteria-bounds\"]},\n    {\"vendor\": \"spektra\", \"disposition\": \"rejected_identity_gate\", \"based_on\": [\"criteria-gate\"]},\n    {\"vendor\": \"murah\", \"disposition\": \"ineligible_bounds\", \"based_on\": [\"criteria-bounds\"]}\n  ],\n  \"winner\": \"nimbus\"\n}\n```\n\nPembahasan:\n\n- Nimbus lolos gerbang identitas karena klaim dan lembar teratestasi sama, serta digeset yang dinyatakan dan digeset yang dihitung harness sama. Nimbus juga memenuhi kriteria score dan kriteria bounds.\n- Stabilo gagal kriteria bounds karena tidak memenuhi syarat ram_gb dan ssd_gb.\n- Spektra gagal gerbang identitas karena klaim dan lembar teratestasi tidak sama, serta digeset yang dinyatakan dan digeset yang dihitung harness tidak sama.\n- Murah gagal kriteria bounds karena tidak memenuhi syarat ram_gb dan ssd_gb."
+ },
+ "instrument_B_whitelist_schema": {
+  "scores": {
+   "winner_correct": 1.0,
+   "gate_caught": 1.0,
+   "marketing_rejected": 1.0,
+   "citation_discipline": 1.0,
+   "decision_score": 4.0,
+   "correct_winner": "nimbus"
+  },
+  "semantic_correct_4_of_4": false,
+  "rejection": null,
+  "citation_violation": false,
+  "rejected_proposals": [],
+  "wall_seconds": 58.74,
+  "usage": {
+   "completion_tokens": 163,
+   "prompt_tokens": 1448,
+   "total_tokens": 1611,
+   "prompt_tokens_details": {
+    "cached_tokens": 1447
+   }
+  },
+  "timings": {
+   "cache_n": 1447,
+   "prompt_n": 1,
+   "prompt_ms": 386.143,
+   "prompt_per_token_ms": 386.143,
+   "prompt_per_second": 2.589714173246699,
+   "predicted_n": 163,
+   "predicted_ms": 58325.903,
+   "predicted_per_token_ms": 360.03643827160494,
+   "predicted_per_second": 2.777496646730013
+  },
+  "raw_reply": "{\n  \"decisions\": [\n    {\n      \"vendor\": \"nimbus\",\n      \"disposition\": \"selected\",\n      \"based_on\": [\"criteria-score\", \"criteria-gate\", \"criteria-bounds\"]\n    },\n    {\n      \"vendor\": \"stabilo\",\n      \"disposition\": \"ineligible_bounds\",\n      \"based_on\": [\"criteria-bounds\"]\n    },\n    {\n      \"vendor\": \"spektra\",\n      \"disposition\": \"ineligible_bounds\",\n      \"based_on\": [\"criteria-bounds\"]\n    },\n    {\n      \"vendor\": \"murah\",\n      \"disposition\": \"rejected_identity_gate\",\n      \"based_on\": [\"criteria-gate\"]\n    }\n  ],\n  \"winner\": \"nimbus\"\n}"
+ },
+ "instrument_C": {
+  "status": "BLOCKED_MISSING_SEALED_EVALUATOR",
+  "reason": "security-test/evaluator (sha256 6b0610f0...) is absent on Manus Sandbox post-rollback; Keamanan-01 is omitted cleanly without mock substitution."
+ }
+}
