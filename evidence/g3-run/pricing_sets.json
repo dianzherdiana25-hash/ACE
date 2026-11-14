@@ -1,0 +1,8353 @@
+{
+ "pool": [
+  {
+   "task_id": "task_a48b695a1c2c382d",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50003,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     750000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    632700
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     749999,
+     true
+    ],
+    [
+     750000,
+     false
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    832498,
+    790875,
+    666000,
+    666001,
+    632701,
+    1332000,
+    1265400,
+    83250,
+    79087
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_de4c2327f5a566aa",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50004,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 10 // 100\n    if member:\n        t -= subtotal * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     150000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    142357
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     149999,
+     false
+    ],
+    [
+     149999,
+     true
+    ],
+    [
+     150000,
+     false
+    ],
+    [
+     150001,
+     false
+    ],
+    [
+     150001,
+     true
+    ],
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    166498,
+    158175,
+    149850,
+    149851,
+    142358,
+    299700,
+    284715,
+    83250,
+    79087
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_f0513d65f75bfa58",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50016,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 100000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 100000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     100000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    79200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     99999,
+     false
+    ],
+    [
+     99999,
+     true
+    ],
+    [
+     100000,
+     false
+    ],
+    [
+     100001,
+     false
+    ],
+    [
+     100001,
+     true
+    ],
+    [
+     200000,
+     false
+    ],
+    [
+     200000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    109998,
+    99000,
+    88000,
+    88001,
+    79201,
+    176000,
+    158400,
+    82500,
+    74250
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_f739a13a4acafe8b",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50021,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 10 // 100\n    if member:\n        t -= subtotal * 15 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     400000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    342720
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     399999,
+     true
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    447998,
+    380800,
+    403200,
+    403201,
+    342721,
+    806400,
+    685440,
+    84000,
+    71400
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_bbe15df24587601e",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50005,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 10 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     749999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    756000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     750000,
+     false
+    ],
+    [
+     750000,
+     true
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    839998,
+    714000,
+    642600,
+    714001,
+    642601,
+    1428000,
+    1285200,
+    84000,
+    75600
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_3c17aa13d8900803",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50006,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     399999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    358400
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    447998,
+    425600,
+    340480,
+    425601,
+    340481,
+    851200,
+    680960,
+    84000,
+    67200
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_bad7a6885c0cf3e9",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50008,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 20 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     399999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    352000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    439998,
+    396000,
+    316800,
+    396001,
+    316801,
+    792000,
+    633600,
+    82500,
+    66000
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_fa456f36bf3290f3",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50013,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 500000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 500000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     499999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    527250
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     499999,
+     false
+    ],
+    [
+     500000,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     500001,
+     false
+    ],
+    [
+     500001,
+     true
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    554998,
+    444000,
+    421800,
+    444001,
+    421801,
+    888000,
+    843600,
+    83250,
+    79087
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_6f02af56e8c88a65",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50006,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     400000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    425600
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     399999,
+     true
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    447998,
+    358400,
+    340480,
+    425601,
+    340481,
+    851200,
+    680960,
+    84000,
+    67200
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_38de67d143c55ee3",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50022,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     400000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    355200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     399999,
+     true
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    443998,
+    421800,
+    337440,
+    355201,
+    337441,
+    710400,
+    674880,
+    83250,
+    79087
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_24607216e706a4b3",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50025,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     1000000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    990000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     999999,
+     true
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1099998,
+    935000,
+    841500,
+    990001,
+    841501,
+    1980000,
+    1683000,
+    82500,
+    70125
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_14eb466357887368",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50028,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 250000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 250000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     250000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    235875
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     249999,
+     false
+    ],
+    [
+     249999,
+     true
+    ],
+    [
+     250000,
+     true
+    ],
+    [
+     250001,
+     false
+    ],
+    [
+     250001,
+     true
+    ],
+    [
+     500000,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    277498,
+    235875,
+    200493,
+    235876,
+    200494,
+    471750,
+    400987,
+    83250,
+    70762
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  }
+ ],
+ "evaluation": [
+  {
+   "task_id": "task_3086a39d8d34c354",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50028,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 250000:\n        t -= t * 15 // 100\n    if member:\n        t -= subtotal * 15 // 100\n    t += t * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 250000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     250000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    200493
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     249999,
+     false
+    ],
+    [
+     249999,
+     true
+    ],
+    [
+     250000,
+     false
+    ],
+    [
+     250001,
+     false
+    ],
+    [
+     250001,
+     true
+    ],
+    [
+     500000,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    277498,
+    235875,
+    235875,
+    235876,
+    200494,
+    471750,
+    400987,
+    83250,
+    70762
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_e91a99e7551bd786",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50037,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     1000000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    792000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     999999,
+     true
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1099998,
+    990000,
+    880000,
+    880001,
+    792001,
+    1760000,
+    1584000,
+    82500,
+    74250
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_b28eabcba0a0325c",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50044,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 10 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     750000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    668250
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     749999,
+     true
+    ],
+    [
+     750000,
+     false
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    824998,
+    742500,
+    742500,
+    742501,
+    668251,
+    1485000,
+    1336500,
+    82500,
+    74250
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_a2abd56e1e43da35",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50047,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 50000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 50000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     50000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    39600
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     49999,
+     false
+    ],
+    [
+     49999,
+     true
+    ],
+    [
+     50000,
+     false
+    ],
+    [
+     50001,
+     false
+    ],
+    [
+     50001,
+     true
+    ],
+    [
+     100000,
+     false
+    ],
+    [
+     100000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    54998,
+    49500,
+    44000,
+    44001,
+    39601,
+    88000,
+    79200,
+    66000,
+    59400
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_e47062c7de073e24",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50049,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 5 // 100\n    if member:\n        t -= subtotal * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     150000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    125400
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     149999,
+     false
+    ],
+    [
+     149999,
+     true
+    ],
+    [
+     150000,
+     false
+    ],
+    [
+     150001,
+     false
+    ],
+    [
+     150001,
+     true
+    ],
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    164998,
+    132000,
+    156750,
+    156751,
+    125401,
+    313500,
+    250800,
+    82500,
+    66000
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_f8a90854471d65c1",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50052,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 15 // 100\n    if member:\n        t -= subtotal * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     400000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    299200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     399999,
+     true
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    439998,
+    352000,
+    374000,
+    374001,
+    299201,
+    748000,
+    598400,
+    82500,
+    66000
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_5734de388afeecad",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50070,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 5 // 100\n    if member:\n        t -= subtotal * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     750000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    627000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     749999,
+     true
+    ],
+    [
+     750000,
+     false
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    824998,
+    660000,
+    783750,
+    783751,
+    627001,
+    1567500,
+    1254000,
+    82500,
+    66000
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_7f860ba6dba44ac5",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50083,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     400000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    299200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     399999,
+     true
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    439998,
+    374000,
+    352000,
+    352001,
+    299201,
+    704000,
+    598400,
+    82500,
+    70125
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_ae4217dae9747b01",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50094,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 100000:\n        t -= t * 15 // 100\n    if member:\n        t -= subtotal * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 100000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     100000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    79475
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     99999,
+     false
+    ],
+    [
+     99999,
+     true
+    ],
+    [
+     100000,
+     false
+    ],
+    [
+     100001,
+     false
+    ],
+    [
+     100001,
+     true
+    ],
+    [
+     200000,
+     false
+    ],
+    [
+     200000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    109998,
+    93500,
+    93500,
+    93501,
+    79476,
+    187000,
+    158950,
+    82500,
+    70125
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_de2d98f3bcf9b38a",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50103,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 5 // 100\n    if member:\n        t -= subtotal * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     200000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    198550
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     199999,
+     false
+    ],
+    [
+     199999,
+     true
+    ],
+    [
+     200000,
+     false
+    ],
+    [
+     200001,
+     false
+    ],
+    [
+     200001,
+     true
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    219998,
+    209000,
+    209000,
+    209001,
+    198551,
+    418000,
+    397100,
+    82500,
+    78375
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_226196647cd23243",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50124,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     150000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    120960
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     149999,
+     false
+    ],
+    [
+     149999,
+     true
+    ],
+    [
+     150000,
+     false
+    ],
+    [
+     150001,
+     false
+    ],
+    [
+     150001,
+     true
+    ],
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    167998,
+    151200,
+    134400,
+    134401,
+    120961,
+    268800,
+    241920,
+    84000,
+    75600
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_505d5876196e63e8",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50132,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 10 // 100\n    if member:\n        t -= subtotal * 20 // 100\n    t += t * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     150000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    119880
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     149999,
+     false
+    ],
+    [
+     149999,
+     true
+    ],
+    [
+     150000,
+     false
+    ],
+    [
+     150001,
+     false
+    ],
+    [
+     150001,
+     true
+    ],
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    166498,
+    133200,
+    149850,
+    149851,
+    119881,
+    299700,
+    239760,
+    83250,
+    66600
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_8c9e4c7a7f106705",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50133,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 300000:\n        t -= t * 5 // 100\n    if member:\n        t -= subtotal * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 300000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     300000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    255360
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     299999,
+     false
+    ],
+    [
+     299999,
+     true
+    ],
+    [
+     300000,
+     false
+    ],
+    [
+     300001,
+     false
+    ],
+    [
+     300001,
+     true
+    ],
+    [
+     600000,
+     false
+    ],
+    [
+     600000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    335998,
+    268800,
+    319200,
+    319201,
+    255361,
+    638400,
+    510720,
+    84000,
+    67200
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_efcdbc7221053cc6",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50145,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 500000:\n        t -= t * 15 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 500000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     500000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    428400
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     499999,
+     false
+    ],
+    [
+     499999,
+     true
+    ],
+    [
+     500000,
+     false
+    ],
+    [
+     500001,
+     false
+    ],
+    [
+     500001,
+     true
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    559998,
+    504000,
+    476000,
+    476001,
+    428401,
+    952000,
+    856800,
+    84000,
+    75600
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_7da3b36030f02245",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50157,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 250000:\n        t -= t * 15 // 100\n    if member:\n        t -= subtotal * 15 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 250000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     250000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    202300
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     249999,
+     false
+    ],
+    [
+     249999,
+     true
+    ],
+    [
+     250000,
+     false
+    ],
+    [
+     250001,
+     false
+    ],
+    [
+     250001,
+     true
+    ],
+    [
+     500000,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    279998,
+    238000,
+    238000,
+    238001,
+    202301,
+    476000,
+    404600,
+    84000,
+    71400
+   ],
+   "defects": [
+    "member_basis"
+   ]
+  },
+  {
+   "task_id": "task_3c16a7f502c8717f",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50018,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 20 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     199999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    179200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     199999,
+     false
+    ],
+    [
+     200000,
+     false
+    ],
+    [
+     200000,
+     true
+    ],
+    [
+     200001,
+     false
+    ],
+    [
+     200001,
+     true
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    223998,
+    190400,
+    152320,
+    190401,
+    152321,
+    380800,
+    304640,
+    84000,
+    67200
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_3bc18f1f0a220f14",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50022,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     399999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    421800
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    443998,
+    355200,
+    337440,
+    355201,
+    337441,
+    710400,
+    674880,
+    83250,
+    79087
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_d5bef3d05b20cc12",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50025,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 15 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     999999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    935000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1099998,
+    990000,
+    841500,
+    990001,
+    841501,
+    1980000,
+    1683000,
+    82500,
+    70125
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_89be9c98b7656d0a",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50042,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     399999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    425600
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    447998,
+    425600,
+    404320,
+    425601,
+    404321,
+    851200,
+    808640,
+    84000,
+    79800
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_f37530b507db271d",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50067,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 500000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 500000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     499999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    522500
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     499999,
+     false
+    ],
+    [
+     500000,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     500001,
+     false
+    ],
+    [
+     500001,
+     true
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    549998,
+    467500,
+    444125,
+    467501,
+    444126,
+    935000,
+    888250,
+    82500,
+    78375
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_2f09739760ba5187",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50072,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 300000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 15 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 300000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     299999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    280500
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     299999,
+     false
+    ],
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     300001,
+     false
+    ],
+    [
+     300001,
+     true
+    ],
+    [
+     600000,
+     false
+    ],
+    [
+     600000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    329998,
+    297000,
+    252450,
+    297001,
+    252451,
+    594000,
+    504900,
+    82500,
+    70125
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_3516718cc1ef0cca",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50076,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 300000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 300000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     299999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    319200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     299999,
+     false
+    ],
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     300001,
+     false
+    ],
+    [
+     300001,
+     true
+    ],
+    [
+     600000,
+     false
+    ],
+    [
+     600000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    335998,
+    319200,
+    303240,
+    319201,
+    303241,
+    638400,
+    606480,
+    84000,
+    79800
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_3d6a5d6fef14a96a",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50078,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     399999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    403200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    447998,
+    358400,
+    322560,
+    358401,
+    322561,
+    716800,
+    645120,
+    84000,
+    75600
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_f6233cd89e77af72",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50088,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     399999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    418000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    439998,
+    418000,
+    397100,
+    418001,
+    397101,
+    836000,
+    794200,
+    82500,
+    78375
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_f4d807e0ca8c71b7",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50104,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 10 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     999999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    999000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1109998,
+    999000,
+    899100,
+    999001,
+    899101,
+    1998000,
+    1798200,
+    83250,
+    74925
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_3ef422d38ef621ef",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50107,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     999999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    1064000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1119998,
+    1064000,
+    1010800,
+    1064001,
+    1010801,
+    2128000,
+    2021600,
+    84000,
+    79800
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_6b9be2d7c0731702",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50108,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 100000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 15 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 100000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     99999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    93500
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     99999,
+     false
+    ],
+    [
+     100000,
+     false
+    ],
+    [
+     100000,
+     true
+    ],
+    [
+     100001,
+     false
+    ],
+    [
+     100001,
+     true
+    ],
+    [
+     200000,
+     false
+    ],
+    [
+     200000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    109998,
+    88000,
+    74800,
+    88001,
+    74801,
+    176000,
+    149600,
+    82500,
+    70125
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_f9bb2bb9b2e1e448",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50111,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 50000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 50000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     49999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    52725
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     49999,
+     false
+    ],
+    [
+     50000,
+     false
+    ],
+    [
+     50000,
+     true
+    ],
+    [
+     50001,
+     false
+    ],
+    [
+     50001,
+     true
+    ],
+    [
+     100000,
+     false
+    ],
+    [
+     100000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    55498,
+    49950,
+    47452,
+    49951,
+    47453,
+    99900,
+    94905,
+    74925,
+    71178
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_e606a897d70e01a2",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50113,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 20 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     199999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    176000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     199999,
+     false
+    ],
+    [
+     200000,
+     false
+    ],
+    [
+     200000,
+     true
+    ],
+    [
+     200001,
+     false
+    ],
+    [
+     200001,
+     true
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    219998,
+    176000,
+    140800,
+    176001,
+    140801,
+    352000,
+    281600,
+    82500,
+    66000
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_c20076cea48fc7b6",
+   "family": "pricing",
+   "level": 1,
+   "seed": 50128,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 250000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 250000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     249999,
+     true
+    ]
+   ],
+   "shown_truth": [
+    220000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     249999,
+     false
+    ],
+    [
+     250000,
+     false
+    ],
+    [
+     250000,
+     true
+    ],
+    [
+     250001,
+     false
+    ],
+    [
+     250001,
+     true
+    ],
+    [
+     500000,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    274998,
+    261250,
+    209000,
+    261251,
+    209001,
+    522500,
+    418000,
+    82500,
+    66000
+   ],
+   "defects": [
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_bce808c08a1605f3",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50042,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     400000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    425600
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     399999,
+     true
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    447998,
+    425600,
+    404320,
+    425601,
+    404321,
+    851200,
+    808640,
+    84000,
+    79800
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_ba556bbb6fbc78d7",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50047,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 50000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 50000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     50000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    44000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     49999,
+     false
+    ],
+    [
+     49999,
+     true
+    ],
+    [
+     50000,
+     true
+    ],
+    [
+     50001,
+     false
+    ],
+    [
+     50001,
+     true
+    ],
+    [
+     100000,
+     false
+    ],
+    [
+     100000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    54998,
+    49500,
+    39600,
+    44001,
+    39601,
+    88000,
+    79200,
+    66000,
+    59400
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_d6e498d18b54ebca",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50067,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 500000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 500000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     500000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    467500
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     499999,
+     false
+    ],
+    [
+     499999,
+     true
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     500001,
+     false
+    ],
+    [
+     500001,
+     true
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    549998,
+    522500,
+    444125,
+    467501,
+    444126,
+    935000,
+    888250,
+    82500,
+    78375
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_d00c5508b40e1c54",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50104,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     1000000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    999000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     999999,
+     true
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1109998,
+    999000,
+    899100,
+    999001,
+    899101,
+    1998000,
+    1798200,
+    83250,
+    74925
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_76bb1dc561da03ee",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50111,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 50000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 50000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     50000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    49950
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     49999,
+     false
+    ],
+    [
+     49999,
+     true
+    ],
+    [
+     50000,
+     true
+    ],
+    [
+     50001,
+     false
+    ],
+    [
+     50001,
+     true
+    ],
+    [
+     100000,
+     false
+    ],
+    [
+     100000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    55498,
+    52725,
+    47452,
+    49951,
+    47453,
+    99900,
+    94905,
+    74925,
+    71178
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_308f97df8772288d",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50128,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 250000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 250000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     250000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    261250
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     249999,
+     false
+    ],
+    [
+     249999,
+     true
+    ],
+    [
+     250000,
+     true
+    ],
+    [
+     250001,
+     false
+    ],
+    [
+     250001,
+     true
+    ],
+    [
+     500000,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    274998,
+    220000,
+    209000,
+    261251,
+    209001,
+    522500,
+    418000,
+    82500,
+    66000
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_cc3c197980f974c2",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50160,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 150000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     150000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    140250
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     149999,
+     false
+    ],
+    [
+     149999,
+     true
+    ],
+    [
+     150000,
+     true
+    ],
+    [
+     150001,
+     false
+    ],
+    [
+     150001,
+     true
+    ],
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    164998,
+    148500,
+    126225,
+    140251,
+    126226,
+    280500,
+    252450,
+    82500,
+    74250
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_eddaa3b5fb9abd63",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50163,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 200000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     200000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    179200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     199999,
+     false
+    ],
+    [
+     199999,
+     true
+    ],
+    [
+     200000,
+     true
+    ],
+    [
+     200001,
+     false
+    ],
+    [
+     200001,
+     true
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    223998,
+    179200,
+    143360,
+    179201,
+    143361,
+    358400,
+    286720,
+    84000,
+    67200
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_7cdc0596c878a204",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50166,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 500000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 500000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     500000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    448000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     499999,
+     false
+    ],
+    [
+     499999,
+     true
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     500001,
+     false
+    ],
+    [
+     500001,
+     true
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    559998,
+    448000,
+    358400,
+    448001,
+    358401,
+    896000,
+    716800,
+    84000,
+    67200
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_26018f14917e11ac",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50172,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 200000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     200000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    188700
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     199999,
+     false
+    ],
+    [
+     199999,
+     true
+    ],
+    [
+     200000,
+     true
+    ],
+    [
+     200001,
+     false
+    ],
+    [
+     200001,
+     true
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    221998,
+    177600,
+    150960,
+    188701,
+    150961,
+    377400,
+    301920,
+    83250,
+    66600
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_986ef89894bc6444",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50181,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 1000000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     1000000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    1064000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     999999,
+     true
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1119998,
+    952000,
+    904400,
+    1064001,
+    904401,
+    2128000,
+    1808800,
+    84000,
+    71400
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_d4293318cce3e2a1",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50190,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 300000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 300000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     300000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    302400
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     299999,
+     false
+    ],
+    [
+     299999,
+     true
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     300001,
+     false
+    ],
+    [
+     300001,
+     true
+    ],
+    [
+     600000,
+     false
+    ],
+    [
+     600000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    335998,
+    268800,
+    241920,
+    302401,
+    241921,
+    604800,
+    483840,
+    84000,
+    67200
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_00a10ffb62e0a418",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50192,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 50000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 50000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     50000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    44000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     49999,
+     false
+    ],
+    [
+     49999,
+     true
+    ],
+    [
+     50000,
+     true
+    ],
+    [
+     50001,
+     false
+    ],
+    [
+     50001,
+     true
+    ],
+    [
+     100000,
+     false
+    ],
+    [
+     100000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    54998,
+    52250,
+    41800,
+    44001,
+    41801,
+    88000,
+    83600,
+    66000,
+    62700
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_25dff5cc6d05accf",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50197,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 250000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 250000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     250000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    220000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     249999,
+     false
+    ],
+    [
+     249999,
+     true
+    ],
+    [
+     250000,
+     true
+    ],
+    [
+     250001,
+     false
+    ],
+    [
+     250001,
+     true
+    ],
+    [
+     500000,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    274998,
+    233750,
+    187000,
+    220001,
+    187001,
+    440000,
+    374000,
+    82500,
+    70125
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_b80c68222f579e20",
+   "family": "pricing",
+   "level": 2,
+   "seed": 50223,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 750000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     750000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    660000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     749999,
+     true
+    ],
+    [
+     750000,
+     true
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    824998,
+    701250,
+    561000,
+    660001,
+    561001,
+    1320000,
+    1122000,
+    82500,
+    70125
+   ],
+   "defects": [
+    "threshold_boundary"
+   ]
+  }
+ ],
+ "eval_pairs": [
+  {
+   "task_id": "task_d1f982f2d73443a2",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50003,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 5 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     749999,
+     true
+    ],
+    [
+     750000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    790875,
+    632700
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     750000,
+     false
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    832498,
+    666000,
+    666001,
+    632701,
+    1332000,
+    1265400,
+    83250,
+    79087
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_0f8626e80c496f0e",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50004,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 10 // 100\n    if member:\n        t -= subtotal * 5 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     149999,
+     true
+    ],
+    [
+     150000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    158175,
+    142357
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     149999,
+     false
+    ],
+    [
+     150000,
+     false
+    ],
+    [
+     150001,
+     false
+    ],
+    [
+     150001,
+     true
+    ],
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    166498,
+    149850,
+    149851,
+    142358,
+    299700,
+    284715,
+    83250,
+    79087
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_4245128ad66c7d0a",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50014,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     999999,
+     true
+    ],
+    [
+     1000000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    1008000,
+    907200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1119998,
+    1008000,
+    1008001,
+    907201,
+    2016000,
+    1814400,
+    84000,
+    75600
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_18fa66ed31561f54",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50016,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 100000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 100000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     99999,
+     true
+    ],
+    [
+     100000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    99000,
+    79200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     99999,
+     false
+    ],
+    [
+     100000,
+     false
+    ],
+    [
+     100001,
+     false
+    ],
+    [
+     100001,
+     true
+    ],
+    [
+     200000,
+     false
+    ],
+    [
+     200000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    109998,
+    88000,
+    88001,
+    79201,
+    176000,
+    158400,
+    82500,
+    74250
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_f607c136aa28195a",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50021,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 10 // 100\n    if member:\n        t -= subtotal * 15 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     399999,
+     true
+    ],
+    [
+     400000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    380800,
+    342720
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    447998,
+    403200,
+    403201,
+    342721,
+    806400,
+    685440,
+    84000,
+    71400
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_48e173feb95ade28",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50037,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     999999,
+     true
+    ],
+    [
+     1000000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    990000,
+    792000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1099998,
+    880000,
+    880001,
+    792001,
+    1760000,
+    1584000,
+    82500,
+    74250
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_f3def69585bf3e94",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50005,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 750000:\n        t -= t * 15 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     750000,
+     false
+    ],
+    [
+     750000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    714000,
+    642600
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     749999,
+     true
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    839998,
+    756000,
+    714001,
+    642601,
+    1428000,
+    1285200,
+    84000,
+    75600
+   ],
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_d7b1c0ba2a071d60",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50006,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= subtotal * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    425600,
+    340480
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     399999,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    447998,
+    358400,
+    425601,
+    340481,
+    851200,
+    680960,
+    84000,
+    67200
+   ],
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_0d1794a14a9f659f",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50025,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= subtotal * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    990000,
+    841500
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     999999,
+     true
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1099998,
+    935000,
+    990001,
+    841501,
+    1980000,
+    1683000,
+    82500,
+    70125
+   ],
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_1623e491a33594cf",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50032,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 300000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 300000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    264000,
+    211200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     299999,
+     false
+    ],
+    [
+     299999,
+     true
+    ],
+    [
+     300001,
+     false
+    ],
+    [
+     300001,
+     true
+    ],
+    [
+     600000,
+     false
+    ],
+    [
+     600000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    329998,
+    264000,
+    264001,
+    211201,
+    528000,
+    422400,
+    82500,
+    66000
+   ],
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_a31d5a6795d3bf1c",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50042,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= subtotal * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    425600,
+    404320
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     399999,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    447998,
+    425600,
+    425601,
+    404321,
+    851200,
+    808640,
+    84000,
+    79800
+   ],
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_fcd046c8bebeadab",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50067,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 500000:\n        t -= t * 15 // 100\n    if member:\n        t -= subtotal * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 500000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     500000,
+     false
+    ],
+    [
+     500000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    467500,
+    444125
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     499999,
+     false
+    ],
+    [
+     499999,
+     true
+    ],
+    [
+     500001,
+     false
+    ],
+    [
+     500001,
+     true
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    549998,
+    522500,
+    467501,
+    444126,
+    935000,
+    888250,
+    82500,
+    78375
+   ],
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_b11eb404e63ca7c8",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50008,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 400000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 20 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     399999,
+     true
+    ],
+    [
+     400000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    352000,
+    396000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    439998,
+    316800,
+    396001,
+    316801,
+    792000,
+    633600,
+    82500,
+    66000
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_b0ee718ebaa4f87a",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50012,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 750000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     749999,
+     true
+    ],
+    [
+     750000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    790875,
+    666000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     750000,
+     true
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    832498,
+    632700,
+    666001,
+    632701,
+    1332000,
+    1265400,
+    83250,
+    79087
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_ac391174ee892892",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50013,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 500000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 500000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     499999,
+     true
+    ],
+    [
+     500000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    527250,
+    444000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     499999,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     500001,
+     false
+    ],
+    [
+     500001,
+     true
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    554998,
+    421800,
+    444001,
+    421801,
+    888000,
+    843600,
+    83250,
+    79087
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_dc3c6e9504a2156d",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50018,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 200000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 20 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     199999,
+     true
+    ],
+    [
+     200000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    179200,
+    190400
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     199999,
+     false
+    ],
+    [
+     200000,
+     true
+    ],
+    [
+     200001,
+     false
+    ],
+    [
+     200001,
+     true
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    223998,
+    152320,
+    190401,
+    152321,
+    380800,
+    304640,
+    84000,
+    67200
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_f298cb06f966eff9",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50022,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     399999,
+     true
+    ],
+    [
+     400000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    421800,
+    355200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    443998,
+    337440,
+    355201,
+    337441,
+    710400,
+    674880,
+    83250,
+    79087
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_5b3fd470eb9ebb82",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50028,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 250000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 15 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 250000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     249999,
+     true
+    ],
+    [
+     250000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    235875,
+    235875
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     249999,
+     false
+    ],
+    [
+     250000,
+     true
+    ],
+    [
+     250001,
+     false
+    ],
+    [
+     250001,
+     true
+    ],
+    [
+     500000,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    277498,
+    200493,
+    235876,
+    200494,
+    471750,
+    400987,
+    83250,
+    70762
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  }
+ ],
+ "control": [
+  {
+   "task_id": "task_642377ae8e370788",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50043,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 750000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 10 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     749999,
+     true
+    ],
+    [
+     750000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    742500,
+    742500
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     750000,
+     true
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    824998,
+    668250,
+    742501,
+    668251,
+    1485000,
+    1336500,
+    82500,
+    74250
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_fd44c42af0df3405",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50044,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 10 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     749999,
+     true
+    ],
+    [
+     750000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    742500,
+    668250
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     750000,
+     false
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    824998,
+    742500,
+    742501,
+    668251,
+    1485000,
+    1336500,
+    82500,
+    74250
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_d07c2a22a3bf6cb3",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50045,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 250000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 250000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     249999,
+     true
+    ],
+    [
+     250000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    261250,
+    220000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     249999,
+     false
+    ],
+    [
+     250000,
+     true
+    ],
+    [
+     250001,
+     false
+    ],
+    [
+     250001,
+     true
+    ],
+    [
+     500000,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    274998,
+    209000,
+    220001,
+    209001,
+    440000,
+    418000,
+    82500,
+    78375
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_42dad2c45db5f25d",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50047,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 50000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 50000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     49999,
+     true
+    ],
+    [
+     50000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    49500,
+    39600
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     49999,
+     false
+    ],
+    [
+     50000,
+     false
+    ],
+    [
+     50001,
+     false
+    ],
+    [
+     50001,
+     true
+    ],
+    [
+     100000,
+     false
+    ],
+    [
+     100000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    54998,
+    44000,
+    44001,
+    39601,
+    88000,
+    79200,
+    66000,
+    59400
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_2d1f547b7235260e",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50049,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 5 // 100\n    if member:\n        t -= subtotal * 20 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     149999,
+     true
+    ],
+    [
+     150000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    132000,
+    125400
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     149999,
+     false
+    ],
+    [
+     150000,
+     false
+    ],
+    [
+     150001,
+     false
+    ],
+    [
+     150001,
+     true
+    ],
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    164998,
+    156750,
+    156751,
+    125401,
+    313500,
+    250800,
+    82500,
+    66000
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_aa10c796b9526570",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50052,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 15 // 100\n    if member:\n        t -= subtotal * 20 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     399999,
+     true
+    ],
+    [
+     400000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    352000,
+    299200
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    439998,
+    374000,
+    374001,
+    299201,
+    748000,
+    598400,
+    82500,
+    66000
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_bb968f00bafb719b",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50055,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 100000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 20 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 100000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     99999,
+     true
+    ],
+    [
+     100000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    89600,
+    100800
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     99999,
+     false
+    ],
+    [
+     100000,
+     true
+    ],
+    [
+     100001,
+     false
+    ],
+    [
+     100001,
+     true
+    ],
+    [
+     200000,
+     false
+    ],
+    [
+     200000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    111998,
+    80640,
+    100801,
+    80641,
+    201600,
+    161280,
+    84000,
+    67200
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_17370e7887c47719",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50056,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 200000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 20 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     199999,
+     true
+    ],
+    [
+     200000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    179200,
+    201600
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     199999,
+     false
+    ],
+    [
+     200000,
+     true
+    ],
+    [
+     200001,
+     false
+    ],
+    [
+     200001,
+     true
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    223998,
+    161280,
+    201601,
+    161281,
+    403200,
+    322560,
+    84000,
+    67200
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_dddced18322f9031",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50060,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 1000000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 15 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     999999,
+     true
+    ],
+    [
+     1000000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    943500,
+    943500
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1109998,
+    801975,
+    943501,
+    801976,
+    1887000,
+    1603950,
+    83250,
+    70762
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_57d4aadabaad4536",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50066,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 15 // 100\n    if member:\n        t -= subtotal * 15 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 15 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     749999,
+     true
+    ],
+    [
+     750000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    707625,
+    601481
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     750000,
+     false
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    832498,
+    707625,
+    707626,
+    601482,
+    1415250,
+    1202962,
+    83250,
+    70762
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_14639169084201f3",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50070,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 5 // 100\n    if member:\n        t -= subtotal * 20 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     749999,
+     true
+    ],
+    [
+     750000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    660000,
+    627000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     750000,
+     false
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    824998,
+    783750,
+    783751,
+    627001,
+    1567500,
+    1254000,
+    82500,
+    66000
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_dcccd49cdccfb911",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50071,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 10 // 100\n    if member:\n        t -= subtotal * 15 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     399999,
+     true
+    ],
+    [
+     400000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    374000,
+    336600
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    439998,
+    396000,
+    396001,
+    336601,
+    792000,
+    673200,
+    82500,
+    70125
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_53bc5ffef8ddffbf",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50072,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 300000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 15 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 300000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     299999,
+     true
+    ],
+    [
+     300000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    280500,
+    297000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     299999,
+     false
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     300001,
+     false
+    ],
+    [
+     300001,
+     true
+    ],
+    [
+     600000,
+     false
+    ],
+    [
+     600000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    329998,
+    252450,
+    297001,
+    252451,
+    594000,
+    504900,
+    82500,
+    70125
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_44bfcbf1c32cf9c7",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50076,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 300000:\n        t -= t * 5 // 100\n    if member:\n        t -= subtotal * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 300000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    319200,
+    303240
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     299999,
+     false
+    ],
+    [
+     299999,
+     true
+    ],
+    [
+     300001,
+     false
+    ],
+    [
+     300001,
+     true
+    ],
+    [
+     600000,
+     false
+    ],
+    [
+     600000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    335998,
+    319200,
+    319201,
+    303241,
+    638400,
+    606480,
+    84000,
+    79800
+   ],
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_c7428b5d689b70e6",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50078,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 10 // 100\n    t += t * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    358400,
+    322560
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     399999,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    447998,
+    403200,
+    358401,
+    322561,
+    716800,
+    645120,
+    84000,
+    75600
+   ],
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_ca315e893260d40a",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50079,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 750000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 750000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     749999,
+     true
+    ],
+    [
+     750000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    798000,
+    756000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     749999,
+     false
+    ],
+    [
+     750000,
+     true
+    ],
+    [
+     750001,
+     false
+    ],
+    [
+     750001,
+     true
+    ],
+    [
+     1500000,
+     false
+    ],
+    [
+     1500000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    839998,
+    718200,
+    756001,
+    718201,
+    1512000,
+    1436400,
+    84000,
+    79800
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_c128aa82627736a5",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50080,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 150000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 15 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     149999,
+     true
+    ],
+    [
+     150000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    142800,
+    159600
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     149999,
+     false
+    ],
+    [
+     150000,
+     true
+    ],
+    [
+     150001,
+     false
+    ],
+    [
+     150001,
+     true
+    ],
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    167998,
+    135660,
+    159601,
+    135661,
+    319200,
+    271320,
+    84000,
+    71400
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_a9d72dae4421fa52",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50083,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 15 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     399999,
+     true
+    ],
+    [
+     400000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    374000,
+    352000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    439998,
+    299200,
+    352001,
+    299201,
+    704000,
+    598400,
+    82500,
+    70125
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_cf8d9e77b656a130",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50086,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 500000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 500000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     499999,
+     true
+    ],
+    [
+     500000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    499500,
+    444000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     499999,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     500001,
+     false
+    ],
+    [
+     500001,
+     true
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    554998,
+    399600,
+    444001,
+    399601,
+    888000,
+    799200,
+    83250,
+    74925
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_2a4c3f66084bf4da",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50088,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= subtotal * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    418000,
+    397100
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     399999,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    439998,
+    418000,
+    418001,
+    397101,
+    836000,
+    794200,
+    82500,
+    78375
+   ],
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_184e53661c5869e2",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50097,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= subtotal * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 400000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    418000,
+    334400
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     399999,
+     false
+    ],
+    [
+     399999,
+     true
+    ],
+    [
+     400001,
+     false
+    ],
+    [
+     400001,
+     true
+    ],
+    [
+     800000,
+     false
+    ],
+    [
+     800000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    439998,
+    352000,
+    418001,
+    334401,
+    836000,
+    668800,
+    82500,
+    66000
+   ],
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_c5da08e870045af9",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50099,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 1000000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 10 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     999999,
+     true
+    ],
+    [
+     1000000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    999000,
+    1054500
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1109998,
+    949050,
+    1054501,
+    949051,
+    2109000,
+    1898100,
+    83250,
+    74925
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_9422ec76ca30c316",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50102,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 500000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 500000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     499999,
+     true
+    ],
+    [
+     500000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    532000,
+    504000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     499999,
+     false
+    ],
+    [
+     500000,
+     true
+    ],
+    [
+     500001,
+     false
+    ],
+    [
+     500001,
+     true
+    ],
+    [
+     1000000,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    559998,
+    478800,
+    504001,
+    478801,
+    1008000,
+    957600,
+    84000,
+    79800
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_6ce833c14823d1ae",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50103,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 5 // 100\n    if member:\n        t -= subtotal * 5 // 100\n    t += subtotal * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     199999,
+     true
+    ],
+    [
+     200000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    209000,
+    198550
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     199999,
+     false
+    ],
+    [
+     200000,
+     false
+    ],
+    [
+     200001,
+     false
+    ],
+    [
+     200001,
+     true
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    219998,
+    209000,
+    209001,
+    198551,
+    418000,
+    397100,
+    82500,
+    78375
+   ],
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ]
+  },
+  {
+   "task_id": "task_80ba8fb7478dca75",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50104,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 10 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 10 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     999999,
+     true
+    ],
+    [
+     1000000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    999000,
+    999000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1109998,
+    899100,
+    999001,
+    899101,
+    1998000,
+    1798200,
+    83250,
+    74925
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_1574b8da90c4c964",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50107,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 1000000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 1000000:\n        t -= t * 5 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     999999,
+     true
+    ],
+    [
+     1000000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    1064000,
+    1064000
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     999999,
+     false
+    ],
+    [
+     1000000,
+     true
+    ],
+    [
+     1000001,
+     false
+    ],
+    [
+     1000001,
+     true
+    ],
+    [
+     2000000,
+     false
+    ],
+    [
+     2000000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    1119998,
+    1010800,
+    1064001,
+    1010801,
+    2128000,
+    2021600,
+    84000,
+    79800
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_1e866358db3bf917",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50108,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 100000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 100000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 15 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     100000,
+     false
+    ],
+    [
+     100000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    88000,
+    74800
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     99999,
+     false
+    ],
+    [
+     99999,
+     true
+    ],
+    [
+     100001,
+     false
+    ],
+    [
+     100001,
+     true
+    ],
+    [
+     200000,
+     false
+    ],
+    [
+     200000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    109998,
+    93500,
+    88001,
+    74801,
+    176000,
+    149600,
+    82500,
+    70125
+   ],
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_a23ce3a63457023e",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50111,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 50000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 11 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 50000:\n        t -= t * 10 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 11 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     49999,
+     true
+    ],
+    [
+     50000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    52725,
+    49950
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     49999,
+     false
+    ],
+    [
+     50000,
+     true
+    ],
+    [
+     50001,
+     false
+    ],
+    [
+     50001,
+     true
+    ],
+    [
+     100000,
+     false
+    ],
+    [
+     100000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    55498,
+    47452,
+    49951,
+    47453,
+    99900,
+    94905,
+    74925,
+    71178
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_9beccbad8c3a491d",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50113,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 200000:\n        t -= t * 20 // 100\n    if member:\n        t -= subtotal * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 200000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 20 // 100\n    t += t * 10 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     200000,
+     false
+    ],
+    [
+     200000,
+     true
+    ]
+   ],
+   "shown_truth": [
+    176000,
+    140800
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     199999,
+     false
+    ],
+    [
+     199999,
+     true
+    ],
+    [
+     200001,
+     false
+    ],
+    [
+     200001,
+     true
+    ],
+    [
+     400000,
+     false
+    ],
+    [
+     400000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    219998,
+    176000,
+    176001,
+    140801,
+    352000,
+    281600,
+    82500,
+    66000
+   ],
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ]
+  },
+  {
+   "task_id": "task_7563244b0541e24f",
+   "family": "pricing",
+   "level": 3,
+   "seed": 50114,
+   "buggy_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal > 150000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += subtotal * 12 // 100\n    return t\n",
+   "reference_code": "def total(subtotal, member):\n    t = subtotal\n    if subtotal >= 150000:\n        t -= t * 20 // 100\n    if member:\n        t -= t * 5 // 100\n    t += t * 12 // 100\n    return t\n",
+   "shown_cases": [
+    [
+     149999,
+     true
+    ],
+    [
+     150000,
+     false
+    ]
+   ],
+   "shown_truth": [
+    159600,
+    134400
+   ],
+   "holdout_cases": [
+    [
+     0,
+     false
+    ],
+    [
+     0,
+     true
+    ],
+    [
+     149999,
+     false
+    ],
+    [
+     150000,
+     true
+    ],
+    [
+     150001,
+     false
+    ],
+    [
+     150001,
+     true
+    ],
+    [
+     300000,
+     false
+    ],
+    [
+     300000,
+     true
+    ],
+    [
+     75000,
+     false
+    ],
+    [
+     75000,
+     true
+    ]
+   ],
+   "holdout_truth": [
+    0,
+    0,
+    167998,
+    127680,
+    134401,
+    127681,
+    268800,
+    255360,
+    84000,
+    79800
+   ],
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ]
+  }
+ ]
+}

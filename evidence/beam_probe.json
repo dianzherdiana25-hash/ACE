@@ -1,0 +1,29 @@
+{
+ "probe": "beam/lookahead vs greedy on the pilot residual shape",
+ "residual_tasks": 15,
+ "control_tasks": 45,
+ "residual": {
+  "greedy": {
+   "solved": 0,
+   "total": 15,
+   "mean_evals": 14.9
+  },
+  "beam": {
+   "solved": 0,
+   "total": 15,
+   "mean_evals": 11.9
+  }
+ },
+ "control": {
+  "greedy": {
+   "solved": 45,
+   "total": 45,
+   "mean_evals": 13.1
+  },
+  "beam": {
+   "solved": 45,
+   "total": 45,
+   "mean_evals": 33.7
+  }
+ }
+}

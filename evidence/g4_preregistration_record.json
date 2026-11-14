@@ -1,0 +1,9 @@
+{
+ "experiment": "g4-application-01",
+ "preregistration_text": "/home/hatch/workspace/ace-omega/wt-g4app/docs/research/ACE_G4_PREREGISTRATION_20261113.md",
+ "text_sha256": "841b3f167d80c3c98ecf04b7f5a33f077b0fc13e4173605766fc7b9d9f2512d9",
+ "protocol_hash": "841b3f167d80c3c98ecf04b7f5a33f077b0fc13e4173605766fc7b9d9f2512d9",
+ "protocol_hash_kind": "draft_text_sha256",
+ "status": "DRAFT \u2014 locks the run; not submitted to any kernel",
+ "relock_note": "Ceiling corrected 600s -> 3600s before any evaluation arm executed (WITH-arm profile ~1720s); first driver invocation under old hash is void, no evaluation report produced."
+}

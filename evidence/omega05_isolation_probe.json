@@ -1,0 +1,70 @@
+{
+ "probe": "OMEGA-05 fresh isolation probe, Phase 2 stage 6",
+ "host": {
+  "sysname": "Linux",
+  "nodename": "htch-runtime",
+  "release": "7.0.0-44-generic",
+  "version": "#1 SMP PREEMPT_DYNAMIC Fri Nov  6 01:23:31 UTC 2026",
+  "machine": "x86_64"
+ },
+ "results": {
+  "bin_bwrap": {
+   "present": false,
+   "detail": ""
+  },
+  "bin_unshare": {
+   "present": true,
+   "detail": "/usr/bin/unshare"
+  },
+  "bin_nsenter": {
+   "present": true,
+   "detail": "/usr/bin/nsenter"
+  },
+  "bin_chroot": {
+   "present": true,
+   "detail": "/usr/sbin/chroot"
+  },
+  "bin_systemd-run": {
+   "present": true,
+   "detail": "/usr/bin/systemd-run"
+  },
+  "bin_firejail": {
+   "present": false,
+   "detail": ""
+  },
+  "knob_unprivileged_userns_clone": "1",
+  "knob_max_user_namespaces": "2147483647",
+  "knob_actions_avail": "kill_process kill_thread trap errno user_notif trace log allow",
+  "uid": 0,
+  "cap_eff": "000001fffff7cfff",
+  "seccomp_mode": "2",
+  "ns_user_mount_pid": {
+   "rc": 0,
+   "detail": "0\nhatch\nNS_OK",
+   "works": true
+  },
+  "ns_net": {
+   "rc": 0,
+   "detail": "1\nNETNS_OK",
+   "works": true
+  },
+  "seccomp_functional": {
+   "rc": 1,
+   "detail": "Traceback (most recent call last):\n  File \"<string>\", line 21, in <module>\nAssertionError: seccomp install failed",
+   "works": false
+  },
+  "landlock": {
+   "abi_version": 8,
+   "errno": 0,
+   "available": true
+  },
+  "ptrace_scope": "1"
+ },
+ "verdicts": {
+  "bwrap": false,
+  "namespaces_functional": true,
+  "network_namespace": true,
+  "seccomp_functional": false,
+  "landlock_available": true
+ }
+}

@@ -1,0 +1,2070 @@
+{
+ "stage": "B-3 probe, substrate v1 (one-shot)",
+ "probe_set_digest_count": 216,
+ "wall_seconds": 2.4,
+ "substrate_overall_rate": 1.0,
+ "substrate_singles_rate": 1.0,
+ "substrate_pairs_rate": 1.0,
+ "per_pair_class": {
+  "tax_basis+threshold_boundary": 1.0,
+  "member_basis+threshold_boundary": 1.0,
+  "member_basis+tax_basis": 1.0
+ },
+ "comparator_overall_rate": 1.0,
+ "bar": "substrate >= 0.95 overall AND singles == 1.0",
+ "bar_met": true,
+ "rows": [
+  {
+   "task_id": "task_012f7db32619e19e",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_d0a6589e6f835af4",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_6e10f22505b0fa23",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_ddf1fa8172c8aa2c",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_60326855a03d38f2",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_16b4cb08df6ec433",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_59acd6563eee49b2",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_a5557c011fd9ffe2",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_635cd6ccaa097b0e",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_8bffa56ee0869cfc",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_73210acaa25ad5b5",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_90886bc9a3ee567a",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_4d838030bf2dc4db",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_e816d4f39fe31550",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_1d9fa9e38c3a059e",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_fb6afc558ceee609",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_ced7ba7a769d7c76",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_9d8c8132f3a4c414",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_5e839f0c273f861b",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_1c787fc5b2317da9",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_5cd60f23548f31e2",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_37af86350b34fdfa",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_361c98cd4ce00777",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_75e73dc0e6a2c39a",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_6060a88d9fbfd0d6",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_f81dc35af4556e25",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_bb6b91d1e7d77d39",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_fe7099047a354966",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_9bf5ee22dd57294d",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_069db67e5cd091cd",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_4bf9c533700cde6b",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_f48bf61d259068d4",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_095fce349ad1acc6",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_bb65398b8405a08f",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_52a5ab2fa99dea54",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_3c7d4955354bd89f",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_c9ad00f1b5def2f7",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_8efdeb5ffb773627",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_9aaf521718c7c1f9",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_2ae527ea2c7b61d5",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_92b584b9b661413a",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_14c7b579470be833",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_a0073960b803f7f2",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_0d95b17b543cf990",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_d12ef6c64a69ff92",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_97817f3b95da7ed3",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_cb1a8b587a096837",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_8730f0e78405e649",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_d9a6e18264bceb7b",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_e930294ebaaf333e",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_15bcff7a7f855a14",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_243e5ed96719f86f",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_80d449073742e309",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_5d9566851c112f78",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_ae9afcdabb2103d2",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_80cd61aace843ebf",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_575dc3eebaf8da54",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_61b5bbf1d66f594e",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_84375c167975f67f",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_78d6357b93511700",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_ae7dce2b7c18586d",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_fd0980ca93d1def2",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_cff5af0a388ff3de",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_0252f4bb73a84a31",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_1803fa509d595719",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_dfdbb4ce3574700f",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_1a802cc3c3a3f9ca",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_37897c04e56563d0",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_3a92e1b1921e3910",
+   "defects": [
+    "tax_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_96c7b5071d438913",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_303ae439873d8a0a",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_6dbe670da24d3f1b",
+   "defects": [
+    "member_basis"
+   ],
+   "level": 1,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_0a565ed79152b2cc",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_724f5f3576891197",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_f24e5d75a0c43dff",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_f0ac2a03afdf7342",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_8bb7e12984400bcb",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_10868495e0000ce4",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_1cceabc932389564",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_371d4681300788ac",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_58415918b0d5df80",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_7c5b75c4940066d7",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_85fc8acf5ba4e3ed",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_f782c0633e922a50",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_b6e2b0e17beef57c",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_c9ac282b2f5535c7",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_13caa81d01a11ab4",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_be90b654cc12d70f",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_0a45ef4ba7a98c5d",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_5e20bc4eecae71fe",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_a2ae103913431d46",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_d4d6f040b74517a8",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_8c0018ea41fc33c8",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_95aa162bc96a2ae7",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_7255cb6be14373a0",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_2e5bf65a7ca6bff8",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_65dbf6d9ab0a404f",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_989e7228d3b63e32",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_c0aadd05f36d7b36",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_e8fc77f8319868b9",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_ff0893cdf498b96a",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_5acf0e88ada49da2",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_61c2421e77922774",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_c4b76ff5ee5de46f",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_b96a25572f4198ab",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_987cdfb233f7dacb",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_59b30700edd8ea9a",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_70593473a2255373",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "level": 2,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_9b5a47c4d2de820a",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_318e63555c27ce39",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_df6d8aae7602b60a",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_81403dfcc184f3bf",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_05da6a4d985baced",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_f3b5ddabe9dc0db0",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_9415ef79dcadab90",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_db34fbff7addf8d3",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_e0501f4189343826",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_d2acb00f31138f72",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_e88296b7612d95bf",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_547d1701f14dec6e",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_65e2950e907d9afb",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_792a4ae678cf8ad7",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_b34387ff419bb2c1",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_9ec627e02a056399",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_88358075bab03ddf",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_095e3c3207fd5dd9",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_0ed81d3f8b5e205d",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_f432c0166ede5878",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_e2c9f42a7a48126c",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_17ed59e101f8a0f1",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_7a366c32164b5230",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_6d135f72dd2f0ef5",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_4d94bcfb9fbde44b",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_426e9b32dd8f8d17",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_9ef4d448abc6f23e",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_4104598e1b311ee4",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_538e9056891f563c",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_328d37a4868f7d7c",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_52f79d9b846b04da",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_14e93e7839fc62c9",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_5ba0c2604c07a6a8",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_411a089f8df4bfd1",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_2f2dc4f06c02c1f5",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_87b0a6109740a5c8",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_e17b7ba74bd33597",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_c73aa924ddfc3da0",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_251891077fdacc84",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_ed415e86d36f1d86",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_0215780ffbf7048d",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_9e297e81c508f4de",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_5a3441d3f3b8784d",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_8fe91e378857a827",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_483ad168ef882947",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_5b2603f3b858c667",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_63667b251d81396b",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_a67eb86d40a63eb1",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_3996adad39bfa8c3",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_0c84cdb6fab77cdb",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_d6dd24b7c7ff685e",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_d1be54a5827363be",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_a8db098d92364cd3",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_b260c60f7bc51cd6",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_a027533536a080b2",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_51cb59c126db9e68",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_4f645bd3557ab9f9",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_133afd4c05051bb3",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_74ae8ac41452c31e",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_cd231da13ba8cd1f",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_8a2f746ca0016f84",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_ad95b9758e7d2dcc",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_e57fcf65c5133aa2",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_b1f8620d0e7c9773",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_034d844cc3cfef79",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_aaedd93d18b1c885",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_53ec55978f3e165a",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_bfa25bc439d43a5c",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_c5768b9b4d2e5037",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_f61fb48c535e333f",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_4fbee8038c5a65a8",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_e36a240848d22c68",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_4dd292d5d52bffdf",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_7fd6f100b7459873",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_c7f5ffaf27fcc8a7",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_518253bb359638c9",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_9d1961f109a36988",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_a659769bc995a29a",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_7a5273bded67562c",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_4fd6488d56b4a198",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_1977fdee230ae727",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_743dd8a0467c43b2",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_e38e6dce12982727",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_dc3b122c92f3007c",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_bc9ae559aa064b24",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_9f3326164b0ed714",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_3ceb8f2a73998a5b",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_5d264a020e354efc",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_22eed5de9725945c",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_5186051c232b2560",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_66f7c9ef60503c28",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_bba4f354ce08a657",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_fe5691736a7ea9d8",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_9e14953bfc7a14ba",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_f8261a2378278b4f",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_55fe2d09eb733a6c",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_e5b9a53c71bd3216",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_1fbffbe336462bf1",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_62fc8acc48192e08",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_656413d01ecbe7cb",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_914a1c6b385712cc",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_d167d25e62b7c671",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_c755e5dfcc96ec2f",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_02455805a777de0b",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_bdfc0cde372a9f52",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_3a2d96a9c5958709",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_5cc64b394cb25f2d",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  },
+  {
+   "task_id": "task_0605a5ed9cb04ba8",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "level": 3,
+   "comparator_solved": true,
+   "substrate_solved": true
+  }
+ ]
+}

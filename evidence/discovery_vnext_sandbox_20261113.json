@@ -1,0 +1,36 @@
+{
+ "stage": "discovery v-next sandbox measurement",
+ "band": [
+  70000,
+  70099
+ ],
+ "built": 100,
+ "skipped": 0,
+ "pool": 10,
+ "evaluation": 30,
+ "arm_a_substrate": 8,
+ "arm_b_all_motions": 13,
+ "admitted_motion_keys": [
+  "('move_stmt', ('augassign', 't', 'Add', 't'), ('return',))"
+ ],
+ "arm_c_admitted": 13,
+ "pool_arm_a": 4,
+ "pool_arm_b": 5,
+ "control_tasks": 30,
+ "control_arm_a": 30,
+ "control_arm_b": 30,
+ "wall_seconds": 0.7,
+ "decomposition": {
+  "eval_shown_discriminating": 13,
+  "eval_nondiscriminating": 17,
+  "note": "On non-discriminating tasks the buggy program is already shown-perfect (all pricing ops are accumulator-multiplicative; order shows only through floor-division rounding), so no shown-driven solver can move on them. Reachable ceiling on this eval set = 13.",
+  "discriminating_arm_a": "8/13",
+  "discriminating_arm_b": "13/13",
+  "control_L2_L3_lab_tasks": {
+   "n": 30,
+   "arm_a": 30,
+   "arm_b": 30,
+   "band": "seeds 71000-71014, levels 2 and 3"
+  }
+ }
+}

@@ -1,0 +1,91 @@
+{
+ "grid": {
+  "n": 12,
+  "baseline_pct": 0.0,
+  "extended_pct": 75.0,
+  "delta_pp": 75.0,
+  "net_new": 9,
+  "catalog_digest": "0e4ac118313cb02a9c8a7907a6c2e9f717b989e8a793441e45394daf78589fb5",
+  "composition_both_conventions": {
+   "pure": "12 singles + 18 mixed",
+   "aggregate_by_class": 48
+  }
+ },
+ "pricing_catalog": {
+  "n": 45,
+  "baseline_pct": 100.0,
+  "extended_pct": 100.0,
+  "delta_pp": 0.0
+ },
+ "pricing_constructed": {
+  "n": 40,
+  "baseline_pct": 35.0,
+  "extended_pct": 35.0,
+  "delta_pp": 0.0
+ },
+ "pricing_pooled": {
+  "n": 85,
+  "baseline_pct": 69.4118,
+  "extended_pct": 69.4118,
+  "delta_pp": 0.0,
+  "net_new": 0,
+  "catalog_digest": "821ae1fb5617fda6abc5773e5140359a2ee0f8d929b7be1e46a869fdf064ae6c"
+ },
+ "control_regressions": 0,
+ "sham_ok": true,
+ "composite_index_pp": -10.0,
+ "kernel_verdict": "fail",
+ "kernel_audit_status": "CLEAN",
+ "instrument_outcome": "SPECIALIZATION",
+ "instrument_detail": {
+  "gate": "G3",
+  "criteria_version": 1,
+  "definition": "an improvement transfers to at least two different problem families; one family is specialization (PRD v0.1)",
+  "clauses": {
+   "C1_identified_improvement": {
+    "verdict": "PASS",
+    "missing": [],
+    "evidence": {
+     "improvement": {
+      "name": "operator-discovery-mechanism",
+      "digest": "e2a59960f8ccc7f8e991e77af99481ad603ce84c50a1b7f8299897b39c9975f8"
+     },
+     "source_family": "grid"
+    }
+   },
+   "C2_two_distinct_families": {
+    "verdict": "PASS",
+    "missing": [],
+    "warnings": [
+     "evaluation (grid): family 'grid' evaluated twice \u2014 the same family twice is one family"
+    ],
+    "evidence": {
+     "valid_families": [
+      "grid",
+      "pricing"
+     ]
+    }
+   },
+   "C3_positive_transfer": {
+    "verdict": "FAIL",
+    "missing": [
+     "positive transfer effect in 1 family; 2 required for TRANSFER_DEMONSTRATED"
+    ],
+    "warnings": [],
+    "evidence": {
+     "positive_families": [
+      "grid"
+     ]
+    }
+   }
+  },
+  "positive_families": [
+   "grid"
+  ],
+  "identity_mismatches": [],
+  "overall": "SPECIALIZATION",
+  "qualification": "The improvement is real (C1 passes) and exactly one family shows a positive transfer effect \u2014 the PRD's own category for one-family gains."
+ },
+ "total_wall_seconds": 2126.5,
+ "finalize_repair_note": "The first finalize attempt failed on a harness path (/tmp/manifest wiped by a runtime restart) BEFORE any kernel write, and the second on the instrument call signature (assess_g3 is keyword-only and file-based) AFTER the kernel record + audit had landed cleanly (exactly 1 ledger row, audit CLEAN). The dossier was then assembled in the instrument file-based format and scored; the kernel was not written twice. Both failures and this repair are disclosed here and in run_notes.json."
+}

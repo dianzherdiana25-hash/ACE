@@ -1,0 +1,1997 @@
+{
+ "generator": "curriculum_generator",
+ "generator_version": 1,
+ "seed": 20261113,
+ "source": "grid_generalization",
+ "quotas": {
+  "tasks_per_gap": 1,
+  "tasks_per_partial": 1,
+  "max_attempts": 2,
+  "class_limit": 6
+ },
+ "targeting": [
+  {
+   "class": "diagonal_moves",
+   "status": "unmeasured",
+   "tier": "gap",
+   "headroom_tasks": null,
+   "rank_reason": "gap report rank 0 (kind 'unmeasured', severity 0)",
+   "requested": 1,
+   "built": 1,
+   "rejected": {
+    "generation_failure": 0,
+    "duplicate_task_id": 0,
+    "shown_does_not_expose_defect": 0,
+    "shown_consistent_with_all_rivals": 0
+   },
+   "shortfall": 0
+  },
+  {
+   "class": "no_up",
+   "status": "unmeasured",
+   "tier": "gap",
+   "headroom_tasks": null,
+   "rank_reason": "gap report rank 1 (kind 'unmeasured', severity 0)",
+   "requested": 1,
+   "built": 1,
+   "rejected": {
+    "generation_failure": 0,
+    "duplicate_task_id": 0,
+    "shown_does_not_expose_defect": 0,
+    "shown_consistent_with_all_rivals": 0
+   },
+   "shortfall": 0
+  },
+  {
+   "class": "start_offset",
+   "status": "unmeasured",
+   "tier": "gap",
+   "headroom_tasks": null,
+   "rank_reason": "gap report rank 2 (kind 'unmeasured', severity 0)",
+   "requested": 1,
+   "built": 1,
+   "rejected": {
+    "generation_failure": 0,
+    "duplicate_task_id": 0,
+    "shown_does_not_expose_defect": 0,
+    "shown_consistent_with_all_rivals": 0
+   },
+   "shortfall": 0
+  },
+  {
+   "class": "walls_passable",
+   "status": "unmeasured",
+   "tier": "gap",
+   "headroom_tasks": null,
+   "rank_reason": "gap report rank 3 (kind 'unmeasured', severity 0)",
+   "requested": 1,
+   "built": 1,
+   "rejected": {
+    "generation_failure": 0,
+    "duplicate_task_id": 0,
+    "shown_does_not_expose_defect": 0,
+    "shown_consistent_with_all_rivals": 0
+   },
+   "shortfall": 0
+  },
+  {
+   "class": "wall_char_x",
+   "status": "partial",
+   "tier": "partial",
+   "headroom_tasks": 12,
+   "rank_reason": "partial tier rank 0 (headroom_tasks 12)",
+   "requested": 1,
+   "built": 1,
+   "rejected": {
+    "generation_failure": 0,
+    "duplicate_task_id": 0,
+    "shown_does_not_expose_defect": 0,
+    "shown_consistent_with_all_rivals": 0
+   },
+   "shortfall": 0
+  },
+  {
+   "class": "dist_step_2",
+   "status": "partial",
+   "tier": "partial",
+   "headroom_tasks": 8,
+   "rank_reason": "partial tier rank 1 (headroom_tasks 8)",
+   "requested": 1,
+   "built": 1,
+   "rejected": {
+    "generation_failure": 0,
+    "duplicate_task_id": 0,
+    "shown_does_not_expose_defect": 0,
+    "shown_consistent_with_all_rivals": 0
+   },
+   "shortfall": 0
+  }
+ ],
+ "excluded": [
+  {
+   "class": "bounds_off_by_one",
+   "status": "partial",
+   "reason": "targeted by the ranking but beyond this run's class_limit (6)"
+  },
+  {
+   "class": "returns_start_distance",
+   "status": "partial",
+   "reason": "targeted by the ranking but beyond this run's class_limit (6)"
+  }
+ ],
+ "tasks": [
+  {
+   "task_id": "practice-diagonal_moves-20261173783339",
+   "class": "diagonal_moves",
+   "defects": [
+    "diagonal_moves"
+   ],
+   "build_seed": 20261173783339,
+   "identifiability": {
+    "level": "discriminating",
+    "shown_cases": 8,
+    "buggy_shown_failures": 8,
+    "rivals_checked": 7,
+    "rivals_failing_shown": 7,
+    "rivals_not_excluded": []
+   },
+   "task": {
+    "task_id": "practice-diagonal_moves-20261173783339",
+    "subset": "practice",
+    "defects": [
+     "diagonal_moves"
+    ],
+    "buggy_code": "from collections import deque\n\n\ndef navigate(grid, sr, sc, gr, gc):\n    rows, cols = len(grid), len(grid[0])\n    dist = [[-1] * cols for _ in range(rows)]\n    dist[sr][sc] = 0\n    q = deque([(sr, sc)])\n    while q:\n        r, c = q.popleft()\n        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (1, -1), (-1, 1), (-1, -1)):\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < rows and 0 <= nc < cols and dist[nr][nc] == -1 and grid[nr][nc] != \"#\":\n                dist[nr][nc] = dist[r][c] + 1\n                q.append((nr, nc))\n    return dist[gr][gc]\n",
+    "shown_cases": [
+     [
+      [
+       "......",
+       ".####.",
+       "......",
+       ".####.",
+       "......"
+      ],
+      0,
+      0,
+      4,
+      5
+     ],
+     [
+      [
+       "...",
+       "#..",
+       "...",
+       "..#",
+       "..."
+      ],
+      4,
+      0,
+      0,
+      2
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".....",
+       ".....",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       ".....",
+       "##.##",
+       ".....",
+       "##.##",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "....",
+       ".##.",
+       "....",
+       "...."
+      ],
+      3,
+      0,
+      0,
+      3
+     ],
+     [
+      [
+       "..#..",
+       "..#..",
+       "..#..",
+       "..#..",
+       "....."
+      ],
+      0,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       "..#..",
+       "..#..",
+       ".....",
+       "..#..",
+       "..#.."
+      ],
+      0,
+      4,
+      4,
+      0
+     ],
+     [
+      [
+       "#....",
+       ".....",
+       ".....",
+       "....#",
+       "....."
+      ],
+      4,
+      0,
+      0,
+      4
+     ]
+    ],
+    "shown_truth": [
+     9,
+     6,
+     8,
+     8,
+     6,
+     12,
+     8,
+     8
+    ],
+    "holdout_cases": [
+     [
+      [
+       ".....",
+       ".....",
+       "#####",
+       ".....",
+       "....."
+      ],
+      4,
+      4,
+      0,
+      0
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".#.#.",
+       ".###.",
+       "....."
+      ],
+      0,
+      0,
+      2,
+      2
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       "..#..",
+       ".....",
+       "....."
+      ],
+      4,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       ".....",
+       ".....",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "....",
+       "....",
+       ".##.",
+       "...."
+      ],
+      0,
+      3,
+      3,
+      0
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       ".....",
+       ".....",
+       "....."
+      ],
+      2,
+      2,
+      2,
+      2
+     ],
+     [
+      [
+       "......",
+       "######",
+       "......",
+       "......",
+       "......"
+      ],
+      0,
+      0,
+      4,
+      0
+     ],
+     [
+      [
+       ".....",
+       "..#..",
+       "..#..",
+       "..#..",
+       "..#.."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "#####",
+       "#...#",
+       "#.#.#",
+       "#...#",
+       "#####"
+      ],
+      1,
+      1,
+      3,
+      3
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".#...",
+       ".###.",
+       "....."
+      ],
+      2,
+      2,
+      0,
+      0
+     ],
+     [
+      [
+       ".....",
+       "..#..",
+       ".#.#.",
+       "..#..",
+       "....."
+      ],
+      0,
+      0,
+      2,
+      2
+     ],
+     [
+      [
+       "....",
+       "....",
+       "....",
+       "...."
+      ],
+      0,
+      0,
+      3,
+      3
+     ]
+    ],
+    "holdout_truth": [
+     -1,
+     -1,
+     8,
+     8,
+     6,
+     0,
+     -1,
+     8,
+     4,
+     8,
+     -1,
+     6
+    ]
+   }
+  },
+  {
+   "task_id": "practice-no_up-20261173793346",
+   "class": "no_up",
+   "defects": [
+    "no_up"
+   ],
+   "build_seed": 20261173793346,
+   "identifiability": {
+    "level": "discriminating",
+    "shown_cases": 3,
+    "buggy_shown_failures": 3,
+    "rivals_checked": 7,
+    "rivals_failing_shown": 7,
+    "rivals_not_excluded": []
+   },
+   "task": {
+    "task_id": "practice-no_up-20261173793346",
+    "subset": "practice",
+    "defects": [
+     "no_up"
+    ],
+    "buggy_code": "from collections import deque\n\n\ndef navigate(grid, sr, sc, gr, gc):\n    rows, cols = len(grid), len(grid[0])\n    dist = [[-1] * cols for _ in range(rows)]\n    dist[sr][sc] = 0\n    q = deque([(sr, sc)])\n    while q:\n        r, c = q.popleft()\n        for dr, dc in ((1, 0), (0, 1), (0, -1)):\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < rows and 0 <= nc < cols and dist[nr][nc] == -1 and grid[nr][nc] != \"#\":\n                dist[nr][nc] = dist[r][c] + 1\n                q.append((nr, nc))\n    return dist[gr][gc]\n",
+    "shown_cases": [
+     [
+      [
+       "..#..",
+       "..#..",
+       "..#..",
+       "..#..",
+       "....."
+      ],
+      0,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".#...",
+       ".###.",
+       "....."
+      ],
+      2,
+      2,
+      0,
+      0
+     ],
+     [
+      [
+       "#....",
+       ".....",
+       ".....",
+       "....#",
+       "....."
+      ],
+      4,
+      0,
+      0,
+      4
+     ]
+    ],
+    "shown_truth": [
+     12,
+     8,
+     8
+    ],
+    "holdout_cases": [
+     [
+      [
+       ".....",
+       ".###.",
+       ".#.#.",
+       ".###.",
+       "....."
+      ],
+      0,
+      0,
+      2,
+      2
+     ],
+     [
+      [
+       ".....",
+       "##.##",
+       ".....",
+       "##.##",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "......",
+       "######",
+       "......",
+       "......",
+       "......"
+      ],
+      0,
+      0,
+      4,
+      0
+     ],
+     [
+      [
+       "#####",
+       "#...#",
+       "#.#.#",
+       "#...#",
+       "#####"
+      ],
+      1,
+      1,
+      3,
+      3
+     ],
+     [
+      [
+       ".....",
+       "..#..",
+       "..#..",
+       "..#..",
+       "..#.."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "......",
+       ".####.",
+       "......",
+       ".####.",
+       "......"
+      ],
+      0,
+      0,
+      4,
+      5
+     ],
+     [
+      [
+       ".....",
+       "..#..",
+       ".#.#.",
+       "..#..",
+       "....."
+      ],
+      0,
+      0,
+      2,
+      2
+     ],
+     [
+      [
+       "..#..",
+       "..#..",
+       ".....",
+       "..#..",
+       "..#.."
+      ],
+      0,
+      4,
+      4,
+      0
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       ".....",
+       ".....",
+       "....."
+      ],
+      2,
+      2,
+      2,
+      2
+     ],
+     [
+      [
+       "....",
+       ".##.",
+       "....",
+       "...."
+      ],
+      3,
+      0,
+      0,
+      3
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       "#####",
+       ".....",
+       "....."
+      ],
+      4,
+      4,
+      0,
+      0
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       "..#..",
+       ".....",
+       "....."
+      ],
+      4,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       "...",
+       "#..",
+       "...",
+       "..#",
+       "..."
+      ],
+      4,
+      0,
+      0,
+      2
+     ],
+     [
+      [
+       "....",
+       "....",
+       "....",
+       "...."
+      ],
+      0,
+      0,
+      3,
+      3
+     ],
+     [
+      [
+       "....",
+       "....",
+       ".##.",
+       "...."
+      ],
+      0,
+      3,
+      3,
+      0
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       ".....",
+       ".....",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".....",
+       ".....",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ]
+    ],
+    "holdout_truth": [
+     -1,
+     8,
+     -1,
+     4,
+     8,
+     9,
+     -1,
+     8,
+     0,
+     6,
+     -1,
+     8,
+     6,
+     6,
+     6,
+     8,
+     8
+    ]
+   }
+  },
+  {
+   "task_id": "practice-start_offset-20261173803353",
+   "class": "start_offset",
+   "defects": [
+    "start_offset"
+   ],
+   "build_seed": 20261173803353,
+   "identifiability": {
+    "level": "discriminating",
+    "shown_cases": 8,
+    "buggy_shown_failures": 8,
+    "rivals_checked": 7,
+    "rivals_failing_shown": 7,
+    "rivals_not_excluded": []
+   },
+   "task": {
+    "task_id": "practice-start_offset-20261173803353",
+    "subset": "practice",
+    "defects": [
+     "start_offset"
+    ],
+    "buggy_code": "from collections import deque\n\n\ndef navigate(grid, sr, sc, gr, gc):\n    rows, cols = len(grid), len(grid[0])\n    dist = [[-1] * cols for _ in range(rows)]\n    dist[sr][sc] = 1\n    q = deque([(sr, sc)])\n    while q:\n        r, c = q.popleft()\n        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < rows and 0 <= nc < cols and dist[nr][nc] == -1 and grid[nr][nc] != \"#\":\n                dist[nr][nc] = dist[r][c] + 1\n                q.append((nr, nc))\n    return dist[gr][gc]\n",
+    "shown_cases": [
+     [
+      [
+       "#....",
+       ".....",
+       ".....",
+       "....#",
+       "....."
+      ],
+      4,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       ".....",
+       ".....",
+       "....."
+      ],
+      2,
+      2,
+      2,
+      2
+     ],
+     [
+      [
+       "#####",
+       "#...#",
+       "#.#.#",
+       "#...#",
+       "#####"
+      ],
+      1,
+      1,
+      3,
+      3
+     ],
+     [
+      [
+       "....",
+       "....",
+       "....",
+       "...."
+      ],
+      0,
+      0,
+      3,
+      3
+     ],
+     [
+      [
+       "....",
+       ".##.",
+       "....",
+       "...."
+      ],
+      3,
+      0,
+      0,
+      3
+     ],
+     [
+      [
+       "...",
+       "#..",
+       "...",
+       "..#",
+       "..."
+      ],
+      4,
+      0,
+      0,
+      2
+     ],
+     [
+      [
+       "..#..",
+       "..#..",
+       "..#..",
+       "..#..",
+       "....."
+      ],
+      0,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".#...",
+       ".###.",
+       "....."
+      ],
+      2,
+      2,
+      0,
+      0
+     ]
+    ],
+    "shown_truth": [
+     8,
+     0,
+     4,
+     6,
+     6,
+     6,
+     12,
+     8
+    ],
+    "holdout_cases": [
+     [
+      [
+       ".....",
+       ".###.",
+       ".#.#.",
+       ".###.",
+       "....."
+      ],
+      0,
+      0,
+      2,
+      2
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       "#####",
+       ".....",
+       "....."
+      ],
+      4,
+      4,
+      0,
+      0
+     ],
+     [
+      [
+       "......",
+       "######",
+       "......",
+       "......",
+       "......"
+      ],
+      0,
+      0,
+      4,
+      0
+     ],
+     [
+      [
+       ".....",
+       "..#..",
+       "..#..",
+       "..#..",
+       "..#.."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       ".....",
+       "##.##",
+       ".....",
+       "##.##",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "....",
+       "....",
+       ".##.",
+       "...."
+      ],
+      0,
+      3,
+      3,
+      0
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".....",
+       ".....",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "..#..",
+       "..#..",
+       ".....",
+       "..#..",
+       "..#.."
+      ],
+      0,
+      4,
+      4,
+      0
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       ".....",
+       ".....",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       ".....",
+       "..#..",
+       ".#.#.",
+       "..#..",
+       "....."
+      ],
+      0,
+      0,
+      2,
+      2
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       "..#..",
+       ".....",
+       "....."
+      ],
+      4,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       "......",
+       ".####.",
+       "......",
+       ".####.",
+       "......"
+      ],
+      0,
+      0,
+      4,
+      5
+     ]
+    ],
+    "holdout_truth": [
+     -1,
+     -1,
+     -1,
+     8,
+     8,
+     6,
+     8,
+     8,
+     8,
+     -1,
+     8,
+     9
+    ]
+   }
+  },
+  {
+   "task_id": "practice-walls_passable-20261173813360",
+   "class": "walls_passable",
+   "defects": [
+    "walls_passable"
+   ],
+   "build_seed": 20261173813360,
+   "identifiability": {
+    "level": "discriminating",
+    "shown_cases": 3,
+    "buggy_shown_failures": 3,
+    "rivals_checked": 7,
+    "rivals_failing_shown": 7,
+    "rivals_not_excluded": []
+   },
+   "task": {
+    "task_id": "practice-walls_passable-20261173813360",
+    "subset": "practice",
+    "defects": [
+     "walls_passable"
+    ],
+    "buggy_code": "from collections import deque\n\n\ndef navigate(grid, sr, sc, gr, gc):\n    rows, cols = len(grid), len(grid[0])\n    dist = [[-1] * cols for _ in range(rows)]\n    dist[sr][sc] = 0\n    q = deque([(sr, sc)])\n    while q:\n        r, c = q.popleft()\n        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < rows and 0 <= nc < cols and dist[nr][nc] == -1:\n                dist[nr][nc] = dist[r][c] + 1\n                q.append((nr, nc))\n    return dist[gr][gc]\n",
+    "shown_cases": [
+     [
+      [
+       ".....",
+       "..#..",
+       ".#.#.",
+       "..#..",
+       "....."
+      ],
+      0,
+      0,
+      2,
+      2
+     ],
+     [
+      [
+       "..#..",
+       "..#..",
+       "..#..",
+       "..#..",
+       "....."
+      ],
+      0,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".#...",
+       ".###.",
+       "....."
+      ],
+      2,
+      2,
+      0,
+      0
+     ]
+    ],
+    "shown_truth": [
+     -1,
+     12,
+     8
+    ],
+    "holdout_cases": [
+     [
+      [
+       "#####",
+       "#...#",
+       "#.#.#",
+       "#...#",
+       "#####"
+      ],
+      1,
+      1,
+      3,
+      3
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       ".....",
+       ".....",
+       "....."
+      ],
+      2,
+      2,
+      2,
+      2
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       "..#..",
+       ".....",
+       "....."
+      ],
+      4,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       ".....",
+       ".....",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       ".....",
+       "##.##",
+       ".....",
+       "##.##",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "..#..",
+       "..#..",
+       ".....",
+       "..#..",
+       "..#.."
+      ],
+      0,
+      4,
+      4,
+      0
+     ],
+     [
+      [
+       "...",
+       "#..",
+       "...",
+       "..#",
+       "..."
+      ],
+      4,
+      0,
+      0,
+      2
+     ],
+     [
+      [
+       ".....",
+       "..#..",
+       "..#..",
+       "..#..",
+       "..#.."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "#....",
+       ".....",
+       ".....",
+       "....#",
+       "....."
+      ],
+      4,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".#.#.",
+       ".###.",
+       "....."
+      ],
+      0,
+      0,
+      2,
+      2
+     ],
+     [
+      [
+       "....",
+       ".##.",
+       "....",
+       "...."
+      ],
+      3,
+      0,
+      0,
+      3
+     ],
+     [
+      [
+       "....",
+       "....",
+       ".##.",
+       "...."
+      ],
+      0,
+      3,
+      3,
+      0
+     ],
+     [
+      [
+       "......",
+       ".####.",
+       "......",
+       ".####.",
+       "......"
+      ],
+      0,
+      0,
+      4,
+      5
+     ],
+     [
+      [
+       "......",
+       "######",
+       "......",
+       "......",
+       "......"
+      ],
+      0,
+      0,
+      4,
+      0
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       "#####",
+       ".....",
+       "....."
+      ],
+      4,
+      4,
+      0,
+      0
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".....",
+       ".....",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "....",
+       "....",
+       "....",
+       "...."
+      ],
+      0,
+      0,
+      3,
+      3
+     ]
+    ],
+    "holdout_truth": [
+     4,
+     0,
+     8,
+     8,
+     8,
+     8,
+     6,
+     8,
+     8,
+     -1,
+     6,
+     6,
+     9,
+     -1,
+     -1,
+     8,
+     6
+    ]
+   }
+  },
+  {
+   "task_id": "practice-wall_char_x-20261173823367",
+   "class": "wall_char_x",
+   "defects": [
+    "wall_char_x"
+   ],
+   "build_seed": 20261173823367,
+   "identifiability": {
+    "level": "discriminating",
+    "shown_cases": 3,
+    "buggy_shown_failures": 3,
+    "rivals_checked": 7,
+    "rivals_failing_shown": 7,
+    "rivals_not_excluded": []
+   },
+   "task": {
+    "task_id": "practice-wall_char_x-20261173823367",
+    "subset": "practice",
+    "defects": [
+     "wall_char_x"
+    ],
+    "buggy_code": "from collections import deque\n\n\ndef navigate(grid, sr, sc, gr, gc):\n    rows, cols = len(grid), len(grid[0])\n    dist = [[-1] * cols for _ in range(rows)]\n    dist[sr][sc] = 0\n    q = deque([(sr, sc)])\n    while q:\n        r, c = q.popleft()\n        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < rows and 0 <= nc < cols and dist[nr][nc] == -1 and grid[nr][nc] != \"X\":\n                dist[nr][nc] = dist[r][c] + 1\n                q.append((nr, nc))\n    return dist[gr][gc]\n",
+    "shown_cases": [
+     [
+      [
+       "..#..",
+       "..#..",
+       "..#..",
+       "..#..",
+       "....."
+      ],
+      0,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       "......",
+       "######",
+       "......",
+       "......",
+       "......"
+      ],
+      0,
+      0,
+      4,
+      0
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".#.#.",
+       ".###.",
+       "....."
+      ],
+      0,
+      0,
+      2,
+      2
+     ]
+    ],
+    "shown_truth": [
+     12,
+     -1,
+     -1
+    ],
+    "holdout_cases": [
+     [
+      [
+       ".....",
+       ".....",
+       "..#..",
+       ".....",
+       "....."
+      ],
+      4,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       "......",
+       ".####.",
+       "......",
+       ".####.",
+       "......"
+      ],
+      0,
+      0,
+      4,
+      5
+     ],
+     [
+      [
+       "...",
+       "#..",
+       "...",
+       "..#",
+       "..."
+      ],
+      4,
+      0,
+      0,
+      2
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".....",
+       ".....",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       ".....",
+       "##.##",
+       ".....",
+       "##.##",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "#....",
+       ".....",
+       ".....",
+       "....#",
+       "....."
+      ],
+      4,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       ".....",
+       ".....",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       "#####",
+       ".....",
+       "....."
+      ],
+      4,
+      4,
+      0,
+      0
+     ],
+     [
+      [
+       "....",
+       ".##.",
+       "....",
+       "...."
+      ],
+      3,
+      0,
+      0,
+      3
+     ],
+     [
+      [
+       "....",
+       "....",
+       "....",
+       "...."
+      ],
+      0,
+      0,
+      3,
+      3
+     ],
+     [
+      [
+       "..#..",
+       "..#..",
+       ".....",
+       "..#..",
+       "..#.."
+      ],
+      0,
+      4,
+      4,
+      0
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       ".....",
+       ".....",
+       "....."
+      ],
+      2,
+      2,
+      2,
+      2
+     ],
+     [
+      [
+       "....",
+       "....",
+       ".##.",
+       "...."
+      ],
+      0,
+      3,
+      3,
+      0
+     ],
+     [
+      [
+       ".....",
+       "..#..",
+       "..#..",
+       "..#..",
+       "..#.."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "#####",
+       "#...#",
+       "#.#.#",
+       "#...#",
+       "#####"
+      ],
+      1,
+      1,
+      3,
+      3
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".#...",
+       ".###.",
+       "....."
+      ],
+      2,
+      2,
+      0,
+      0
+     ],
+     [
+      [
+       ".....",
+       "..#..",
+       ".#.#.",
+       "..#..",
+       "....."
+      ],
+      0,
+      0,
+      2,
+      2
+     ]
+    ],
+    "holdout_truth": [
+     8,
+     9,
+     6,
+     8,
+     8,
+     8,
+     8,
+     -1,
+     6,
+     6,
+     8,
+     0,
+     6,
+     8,
+     4,
+     8,
+     -1
+    ]
+   }
+  },
+  {
+   "task_id": "practice-dist_step_2-20261173833374",
+   "class": "dist_step_2",
+   "defects": [
+    "dist_step_2"
+   ],
+   "build_seed": 20261173833374,
+   "identifiability": {
+    "level": "discriminating",
+    "shown_cases": 8,
+    "buggy_shown_failures": 8,
+    "rivals_checked": 7,
+    "rivals_failing_shown": 5,
+    "rivals_not_excluded": [
+     "rival_class:wall_char_x",
+     "rival_class:walls_passable"
+    ]
+   },
+   "task": {
+    "task_id": "practice-dist_step_2-20261173833374",
+    "subset": "practice",
+    "defects": [
+     "dist_step_2"
+    ],
+    "buggy_code": "from collections import deque\n\n\ndef navigate(grid, sr, sc, gr, gc):\n    rows, cols = len(grid), len(grid[0])\n    dist = [[-1] * cols for _ in range(rows)]\n    dist[sr][sc] = 0\n    q = deque([(sr, sc)])\n    while q:\n        r, c = q.popleft()\n        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < rows and 0 <= nc < cols and dist[nr][nc] == -1 and grid[nr][nc] != \"#\":\n                dist[nr][nc] = dist[r][c] + 2\n                q.append((nr, nc))\n    return dist[gr][gc]\n",
+    "shown_cases": [
+     [
+      [
+       "....",
+       "....",
+       ".##.",
+       "...."
+      ],
+      0,
+      3,
+      3,
+      0
+     ],
+     [
+      [
+       "#....",
+       ".....",
+       ".....",
+       "....#",
+       "....."
+      ],
+      4,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       "......",
+       ".####.",
+       "......",
+       ".####.",
+       "......"
+      ],
+      0,
+      0,
+      4,
+      5
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       "..#..",
+       ".....",
+       "....."
+      ],
+      4,
+      0,
+      0,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".....",
+       ".....",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       "#####",
+       "#...#",
+       "#.#.#",
+       "#...#",
+       "#####"
+      ],
+      1,
+      1,
+      3,
+      3
+     ],
+     [
+      [
+       "....",
+       ".##.",
+       "....",
+       "...."
+      ],
+      3,
+      0,
+      0,
+      3
+     ],
+     [
+      [
+       "...",
+       "#..",
+       "...",
+       "..#",
+       "..."
+      ],
+      4,
+      0,
+      0,
+      2
+     ]
+    ],
+    "shown_truth": [
+     6,
+     8,
+     9,
+     8,
+     8,
+     4,
+     6,
+     6
+    ],
+    "holdout_cases": [
+     [
+      [
+       ".....",
+       "..#..",
+       ".#.#.",
+       "..#..",
+       "....."
+      ],
+      0,
+      0,
+      2,
+      2
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".#.#.",
+       ".###.",
+       "....."
+      ],
+      0,
+      0,
+      2,
+      2
+     ],
+     [
+      [
+       "......",
+       "######",
+       "......",
+       "......",
+       "......"
+      ],
+      0,
+      0,
+      4,
+      0
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       "#####",
+       ".....",
+       "....."
+      ],
+      4,
+      4,
+      0,
+      0
+     ],
+     [
+      [
+       ".....",
+       "##.##",
+       ".....",
+       "##.##",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       ".....",
+       "..#..",
+       "..#..",
+       "..#..",
+       "..#.."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       ".....",
+       ".....",
+       "....."
+      ],
+      0,
+      0,
+      4,
+      4
+     ],
+     [
+      [
+       ".....",
+       ".....",
+       ".....",
+       ".....",
+       "....."
+      ],
+      2,
+      2,
+      2,
+      2
+     ],
+     [
+      [
+       ".....",
+       ".###.",
+       ".#...",
+       ".###.",
+       "....."
+      ],
+      2,
+      2,
+      0,
+      0
+     ],
+     [
+      [
+       "..#..",
+       "..#..",
+       ".....",
+       "..#..",
+       "..#.."
+      ],
+      0,
+      4,
+      4,
+      0
+     ],
+     [
+      [
+       "....",
+       "....",
+       "....",
+       "...."
+      ],
+      0,
+      0,
+      3,
+      3
+     ],
+     [
+      [
+       "..#..",
+       "..#..",
+       "..#..",
+       "..#..",
+       "....."
+      ],
+      0,
+      0,
+      0,
+      4
+     ]
+    ],
+    "holdout_truth": [
+     -1,
+     -1,
+     -1,
+     -1,
+     8,
+     8,
+     8,
+     0,
+     8,
+     8,
+     6,
+     12
+    ]
+   }
+  }
+ ],
+ "totals": {
+  "classes_targeted": 6,
+  "requested": 6,
+  "built": 6,
+  "by_identifiability": {
+   "discriminating": 6
+  }
+ },
+ "demo": {
+  "wall_seconds": 0.38,
+  "build_calls": 6,
+  "inputs": [
+   "evidence/operator_discovery_v4.json",
+   "operator_catalog_v4.json (G4-materialised)"
+  ]
+ }
+}

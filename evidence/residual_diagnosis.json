@@ -1,0 +1,8 @@
+{
+ "diagnosis": "residual {member_basis, tax_basis} failure mechanism",
+ "residual_tasks": 15,
+ "shown_trap_present": "15/15 (a single-fix variant is perfect on the 2 shown cases but wrong on holdout)",
+ "beam_width4_depth4_solves": "0/15 (same shown signal, same trap)",
+ "greedy_with_4_exposing_shown_solves": "15/15 (identical greedy solver, richer signal)",
+ "conclusion": "Not a search failure and not an operator failure: a shown-set identifiability failure in the OMEGA-10 curriculum. Two shown cases cannot identify a two-defect interacting task. Fix class: shown selection must defeat partial fixes (no proper partial fix may be shown-perfect); shown size should grow with defect count."
+}
