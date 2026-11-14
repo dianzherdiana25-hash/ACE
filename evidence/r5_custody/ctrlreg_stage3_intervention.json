@@ -1,0 +1,718 @@
+{
+ "experiment": "ctrlreg-stage3-intervention-prep (PR #173 \u00a77/\u00a78)",
+ "scope": "DEVELOPMENT witnesses only (band 20261501 catalog_control-020/-021, arm B frozen catalog incl. causal 'nc' key) \u2014 NOT an official Stage 3 run; the fresh-band run awaits the Stage 3 preregistration's internal ratification",
+ "catalog_digest": "a67685635cffb2c20a1c48bedd797b34ab71e93d7325eaae734231036418ee68",
+ "nc_key": "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')",
+ "recovery_criterion": "solved = returned code passes ALL holdout cases (PR #173 \u00a78(c)); hash equality with arm A's solution is NOT the criterion",
+ "gate": {
+  "gate": "logging-invariance (PR #173 \u00a77.2)",
+  "verdict": "PASS",
+  "comparisons": [
+   {
+    "task_id": "catalog_control-020",
+    "arm": "A",
+    "modes_identical": true,
+    "stage0_anchor_ok": true,
+    "pass": true,
+    "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+    "solved": true,
+    "score_calls": 4
+   },
+   {
+    "task_id": "catalog_control-020",
+    "arm": "B",
+    "modes_identical": true,
+    "stage0_anchor_ok": true,
+    "pass": true,
+    "returned_sha256": "dcfb155f27659d3eae8732a49957c2f357e0bddc34721e6c92e6505ea06a5c09",
+    "solved": false,
+    "score_calls": 410
+   },
+   {
+    "task_id": "catalog_control-021",
+    "arm": "A",
+    "modes_identical": true,
+    "stage0_anchor_ok": true,
+    "pass": true,
+    "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+    "solved": true,
+    "score_calls": 4
+   },
+   {
+    "task_id": "catalog_control-021",
+    "arm": "B",
+    "modes_identical": true,
+    "stage0_anchor_ok": true,
+    "pass": true,
+    "returned_sha256": "6577e3eecf247df1555e9279b8057bb2ce5d882fa8de2a6fa95a0dbe3c49062b",
+    "solved": false,
+    "score_calls": 159
+   }
+  ]
+ },
+ "cells": {
+  "control": {
+   "config": {
+    "rounds": 6,
+    "frontier_width": 4
+   },
+   "cap": null,
+   "wall_seconds": 102.5,
+   "records": {
+    "catalog_control-020": {
+     "task_id": "catalog_control-020",
+     "solved": false,
+     "holdout_passes": 5,
+     "holdout_total": 12,
+     "shown_score": 4,
+     "shown_total": 8,
+     "score_calls": 410,
+     "returned_sha256": "dcfb155f27659d3eae8732a49957c2f357e0bddc34721e6c92e6505ea06a5c09",
+     "returned_is_a_solution": false,
+     "trace": [
+      [
+       "key",
+       "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+      ],
+      [
+       "baseline",
+       null
+      ],
+      [
+       "key",
+       "('name_swap', (5, 2, 3, 0, 1, 4), 'gc')"
+      ]
+     ],
+     "termination": "frontier_empty",
+     "true_path_classification": "never_generated",
+     "round_log": [
+      {
+       "round": 1,
+       "n_candidates_generated": 57,
+       "n_scored": 57,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 2,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 2,
+       "n_candidates_generated": 49,
+       "n_scored": 49,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 2,
+       "frontier_cutoff_score": 2,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 3,
+       "n_candidates_generated": 105,
+       "n_scored": 105,
+       "cap_break": false,
+       "best_score_after": 3,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 3,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 4,
+       "n_candidates_generated": 53,
+       "n_scored": 53,
+       "cap_break": false,
+       "best_score_after": 4,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 4,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 5,
+       "n_candidates_generated": 47,
+       "n_scored": 47,
+       "cap_break": false,
+       "best_score_after": 4,
+       "frontier_size": 2,
+       "frontier_cutoff_score": 4,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 6,
+       "n_candidates_generated": 98,
+       "n_scored": 98,
+       "cap_break": false,
+       "best_score_after": 4,
+       "frontier_size": 0,
+       "frontier_cutoff_score": null,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      }
+     ],
+     "timeout": false
+    },
+    "catalog_control-021": {
+     "task_id": "catalog_control-021",
+     "solved": false,
+     "holdout_passes": 3,
+     "holdout_total": 12,
+     "shown_score": 2,
+     "shown_total": 8,
+     "score_calls": 159,
+     "returned_sha256": "6577e3eecf247df1555e9279b8057bb2ce5d882fa8de2a6fa95a0dbe3c49062b",
+     "returned_is_a_solution": false,
+     "trace": [
+      [
+       "key",
+       "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+      ]
+     ],
+     "termination": "frontier_empty",
+     "true_path_classification": "never_generated",
+     "round_log": [
+      {
+       "round": 1,
+       "n_candidates_generated": 57,
+       "n_scored": 57,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 2,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 2,
+       "n_candidates_generated": 49,
+       "n_scored": 49,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 2,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 3,
+       "n_candidates_generated": 52,
+       "n_scored": 52,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 0,
+       "frontier_cutoff_score": null,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      }
+     ],
+     "timeout": false
+    }
+   }
+  },
+  "rounds_only": {
+   "config": {
+    "rounds": 12,
+    "frontier_width": 4
+   },
+   "cap": null,
+   "wall_seconds": 103.6,
+   "records": {
+    "catalog_control-020": {
+     "task_id": "catalog_control-020",
+     "solved": false,
+     "holdout_passes": 5,
+     "holdout_total": 12,
+     "shown_score": 4,
+     "shown_total": 8,
+     "score_calls": 410,
+     "returned_sha256": "dcfb155f27659d3eae8732a49957c2f357e0bddc34721e6c92e6505ea06a5c09",
+     "returned_is_a_solution": false,
+     "trace": [
+      [
+       "key",
+       "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+      ],
+      [
+       "baseline",
+       null
+      ],
+      [
+       "key",
+       "('name_swap', (5, 2, 3, 0, 1, 4), 'gc')"
+      ]
+     ],
+     "termination": "frontier_empty",
+     "true_path_classification": "never_generated",
+     "round_log": [
+      {
+       "round": 1,
+       "n_candidates_generated": 57,
+       "n_scored": 57,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 2,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 2,
+       "n_candidates_generated": 49,
+       "n_scored": 49,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 2,
+       "frontier_cutoff_score": 2,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 3,
+       "n_candidates_generated": 105,
+       "n_scored": 105,
+       "cap_break": false,
+       "best_score_after": 3,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 3,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 4,
+       "n_candidates_generated": 53,
+       "n_scored": 53,
+       "cap_break": false,
+       "best_score_after": 4,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 4,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 5,
+       "n_candidates_generated": 47,
+       "n_scored": 47,
+       "cap_break": false,
+       "best_score_after": 4,
+       "frontier_size": 2,
+       "frontier_cutoff_score": 4,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 6,
+       "n_candidates_generated": 98,
+       "n_scored": 98,
+       "cap_break": false,
+       "best_score_after": 4,
+       "frontier_size": 0,
+       "frontier_cutoff_score": null,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      }
+     ],
+     "timeout": false
+    },
+    "catalog_control-021": {
+     "task_id": "catalog_control-021",
+     "solved": false,
+     "holdout_passes": 3,
+     "holdout_total": 12,
+     "shown_score": 2,
+     "shown_total": 8,
+     "score_calls": 159,
+     "returned_sha256": "6577e3eecf247df1555e9279b8057bb2ce5d882fa8de2a6fa95a0dbe3c49062b",
+     "returned_is_a_solution": false,
+     "trace": [
+      [
+       "key",
+       "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+      ]
+     ],
+     "termination": "frontier_empty",
+     "true_path_classification": "never_generated",
+     "round_log": [
+      {
+       "round": 1,
+       "n_candidates_generated": 57,
+       "n_scored": 57,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 2,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 2,
+       "n_candidates_generated": 49,
+       "n_scored": 49,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 2,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 3,
+       "n_candidates_generated": 52,
+       "n_scored": 52,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 0,
+       "frontier_cutoff_score": null,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      }
+     ],
+     "timeout": false
+    }
+   }
+  },
+  "frontier_only": {
+   "config": {
+    "rounds": 6,
+    "frontier_width": 8
+   },
+   "cap": null,
+   "wall_seconds": 103.2,
+   "records": {
+    "catalog_control-020": {
+     "task_id": "catalog_control-020",
+     "solved": false,
+     "holdout_passes": 5,
+     "holdout_total": 12,
+     "shown_score": 4,
+     "shown_total": 8,
+     "score_calls": 410,
+     "returned_sha256": "dcfb155f27659d3eae8732a49957c2f357e0bddc34721e6c92e6505ea06a5c09",
+     "returned_is_a_solution": false,
+     "trace": [
+      [
+       "key",
+       "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+      ],
+      [
+       "baseline",
+       null
+      ],
+      [
+       "key",
+       "('name_swap', (5, 2, 3, 0, 1, 4), 'gc')"
+      ]
+     ],
+     "termination": "frontier_empty",
+     "true_path_classification": "never_generated",
+     "round_log": [
+      {
+       "round": 1,
+       "n_candidates_generated": 57,
+       "n_scored": 57,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 2,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 2,
+       "n_candidates_generated": 49,
+       "n_scored": 49,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 2,
+       "frontier_cutoff_score": 2,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 3,
+       "n_candidates_generated": 105,
+       "n_scored": 105,
+       "cap_break": false,
+       "best_score_after": 3,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 3,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 4,
+       "n_candidates_generated": 53,
+       "n_scored": 53,
+       "cap_break": false,
+       "best_score_after": 4,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 4,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 5,
+       "n_candidates_generated": 47,
+       "n_scored": 47,
+       "cap_break": false,
+       "best_score_after": 4,
+       "frontier_size": 2,
+       "frontier_cutoff_score": 4,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 6,
+       "n_candidates_generated": 98,
+       "n_scored": 98,
+       "cap_break": false,
+       "best_score_after": 4,
+       "frontier_size": 0,
+       "frontier_cutoff_score": null,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      }
+     ],
+     "timeout": false
+    },
+    "catalog_control-021": {
+     "task_id": "catalog_control-021",
+     "solved": false,
+     "holdout_passes": 3,
+     "holdout_total": 12,
+     "shown_score": 2,
+     "shown_total": 8,
+     "score_calls": 159,
+     "returned_sha256": "6577e3eecf247df1555e9279b8057bb2ce5d882fa8de2a6fa95a0dbe3c49062b",
+     "returned_is_a_solution": false,
+     "trace": [
+      [
+       "key",
+       "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')"
+      ]
+     ],
+     "termination": "frontier_empty",
+     "true_path_classification": "never_generated",
+     "round_log": [
+      {
+       "round": 1,
+       "n_candidates_generated": 57,
+       "n_scored": 57,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 2,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 2,
+       "n_candidates_generated": 49,
+       "n_scored": 49,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 1,
+       "frontier_cutoff_score": 2,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      },
+      {
+       "round": 3,
+       "n_candidates_generated": 52,
+       "n_scored": 52,
+       "cap_break": false,
+       "best_score_after": 2,
+       "frontier_size": 0,
+       "frontier_cutoff_score": null,
+       "true_path": {
+        "generated": false,
+        "scored": false,
+        "rank": null,
+        "score": null,
+        "in_frontier": false,
+        "is_best": false
+       }
+      }
+     ],
+     "timeout": false
+    }
+   }
+  }
+ },
+ "comparison_valid_per_section8d": true,
+ "summary": {
+  "catalog_control-020": {
+   "control_solved": false,
+   "rounds_only_solved": false,
+   "frontier_only_solved": false,
+   "rounds_only_recovers": false,
+   "frontier_only_recovers": false
+  },
+  "catalog_control-021": {
+   "control_solved": false,
+   "rounds_only_solved": false,
+   "frontier_only_solved": false,
+   "rounds_only_recovers": false,
+   "frontier_only_recovers": false
+  }
+ },
+ "verdict": "COMPARISON_VALID"
+}

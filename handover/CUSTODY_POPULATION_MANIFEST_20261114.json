@@ -1,0 +1,492 @@
+{
+ "manifest": "CUSTODY POPULATION \u2014 frozen sha256 manifest (Ian, 2026-11-14)",
+ "source_root": "~/workspace/ace-omega",
+ "target": "/workspace/ace-custody-lineage-guard (sandbox, ubuntu:ubuntu 0700)",
+ "requirements_doc": "handover/CUSTODY_REQUIREMENTS_LINEAGE_GUARD_20261114.md",
+ "file_count": 80,
+ "total_bytes": 1049673,
+ "tree_digest_sha256": "c02221775c2b81117effb93b204cccd0aaaa930e166e4a9c3883cf1d233fc6c2",
+ "files": [
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/__init__.py",
+   "bytes": 1154,
+   "sha256": "57f40558ac50251615e4d89e82ac7afe921a3545a12e99114f89dff97a244fc7"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/abc_v3_scorer.py",
+   "bytes": 10200,
+   "sha256": "c6ca3421eca3ff4f086b324820ad5168a57cea645ff83bfa922f95b47fd3b6c1"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/attested_server.py",
+   "bytes": 7895,
+   "sha256": "e1805b5b47c27d1bb6bc78c8c9ddbe8be623a984df82ccf25a29795840c336f1"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/autonomous_engine.py",
+   "bytes": 28893,
+   "sha256": "2dd722dffa7b7ec257c5472634721e47534b9cfdb3fb5b11ee7a15d3ae29709c"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/autonomy_loop.py",
+   "bytes": 64325,
+   "sha256": "ad52262b46c8405777b98fbd6d4a2ea0fb01a0b459be3d032146f60aca13449b"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/brain_registry.py",
+   "bytes": 4370,
+   "sha256": "9848fe52dcfeeb5bafa725b2e661a85bc85d16580522c42c03a368e4c1dc649d"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/coding_loop.py",
+   "bytes": 67120,
+   "sha256": "4cf075edd26e82fff6a3c689a2b18d3dfa13b51043d889f13ec1275d60c52716"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/cognitive_memory.py",
+   "bytes": 15970,
+   "sha256": "77fe211d9823c34005cb5c75736ef9f35de55a06430b48b148f1e208db8541a6"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/curriculum_lab.py",
+   "bytes": 28609,
+   "sha256": "22304a45705bfef6eff675a38ca2d35836e5e96c871dfbd84aaf61eaeb16775c"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/director_loop.py",
+   "bytes": 10405,
+   "sha256": "568ffa27c74a64b0d5dad1e8649e6fd0e66629f3bce3828c78a3138a6297dfc8"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/experiment_kernel.py",
+   "bytes": 17175,
+   "sha256": "34c41aaf6d3719279564cc615e25751d47de1e6bf6a003c9a3ec06a3d4fdfbe2"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/g1_assessment_v2.json",
+   "bytes": 1084,
+   "sha256": "d824450c3b95e57221c3abd598930b26056b98878467d5c36c2ca94a1909402a"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/g1_instrument.py",
+   "bytes": 8267,
+   "sha256": "7665c05e652cbbec8b3fef7ac5e2c2833d30dd8513f744407c5a959f186857ba"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/grid_adapter.py",
+   "bytes": 1320,
+   "sha256": "d7803d0c6bac99deed50a063fa304e41acf455062ec4a7cf123e333dd38802f7"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/grid_generalization.py",
+   "bytes": 15578,
+   "sha256": "b4f28baa701759537f7c7783c87000c2b91e87b54c100bdeb0585dd19665fdf3"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/grid_substrate.py",
+   "bytes": 9157,
+   "sha256": "56fcafbd2afcbe00bed86aa4b6f4126dab8936f4408060fb5953fbebdf28ccb6"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/language.py",
+   "bytes": 45559,
+   "sha256": "b0244740f69902a5496b30ed8e821a80dc38524a57b55ec449dd877dc1c51726"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/local_repo_workflow.py",
+   "bytes": 23258,
+   "sha256": "5ff82ef0d1f87dafe010e8375bc24ad40f33e76048c900dcdc0ed75fe435d6cb"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/local_sandbox.py",
+   "bytes": 16042,
+   "sha256": "6f047da8bfa347ae1803ca416a2c2daadb32a9cebbe12fe12c5fcd6c9f489ddd"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/local_sandbox_v2.py",
+   "bytes": 16219,
+   "sha256": "986ba66727254632bf2fc57519e3dab2ba39afecf6b1ff2cfd884e33a172be67"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/massive_skills_expansion.py",
+   "bytes": 10127,
+   "sha256": "ccf6754ce4cd0a097dc9dc2ef6e10f83fd5b502a911e5101b32b0917edc42470"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/models_backend.py",
+   "bytes": 42943,
+   "sha256": "4d3e4593282e39004b632ab2e4512045bc220a5a6f102c90079ef06a7a8f9db2"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/mutation_engine.py",
+   "bytes": 11721,
+   "sha256": "e20174ada6c2cd2eac54950fa0d40c4a31599c1cff45142a08961a5c8ee1c114"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/operator_discovery.py",
+   "bytes": 32714,
+   "sha256": "c64a1cdcdc9bf779a8156d432d604f507386e74ace93e720414c29591c2a64d9"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/pilot_abc.py",
+   "bytes": 19956,
+   "sha256": "692cf135558526a8932d09837f3a76d63cf3458ac4b150339bf5faf40524cc14"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/population_archive.py",
+   "bytes": 17673,
+   "sha256": "601cb9c286ce6222959e391c1acabd8eb33f751810e9a17aa2198aab3cfb110b"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/pricing_adapter.py",
+   "bytes": 3783,
+   "sha256": "0f19ff1cbf40c2f0f255f0bc77dcaecd39a0f2fb929e5b1237bb6018e098e72b"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/pricing_substrate.py",
+   "bytes": 7795,
+   "sha256": "791fd77f6e33c53a9c0e7520d2c43f0fe00434d40ce44ed9ca17411b692e7292"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/reasoning_lab.py",
+   "bytes": 14798,
+   "sha256": "17e065bbc29be270631425c10a12ef9608c1c72325e08da9233c42dc6085fc46"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/resume_drill.json",
+   "bytes": 476,
+   "sha256": "0612d703bdfdc89d9d7caccc2e1dd8592cce3e14ffce4d930cc1205f3a4715b3"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/self_evolution_engine.py",
+   "bytes": 11178,
+   "sha256": "91f88a83ea16f157a6c687ed23e95508a5abe648aeaa9125a73a3cfdf017cb23"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/software_factory.py",
+   "bytes": 10883,
+   "sha256": "c273a8bc874a31f84b7e67addbdfe50e4f5e14049cf88fab8a2df6af1fb7fe85"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/store.py",
+   "bytes": 77335,
+   "sha256": "5e44c9c3dfa5123bf83284ba6410d3827a276474b671439d6bdb24050c2b043c"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/story_projector.py",
+   "bytes": 9202,
+   "sha256": "1978256ff5fad989665acc9a11bd147b2e73011bfdf13a79b3e4d633a7385499"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/terminal_chart_visualizer.py",
+   "bytes": 5029,
+   "sha256": "a9531585967b069026303b2fd7a626ea827a9e32f62ba9f2a3c8bcbe3750b9c3"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_abc_v3_scorer.py",
+   "bytes": 7273,
+   "sha256": "f0567893f299cd0d7ef769b8fc0bed6142f69318fa54fbb030c006073ce08861"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_attested_server.py",
+   "bytes": 6308,
+   "sha256": "14fb0de53739c163f35ce51a01a808e9312b5505ed096b54f00ec11436237590"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_brain_registry.py",
+   "bytes": 3882,
+   "sha256": "51134ea3240caef1d012d7ec3cc0f6910b3e7cb63c5bf1bf766f8ee55df13700"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_cognitive_memory.py",
+   "bytes": 10158,
+   "sha256": "961e5827f261cf80ae6bf858cfb97979872c654d9e75dc2c8f45b478b2fb8ecf"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_curriculum_lab.py",
+   "bytes": 10670,
+   "sha256": "693afc483723fe791bf614d1ef31ab177449ad80d30bc3df2fc54f2c4eec6a8b"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_director_loop.py",
+   "bytes": 5259,
+   "sha256": "0c64a289af9a7b60f2b435b31c6a263df57ef8b565ba0cb645df7806f5c729f0"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_edition4_acceptance.py",
+   "bytes": 41356,
+   "sha256": "038e952641a512e745a6bb180d91ded0c465bb10ae28282657c70253882c0e9d"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_experiment_kernel.py",
+   "bytes": 11845,
+   "sha256": "6e68473bd4dbf82d1a74f517cceb748e5e7500c00c05fb676cbc41d7fc054419"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_g1_instrument.py",
+   "bytes": 5173,
+   "sha256": "d2439e6a41fb739fd325314262c1abd4ffa316653793ff9bc1c92fe09b958a6b"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_gguf_integrity.py",
+   "bytes": 7870,
+   "sha256": "2a239ab771cf1223db6a8006dab62c5199945d9aa741ef930a89508ff503101a"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_grid_generalization.py",
+   "bytes": 3319,
+   "sha256": "edd05dc30996fb5aa0e4f579e6ca9ba6032851873dc9373ef63fd5f874f61d33"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_grid_substrate.py",
+   "bytes": 1973,
+   "sha256": "7b4207d10f15b379d885240800b193264ad9ef4f624677fe7cab6901d5261511"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_hybrid_routing.py",
+   "bytes": 2754,
+   "sha256": "37c2cae2dae5a925fefd5c78d1f4bfa6c82a0981a9ac3acb8023d8e6c1137e9f"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_local_repo_workflow.py",
+   "bytes": 10015,
+   "sha256": "e181b60ac3a28e7675a2c7333f333c677756821244326367fb14521dcbca101c"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_local_sandbox.py",
+   "bytes": 5269,
+   "sha256": "e61e7ec57e9defb354fac1d4baed2d8d5ee6aa148434c8cc39b5ec1245c73ca7"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_local_sandbox_v2.py",
+   "bytes": 4046,
+   "sha256": "1a3f6a4594f3d0fdcd4b3154f213b30764f3d5b27fbc26580e184d4686825e1f"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_massive_skills_expansion.py",
+   "bytes": 2300,
+   "sha256": "11771f8cc15cbd6166ba56d46ef90d11d2fd92185a5ccb9f22cd25fbb255d614"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_mutation_engine.py",
+   "bytes": 6848,
+   "sha256": "61731dfcbb4d35cb37e2a339b5ec29d9d9d65ff780ba50bb6acd086deacf45b4"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_operator_discovery.py",
+   "bytes": 6258,
+   "sha256": "14bcf31a5d8e6d09badfa11becff6d5034af31dd16d1ba8e1e397463c78e5d77"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_pilot_abc.py",
+   "bytes": 5606,
+   "sha256": "5080ca8e8a86fcbbea75c6b38006505b6a7f57ef6b0ebe8b08cbd4db518dc785"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_population_archive.py",
+   "bytes": 10205,
+   "sha256": "51bd411e62a87036e3eb771b707f4267577a54d34f99022aaab0a3a4c92993cd"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_pricing_adapter.py",
+   "bytes": 2892,
+   "sha256": "f61deedce96bab1c4734b1eaf0db5e9f5c5e18502987f05ffbacea9b9f17deda"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_pricing_substrate.py",
+   "bytes": 2129,
+   "sha256": "6998eb963e59ffe0416e8829232247b948d14ea2327ef1df336b5e6054ca3043"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_reasoning_lab.py",
+   "bytes": 4721,
+   "sha256": "b9b89868aa1772cae9af0520e191ad508ccc8b4e61d646c5da33a4a72a953fd2"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_self_evolution_engine.py",
+   "bytes": 6155,
+   "sha256": "ab5cca53e2e4e75dc23006f0486663e10993ab126fa1978d3da323ea5f15c402"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_software_factory.py",
+   "bytes": 4054,
+   "sha256": "1c928e5b4cf0561643f4f8a3e4452f43e400b5df5b5cc85359163f497b164d6c"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_solve_task.py",
+   "bytes": 4354,
+   "sha256": "bf882b837de78453cc0fa2c76c17db7c718b0adbf46232270ffb2a98ec382082"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_terminal_chart_visualizer.py",
+   "bytes": 2341,
+   "sha256": "e777ee547b58121c4f657a45e3aa53bf4ee81d3f0a3d66d1c234a396476d4adf"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/test_truthful_inference.py",
+   "bytes": 16857,
+   "sha256": "053a15818b0beaf398acaf010c2e4a9a35b86e580fcdd497712b49a19234f8f5"
+  },
+  {
+   "class": "R1",
+   "path": "wt-abcv3/code/ace_operational/web_server.py",
+   "bytes": 45073,
+   "sha256": "e087c357dc091a49ec56ad2634f89953b2ffa80ba216b34879092acf2bf7b471"
+  },
+  {
+   "class": "R1",
+   "path": "abc_v3_run.py",
+   "bytes": 16985,
+   "sha256": "e426249a65329f1b1f9eb9e5e367b230bcdff7f984a5f7b9eab0b345591d675c"
+  },
+  {
+   "class": "R1",
+   "path": "stage3_run/harness_ext.py",
+   "bytes": 22919,
+   "sha256": "99831ca5b32ed9d0b1959258d077907ce5e0caf9479e99dc221a3c5ba8b6bdb4"
+  },
+  {
+   "class": "R1",
+   "path": "stage3_run/stage3_official.py",
+   "bytes": 16027,
+   "sha256": "1b5fb5e8e02f70fba325067ce38901a729673ad7c7610c9da4b89438fd0054b4"
+  },
+  {
+   "class": "R2",
+   "path": "abc-v3-run-state/discovery_20261501.json",
+   "bytes": 4278,
+   "sha256": "9d398f639eaf2fc6367401b7d6f978bc4c8d732c1006e83d541130f5571aead5"
+  },
+  {
+   "class": "R2",
+   "path": "regression_anchor.py",
+   "bytes": 17386,
+   "sha256": "a0d65615c20df0bab3de2239b1a3bd72e028fc877b4f827156d311b7a656b31f"
+  },
+  {
+   "class": "R2",
+   "path": "evidence/regression_anchor_selftest-identical.json",
+   "bytes": 2692,
+   "sha256": "4de0f72b7be34885540f1c91bb81243516eef86af4bf2be9e4693c4fa300aa10"
+  },
+  {
+   "class": "R2",
+   "path": "evidence/regression_anchor_selftest-empty.json",
+   "bytes": 2420,
+   "sha256": "f692ca53c47d128cc456094dee3f65abccdf40905fef8f2b5c1ec4020ccf28a4"
+  },
+  {
+   "class": "R2",
+   "path": "evidence/regression_anchor_inoculation-wiring-demo.json",
+   "bytes": 2795,
+   "sha256": "89c2e8c369b57f3ed048bd9bf4b19c92c303d0a36ca5a0f4c7738d44449bc71d"
+  },
+  {
+   "class": "R2",
+   "path": "evidence/distractor_inoculation_demo.json",
+   "bytes": 959,
+   "sha256": "6d71c30f6bb680aaf7af82ecd724f31111ec63965d3ec0a4bbd0e7b30d468507"
+  },
+  {
+   "class": "R2",
+   "path": "evidence/ctrlreg_stage0_replay.json",
+   "bytes": 1150,
+   "sha256": "8aa1ea8ba689381a648c1a0d2b6a323ecc8564c62c705aa397b04e2c15d827a0"
+  },
+  {
+   "class": "R2",
+   "path": "evidence/ctrlreg_stage1_counterfactual.json",
+   "bytes": 14264,
+   "sha256": "ab974eb09ca9512a303db4893b1042454d74dfd25865484a745dc4a4081482e9"
+  },
+  {
+   "class": "R2",
+   "path": "evidence/ctrlreg_stage2_dose.json",
+   "bytes": 1921,
+   "sha256": "18c496736641d8df5e1077d0ae3e8fd3d32ff82b9d2b7fed7b7488ccb37fab8c"
+  },
+  {
+   "class": "R2",
+   "path": "stage3_run/ctrlreg_stage3_intervention.json",
+   "bytes": 17495,
+   "sha256": "3563b523878cfacb05a5ba7111ab4d3b5edc8825a945c2ac130a20b9c6ac019b"
+  },
+  {
+   "class": "R2",
+   "path": "stage3_run/dev_regate_verdict.json",
+   "bytes": 2105,
+   "sha256": "bbe1a4121bd9a84077c1c548d6c133094bf2f625e78530c3428751bee2f30768"
+  },
+  {
+   "class": "R2",
+   "path": "stage3_run/provenance_demo.json",
+   "bytes": 1101,
+   "sha256": "17a810465ae39e99566e8b6f3e3644ef80221f6ea3ec2252140f7491f5a69daf"
+  }
+ ],
+ "tree_digest_method": "sha256 over the UTF-8 concatenation, in the 'files' array order, of one line per file: '<sha256>  <path>\\n' (two spaces between hash and path, newline-terminated). Verify: recompute each file's sha256 from its bytes, rebuild the concatenation from the manifest's own entries, hash it, compare with tree_digest_sha256."
+}

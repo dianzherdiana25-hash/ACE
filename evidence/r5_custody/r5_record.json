@@ -1,0 +1,56 @@
+{
+ "record": "R5 \u2014 Ian verification from inside the sandbox custody (D402 door)",
+ "date_local": "2026-11-14",
+ "host": "2887726280f4",
+ "custody": "/workspace/ace-custody-lineage-guard",
+ "python": "3.12.3",
+ "step1_hash_in_place": {
+  "checked": 80,
+  "problems": [],
+  "total_bytes": 1049673,
+  "tree_digest": "c02221775c2b81117effb93b204cccd0aaaa930e166e4a9c3883cf1d233fc6c2",
+  "digest_match": true,
+  "extras": [],
+  "rerun_after_all_work": "identical \u2014 population pristine"
+ },
+ "step2_import_isolation": {
+  "all_under_custody": true,
+  "modules": {
+   "abc_v3_run": "/workspace/ace-custody-lineage-guard/abc_v3_run.py",
+   "ace_operational.grid_adapter": "/workspace/ace-custody-lineage-guard/wt-abcv3/code/ace_operational/grid_adapter.py",
+   "ace_operational.grid_generalization": "/workspace/ace-custody-lineage-guard/wt-abcv3/code/ace_operational/grid_generalization.py",
+   "ace_operational.operator_discovery": "/workspace/ace-custody-lineage-guard/wt-abcv3/code/ace_operational/operator_discovery.py"
+  },
+  "note": "one inert sys.path entry /home/hatch/workspace/ace-omega/wt-abcv3/code (driver-inserted; path does not exist on this host; no module resolved from it)"
+ },
+ "step3_regate_in_scratch": {
+  "scratch": "/workspace/r5-ian/scratch",
+  "gate": "PASS 4/4 (stock==param_nolog==param_log identical; Stage 0 anchors reproduced, both tasks x both arms)",
+  "control_uncapped": {
+   "catalog_control-020": {
+    "solved": false,
+    "score_calls": 410,
+    "tp": "never_generated"
+   },
+   "catalog_control-021": {
+    "solved": false,
+    "score_calls": 159,
+    "tp": "never_generated"
+   }
+  },
+  "rounds_only": "identical 410/159, both unsolved",
+  "frontier_only": "identical 410/159, both unsolved",
+  "verdict": "COMPARISON_VALID",
+  "evidence": "scratch/stage3_run/ctrlreg_stage3_intervention.json + ctrlreg_stage3_state/{gate,cell_control,cell_rounds_only,cell_frontier_only}.json + /workspace/r5-ian/regate.log"
+ },
+ "step4_timing_probe": {
+  "band": 20261601,
+  "seconds": 1317.63,
+  "n_keys": 6,
+  "n_chains": 1,
+  "catalog_digest": "e5c7875d5e742bc4ca317569afa6a4b7a88f9aa0ea706ee99675d0d8c2d9a09c",
+  "digest_match": true,
+  "caveat": "measured through the MCP door inside sandbox-mcp.service's ~1-CPU cgroup (load from other tenants present); the SSH door sits outside that cgroup, so this is a door-bound number, not a host-bound one"
+ },
+ "verdict": "R5 PASS \u2014 all four steps"
+}
