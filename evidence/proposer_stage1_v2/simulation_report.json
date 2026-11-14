@@ -1,0 +1,484 @@
+{
+ "schema": "ace.proposer_stage1_v2_report.v1",
+ "brain": "Qwen3.5-4B-Q4_K_M.gguf (llama-server b12316, -t 4, -c 8192, --reasoning off, temp 0.0, repeat_penalty 1.08, seed 42, max_tokens 1300)",
+ "schema_digest": "096bef9b674c137b37ba482c55e139c5f9963b1d1d143e37729ab58a78fe055c",
+ "prior_verdict_ref": "handover/PROPOSER_STAGE1_EXIT_GATE_VERDICT_20261114.md (Stage 1 v1 Qwen3-30B-A3B NOT_PASSED: 0/6, mean_diff=-91.67, wall=751s/ep)",
+ "grammar_only": {
+  "simulation": "proposer_stage1_v2",
+  "arm": "grammar_only",
+  "review_type": "SIMULATION - no proposal was dispatched or executed",
+  "schema_digest": "096bef9b674c137b37ba482c55e139c5f9963b1d1d143e37729ab58a78fe055c",
+  "episodes": [
+   {
+    "episode_id": "EP1-G3-APPLICATION",
+    "generation_sha256": "d3a0a2732908fac229bf2fe2543e1596ebc185c54c55b521b2c4bf8ded3274ea",
+    "generation_wall_seconds": 191.42,
+    "validator_accepted": true,
+    "validator_reasons": [],
+    "proposer_score": 100.0,
+    "proposer_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "historical_score": 100.0,
+    "historical_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "diff": 0.0,
+    "outcome_revealed_after_scoring": "SPECIALIZATION: grid +75.0pp on pure evaluation singles, pricing delta 0 (boundary prediction confirmed), composite g3_composite_index_pp = -10.0, kernel verdict fail on the transfer conjunction, audit CLEAN, walls 2126.5 s of 2700 s budget."
+   },
+   {
+    "episode_id": "EP2-ABC-V3",
+    "generation_sha256": "cd2ce6940c294d8b116a6400e7bb3aac23a577f21d03ea0db76833c4b0a3069a",
+    "generation_wall_seconds": 178.69,
+    "validator_accepted": true,
+    "validator_reasons": [],
+    "proposer_score": 100.0,
+    "proposer_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "historical_score": 100.0,
+    "historical_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "diff": 0.0,
+    "outcome_revealed_after_scoring": "NOT_DEMONSTRATED: pooled DI = -1.98pp; evaluation A 0/90, B 90/90, C 90/90; controls A 101/101, B 99/101, C 99/101 - the control margin was the sole binding term (band 20261501). G2 board: MEASURED NOT_DEMONSTRATED (third measured null)."
+   },
+   {
+    "episode_id": "EP3-ROUND2-GATE",
+    "generation_sha256": "7d8276f6ab7436980bda0f078b92227244b9c5633f713808a3d979701fdf2cd0",
+    "generation_wall_seconds": 199.59,
+    "validator_accepted": true,
+    "validator_reasons": [],
+    "proposer_score": 100.0,
+    "proposer_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "historical_score": 100.0,
+    "historical_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "diff": 0.0,
+    "outcome_revealed_after_scoring": "LIFT_DEMONSTRATED: round2_index = 0.0 exactly on the pass threshold; B_disc 100.0%, capture 1.0, control margin 0.0pp; all three replication guards passed; verifier TAHAN 6/6."
+   },
+   {
+    "episode_id": "EP4-CONTROL-REGRESSION-ATTRIBUTION",
+    "generation_sha256": "17b56ae2e62d6384b728a4e04eceedb4355cb75fae5d5e6a34cbaa3d7c4e6846",
+    "generation_wall_seconds": 219.84,
+    "validator_accepted": true,
+    "validator_reasons": [],
+    "proposer_score": 95.0,
+    "proposer_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 10.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "historical_score": 90.0,
+    "historical_breakdown": {
+     "claim_testability": 10.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "diff": 5.0,
+    "outcome_revealed_after_scoring": "Attribution CONFIRMED: single-key distractor diversion by the 'nc' key for both witness tasks (removal restores 020 at 260 calls and 021 at 258 calls; 'gc' removal restores neither); 8/8 key-order permutations reproduce the failures with byte-identical scored-variant multisets (M3 inert)."
+   },
+   {
+    "episode_id": "EP5-G4-INHERITANCE",
+    "generation_sha256": "892748fc60033b4602b9439460da357d859e51e7f0bb995752dcb2657074148f",
+    "generation_wall_seconds": 218.68,
+    "validator_accepted": true,
+    "validator_reasons": [],
+    "proposer_score": 100.0,
+    "proposer_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "historical_score": 80.0,
+    "historical_breakdown": {
+     "claim_testability": 0.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "diff": 20.0,
+    "outcome_revealed_after_scoring": "INHERITANCE_DEMONSTRATED: gate board moved to G4 MEASURED - INHERITANCE_DEMONSTRATED."
+   },
+   {
+    "episode_id": "EP6-PER-TASK-RECORDING",
+    "generation_sha256": "985d062c664a2020680cf4b66196d68b94fecea8fc4cddfcac49d7c9b3aa52ef",
+    "generation_wall_seconds": 202.77,
+    "validator_accepted": true,
+    "validator_reasons": [],
+    "proposer_score": 100.0,
+    "proposer_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "historical_score": 80.0,
+    "historical_breakdown": {
+     "claim_testability": 0.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "diff": 20.0,
+    "outcome_revealed_after_scoring": "ADOPTED as a named milestone candidate (hub act pending at record time); build assigned to Ian's desk in the main chat."
+   }
+  ],
+  "mean_diff": 7.5,
+  "bootstrap_ci_lower_95": 0.8333333333333334,
+  "noninferiority_margin": -10.0,
+  "ci_lower_floor": -20.0,
+  "quality_clause": "PASS",
+  "time_clause": "NOT_ASSESSABLE - no historical drafting-time baseline exists in the official record",
+  "exit_gate_verdict": "PARTIAL",
+  "walls_mean_seconds": 201.83166666666668
+ },
+ "grammar_plus_1_repair": {
+  "simulation": "proposer_stage1_v2",
+  "arm": "grammar_plus_1_repair",
+  "review_type": "SIMULATION - no proposal was dispatched or executed",
+  "schema_digest": "096bef9b674c137b37ba482c55e139c5f9963b1d1d143e37729ab58a78fe055c",
+  "episodes": [
+   {
+    "episode_id": "EP1-G3-APPLICATION",
+    "generation_sha256": "d3a0a2732908fac229bf2fe2543e1596ebc185c54c55b521b2c4bf8ded3274ea",
+    "generation_wall_seconds": 191.42,
+    "validator_accepted": true,
+    "validator_reasons": [],
+    "proposer_score": 100.0,
+    "proposer_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "historical_score": 100.0,
+    "historical_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "diff": 0.0,
+    "outcome_revealed_after_scoring": "SPECIALIZATION: grid +75.0pp on pure evaluation singles, pricing delta 0 (boundary prediction confirmed), composite g3_composite_index_pp = -10.0, kernel verdict fail on the transfer conjunction, audit CLEAN, walls 2126.5 s of 2700 s budget."
+   },
+   {
+    "episode_id": "EP2-ABC-V3",
+    "generation_sha256": "cd2ce6940c294d8b116a6400e7bb3aac23a577f21d03ea0db76833c4b0a3069a",
+    "generation_wall_seconds": 178.69,
+    "validator_accepted": true,
+    "validator_reasons": [],
+    "proposer_score": 100.0,
+    "proposer_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "historical_score": 100.0,
+    "historical_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "diff": 0.0,
+    "outcome_revealed_after_scoring": "NOT_DEMONSTRATED: pooled DI = -1.98pp; evaluation A 0/90, B 90/90, C 90/90; controls A 101/101, B 99/101, C 99/101 - the control margin was the sole binding term (band 20261501). G2 board: MEASURED NOT_DEMONSTRATED (third measured null)."
+   },
+   {
+    "episode_id": "EP3-ROUND2-GATE",
+    "generation_sha256": "7d8276f6ab7436980bda0f078b92227244b9c5633f713808a3d979701fdf2cd0",
+    "generation_wall_seconds": 199.59,
+    "validator_accepted": true,
+    "validator_reasons": [],
+    "proposer_score": 100.0,
+    "proposer_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "historical_score": 100.0,
+    "historical_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "diff": 0.0,
+    "outcome_revealed_after_scoring": "LIFT_DEMONSTRATED: round2_index = 0.0 exactly on the pass threshold; B_disc 100.0%, capture 1.0, control margin 0.0pp; all three replication guards passed; verifier TAHAN 6/6."
+   },
+   {
+    "episode_id": "EP4-CONTROL-REGRESSION-ATTRIBUTION",
+    "generation_sha256": "17b56ae2e62d6384b728a4e04eceedb4355cb75fae5d5e6a34cbaa3d7c4e6846",
+    "generation_wall_seconds": 219.84,
+    "validator_accepted": true,
+    "validator_reasons": [],
+    "proposer_score": 95.0,
+    "proposer_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 10.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "historical_score": 90.0,
+    "historical_breakdown": {
+     "claim_testability": 10.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "diff": 5.0,
+    "outcome_revealed_after_scoring": "Attribution CONFIRMED: single-key distractor diversion by the 'nc' key for both witness tasks (removal restores 020 at 260 calls and 021 at 258 calls; 'gc' removal restores neither); 8/8 key-order permutations reproduce the failures with byte-identical scored-variant multisets (M3 inert)."
+   },
+   {
+    "episode_id": "EP5-G4-INHERITANCE",
+    "generation_sha256": "892748fc60033b4602b9439460da357d859e51e7f0bb995752dcb2657074148f",
+    "generation_wall_seconds": 218.68,
+    "validator_accepted": true,
+    "validator_reasons": [],
+    "proposer_score": 100.0,
+    "proposer_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "historical_score": 80.0,
+    "historical_breakdown": {
+     "claim_testability": 0.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "diff": 20.0,
+    "outcome_revealed_after_scoring": "INHERITANCE_DEMONSTRATED: gate board moved to G4 MEASURED - INHERITANCE_DEMONSTRATED."
+   },
+   {
+    "episode_id": "EP6-PER-TASK-RECORDING",
+    "generation_sha256": "985d062c664a2020680cf4b66196d68b94fecea8fc4cddfcac49d7c9b3aa52ef",
+    "generation_wall_seconds": 202.77,
+    "validator_accepted": true,
+    "validator_reasons": [],
+    "proposer_score": 100.0,
+    "proposer_breakdown": {
+     "claim_testability": 20.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "historical_score": 80.0,
+    "historical_breakdown": {
+     "claim_testability": 0.0,
+     "evidence_grounding": 20.0,
+     "cost_realism": 20.0,
+     "risk_honesty": 15.0,
+     "stop_controls": 15.0,
+     "option_coverage": 10.0
+    },
+    "diff": 20.0,
+    "outcome_revealed_after_scoring": "ADOPTED as a named milestone candidate (hub act pending at record time); build assigned to Ian's desk in the main chat."
+   }
+  ],
+  "mean_diff": 7.5,
+  "bootstrap_ci_lower_95": 0.8333333333333334,
+  "noninferiority_margin": -10.0,
+  "ci_lower_floor": -20.0,
+  "quality_clause": "PASS",
+  "time_clause": "NOT_ASSESSABLE - no historical drafting-time baseline exists in the official record",
+  "exit_gate_verdict": "PARTIAL",
+  "walls_mean_seconds": 201.83166666666668
+ },
+ "run_trace": [
+  {
+   "episode_id": "EP1-G3-APPLICATION",
+   "attempt0_wall": 191.42,
+   "attempt0_ok": true,
+   "attempt0_reasons": [],
+   "attempt0_sha256": "d3a0a2732908fac229bf2fe2543e1596ebc185c54c55b521b2c4bf8ded3274ea",
+   "repaired": false,
+   "final_wall": 191.42,
+   "final_ok": true,
+   "final_reasons": [],
+   "final_sha256": "d3a0a2732908fac229bf2fe2543e1596ebc185c54c55b521b2c4bf8ded3274ea",
+   "attempt0_usage": {
+    "completion_tokens": 648,
+    "prompt_tokens": 988,
+    "total_tokens": 1636,
+    "prompt_tokens_details": {
+     "cached_tokens": 0
+    }
+   }
+  },
+  {
+   "episode_id": "EP2-ABC-V3",
+   "attempt0_wall": 178.69,
+   "attempt0_ok": true,
+   "attempt0_reasons": [],
+   "attempt0_sha256": "cd2ce6940c294d8b116a6400e7bb3aac23a577f21d03ea0db76833c4b0a3069a",
+   "repaired": false,
+   "final_wall": 178.69,
+   "final_ok": true,
+   "final_reasons": [],
+   "final_sha256": "cd2ce6940c294d8b116a6400e7bb3aac23a577f21d03ea0db76833c4b0a3069a",
+   "attempt0_usage": {
+    "completion_tokens": 593,
+    "prompt_tokens": 998,
+    "total_tokens": 1591,
+    "prompt_tokens_details": {
+     "cached_tokens": 93
+    }
+   }
+  },
+  {
+   "episode_id": "EP3-ROUND2-GATE",
+   "attempt0_wall": 199.59,
+   "attempt0_ok": true,
+   "attempt0_reasons": [],
+   "attempt0_sha256": "7d8276f6ab7436980bda0f078b92227244b9c5633f713808a3d979701fdf2cd0",
+   "repaired": false,
+   "final_wall": 199.59,
+   "final_ok": true,
+   "final_reasons": [],
+   "final_sha256": "7d8276f6ab7436980bda0f078b92227244b9c5633f713808a3d979701fdf2cd0",
+   "attempt0_usage": {
+    "completion_tokens": 675,
+    "prompt_tokens": 1028,
+    "total_tokens": 1703,
+    "prompt_tokens_details": {
+     "cached_tokens": 93
+    }
+   }
+  },
+  {
+   "episode_id": "EP4-CONTROL-REGRESSION-ATTRIBUTION",
+   "attempt0_wall": 219.84,
+   "attempt0_ok": true,
+   "attempt0_reasons": [],
+   "attempt0_sha256": "17b56ae2e62d6384b728a4e04eceedb4355cb75fae5d5e6a34cbaa3d7c4e6846",
+   "repaired": false,
+   "final_wall": 219.84,
+   "final_ok": true,
+   "final_reasons": [],
+   "final_sha256": "17b56ae2e62d6384b728a4e04eceedb4355cb75fae5d5e6a34cbaa3d7c4e6846",
+   "attempt0_usage": {
+    "completion_tokens": 741,
+    "prompt_tokens": 1091,
+    "total_tokens": 1832,
+    "prompt_tokens_details": {
+     "cached_tokens": 93
+    }
+   }
+  },
+  {
+   "episode_id": "EP5-G4-INHERITANCE",
+   "attempt0_wall": 218.68,
+   "attempt0_ok": true,
+   "attempt0_reasons": [],
+   "attempt0_sha256": "892748fc60033b4602b9439460da357d859e51e7f0bb995752dcb2657074148f",
+   "repaired": false,
+   "final_wall": 218.68,
+   "final_ok": true,
+   "final_reasons": [],
+   "final_sha256": "892748fc60033b4602b9439460da357d859e51e7f0bb995752dcb2657074148f",
+   "attempt0_usage": {
+    "completion_tokens": 743,
+    "prompt_tokens": 960,
+    "total_tokens": 1703,
+    "prompt_tokens_details": {
+     "cached_tokens": 93
+    }
+   }
+  },
+  {
+   "episode_id": "EP6-PER-TASK-RECORDING",
+   "attempt0_wall": 202.77,
+   "attempt0_ok": true,
+   "attempt0_reasons": [],
+   "attempt0_sha256": "985d062c664a2020680cf4b66196d68b94fecea8fc4cddfcac49d7c9b3aa52ef",
+   "repaired": false,
+   "final_wall": 202.77,
+   "final_ok": true,
+   "final_reasons": [],
+   "final_sha256": "985d062c664a2020680cf4b66196d68b94fecea8fc4cddfcac49d7c9b3aa52ef",
+   "attempt0_usage": {
+    "completion_tokens": 692,
+    "prompt_tokens": 1013,
+    "total_tokens": 1705,
+    "prompt_tokens_details": {
+     "cached_tokens": 93
+    }
+   }
+  }
+ ]
+}
