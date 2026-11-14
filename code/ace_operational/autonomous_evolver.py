@@ -19,9 +19,68 @@ from .causal_repo_evolution import run_causal_repo_evolution_cycle
 from .coevolution_arena import run_coevolution_arena_cycle
 from .commercial_product_factory import run_commercial_factory_cycle
 from .local_repo_workflow import atomic_write_verified
-from .neuro_formal_genesis import run_neuro_formal_genesis_cycle
+from .neuro_formal_genesis import (
+    FormalSkillSpec,
+    SpecDrivenProgramSynthesizer,
+    run_neuro_formal_genesis_cycle,
+)
+from .oaie_unlimited import AutopoieticSkillForge
 from .ontological_godel_engine import run_ontological_godel_cycle
 from .sovereign_runtime import SovereignRuntimeSupervisor, SubstrateSpore
+from ace_component_synthesis.component_synthesizer import TYPE_BOOL, TYPE_INT
+
+
+def generate_procedural_skill_spec(gen_idx: int) -> FormalSkillSpec:
+    """Generate a novel behavioral FormalSkillSpec parameterized by generation index."""
+    mode = gen_idx % 3
+    if mode == 1:
+        k_add = 2 + (gen_idx % 17)
+        k_mul = 2 + (gen_idx % 5)
+        fn = lambda x, y, _a=k_add, _m=k_mul: (x * _m) + _a
+        shown = tuple((((x, y), fn(x, y)) for x, y in ((1, 0), (3, 2), (5, 4), (0, 7))))
+        holdout = tuple((((x, y), fn(x, y)) for x, y in ((8, 1), (10, 5), (2, 9))))
+        return FormalSkillSpec(
+            skill_id=f"proc_pricing_curve_g{gen_idx}",
+            title=f"Procedural Pricing Curve Gen-{gen_idx} (x*{k_mul}+{k_add})",
+            domain="procedural_pricing",
+            entrypoint=f"pricing_curve_g{gen_idx}",
+            arg_names=("x", "y"),
+            return_type=TYPE_INT,
+            shown_io=shown,
+            holdout_io=holdout,
+            constants=((k_add, TYPE_INT), (k_mul, TYPE_INT)),
+        )
+    if mode == 2:
+        limit = 50 + (gen_idx * 5)
+        fn = lambda x, y, _lim=limit: (x - y) + _lim
+        shown = tuple((((x, y), fn(x, y)) for x, y in ((10, 2), (25, 5), (0, 3), (7, 7))))
+        holdout = tuple((((x, y), fn(x, y)) for x, y in ((30, 10), (15, 0), (40, 12))))
+        return FormalSkillSpec(
+            skill_id=f"proc_margin_delta_g{gen_idx}",
+            title=f"Procedural Margin Delta Gen-{gen_idx} ((x-y)+{limit})",
+            domain="procedural_guardrail",
+            entrypoint=f"margin_delta_g{gen_idx}",
+            arg_names=("x", "y"),
+            return_type=TYPE_INT,
+            shown_io=shown,
+            holdout_io=holdout,
+            constants=((limit, TYPE_INT),),
+        )
+    bonus = 3 + (gen_idx % 19)
+    fn = lambda x, y, _b=bonus: (x * y) + _b
+    shown = tuple((((x, y), fn(x, y)) for x, y in ((2, 3), (4, 5), (0, 6), (7, 1))))
+    holdout = tuple((((x, y), fn(x, y)) for x, y in ((6, 6), (9, 2), (1, 0))))
+    return FormalSkillSpec(
+        skill_id=f"proc_load_score_g{gen_idx}",
+        title=f"Procedural Load Score Gen-{gen_idx} (x*y+{bonus})",
+        domain="procedural_telemetry",
+        entrypoint=f"load_score_g{gen_idx}",
+        arg_names=("x", "y"),
+        return_type=TYPE_INT,
+        shown_io=shown,
+        holdout_io=holdout,
+        constants=((bonus, TYPE_INT),),
+    )
 
 
 class AutonomousEvolver:
@@ -35,11 +94,20 @@ class AutonomousEvolver:
     def run_evolution_generation(self, generation_id: str = "gen-1") -> dict[str, Any]:
         gen_dir = self.workspace / generation_id
         gen_dir.mkdir(parents=True, exist_ok=True)
+        digits = "".join(ch for ch in generation_id if ch.isdigit())
+        gen_idx = int(digits) if digits else (self.supervisor.state["cycle_count"] + 1)
 
         # Epoch C: Causal multi-file repo localization, atomic patch & epistemic market
         epoch_c = run_causal_repo_evolution_cycle(gen_dir / "epoch_c")
-        # Epoch A: Neuro-formal zero-template program synthesis
+        # Epoch A: Neuro-formal zero-template program synthesis (baseline + novel procedural spec)
         epoch_a = run_neuro_formal_genesis_cycle()
+        proc_spec = generate_procedural_skill_spec(gen_idx)
+        proc_forge = AutopoieticSkillForge()
+        proc_skill, proc_rep = SpecDrivenProgramSynthesizer().synthesize_from_spec(proc_spec, proc_forge)
+        skills_dir = gen_dir / "synthesized_skills"
+        skills_dir.mkdir(parents=True, exist_ok=True)
+        atomic_write_verified(skills_dir / f"{proc_skill.skill_id}.py", proc_skill.source_code + "\n")
+
         # Epoch B: Adversarial challenger-solver co-evolution & antibodies
         epoch_b = run_coevolution_arena_cycle()
         # Epoch D: Ontological causal discovery & Godel proof-carrying strategy upgrade
@@ -47,21 +115,18 @@ class AutonomousEvolver:
         # Epoch F: Commercial CLI product factory, anti-slop publisher & O(1) B2A receipts
         epoch_f = run_commercial_factory_cycle(gen_dir / "epoch_f")
 
-        # Epoch A: Register newly synthesized skills monotonically into supervisor certified_skills
+        # Epoch A: Register the novel procedural skill monotonically into supervisor certified_skills
         existing_skill_ids = {s["skill_id"] for s in self.supervisor._state["certified_skills"]}
-        for rep in epoch_a.get("reports", []):
-            sk = rep["skill"]
-            gen_skill_id = f"{sk['skill_id']}__{generation_id}"
-            if gen_skill_id not in existing_skill_ids:
-                self.supervisor._state["certified_skills"].append(
-                    {
-                        "skill_id": gen_skill_id,
-                        "base_skill_id": sk["skill_id"],
-                        "birth_sha256": sk["birth_certificate_sha256"],
-                        "generation_id": generation_id,
-                    }
-                )
-                existing_skill_ids.add(gen_skill_id)
+        if proc_skill.skill_id not in existing_skill_ids:
+            self.supervisor._state["certified_skills"].append(
+                {
+                    "skill_id": proc_skill.skill_id,
+                    "birth_sha256": proc_skill.birth_certificate_sha256,
+                    "source_sha256": hashlib.sha256(proc_skill.source_code.encode("utf-8")).hexdigest(),
+                    "generation_id": generation_id,
+                }
+            )
+            existing_skill_ids.add(proc_skill.skill_id)
 
         # Epoch B/E: Inject generation-scoped adversarial reflex probe to compile a new antibody fossil
         probe_res = self.supervisor.run_single_tick(
@@ -79,6 +144,7 @@ class AutonomousEvolver:
             json.dumps(
                 {
                     "a": epoch_a["genesis_digest"],
+                    "a_proc": proc_skill.birth_certificate_sha256,
                     "b": epoch_b["arena_digest"],
                     "c": epoch_c["epoch_c_digest"],
                     "d": epoch_d["godel_tcb_digest"],
@@ -95,7 +161,11 @@ class AutonomousEvolver:
                 "estimated_dt": 0.5,
                 "remaining_budget_ratio": 1.0,
             },
-            executor_fn=lambda _: {"verified": True, "generation_digest": gen_digest},
+            executor_fn=lambda _: {
+                "verified": True,
+                "generation_digest": gen_digest,
+                "novel_skill_id": proc_skill.skill_id,
+            },
         )
 
         spore = SubstrateSpore.export_spore(
@@ -109,7 +179,10 @@ class AutonomousEvolver:
             "schema": "ace.autonomous_evolver.generation.v1",
             "generation_id": generation_id,
             "generation_digest": gen_digest,
-            "epoch_a_skills_synthesized": epoch_a["skills_synthesized"],
+            "novel_skill_id": proc_skill.skill_id,
+            "novel_skill_birth_sha256": proc_skill.birth_certificate_sha256,
+            "novel_skill_source": proc_skill.source_code,
+            "epoch_a_skills_synthesized": epoch_a["skills_synthesized"] + 1,
             "epoch_a_forgetting": epoch_a["forgetting_count"],
             "epoch_b_waves_solved": len(epoch_b["waves"]),
             "epoch_c_mutation_kill_rate": epoch_c["mutation_report"]["mutation_kill_rate"],

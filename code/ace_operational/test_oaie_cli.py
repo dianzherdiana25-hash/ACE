@@ -39,7 +39,7 @@ class OaieCliTests(unittest.TestCase):
             self.assertEqual(fac["receipts_verified_o1"], [True, True])
 
             ev = self._run_cli(ws, "evolve-once", "--generation-id", "gen-cli")
-            self.assertEqual(ev["epoch_a_skills_synthesized"], 4)
+            self.assertEqual(ev["epoch_a_skills_synthesized"], 5)
             self.assertTrue(ev["dag_chain_valid"])
 
             vs = self._run_cli(
