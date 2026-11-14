@@ -245,10 +245,51 @@ def build_text_task(*, seed: int, level: int) -> dict[str, Any]:
                     if buggy_out[i] != truth[i]]
         if len(exposing) < 2:
             continue  # need exposure in shown AND holdout
-        shown_idx = sorted(exposing[:1] +
-                           [i for i in range(len(cases))
-                            if i not in exposing][:5])
+        # Select shown cases so L2 pairs are identifiable on shown while preserving
+        # at least 1 exposing case (and >= 2 total cases) in holdout.
+        max_shown = min(6, len(cases) - 2)
+        partial_fails_shown = True
+        partial_variants: list[str] = []
+        if level == 2:
+            for kept in combo:
+                _, factory = DEFECT_CATALOG[kept]
+                p_code = factory(case_mode, sep, limit)(reference)
+                if p_code != reference:
+                    partial_variants.append(p_code)
+
+        # Sample exposing indices evenly across case categories (first, middle, late messy/boundary)
+        exposing_rest = list(exposing)
+        holdout_reserve = exposing_rest.pop()  # guarantees >=1 exposing case stays in holdout
+        non_exposing = [i for i in range(len(cases)) if i not in exposing]
+
+        # Order exposing_rest alternating tail (messy/boundary) and head (simple/short)
+        ordered_exp: list[int] = []
+        lo, hi = 0, len(exposing_rest) - 1
+        while lo <= hi:
+            ordered_exp.append(exposing_rest[lo])
+            lo += 1
+            if lo <= hi:
+                ordered_exp.append(exposing_rest[hi])
+                hi -= 1
+
+        chosen = ordered_exp[:max_shown]
+        if len(chosen) < max_shown:
+            for idx in non_exposing:
+                if idx not in chosen:
+                    chosen.append(idx)
+                if len(chosen) >= max_shown:
+                    break
+        shown_idx = sorted(chosen)
+        if level == 2 and partial_variants:
+            for p_code in partial_variants:
+                p_out = _run_cases(p_code, ENTRYPOINT, [cases[i] for i in shown_idx])
+                if p_out == [truth[i] for i in shown_idx]:
+                    partial_fails_shown = False
+                    break
+            if not partial_fails_shown:
+                continue
         shown_set = set(shown_idx)
+        assert holdout_reserve not in shown_set
         holdout_idx = [i for i in range(len(cases))
                        if i not in shown_set]
         spec = (
@@ -274,6 +315,41 @@ def build_text_task(*, seed: int, level: int) -> dict[str, Any]:
     raise InvalidTaskError(
         f"text_transform seed {seed} level {level}: no defect "
         "combination passes the validity gate")
+
+
+def text_rivals(task: dict[str, Any]) -> list[tuple[str, str]]:
+    """Construct rival (wrong/partial) programs for curriculum_generator's
+    identifiability control. Checks partial repairs leaving individual defects
+    unfixed plus alternative boundary/mode twins from DEFECT_CATALOG."""
+    import re
+
+    ref = task.get("reference_code") or ""
+    m_mode = re.search(r"w\.(lower|upper|title)\(\)", ref)
+    m_sep = re.search(r'"([_-])"\.join\(words\)', ref)
+    m_lim = re.search(r"len\(slug\)\s*>\s*(\d+):", ref)
+    if not (m_mode and m_sep and m_lim):
+        return []
+    case_mode = m_mode.group(1)
+    sep = m_sep.group(1)
+    limit = int(m_lim.group(1))
+    defects = list(task.get("defects", []))
+    rivals: list[tuple[str, str]] = []
+    # Partial-fix rivals: fix all defects except one.
+    if len(defects) >= 2:
+        for kept in defects:
+            _, factory = DEFECT_CATALOG[kept]
+            code = factory(case_mode, sep, limit)(ref)
+            if code != ref and code != task.get("buggy_code"):
+                rivals.append((f"partial_keeps_{kept}", code))
+    # Alternative single-defect confusion twins.
+    for name in DEFECT_NAMES:
+        if name in defects:
+            continue
+        _, factory = DEFECT_CATALOG[name]
+        code = factory(case_mode, sep, limit)(ref)
+        if code != ref and code != task.get("buggy_code"):
+            rivals.append((f"wrong_class_{name}", code))
+    return rivals
 
 
 # ---------------------------------------------------------------------------
@@ -317,7 +393,7 @@ class TextAdapter:
         return "text-prototype-v0:no-authored-substrate"
 
     def extra_string_candidates(self, code) -> set:
-        return set()
+        return {"-", "_", " ", ""}
 
 
 TEXT_ADAPTER = TextAdapter()
