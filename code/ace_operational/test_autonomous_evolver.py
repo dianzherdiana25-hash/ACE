@@ -25,6 +25,14 @@ class AutonomousEvolverTests(unittest.TestCase):
             self.assertTrue((Path(d1) / "gen-1" / "generation_spore.json").exists())
             self.assertTrue((Path(d1) / "gen-1" / "evolution_summary.json").exists())
 
+    def test_multi_generation_continuity_exam(self) -> None:
+        with tempfile.TemporaryDirectory() as d1:
+            evolver = AutonomousEvolver(d1)
+            multi = evolver.run_multi_generation_loop(generations=2)
+            self.assertEqual(multi["generations_completed"], 2)
+            self.assertTrue(multi["all_continuity_exams_passed"])
+            self.assertEqual(multi["total_forgetting_count"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

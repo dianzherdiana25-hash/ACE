@@ -98,3 +98,30 @@ class AutonomousEvolver:
             json.dumps(summary, indent=2, sort_keys=True),
         )
         return summary
+
+    def run_multi_generation_loop(self, *, generations: int = 2) -> dict[str, Any]:
+        """Evolve across N generations, verifying SubstrateSpore continuity after each generation."""
+        if generations < 1:
+            raise ValueError("generations must be >= 1")
+        gen_summaries: list[dict[str, Any]] = []
+        continuity_exams: list[dict[str, Any]] = []
+        for idx in range(1, generations + 1):
+            gid = f"gen-{idx}"
+            summary = self.run_evolution_generation(gid)
+            gen_summaries.append(summary)
+            exam = SubstrateSpore.import_and_verify_spore(
+                spore_path=self.workspace / gid / "generation_spore.json",
+                target_workspace=self.workspace / gid / "continuity_probe",
+                expected_ancestor_skills=["core_stage2_guard"],
+                antibody_probes=[],
+            )
+            continuity_exams.append(exam)
+        return {
+            "schema": "ace.autonomous_evolver.multi_gen.v1",
+            "generations_completed": len(gen_summaries),
+            "all_continuity_exams_passed": all(e["exam_passed"] for e in continuity_exams),
+            "total_forgetting_count": sum(e["forgetting_count"] for e in continuity_exams),
+            "latest_spore_sha256": gen_summaries[-1]["spore_sha256"],
+            "generations": gen_summaries,
+        }
+

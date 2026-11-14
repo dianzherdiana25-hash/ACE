@@ -64,6 +64,21 @@ def run_cli_action(args: argparse.Namespace) -> dict[str, Any]:
 
         return AutonomousEvolver(ws / "evolver").run_evolution_generation(args.generation_id)
 
+    if args.command == "evolve-multi":
+        from .autonomous_evolver import AutonomousEvolver
+
+        return AutonomousEvolver(ws / "evolver").run_multi_generation_loop(generations=args.generations)
+
+    if args.command == "verify-spore":
+        from .sovereign_runtime import SubstrateSpore
+
+        return SubstrateSpore.import_and_verify_spore(
+            spore_path=args.spore_path,
+            target_workspace=ws / "spore_verify_probe",
+            expected_ancestor_skills=["core_stage2_guard"],
+            antibody_probes=[],
+        )
+
     if args.command == "work-order":
         return sup.work_bridge.export_work_order(
             order_id=args.order_id,
@@ -96,6 +111,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     ev = sub.add_parser("evolve-once", help="Run a unified Epochs A-F self-evolution generation")
     ev.add_argument("--generation-id", default="gen-1")
+
+    em = sub.add_parser("evolve-multi", help="Run N generations with Succession Continuity Exams")
+    em.add_argument("--generations", type=int, default=2)
+
+    vs = sub.add_parser("verify-spore", help="Verify a SubstrateSpore bundle via Succession Continuity Exam")
+    vs.add_argument("--spore-path", required=True)
 
     wo = sub.add_parser("work-order", help="Emit a deterministic zero-API Work Order")
     wo.add_argument("--order-id", required=True)

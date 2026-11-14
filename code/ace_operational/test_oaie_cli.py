@@ -42,6 +42,15 @@ class OaieCliTests(unittest.TestCase):
             self.assertEqual(ev["epoch_a_skills_synthesized"], 4)
             self.assertTrue(ev["dag_chain_valid"])
 
+            vs = self._run_cli(
+                ws,
+                "verify-spore",
+                "--spore-path",
+                str(ws / "evolver" / "gen-cli" / "generation_spore.json"),
+            )
+            self.assertTrue(vs["exam_passed"])
+            self.assertEqual(vs["forgetting_count"], 0)
+
             wo = self._run_cli(ws, "work-order", "--order-id", "wo-test", "--goal", "Verify CLI")
             self.assertEqual(len(wo["order_sha256"]), 64)
             self.assertTrue((ws / "ACE_WORK_ORDER.json").exists())
