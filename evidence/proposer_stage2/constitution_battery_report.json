@@ -12,7 +12,7 @@
     {
       "check_id": "C2_HASH_PIN_VOCAB_AND_TTL",
       "episode": "EP2-ABC-V3.txt",
-      "execution_run_id": "stgrun_1731580005000_ea4a7a84",
+      "execution_run_id": "stgrun_1731580005000_87801d38",
       "passed": true,
       "payload_sha256": "498f9ad00fcaa4732d68bb3a5750d73010b97d22867b191963c92b0b49218a40",
       "preaudit_exit_code": 0,
@@ -24,7 +24,7 @@
       "check_id": "C3_VISIBLE_STOP_AND_NO_AUTO_RETRY",
       "cost_units": 0.15,
       "episode": "EP3-ROUND2-GATE.txt",
-      "execution_run_id": "stgrun_1731580005000_288942a0",
+      "execution_run_id": "stgrun_1731580005000_6ec86c9a",
       "passed": true,
       "payload_sha256": "0e6ecef4d88b2ec2846fe972efdb53844cab82db52477db2183df90c046539e0",
       "preaudit_exit_code": 0,
@@ -35,7 +35,7 @@
     {
       "check_id": "C4_HARD_CEILING_ABORT",
       "episode": "EP4-CONTROL-REGRESSION-ATTRIBUTION.txt",
-      "execution_run_id": "stgrun_1731580007100_e961833a",
+      "execution_run_id": "stgrun_1731580007100_51ddf26e",
       "passed": true,
       "payload_sha256": "2b41cbb268e5467db60ecc40ca293465bfb73ada14a12a3aa93523dd7949af92",
       "preaudit_exit_code": 0,
@@ -46,7 +46,7 @@
     {
       "check_id": "C5_IRREVOCABLE_MIDFLIGHT_REVOCATION",
       "episode": "EP5-G4-INHERITANCE.txt",
-      "execution_run_id": "stgrun_1731580007100_1324d735",
+      "execution_run_id": "stgrun_1731580007100_1cfa19b0",
       "passed": true,
       "payload_sha256": "c66822e39d3973b3a224a7594d83615aaeaec8f25892573f1279fd53651fc7a3",
       "preaudit_exit_code": 0,
@@ -65,7 +65,7 @@
           "version": "preaudit-validator-2.1.0"
         },
         "proposer_stage2": {
-          "source_sha256": "8853773283370e03757371f64d1d86453177cd5a25f5791519238763461ca253",
+          "source_sha256": "3ba1eeba0b21845e6651bd68cb3f0494d12069003436f16f7f0faba3e6a636c5",
           "version": "proposer-stage2-1.0.0"
         },
         "proposer_validator": {
@@ -75,8 +75,8 @@
       },
       "episode": "EP6-PER-TASK-RECORDING.txt",
       "execution_run_ids": [
-        "stgrun_1731580007100_e99dadf2",
-        "stgrun_1731580007100_e06f77fc"
+        "stgrun_1731580007100_95664347",
+        "stgrun_1731580007100_3e913af6"
       ],
       "passed": true,
       "payload_sha256": "09d7a8dad6b5fc7ee665efcf31207d1187ad6e474a2ac13490633ed43d0b2fe9",

@@ -420,11 +420,16 @@ class ProposerStage2Tests(unittest.TestCase):
                 pre_commit_bundle_hook=corrupt_bundle,
             )
 
-        # Because immutable-blob verification failed before DB commit, finalize never committed.
+        # Because immutable-blob verification failed before finalization commit, status stays unresolved (FINALIZE_FAILED)
+        # with empty manifest digest and re-dispatch remains blocked fail-closed.
         runs = self.engine.list_runs(staged["staging_id"])
         self.assertEqual(len(runs), 1)
-        self.assertEqual(runs[0]["status"], "RUNNING")
+        self.assertEqual(runs[0]["status"], "FINALIZE_FAILED")
         self.assertEqual(runs[0]["bundle_manifest_sha256"], "")
+        ledger_events = [e["event_type"] for e in self.engine.list_ledger(staged["staging_id"])]
+        self.assertIn("RUN_FINALIZE_FAILED", ledger_events)
+        with self.assertRaises(AutoRetryBlockedError):
+            self.engine.dispatch_staged(staged["staging_id"], expected_payload_sha256=sha)
 
         # Direct SQLite tampering breaks ledger verification fail-closed.
         with sqlite3.connect(str(self.store.db_path)) as con:
@@ -478,6 +483,237 @@ class ProposerStage2Tests(unittest.TestCase):
         for key, path in expected_files.items():
             actual_sha = hashlib.sha256(path.read_bytes()).hexdigest()
             self.assertEqual(enforcers[key]["source_sha256"], actual_sha)
+
+    def test_enforcer_stamps_require_complete_set_and_live_digests(self):
+        pkg = self._pkg()
+        staged, _ = self.engine.stage_package(pkg, request_id="req-enforcer-strict")
+        sha = staged["payload_sha256"]
+        self.engine.ratify_staged(staged["staging_id"], audience="hub", payload_sha256=sha)
+
+        partial = StagingEnvironmentProfile(
+            identity_mode="staging-only",
+            effective_identity="staging:strict",
+            egress_blocked=True,
+            dummy_credentials_only=True,
+            dummy_credentials={"k": "dummy_1"},
+            dummy_resource_root=self.engine.dummy_base_dir / "strict_sub",
+            enforcer_versions={"proposer_validator": {}},
+        )
+        with self.assertRaises(EnvironmentIsolationError):
+            self.engine.dispatch_staged(staged["staging_id"], expected_payload_sha256=sha, env_profile=partial)
+
+        stale = self.engine.default_environment_profile(dummy_subdir="stale_sub")
+        stale.enforcer_versions["proposer_stage2"]["source_sha256"] = "0" * 64
+        with self.assertRaises(EnvironmentIsolationError):
+            self.engine.dispatch_staged(staged["staging_id"], expected_payload_sha256=sha, env_profile=stale)
+        self.assertEqual(self.engine.list_runs(staged["staging_id"]), [])
+
+    def test_cross_engine_request_stop_and_revocation(self):
+        store2 = OperationalStore(self.ws)
+        engine2 = Stage2StagingEngine(store2, mission_bus=self.bus, now_fn=self.clock)
+        try:
+            pkg = self._pkg(max_calls=10, max_wall=60, max_cost=5.0)
+            staged, _ = self.engine.stage_package(pkg, request_id="req-cross-stop")
+            sha = staged["payload_sha256"]
+            self.engine.ratify_staged(staged["staging_id"], audience="kernel", payload_sha256=sha)
+
+            entered = threading.Event()
+            proceed = threading.Event()
+            observed_should_stop: list[bool] = []
+            holder: dict = {}
+
+            def worker(ctx, _pkg):
+                ctx.record_step(step_name="step1", calls=1, cost_units=0.1, work_units=1)
+                entered.set()
+                proceed.wait(timeout=5.0)
+                observed_should_stop.append(ctx.should_stop())
+                ctx.check_gates()
+
+            t = threading.Thread(
+                target=lambda: holder.setdefault(
+                    "run",
+                    self.engine.dispatch_staged(staged["staging_id"], expected_payload_sha256=sha, worker=worker),
+                ),
+                daemon=True,
+            )
+            t.start()
+            self.assertTrue(entered.wait(timeout=5.0))
+            run_id = self.engine.list_runs(staged["staging_id"])[0]["execution_run_id"]
+            self.assertTrue(engine2.request_stop(run_id, reason="cross_instance_halt"))
+            self.clock.advance(0.2)
+            proceed.set()
+            t.join(timeout=5.0)
+
+            run = holder["run"]
+            self.assertEqual(observed_should_stop, [True])
+            self.assertEqual(run["status"], "STOPPED")
+            self.assertEqual(run["stop_reason"], "cross_instance_halt")
+            self.assertAlmostEqual(run["result_summary"]["stop_latency_seconds"], 0.2, places=6)
+        finally:
+            store2.close()
+
+    def test_non_finite_and_bool_step_cost_rejected(self):
+        pkg = self._pkg()
+        for idx, bad_cost in enumerate((float("nan"), float("inf"), True)):
+            staged, _ = self.engine.stage_package(pkg, request_id=f"req-nan-{idx}")
+            sha = staged["payload_sha256"]
+            self.engine.ratify_staged(staged["staging_id"], audience="evidence", payload_sha256=sha)
+            seen_err: list[Exception] = []
+
+            def bad_worker(ctx, _pkg, bad=bad_cost):
+                try:
+                    ctx.record_step(step_name="bad", calls=1, cost_units=bad, work_units=1)
+                except ValidationRejectedError as exc:
+                    seen_err.append(exc)
+                    raise
+
+            run = self.engine.dispatch_staged(staged["staging_id"], expected_payload_sha256=sha, worker=bad_worker)
+            self.assertEqual(len(seen_err), 1)
+            self.assertEqual(run["status"], "FAILED")
+            self.assertEqual(run["calls_used"], 0)
+            self.assertEqual(run["cost_units"], 0.0)
+            self.assertEqual(run["preaudit_exit_code"], 0)
+
+    def test_review_mission_points_to_existing_staged_blob(self):
+        pkg = self._pkg()
+        staged, _ = self.engine.stage_package(pkg, request_id="req-mission-blob-path")
+        with self.bus._get_connection() as con:
+            row = con.execute("SELECT data_json FROM missions WHERE id = ?", (staged["mission_id"],)).fetchone()
+        self.assertIsNotNone(row)
+        doc = json.loads(row[0])
+        rel = doc["inputs"][0]["path"]
+        self.assertEqual(doc["inputs"][0]["sha256"], staged["payload_sha256"])
+        self.assertEqual((self.ws / rel).resolve(), Path(staged["blob_path"]).resolve())
+        self.assertTrue((self.ws / rel).is_file())
+
+    def test_per_run_dummy_root_and_worker_pkg_copy_isolation(self):
+        pkg = self._pkg()
+        orig_prop_id = pkg["proposal_id"]
+        orig_max_calls = pkg["cost_ceiling"]["max_calls"]
+        staged, _ = self.engine.stage_package(pkg, request_id="req-isolation-copy")
+        sha = staged["payload_sha256"]
+        self.engine.ratify_staged(staged["staging_id"], audience="kernel", payload_sha256=sha)
+
+        def mutating_worker(tag: bytes):
+            def _fn(ctx, wpkg):
+                wpkg["proposal_id"] = "tampered-proposal-id"
+                wpkg["cost_ceiling"]["max_calls"] = 999999
+                ctx.record_step(
+                    step_name="write_shared",
+                    calls=1,
+                    cost_units=0.1,
+                    work_units=1,
+                    dummy_artifact_rel="shared.txt",
+                    dummy_content=tag,
+                )
+            return _fn
+
+        r1 = self.engine.dispatch_staged(staged["staging_id"], expected_payload_sha256=sha, worker=mutating_worker(b"run-one"))
+        r2 = self.engine.dispatch_staged(staged["staging_id"], expected_payload_sha256=sha, worker=mutating_worker(b"run-two"))
+        self.assertEqual(r1["preaudit_exit_code"], 0)
+        self.assertEqual(r2["preaudit_exit_code"], 0)
+
+        p1 = self.engine.dummy_base_dir / "default" / r1["execution_run_id"] / "shared.txt"
+        p2 = self.engine.dummy_base_dir / "default" / r2["execution_run_id"] / "shared.txt"
+        self.assertEqual(p1.read_bytes(), b"run-one")
+        self.assertEqual(p2.read_bytes(), b"run-two")
+
+        prereg1 = json.loads((Path(r1["bundle_dir"]) / "source" / "preregistration.json").read_text(encoding="utf-8"))
+        summary1 = json.loads((Path(r1["bundle_dir"]) / "source" / "execution_summary.json").read_text(encoding="utf-8"))
+        self.assertEqual(prereg1["cost_ceiling"]["max_calls"], orig_max_calls)
+        self.assertEqual(summary1["proposal_id"], orig_prop_id)
+
+    def test_supervised_boundary_interrupts_hung_loops_and_blocked_waits(self):
+        # 1) Hung infinite Python loop interrupted on real wall deadline (no gate calls inside loop).
+        real_store = OperationalStore(self.ws / "real_wall_ws")
+        try:
+            real_engine = Stage2StagingEngine(real_store, mission_bus=self.bus)
+            pkg_wall = self._pkg(max_calls=10, max_wall=1, max_cost=5.0)
+            pkg_wall["cost_estimate"]["wall_seconds"] = 1
+            s_wall, _ = real_engine.stage_package(pkg_wall, request_id="req-hung-loop")
+            real_engine.ratify_staged(s_wall["staging_id"], audience="hub", payload_sha256=s_wall["payload_sha256"])
+
+            def hung_loop(_ctx, _pkg):
+                x = 0
+                while True:
+                    x += 1
+
+            r_wall = real_engine.dispatch_staged(
+                s_wall["staging_id"],
+                expected_payload_sha256=s_wall["payload_sha256"],
+                worker=hung_loop,
+            )
+            self.assertEqual(r_wall["status"], "ABORTED_CEILING")
+            self.assertIn("max_wall_seconds", r_wall["stop_reason"])
+            self.assertEqual(r_wall["preaudit_exit_code"], 0)
+        finally:
+            real_store.close()
+
+        # 2) Blocked Event.wait worker stopped cleanly by request_stop; late wakeups cannot mutate ctx.
+        pkg_blk = self._pkg(max_calls=10, max_wall=60, max_cost=5.0)
+        s_blk, _ = self.engine.stage_package(pkg_blk, request_id="req-blocked-wait")
+        self.engine.ratify_staged(s_blk["staging_id"], audience="kernel", payload_sha256=s_blk["payload_sha256"])
+        entered = threading.Event()
+        never_or_late = threading.Event()
+        holder: dict = {}
+
+        def blocked_worker(ctx, _pkg):
+            ctx.record_step(step_name="initial", calls=1, cost_units=0.2, work_units=1)
+            entered.set()
+            never_or_late.wait(timeout=30.0)
+            # If awakened later, sealed context must refuse mutations cleanly.
+            ctx.record_step(step_name="late_mutation", calls=1, cost_units=0.5, work_units=5)
+
+        t = threading.Thread(
+            target=lambda: holder.setdefault(
+                "run",
+                self.engine.dispatch_staged(
+                    s_blk["staging_id"],
+                    expected_payload_sha256=s_blk["payload_sha256"],
+                    worker=blocked_worker,
+                ),
+            ),
+            daemon=True,
+        )
+        t.start()
+        self.assertTrue(entered.wait(timeout=5.0))
+        run_id = self.engine.list_runs(s_blk["staging_id"])[0]["execution_run_id"]
+        self.assertTrue(self.engine.request_stop(run_id, reason="stop_blocked_worker"))
+        t.join(timeout=5.0)
+        self.assertFalse(t.is_alive())
+        never_or_late.set()
+        run = holder["run"]
+        self.assertEqual(run["status"], "STOPPED")
+        self.assertEqual(run["calls_used"], 1)
+        self.assertAlmostEqual(run["cost_units"], 0.2, places=6)
+
+    def test_late_request_stop_during_finalization_rejected_cleanly(self):
+        pkg = self._pkg()
+        staged, _ = self.engine.stage_package(pkg, request_id="req-late-stop")
+        sha = staged["payload_sha256"]
+        self.engine.ratify_staged(staged["staging_id"], audience="evidence", payload_sha256=sha)
+        late_results: list[bool] = []
+
+        def hook_during_finalize(_pkg_dir: Path) -> None:
+            runs = self.engine.list_runs(staged["staging_id"])
+            self.assertEqual(runs[0]["status"], "FINALIZING")
+            late_results.append(
+                self.engine.request_stop(runs[0]["execution_run_id"], reason="late_during_finalize")
+            )
+
+        run = self.engine.dispatch_staged(
+            staged["staging_id"],
+            expected_payload_sha256=sha,
+            pre_commit_bundle_hook=hook_during_finalize,
+        )
+        self.assertEqual(late_results, [False])
+        self.assertEqual(run["status"], "COMPLETED")
+        self.assertFalse(run["stop_requested"])
+        self.assertEqual(run["stop_reason"], "")
+        summary = json.loads((Path(run["bundle_dir"]) / "source" / "execution_summary.json").read_text(encoding="utf-8"))
+        self.assertEqual(summary["status"], "COMPLETED")
+        self.assertFalse(summary["stop_requested"])
+        self.assertEqual(summary["stop_reason"], "")
 
     def test_constitution_battery_over_frozen_stage1_v2_packages(self):
         from ace_operational.proposer_stage2_battery import run_stage2_constitution_battery

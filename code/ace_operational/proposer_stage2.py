@@ -35,6 +35,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+import copy
+import ctypes
 import hashlib
 import json
 import math
@@ -128,6 +130,25 @@ class _CeilingExceeded(Exception):
     def __init__(self, reason: str):
         self.reason = reason
         super().__init__(reason)
+
+
+class _WorkerInterrupted(BaseException):
+    """Supervisor unwind signal injected when a blocked worker exceeds stop/wall deadlines."""
+
+
+def _interrupt_thread(tid: int | None, exc_type: type[BaseException]) -> bool:
+    """Inject an asynchronous unwind exception into an active worker thread."""
+    if not tid:
+        return False
+    set_async = ctypes.pythonapi.PyThreadState_SetAsyncExc
+    set_async.argtypes = [ctypes.c_ulong, ctypes.py_object]
+    set_async.restype = ctypes.c_int
+    res = set_async(ctypes.c_ulong(tid), ctypes.py_object(exc_type))
+    if res > 1:
+        # Undo unintended multi-thread match per CPython C-API contract.
+        set_async(ctypes.c_ulong(tid), None)
+        return False
+    return res == 1
 
 
 def _utc_iso(ts: float | None = None) -> str:
@@ -330,8 +351,24 @@ class StagingEnvironmentProfile:
             raise EnvironmentIsolationError(
                 f"dummy_resource_root {resolved} escapes isolated staging root {base_resolved}"
             )
-        if not self.enforcer_versions or "proposer_validator" not in self.enforcer_versions:
-            raise EnvironmentIsolationError("enforcer_versions must pin real enforcer digests")
+        expected_stamps = _runtime_enforcer_stamps()
+        if (
+            not isinstance(self.enforcer_versions, dict)
+            or set(self.enforcer_versions.keys()) != set(expected_stamps.keys())
+        ):
+            raise EnvironmentIsolationError(
+                f"enforcer_versions must pin exact enforcer module set {sorted(expected_stamps.keys())}"
+            )
+        for mod_name, exp in expected_stamps.items():
+            got = self.enforcer_versions.get(mod_name)
+            if (
+                not isinstance(got, dict)
+                or got.get("version") != exp["version"]
+                or got.get("source_sha256") != exp["source_sha256"]
+            ):
+                raise EnvironmentIsolationError(
+                    f"enforcer_versions digest/version mismatch for {mod_name!r}"
+                )
         resolved.mkdir(parents=True, exist_ok=True)
         return resolved
 
@@ -344,7 +381,7 @@ class StagingEnvironmentProfile:
             "dummy_credential_keys": sorted(self.dummy_credentials.keys()),
             "dummy_resource_root": str(self.dummy_resource_root),
             "mount_permissions": list(self.mount_permissions),
-            "enforcer_versions": self.enforcer_versions,
+            "enforcer_versions": copy.deepcopy(self.enforcer_versions),
         }
 
 
@@ -368,12 +405,16 @@ class StagingRunContext:
         self.execution_run_id = execution_run_id
         self.staging_id = staging_id
         self.bound_payload_sha256 = bound_payload_sha256
-        self.ceiling = dict(ceiling)
+        self.ceiling = copy.deepcopy(ceiling)
         self.dummy_root = dummy_root
         self.dummy_credentials = dict(dummy_credentials)
         self._stop_event = stop_event
         self._now = now_fn
         self._start_t = now_fn()
+        self._lock = threading.Lock()
+        self._sealed_kind = ""
+        self._sealed_reason = ""
+        self._frozen_snapshot: dict[str, Any] | None = None
         self.calls_used = 0
         self.cost_units = 0.0
         self.work_completed_units = 0
@@ -383,14 +424,56 @@ class StagingRunContext:
         return round(max(0.0, self._now() - self._start_t), 6)
 
     def remaining_budget(self) -> dict[str, float | int]:
-        return {
-            "calls": max(0, int(self.ceiling["max_calls"]) - self.calls_used),
-            "wall_seconds": round(max(0.0, float(self.ceiling["max_wall_seconds"]) - self.elapsed_seconds()), 6),
-            "cost_units": round(max(0.0, float(self.ceiling["max_cost_units"]) - self.cost_units), 6),
-        }
+        with self._lock:
+            return {
+                "calls": max(0, int(self.ceiling["max_calls"]) - self.calls_used),
+                "wall_seconds": round(max(0.0, float(self.ceiling["max_wall_seconds"]) - self.elapsed_seconds()), 6),
+                "cost_units": round(max(0.0, float(self.ceiling["max_cost_units"]) - self.cost_units), 6),
+            }
 
-    def check_gates(self) -> None:
-        if self._stop_event.is_set() or self._engine.is_revoked(self.staging_id):
+    def _raise_if_sealed_locked(self) -> None:
+        if self._sealed_kind == "STOPPED":
+            raise _StopTriggered(self._sealed_reason or "stop requested")
+        if self._sealed_kind == "ABORTED_CEILING":
+            raise _CeilingExceeded(self._sealed_reason or "hard ceiling exceeded")
+
+    def _seal(self, kind: str, reason: str) -> dict[str, Any]:
+        with self._lock:
+            if not self._sealed_kind:
+                self._sealed_kind = kind
+                self._sealed_reason = reason
+            if self._frozen_snapshot is None:
+                self._frozen_snapshot = {
+                    "calls_used": int(self.calls_used),
+                    "elapsed_seconds": self.elapsed_seconds(),
+                    "cost_units": round(float(self.cost_units), 6),
+                    "work_completed_units": int(self.work_completed_units),
+                    "steps": copy.deepcopy(self.steps),
+                }
+            return copy.deepcopy(self._frozen_snapshot)
+
+    def _sealed_outcome(self) -> tuple[str, str]:
+        with self._lock:
+            return self._sealed_kind, self._sealed_reason
+
+    def snapshot(self) -> dict[str, Any]:
+        with self._lock:
+            if self._frozen_snapshot is not None:
+                return copy.deepcopy(self._frozen_snapshot)
+            return {
+                "calls_used": int(self.calls_used),
+                "elapsed_seconds": self.elapsed_seconds(),
+                "cost_units": round(float(self.cost_units), 6),
+                "work_completed_units": int(self.work_completed_units),
+                "steps": copy.deepcopy(self.steps),
+            }
+
+    def _check_gates_locked(self) -> None:
+        self._raise_if_sealed_locked()
+        persisted_stop, _ = self._engine._persisted_stop_state(self.execution_run_id)
+        if persisted_stop:
+            self._stop_event.set()
+        if self._stop_event.is_set() or persisted_stop or self._engine.is_revoked(self.staging_id):
             reason = self._engine._stop_reason_for(self.execution_run_id, self.staging_id)
             raise _StopTriggered(reason or "stop requested")
         elapsed = self.elapsed_seconds()
@@ -407,8 +490,22 @@ class StagingRunContext:
                 f"cost_units {self.cost_units} exceeds max_cost_units {self.ceiling['max_cost_units']}"
             )
 
+    def check_gates(self) -> None:
+        with self._lock:
+            self._check_gates_locked()
+
     def should_stop(self) -> bool:
-        return self._stop_event.is_set() or self._engine.is_revoked(self.staging_id)
+        with self._lock:
+            if self._sealed_kind:
+                return True
+        persisted_stop, _ = self._engine._persisted_stop_state(self.execution_run_id)
+        if persisted_stop:
+            self._stop_event.set()
+        return bool(
+            self._stop_event.is_set()
+            or persisted_stop
+            or self._engine.is_revoked(self.staging_id)
+        )
 
     def record_step(
         self,
@@ -421,54 +518,62 @@ class StagingRunContext:
         dummy_content: bytes | None = None,
     ) -> dict[str, Any]:
         """Account resource consumption strictly and enforce stop & ceiling gates."""
-        self.check_gates()
-        if calls < 0 or cost_units < 0 or work_units < 0:
-            raise ValidationRejectedError("step costs and work_units must be >= 0")
+        with self._lock:
+            self._check_gates_locked()
+            if (
+                isinstance(cost_units, bool)
+                or not isinstance(cost_units, (int, float))
+                or not math.isfinite(float(cost_units))
+                or float(cost_units) < 0
+            ):
+                raise ValidationRejectedError("step cost_units must be finite and >= 0")
+            if calls < 0 or work_units < 0:
+                raise ValidationRejectedError("step costs and work_units must be >= 0")
 
-        next_calls = self.calls_used + int(calls)
-        next_cost = round(self.cost_units + float(cost_units), 6)
-        elapsed = self.elapsed_seconds()
-        if elapsed > float(self.ceiling["max_wall_seconds"]):
-            raise _CeilingExceeded(
-                f"wall_seconds {elapsed} exceeds max_wall_seconds {self.ceiling['max_wall_seconds']}"
-            )
-        if next_calls > int(self.ceiling["max_calls"]):
-            raise _CeilingExceeded(
-                f"projected calls {next_calls} exceeds max_calls {self.ceiling['max_calls']}"
-            )
-        if next_cost > float(self.ceiling["max_cost_units"]) + 1e-9:
-            raise _CeilingExceeded(
-                f"projected cost_units {next_cost} exceeds max_cost_units {self.ceiling['max_cost_units']}"
-            )
+            next_calls = self.calls_used + int(calls)
+            next_cost = round(self.cost_units + float(cost_units), 6)
+            elapsed = self.elapsed_seconds()
+            if elapsed > float(self.ceiling["max_wall_seconds"]):
+                raise _CeilingExceeded(
+                    f"wall_seconds {elapsed} exceeds max_wall_seconds {self.ceiling['max_wall_seconds']}"
+                )
+            if next_calls > int(self.ceiling["max_calls"]):
+                raise _CeilingExceeded(
+                    f"projected calls {next_calls} exceeds max_calls {self.ceiling['max_calls']}"
+                )
+            if next_cost > float(self.ceiling["max_cost_units"]) + 1e-9:
+                raise _CeilingExceeded(
+                    f"projected cost_units {next_cost} exceeds max_cost_units {self.ceiling['max_cost_units']}"
+                )
 
-        artifact_digest = ""
-        if dummy_artifact_rel is not None:
-            rel = Path(dummy_artifact_rel)
-            if rel.is_absolute() or ".." in rel.parts:
-                raise EnvironmentIsolationError(f"dummy artifact path escapes sandbox: {dummy_artifact_rel!r}")
-            target = (self.dummy_root / rel).resolve()
-            root_res = self.dummy_root.resolve()
-            if target != root_res and root_res not in target.parents:
-                raise EnvironmentIsolationError(f"resolved artifact path escapes sandbox: {target}")
-            payload = dummy_content if dummy_content is not None else b""
-            artifact_digest, _ = _write_immutable_bytes(target, payload)
+            artifact_digest = ""
+            if dummy_artifact_rel is not None:
+                rel = Path(dummy_artifact_rel)
+                if rel.is_absolute() or ".." in rel.parts:
+                    raise EnvironmentIsolationError(f"dummy artifact path escapes sandbox: {dummy_artifact_rel!r}")
+                target = (self.dummy_root / rel).resolve()
+                root_res = self.dummy_root.resolve()
+                if target != root_res and root_res not in target.parents:
+                    raise EnvironmentIsolationError(f"resolved artifact path escapes sandbox: {target}")
+                payload = dummy_content if dummy_content is not None else b""
+                artifact_digest, _ = _write_immutable_bytes(target, payload)
 
-        self.calls_used = next_calls
-        self.cost_units = next_cost
-        self.work_completed_units += int(work_units)
-        rec = {
-            "step": step_name,
-            "calls": int(calls),
-            "cost_units": float(cost_units),
-            "work_units": int(work_units),
-            "elapsed_seconds": self.elapsed_seconds(),
-            "artifact": dummy_artifact_rel or "",
-            "artifact_sha256": artifact_digest,
-        }
-        self.steps.append(rec)
-        # Re-check post-step so concurrent stop requests during step I/O halt immediately.
-        self.check_gates()
-        return rec
+            self.calls_used = next_calls
+            self.cost_units = next_cost
+            self.work_completed_units += int(work_units)
+            rec = {
+                "step": step_name,
+                "calls": int(calls),
+                "cost_units": float(cost_units),
+                "work_units": int(work_units),
+                "elapsed_seconds": self.elapsed_seconds(),
+                "artifact": dummy_artifact_rel or "",
+                "artifact_sha256": artifact_digest,
+            }
+            self.steps.append(rec)
+            # Re-check post-step so concurrent stop requests during step I/O halt immediately.
+            self._check_gates_locked()
+            return rec
 
 
 class Stage2StagingEngine:
@@ -640,9 +745,17 @@ class Stage2StagingEngine:
             raise LedgerTamperError("proposer_stage2_ledger hash chain is broken; failing closed")
 
     # --- MissionBus review-only hook (leaves code/ace_mission untouched) ---
-    def _queue_review_mission(self, *, staging_id: str, proposal_id: str, payload_sha256: str) -> str:
+    def _queue_review_mission(
+        self,
+        *,
+        staging_id: str,
+        proposal_id: str,
+        payload_sha256: str,
+        blob_path: Path,
+    ) -> str:
         if self.mission_bus is None:
             return ""
+        rel_blob_path = blob_path.resolve().relative_to(self.store.workspace.resolve()).as_posix()
         mission_id = "mission_" + hashlib.sha256(
             f"ace.proposer_stage2.review.v1:{staging_id}".encode("utf-8")
         ).hexdigest()[:24]
@@ -656,7 +769,7 @@ class Stage2StagingEngine:
                 f"Package payload sha256:{payload_sha256} passed Stage-2 validator in staging-only mode"
             ),
             "task_family_ids": ["proposer_stage2_internal_review"],
-            "inputs": [{"path": f"proposer_stage2/blobs/pkgs/{payload_sha256}.json", "sha256": payload_sha256}],
+            "inputs": [{"path": rel_blob_path, "sha256": payload_sha256}],
             "budget": {"time_sec": 120, "max_candidates": 1},
             "acceptance": {"metric": "internal_ratification_only", "threshold": 1, "comparator": ">="},
             "forbidden": [".git/", "main", "production", "owner_approval"],
@@ -767,6 +880,7 @@ class Stage2StagingEngine:
             staging_id=staging_id,
             proposal_id=pkg["proposal_id"],
             payload_sha256=payload_sha,
+            blob_path=blob_path,
         )
         now_iso = _utc_iso(self._now())
         with self.store._lock:
@@ -970,28 +1084,38 @@ class Stage2StagingEngine:
             self.store._conn.commit()
             updated = self.get_staged(staging_id)
 
-        # Signal any active runs for this staging_id immediately.
+        # Signal any active runs (local or cross-engine) for this staging_id immediately.
+        with self.store._lock:
+            db_running = [
+                str(r["execution_run_id"])
+                for r in self.store._conn.execute(
+                    "SELECT execution_run_id FROM proposer_stage2_runs WHERE staging_id = ? AND status = 'RUNNING'",
+                    (staging_id,),
+                ).fetchall()
+            ]
         with self._active_lock:
-            run_ids = [
+            local_running = [
                 rid for rid, meta in self._stop_meta.items() if meta.get("staging_id") == staging_id
             ]
-        for rid in run_ids:
+        for rid in sorted(set(db_running) | set(local_running)):
             self.request_stop(rid, reason=f"revoked_at_seq:{seq}:{reason.strip()}")
         return updated  # type: ignore[return-value]
+
+    def _persisted_stop_state(self, execution_run_id: str) -> tuple[bool, str]:
+        with self.store._lock:
+            row = self.store._conn.execute(
+                "SELECT stop_requested, stop_reason FROM proposer_stage2_runs WHERE execution_run_id = ?",
+                (execution_run_id,),
+            ).fetchone()
+            if row is None:
+                return False, ""
+            return bool(row["stop_requested"]), str(row["stop_reason"] or "")
 
     def request_stop(self, execution_run_id: str, *, reason: str = "explicit_stop") -> bool:
         """Signal an in-flight execution run to stop visibly at the next gate check."""
         _check_no_forbidden_terms(reason, field_name="stop_reason")
         clean_reason = reason.strip() or "explicit_stop"
         now_ep = float(self._now())
-        with self._active_lock:
-            ev = self._stop_events.get(execution_run_id)
-            meta = self._stop_meta.get(execution_run_id)
-            if meta is not None:
-                meta.setdefault("stop_requested_at", now_ep)
-                meta["reason"] = clean_reason
-            if ev is not None:
-                ev.set()
         with self.store._lock:
             cur = self.store._conn.execute(
                 "UPDATE proposer_stage2_runs SET stop_requested = 1, stop_reason = ? "
@@ -1014,13 +1138,26 @@ class Stage2StagingEngine:
                         detail={"reason": clean_reason, "requested_at": now_ep},
                     )
                 self.store._conn.commit()
-        return bool(ev is not None or changed)
+        if not changed:
+            return False
+        with self._active_lock:
+            ev = self._stop_events.get(execution_run_id)
+            meta = self._stop_meta.get(execution_run_id)
+            if meta is not None:
+                meta.setdefault("stop_requested_at", now_ep)
+                meta["reason"] = clean_reason
+            if ev is not None:
+                ev.set()
+        return True
 
     def _stop_reason_for(self, execution_run_id: str, staging_id: str) -> str:
         with self._active_lock:
             meta = self._stop_meta.get(execution_run_id, {})
             if meta.get("reason"):
                 return str(meta["reason"])
+        persisted_stop, persisted_reason = self._persisted_stop_state(execution_run_id)
+        if persisted_stop and persisted_reason:
+            return persisted_reason
         staged = self.get_staged(staging_id)
         if staged and staged["revoked"]:
             return f"revoked_at_seq:{staged['revocation_ledger_seq']}"
@@ -1100,7 +1237,6 @@ class Stage2StagingEngine:
         execution_run_id: str,
         staging_id: str,
         staged: dict[str, Any],
-        pkg: dict[str, Any],
         canon_pkg_bytes: bytes,
         ratification: dict[str, Any],
         env_profile: StagingEnvironmentProfile,
@@ -1108,9 +1244,16 @@ class Stage2StagingEngine:
         stop_requested: bool,
         stop_reason: str,
         stop_latency_seconds: float | None,
-        ctx: StagingRunContext,
+        ctx_snapshot: dict[str, Any],
         pre_commit_bundle_hook: Callable[[Path], None] | None = None,
     ) -> dict[str, Any]:
+        if _sha256_bytes(canon_pkg_bytes) != staged["payload_sha256"]:
+            raise BlobIntegrityError("canonical package bytes diverged from staged payload_sha256")
+        verified_pkg = json.loads(canon_pkg_bytes.decode("utf-8"))
+        ok_pkg, pkg_reasons = validate_package(verified_pkg)
+        if not ok_pkg:
+            raise ValidationRejectedError(pkg_reasons)
+
         bundle_root = self.bundles_dir / execution_run_id
         if bundle_root.exists():
             raise BlobIntegrityError(f"bundle directory already exists for {execution_run_id}")
@@ -1129,7 +1272,7 @@ class Stage2StagingEngine:
             "staging_id": staging_id,
             "execution_run_id": execution_run_id,
             "payload_sha256": staged["payload_sha256"],
-            "cost_ceiling": pkg["cost_ceiling"],
+            "cost_ceiling": verified_pkg["cost_ceiling"],
             "protocol": {
                 "pass_rule": {
                     "metric": "run_completed",
@@ -1138,7 +1281,9 @@ class Stage2StagingEngine:
                 }
             },
         }
-        prereg_bytes = (json.dumps(prereg_doc, indent=2, sort_keys=True, ensure_ascii=False) + "\n").encode("utf-8")
+        prereg_bytes = (
+            json.dumps(prereg_doc, indent=2, sort_keys=True, ensure_ascii=False, allow_nan=False) + "\n"
+        ).encode("utf-8")
         prereg_sha, prereg_size = _write_immutable_bytes(package_dir / "preregistration.json", prereg_bytes)
 
         rat_doc = {
@@ -1153,7 +1298,9 @@ class Stage2StagingEngine:
             "identity_mode": "staging-only",
             "env_profile": env_profile.to_snapshot(),
         }
-        rat_bytes = (json.dumps(rat_doc, indent=2, sort_keys=True, ensure_ascii=False) + "\n").encode("utf-8")
+        rat_bytes = (
+            json.dumps(rat_doc, indent=2, sort_keys=True, ensure_ascii=False, allow_nan=False) + "\n"
+        ).encode("utf-8")
         rat_sha, rat_size = _write_immutable_bytes(package_dir / "ratification.json", rat_bytes)
 
         summary_doc = {
@@ -1161,7 +1308,7 @@ class Stage2StagingEngine:
             "execution_run_id": execution_run_id,
             "staging_id": staging_id,
             "request_id": staged["request_id"],
-            "proposal_id": pkg["proposal_id"],
+            "proposal_id": verified_pkg["proposal_id"],
             "bound_payload_sha256": staged["payload_sha256"],
             "identity_mode": "staging-only",
             "status": status,
@@ -1170,16 +1317,18 @@ class Stage2StagingEngine:
             "stop_reason": stop_reason,
             "stop_latency_seconds": stop_latency_seconds,
             "cost_used": {
-                "calls": ctx.calls_used,
-                "wall_seconds": ctx.elapsed_seconds(),
-                "cost_units": round(ctx.cost_units, 6),
+                "calls": ctx_snapshot["calls_used"],
+                "wall_seconds": ctx_snapshot["elapsed_seconds"],
+                "cost_units": round(float(ctx_snapshot["cost_units"]), 6),
             },
-            "work_completed_units": ctx.work_completed_units,
-            "steps": ctx.steps,
+            "work_completed_units": ctx_snapshot["work_completed_units"],
+            "steps": ctx_snapshot["steps"],
             "gate_pairs": [{"pair": [run_completed, 1]}],
             "gate_total_pair": [run_completed, 1],
         }
-        summary_bytes = (json.dumps(summary_doc, indent=2, sort_keys=True, ensure_ascii=False) + "\n").encode("utf-8")
+        summary_bytes = (
+            json.dumps(summary_doc, indent=2, sort_keys=True, ensure_ascii=False, allow_nan=False) + "\n"
+        ).encode("utf-8")
         summary_sha, summary_size = _write_immutable_bytes(package_dir / "execution_summary.json", summary_bytes)
 
         result_rec = {
@@ -1189,13 +1338,15 @@ class Stage2StagingEngine:
             "result": {
                 "metrics": {
                     "run_completed": run_completed,
-                    "calls_used": ctx.calls_used,
-                    "work_completed_units": ctx.work_completed_units,
+                    "calls_used": ctx_snapshot["calls_used"],
+                    "work_completed_units": ctx_snapshot["work_completed_units"],
                 },
                 "verdict": "pass" if run_completed == 1 else "fail",
             },
         }
-        results_bytes = (json.dumps(result_rec, sort_keys=True, ensure_ascii=False) + "\n").encode("utf-8")
+        results_bytes = (
+            json.dumps(result_rec, sort_keys=True, ensure_ascii=False, allow_nan=False) + "\n"
+        ).encode("utf-8")
         results_sha, results_size = _write_immutable_bytes(package_dir / "results.jsonl", results_bytes)
 
         manifest_doc = {
@@ -1234,7 +1385,9 @@ class Stage2StagingEngine:
                 "results": {"artifact": "results.jsonl"},
             },
         }
-        manifest_bytes = (json.dumps(manifest_doc, indent=2, sort_keys=True, ensure_ascii=False) + "\n").encode("utf-8")
+        manifest_bytes = (
+            json.dumps(manifest_doc, indent=2, sort_keys=True, ensure_ascii=False, allow_nan=False) + "\n"
+        ).encode("utf-8")
         manifest_path = bundle_root / "manifest.json"
         manifest_sha, _ = _write_immutable_bytes(manifest_path, manifest_bytes)
 
@@ -1323,9 +1476,16 @@ class Stage2StagingEngine:
                 ),
             )
 
-        # Enforce no_auto_retry after STOPPED / ABORTED_CEILING / FAILED.
+        # Enforce no_auto_retry after RUNNING / FINALIZING / FINALIZE_FAILED / STOPPED / ABORTED_CEILING / FAILED.
         prior_runs = self.list_runs(staging_id)
-        blocked_states = ("STOPPED", "ABORTED_CEILING", "FAILED")
+        blocked_states = (
+            "RUNNING",
+            "FINALIZING",
+            "FINALIZE_FAILED",
+            "STOPPED",
+            "ABORTED_CEILING",
+            "FAILED",
+        )
         halted = [r for r in prior_runs if r["status"] in blocked_states]
         if halted:
             self._reject_dispatch(
@@ -1421,6 +1581,8 @@ class Stage2StagingEngine:
 
         # Mint fresh execution_run_id (#8C: unique per intentional execution / replication).
         run_id = f"stgrun_{int(now_ep * 1000)}_{secrets.token_hex(4)}"
+        run_dummy_root = (dummy_root / run_id).resolve()
+        run_dummy_root.mkdir(parents=True, exist_ok=True)
         env_snap = profile.to_snapshot()
         created_iso = _utc_iso(now_ep)
 
@@ -1466,79 +1628,275 @@ class Stage2StagingEngine:
             staging_id=staging_id,
             bound_payload_sha256=staged["payload_sha256"],
             ceiling=pkg["cost_ceiling"],
-            dummy_root=dummy_root,
+            dummy_root=run_dummy_root,
             dummy_credentials=profile.dummy_credentials,
             stop_event=stop_event,
             now_fn=self._now,
         )
 
-        final_status = "COMPLETED"
-        stop_requested = False
-        stop_reason = ""
-        worker_out: dict[str, Any] = {}
-        try:
-            ctx.check_gates()
-            if worker is None:
-                est_calls = max(1, min(int(pkg["cost_estimate"]["calls"]), int(pkg["cost_ceiling"]["max_calls"])))
-                ctx.record_step(
-                    step_name="isolated_staging_dry_probe",
-                    calls=est_calls,
-                    cost_units=min(float(pkg["cost_estimate"]["cost_units"]), float(pkg["cost_ceiling"]["max_cost_units"])),
-                    work_units=1,
-                    dummy_artifact_rel=f"{run_id}_probe.json",
-                    dummy_content=json.dumps({
-                        "execution_run_id": run_id,
-                        "staging_id": staging_id,
-                        "identity_mode": "staging-only",
-                        "dummy_account": profile.dummy_credentials.get("staging_account", ""),
-                    }).encode("utf-8"),
-                )
+        # Pass an isolated deep copy parsed directly from verified canonical bytes to the worker.
+        worker_pkg = json.loads(canon_bytes.decode("utf-8"))
+        worker_done = threading.Event()
+        worker_holder: dict[str, Any] = {
+            "status": "COMPLETED",
+            "stop_requested": False,
+            "stop_reason": "",
+            "out": {},
+        }
+
+        def _worker_runner() -> None:
+            try:
+                ctx.check_gates()
+                if worker is None:
+                    est_calls = max(
+                        1,
+                        min(
+                            int(worker_pkg["cost_estimate"]["calls"]),
+                            int(worker_pkg["cost_ceiling"]["max_calls"]),
+                        ),
+                    )
+                    ctx.record_step(
+                        step_name="isolated_staging_dry_probe",
+                        calls=est_calls,
+                        cost_units=min(
+                            float(worker_pkg["cost_estimate"]["cost_units"]),
+                            float(worker_pkg["cost_ceiling"]["max_cost_units"]),
+                        ),
+                        work_units=1,
+                        dummy_artifact_rel=f"{run_id}_probe.json",
+                        dummy_content=json.dumps({
+                            "execution_run_id": run_id,
+                            "staging_id": staging_id,
+                            "identity_mode": "staging-only",
+                            "dummy_account": profile.dummy_credentials.get("staging_account", ""),
+                        }).encode("utf-8"),
+                    )
+                else:
+                    res = worker(ctx, worker_pkg)
+                    if isinstance(res, dict):
+                        worker_holder["out"] = res
+                ctx.check_gates()
+            except _StopTriggered as exc:
+                worker_holder["status"] = "STOPPED"
+                worker_holder["stop_requested"] = True
+                worker_holder["stop_reason"] = exc.reason
+            except _CeilingExceeded as exc:
+                worker_holder["status"] = "ABORTED_CEILING"
+                worker_holder["stop_requested"] = True
+                worker_holder["stop_reason"] = exc.reason
+            except BaseException as exc:
+                sealed_kind, sealed_reason = ctx._sealed_outcome()
+                if sealed_kind == "STOPPED":
+                    worker_holder["status"] = "STOPPED"
+                    worker_holder["stop_requested"] = True
+                    worker_holder["stop_reason"] = sealed_reason
+                elif sealed_kind == "ABORTED_CEILING":
+                    worker_holder["status"] = "ABORTED_CEILING"
+                    worker_holder["stop_requested"] = True
+                    worker_holder["stop_reason"] = sealed_reason
+                else:
+                    worker_holder["status"] = "FAILED"
+                    worker_holder["stop_reason"] = f"{type(exc).__name__}: {exc}"[:300]
+            finally:
+                worker_done.set()
+
+        wt = threading.Thread(target=_worker_runner, name=f"stage2-{run_id}", daemon=True)
+        wt.start()
+        worker_tid = wt.ident
+
+        max_wall = float(pkg["cost_ceiling"]["max_wall_seconds"])
+        trigger_kind = ""
+        trigger_reason = ""
+        trigger_mono: float | None = None
+        grace_sec = 0.0
+        supervised_aborted = False
+
+        while not worker_done.wait(timeout=0.02):
+            elapsed_wall = ctx.elapsed_seconds()
+            persisted_stop, _ = self._persisted_stop_state(run_id)
+            if persisted_stop:
+                stop_event.set()
+            revoked_now = self.is_revoked(staging_id)
+            if elapsed_wall > max_wall:
+                if trigger_kind != "ABORTED_CEILING":
+                    trigger_kind = "ABORTED_CEILING"
+                    trigger_reason = f"wall_seconds {elapsed_wall} exceeds max_wall_seconds {pkg['cost_ceiling']['max_wall_seconds']}"
+                    trigger_mono = time.monotonic()
+                    grace_sec = 0.05
+            elif stop_event.is_set() or persisted_stop or revoked_now:
+                if not trigger_kind:
+                    trigger_kind = "STOPPED"
+                    trigger_reason = self._stop_reason_for(run_id, staging_id)
+                    trigger_mono = time.monotonic()
+                    grace_sec = 0.15
+
+            if trigger_kind and trigger_mono is not None and (time.monotonic() - trigger_mono) >= grace_sec:
+                ctx._seal(trigger_kind, trigger_reason)
+                if wt.is_alive():
+                    _interrupt_thread(worker_tid, _WorkerInterrupted)
+                if not worker_done.wait(timeout=0.10):
+                    if wt.is_alive():
+                        _interrupt_thread(worker_tid, _WorkerInterrupted)
+                    worker_done.wait(timeout=0.05)
+                supervised_aborted = True
+                break
+
+        end_ep = float(self._now())
+
+        if worker_done.is_set() and not supervised_aborted:
+            final_status = str(worker_holder["status"])
+            stop_requested = bool(worker_holder["stop_requested"])
+            stop_reason = str(worker_holder["stop_reason"])
+            worker_out = dict(worker_holder["out"]) if isinstance(worker_holder["out"], dict) else {}
+        else:
+            if worker_done.is_set() and worker_holder["status"] in ("STOPPED", "ABORTED_CEILING"):
+                final_status = str(worker_holder["status"])
+                stop_requested = True
+                stop_reason = str(worker_holder["stop_reason"]) or trigger_reason
             else:
-                res = worker(ctx, pkg)
-                if isinstance(res, dict):
-                    worker_out = res
-            ctx.check_gates()
-        except _StopTriggered as exc:
-            final_status = "STOPPED"
-            stop_requested = True
-            stop_reason = exc.reason
-        except _CeilingExceeded as exc:
-            final_status = "ABORTED_CEILING"
-            stop_requested = True
-            stop_reason = exc.reason
-        except Exception as exc:
-            final_status = "FAILED"
-            stop_reason = f"{type(exc).__name__}: {exc}"[:300]
-        finally:
-            end_ep = float(self._now())
-            with self._active_lock:
-                self._stop_events.pop(run_id, None)
-                meta = self._stop_meta.pop(run_id, {})
+                final_status = trigger_kind
+                stop_requested = True
+                stop_reason = trigger_reason
+            worker_out = {}
+
+        # Freeze metrics snapshot before entering finalization so late daemon thread wakes cannot mutate state.
+        ctx_snapshot = ctx._seal(
+            final_status if final_status in ("STOPPED", "ABORTED_CEILING") else "FINALIZED",
+            stop_reason,
+        )
+
+        # Atomically serialize RUNNING -> FINALIZING with request_stop acceptance on store._lock.
+        stop_req_at_db: float | None = None
+        with self.store._lock:
+            run_row = self.store._conn.execute(
+                "SELECT stop_requested, stop_reason FROM proposer_stage2_runs WHERE execution_run_id = ?",
+                (run_id,),
+            ).fetchone()
+            db_stop_requested = bool(run_row and run_row["stop_requested"])
+            db_stop_reason = str(run_row["stop_reason"] or "") if run_row else ""
+
+            pkg_row = self.store._conn.execute(
+                "SELECT revoked, revocation_ledger_seq FROM proposer_staged_packages WHERE staging_id = ?",
+                (staging_id,),
+            ).fetchone()
+            db_revoked = bool(pkg_row and pkg_row["revoked"])
+
+            if final_status == "COMPLETED" and (stop_event.is_set() or db_stop_requested or db_revoked):
+                final_status = "STOPPED"
+                stop_requested = True
+                if db_stop_reason:
+                    stop_reason = db_stop_reason
+                elif db_revoked:
+                    stop_reason = f"revoked_at_seq:{int(pkg_row['revocation_ledger_seq'])}"
+                else:
+                    stop_reason = "explicit_stop"
+            elif final_status == "STOPPED" and db_stop_requested and db_stop_reason:
+                stop_reason = db_stop_reason
+
+            if stop_requested:
+                sig_row = self.store._conn.execute(
+                    "SELECT detail_json FROM proposer_stage2_ledger "
+                    "WHERE execution_run_id = ? AND event_type = 'STOP_SIGNAL_RECORDED' "
+                    "ORDER BY seq DESC LIMIT 1",
+                    (run_id,),
+                ).fetchone()
+                if sig_row is not None:
+                    sig_detail = json.loads(sig_row["detail_json"] or "{}")
+                    if "requested_at" in sig_detail:
+                        stop_req_at_db = float(sig_detail["requested_at"])
+
+            self.store._conn.execute(
+                "UPDATE proposer_stage2_runs SET status = 'FINALIZING', stop_requested = ?, stop_reason = ? "
+                "WHERE execution_run_id = ? AND status = 'RUNNING'",
+                (1 if stop_requested else 0, stop_reason, run_id),
+            )
+            self.store._conn.commit()
+
+        with self._active_lock:
+            self._stop_events.pop(run_id, None)
+            meta = self._stop_meta.pop(run_id, {})
 
         stop_latency: float | None = None
-        if stop_requested and "stop_requested_at" in meta:
-            stop_latency = round(max(0.0, end_ep - float(meta["stop_requested_at"])), 6)
+        req_at = meta.get("stop_requested_at", stop_req_at_db)
+        if stop_requested and req_at is not None:
+            stop_latency = round(max(0.0, end_ep - float(req_at)), 6)
 
-        bundle_info = self._export_and_verify_bundle(
-            execution_run_id=run_id,
-            staging_id=staging_id,
-            staged=staged,
-            pkg=pkg,
-            canon_pkg_bytes=canon_bytes,
-            ratification=active_rat,
-            env_profile=profile,
-            status=final_status,
-            stop_requested=stop_requested,
-            stop_reason=stop_reason,
-            stop_latency_seconds=stop_latency,
-            ctx=ctx,
-            pre_commit_bundle_hook=pre_commit_bundle_hook,
-        )
+        try:
+            bundle_info = self._export_and_verify_bundle(
+                execution_run_id=run_id,
+                staging_id=staging_id,
+                staged=staged,
+                canon_pkg_bytes=canon_bytes,
+                ratification=active_rat,
+                env_profile=profile,
+                status=final_status,
+                stop_requested=stop_requested,
+                stop_reason=stop_reason,
+                stop_latency_seconds=stop_latency,
+                ctx_snapshot=ctx_snapshot,
+                pre_commit_bundle_hook=pre_commit_bundle_hook,
+            )
+        except Exception as exc:
+            fail_iso = _utc_iso(float(self._now()))
+            err_msg = f"{type(exc).__name__}: {exc}"[:300]
+            comb_reason = err_msg if not stop_reason else f"{stop_reason} | finalize_error: {err_msg}"[:300]
+            with self.store._lock:
+                self.store._conn.execute(
+                    """
+                    UPDATE proposer_stage2_runs SET
+                        status = 'FINALIZE_FAILED',
+                        stop_requested = ?,
+                        stop_reason = ?,
+                        stop_visible = 1,
+                        calls_used = ?,
+                        wall_seconds = ?,
+                        cost_units = ?,
+                        work_completed_units = ?,
+                        bundle_manifest_sha256 = '',
+                        preaudit_report_sha256 = '',
+                        preaudit_exit_code = -1,
+                        result_summary_json = ?,
+                        finished_at = ?
+                    WHERE execution_run_id = ?
+                    """,
+                    (
+                        1 if stop_requested else 0,
+                        comb_reason,
+                        ctx_snapshot["calls_used"],
+                        ctx_snapshot["elapsed_seconds"],
+                        round(float(ctx_snapshot["cost_units"]), 6),
+                        ctx_snapshot["work_completed_units"],
+                        json.dumps(
+                            {
+                                "worker_output": worker_out,
+                                "steps": ctx_snapshot["steps"],
+                                "stop_latency_seconds": stop_latency,
+                                "finalize_error": err_msg,
+                            },
+                            sort_keys=True,
+                            ensure_ascii=False,
+                        ),
+                        fail_iso,
+                        run_id,
+                    ),
+                )
+                self._append_ledger_locked(
+                    event_type="RUN_FINALIZE_FAILED",
+                    staging_id=staging_id,
+                    execution_run_id=run_id,
+                    payload_sha256=staged["payload_sha256"],
+                    detail={
+                        "prior_execution_status": final_status,
+                        "error": err_msg,
+                    },
+                )
+                self.store._conn.commit()
+            raise
 
         finished_iso = _utc_iso(end_ep)
         result_summary = {
             "worker_output": worker_out,
-            "steps": ctx.steps,
+            "steps": ctx_snapshot["steps"],
             "stop_latency_seconds": stop_latency,
         }
         # Commit finalized DB state ONLY after immutable blobs + preaudit verification passed!
@@ -1566,10 +1924,10 @@ class Stage2StagingEngine:
                     final_status,
                     1 if stop_requested else 0,
                     stop_reason,
-                    ctx.calls_used,
-                    ctx.elapsed_seconds(),
-                    round(ctx.cost_units, 6),
-                    ctx.work_completed_units,
+                    ctx_snapshot["calls_used"],
+                    ctx_snapshot["elapsed_seconds"],
+                    round(float(ctx_snapshot["cost_units"]), 6),
+                    ctx_snapshot["work_completed_units"],
                     bundle_info["bundle_dir"],
                     bundle_info["manifest_sha256"],
                     bundle_info["preaudit_report_sha256"],
@@ -1586,10 +1944,10 @@ class Stage2StagingEngine:
                 payload_sha256=staged["payload_sha256"],
                 detail={
                     "status": final_status,
-                    "calls_used": ctx.calls_used,
-                    "wall_seconds": ctx.elapsed_seconds(),
-                    "cost_units": round(ctx.cost_units, 6),
-                    "work_completed_units": ctx.work_completed_units,
+                    "calls_used": ctx_snapshot["calls_used"],
+                    "wall_seconds": ctx_snapshot["elapsed_seconds"],
+                    "cost_units": round(float(ctx_snapshot["cost_units"]), 6),
+                    "work_completed_units": ctx_snapshot["work_completed_units"],
                     "stop_visible": True,
                     "stop_reason": stop_reason,
                     "bundle_manifest_sha256": bundle_info["manifest_sha256"],

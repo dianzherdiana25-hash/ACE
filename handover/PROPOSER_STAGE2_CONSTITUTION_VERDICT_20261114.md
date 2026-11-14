@@ -6,7 +6,7 @@
 
 ## 1. Constitutional Design Summary
 
-Stage 2 opens a **strictly isolated, `staging-only` execution & constitution harness** ([`code/ace_operational/proposer_stage2.py`](file:///home/antigravity/dianzherdiana25-hash/ACE/code/ace_operational/proposer_stage2.py)) backed by four additive schema tables in [`code/ace_operational/store.py`](file:///home/antigravity/dianzherdiana25-hash/ACE/code/ace_operational/store.py): `proposer_staged_packages`, `proposer_stage2_ratifications`, `proposer_stage2_runs`, and `proposer_stage2_ledger`.
+Stage 2 opens a **strictly isolated, `staging-only` execution & constitution harness** ([`code/ace_operational/proposer_stage2.py`](../code/ace_operational/proposer_stage2.py)) backed by four additive schema tables in [`code/ace_operational/store.py`](../code/ace_operational/store.py): `proposer_staged_packages`, `proposer_stage2_ratifications`, `proposer_stage2_runs`, and `proposer_stage2_ledger`.
 
 1. **Internal Ratification Only (Zero Owner-Permission Vocabulary):**
    `FORBIDDEN_RATIFICATION_TERMS` (`owner_approval`, `owner_permission`, `izin_pemilik`, `persetujuan_pemilik`) are rejected fail-closed across proposal packages, `request_id`, ratification records, revocation metadata, stop reasons, and environment profiles. Only `RATIFICATION_AUDIENCE` (`hub`, `kernel`, `evidence`) may grant internal ratification.
@@ -25,7 +25,7 @@ Stage 2 opens a **strictly isolated, `staging-only` execution & constitution har
 
 ## 2. Constitution Battery Results (7/7 PASS over Real Frozen Stage-1 v2 Packages)
 
-Executed offline (zero LLM/network calls) via [`proposer_stage2_battery.py`](file:///home/antigravity/dianzherdiana25-hash/ACE/code/ace_operational/proposer_stage2_battery.py) against all six real `Qwen3.5-4B` Stage-1 v2 packages in `evidence/proposer_stage1_v2/grammar_only/`. Recorded report: [`evidence/proposer_stage2/constitution_battery_report.json`](file:///home/antigravity/dianzherdiana25-hash/ACE/evidence/proposer_stage2/constitution_battery_report.json).
+Executed offline (zero LLM/network calls) via [`proposer_stage2_battery.py`](../code/ace_operational/proposer_stage2_battery.py) against all six real `Qwen3.5-4B` Stage-1 v2 packages in `evidence/proposer_stage1_v2/grammar_only/`. Recorded report: [`evidence/proposer_stage2/constitution_battery_report.json`](../evidence/proposer_stage2/constitution_battery_report.json).
 
 | Check | Target Episode (Real Package) | Constitutional Invariant Verified | Result |
 |---|---|---|---|
