@@ -1,0 +1,2470 @@
+{
+ "band": 20261703,
+ "arm": "guarded",
+ "condition": "clean",
+ "wall_seconds": 364.8,
+ "records": {
+  "catalog_control-001": {
+   "task_id": "catalog_control-001",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 3,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "81b57c2daf88a034302c522d18fc900792cac03d67733f6877390afbe653252b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-002": {
+   "task_id": "catalog_control-002",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 3,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "81b57c2daf88a034302c522d18fc900792cac03d67733f6877390afbe653252b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-003": {
+   "task_id": "catalog_control-003",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 3,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "81b57c2daf88a034302c522d18fc900792cac03d67733f6877390afbe653252b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-004": {
+   "task_id": "catalog_control-004",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 3,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "81b57c2daf88a034302c522d18fc900792cac03d67733f6877390afbe653252b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-005": {
+   "task_id": "catalog_control-005",
+   "solved": true,
+   "holdout_passes": 18,
+   "holdout_total": 18,
+   "shown_score": 2,
+   "shown_total": 2,
+   "score_calls": 3,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 2,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 2,
+     "frontier_in": [
+      [
+       "50e1d95eb31c27377fd15478a7934cc1d2ca59904ad6c1929082d70070ea38ea",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      2,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-006": {
+   "task_id": "catalog_control-006",
+   "solved": true,
+   "holdout_passes": 17,
+   "holdout_total": 17,
+   "shown_score": 3,
+   "shown_total": 3,
+   "score_calls": 3,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 3,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 3,
+     "frontier_in": [
+      [
+       "50e1d95eb31c27377fd15478a7934cc1d2ca59904ad6c1929082d70070ea38ea",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      3,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-007": {
+   "task_id": "catalog_control-007",
+   "solved": true,
+   "holdout_passes": 17,
+   "holdout_total": 17,
+   "shown_score": 3,
+   "shown_total": 3,
+   "score_calls": 3,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 3,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 3,
+     "frontier_in": [
+      [
+       "50e1d95eb31c27377fd15478a7934cc1d2ca59904ad6c1929082d70070ea38ea",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      3,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-008": {
+   "task_id": "catalog_control-008",
+   "solved": true,
+   "holdout_passes": 17,
+   "holdout_total": 17,
+   "shown_score": 3,
+   "shown_total": 3,
+   "score_calls": 3,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 3,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 3,
+     "frontier_in": [
+      [
+       "50e1d95eb31c27377fd15478a7934cc1d2ca59904ad6c1929082d70070ea38ea",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      3,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-009": {
+   "task_id": "catalog_control-009",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 3,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "bb3bc32a590ef8cdba3dd1740fe65b6ebd028399c07ed38d1aba83d7544f7a7b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-010": {
+   "task_id": "catalog_control-010",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 3,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "bb3bc32a590ef8cdba3dd1740fe65b6ebd028399c07ed38d1aba83d7544f7a7b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-011": {
+   "task_id": "catalog_control-011",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 3,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "bb3bc32a590ef8cdba3dd1740fe65b6ebd028399c07ed38d1aba83d7544f7a7b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-012": {
+   "task_id": "catalog_control-012",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 3,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "bb3bc32a590ef8cdba3dd1740fe65b6ebd028399c07ed38d1aba83d7544f7a7b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-013": {
+   "task_id": "catalog_control-013",
+   "solved": true,
+   "holdout_passes": 17,
+   "holdout_total": 17,
+   "shown_score": 3,
+   "shown_total": 3,
+   "score_calls": 3,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 3,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 3,
+     "frontier_in": [
+      [
+       "6adc5fadf79186671dbe59d595db5eaa9619446c521b7a705b20d89e4ac38728",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      3,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-014": {
+   "task_id": "catalog_control-014",
+   "solved": true,
+   "holdout_passes": 17,
+   "holdout_total": 17,
+   "shown_score": 3,
+   "shown_total": 3,
+   "score_calls": 3,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 3,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 3,
+     "frontier_in": [
+      [
+       "6adc5fadf79186671dbe59d595db5eaa9619446c521b7a705b20d89e4ac38728",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      3,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-015": {
+   "task_id": "catalog_control-015",
+   "solved": true,
+   "holdout_passes": 17,
+   "holdout_total": 17,
+   "shown_score": 3,
+   "shown_total": 3,
+   "score_calls": 3,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 3,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 3,
+     "frontier_in": [
+      [
+       "6adc5fadf79186671dbe59d595db5eaa9619446c521b7a705b20d89e4ac38728",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      3,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-016": {
+   "task_id": "catalog_control-016",
+   "solved": true,
+   "holdout_passes": 17,
+   "holdout_total": 17,
+   "shown_score": 3,
+   "shown_total": 3,
+   "score_calls": 3,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 2,
+     "n_scored": 2,
+     "cap_break": false,
+     "best_score_after": 3,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 3,
+     "frontier_in": [
+      [
+       "6adc5fadf79186671dbe59d595db5eaa9619446c521b7a705b20d89e4ac38728",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      3,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-017": {
+   "task_id": "catalog_control-017",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 5,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 5,
+     "frontier_in": [
+      [
+       "51238f8958b83561dfd6ac51cc5b32e0c6c299ef07a315535b531246cb913805",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+      5,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-018": {
+   "task_id": "catalog_control-018",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 6,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 6,
+     "frontier_in": [
+      [
+       "51238f8958b83561dfd6ac51cc5b32e0c6c299ef07a315535b531246cb913805",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+      6,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-019": {
+   "task_id": "catalog_control-019",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 5,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 5,
+     "frontier_in": [
+      [
+       "51238f8958b83561dfd6ac51cc5b32e0c6c299ef07a315535b531246cb913805",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+      5,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-020": {
+   "task_id": "catalog_control-020",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 1,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 1,
+     "frontier_in": [
+      [
+       "c43a2788d0b27b3af52a0d70f26344a60fe6ecbc065929148e9e092875e16b79",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "a65cec79be41dbf332627772f7b9c1d9849054e240c7ee3d3e99214bc0312315",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "a65cec79be41dbf332627772f7b9c1d9849054e240c7ee3d3e99214bc0312315",
+      1,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "a65cec79be41dbf332627772f7b9c1d9849054e240c7ee3d3e99214bc0312315",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-021": {
+   "task_id": "catalog_control-021",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 1,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 1,
+     "frontier_in": [
+      [
+       "c43a2788d0b27b3af52a0d70f26344a60fe6ecbc065929148e9e092875e16b79",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "a65cec79be41dbf332627772f7b9c1d9849054e240c7ee3d3e99214bc0312315",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "a65cec79be41dbf332627772f7b9c1d9849054e240c7ee3d3e99214bc0312315",
+      1,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "a65cec79be41dbf332627772f7b9c1d9849054e240c7ee3d3e99214bc0312315",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-022": {
+   "task_id": "catalog_control-022",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 0,
+     "frontier_size": 3,
+     "frontier_cutoff_score": 0,
+     "frontier_in": [
+      [
+       "c43a2788d0b27b3af52a0d70f26344a60fe6ecbc065929148e9e092875e16b79",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "535e5b60277b7cc4fb304cd00539e18119c45c256be2e0f3ffaf81c59cb59eb8",
+       "BASE"
+      ],
+      [
+       "a65cec79be41dbf332627772f7b9c1d9849054e240c7ee3d3e99214bc0312315",
+       "BASE"
+      ],
+      [
+       "6fe7a185c0b36fc38727f492c9a918bb652dd1f01c0d9e0d50d0832e1db99a7a",
+       "ENRICHED"
+      ]
+     ],
+     "scored_base_best": [
+      "535e5b60277b7cc4fb304cd00539e18119c45c256be2e0f3ffaf81c59cb59eb8",
+      0,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "535e5b60277b7cc4fb304cd00539e18119c45c256be2e0f3ffaf81c59cb59eb8",
+       "BASE"
+      ],
+      [
+       "a65cec79be41dbf332627772f7b9c1d9849054e240c7ee3d3e99214bc0312315",
+       "BASE"
+      ],
+      [
+       "6fe7a185c0b36fc38727f492c9a918bb652dd1f01c0d9e0d50d0832e1db99a7a",
+       "ENRICHED"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-023": {
+   "task_id": "catalog_control-023",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 5,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 5,
+     "frontier_in": [
+      [
+       "4a9224c5da379cbdc79838e12a293b320d8ee351e9a8bff2ffff7144a4ecb72b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+      5,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-024": {
+   "task_id": "catalog_control-024",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 6,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 6,
+     "frontier_in": [
+      [
+       "4a9224c5da379cbdc79838e12a293b320d8ee351e9a8bff2ffff7144a4ecb72b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+      6,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-025": {
+   "task_id": "catalog_control-025",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 6,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 6,
+     "frontier_in": [
+      [
+       "4a9224c5da379cbdc79838e12a293b320d8ee351e9a8bff2ffff7144a4ecb72b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+      6,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-026": {
+   "task_id": "catalog_control-026",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 4,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 4,
+     "frontier_in": [
+      [
+       "2a2dc63296fd13efd542468c4b537093a0bb193f459f7f7c575cf4950f39bded",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+      4,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-027": {
+   "task_id": "catalog_control-027",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 3,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 3,
+     "frontier_in": [
+      [
+       "2a2dc63296fd13efd542468c4b537093a0bb193f459f7f7c575cf4950f39bded",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+      3,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-028": {
+   "task_id": "catalog_control-028",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 4,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 4,
+     "frontier_in": [
+      [
+       "2a2dc63296fd13efd542468c4b537093a0bb193f459f7f7c575cf4950f39bded",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+      4,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-029": {
+   "task_id": "catalog_control-029",
+   "solved": true,
+   "holdout_passes": 14,
+   "holdout_total": 14,
+   "shown_score": 6,
+   "shown_total": 6,
+   "score_calls": 5,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 3,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 3,
+     "frontier_in": [
+      [
+       "dc7db6e0a257204f15542caa8bde36e14d895a081591a22cb17ae8b29157b79b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "9ede91b7ada20daa682a3ee84b5d0571df7aab8640af5f4d36f79ef45f51359a",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "9ede91b7ada20daa682a3ee84b5d0571df7aab8640af5f4d36f79ef45f51359a",
+      3,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 6,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 6,
+     "frontier_in": [
+      [
+       "9ede91b7ada20daa682a3ee84b5d0571df7aab8640af5f4d36f79ef45f51359a",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      6,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-030": {
+   "task_id": "catalog_control-030",
+   "solved": true,
+   "holdout_passes": 14,
+   "holdout_total": 14,
+   "shown_score": 6,
+   "shown_total": 6,
+   "score_calls": 5,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 3,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 3,
+     "frontier_in": [
+      [
+       "dc7db6e0a257204f15542caa8bde36e14d895a081591a22cb17ae8b29157b79b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "9ede91b7ada20daa682a3ee84b5d0571df7aab8640af5f4d36f79ef45f51359a",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "9ede91b7ada20daa682a3ee84b5d0571df7aab8640af5f4d36f79ef45f51359a",
+      3,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 6,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 6,
+     "frontier_in": [
+      [
+       "9ede91b7ada20daa682a3ee84b5d0571df7aab8640af5f4d36f79ef45f51359a",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      6,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-031": {
+   "task_id": "catalog_control-031",
+   "solved": true,
+   "holdout_passes": 14,
+   "holdout_total": 14,
+   "shown_score": 6,
+   "shown_total": 6,
+   "score_calls": 5,
+   "returned_sha256": "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 3,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 3,
+     "frontier_in": [
+      [
+       "dc7db6e0a257204f15542caa8bde36e14d895a081591a22cb17ae8b29157b79b",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+      3,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 6,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 6,
+     "frontier_in": [
+      [
+       "f95b670585a3e32ecfd32b9fcf11296d939a1c441b99ba69ce1126f54c323f91",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "51789304357376670d7e6924d13e612a103a52b0490d2d86b2dda8a959db82a4",
+      6,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-032": {
+   "task_id": "catalog_control-032",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 6,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 6,
+     "frontier_in": [
+      [
+       "61c671f16e6cc7907fa029b874e12e86c7f24459a9d69387529f845393c73c80",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+      6,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-033": {
+   "task_id": "catalog_control-033",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 5,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 5,
+     "frontier_in": [
+      [
+       "61c671f16e6cc7907fa029b874e12e86c7f24459a9d69387529f845393c73c80",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+      5,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  },
+  "catalog_control-034": {
+   "task_id": "catalog_control-034",
+   "solved": true,
+   "holdout_passes": 12,
+   "holdout_total": 12,
+   "shown_score": 8,
+   "shown_total": 8,
+   "score_calls": 5,
+   "returned_sha256": "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+   "trace": [
+    [
+     "baseline",
+     null
+    ],
+    [
+     "baseline",
+     null
+    ]
+   ],
+   "termination": "shown_perfect_exit",
+   "round_log": [
+    {
+     "round": 1,
+     "n_candidates_generated": 3,
+     "n_scored": 3,
+     "cap_break": false,
+     "best_score_after": 6,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 6,
+     "frontier_in": [
+      [
+       "61c671f16e6cc7907fa029b874e12e86c7f24459a9d69387529f845393c73c80",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+      6,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "n_candidates_generated": 1,
+     "n_scored": 1,
+     "cap_break": false,
+     "best_score_after": 8,
+     "frontier_size": 1,
+     "frontier_cutoff_score": 8,
+     "frontier_in": [
+      [
+       "f968581ab887a492abb0b6e259d1584ca44c711e9d77bb71cc0ba8281c5b3ceb",
+       "BASE"
+      ]
+     ],
+     "frontier_out": [
+      [
+       "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+       "BASE"
+      ]
+     ],
+     "scored_base_best": [
+      "6504b23bd0f407d222f3453430cb5edd92f87fc65dc5a0b07e19080068098322",
+      8,
+      1
+     ],
+     "guard_event": {
+      "triggered": false,
+      "occupant": null,
+      "displaced": null
+     },
+     "lineage_alive_in": true
+    }
+   ],
+   "l5_violations": [],
+   "timeout": false
+  }
+ }
+}
