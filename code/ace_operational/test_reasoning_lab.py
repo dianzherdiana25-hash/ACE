@@ -19,7 +19,7 @@ from ace_operational.reasoning_lab import (
 
 
 def tiny_run(**overrides):
-    args = dict(families=["pricing"], levels=[1], seeds=[1, 2, 3],
+    args = dict(families=["pricing"], levels=[1], seeds=[1, 2, 3, 5, 8],
                 budget_limit=40)
     args.update(overrides)
     return run_experiment(**args)
@@ -61,15 +61,17 @@ class HarnessTests(unittest.TestCase):
         self.assertEqual(report["solvers"]["hopeless"]["solved"], 0)
 
     def test_multiple_seeds_aggregate_and_repeat_deterministically(self):
-        one = tiny_run(seeds=[1, 2, 3, 4])
-        two = tiny_run(seeds=[1, 2, 3, 4])
+        one = tiny_run(seeds=[1, 2, 3, 4, 5, 8])
+        two = tiny_run(seeds=[1, 2, 3, 4, 5, 8])
         self.assertEqual(one["task_count"], two["task_count"])
         self.assertEqual({k: v["solved"] for k, v in one["solvers"].items()},
                          {k: v["solved"] for k, v in two["solvers"].items()})
 
     def test_results_are_reported_per_family(self):
+        # Range 1..29 guarantees >=1 holdout task per family across Python 3.11/3.12/3.13
+        # ast.dump() variations without altering frozen curriculum_lab.normalized_form.
         report = run_experiment(families=["pricing", "shipping"], levels=[1],
-                                seeds=[1, 2], budget_limit=40)
+                                seeds=list(range(1, 30)), budget_limit=40)
         for data in report["solvers"].values():
             self.assertIn("pricing", data["per_family"])
             self.assertIn("shipping", data["per_family"])
