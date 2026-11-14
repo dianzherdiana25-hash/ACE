@@ -1,0 +1,9 @@
+{
+ "band": 20261601,
+ "seconds": 1317.63,
+ "n_keys": 6,
+ "n_chains": 1,
+ "catalog_digest": "e5c7875d5e742bc4ca317569afa6a4b7a88f9aa0ea706ee99675d0d8c2d9a09c",
+ "expected_digest": "e5c7875d5e742bc4ca317569afa6a4b7a88f9aa0ea706ee99675d0d8c2d9a09c",
+ "digest_match": true
+}

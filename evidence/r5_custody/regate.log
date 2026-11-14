@@ -1,0 +1,9 @@
+[stage3] control=34 keys=60 chains=1 digest OK; 'nc' key present at position 31
+[stage3] gate catalog_control-020 arm A: identical=True anchor=True
+[stage3] gate catalog_control-020 arm B: identical=True anchor=True
+[stage3] gate catalog_control-021 arm A: identical=True anchor=True
+[stage3] gate catalog_control-021 arm B: identical=True anchor=True
+[stage3] cell control: catalog_control-020 solved=False calls=410 tp=never_generated; catalog_control-021 solved=False calls=159 tp=never_generated
+[stage3] cell rounds_only: catalog_control-020 solved=False calls=410 tp=never_generated; catalog_control-021 solved=False calls=159 tp=never_generated
+[stage3] cell frontier_only: catalog_control-020 solved=False calls=410 tp=never_generated; catalog_control-021 solved=False calls=159 tp=never_generated
+[stage3] DONE — verdict=COMPARISON_VALID
