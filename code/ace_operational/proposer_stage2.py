@@ -370,7 +370,12 @@ class StagingEnvironmentProfile:
                 raise EnvironmentIsolationError(
                     f"enforcer_versions digest/version mismatch for {mod_name!r}"
                 )
-        resolved.mkdir(parents=True, exist_ok=True)
+        try:
+            resolved.mkdir(parents=True, exist_ok=True)
+        except OSError as exc:
+            raise EnvironmentIsolationError(
+                f"failed to prepare dummy_resource_root {resolved}: {exc}"
+            ) from exc
         return resolved
 
     def to_snapshot(self) -> dict[str, Any]:
@@ -1590,7 +1595,19 @@ class Stage2StagingEngine:
         run_id = f"stgrun_{int(now_ep * 1000)}_{secrets.token_hex(4)}"
         run_dummy_root = (dummy_root / run_id).resolve()
         env_snap = profile.to_snapshot()
-        created_iso = _utc_iso(now_ep)
+        try:
+            run_dummy_root.mkdir(parents=True, exist_ok=True)
+        except OSError as exc:
+            self._reject_dispatch(
+                event_type="DISPATCH_REJECTED_ENV_ISOLATION",
+                staging_id=staging_id,
+                payload_sha256=staged["payload_sha256"],
+                detail={"error": str(exc)},
+                exc=EnvironmentIsolationError(
+                    f"failed to prepare isolated dummy root {run_dummy_root}: {exc}"
+                ),
+            )
+            raise  # unreachable
 
         stop_event = threading.Event()
         with self._active_lock:
@@ -1602,8 +1619,8 @@ class Stage2StagingEngine:
             with self.store._lock:
                 self.store._conn.execute("BEGIN IMMEDIATE")
                 try:
-                    # Re-check active/blocked states & revocation inside write lock so
-                    # concurrent dispatches across engine instances cannot both start.
+                    # Re-check active/blocked states, revocation, and expiry inside write lock
+                    # so concurrent or queued dispatches cannot bypass gates after waiting.
                     blocked_placeholders = ",".join("?" for _ in blocked_states)
                     conflict_row = self.store._conn.execute(
                         f"SELECT execution_run_id, status FROM proposer_stage2_runs "
@@ -1644,6 +1661,37 @@ class Stage2StagingEngine:
                             f"dispatch refused: staging_id {staging_id} revoked at seq {seq}"
                         )
 
+                    rat_rev_row = self.store._conn.execute(
+                        "SELECT revoked FROM proposer_stage2_ratifications WHERE ratification_id = ?",
+                        (active_rat["ratification_id"],),
+                    ).fetchone()
+                    if rat_rev_row is not None and bool(rat_rev_row["revoked"]):
+                        self._append_ledger_locked(
+                            event_type="DISPATCH_REJECTED_REVOKED",
+                            staging_id=staging_id,
+                            payload_sha256=staged["payload_sha256"],
+                            detail={"reason": "ratification revoked before admission", "ratification_id": active_rat["ratification_id"]},
+                        )
+                        self.store._conn.commit()
+                        raise RevokedError(f"ratification revoked for {staging_id}")
+
+                    admit_now_ep = float(self._now())
+                    if admit_now_ep >= float(active_rat["expires_at_epoch"]):
+                        self._append_ledger_locked(
+                            event_type="DISPATCH_REJECTED_EXPIRED",
+                            staging_id=staging_id,
+                            payload_sha256=staged["payload_sha256"],
+                            detail={
+                                "now_epoch": admit_now_ep,
+                                "expires_at_epoch": float(active_rat["expires_at_epoch"]),
+                            },
+                        )
+                        self.store._conn.commit()
+                        raise RatificationError(
+                            f"internal ratification for {staging_id} expired before admission"
+                        )
+
+                    created_iso = _utc_iso(admit_now_ep)
                     self.store._conn.execute(
                         """
                         INSERT INTO proposer_stage2_runs(
@@ -1704,8 +1752,10 @@ class Stage2StagingEngine:
                 with self._active_lock:
                     self._stop_events.pop(run_id, None)
                     self._stop_meta.pop(run_id, None)
-
-        run_dummy_root.mkdir(parents=True, exist_ok=True)
+                try:
+                    run_dummy_root.rmdir()
+                except OSError:
+                    pass
         ctx = StagingRunContext(
             engine=self,
             execution_run_id=run_id,

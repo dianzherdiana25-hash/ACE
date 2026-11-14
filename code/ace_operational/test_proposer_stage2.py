@@ -740,6 +740,7 @@ class ProposerStage2Tests(unittest.TestCase):
 
         entered = threading.Event()
         release = threading.Event()
+        rejected = threading.Event()
         barrier = threading.Barrier(2)
         results: list[tuple[str, Any]] = []
         res_lock = threading.Lock()
@@ -763,15 +764,19 @@ class ProposerStage2Tests(unittest.TestCase):
             except Exception as exc:
                 with res_lock:
                     results.append((label, ("ERR", type(exc).__name__, str(exc))))
+                rejected.set()
 
         t1 = threading.Thread(target=invoke, args=("eng_a", self.engine), daemon=True)
         t2 = threading.Thread(target=invoke, args=("eng_b", engine_b), daemon=True)
         t1.start()
         t2.start()
-        self.assertTrue(entered.wait(timeout=5.0))
-        release.set()
-        t1.join(timeout=5.0)
-        t2.join(timeout=5.0)
+        try:
+            self.assertTrue(entered.wait(timeout=5.0))
+            self.assertTrue(rejected.wait(timeout=5.0))
+        finally:
+            release.set()
+            t1.join(timeout=5.0)
+            t2.join(timeout=5.0)
 
         self.assertEqual(len(results), 2)
         ok_res = [r for _, r in results if r[0] == "OK"]
@@ -782,6 +787,46 @@ class ProposerStage2Tests(unittest.TestCase):
         self.assertEqual(len(self.engine.list_runs(staged["staging_id"])), 1)
         self.assertTrue(self.engine.verify_ledger())
         self.assertTrue(engine_b.verify_ledger())
+
+    def test_expired_before_admission_tx_and_mkdir_failure_leave_no_active_run(self):
+        from pathlib import Path
+        from unittest.mock import patch
+
+        pkg = self._pkg()
+        staged, _ = self.engine.stage_package(pkg, request_id="req-tx-expiry")
+        sha = staged["payload_sha256"]
+        self.engine.ratify_staged(staged["staging_id"], audience="hub", payload_sha256=sha, ttl_seconds=10.0)
+
+        ticks = iter([float(self.clock()), float(self.clock()) + 20.0])
+        tx_engine = Stage2StagingEngine(
+            self.store,
+            mission_bus=self.bus,
+            now_fn=lambda: next(ticks, float(self.clock()) + 20.0),
+        )
+        with self.assertRaises(RatificationError):
+            tx_engine.dispatch_staged(staged["staging_id"], expected_payload_sha256=sha)
+        self.assertEqual(self.engine.list_runs(staged["staging_id"]), [])
+
+        orig_mkdir = Path.mkdir
+
+        def fail_stgrun_mkdir(path_self: Path, *args, **kwargs):
+            if path_self.name.startswith("stgrun_"):
+                raise OSError("disk full")
+            return orig_mkdir(path_self, *args, **kwargs)
+
+        with patch.object(Path, "mkdir", autospec=True, side_effect=fail_stgrun_mkdir):
+            with self.assertRaises(EnvironmentIsolationError):
+                self.engine.dispatch_staged(staged["staging_id"], expected_payload_sha256=sha)
+        self.assertEqual(self.engine.list_runs(staged["staging_id"]), [])
+        self.assertEqual(self.engine._stop_events, {})
+        self.assertEqual(self.engine._stop_meta, {})
+        ledger_events = [e["event_type"] for e in self.engine.list_ledger(staged["staging_id"])]
+        self.assertIn("DISPATCH_REJECTED_EXPIRED", ledger_events)
+        self.assertIn("DISPATCH_REJECTED_ENV_ISOLATION", ledger_events)
+
+        run_ok = self.engine.dispatch_staged(staged["staging_id"], expected_payload_sha256=sha)
+        self.assertEqual(run_ok["status"], "COMPLETED")
+        self.assertTrue(self.engine.verify_ledger())
 
     def test_non_json_worker_output_rejected_before_retaining(self):
         pkg = self._pkg()
