@@ -38,6 +38,10 @@ class OaieCliTests(unittest.TestCase):
             self.assertEqual(len(fac["products"]), 2)
             self.assertEqual(fac["receipts_verified_o1"], [True, True])
 
+            ev = self._run_cli(ws, "evolve-once", "--generation-id", "gen-cli")
+            self.assertEqual(ev["epoch_a_skills_synthesized"], 4)
+            self.assertTrue(ev["dag_chain_valid"])
+
             wo = self._run_cli(ws, "work-order", "--order-id", "wo-test", "--goal", "Verify CLI")
             self.assertEqual(len(wo["order_sha256"]), 64)
             self.assertTrue((ws / "ACE_WORK_ORDER.json").exists())

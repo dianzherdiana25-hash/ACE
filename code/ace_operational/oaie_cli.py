@@ -59,6 +59,11 @@ def run_cli_action(args: argparse.Namespace) -> dict[str, Any]:
     if args.command == "factory":
         return run_commercial_factory_cycle(ws / "commercial")
 
+    if args.command == "evolve-once":
+        from .autonomous_evolver import AutonomousEvolver
+
+        return AutonomousEvolver(ws / "evolver").run_evolution_generation(args.generation_id)
+
     if args.command == "work-order":
         return sup.work_bridge.export_work_order(
             order_id=args.order_id,
@@ -88,6 +93,9 @@ def build_parser() -> argparse.ArgumentParser:
     rc.add_argument("--cycles", type=int, default=3)
 
     sub.add_parser("factory", help="Build commercial CLI deliverables & O(1) B2A receipts")
+
+    ev = sub.add_parser("evolve-once", help="Run a unified Epochs A-F self-evolution generation")
+    ev.add_argument("--generation-id", default="gen-1")
 
     wo = sub.add_parser("work-order", help="Emit a deterministic zero-API Work Order")
     wo.add_argument("--order-id", required=True)
