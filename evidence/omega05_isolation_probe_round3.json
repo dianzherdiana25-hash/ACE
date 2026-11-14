@@ -1,0 +1,21 @@
+{
+ "probe_round": 3,
+ "results": {
+  "seccomp_syscall_enforced": {
+   "rc": 0,
+   "detail": "INSTALL ret 0 errno 0\nUNAME ret -1 errno 1",
+   "works": true
+  },
+  "landlock_enforced": {
+   "rc": 1,
+   "detail": "Traceback (most recent call last):\n  File \"<string>\", line 13, in <module>\nFileNotFoundError: [Errno 2] No such file or directory: '/tmp/ll_allowed'",
+   "works": false
+  },
+  "ns_rootfs": {
+   "rc": 0,
+   "detail": "PAYLOAD_DONE\nmount: /tmp/nsroot: mount point does not exist.\n       dmesg(1) may have more information after failed mount system call.\nbash: line 5: /work/proof.txt: No such file or directory",
+   "host_file_visible_after": false,
+   "works": false
+  }
+ }
+}

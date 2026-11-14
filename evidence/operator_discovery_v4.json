@@ -1,0 +1,75 @@
+{
+ "by_class": {
+  "bounds_off_by_one": {
+   "pool_tasks": 3,
+   "candidate_operators": 3,
+   "admitted_operators": [
+    "('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult')",
+    "('binop_unwrap', (5, 2, 3, 0, 1, 4), 'left')",
+    "('int_constant', (5, 2, 3, 0, 1, 4, 2), 0)"
+   ],
+   "admitted_chains": [
+    "(('return_indices', (6,), ('gr', 'gc')), ('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult'))"
+   ],
+   "eval_tasks": 8,
+   "eval_solved_baseline": 0,
+   "eval_solved_extended": 4
+  },
+  "dist_step_2": {
+   "pool_tasks": 3,
+   "candidate_operators": 1,
+   "admitted_operators": [
+    "('int_constant', (5, 2, 3, 1, 1, 2), 1)"
+   ],
+   "admitted_chains": [],
+   "eval_tasks": 11,
+   "eval_solved_baseline": 0,
+   "eval_solved_extended": 3
+  },
+  "returns_start_distance": {
+   "pool_tasks": 3,
+   "candidate_operators": 1,
+   "admitted_operators": [
+    "('return_indices', (6,), ('gr', 'gc'))"
+   ],
+   "admitted_chains": [
+    "(('return_indices', (6,), ('gr', 'gc')), ('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult'))"
+   ],
+   "eval_tasks": 13,
+   "eval_solved_baseline": 0,
+   "eval_solved_extended": 5
+  },
+  "wall_char_x": {
+   "pool_tasks": 3,
+   "candidate_operators": 55,
+   "admitted_operators": [
+    "('string_literal', (5, 2, 3, 0, 4, 2), '#')"
+   ],
+   "admitted_chains": [],
+   "eval_tasks": 15,
+   "eval_solved_baseline": 0,
+   "eval_solved_extended": 3
+  }
+ },
+ "pair_pool": {
+  "tasks": 6,
+  "tasks_solved_by_pairs": 0
+ },
+ "chain_pool": {
+  "tasks": 6,
+  "tasks_solved_by_chains": 3
+ },
+ "mixed_evaluation": {
+  "total": 18,
+  "solved_baseline": 0,
+  "solved_extended": 18
+ },
+ "control": {
+  "total": 34,
+  "solved_baseline": 34,
+  "solved_extended": 34
+ },
+ "elapsed_seconds": 1337.2,
+ "pool_tasks": 12,
+ "evaluation_tasks": 29
+}

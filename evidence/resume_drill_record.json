@@ -1,0 +1,29 @@
+{
+ "experiment": "resume-drill-flagship",
+ "method": "flagship director operation run in a dedicated OS process; the process was SIGKILLed mid-generation of cycle 2 (marker-confirmed in-flight work); after the kill, a fresh OS process verified the surviving on-disk state and resumed the same operation to its final report",
+ "verdict": "RESUME_DRILL_PASS",
+ "event_phases": [
+  "phase1: cycle 1 recorded, cycle 2 generation started",
+  "kill: SIGKILL mid-generation, no partial cycle recorded",
+  "phase2: fresh process verified state and resumed",
+  "report: cycles 1-3 gapless, memory chain verified"
+ ],
+ "checkpoint": {
+  "cycles_survived_kill": 1,
+  "final_cycles": 3,
+  "numbering_gapless": true
+ },
+ "interruption": {
+  "killed_mid_work": true,
+  "state_integrity_after": true,
+  "resumed_by_separate_process": true,
+  "final_report_reached": true,
+  "record_continuity": true
+ },
+ "resumed_cycle": {
+  "cycle_no": 2,
+  "status": "accepted",
+  "proposals": 5,
+  "elapsed_s": 338.0
+ }
+}

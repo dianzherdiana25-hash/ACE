@@ -1,0 +1,283 @@
+{
+ "stage": "P4 calibration — pricing baseline arm",
+ "calibration_set": {
+  "seed_band": [
+   30000,
+   30999
+  ],
+  "tasks": 36,
+  "singles": 24,
+  "pairs": 12
+ },
+ "baseline_solved": 36,
+ "baseline_rate": 1.0,
+ "gate": ">= 0.90 fires regeneration (Task 02 §4 P4)",
+ "gate_fired": true,
+ "wall_seconds": 0.1,
+ "rows": [
+  {
+   "task_id": "task_d507dfa05412eb59",
+   "defects": [
+    "member_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_9bdb427a335502a9",
+   "defects": [
+    "member_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_d05e60b093e51204",
+   "defects": [
+    "member_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_0bf8b9b026e9c354",
+   "defects": [
+    "member_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_bc7b28523845b93f",
+   "defects": [
+    "member_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_8a251a10cf33aad8",
+   "defects": [
+    "member_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_4888443c286e42d6",
+   "defects": [
+    "member_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_a17387857f31640e",
+   "defects": [
+    "member_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_dfc398a23f828213",
+   "defects": [
+    "tax_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_3d0bbd2cd02305d6",
+   "defects": [
+    "tax_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_40541ebdc11ab369",
+   "defects": [
+    "tax_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_58e91f059b459961",
+   "defects": [
+    "tax_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_0e45668d31fa5ead",
+   "defects": [
+    "tax_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_c8e9807ee860ccc0",
+   "defects": [
+    "tax_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_280faf3e3541441e",
+   "defects": [
+    "tax_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_f48a7b34076a1ea6",
+   "defects": [
+    "tax_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_69be93cef6663d3b",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_5b8a33695ac78526",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_df4fa7397214f5e9",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_23e8b37cefdc18ab",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_48f6565537e9f204",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_72258e46611aa606",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_5df225cfa957de81",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_192261acb318309d",
+   "defects": [
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_689b262cc557bfde",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_7f5bb69b96dca435",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_e70952d2c9ddbc25",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_c000ed3b703ff9e4",
+   "defects": [
+    "member_basis",
+    "tax_basis"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_a7d4e9e84c0d1037",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_776e7cf2c2dfd9fc",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_bb4bb684a2a2d955",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_8e08f389e9caf05c",
+   "defects": [
+    "member_basis",
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_4068a228cfe2c625",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_0ca7c4143809140c",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_fbc3ef671f8c974f",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  },
+  {
+   "task_id": "task_d262cde48a7fc009",
+   "defects": [
+    "tax_basis",
+    "threshold_boundary"
+   ],
+   "baseline_solved": true
+  }
+ ]
+}

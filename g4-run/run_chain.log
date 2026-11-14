@@ -1,0 +1,23 @@
+{
+ "audit": "CLEAN",
+ "protocol_hash": "841b3f167d80c3c98ecf04b7f5a33f077b0fc13e4173605766fc7b9d9f2512d9",
+ "successor_id": "cand_ec7dcbcb674a08899097",
+ "capability": {
+  "n": 48,
+  "with_solved": 48,
+  "without_solved": 0,
+  "with_fraction": 1.0,
+  "without_fraction": 0.0,
+  "delta_pp": 100.0
+ },
+ "control": {
+  "n": 68,
+  "with_solved": 68,
+  "without_solved": 68
+ },
+ "wall_seconds": {
+  "without": 10.738,
+  "with": 2740.863,
+  "total": 2751.601
+ }
+}

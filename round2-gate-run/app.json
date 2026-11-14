@@ -1,0 +1,43 @@
+{
+ "phase": "application_band_72000_72099",
+ "built": 100,
+ "skipped": 0,
+ "pool": 10,
+ "evaluation": 30,
+ "admitted_motion_keys": [
+  "('move_stmt', ('augassign', 't', 'Add', 't'), ('return',))"
+ ],
+ "solved_counts": {
+  "a": 14,
+  "b": 18,
+  "r": 18
+ },
+ "discriminating_n": 18,
+ "discriminating_ids": [
+  "pricing-order-72010",
+  "pricing-order-72011",
+  "pricing-order-72012",
+  "pricing-order-72013",
+  "pricing-order-72014",
+  "pricing-order-72016",
+  "pricing-order-72020",
+  "pricing-order-72021",
+  "pricing-order-72023",
+  "pricing-order-72026",
+  "pricing-order-72027",
+  "pricing-order-72030",
+  "pricing-order-72031",
+  "pricing-order-72032",
+  "pricing-order-72033",
+  "pricing-order-72034",
+  "pricing-order-72037",
+  "pricing-order-72039"
+ ],
+ "a_on_discriminating": 14,
+ "b_on_discriminating": 18,
+ "b_disc_pct": 100.0,
+ "a_disc_pct": 77.77777777777777,
+ "capture": 1.0,
+ "round2_index": 0.0,
+ "outcome": "INDEX_COMPUTED"
+}

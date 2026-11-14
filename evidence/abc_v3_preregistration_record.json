@@ -1,0 +1,9 @@
+{
+ "experiment": "abc-v3-01",
+ "text_sha256": "55b6331eeed0cfc4779b09114cc74d7c48c47b1a125759bc6296105e3e6529be",
+ "kernel_protocol_hash": "8591b93814759d5485be3f9e8b47e31a08aa7b1fc41e14b2707b2aa46b975c1a",
+ "candidate_digest_kernel": "b042614d90bc7b632cf4f5844443a9f736e2b59df0458651eb247da553575f9b",
+ "baseline_digest_kernel": "d541695498cbd1857d3e73a17f40d6a0ef31e1c48046c88f090f11d69ed0be41",
+ "evaluator_digest": "c6ca3421eca3ff4f086b324820ad5168a57cea645ff83bfa922f95b47fd3b6c1",
+ "fixture_digest": "18d854cf6c191938454a519de8ef5f71aba6b7d0f871814e772f7f3f815f4915"
+}

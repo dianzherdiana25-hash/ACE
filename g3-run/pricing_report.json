@@ -1,0 +1,78 @@
+{
+ "by_class": {
+  "member_basis": {
+   "pool_tasks": 4,
+   "candidate_operators": 3,
+   "admitted_operators": [
+    "('name_swap', (3, 1, 2, 0, 0), 't')"
+   ],
+   "admitted_chains": [],
+   "eval_tasks": 27,
+   "eval_solved_baseline": 27,
+   "eval_solved_extended": 27
+  },
+  "tax_basis": {
+   "pool_tasks": 4,
+   "candidate_operators": 1,
+   "admitted_operators": [
+    "('name_swap', (4, 2, 0, 0), 't')"
+   ],
+   "admitted_chains": [],
+   "eval_tasks": 27,
+   "eval_solved_baseline": 27,
+   "eval_solved_extended": 27
+  },
+  "threshold_boundary": {
+   "pool_tasks": 4,
+   "candidate_operators": 12,
+   "admitted_operators": [
+    "('unary_not', (2, 0), 'wrap')",
+    "('compare_swap', (2, 0), 'LtE')",
+    "('compare_swap', (2, 0), 'GtE')",
+    "('compare_swap', (2, 0), 'Eq')",
+    "('int_constant', (2, 0, 2), 0)",
+    "('int_constant', (2, 0, 2), 1)",
+    "('int_constant', (2, 0, 2), 2)",
+    "('int_constant', (2, 0, 2), 399999)"
+   ],
+   "admitted_chains": [],
+   "eval_tasks": 27,
+   "eval_solved_baseline": 27,
+   "eval_solved_extended": 27
+  }
+ },
+ "pair_pool": {
+  "tasks": 0,
+  "tasks_solved_by_pairs": 0
+ },
+ "chain_pool": {
+  "tasks": 0,
+  "tasks_solved_by_chains": 0
+ },
+ "mixed_evaluation": {
+  "total": 18,
+  "solved_baseline": 18,
+  "solved_extended": 18
+ },
+ "control": {
+  "total": 30,
+  "solved_baseline": 30,
+  "solved_extended": 30
+ },
+ "wall_seconds": 17.8,
+ "family": "pricing",
+ "admitted_keys": [
+  "('name_swap', (3, 1, 2, 0, 0), 't')",
+  "('name_swap', (4, 2, 0, 0), 't')",
+  "('unary_not', (2, 0), 'wrap')",
+  "('compare_swap', (2, 0), 'LtE')",
+  "('compare_swap', (2, 0), 'GtE')",
+  "('compare_swap', (2, 0), 'Eq')",
+  "('int_constant', (2, 0, 2), 0)",
+  "('int_constant', (2, 0, 2), 1)",
+  "('int_constant', (2, 0, 2), 2)",
+  "('int_constant', (2, 0, 2), 399999)"
+ ],
+ "admitted_chains_ser": [],
+ "catalog_digest": "821ae1fb5617fda6abc5773e5140359a2ee0f8d929b7be1e46a869fdf064ae6c"
+}

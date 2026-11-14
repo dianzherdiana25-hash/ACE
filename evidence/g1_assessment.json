@@ -1,0 +1,34 @@
+{
+ "gate": "G1",
+ "definition": "run one digital experiment from task to report with complete records and the ability to resume after interruption (PRD v0.1)",
+ "clauses": {
+  "C1_task_to_report": {
+   "verdict": "PASS",
+   "missing": [],
+   "evidence": {
+    "experiment": "pilot-abc-v1",
+    "protocol_hash": "bce010ab273183f3a6b4459861b5743c9f89ee3fcd6af9fe68becf134c827d42"
+   }
+  },
+  "C2_complete_records": {
+   "verdict": "PASS",
+   "missing": [],
+   "evidence": {
+    "audit_status": "CLEAN",
+    "results_verified": 4,
+    "ledger_entries_verified": 4
+   }
+  },
+  "C3_resume_after_interruption": {
+   "verdict": "PASS",
+   "missing": [],
+   "evidence": {
+    "package": "OMEGA-04",
+    "subject": "ace_operational.store.OperationalStore (main)",
+    "task_status": "ACTIVE"
+   }
+  }
+ },
+ "overall": "DEMONSTRATED",
+ "qualification": "C3 evidences the resume capability of the substrate the flagship experiment ran on, not an interruption of the flagship run itself; an unqualified pass requires the closing resume drill named in the design document."
+}

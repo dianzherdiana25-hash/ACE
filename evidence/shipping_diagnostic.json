@@ -1,0 +1,343 @@
+{
+ "diagnostic": "shipping weakness, Phase 2 agenda item 3",
+ "budget": 200,
+ "summary": {
+  "tasks": 30,
+  "by_defect_set": {
+   "free_boundary": {
+    "n": 10,
+    "grammar_shown": "10/10",
+    "grammar_oracle": "10/10",
+    "token-search_shown": "0/10",
+    "token-search_oracle": "10/10"
+   },
+   "free_boundary+multiplier_dropped": {
+    "n": 10,
+    "grammar_shown": "0/10",
+    "grammar_oracle": "0/10",
+    "token-search_shown": "0/10",
+    "token-search_oracle": "2/10"
+   },
+   "multiplier_dropped": {
+    "n": 10,
+    "grammar_shown": "0/10",
+    "grammar_oracle": "0/10",
+    "token-search_shown": "2/10",
+    "token-search_oracle": "2/10"
+   }
+  },
+  "overall": {
+   "grammar_shown": "10/30",
+   "grammar_oracle": "10/30",
+   "token-search_shown": "2/30",
+   "token-search_oracle": "14/30"
+  },
+  "shown_exposure": {
+   "tasks_with_0_exposing_shown": 0,
+   "tasks_with_1_exposing_shown": 10,
+   "tasks_with_2_exposing_shown": 20
+  }
+ },
+ "rows": [
+  {
+   "task": "task_4d647f64ac548cf0",
+   "level": 1,
+   "defects": "multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "no-repair",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_97e65db72a0b00e7",
+   "level": 1,
+   "defects": "multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "solved",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_0c748b17ff234948",
+   "level": 1,
+   "defects": "multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "no-repair",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_5e9b3dcb2c5b251a",
+   "level": 1,
+   "defects": "multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "solved",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_e7e275bf90e5362f",
+   "level": 1,
+   "defects": "multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "no-repair",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_4118c69e8912c5ba",
+   "level": 1,
+   "defects": "multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "no-repair",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_cba219033467cd93",
+   "level": 1,
+   "defects": "multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "no-repair",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_09cccacc024b40b4",
+   "level": 1,
+   "defects": "multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "no-repair",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_9abb30a11a12af87",
+   "level": 1,
+   "defects": "multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "no-repair",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_41fbc88d52f8df8e",
+   "level": 1,
+   "defects": "multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "no-repair",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_0bd660598ef9afa5",
+   "level": 2,
+   "defects": "free_boundary",
+   "shown_exposing": 1,
+   "grammar_shown": "solved",
+   "grammar_oracle": "solved",
+   "token-search_shown": "partial",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_01747cf67da74899",
+   "level": 2,
+   "defects": "free_boundary",
+   "shown_exposing": 1,
+   "grammar_shown": "solved",
+   "grammar_oracle": "solved",
+   "token-search_shown": "partial",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_ba00069e5e5a5cf6",
+   "level": 2,
+   "defects": "free_boundary",
+   "shown_exposing": 1,
+   "grammar_shown": "solved",
+   "grammar_oracle": "solved",
+   "token-search_shown": "partial",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_f914d8ab687e4713",
+   "level": 2,
+   "defects": "free_boundary",
+   "shown_exposing": 1,
+   "grammar_shown": "solved",
+   "grammar_oracle": "solved",
+   "token-search_shown": "partial",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_c0c687d17b61daff",
+   "level": 2,
+   "defects": "free_boundary",
+   "shown_exposing": 1,
+   "grammar_shown": "solved",
+   "grammar_oracle": "solved",
+   "token-search_shown": "partial",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_dcf371cce5d6216f",
+   "level": 2,
+   "defects": "free_boundary",
+   "shown_exposing": 1,
+   "grammar_shown": "solved",
+   "grammar_oracle": "solved",
+   "token-search_shown": "partial",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_31ec23cbb24d7c63",
+   "level": 2,
+   "defects": "free_boundary",
+   "shown_exposing": 1,
+   "grammar_shown": "solved",
+   "grammar_oracle": "solved",
+   "token-search_shown": "partial",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_84e58c3ba06659cd",
+   "level": 2,
+   "defects": "free_boundary",
+   "shown_exposing": 1,
+   "grammar_shown": "solved",
+   "grammar_oracle": "solved",
+   "token-search_shown": "partial",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_ae6ee0325231a903",
+   "level": 2,
+   "defects": "free_boundary",
+   "shown_exposing": 1,
+   "grammar_shown": "solved",
+   "grammar_oracle": "solved",
+   "token-search_shown": "partial",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_a9f10d9e7094f34c",
+   "level": 2,
+   "defects": "free_boundary",
+   "shown_exposing": 1,
+   "grammar_shown": "solved",
+   "grammar_oracle": "solved",
+   "token-search_shown": "partial",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_d80d7ce39d2d137d",
+   "level": 3,
+   "defects": "free_boundary+multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "partial",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_5d92ed9036da3498",
+   "level": 3,
+   "defects": "free_boundary+multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "partial",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_2849fc9817a6e8c4",
+   "level": 3,
+   "defects": "free_boundary+multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "partial",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_d8e21bb8dbef18bd",
+   "level": 3,
+   "defects": "free_boundary+multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "partial",
+   "token-search_oracle": "solved"
+  },
+  {
+   "task": "task_16841259d7154ef4",
+   "level": 3,
+   "defects": "free_boundary+multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "partial",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_31ffb01bea52df5f",
+   "level": 3,
+   "defects": "free_boundary+multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "partial",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_03fe0a73daa0243a",
+   "level": 3,
+   "defects": "free_boundary+multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "partial",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_d8d8fc09fa817100",
+   "level": 3,
+   "defects": "free_boundary+multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "partial",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_04d3d75583b5cfed",
+   "level": 3,
+   "defects": "free_boundary+multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "partial",
+   "token-search_oracle": "partial"
+  },
+  {
+   "task": "task_031fb9c471ecad0e",
+   "level": 3,
+   "defects": "free_boundary+multiplier_dropped",
+   "shown_exposing": 2,
+   "grammar_shown": "partial",
+   "grammar_oracle": "partial",
+   "token-search_shown": "partial",
+   "token-search_oracle": "partial"
+  }
+ ]
+}

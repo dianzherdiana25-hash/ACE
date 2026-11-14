@@ -1,0 +1,9 @@
+{
+ "cycle": 5,
+ "at": 1794494483.9093647,
+ "observation_facts": 16,
+ "status": "rejected",
+ "reason": "no JSON object found in director reply",
+ "proposals": [],
+ "elapsed_seconds": 0.0
+}

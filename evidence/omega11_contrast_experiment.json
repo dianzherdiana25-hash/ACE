@@ -1,0 +1,1808 @@
+{
+ "package": "OMEGA-11 contrast experiment",
+ "note": "Solvers saw shown cases only; scoring by the OMEGA-10 verifier over all cases.",
+ "holdout": {
+  "split": "holdout",
+  "budget_limit": 200,
+  "task_count": 20,
+  "hypothesis": {
+   "subject": "token-search",
+   "claim": "solves_at_least_as_many_as",
+   "reference": "grammar",
+   "margin": 2
+  },
+  "hypothesis_verdict": "INCONCLUSIVE",
+  "solvers": {
+   "grammar": {
+    "solved": 14,
+    "tasks": 20,
+    "per_family": {
+     "pricing": {
+      "solved": 11,
+      "total": 12
+     },
+     "shipping": {
+      "solved": 3,
+      "total": 8
+     }
+    },
+    "abstained": 0
+   },
+   "token-search": {
+    "solved": 13,
+    "tasks": 20,
+    "per_family": {
+     "pricing": {
+      "solved": 11,
+      "total": 12
+     },
+     "shipping": {
+      "solved": 2,
+      "total": 8
+     }
+    },
+    "abstained": 0
+   },
+   "token-search-ablated": {
+    "solved": 13,
+    "tasks": 20,
+    "per_family": {
+     "pricing": {
+      "solved": 11,
+      "total": 12
+     },
+     "shipping": {
+      "solved": 2,
+      "total": 8
+     }
+    },
+    "abstained": 0
+   },
+   "random": {
+    "solved": 6,
+    "tasks": 20,
+    "per_family": {
+     "pricing": {
+      "solved": 5,
+      "total": 12
+     },
+     "shipping": {
+      "solved": 1,
+      "total": 8
+     }
+    },
+    "abstained": 0
+   }
+  },
+  "details": {
+   "grammar": [
+    {
+     "task": "task_84cd498b9f6a39a3",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 12
+    },
+    {
+     "task": "task_7f14cf33ef2a4bcd",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 14
+    },
+    {
+     "task": "task_0061499d89d23e70",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 10
+    },
+    {
+     "task": "task_f71f684ae1130981",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 10
+    },
+    {
+     "task": "task_25d0cab6c891d507",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 12
+    },
+    {
+     "task": "task_83685a09dfb438d2",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 12
+    },
+    {
+     "task": "task_1d0b48a36e5e5165",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 10
+    },
+    {
+     "task": "task_acc72a5c30381fda",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 8
+    },
+    {
+     "task": "task_bb7b2d417150b950",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 12
+    },
+    {
+     "task": "task_6dbd8084b57d1f2c",
+     "result": "partial",
+     "passed": 9,
+     "total": 12,
+     "budget_used": 14
+    },
+    {
+     "task": "task_b32716b8854296b3",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 13
+    },
+    {
+     "task": "task_55ce3ab2f92076c8",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 11
+    },
+    {
+     "task": "task_4d647f64ac548cf0",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 7
+    },
+    {
+     "task": "task_97e65db72a0b00e7",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 7
+    },
+    {
+     "task": "task_0c748b17ff234948",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 7
+    },
+    {
+     "task": "task_5e9b3dcb2c5b251a",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 7
+    },
+    {
+     "task": "task_09cccacc024b40b4",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 7
+    },
+    {
+     "task": "task_dcf371cce5d6216f",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 10
+    },
+    {
+     "task": "task_31ec23cbb24d7c63",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 10
+    },
+    {
+     "task": "task_a9f10d9e7094f34c",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 10
+    }
+   ],
+   "token-search": [
+    {
+     "task": "task_84cd498b9f6a39a3",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_7f14cf33ef2a4bcd",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_0061499d89d23e70",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_f71f684ae1130981",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_25d0cab6c891d507",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_83685a09dfb438d2",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_1d0b48a36e5e5165",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_acc72a5c30381fda",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_bb7b2d417150b950",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_6dbd8084b57d1f2c",
+     "result": "partial",
+     "passed": 9,
+     "total": 12,
+     "budget_used": 65
+    },
+    {
+     "task": "task_b32716b8854296b3",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_55ce3ab2f92076c8",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_4d647f64ac548cf0",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_97e65db72a0b00e7",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 142
+    },
+    {
+     "task": "task_0c748b17ff234948",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_5e9b3dcb2c5b251a",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 142
+    },
+    {
+     "task": "task_09cccacc024b40b4",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_dcf371cce5d6216f",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_31ec23cbb24d7c63",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_a9f10d9e7094f34c",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    }
+   ],
+   "token-search-ablated": [
+    {
+     "task": "task_84cd498b9f6a39a3",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_7f14cf33ef2a4bcd",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_0061499d89d23e70",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_f71f684ae1130981",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_25d0cab6c891d507",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_83685a09dfb438d2",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_1d0b48a36e5e5165",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_acc72a5c30381fda",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_bb7b2d417150b950",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_6dbd8084b57d1f2c",
+     "result": "partial",
+     "passed": 9,
+     "total": 12,
+     "budget_used": 65
+    },
+    {
+     "task": "task_b32716b8854296b3",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_55ce3ab2f92076c8",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_4d647f64ac548cf0",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_97e65db72a0b00e7",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 142
+    },
+    {
+     "task": "task_0c748b17ff234948",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_5e9b3dcb2c5b251a",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 142
+    },
+    {
+     "task": "task_09cccacc024b40b4",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_dcf371cce5d6216f",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_31ec23cbb24d7c63",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_a9f10d9e7094f34c",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    }
+   ],
+   "random": [
+    {
+     "task": "task_84cd498b9f6a39a3",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_7f14cf33ef2a4bcd",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_0061499d89d23e70",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_f71f684ae1130981",
+     "result": "partial",
+     "passed": 7,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_25d0cab6c891d507",
+     "result": "partial",
+     "passed": 4,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_83685a09dfb438d2",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_1d0b48a36e5e5165",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_acc72a5c30381fda",
+     "result": "partial",
+     "passed": 7,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_bb7b2d417150b950",
+     "result": "partial",
+     "passed": 4,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_6dbd8084b57d1f2c",
+     "result": "partial",
+     "passed": 9,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_b32716b8854296b3",
+     "result": "partial",
+     "passed": 9,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_55ce3ab2f92076c8",
+     "result": "partial",
+     "passed": 10,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_4d647f64ac548cf0",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_97e65db72a0b00e7",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_0c748b17ff234948",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_5e9b3dcb2c5b251a",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_09cccacc024b40b4",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_dcf371cce5d6216f",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_31ec23cbb24d7c63",
+     "result": "partial",
+     "passed": 8,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_a9f10d9e7094f34c",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    }
+   ]
+  },
+  "claims": {
+   "novelty": "NOT_ASSESSED",
+   "generalization": "NOT_ASSESSED"
+  },
+  "claims_note": "Per the OMEGA-11 gate, novelty and generalization stay NOT_ASSESSED until custody and transfer proof exist. The numbers above are engineering data from generated tasks, not capability claims."
+ },
+ "train": {
+  "split": "train",
+  "budget_limit": 200,
+  "task_count": 40,
+  "hypothesis": {
+   "subject": "token-search",
+   "claim": "solves_at_least_as_many_as",
+   "reference": "grammar",
+   "margin": 2
+  },
+  "hypothesis_verdict": "FALSIFIED",
+  "solvers": {
+   "grammar": {
+    "solved": 25,
+    "tasks": 40,
+    "per_family": {
+     "pricing": {
+      "solved": 18,
+      "total": 18
+     },
+     "shipping": {
+      "solved": 7,
+      "total": 22
+     }
+    },
+    "abstained": 0
+   },
+   "token-search": {
+    "solved": 18,
+    "tasks": 40,
+    "per_family": {
+     "pricing": {
+      "solved": 18,
+      "total": 18
+     },
+     "shipping": {
+      "solved": 0,
+      "total": 22
+     }
+    },
+    "abstained": 0
+   },
+   "token-search-ablated": {
+    "solved": 18,
+    "tasks": 40,
+    "per_family": {
+     "pricing": {
+      "solved": 18,
+      "total": 18
+     },
+     "shipping": {
+      "solved": 0,
+      "total": 22
+     }
+    },
+    "abstained": 0
+   },
+   "random": {
+    "solved": 11,
+    "tasks": 40,
+    "per_family": {
+     "pricing": {
+      "solved": 8,
+      "total": 18
+     },
+     "shipping": {
+      "solved": 3,
+      "total": 22
+     }
+    },
+    "abstained": 0
+   }
+  },
+  "details": {
+   "grammar": [
+    {
+     "task": "task_04ae50293c595cbd",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 12
+    },
+    {
+     "task": "task_d23b4782ee770bd2",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 14
+    },
+    {
+     "task": "task_9954be1025ac1b46",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 14
+    },
+    {
+     "task": "task_52301af34bb0b3d5",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 14
+    },
+    {
+     "task": "task_0afc6f6cb71b8998",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 12
+    },
+    {
+     "task": "task_dec406bed8175d07",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 14
+    },
+    {
+     "task": "task_03bdea1f28e97c45",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 10
+    },
+    {
+     "task": "task_5e6ca2876347bc74",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 10
+    },
+    {
+     "task": "task_1378407586cb5d65",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 12
+    },
+    {
+     "task": "task_6498b19537649dfb",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 12
+    },
+    {
+     "task": "task_f489c43d2e008d22",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 8
+    },
+    {
+     "task": "task_78ee2cb40b69e3d8",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 12
+    },
+    {
+     "task": "task_1f97a430bb9f7d30",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 15
+    },
+    {
+     "task": "task_c8a5a4b6ef00734f",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 14
+    },
+    {
+     "task": "task_15fdcfa05eb3adfc",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 15
+    },
+    {
+     "task": "task_216e52357a6c2679",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 15
+    },
+    {
+     "task": "task_dc3039d3f74136eb",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 11
+    },
+    {
+     "task": "task_4949baa9eddf1cb6",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 15
+    },
+    {
+     "task": "task_e7e275bf90e5362f",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 7
+    },
+    {
+     "task": "task_4118c69e8912c5ba",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 7
+    },
+    {
+     "task": "task_cba219033467cd93",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 7
+    },
+    {
+     "task": "task_9abb30a11a12af87",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 7
+    },
+    {
+     "task": "task_41fbc88d52f8df8e",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 7
+    },
+    {
+     "task": "task_0bd660598ef9afa5",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 10
+    },
+    {
+     "task": "task_01747cf67da74899",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 10
+    },
+    {
+     "task": "task_ba00069e5e5a5cf6",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 10
+    },
+    {
+     "task": "task_f914d8ab687e4713",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 10
+    },
+    {
+     "task": "task_c0c687d17b61daff",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 10
+    },
+    {
+     "task": "task_84e58c3ba06659cd",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 10
+    },
+    {
+     "task": "task_ae6ee0325231a903",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 10
+    },
+    {
+     "task": "task_d80d7ce39d2d137d",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 8
+    },
+    {
+     "task": "task_5d92ed9036da3498",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 8
+    },
+    {
+     "task": "task_2849fc9817a6e8c4",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 8
+    },
+    {
+     "task": "task_d8e21bb8dbef18bd",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 8
+    },
+    {
+     "task": "task_16841259d7154ef4",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 8
+    },
+    {
+     "task": "task_31ffb01bea52df5f",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 8
+    },
+    {
+     "task": "task_03fe0a73daa0243a",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 8
+    },
+    {
+     "task": "task_d8d8fc09fa817100",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 8
+    },
+    {
+     "task": "task_04d3d75583b5cfed",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 8
+    },
+    {
+     "task": "task_031fb9c471ecad0e",
+     "result": "partial",
+     "passed": 6,
+     "total": 10,
+     "budget_used": 8
+    }
+   ],
+   "token-search": [
+    {
+     "task": "task_04ae50293c595cbd",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_d23b4782ee770bd2",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_9954be1025ac1b46",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_52301af34bb0b3d5",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_0afc6f6cb71b8998",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_dec406bed8175d07",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_03bdea1f28e97c45",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_5e6ca2876347bc74",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_1378407586cb5d65",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_6498b19537649dfb",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_f489c43d2e008d22",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_78ee2cb40b69e3d8",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 127
+    },
+    {
+     "task": "task_1f97a430bb9f7d30",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_c8a5a4b6ef00734f",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 127
+    },
+    {
+     "task": "task_15fdcfa05eb3adfc",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_216e52357a6c2679",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_dc3039d3f74136eb",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_4949baa9eddf1cb6",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_e7e275bf90e5362f",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_4118c69e8912c5ba",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_cba219033467cd93",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_9abb30a11a12af87",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_41fbc88d52f8df8e",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_0bd660598ef9afa5",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_01747cf67da74899",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_ba00069e5e5a5cf6",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_f914d8ab687e4713",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_c0c687d17b61daff",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_84e58c3ba06659cd",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_ae6ee0325231a903",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_d80d7ce39d2d137d",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_5d92ed9036da3498",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_2849fc9817a6e8c4",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_d8e21bb8dbef18bd",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_16841259d7154ef4",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_31ffb01bea52df5f",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_03fe0a73daa0243a",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_d8d8fc09fa817100",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_04d3d75583b5cfed",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_031fb9c471ecad0e",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    }
+   ],
+   "token-search-ablated": [
+    {
+     "task": "task_04ae50293c595cbd",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_d23b4782ee770bd2",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_9954be1025ac1b46",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_52301af34bb0b3d5",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_0afc6f6cb71b8998",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_dec406bed8175d07",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 60
+    },
+    {
+     "task": "task_03bdea1f28e97c45",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_5e6ca2876347bc74",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_1378407586cb5d65",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_6498b19537649dfb",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_f489c43d2e008d22",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 2
+    },
+    {
+     "task": "task_78ee2cb40b69e3d8",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 127
+    },
+    {
+     "task": "task_1f97a430bb9f7d30",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_c8a5a4b6ef00734f",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 127
+    },
+    {
+     "task": "task_15fdcfa05eb3adfc",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_216e52357a6c2679",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_dc3039d3f74136eb",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_4949baa9eddf1cb6",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 182
+    },
+    {
+     "task": "task_e7e275bf90e5362f",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_4118c69e8912c5ba",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_cba219033467cd93",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_9abb30a11a12af87",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_41fbc88d52f8df8e",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_0bd660598ef9afa5",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_01747cf67da74899",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_ba00069e5e5a5cf6",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_f914d8ab687e4713",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_c0c687d17b61daff",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_84e58c3ba06659cd",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_ae6ee0325231a903",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 2
+    },
+    {
+     "task": "task_d80d7ce39d2d137d",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_5d92ed9036da3498",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_2849fc9817a6e8c4",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_d8e21bb8dbef18bd",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_16841259d7154ef4",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_31ffb01bea52df5f",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_03fe0a73daa0243a",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_d8d8fc09fa817100",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_04d3d75583b5cfed",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_031fb9c471ecad0e",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    }
+   ],
+   "random": [
+    {
+     "task": "task_04ae50293c595cbd",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_d23b4782ee770bd2",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_9954be1025ac1b46",
+     "result": "no-repair",
+     "passed": 4
+    },
+    {
+     "task": "task_52301af34bb0b3d5",
+     "result": "no-repair",
+     "passed": 4
+    },
+    {
+     "task": "task_0afc6f6cb71b8998",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_dec406bed8175d07",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_03bdea1f28e97c45",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_5e6ca2876347bc74",
+     "result": "partial",
+     "passed": 7,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_1378407586cb5d65",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_6498b19537649dfb",
+     "result": "partial",
+     "passed": 4,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_f489c43d2e008d22",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_78ee2cb40b69e3d8",
+     "result": "partial",
+     "passed": 7,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_1f97a430bb9f7d30",
+     "result": "partial",
+     "passed": 4,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_c8a5a4b6ef00734f",
+     "result": "solved",
+     "passed": 12,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_15fdcfa05eb3adfc",
+     "result": "partial",
+     "passed": 3,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_216e52357a6c2679",
+     "result": "partial",
+     "passed": 9,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_dc3039d3f74136eb",
+     "result": "partial",
+     "passed": 5,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_4949baa9eddf1cb6",
+     "result": "partial",
+     "passed": 4,
+     "total": 12,
+     "budget_used": 200
+    },
+    {
+     "task": "task_e7e275bf90e5362f",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_4118c69e8912c5ba",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_cba219033467cd93",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_9abb30a11a12af87",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_41fbc88d52f8df8e",
+     "result": "no-repair",
+     "passed": 6
+    },
+    {
+     "task": "task_0bd660598ef9afa5",
+     "result": "partial",
+     "passed": 8,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_01747cf67da74899",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_ba00069e5e5a5cf6",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_f914d8ab687e4713",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_c0c687d17b61daff",
+     "result": "partial",
+     "passed": 7,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_84e58c3ba06659cd",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_ae6ee0325231a903",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_d80d7ce39d2d137d",
+     "result": "partial",
+     "passed": 4,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_5d92ed9036da3498",
+     "result": "solved",
+     "passed": 10,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_2849fc9817a6e8c4",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_d8e21bb8dbef18bd",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_16841259d7154ef4",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_31ffb01bea52df5f",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_03fe0a73daa0243a",
+     "result": "partial",
+     "passed": 4,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_d8d8fc09fa817100",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_04d3d75583b5cfed",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    },
+    {
+     "task": "task_031fb9c471ecad0e",
+     "result": "partial",
+     "passed": 3,
+     "total": 10,
+     "budget_used": 200
+    }
+   ]
+  },
+  "claims": {
+   "novelty": "NOT_ASSESSED",
+   "generalization": "NOT_ASSESSED"
+  },
+  "claims_note": "Per the OMEGA-11 gate, novelty and generalization stay NOT_ASSESSED until custody and transfer proof exist. The numbers above are engineering data from generated tasks, not capability claims."
+ }
+}

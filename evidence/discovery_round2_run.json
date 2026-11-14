@@ -1,0 +1,110 @@
+{
+ "experiment": "discovery-round2-01",
+ "preregistration": "ACE_DISCOVERY_ROUND2_PREREGISTRATION_20261113.md",
+ "band": [
+  70000,
+  70099
+ ],
+ "built": 100,
+ "skipped": 0,
+ "pool": 10,
+ "evaluation": 30,
+ "shown_discriminating_n": 13,
+ "shown_discriminating_ids": [
+  "pricing-order-70010",
+  "pricing-order-70011",
+  "pricing-order-70012",
+  "pricing-order-70014",
+  "pricing-order-70015",
+  "pricing-order-70016",
+  "pricing-order-70017",
+  "pricing-order-70021",
+  "pricing-order-70029",
+  "pricing-order-70034",
+  "pricing-order-70036",
+  "pricing-order-70037",
+  "pricing-order-70038"
+ ],
+ "arm_a_solved": [
+  "pricing-order-70010",
+  "pricing-order-70011",
+  "pricing-order-70014",
+  "pricing-order-70015",
+  "pricing-order-70016",
+  "pricing-order-70017",
+  "pricing-order-70021",
+  "pricing-order-70034"
+ ],
+ "arm_b_solved": [
+  "pricing-order-70010",
+  "pricing-order-70011",
+  "pricing-order-70012",
+  "pricing-order-70014",
+  "pricing-order-70015",
+  "pricing-order-70016",
+  "pricing-order-70017",
+  "pricing-order-70021",
+  "pricing-order-70029",
+  "pricing-order-70034",
+  "pricing-order-70036",
+  "pricing-order-70037",
+  "pricing-order-70038"
+ ],
+ "admitted_motion_keys": [
+  "('move_stmt', ('augassign', 't', 'Add', 't'), ('return',))"
+ ],
+ "arm_c_solved": [
+  "pricing-order-70010",
+  "pricing-order-70011",
+  "pricing-order-70012",
+  "pricing-order-70014",
+  "pricing-order-70015",
+  "pricing-order-70016",
+  "pricing-order-70017",
+  "pricing-order-70021",
+  "pricing-order-70029",
+  "pricing-order-70034",
+  "pricing-order-70036",
+  "pricing-order-70037",
+  "pricing-order-70038"
+ ],
+ "controls": {
+  "control_L1": {
+   "n": 30,
+   "arm_a": 30,
+   "arm_b": 30,
+   "verdict": "PASS"
+  },
+  "control_L2": {
+   "n": 15,
+   "arm_a": 15,
+   "arm_b": 15,
+   "verdict": "PASS"
+  },
+  "control_L3": {
+   "n": 15,
+   "arm_a": 15,
+   "arm_b": 15,
+   "verdict": "PASS"
+  }
+ },
+ "verdicts": {
+  "H1_reachability": {
+   "b_on_discriminating": "13/13",
+   "pct": 100.0,
+   "verdict": "PASS"
+  },
+  "H2_transfer": {
+   "capture": 1.0,
+   "gain_b_minus_a": 5,
+   "gain_c_minus_a": 5,
+   "verdict": "PASS"
+  },
+  "H3_no_regression": {
+   "verdict": "PASS",
+   "note": "ceiling sets are one-sided by construction; reported as such where arm A is at maximum"
+  }
+ },
+ "overall": "ROUND2_CONFIRMED",
+ "wall_seconds": 0.7
+}

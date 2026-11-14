@@ -1,0 +1,19 @@
+{
+ "correction_2026_11_13": "First calibration run the same night treated solve_task's returned code string as a boolean (always truthy) and reported a spurious 100% in 0.3 s; that run is void. This file is the corrected run using the census's passes()-based solved() check.",
+ "seed": 20261301,
+ "score_call_cap": 4000,
+ "arm": "A_catalog_only",
+ "evaluation_n": 30,
+ "evaluation_solved_by_A": 0,
+ "control_n": 34,
+ "control_solved_by_A": 34,
+ "control_failed_ids": [],
+ "pooled_n": 64,
+ "pooled_solved_by_A": 34,
+ "pooled_pct": 53.12,
+ "evaluation_pct": 0.0,
+ "control_pct": 100.0,
+ "gate_10_90_pooled": true,
+ "gate_10_90_evaluation_only": false,
+ "wall_seconds": 0.5
+}

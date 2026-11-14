@@ -1,0 +1,53 @@
+{
+ "stage": "statement_order class calibration",
+ "tasks": 24,
+ "baseline_solved": 5,
+ "baseline_rate": 0.2083,
+ "comparator_solved": 0,
+ "comparator_rate": 0.0,
+ "discovery_report": {
+  "by_class": {
+   "statement_order": {
+    "pool_tasks": 8,
+    "candidate_operators": 13,
+    "admitted_operators": [
+     "('name_swap', (2, 2, 0, 0), 'subtotal')",
+     "('compare_swap', (3, 0), 'LtE')",
+     "('compare_swap', (3, 0), 'Eq')",
+     "('name_swap', (3, 0, 0), 't')",
+     "('int_constant', (3, 0, 2), 0)",
+     "('int_constant', (3, 0, 2), 1)",
+     "('int_constant', (3, 0, 2), 2)",
+     "('int_constant', (3, 0, 2), 399999)",
+     "('name_swap', (4, 0), 'subtotal')",
+     "('name_swap', (4, 0), 't')",
+     "('int_constant', (3, 0, 2), 249999)"
+    ],
+    "admitted_chains": [],
+    "eval_tasks": 16,
+    "eval_solved_baseline": 4,
+    "eval_solved_extended": 4
+   }
+  },
+  "pair_pool": {
+   "tasks": 0,
+   "tasks_solved_by_pairs": 0
+  },
+  "chain_pool": {
+   "tasks": 0,
+   "tasks_solved_by_chains": 0
+  },
+  "mixed_evaluation": {
+   "total": 0,
+   "solved_baseline": 0,
+   "solved_extended": 0
+  },
+  "control": {
+   "total": 0,
+   "solved_baseline": 0,
+   "solved_extended": 0
+  }
+ },
+ "wall_light_arms_seconds": 2.2,
+ "wall_discovery_seconds": 20.0
+}

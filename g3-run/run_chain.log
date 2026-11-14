@@ -1,0 +1,27 @@
+grid: 12 30 34 | pricing: 12 45 18 30 | constructed: 40
+phase wall: 142.1 s
+grid discovery done in 1467.0 s; catalog 0e4ac118313c
+phase wall: 1467.0 s
+pricing discovery done in 17.8 s; catalog 821ae1fb5617
+phase wall: 17.8 s
+grid sham solved 0
+phase wall: 0.1 s
+pricing sham solved 45
+phase wall: 0.1 s
+grid extra: base 0 ext 9 net_new 9 regressions 0
+pricing extra: base 45 ext 45 net_new 0 regressions 0
+constructed: base 14 ext 14
+phase wall: 499.4 s
+Traceback (most recent call last):
+  File "/home/hatch/workspace/ace-omega/g3_runner.py", line 210, in <module>
+    phase_finalize()
+  File "/home/hatch/workspace/ace-omega/g3_finalize.py", line 98, in phase_finalize
+    (M / "operator_discovery.py").read_bytes(),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1021, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/manifest/operator_discovery.py'

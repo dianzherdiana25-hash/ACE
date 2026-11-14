@@ -1,0 +1,33 @@
+{
+ "family": "text_transform",
+ "band": "seeds 91000-91039 (L1) + 91000-91019 (L2)",
+ "builds_attempted": 60,
+ "levels": {
+  "level_1": {
+   "built": 40,
+   "failed": 0
+  },
+  "level_2": {
+   "built": 20,
+   "failed": 0
+  }
+ },
+ "distinct_reference_programs": 21,
+ "distinct_buggy_programs": 48,
+ "per_defect_class_yields": {
+  "case_mode_swap": 10,
+  "separator_swap": 14,
+  "split_whitespace_semantics": 13,
+  "truncate_condition_boundary": 13,
+  "truncate_off_by_one": 19,
+  "word_order_reversal": 11
+ },
+ "shown_cases_per_task": {
+  "min": 1,
+  "max": 6
+ },
+ "holdout_cases_per_task": {
+  "min": 3,
+  "max": 8
+ }
+}

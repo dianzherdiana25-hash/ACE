@@ -1,0 +1,77 @@
+{
+ "by_class": {
+  "bounds_off_by_one": {
+   "pool_tasks": 3,
+   "candidate_operators": 3,
+   "admitted_operators": [
+    "('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult')",
+    "('binop_unwrap', (5, 2, 3, 0, 1, 4), 'left')",
+    "('int_constant', (5, 2, 3, 0, 1, 4, 2), 0)"
+   ],
+   "admitted_chains": [],
+   "eval_tasks": 9,
+   "eval_solved_baseline": 0,
+   "eval_solved_extended": 3
+  },
+  "dist_step_2": {
+   "pool_tasks": 3,
+   "candidate_operators": 1,
+   "admitted_operators": [
+    "('int_constant', (5, 2, 3, 1, 1, 2), 1)"
+   ],
+   "admitted_chains": [],
+   "eval_tasks": 11,
+   "eval_solved_baseline": 0,
+   "eval_solved_extended": 3
+  },
+  "returns_start_distance": {
+   "pool_tasks": 3,
+   "candidate_operators": 0,
+   "admitted_operators": [],
+   "admitted_chains": [],
+   "eval_tasks": 13,
+   "eval_solved_baseline": 0,
+   "eval_solved_extended": 0
+  },
+  "wall_char_x": {
+   "pool_tasks": 3,
+   "candidate_operators": 66,
+   "admitted_operators": [
+    "('string_literal', (5, 2, 3, 0, 4, 2), '#')"
+   ],
+   "admitted_chains": [],
+   "eval_tasks": 15,
+   "eval_solved_baseline": 0,
+   "eval_solved_extended": 3
+  }
+ },
+ "pair_pool": {
+  "tasks": 6,
+  "tasks_solved_by_pairs": 0
+ },
+ "chain_pool": {
+  "tasks": 6,
+  "tasks_solved_by_chains": 0
+ },
+ "mixed_evaluation": {
+  "total": 18,
+  "solved_baseline": 0,
+  "solved_extended": 8
+ },
+ "control": {
+  "total": 34,
+  "solved_baseline": 34,
+  "solved_extended": 34
+ },
+ "wall_seconds": 1467.0,
+ "family": "grid",
+ "admitted_keys": [
+  "('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult')",
+  "('binop_unwrap', (5, 2, 3, 0, 1, 4), 'left')",
+  "('int_constant', (5, 2, 3, 0, 1, 4, 2), 0)",
+  "('int_constant', (5, 2, 3, 1, 1, 2), 1)",
+  "('string_literal', (5, 2, 3, 0, 4, 2), '#')"
+ ],
+ "admitted_chains_ser": [],
+ "catalog_digest": "0e4ac118313cb02a9c8a7907a6c2e9f717b989e8a793441e45394daf78589fb5"
+}

@@ -1,0 +1,13 @@
+{
+ "sets_phase_findings": [
+  "Band-level program exclusion (runner's first implementation) is mathematically unsatisfiable: the census band 20000-25999 enumerates the entire 2,857-program pricing space. The runner was corrected to the locked text's digest-level fence (216 + 1,768 recorded probe programs + 36 P4 calibration tasks + 24 statement_order calibration references). Hub ratified this as a fidelity correction, not an amendment (2026-11-13).",
+  "Runner slice bug caught and fixed during the sets phase, before any data was used: the pricing evaluation draw initially overlapped the discovery pool (slice [:19] instead of [4:19]). Post-fix disjointness verified: 0 intersections across all set pairs.",
+  "Grid seed amendment (proposed by Ian, ratified by hub) was executed in scan form only: 40 consecutive seeds from 20261114 all yield 23-24 new_only singles (structural ceiling 4 classes x 6). See seed_scan.json. The amendment was then declared VOID by the hub (born of a counting-convention misreading) and withdrawn in the preregistration text's interpretation note (Addendum 53).",
+  "Interpretation note (hub decision, Addendum 53): the section-4 grid evaluation floor reads in the per-class aggregate (by_class) convention of its own reference protocol (v4 evaluation: 11 pure singles + 18 mixed = 29 tasks, aggregate 47). This run's grid composition, reported in both conventions: pure 12 singles + 18 mixed; aggregate 48. Pass rules are computed per task over the exact evaluation set; the convention touches only the floor-compliance statement.",
+  "All decisions above were taken in a zero-solving state (result-blind): no discovery, evaluation, or arm of any kind had run when they were made."
+ ],
+ "finalize_repairs": [
+  "First finalize attempt failed before any kernel write: the runner read the custodied bundle components from /tmp/manifest, wiped by a runtime restart mid-run. Components were restored byte-identically from the frozen branch; the recomputed manifest digest matched e2a59960... exactly before recording.",
+  "Second finalize attempt recorded the kernel result and audit (exactly 1 ledger row; audit CLEAN) and then failed on the instrument call (assess_g3 is keyword-only and file-based; the runner passed an inline dict positionally). The dossier was assembled in the instrument's file-based format (dossier/ directory) and scored without any second kernel write."
+ ]
+}
