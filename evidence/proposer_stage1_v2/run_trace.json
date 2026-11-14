@@ -1,0 +1,122 @@
+[
+ {
+  "episode_id": "EP1-G3-APPLICATION",
+  "attempt0_wall": 191.42,
+  "attempt0_ok": true,
+  "attempt0_reasons": [],
+  "attempt0_sha256": "d3a0a2732908fac229bf2fe2543e1596ebc185c54c55b521b2c4bf8ded3274ea",
+  "repaired": false,
+  "final_wall": 191.42,
+  "final_ok": true,
+  "final_reasons": [],
+  "final_sha256": "d3a0a2732908fac229bf2fe2543e1596ebc185c54c55b521b2c4bf8ded3274ea",
+  "attempt0_usage": {
+   "completion_tokens": 648,
+   "prompt_tokens": 988,
+   "total_tokens": 1636,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  }
+ },
+ {
+  "episode_id": "EP2-ABC-V3",
+  "attempt0_wall": 178.69,
+  "attempt0_ok": true,
+  "attempt0_reasons": [],
+  "attempt0_sha256": "cd2ce6940c294d8b116a6400e7bb3aac23a577f21d03ea0db76833c4b0a3069a",
+  "repaired": false,
+  "final_wall": 178.69,
+  "final_ok": true,
+  "final_reasons": [],
+  "final_sha256": "cd2ce6940c294d8b116a6400e7bb3aac23a577f21d03ea0db76833c4b0a3069a",
+  "attempt0_usage": {
+   "completion_tokens": 593,
+   "prompt_tokens": 998,
+   "total_tokens": 1591,
+   "prompt_tokens_details": {
+    "cached_tokens": 93
+   }
+  }
+ },
+ {
+  "episode_id": "EP3-ROUND2-GATE",
+  "attempt0_wall": 199.59,
+  "attempt0_ok": true,
+  "attempt0_reasons": [],
+  "attempt0_sha256": "7d8276f6ab7436980bda0f078b92227244b9c5633f713808a3d979701fdf2cd0",
+  "repaired": false,
+  "final_wall": 199.59,
+  "final_ok": true,
+  "final_reasons": [],
+  "final_sha256": "7d8276f6ab7436980bda0f078b92227244b9c5633f713808a3d979701fdf2cd0",
+  "attempt0_usage": {
+   "completion_tokens": 675,
+   "prompt_tokens": 1028,
+   "total_tokens": 1703,
+   "prompt_tokens_details": {
+    "cached_tokens": 93
+   }
+  }
+ },
+ {
+  "episode_id": "EP4-CONTROL-REGRESSION-ATTRIBUTION",
+  "attempt0_wall": 219.84,
+  "attempt0_ok": true,
+  "attempt0_reasons": [],
+  "attempt0_sha256": "17b56ae2e62d6384b728a4e04eceedb4355cb75fae5d5e6a34cbaa3d7c4e6846",
+  "repaired": false,
+  "final_wall": 219.84,
+  "final_ok": true,
+  "final_reasons": [],
+  "final_sha256": "17b56ae2e62d6384b728a4e04eceedb4355cb75fae5d5e6a34cbaa3d7c4e6846",
+  "attempt0_usage": {
+   "completion_tokens": 741,
+   "prompt_tokens": 1091,
+   "total_tokens": 1832,
+   "prompt_tokens_details": {
+    "cached_tokens": 93
+   }
+  }
+ },
+ {
+  "episode_id": "EP5-G4-INHERITANCE",
+  "attempt0_wall": 218.68,
+  "attempt0_ok": true,
+  "attempt0_reasons": [],
+  "attempt0_sha256": "892748fc60033b4602b9439460da357d859e51e7f0bb995752dcb2657074148f",
+  "repaired": false,
+  "final_wall": 218.68,
+  "final_ok": true,
+  "final_reasons": [],
+  "final_sha256": "892748fc60033b4602b9439460da357d859e51e7f0bb995752dcb2657074148f",
+  "attempt0_usage": {
+   "completion_tokens": 743,
+   "prompt_tokens": 960,
+   "total_tokens": 1703,
+   "prompt_tokens_details": {
+    "cached_tokens": 93
+   }
+  }
+ },
+ {
+  "episode_id": "EP6-PER-TASK-RECORDING",
+  "attempt0_wall": 202.77,
+  "attempt0_ok": true,
+  "attempt0_reasons": [],
+  "attempt0_sha256": "985d062c664a2020680cf4b66196d68b94fecea8fc4cddfcac49d7c9b3aa52ef",
+  "repaired": false,
+  "final_wall": 202.77,
+  "final_ok": true,
+  "final_reasons": [],
+  "final_sha256": "985d062c664a2020680cf4b66196d68b94fecea8fc4cddfcac49d7c9b3aa52ef",
+  "attempt0_usage": {
+   "completion_tokens": 692,
+   "prompt_tokens": 1013,
+   "total_tokens": 1705,
+   "prompt_tokens_details": {
+    "cached_tokens": 93
+   }
+  }
+ }
+]
