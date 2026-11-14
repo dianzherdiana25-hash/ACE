@@ -1,0 +1,16 @@
+{
+ "probe_round": 4,
+ "results": {
+  "landlock_enforced": {
+   "rc": 0,
+   "detail": "ADD_RULE ret 0 errno 0\nRESTRICT ret 0 errno 0\nALLOWED True DENIED_BLOCKED True",
+   "works": true
+  },
+  "ns_rootfs": {
+   "rc": 0,
+   "detail": "HOST_HIDDEN\nWROTE_WORK\nPAYLOAD_DONE",
+   "proof_landed": true,
+   "works": true
+  }
+ }
+}

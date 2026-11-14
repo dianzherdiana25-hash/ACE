@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ACE — Pusat Pantauan Evolusi Mandiri</title>
+    <style>
+        :root {
+            --bg: #090d16;
+            --surface: #131b2e;
+            --surface-hover: #1b2640;
+            --border: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.35);
+            --accent: #06b6d4;
+            --green: #10b981;
+            --yellow: #f59e0b;
+            --purple: #a855f7;
+            --red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg) 60%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 16px;
+            padding-bottom: 50px;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0 16px 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 0 16px var(--primary-glow);
+        }
+
+        .brand-text h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-text p {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #34d399;
+            box-shadow: 0 0 8px #34d399;
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.8; }
+        }
+
+        /* Section Title */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 22px 0 10px 0;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 5 Key Focus Cards */
+        .focus-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .focus-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .focus-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .focus-doing::before { background: var(--accent); }
+        .focus-solving::before { background: var(--yellow); }
+        .focus-adding::before { background: var(--green); }
+        .focus-removing::before { background: var(--purple); }
+        .focus-ai::before { background: var(--primary); }
+
+        .focus-tag {
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tag-doing { color: var(--accent); }
+        .tag-solving { color: var(--yellow); }
+        .tag-adding { color: var(--green); }
+        .tag-removing { color: #c084fc; }
+        .tag-ai { color: #818cf8; }
+
+        .focus-body {
+            font-size: 0.82rem;
+            color: var(--text-main);
+            line-height: 1.45;
+            font-weight: 500;
+        }
+
+        /* Level Card */
+        .level-card {
+            background: linear-gradient(145deg, rgba(30, 27, 75, 0.7), rgba(19, 27, 46, 0.9));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .level-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .level-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .level-number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #fff, #c7d2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            height: 100%;
+            border-radius: 10px;
+            width: 50%;
+            transition: width 0.6s ease;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .level-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* 3-Column Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 10px;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: 2px;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Story Feed */
+        .story-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .story-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .story-icon {
+            font-size: 18px;
+            margin-top: 1px;
+        }
+
+        .story-content {
+            flex: 1;
+        }
+
+        .story-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .story-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .story-badge {
+            font-size: 0.65rem;
+            padding: 2px 7px;
+            border-radius: 6px;
+            background: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+            font-weight: 600;
+        }
+
+        .story-desc {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Raw log accordion */
+        .toggle-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .raw-log-box {
+            display: none;
+            background: #000;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 0.65rem;
+            color: #a3e635;
+            max-height: 160px;
+            overflow-y: auto;
+            margin-top: 8px;
+            white-space: pre-wrap;
+        }
+
+        .focus-stamp {
+            font-size: 0.62rem;
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        .omega-board {
+            white-space: pre-line;
+            font-size: 0.8rem;
+            line-height: 1.55;
+            margin-top: 8px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="brand">
+                <div class="logo-icon">🧬</div>
+                <div class="brand-text">
+                    <h1>ACE Evolution</h1>
+                    <p>Visi Riset: OAIE Mandiri</p>
+                </div>
+            </div>
+            <div class="status-pill">
+                <div class="pulse-dot"></div>
+                <span id="healthLabel">BERPIKIR</span>
+            </div>
+        </div>
+
+        <!-- 5 Key Focus Cards: Apa yang sedang dilakukan, diselesaikan, ditambah, dikurangi, dipakai -->
+        <div class="section-header" style="margin-top: 6px;">
+            <div class="section-title">🔍 Status Live: Apa yang Sedang Dikerjakan?</div>
+            <span style="font-size: 0.65rem; color: #64748b;" id="syncTime">Auto-refresh 3s</span>
+        </div>
+        <div class="focus-stack">
+            <!-- 1. Sedang Melakukan Apa -->
+            <div class="focus-card focus-doing">
+                <div class="focus-tag tag-doing">⚡ 1. Sedang Melakukan Apa?</div>
+                <div class="focus-body" id="focusDoing">Program Ω — run A/B/C v3 (penentu G2): status RUNNING, pita 20261501, fase arm_C (heartbeat 2026-11-13 08:05:46). Gerbang round-2: not started — antre di belakang run v3.</div>
+                <div class="focus-stamp" id="stampDoing">sumber: heartbeat run v3 (2026-11-13 15:05:46 WIB); berkas status 2026-11-13 15:07:44 WIB</div>
+            </div>
+
+            <!-- 2. Menyelesaikan Masalah Apa -->
+            <div class="focus-card focus-solving">
+                <div class="focus-tag tag-solving">🎯 2. Menyelesaikan Masalah Apa?</div>
+                <div class="focus-body" id="focusSolving">Papan gerbang Ω (per Addendum 58 (2026-11-13)): G0: PASS (session-scoped only); G1: MEASURED — DEMONSTRATED; G2: MEASURED — null x2 (pilot v1, v2); v3 decider IN FLIGHT; G3: MEASURED — SPECIALIZATION; G4: MEASURED — INHERITANCE_DEMONSTRATED; G5: NOT_ASSESSED.</div>
+                <div class="focus-stamp" id="stampSolving">sumber: staging/add58/docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM58.md (2026-11-13 11:08:12 WIB); berkas status 2026-11-13 15:07:44 WIB</div>
+            </div>
+
+            <!-- 3. Menambah Apa -->
+            <div class="focus-card focus-adding">
+                <div class="focus-tag tag-adding">➕ 3. Menambah Apa?</div>
+                <div class="focus-body" id="focusAdding">Venue berjalan: KBM 3 bab terbit (Malam Aku Diusir dari Rumah Itu, Kos Kecil, Dapur Orang, Kesempatan Pertama, Nama yang Tak Pernah Disebut); Threads &amp; Facebook terjadwal malam ini; register peluang 11 entri (origin share 0.909).</div>
+                <div class="focus-stamp" id="stampAdding">sumber: KBM state (2026-11-13 12:40:41 WIB); berkas status 2026-11-13 15:07:44 WIB</div>
+            </div>
+
+            <!-- 4. Mengurangi / Membersihkan Apa -->
+            <div class="focus-card focus-removing">
+                <div class="focus-tag tag-removing">➖ 4. Mengurangi / Membersihkan Apa?</div>
+                <div class="focus-body" id="focusRemoving">Utang awal: tersisa Rp4.208.328 (0.0% tertebus) dari baseline Rp4.208.328; penghasilan tunai terverifikasi Rp0.</div>
+                <div class="focus-stamp" id="stampRemoving">sumber: ledger (2026-11-13 02:40:20 WIB); berkas status 2026-11-13 15:07:44 WIB</div>
+            </div>
+
+            <!-- 5. Menggunakan AI Apa -->
+            <div class="focus-card focus-ai">
+                <div class="focus-tag tag-ai">🤖 5. Menggunakan AI Apa?</div>
+                <div class="focus-body" id="focusAI">Muse — Ian (ruang eksekusi utama) + ila (direktur program, ruang diskusi). Model lokal: Qwen3-8B (direktur riset lokal) — ISTIRAHAT TOTAL atas perintah pemilik; tidak ada run model lokal berjalan</div>
+                <div class="focus-stamp" id="stampAI">sumber: perintah pemilik 2026-11-13 (ruang diskusi + MEMORY.md) (2026-11-13 11:03 WIB)</div>
+            </div>
+        </div>
+
+        <!-- Papan Gerbang Omega -->
+        <div class="level-card" id="omegaBoardCard">
+            <div class="level-title">🧭 Papan Gerbang Ω — Program Saat Ini</div>
+            <div class="omega-board" id="omegaBoard">G0: PASS (session-scoped only)
+G1: MEASURED — DEMONSTRATED
+G2: MEASURED — null x2 (pilot v1, v2); v3 decider IN FLIGHT
+G3: MEASURED — SPECIALIZATION
+G4: MEASURED — INHERITANCE_DEMONSTRATED
+G5: NOT_ASSESSED</div>
+        </div>
+
+        <!-- Level Progress -->
+        <div class="level-card">
+            <div class="level-top">
+                <div>
+                    <div class="level-title">Tahap Generasi Evolusi</div>
+                    <div class="level-number" id="levelDisplay">Generasi 6</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.7rem; color: var(--text-muted);">Total Ide Selesai</div>
+                    <div style="font-size: 1.1rem; font-weight: 800; color: #fff;" id="cycleCount">308</div>
+                </div>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBar" style="width: 84%;"></div>
+            </div>
+            <div class="level-desc">
+                <span>Progres Menuju Generasi Berikutnya</span>
+                <span id="progressText">84%</span>
+            </div>
+        </div>
+
+        <!-- Quick 3 Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Kecepatan Belajar</div>
+                <div class="stat-val" id="speedVal">60/jam</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">RAM Termux</div>
+                <div class="stat-val" id="ramVal">24 MB</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Suhu HP & Daya</div>
+                <div class="stat-val" style="color: #94a3b8;">N/A</div>
+            </div>
+        </div>
+
+        <!-- Storyline Feed -->
+        <div class="section-header">
+            <div class="section-title">📖 Catatan Aktivitas Terkini</div>
+        </div>
+        <div class="story-list" id="storyList">
+            <div style="text-align: center; color: #64748b; font-size: 0.75rem; padding: 20px;">
+                Memuat aktivitas terbaru ACE...
+            </div>
+        </div>
+
+        <!-- Mode Ahli (Raw Log) -->
+        <button class="toggle-btn" onclick="toggleRawLog()">🛠️ Intip Log Terminal Teknis</button>
+        <div class="raw-log-box" id="rawLogBox">Memuat log mentah...</div>
+
+        <div class="footer">
+            ACE Autonomous Capability Evolution • Berjalan di Android Termux
+        </div>
+    </div>
+
+    <script>
+        function toggleRawLog() {
+            const box = document.getElementById('rawLogBox');
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+
+        async function updateDashboard() {
+            try {
+                const res = await fetch('/api/data');
+                const data = await res.json();
+                
+                const hb = data.heartbeat || {};
+                const stats = hb.resource_stats || {};
+                const focus = data.focus || {};
+                
+                // 5 Key Focus Updates
+                document.getElementById('focusDoing').textContent = focus.doing || '-';
+                document.getElementById('focusSolving').textContent = focus.solving || '-';
+                document.getElementById('focusAdding').textContent = focus.adding || '-';
+                document.getElementById('focusRemoving').textContent = focus.removing || '-';
+                document.getElementById('focusAI').textContent = focus.ai_used || '-';
+                const omegaLive = data.omega && data.omega.active && !data.omega.stale;
+                document.getElementById('healthLabel').textContent = (data.live_status || omegaLive) ? (focus.doing_status || 'AKTIF') : 'OFFLINE / BELUM TERVERIFIKASI';
+                document.querySelector('.pulse-dot').style.display = data.live_status ? '' : 'none';
+
+                // Cycles & Levels
+                const cycles = Number.isFinite(data.completed_cycles) ? data.completed_cycles : 0;
+                document.getElementById('cycleCount').textContent = cycles;
+                document.getElementById('levelDisplay').textContent = 'Generasi ' + data.level;
+                document.getElementById('progressBar').style.width = data.level_progress + '%';
+                document.getElementById('progressText').textContent = data.level_progress + '%';
+
+                // Stats
+                const tput = Number(hb.cycle_throughput_per_hour || 0);
+                document.getElementById('speedVal').textContent = tput.toFixed(0) + '/jam';
+                document.getElementById('ramVal').textContent = Number(stats.rss_memory_mb || 0).toFixed(0) + ' MB';
+                document.getElementById('syncTime').textContent = 'Update: ' + data.timestamp;
+                const tsMap = data.focus_ts || {};
+                const stampIds = {doing: 'stampDoing', solving: 'stampSolving', adding: 'stampAdding', removing: 'stampRemoving', ai_used: 'stampAI'};
+                for (const k in stampIds) { const el = document.getElementById(stampIds[k]); if (el) el.textContent = tsMap[k] || ''; }
+                const boardEl = document.getElementById('omegaBoard');
+                if (boardEl && data.omega_board_lines && data.omega_board_lines.length) boardEl.textContent = data.omega_board_lines.join('
+');
+
+                // Stories Feed
+                const list = document.getElementById('storyList');
+                if (data.stories && data.stories.length > 0) {
+                    list.innerHTML = data.stories.map(s => `
+                        <div class="story-card">
+                            <div class="story-icon">${s.icon}</div>
+                            <div class="story-content">
+                                <div class="story-header">
+                                    <div class="story-title">${s.title}</div>
+                                    <div class="story-badge">${s.badge}</div>
+                                </div>
+                                <div class="story-desc">${s.desc}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                // Raw logs
+                const rawBox = document.getElementById('rawLogBox');
+                if (data.raw_logs) {
+                    rawBox.textContent = data.raw_logs.join('\n');
+                }
+
+            } catch (err) {
+                console.error("Gagal sinkronasi dashboard:", err);
+            }
+        }
+
+        setInterval(updateDashboard, 3000);
+        updateDashboard();
+    </script>
+</body>
+</html>

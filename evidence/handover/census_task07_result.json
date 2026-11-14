@@ -1,0 +1,202 @@
+{
+ "seeds_per_level": 4000,
+ "total_unique_programs": 216,
+ "theoretical_ceiling": 216,
+ "param_combos_seen": 36,
+ "param_combos_theoretical": 36,
+ "by_defect_set": {
+  "member_basis": 36,
+  "member_basis+tax_basis": 36,
+  "member_basis+threshold_boundary": 36,
+  "tax_basis": 36,
+  "tax_basis+threshold_boundary": 36,
+  "threshold_boundary": 36
+ },
+ "singles_total": 108,
+ "pairs_total": 108,
+ "per_level": {
+  "1": {
+   "generated_ok": 4000,
+   "invalid": 0,
+   "unique_programs_seen_at_level": 72
+  },
+  "2": {
+   "generated_ok": 4000,
+   "invalid": 0,
+   "unique_programs_seen_at_level": 36
+  },
+  "3": {
+   "generated_ok": 4000,
+   "invalid": 0,
+   "unique_programs_seen_at_level": 108
+  },
+  "4": {
+   "generated_ok": 4000,
+   "invalid": 0,
+   "unique_programs_seen_at_level": 72
+  }
+ },
+ "programs_seen_at_multiple_levels": 72,
+ "saturation_curve": [
+  {
+   "level": 1,
+   "after_seeds": 500,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 1,
+   "after_seeds": 1000,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 1,
+   "after_seeds": 1500,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 1,
+   "after_seeds": 2000,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 1,
+   "after_seeds": 2500,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 1,
+   "after_seeds": 3000,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 1,
+   "after_seeds": 3500,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 1,
+   "after_seeds": 4000,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 2,
+   "after_seeds": 500,
+   "cumulative_uniques": 36
+  },
+  {
+   "level": 2,
+   "after_seeds": 1000,
+   "cumulative_uniques": 36
+  },
+  {
+   "level": 2,
+   "after_seeds": 1500,
+   "cumulative_uniques": 36
+  },
+  {
+   "level": 2,
+   "after_seeds": 2000,
+   "cumulative_uniques": 36
+  },
+  {
+   "level": 2,
+   "after_seeds": 2500,
+   "cumulative_uniques": 36
+  },
+  {
+   "level": 2,
+   "after_seeds": 3000,
+   "cumulative_uniques": 36
+  },
+  {
+   "level": 2,
+   "after_seeds": 3500,
+   "cumulative_uniques": 36
+  },
+  {
+   "level": 2,
+   "after_seeds": 4000,
+   "cumulative_uniques": 36
+  },
+  {
+   "level": 3,
+   "after_seeds": 500,
+   "cumulative_uniques": 108
+  },
+  {
+   "level": 3,
+   "after_seeds": 1000,
+   "cumulative_uniques": 108
+  },
+  {
+   "level": 3,
+   "after_seeds": 1500,
+   "cumulative_uniques": 108
+  },
+  {
+   "level": 3,
+   "after_seeds": 2000,
+   "cumulative_uniques": 108
+  },
+  {
+   "level": 3,
+   "after_seeds": 2500,
+   "cumulative_uniques": 108
+  },
+  {
+   "level": 3,
+   "after_seeds": 3000,
+   "cumulative_uniques": 108
+  },
+  {
+   "level": 3,
+   "after_seeds": 3500,
+   "cumulative_uniques": 108
+  },
+  {
+   "level": 3,
+   "after_seeds": 4000,
+   "cumulative_uniques": 108
+  },
+  {
+   "level": 4,
+   "after_seeds": 500,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 4,
+   "after_seeds": 1000,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 4,
+   "after_seeds": 1500,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 4,
+   "after_seeds": 2000,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 4,
+   "after_seeds": 2500,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 4,
+   "after_seeds": 3000,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 4,
+   "after_seeds": 3500,
+   "cumulative_uniques": 72
+  },
+  {
+   "level": 4,
+   "after_seeds": 4000,
+   "cumulative_uniques": 72
+  }
+ ]
+}

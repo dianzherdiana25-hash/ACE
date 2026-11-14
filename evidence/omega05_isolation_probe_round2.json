@@ -1,0 +1,19 @@
+{
+ "probe_round": 2,
+ "results": {
+  "seccomp_detail": {
+   "rc": 0,
+   "detail": "PRCTL_SECCOMP ret -1 errno 22\nSYSCALL_SECCOMP ret 0 errno 0"
+  },
+  "landlock_functional": {
+   "rc": 0,
+   "detail": "ADD_RULE ret -1 errno 22\nRESTRICT ret 0 errno 22\nALLOWED_WRITE blocked?! [Errno 13] Permission denied: '/tmp/ll_allowed/ok.txt'\nDENIED_WRITE blocked: 13",
+   "works": false
+  },
+  "ns_rootfs": {
+   "rc": 127,
+   "detail": "bash: line 3: umount: command not found\nbash: line 4: head: command not found\nbash: line 5: ls: command not found",
+   "works": false
+  }
+ }
+}

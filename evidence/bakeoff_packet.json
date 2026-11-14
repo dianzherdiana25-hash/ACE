@@ -1,0 +1,53 @@
+{
+ "gates": {
+  "G0": "PASS_SESSION_SCOPED",
+  "G1": "MEASURED_DEMONSTRATED_UNQUALIFIED",
+  "G2": "MEASURED_NULL_X2",
+  "G3": "NOT_ASSESSED",
+  "G4": "NOT_ASSESSED",
+  "G5": "NOT_ASSESSED",
+  "OAIE": "UNPROVEN"
+ },
+ "open_gaps": [
+  {
+   "id": "gap-g3-application",
+   "what": "Instrumen G3 terbangun dan terverifikasi (PR #143), tetapi aplikasi pertamanya butuh prasyarat P1 (decouple run_discovery dari keluarga grid) dan teks praregistrasi"
+  },
+  {
+   "id": "gap-g4-g5-instruments",
+   "what": "Instrumen G4 dan G5 baru berupa desain (PR #136); implementasinya belum dibangun"
+  },
+  {
+   "id": "gap-abc-arms",
+   "what": "Lengan A/B/C belum terbedakan oleh strategi pada semesta tak-jenuh; desain v3 belum ditulis"
+  },
+  {
+   "id": "gap-facebook-mission",
+   "what": "Syarat misi $500 Facebook Pro belum terbaca (panel hanya bisa ditunjukkan pemilik); produksi konten menunggu verifikasi"
+  },
+  {
+   "id": "gap-brain-succession",
+   "what": "Suksesi direktur lokal sedang diuji banding terpraregistrasi; kursi berpindah hanya bila kandidat lulus ambang keandalan + kecepatan"
+  }
+ ],
+ "recent_results": [
+  {
+   "id": "composition-v2",
+   "summary": "Penemuan komposisi v2: rantai 3/6 vs pasangan 0/6 pada tugas yang sama; transfer tunggal naik 11 ke 15; kontrol 34/34 (PR #140)"
+  },
+  {
+   "id": "b2a02-pass",
+   "summary": "Uji B2A-02 LULUS 4/4 dengan tabel perbandingan terhitung harness; audit CLEAN (PR #141)"
+  },
+  {
+   "id": "g3-instrument-verified",
+   "summary": "Instrumen G3 dibangun Ian, diverifikasi TAHAN oleh dua pos independen; dua temuan minor terkoreksi (PR #143)"
+  },
+  {
+   "id": "opportunity-register",
+   "summary": "Register peluang dibuka: 12 aset terdaftar, entri #1 asal FOUNDER, pangsa sintesis sisi-ACE baseline 0,0 (PR #142)"
+  }
+ ],
+ "memory_facts": [],
+ "fact_count": 16
+}

@@ -1,0 +1,28 @@
+# PETA PELUANG #8 — Loop Siklus 5: Fastwork siap-buka · Shopee terverifikasi ulang · newsletter terbagi dua
+- Tanggal: 13 Nov 2026 · Standar sama.
+
+## 1. FASTWORK — Paket A SIAP-BUKA (kanal terakhir yang belum punya daftar)
+- Onboarding (RESMI, start-selling + Help Center): daftar dengan **KTP + akun bank**; tim memverifikasi akun (hasil via email, **maks 2 hari kerja**); listing ditinjau **maks 48 jam** sebelum tayang; usia min 18.
+- Kategori: induk **Web & Pemrograman**, subkategori **cyber-security** terbukti hidup (slug listing nyata). **Paket 3 tingkat DIDUKUNG NATIVE** (bukti listing pentest live: Basic/Professional/Advanced + fitur/waktu pengerjaan/revisi per tingkat) → dokumen Paket A terpetakan 1:1. Patokan kompetitor itu: mulai **Rp1.500.000** dengan retest hanya di tier atas — tier Paket A (350/850/1.500) masuk di bawahnya dengan retest sudah termasuk di struktur kita.
+- Transaksi berjalan lewat **quotation PDF di chat** (tombol Request Pembayaran); quotation adalah bukti nomor satu saat sengketa (wajib: deliverables, pengecualian, biaya tambahan eksplisit). Escrow: klien membayar dulu → status In Progress → Submit Work → Approve → komisi terpotong otomatis → saldo.
+- Komisi Bronze 12% terkonfirmasi ulang dari halaman Komisi resmi berjalan (contoh Okt–Nov 2026; contoh "10%" di artikel bantuan = usang). **Bersih Paket A di Bronze: Rp350 rb → Rp308.000 · Rp850 rb → Rp748.000 · Rp1,5 jt → Rp1.320.000** (sebelum PPh; Fastwork tidak memotong PPh). Penarikan ke rekening gratis.
+- ⚠️ Lubang hari-H: jadwal pencairan punya DUA versi resmi berbeda generasi (setiap Selasa vs Selasa minggu ke-2 & ke-4), minimum transfer otomatis ID tidak terbaca resmi, jendela auto-approve ID tidak ditemukan, format unggahan verifikasi persis & taksonomi subkategori lengkap hanya di formulir akun, teks S&K domain resmi sesi ini hanya terbaca via salinan (butir-butirnya konsisten dengan Help Center).
+- Pagar: kontak pribadi di listing dilarang; pembayaran di luar platform pelanggaran mutlak (konsisten dengan aturan kanal induk).
+
+## 2. SHOPEE AFFILIATE — angka induk COCOK, dokumen DIPERKETAT
+- Terverifikasi ulang dari S&K + Pusat Bantuan resmi: pendaftaran 3 jalur, peninjauan **maks 1 hari kerja**, **tanpa minimum followers**; kanal resmi **IG/YouTube/FB/TikTok/Twitter (+blog/Pinterest di S&K)** — **Threads tetap TIDAK tercantum**. Komisi hanya produk **non-digital Mall/Supermarket/Star+/Star**; Komisi Shopee "hingga 4%" dengan **cap Rp10.000/pesanan**; **Komisi XTRA dari penjual tanpa cap** (komponen yang sesungguhnya bernilai — saring daftar B ke produk XTRA); atribusi klik→pesanan selesai **7 hari**; bayar **mingguan**, <Rp500 rb via ShopeePay, di atasnya transfer bank; komisi sebelum PPh (Shopee memotong PPh 21/26).
+- **PENGETATAN paling operasional:** S&K 5.3–5.4 + artikel kendala pembayaran — pembayaran mensyaratkan **KTP dan NPWP 16 digit yang sudah dipadankan dengan NIK**, dengan nama persis sama di KTP–rekening–NPWP; tanpa itu pembayaran **tidak diproses sama sekali**. Booklet lama yang menyebut NPWP "disarankan" sudah tidak berlaku.
+- **FB wajib Halaman (fan page)** per S&K 2.7 — profil pribadi (termasuk profil FB Pro pemilik) TIDAK memenuhi syarat media; daftar B harus memakai Page.
+- ⚠️ Angka minimum pencairan Rp10.000 yang beredar TIDAK ditemukan di dokumen resmi berjalan (status: belum terverifikasi untuk aturan kini); hari bayar antar artikel resmi konflik (Rabu/Jumat berbasis laporan vs Kamis) — yang aman dipegang hanya "mingguan".
+- Pelanggaran yang membatalkan komisi (termasuk yang sudah dibayar): beli lewat link sendiri, kolusi antar-afiliasi/penjual, spam/blast, masking custom link, clickbait, produk digital, pembelian untuk dijual kembali.
+
+## 3. NEWSLETTER BERBAYAR — terbagi dua, satu avenue nyata
+- **Medium Partner Program: TERBUKA resmi untuk Indonesia** (daftar ±119 negara memuat Indonesia eksplisit; syarat: membership Medium aktif + ≥1 story + profil lengkap + bank & residensi pajak di negara eligible; payout min **$10**, ±tgl 10 bulanan via Stripe yang terhubung, pajak via Tipalti; tanpa minimum follower di aturan berjalan). **Pagar kerasnya kebijakan AI:** tulisan mayoritas-AI **DILARANG di-paywall** (diungkap atau tidak); AI-assistive boleh dengan label jelas; gambar AI wajib caption. → Avenue ini hanya untuk tulisan yang dipimpin manusia — bukan saluran output AI murni.
+- **Substack: ABU-ABU.** Fee resmi 10% + Stripe 2,9% + $0,30 + Billing 0,7%; Indonesia masuk daftar pengecualian fee (saat ini fee platform **0%** bila terhubung Stripe — "will eventually apply"); tetapi aktivasi bergantung akun Stripe dan **Stripe Indonesia masih "Preview"** di stripe.com/global. Penentu = layar setup hari-H; Stripe Atlas adalah workaround resmi yang dipromosikan (perusahaan AS).
+- **Ghost:** fee 0% tetapi pembayaran hanya via Stripe kreator → mewarisi kendala yang sama persis; bukan jalan keluar.
+- Kesimpulan: jangan coret newsletter — catat sebagai avenue **Medium (terencana, tulisan manusia berlabel AI-assist)** + opsi Substack yang menunggu status Stripe (item pantau Jaga Perubahan yang sama).
+
+## REKOMENDASI SIKLUS 5
+1. Bundel dokumen pemilik bertambah satu butir presisi: **NPWP harus 16 digit dan sudah dipadankan dengan NIK** (syarat de facto Shopee + kolom treaty KDP + PartnerStack) — satu tindakan administratif yang membuka tiga rel.
+2. Daftar B Shopee disaring ulang sebelum pendaftaran dibuka: hanya produk non-digital Mall/Star bertanda **Komisi XTRA**, kanal hanya **Page** FB + IG (bukan profil Pro, bukan Threads).
+3. Medium dimasukkan ke peta sebagai avenue tulisan-Inggris-manusia (pendamping Royal Road untuk nonfiksi/esai), bukan untuk serial AI.

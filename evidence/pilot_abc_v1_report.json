@@ -1,0 +1,477 @@
+{
+ "experiment": "pilot-abc-v1",
+ "protocol_hash": "bce010ab273183f3a6b4459861b5743c9f89ee3fcd6af9fe68becf134c827d42",
+ "reps": [
+  {
+   "rep": 0,
+   "train_tasks": 230,
+   "holdout_tasks": 70,
+   "arms": {
+    "arm-a-fixed": {
+     "final_config": {
+      "operators": [
+       "boundary",
+       "basis",
+       "nudge",
+       "multiplier"
+      ],
+      "rounds": 3
+     },
+     "heldout": {
+      "solved": 69,
+      "total": 70,
+      "rate": 0.9857142857142858,
+      "per_family": {
+       "pricing": {
+        "solved": 41,
+        "total": 42
+       },
+       "shipping": {
+        "solved": 28,
+        "total": 28
+       }
+      },
+      "credits": {
+       "boundary": 31,
+       "basis": 29,
+       "nudge": 0,
+       "multiplier": 17
+      },
+      "evals": 936
+     }
+    },
+    "arm-b-adaptive": {
+     "final_config": {
+      "operators": [
+       "boundary",
+       "multiplier",
+       "basis",
+       "nudge"
+      ],
+      "rounds": 3
+     },
+     "heldout": {
+      "solved": 69,
+      "total": 70,
+      "rate": 0.9857142857142858,
+      "per_family": {
+       "pricing": {
+        "solved": 41,
+        "total": 42
+       },
+       "shipping": {
+        "solved": 28,
+        "total": 28
+       }
+      },
+      "credits": {
+       "boundary": 31,
+       "basis": 29,
+       "nudge": 0,
+       "multiplier": 17
+      },
+      "evals": 868
+     }
+    },
+    "arm-c-evolutionary": {
+     "final_config": {
+      "operators": [
+       "basis",
+       "boundary",
+       "multiplier",
+       "nudge"
+      ],
+      "rounds": 3
+     },
+     "heldout": {
+      "solved": 69,
+      "total": 70,
+      "rate": 0.9857142857142858,
+      "per_family": {
+       "pricing": {
+        "solved": 41,
+        "total": 42
+       },
+       "shipping": {
+        "solved": 28,
+        "total": 28
+       }
+      },
+      "credits": {
+       "boundary": 31,
+       "basis": 29,
+       "nudge": 0,
+       "multiplier": 17
+      },
+      "evals": 817
+     }
+    },
+    "arm-null": {
+     "final_config": "identity",
+     "heldout": {
+      "solved": 0,
+      "total": 70,
+      "rate": 0.0,
+      "per_family": {
+       "pricing": {
+        "solved": 0,
+        "total": 42
+       },
+       "shipping": {
+        "solved": 0,
+        "total": 28
+       }
+      },
+      "credits": {
+       "boundary": 0,
+       "basis": 0,
+       "nudge": 0,
+       "multiplier": 0
+      },
+      "evals": 70
+     }
+    }
+   }
+  },
+  {
+   "rep": 1,
+   "train_tasks": 235,
+   "holdout_tasks": 65,
+   "arms": {
+    "arm-a-fixed": {
+     "final_config": {
+      "operators": [
+       "boundary",
+       "basis",
+       "nudge",
+       "multiplier"
+      ],
+      "rounds": 3
+     },
+     "heldout": {
+      "solved": 59,
+      "total": 65,
+      "rate": 0.9076923076923077,
+      "per_family": {
+       "pricing": {
+        "solved": 33,
+        "total": 39
+       },
+       "shipping": {
+        "solved": 26,
+        "total": 26
+       }
+      },
+      "credits": {
+       "boundary": 29,
+       "basis": 21,
+       "nudge": 0,
+       "multiplier": 18
+      },
+      "evals": 885
+     }
+    },
+    "arm-b-adaptive": {
+     "final_config": {
+      "operators": [
+       "boundary",
+       "multiplier",
+       "basis",
+       "nudge"
+      ],
+      "rounds": 3
+     },
+     "heldout": {
+      "solved": 59,
+      "total": 65,
+      "rate": 0.9076923076923077,
+      "per_family": {
+       "pricing": {
+        "solved": 33,
+        "total": 39
+       },
+       "shipping": {
+        "solved": 26,
+        "total": 26
+       }
+      },
+      "credits": {
+       "boundary": 29,
+       "basis": 21,
+       "nudge": 0,
+       "multiplier": 18
+      },
+      "evals": 813
+     }
+    },
+    "arm-c-evolutionary": {
+     "final_config": {
+      "operators": [
+       "basis",
+       "nudge",
+       "multiplier"
+      ],
+      "rounds": 2
+     },
+     "heldout": {
+      "solved": 59,
+      "total": 65,
+      "rate": 0.9076923076923077,
+      "per_family": {
+       "pricing": {
+        "solved": 33,
+        "total": 39
+       },
+       "shipping": {
+        "solved": 26,
+        "total": 26
+       }
+      },
+      "credits": {
+       "boundary": 0,
+       "basis": 21,
+       "nudge": 29,
+       "multiplier": 18
+      },
+      "evals": 648
+     }
+    },
+    "arm-null": {
+     "final_config": "identity",
+     "heldout": {
+      "solved": 0,
+      "total": 65,
+      "rate": 0.0,
+      "per_family": {
+       "pricing": {
+        "solved": 0,
+        "total": 39
+       },
+       "shipping": {
+        "solved": 0,
+        "total": 26
+       }
+      },
+      "credits": {
+       "boundary": 0,
+       "basis": 0,
+       "nudge": 0,
+       "multiplier": 0
+      },
+      "evals": 65
+     }
+    }
+   }
+  },
+  {
+   "rep": 2,
+   "train_tasks": 235,
+   "holdout_tasks": 65,
+   "arms": {
+    "arm-a-fixed": {
+     "final_config": {
+      "operators": [
+       "boundary",
+       "basis",
+       "nudge",
+       "multiplier"
+      ],
+      "rounds": 3
+     },
+     "heldout": {
+      "solved": 62,
+      "total": 65,
+      "rate": 0.9538461538461539,
+      "per_family": {
+       "pricing": {
+        "solved": 31,
+        "total": 34
+       },
+       "shipping": {
+        "solved": 31,
+        "total": 31
+       }
+      },
+      "credits": {
+       "boundary": 34,
+       "basis": 18,
+       "nudge": 0,
+       "multiplier": 16
+      },
+      "evals": 875
+     }
+    },
+    "arm-b-adaptive": {
+     "final_config": {
+      "operators": [
+       "boundary",
+       "multiplier",
+       "basis",
+       "nudge"
+      ],
+      "rounds": 3
+     },
+     "heldout": {
+      "solved": 62,
+      "total": 65,
+      "rate": 0.9538461538461539,
+      "per_family": {
+       "pricing": {
+        "solved": 31,
+        "total": 34
+       },
+       "shipping": {
+        "solved": 31,
+        "total": 31
+       }
+      },
+      "credits": {
+       "boundary": 34,
+       "basis": 18,
+       "nudge": 0,
+       "multiplier": 16
+      },
+      "evals": 811
+     }
+    },
+    "arm-c-evolutionary": {
+     "final_config": {
+      "operators": [
+       "multiplier",
+       "basis",
+       "nudge"
+      ],
+      "rounds": 2
+     },
+     "heldout": {
+      "solved": 62,
+      "total": 65,
+      "rate": 0.9538461538461539,
+      "per_family": {
+       "pricing": {
+        "solved": 31,
+        "total": 34
+       },
+       "shipping": {
+        "solved": 31,
+        "total": 31
+       }
+      },
+      "credits": {
+       "boundary": 0,
+       "basis": 18,
+       "nudge": 34,
+       "multiplier": 16
+      },
+      "evals": 641
+     }
+    },
+    "arm-null": {
+     "final_config": "identity",
+     "heldout": {
+      "solved": 0,
+      "total": 65,
+      "rate": 0.0,
+      "per_family": {
+       "pricing": {
+        "solved": 0,
+        "total": 34
+       },
+       "shipping": {
+        "solved": 0,
+        "total": 31
+       }
+      },
+      "credits": {
+       "boundary": 0,
+       "basis": 0,
+       "nudge": 0,
+       "multiplier": 0
+      },
+      "evals": 65
+     }
+    }
+   }
+  }
+ ],
+ "aggregate": {
+  "arm-a-fixed": {
+   "mean_rate": 0.9490842490842492,
+   "solved": 190,
+   "total": 200,
+   "pooled_rate": 0.95,
+   "per_family": {
+    "pricing": {
+     "solved": 105,
+     "total": 115
+    },
+    "shipping": {
+     "solved": 85,
+     "total": 85
+    }
+   }
+  },
+  "arm-b-adaptive": {
+   "mean_rate": 0.9490842490842492,
+   "solved": 190,
+   "total": 200,
+   "pooled_rate": 0.95,
+   "per_family": {
+    "pricing": {
+     "solved": 105,
+     "total": 115
+    },
+    "shipping": {
+     "solved": 85,
+     "total": 85
+    }
+   }
+  },
+  "arm-c-evolutionary": {
+   "mean_rate": 0.9490842490842492,
+   "solved": 190,
+   "total": 200,
+   "pooled_rate": 0.95,
+   "per_family": {
+    "pricing": {
+     "solved": 105,
+     "total": 115
+    },
+    "shipping": {
+     "solved": 85,
+     "total": 85
+    }
+   }
+  },
+  "arm-null": {
+   "mean_rate": 0.0,
+   "solved": 0,
+   "total": 200,
+   "pooled_rate": 0.0,
+   "per_family": {
+    "pricing": {
+     "solved": 0,
+     "total": 115
+    },
+    "shipping": {
+     "solved": 0,
+     "total": 85
+    }
+   }
+  }
+ },
+ "audit": {
+  "experiment_id": "pilot-abc-v1",
+  "status": "CLEAN",
+  "problems": [],
+  "results_verified": 4,
+  "ledger_entries_verified": 4,
+  "chain_break_at": null
+ },
+ "holdout_tasks_per_family": {
+  "pricing": 115,
+  "shipping": 85
+ },
+ "sample_target_met": true,
+ "elapsed_seconds": 13.6
+}

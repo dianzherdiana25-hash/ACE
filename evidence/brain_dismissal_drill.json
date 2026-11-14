@@ -1,0 +1,73 @@
+{
+ "checks": {
+  "registry_brains": [
+   [
+    "qwen3-8b",
+    "active"
+   ],
+   [
+    "qwen2.5-coder-3b",
+    "active"
+   ],
+   [
+    "claude",
+    "declared-unavailable"
+   ],
+   [
+    "antigravity",
+    "declared-unavailable"
+   ]
+  ],
+  "cycle_a_contract": true,
+  "dismissal_refused": true,
+  "cycle_b_contract": true,
+  "agenda_cycles": 2,
+  "agenda_continuous": true,
+  "memory_audit_clean": false
+ },
+ "cycle_a": {
+  "status": "accepted",
+  "proposals": 5,
+  "elapsed_s": 316.5
+ },
+ "refusal_codes": [
+  "BRAIN_DISMISSED"
+ ],
+ "cycle_b": {
+  "status": "rejected",
+  "proposals": 0,
+  "elapsed_s": 92.7
+ },
+ "memory_audit": {
+  "chain_ok": true,
+  "events": 5,
+  "active_records": 5,
+  "superseded_records": 0,
+  "expired_record_ids": [],
+  "tombstones": [],
+  "anchored_evidence": 0
+ },
+ "registry_events": [
+  [
+   "registered",
+   "qwen3-8b"
+  ],
+  [
+   "registered",
+   "qwen2.5-coder-3b"
+  ],
+  [
+   "registered",
+   "claude"
+  ],
+  [
+   "registered",
+   "antigravity"
+  ],
+  [
+   "dismissed",
+   "qwen3-8b"
+  ]
+ ],
+ "verdict": "DRILL_PASS"
+}

@@ -1,0 +1,26 @@
+[
+ {
+  "phase": "sets",
+  "wall": 142.1
+ },
+ {
+  "phase": "grid",
+  "wall": 1467.0
+ },
+ {
+  "phase": "pricing",
+  "wall": 17.8
+ },
+ {
+  "phase": "sham",
+  "wall": 0.1
+ },
+ {
+  "phase": "sham",
+  "wall": 0.1
+ },
+ {
+  "phase": "extra",
+  "wall": 499.4
+ }
+]

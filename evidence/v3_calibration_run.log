@@ -1,0 +1,18 @@
+{
+ "seed": 20261301,
+ "score_call_cap": 4000,
+ "arm": "A_catalog_only",
+ "evaluation_n": 30,
+ "evaluation_solved_by_A": 30,
+ "control_n": 34,
+ "control_solved_by_A": 34,
+ "control_failed_ids": [],
+ "pooled_n": 64,
+ "pooled_solved_by_A": 64,
+ "pooled_pct": 100.0,
+ "evaluation_pct": 100.0,
+ "control_pct": 100.0,
+ "gate_10_90_pooled": false,
+ "gate_10_90_evaluation_only": false,
+ "wall_seconds": 0.3
+}

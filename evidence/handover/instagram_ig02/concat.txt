@@ -1,0 +1,11 @@
+file 'scenes/scene1.png'
+duration 5
+file 'scenes/scene2.png'
+duration 5
+file 'scenes/scene3.png'
+duration 5
+file 'scenes/scene4.png'
+duration 5
+file 'scenes/scene5.png'
+duration 5
+file 'scenes/scene5.png'

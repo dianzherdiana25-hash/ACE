@@ -1,0 +1,26 @@
+# PETA PELUANG #9 — Loop Siklus 6: KBM null-publik · Lemon Squeezy siap-buka · stok media tertutup untuk AI
+- Tanggal: 13 Nov 2026 · Standar sama.
+
+## 1. KBM — DURASI KONTRAK: NULL PUBLIK TERVERIFIKASI
+- Pencarian resmi publik menyeluruh (beranda kbm.id, halaman baca/profil resmi, listing resmi Google Play PT Sembilan Sembilan Media, pencarian terarah atas halaman-halamannya sendiri) menghasilkan: **tidak ada teks publik resmi tentang Perjanjian Karya Eksklusif** — durasi, hak yang diambil, klausul adaptasi, klausul AI, dan syarat keluar **semuanya tidak diterbitkan publik**. Menulis angka apa pun akan menjadi fabrikasi.
+- Halaman "Syarat & Ketentuan" dan "Pusat Bantuan" resmi **ada** (tercantum di footer resmi kbm.id beserta kontak [email protected]), tetapi isinya tidak terekspos lewat jalur pengambilan teks publik yang dipakai agen riset (href footer tidak terindeks). **Langkah penutup yang tersisa:** (a) baca langsung kedua halaman itu via browser live — kujadwalkan sebagai pekerjaan Siklus 7 pos ini; bila tetap tak terbaca, (b) satu-satunya jalur adalah dokumen kontrak di dalam aplikasi pemilik (tugas hub/pemilik, sudah lama tercatat).
+- Mekanik penulis dari listing resmi Play: menulis & menerbitkan terbuka dari aplikasi tanpa ambang yang dinyatakan; fitur resmi menyebut Tips, Affiliate (bonus komisi tiap unlock pembaca), Coin Transfer, Daily Missions. **Kunci Bab 8 dan ambang Rp15.000/payout tgl 4 tetap berstatus "terverifikasi dari aplikasi pemilik"** — tidak ada konfirmasi maupun bantahan publik resmi; jangan naikkan statusnya.
+
+## 2. LEMON SQUEEZY — SIAP-BUKA, dengan catatan masa berlaku strategis
+- Aktivasi (RESMI): daftar → buat toko (Test mode) → tautkan payout → **verifikasi identitas** (ID pemerintah berfoto; re-verifikasi berkala wajib, mengabaikannya menjeda payout) → **Activate** (tinjauan kepatuhan, resmi biasanya 1–2 hari kerja). **Penjual TIDAK membuka akun Stripe sendiri** — LS adalah merchant of record; payout bank berjalan via Stripe dan Indonesia tercantum polos tanpa caveat.
+- Angka induk semua TERKONFIRMASI: ambang **$50**, tahan **13 hari**, payout dibuat tgl 1 & 15 dibayar **tgl 14 & 28**, fee payout bank non-AS **1%** (PayPal 3% maks $30 — jalur bank menang), kurs mid-market saat payout. **Fee efektif realistis untuk pembeli global: 5% + $0,50 + 1,5% transaksi internasional**, dihitung dari total termasuk pajak.
+- Produk AI milik sendiri **tidak dilarang** teks resmi (yang dilarang: jasa, fisik, PLR/MRR, NSFW, IP orang lain). LS memungut & menyetor VAT/sales-tax global sebagai MoR; PPh atas payout tetap urusan penjual.
+- ⚠️ **Catatan strategis (blog resmi LS):** pemiliknya (Stripe) sedang membangun **Stripe Managed Payments** sebagai penerus dan menyatakan fokus bergeser ke sana; tidak ada tanggal tutup LS, tetapi kelayakan domisili Indonesia di platform penerus **belum terkonfirmasi** (Stripe ID masih "Preview"). Vonis: LS = etalase global yang bekerja SEKARANG, bukan rumah permanen — cocok untuk K1 global dengan kesadaran migrasi.
+- Lubang: isi kuesioner aktivasi tidak dirinci resmi; antrean persetujuan pasca-akuisisi dilaporkan pihak ketiga bisa lebih lama — anggarkan longgar.
+
+## 3. STOK MEDIA — arus utama TERTUTUP untuk aset AI; satu pintu kondisional
+*(Kejujuran metode: halaman resmi Shutterstock & Pond5 gagal dibuka langsung sesi ini — vonis AI mereka adalah konsensus konsisten banyak sumber yang mengutip halaman resminya, ditandai ⚠️; angka Freepik TERVERIFIKASI dari FAQ resmi yang terbuka.)*
+- **Shutterstock ⚠️:** AI-generated **ditolak** dari kontributor (jalur AI hanya generator mereka + Contributor Fund untuk karya manusia). Royalti bertingkat 15% (Level 1, reset tiap 1 Jan) → 40%; payout min $25 (kerja)/$35 (konservatif), PayPal/Payoneer/Skrill. Untuk karya manusia pun ekonomi masuknya terburuk di kelasnya.
+- **Pond5 ⚠️:** AI **dilarang total termasuk musik, sanksi suspensi–terminasi** untuk pengiriman berulang. Royalti kini 30% non-eksklusif / 40% video eksklusif (angka lama 50/60% = pra-2025, jangan dipakai). Payout $25, tgl 15.
+- **Freepik (kini Magnific) — TERVERIFIKASI sebagian:** revenue share **50% flat** non-eksklusif; payout PayPal/Payoneer, invoice min $25, ritme bulanan dengan **lag ±2 bulan**. AI diterima BERSYARAT ⚠️ (flag + keyword `_ai_generated` + metadata prompt/model + **uji submisi batch 150–200 file**) — gerbang batch adalah biaya masuk sesungguhnya.
+- **Vonis:** stok media BUKAN jalur tersendiri. Satu-satunya makna praktisnya: tempat parkir kondisional bagi kelebihan produksi ilustrasi sinematik (Freepik bila batch ≥150 file terbentuk; Adobe Stock 33% yang sudah dipetakan) — di bawah payung kemampuan ilustrasi, bukan venue baru.
+
+## REKOMENDASI SIKLUS 6
+1. Perburuan durasi kontrak KBM berpindah jalur: baca footer S&K/Pusat Bantuan via browser live (Siklus 7); bila buntu, lubang ini resmi menjadi murni tugas membaca kontrak dalam aplikasi oleh pemilik — jangan ada pihak yang mengutip angka durasi dari mana pun sebelum itu.
+2. Etalase global K1: Lemon Squeezy adalah pilihan hari-buka (dossier lengkap), dengan strategi sadar-migrasi (arsip produk & daftar pelanggan harus bisa dipindah keluar kapan pun).
+3. Stok media ditutup sebagai avenue; jangan alokasikan kapasitas produksi khusus untuknya.

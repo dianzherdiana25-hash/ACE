@@ -1,0 +1,23 @@
+# RESOLUSI DAFTAR ⚠️ — Peta #1 + #2 (13 Nov 2026)
+Semua butir ditutup dari sumber resmi yang dibuka langsung. Status akhir: 1 TERVERIFIKASI penuh, 1 TERVERIFIKASI sebagian, 3 TERVERIFIKASI-TIDAK-ADA (null tercatat dengan penyebut penentunya).
+
+## 1. Komisi pemula Fastwork — ✅ TERVERIFIKASI: 12% (Bronze), konflik TERSELESAIKAN
+Hierarki dokumen resmi: (a) S&K Freelancer Fastwork (berlaku 17 Apr 2023) TIDAK mengunci angka — "tarif yang ditentukan oleh Perusahaan dan akan diumumkan di Platform"; (b) artikel Zendesk (contoh Bronze 10%) berstatus stagnan (metadata: last updated 448 hari lalu) dan menutup dengan rujukan "Full details: Fastwork Commission Terms & Conditions"; (c) halaman Commission T&C yang ditunjuk itu (static.fastwork.id/contents/commission) adalah dokumen berlaku: komisi mengikuti level saat penawaran dibuat, dihitung dari penjualan 3 bulan kalender sebelumnya + bulan berjalan; contoh resmi berjalan — penawaran Oktober 2026 = **12% (Bronze)**, naik level = 11% (Silver); contoh November 2026 dengan kumulatif Rp3,5 jt tetap 12% (Bronze).
+→ Angka perencanaan yang sah sejak sekarang: **komisi pemula Fastwork = 12%**. Contoh 10% di Zendesk adalah sisa versi lama (konsisten dengan salinan S&K lama "penghasilan 90%"). Koreksi ini menggantikan catatan "±10–12% konflik" di PELUANG_PETA_01.md dan PELUANG_PAKET_PENAWARAN_AUDIT.md.
+
+## 2. Set-up fee Etsy Indonesia — ⌀ TERVERIFIKASI-TIDAK-ADA di sumber publik
+Fees & Payments Policy resmi Etsy (etsy.com/uk/legal/fees) sengaja TIDAK memuat nominal/tabel negara untuk set-up fee: fee "will be displayed and charged as part of the shop set-up process", dapat diubah/dibebaskan atas diskresi Etsy. Pengumuman resmi peluncuran (Seller Handbook, Feb 2024) hanya menyebut $15 untuk SEBAGIAN toko baru. Tidak ada sumber resmi (atau sekunder) yang menyebut nominal Indonesia. Sekunder global $15–29 = bukan angka Indonesia.
+→ Penentu satu-satunya: angka di layar set-up toko saat pendaftaran (tindakan akun pemilik). Perencanaan Etsy harus memperlakukan biaya ini sebagai "ada, tak diketahui, kemungkinan belasan–puluhan dolar".
+
+## 3. Kelayakan instruktur Indonesia di Udemy — ⌀ TERVERIFIKASI-TIDAK-ADA di sumber publik
+Udemy tidak mempublikasikan daftar negara instruktur (didukung maupun dikecualikan). FAQ resmi instruktur (success.udemy.com) menyebut metode bayar saja (PayPal/Payoneer/Tipalti/direct deposit AS-saja) tanpa daftar negara; pendaftaran tanpa gerbang kewarganegaraan tertulis; sistem pajak W-8BEN membuktikan instruktur non-AS adalah kategori resmi — tetapi bukan daftar bernama. Bukti rel (bukan kelayakan Udemy): tabel resmi PayPal Payouts mencantumkan Indonesia "send, receive, withdraw".
+→ Penentu: Udemy Instructor Support atau metode yang muncul di Payout Settings akun nyata berdomisili Indonesia. Status sah: tidak dilarang, tidak pula terdaftar boleh.
+
+## 4. Ambang subscriber YouTube Shopping × Shopee — ◐ TERVERIFIKASI sebagian; angka spesifik kemitraan ⌀ TIDAK-ADA
+- Sisi YouTube ✅ TERVERIFIKASI: halaman affiliate resmi (answer/13376398) mensyaratkan YPP + "meets the subscriber threshold for YPP"; halaman expanded YPP resmi (answer/13429240, Indonesia termasuk) menulis Shopping terbuka saat bergabung YPP di **500 subscriber** (+3 upload/90 hari + 3.000 jam/12 bln atau 3 jt Shorts/90 hari). Jadi kerangka YouTube yang berlaku = tier 500, bukan 1.000.
+- Spesifik Shopee×Indonesia ⌀: dua sumber resmi Shopee BERTENTANGAN — Pusat Bantuan Shopee ID (article 203498) tanpa angka (tunduk ke syarat YPP YouTube; komisi hingga 4% non-elektronik, 1% elektronik, + XTRA), sedangkan landing resmi Shopee (shopee.co.id/m/youtube-shopping-affiliates-mar, diperkuat artikel Inspirasi 10 Sep 2025) menulis **10.000 subscriber** — tampaknya sisa era pilot yang belum diperbarui; blog resmi Google Indonesia saat peluncuran (18 Sep 2024) tidak menyebut angka sama sekali.
+→ Penentu definitif: tab Earn → Shopping di YouTube Studio akun yang bersangkutan (akses diberikan bertahap per akun). Perencanaan TIDAK boleh mengasumsikan 500 cukup untuk tag produk Shopee di Indonesia.
+
+## 5. Aplikasi YPP diajukan sebelum / ditinjau sesudah 1 Feb 2027 — ⌀ TERVERIFIKASI-TIDAK-ADA
+Tidak ada redaksi resmi (blog.youtube 10 Agu 2026; answer/12843009; pos TeamYouTube) yang mengatur aplikasi menggantung; perlindungan selalu dirumuskan biner: "already in YPP" vs "new creators applying". FAQ answer/72851 soal angka turun selama menunggu review mengatur penurunan angka, BUKAN perubahan ambang oleh aturan baru — jangan dicampur.
+→ Inferensi praktis (ditandai inferensi, bukan fakta): targetkan DITERIMA sebelum 1 Feb 2027; dengan tinjauan ±1 bulan, ajukan paling lambat akhir Des 2026–awal Jan 2027. Penentu definitif: TeamYouTube/Creator Support.

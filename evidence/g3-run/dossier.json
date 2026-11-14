@@ -1,0 +1,47 @@
+{
+ "improvement": {
+  "name": "operator-discovery-mechanism",
+  "digest": "e2a59960f8ccc7f8e991e77af99481ad603ce84c50a1b7f8299897b39c9975f8"
+ },
+ "source": {
+  "family": "grid",
+  "report": {
+   "protocol_hash": "5f907362e150d9cea1ef065010e11ff55592695720b5133d79d2b155aab8bb6d",
+   "audit_status": "CLEAN",
+   "improvement_name": "operator-discovery-mechanism",
+   "improvement_digest": "e2a59960f8ccc7f8e991e77af99481ad603ce84c50a1b7f8299897b39c9975f8",
+   "held_out": true,
+   "baseline_score": 0.0,
+   "improvement_score": 75.0,
+   "margin_pp": 10.0
+  }
+ },
+ "evaluations": [
+  {
+   "family": "grid",
+   "report": {
+    "protocol_hash": "5f907362e150d9cea1ef065010e11ff55592695720b5133d79d2b155aab8bb6d",
+    "audit_status": "CLEAN",
+    "improvement_name": "operator-discovery-mechanism",
+    "improvement_digest": "e2a59960f8ccc7f8e991e77af99481ad603ce84c50a1b7f8299897b39c9975f8",
+    "held_out": true,
+    "baseline_score": 0.0,
+    "improvement_score": 75.0,
+    "margin_pp": 10.0
+   }
+  },
+  {
+   "family": "pricing",
+   "report": {
+    "protocol_hash": "5f907362e150d9cea1ef065010e11ff55592695720b5133d79d2b155aab8bb6d",
+    "audit_status": "CLEAN",
+    "improvement_name": "operator-discovery-mechanism",
+    "improvement_digest": "e2a59960f8ccc7f8e991e77af99481ad603ce84c50a1b7f8299897b39c9975f8",
+    "held_out": true,
+    "baseline_score": 69.4118,
+    "improvement_score": 69.4118,
+    "margin_pp": 10.0
+   }
+  }
+ ]
+}

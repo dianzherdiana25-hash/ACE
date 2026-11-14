@@ -1,0 +1,12 @@
+{
+ "predecessor_id": "cand_fdfec59807ead1abee00",
+ "successor_id": "cand_ec7dcbcb674a08899097",
+ "successor_parents": [
+  "cand_fdfec59807ead1abee00"
+ ],
+ "capability_digest": "e7925aa7ea0f7d766b70e2b3855b2377b017959426d370a8cba43b6eff07a808",
+ "archive_audit": "CLEAN",
+ "chain_valid": true,
+ "archive_root": "g4-archive",
+ "archive_state_hash": "2a335a3367e1493cbd265fc5cd5c325ddf4fd22b8dfa70de4935f87e3ba6f232"
+}

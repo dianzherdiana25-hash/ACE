@@ -1,0 +1,62 @@
+{
+ "experiment": "b2a-01",
+ "protocol_hash": "93fef0c954a17da1bf3ddabfa59f2401d03a840fd896b752bfc298e9eef08baf",
+ "scores": {
+  "winner_correct": 0.0,
+  "gate_caught": 1.0,
+  "marketing_rejected": 1.0,
+  "citation_discipline": 1.0,
+  "decision_score": 3.0,
+  "correct_winner": "nimbus"
+ },
+ "verdict": "fail",
+ "decision": {
+  "decisions": [
+   {
+    "vendor": "nimbus",
+    "disposition": "eligible_not_selected",
+    "based_on": [
+     "criteria-gate",
+     "criteria-bounds",
+     "criteria-score"
+    ]
+   },
+   {
+    "vendor": "stabilo",
+    "disposition": "selected",
+    "based_on": [
+     "criteria-gate",
+     "criteria-bounds",
+     "criteria-score"
+    ]
+   },
+   {
+    "vendor": "spektra",
+    "disposition": "ineligible_bounds",
+    "based_on": [
+     "criteria-bounds"
+    ]
+   },
+   {
+    "vendor": "murah",
+    "disposition": "rejected_identity_gate",
+    "based_on": [
+     "criteria-gate"
+    ]
+   }
+  ],
+  "winner": "stabilo"
+ },
+ "rejection": null,
+ "wall_seconds": 358.6,
+ "ledger_seqs": [
+  1,
+  2
+ ],
+ "audit_status": "CLEAN",
+ "attestation": {
+  "model_sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+  "binary_sha256": "c25f12e9d7f92705d6329e170e91ca0db30f6f43bb2494316d42c1046f78a928",
+  "model_id": "/home/hatch/workspace/ace-omega/models/Qwen3-8B-Q4_K_M.gguf"
+ }
+}

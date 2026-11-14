@@ -1,0 +1,84 @@
+{
+ "experiment": "pilot-grid-gen-v1",
+ "protocol_hash": "fe984a8bc904c4852bc7df8e646258001dbdc9bddb900e2651f6e014ac267baf",
+ "elapsed_seconds": 17.6,
+ "results": {
+  "arms": {
+   "A": {
+    "subsets": {
+     "new_only": {
+      "solved": 0,
+      "total": 48,
+      "mean_fraction": 0.3032
+     },
+     "mixed": {
+      "solved": 2,
+      "total": 32,
+      "mean_fraction": 0.2431
+     },
+     "catalog_control": {
+      "solved": 16,
+      "total": 34,
+      "mean_fraction": 0.5948
+     }
+    },
+    "budget_calls": 198
+   },
+   "B": {
+    "subsets": {
+     "new_only": {
+      "solved": 0,
+      "total": 48,
+      "mean_fraction": 0.3032
+     },
+     "mixed": {
+      "solved": 2,
+      "total": 32,
+      "mean_fraction": 0.2431
+     },
+     "catalog_control": {
+      "solved": 16,
+      "total": 34,
+      "mean_fraction": 0.5948
+     }
+    },
+    "budget_calls": 198
+   },
+   "C": {
+    "subsets": {
+     "new_only": {
+      "solved": 0,
+      "total": 48,
+      "mean_fraction": 0.3032
+     },
+     "mixed": {
+      "solved": 2,
+      "total": 32,
+      "mean_fraction": 0.2431
+     },
+     "catalog_control": {
+      "solved": 16,
+      "total": 34,
+      "mean_fraction": 0.5948
+     }
+    },
+    "budget_calls": 198
+   }
+  },
+  "null_control": {
+   "solved": 0,
+   "total": 114
+  },
+  "holdout_total": 114,
+  "train_total": 36
+ },
+ "audit": {
+  "experiment_id": "pilot-grid-gen-v1",
+  "status": "CLEAN",
+  "problems": [],
+  "results_verified": 4,
+  "ledger_entries_verified": 4,
+  "chain_break_at": null
+ },
+ "generation_failures": {}
+}
