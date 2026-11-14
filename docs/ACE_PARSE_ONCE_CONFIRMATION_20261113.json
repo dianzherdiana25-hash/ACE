@@ -1,0 +1,687 @@
+{
+ "tasks": 72,
+ "seeds": [
+  501,
+  502,
+  503,
+  504,
+  505,
+  506,
+  507,
+  508,
+  509,
+  510,
+  511,
+  512
+ ],
+ "levels": [
+  1,
+  2,
+  3
+ ],
+ "families": [
+  "pricing",
+  "shipping"
+ ],
+ "budget_limit": 200,
+ "delta_preregistered": 0.05,
+ "output_mismatches": [],
+ "median_ratio_cand_over_base": 0.8115796795737586,
+ "ratio_ci95": [
+  0.80345287020624,
+  0.8215118537815163
+ ],
+ "base_total_s": 0.10704324400285259,
+ "cand_total_s": 0.08607025299897941,
+ "verdict": "CONFIRMED",
+ "per_task": [
+  {
+   "task_id": "task_ced274e7278da562",
+   "family": "pricing",
+   "level": 1,
+   "seed": 501,
+   "base_s": 0.001467672000217135,
+   "cand_s": 0.0011752039999919361,
+   "ratio": 0.8007265927387525
+  },
+  {
+   "task_id": "task_08d4a0cb2995f439",
+   "family": "pricing",
+   "level": 1,
+   "seed": 502,
+   "base_s": 0.0013533809997170465,
+   "cand_s": 0.001186049999887473,
+   "ratio": 0.8763607588221219
+  },
+  {
+   "task_id": "task_da6fed4d52c93084",
+   "family": "pricing",
+   "level": 1,
+   "seed": 503,
+   "base_s": 0.0012446280006770394,
+   "cand_s": 0.0010298250008418108,
+   "ratio": 0.827415902809207
+  },
+  {
+   "task_id": "task_7577cd9e819862bd",
+   "family": "pricing",
+   "level": 1,
+   "seed": 504,
+   "base_s": 0.0011958750001213048,
+   "cand_s": 0.0010144329999093316,
+   "ratio": 0.8482767846191547
+  },
+  {
+   "task_id": "task_04ba225ae162ff2a",
+   "family": "pricing",
+   "level": 1,
+   "seed": 505,
+   "base_s": 0.0012094850007997593,
+   "cand_s": 0.0010573869994914276,
+   "ratio": 0.8742456490094888
+  },
+  {
+   "task_id": "task_c95fd6e4b54aa13b",
+   "family": "pricing",
+   "level": 1,
+   "seed": 506,
+   "base_s": 0.001233511999998882,
+   "cand_s": 0.0010365959997216123,
+   "ratio": 0.8403615041625472
+  },
+  {
+   "task_id": "task_496e2f92c1deb233",
+   "family": "pricing",
+   "level": 1,
+   "seed": 507,
+   "base_s": 0.001215614000102505,
+   "cand_s": 0.0010207519999312353,
+   "ratio": 0.8397007601468572
+  },
+  {
+   "task_id": "task_40fb3fba5145de7b",
+   "family": "pricing",
+   "level": 1,
+   "seed": 508,
+   "base_s": 0.0010655690002749907,
+   "cand_s": 0.0008947229998739203,
+   "ratio": 0.8396668818659512
+  },
+  {
+   "task_id": "task_79f71473ed8fb4ea",
+   "family": "pricing",
+   "level": 1,
+   "seed": 509,
+   "base_s": 0.001205559000482026,
+   "cand_s": 0.0009993999992730096,
+   "ratio": 0.8289930222190812
+  },
+  {
+   "task_id": "task_e487f05dbb752cdf",
+   "family": "pricing",
+   "level": 1,
+   "seed": 510,
+   "base_s": 0.0011937210001633503,
+   "cand_s": 0.0010121280001840205,
+   "ratio": 0.8478765138968986
+  },
+  {
+   "task_id": "task_18953dca6e30fefc",
+   "family": "pricing",
+   "level": 1,
+   "seed": 511,
+   "base_s": 0.0012109270001019468,
+   "cand_s": 0.0010156739999729325,
+   "ratio": 0.8387574146810038
+  },
+  {
+   "task_id": "task_b2ed5b5bccf4297d",
+   "family": "pricing",
+   "level": 1,
+   "seed": 512,
+   "base_s": 0.0013859800001227995,
+   "cand_s": 0.0011385989992049872,
+   "ratio": 0.8215118537815163
+  },
+  {
+   "task_id": "task_6b03e5327fd65637",
+   "family": "pricing",
+   "level": 2,
+   "seed": 501,
+   "base_s": 0.0012643079999179463,
+   "cand_s": 0.0012057399999321206,
+   "ratio": 0.9536758448181718
+  },
+  {
+   "task_id": "task_5b1e54f0e54568de",
+   "family": "pricing",
+   "level": 2,
+   "seed": 502,
+   "base_s": 0.0014061000001674984,
+   "cand_s": 0.0009874919996946119,
+   "ratio": 0.7022914441198913
+  },
+  {
+   "task_id": "task_09eb8d02c1a5a2e6",
+   "family": "pricing",
+   "level": 2,
+   "seed": 503,
+   "base_s": 0.0011187990003236337,
+   "cand_s": 0.0008654690000184928,
+   "ratio": 0.7735696937234835
+  },
+  {
+   "task_id": "task_e34abe78f240bb51",
+   "family": "pricing",
+   "level": 2,
+   "seed": 504,
+   "base_s": 0.0010906970001087757,
+   "cand_s": 0.0008611329994892003,
+   "ratio": 0.7895254130187569
+  },
+  {
+   "task_id": "task_ccb6178d290b8e07",
+   "family": "pricing",
+   "level": 2,
+   "seed": 505,
+   "base_s": 0.0011069709998992039,
+   "cand_s": 0.0008861200003593694,
+   "ratio": 0.8004907088262075
+  },
+  {
+   "task_id": "task_81ca0cb30c91de4d",
+   "family": "pricing",
+   "level": 2,
+   "seed": 506,
+   "base_s": 0.0011115479992440669,
+   "cand_s": 0.0008460099998046644,
+   "ratio": 0.7611097319953907
+  },
+  {
+   "task_id": "task_2336f9980c7b0037",
+   "family": "pricing",
+   "level": 2,
+   "seed": 507,
+   "base_s": 0.0010920389995590085,
+   "cand_s": 0.0008652590004203375,
+   "ratio": 0.7923334246943102
+  },
+  {
+   "task_id": "task_6332c201a2105b75",
+   "family": "pricing",
+   "level": 2,
+   "seed": 508,
+   "base_s": 0.0009677420002844883,
+   "cand_s": 0.0007373369999186252,
+   "ratio": 0.7619148488976084
+  },
+  {
+   "task_id": "task_736a8be8a5919c90",
+   "family": "pricing",
+   "level": 2,
+   "seed": 509,
+   "base_s": 0.0010888239994528703,
+   "cand_s": 0.0008624949996374198,
+   "ratio": 0.7921344497097971
+  },
+  {
+   "task_id": "task_bdd5c6af69aecae5",
+   "family": "pricing",
+   "level": 2,
+   "seed": 510,
+   "base_s": 0.0013147330000720103,
+   "cand_s": 0.0009088039996640873,
+   "ratio": 0.691246054989348
+  },
+  {
+   "task_id": "task_0228e96167b369cf",
+   "family": "pricing",
+   "level": 2,
+   "seed": 511,
+   "base_s": 0.0012135509996369365,
+   "cand_s": 0.0008857390002958709,
+   "ratio": 0.7298737346521584
+  },
+  {
+   "task_id": "task_ee266cc7fd5639c1",
+   "family": "pricing",
+   "level": 2,
+   "seed": 512,
+   "base_s": 0.0012899660005132318,
+   "cand_s": 0.001018588999613712,
+   "ratio": 0.789624687168849
+  },
+  {
+   "task_id": "task_1f9dd413041a1a07",
+   "family": "pricing",
+   "level": 3,
+   "seed": 501,
+   "base_s": 0.001695455000117363,
+   "cand_s": 0.0013895550000597723,
+   "ratio": 0.8195764558561474
+  },
+  {
+   "task_id": "task_1ad808827cbcb771",
+   "family": "pricing",
+   "level": 3,
+   "seed": 502,
+   "base_s": 0.0017169570000987733,
+   "cand_s": 0.0013806220003971248,
+   "ratio": 0.8041098293770317
+  },
+  {
+   "task_id": "task_5f216ed8b11f2976",
+   "family": "pricing",
+   "level": 3,
+   "seed": 503,
+   "base_s": 0.0017484540003351867,
+   "cand_s": 0.0014545630001521204,
+   "ratio": 0.8319137934845721
+  },
+  {
+   "task_id": "task_d429b5ead9398839",
+   "family": "pricing",
+   "level": 3,
+   "seed": 504,
+   "base_s": 0.0015817640005479916,
+   "cand_s": 0.0012240569994901307,
+   "ratio": 0.7738556441201496
+  },
+  {
+   "task_id": "task_1f723d0d7bf6f789",
+   "family": "pricing",
+   "level": 3,
+   "seed": 505,
+   "base_s": 0.0017388590003974969,
+   "cand_s": 0.0014710779996676138,
+   "ratio": 0.8460018893603971
+  },
+  {
+   "task_id": "task_71159150fa8bea11",
+   "family": "pricing",
+   "level": 3,
+   "seed": 506,
+   "base_s": 0.0015529209995293058,
+   "cand_s": 0.0012040969995723572,
+   "ratio": 0.7753755663921873
+  },
+  {
+   "task_id": "task_9362483df5d54bd6",
+   "family": "pricing",
+   "level": 3,
+   "seed": 507,
+   "base_s": 0.0017490949994680705,
+   "cand_s": 0.0014313980000224547,
+   "ratio": 0.8183649261233764
+  },
+  {
+   "task_id": "task_bab1e3de1615e29c",
+   "family": "pricing",
+   "level": 3,
+   "seed": 508,
+   "base_s": 0.0014580980005121091,
+   "cand_s": 0.0010835060002136743,
+   "ratio": 0.7430954571181967
+  },
+  {
+   "task_id": "task_3c5f9e0cddab70b3",
+   "family": "pricing",
+   "level": 3,
+   "seed": 509,
+   "base_s": 0.0016413530001955223,
+   "cand_s": 0.0012245779998920625,
+   "ratio": 0.7460783876144788
+  },
+  {
+   "task_id": "task_c315987da8800477",
+   "family": "pricing",
+   "level": 3,
+   "seed": 510,
+   "base_s": 0.0018204920006610337,
+   "cand_s": 0.0014809230005994323,
+   "ratio": 0.8134740499061235
+  },
+  {
+   "task_id": "task_f7d1f1e7f43fa337",
+   "family": "pricing",
+   "level": 3,
+   "seed": 511,
+   "base_s": 0.001566631000059715,
+   "cand_s": 0.0012003709998680279,
+   "ratio": 0.7662116987486355
+  },
+  {
+   "task_id": "task_a1fb0370e91496f6",
+   "family": "pricing",
+   "level": 3,
+   "seed": 512,
+   "base_s": 0.0021869519996471354,
+   "cand_s": 0.002590478000456642,
+   "ratio": 1.1845152526779807
+  },
+  {
+   "task_id": "task_0d69993a75f476c0",
+   "family": "shipping",
+   "level": 1,
+   "seed": 501,
+   "base_s": 0.0016317390000040177,
+   "cand_s": 0.00151747699965199,
+   "ratio": 0.9299753205924804
+  },
+  {
+   "task_id": "task_7a4db2355e6a118f",
+   "family": "shipping",
+   "level": 1,
+   "seed": 502,
+   "base_s": 0.002048424000349769,
+   "cand_s": 0.0014461400005529867,
+   "ratio": 0.705976887746901
+  },
+  {
+   "task_id": "task_38e1f35d73a9215e",
+   "family": "shipping",
+   "level": 1,
+   "seed": 503,
+   "base_s": 0.0037156759999561473,
+   "cand_s": 0.0015720289993623737,
+   "ratio": 0.4230802145776238
+  },
+  {
+   "task_id": "task_bdfedcb7a5744a5b",
+   "family": "shipping",
+   "level": 1,
+   "seed": 504,
+   "base_s": 0.0017550639995533857,
+   "cand_s": 0.0014584690006813616,
+   "ratio": 0.8310061633379187
+  },
+  {
+   "task_id": "task_16dd6fab4348acac",
+   "family": "shipping",
+   "level": 1,
+   "seed": 505,
+   "base_s": 0.001656977000493498,
+   "cand_s": 0.001632129000427085,
+   "ratio": 0.9850040163146425
+  },
+  {
+   "task_id": "task_680e478ec74c008e",
+   "family": "shipping",
+   "level": 1,
+   "seed": 506,
+   "base_s": 0.0019313789998705033,
+   "cand_s": 0.0016714080002202536,
+   "ratio": 0.8653961756508275
+  },
+  {
+   "task_id": "task_4d7850eab481413d",
+   "family": "shipping",
+   "level": 1,
+   "seed": 507,
+   "base_s": 0.0017839769998317934,
+   "cand_s": 0.0015205320005406975,
+   "ratio": 0.852327132403649
+  },
+  {
+   "task_id": "task_001172b129aeb1df",
+   "family": "shipping",
+   "level": 1,
+   "seed": 508,
+   "base_s": 0.002162185000088357,
+   "cand_s": 0.0020339330003480427,
+   "ratio": 0.9406840766469691
+  },
+  {
+   "task_id": "task_eea1192baeb2ef8e",
+   "family": "shipping",
+   "level": 1,
+   "seed": 509,
+   "base_s": 0.004866042999310594,
+   "cand_s": 0.00313552600073308,
+   "ratio": 0.6443687409209725
+  },
+  {
+   "task_id": "task_67ec9b1f894b2695",
+   "family": "shipping",
+   "level": 1,
+   "seed": 510,
+   "base_s": 0.0013762749995294143,
+   "cand_s": 0.0011658399998850655,
+   "ratio": 0.8470981455622588
+  },
+  {
+   "task_id": "task_9b1a50ee026aceb3",
+   "family": "shipping",
+   "level": 1,
+   "seed": 511,
+   "base_s": 0.0013448179997794796,
+   "cand_s": 0.0011911479996342678,
+   "ratio": 0.8857317494483192
+  },
+  {
+   "task_id": "task_9529e612d3312767",
+   "family": "shipping",
+   "level": 1,
+   "seed": 512,
+   "base_s": 0.0013091439996060217,
+   "cand_s": 0.0011077630006184336,
+   "ratio": 0.8461735309116549
+  },
+  {
+   "task_id": "task_e09f59e9b83737f4",
+   "family": "shipping",
+   "level": 2,
+   "seed": 501,
+   "base_s": 0.0010595699995974428,
+   "cand_s": 0.00097942999946099,
+   "ratio": 0.9243655443558236
+  },
+  {
+   "task_id": "task_c5fdb7edf16af7ee",
+   "family": "shipping",
+   "level": 2,
+   "seed": 502,
+   "base_s": 0.0010571470002105343,
+   "cand_s": 0.0008511480000379379,
+   "ratio": 0.8051368446095283
+  },
+  {
+   "task_id": "task_401ccc3f5299f0f7",
+   "family": "shipping",
+   "level": 2,
+   "seed": 503,
+   "base_s": 0.001034603000334755,
+   "cand_s": 0.0008345619999090559,
+   "ratio": 0.806649506756723
+  },
+  {
+   "task_id": "task_9923abcd95bcb97a",
+   "family": "shipping",
+   "level": 2,
+   "seed": 504,
+   "base_s": 0.0010658999999577645,
+   "cand_s": 0.0008628440000393311,
+   "ratio": 0.809498076811634
+  },
+  {
+   "task_id": "task_d8179176dbec381d",
+   "family": "shipping",
+   "level": 2,
+   "seed": 505,
+   "base_s": 0.0010362250004618545,
+   "cand_s": 0.0008346229997187038,
+   "ratio": 0.8054457278551521
+  },
+  {
+   "task_id": "task_891d710a37aa7d77",
+   "family": "shipping",
+   "level": 2,
+   "seed": 506,
+   "base_s": 0.0010501460001250962,
+   "cand_s": 0.0008445469993603183,
+   "ratio": 0.8042186507968545
+  },
+  {
+   "task_id": "task_018a61729dc9c02c",
+   "family": "shipping",
+   "level": 2,
+   "seed": 507,
+   "base_s": 0.0010503669991521747,
+   "cand_s": 0.0008328799995069858,
+   "ratio": 0.7929418957176511
+  },
+  {
+   "task_id": "task_a4af13a8c6dc0426",
+   "family": "shipping",
+   "level": 2,
+   "seed": 508,
+   "base_s": 0.0010378169999967213,
+   "cand_s": 0.0008424540001215064,
+   "ratio": 0.8117558299046632
+  },
+  {
+   "task_id": "task_037fcd944e5fc7fb",
+   "family": "shipping",
+   "level": 2,
+   "seed": 509,
+   "base_s": 0.0010523789997023414,
+   "cand_s": 0.0008309969998663291,
+   "ratio": 0.7896366234040885
+  },
+  {
+   "task_id": "task_f903f3ee53797b16",
+   "family": "shipping",
+   "level": 2,
+   "seed": 510,
+   "base_s": 0.001029125000059139,
+   "cand_s": 0.0008353729999726056,
+   "ratio": 0.8117313250815991
+  },
+  {
+   "task_id": "task_365ab2a4b94b7a57",
+   "family": "shipping",
+   "level": 2,
+   "seed": 511,
+   "base_s": 0.0010364449999542558,
+   "cand_s": 0.0008269210002254113,
+   "ratio": 0.7978435906024034
+  },
+  {
+   "task_id": "task_da025bc3c8b33954",
+   "family": "shipping",
+   "level": 2,
+   "seed": 512,
+   "base_s": 0.001031879000038316,
+   "cand_s": 0.0008335409993378562,
+   "ratio": 0.8077894785211298
+  },
+  {
+   "task_id": "task_eea626dedca33586",
+   "family": "shipping",
+   "level": 3,
+   "seed": 501,
+   "base_s": 0.0016053590006777085,
+   "cand_s": 0.001315003000854631,
+   "ratio": 0.8191332906219091
+  },
+  {
+   "task_id": "task_c0fcd0af00b16910",
+   "family": "shipping",
+   "level": 3,
+   "seed": 502,
+   "base_s": 0.0016512780002813088,
+   "cand_s": 0.0012878220004495233,
+   "ratio": 0.7798941185131348
+  },
+  {
+   "task_id": "task_a1c13eb3b69cdf5d",
+   "family": "shipping",
+   "level": 3,
+   "seed": 503,
+   "base_s": 0.0016117790000862442,
+   "cand_s": 0.0013225749999037362,
+   "ratio": 0.8205684525192144
+  },
+  {
+   "task_id": "task_ddb745fbef985b00",
+   "family": "shipping",
+   "level": 3,
+   "seed": 504,
+   "base_s": 0.0016176469998754328,
+   "cand_s": 0.001274732999263506,
+   "ratio": 0.7880167918969139
+  },
+  {
+   "task_id": "task_a3bf1fb225ee6e01",
+   "family": "shipping",
+   "level": 3,
+   "seed": 505,
+   "base_s": 0.0016280840000035823,
+   "cand_s": 0.0013210729994170833,
+   "ratio": 0.8114280340659183
+  },
+  {
+   "task_id": "task_c9ac45308dc5b3fc",
+   "family": "shipping",
+   "level": 3,
+   "seed": 506,
+   "base_s": 0.0016192299999602255,
+   "cand_s": 0.0013611330005005584,
+   "ratio": 0.8406051027550089
+  },
+  {
+   "task_id": "task_632289d3c25aee53",
+   "family": "shipping",
+   "level": 3,
+   "seed": 507,
+   "base_s": 0.0016203320001295651,
+   "cand_s": 0.0013262900001791422,
+   "ratio": 0.8185297828303639
+  },
+  {
+   "task_id": "task_f380400b5b209b66",
+   "family": "shipping",
+   "level": 3,
+   "seed": 508,
+   "base_s": 0.0015954549999150913,
+   "cand_s": 0.001327853000475443,
+   "ratio": 0.8322722988402118
+  },
+  {
+   "task_id": "task_afd997faa23054dc",
+   "family": "shipping",
+   "level": 3,
+   "seed": 509,
+   "base_s": 0.0016311679992213612,
+   "cand_s": 0.0013094949999867822,
+   "ratio": 0.8027959110354483
+  },
+  {
+   "task_id": "task_b7316f55ab8fee5d",
+   "family": "shipping",
+   "level": 3,
+   "seed": 510,
+   "base_s": 0.0016231860008701915,
+   "cand_s": 0.0013582890005636727,
+   "ratio": 0.8368042848050025
+  },
+  {
+   "task_id": "task_725e0716e5ace86a",
+   "family": "shipping",
+   "level": 3,
+   "seed": 511,
+   "base_s": 0.001615344000128971,
+   "cand_s": 0.0012816329999623122,
+   "ratio": 0.7934118056958673
+  },
+  {
+   "task_id": "task_63b17d7720991cc0",
+   "family": "shipping",
+   "level": 3,
+   "seed": 512,
+   "base_s": 0.0015968460002113716,
+   "cand_s": 0.001276455999686732,
+   "ratio": 0.7993607395564568
+  }
+ ]
+}
