@@ -299,3 +299,20 @@ class SelfEvolutionEngine:
             logger.warning(f"Failed to record OAIE-Unlimited telemetry: {e}")
         return result
 
+    def run_sovereign_runtime_cycles(self, *, max_cycles: int = 3) -> dict[str, Any]:
+        """Run bounded Epoch E SovereignRuntimeSupervisor ticks on this engine's workspace."""
+        from .sovereign_runtime import SovereignRuntimeSupervisor
+
+        sup = SovereignRuntimeSupervisor(self.store.workspace)
+        return sup.run_until_health(
+            target_health=0.8,
+            max_cycles=max_cycles,
+            task_factory=lambda idx: {
+                "task_id": f"self_evo_tick_{idx}",
+                "expected_benefit": 1.0,
+                "estimated_dt": 0.4,
+                "remaining_budget_ratio": 1.0,
+            },
+        )
+
+
