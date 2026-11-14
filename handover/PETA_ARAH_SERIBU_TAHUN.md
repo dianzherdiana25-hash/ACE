@@ -58,6 +58,12 @@ terpasang, belum menghasilkan.
   `PopulationArchive` (`replay_matches = true`), promosi Frontier + `OpenWorldLocalExecutor`,
   serta [`OpportunityRegister`](../code/ace_operational/opportunity_register.py) (`verify_chain = true`).
   Lihat laporan lengkap: [`ACE_OAIE_CLOSED_LOOP_VERDICT_20261114.md`](../docs/validation/ACE_OAIE_CLOSED_LOOP_VERDICT_20261114.md).
+- **Ekspansi Kedaulatan OAIE-Unlimited (`G4 -> G5_unlimited`, [`oaie_unlimited.py`](../code/ace_operational/oaie_unlimited.py)):**
+  Orkestrasi multi-otak bebas-percaya (`UniversalBrainGovernor` + suksesi otomatis [`BrainRegistry`](../code/ace_operational/brain_registry.py)),
+  penempaan skill otonom ber-Akta Kelahiran SHA-256 (`AutopoieticSkillForge`), serta mesin ekonomi
+  homeostatik etis (`MetabolicSurvivalLedger` + `EthicalValueVentureStudio` + `LifeResponsibilityArbiter`)
+  untuk penebusan utang awal (`Rp4.208.328`) secara terukur. Lihat doktrin lengkap:
+  [`ACE_OAIE_UNLIMITED_DOCTRINE.md`](../docs/architecture/ACE_OAIE_UNLIMITED_DOCTRINE.md).
 
 ---
 

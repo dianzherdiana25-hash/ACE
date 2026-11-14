@@ -270,3 +270,32 @@ class SelfEvolutionEngine:
         except Exception as e:
             logger.warning(f"Failed to record OAIE evolution telemetry: {e}")
         return result
+
+    def run_oaie_unlimited_evolution_cycle(self, *, seed: int = 20261114) -> dict[str, Any]:
+        """Run the unified offline OAIE-Unlimited sovereign cycle (`G0 -> G5_unlimited`)."""
+        from .oaie_unlimited import run_oaie_unlimited_cycle
+
+        result = run_oaie_unlimited_cycle(self.store.workspace, seed=seed, store=self.store)
+        try:
+            with open(self.evolution_log_path, "a", encoding="utf-8") as f:
+                f.write(json.dumps({"kind": "oaie_unlimited_sovereign", **result}, ensure_ascii=False) + "\n")
+            self.status_path.write_text(
+                json.dumps(
+                    {
+                        "schema": "ace.self_evolution.oaie_unlimited.status.v1",
+                        "running": True,
+                        "last_cycle_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                        "verified_unlimited_ok": result["verified_unlimited_ok"],
+                        "unlimited_replay_digest": result["unlimited_replay_digest"],
+                        "life_responsibility": result["life_responsibility"],
+                        "metabolic_status": result["homeostatic_economics"]["metabolic_status"],
+                    },
+                    indent=2,
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+        except Exception as e:
+            logger.warning(f"Failed to record OAIE-Unlimited telemetry: {e}")
+        return result
+
