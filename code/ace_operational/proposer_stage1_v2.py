@@ -51,6 +51,7 @@ PROPOSER_JSON_SCHEMA = {
         "options_considered": {
             "type": "array",
             "minItems": 2,
+            "maxItems": 6,
             "items": {
                 "type": "object",
                 "additionalProperties": False,
@@ -85,6 +86,7 @@ PROPOSER_JSON_SCHEMA = {
         "evidence": {
             "type": "array",
             "minItems": 1,
+            "maxItems": 8,
             "items": {
                 "type": "object",
                 "additionalProperties": False,
@@ -107,11 +109,13 @@ PROPOSER_JSON_SCHEMA = {
         "risks": {
             "type": "array",
             "minItems": 2,
+            "maxItems": 4,
             "items": {"type": "string", "minLength": 3},
         },
         "uncertainties": {
             "type": "array",
             "minItems": 1,
+            "maxItems": 3,
             "items": {"type": "string", "minLength": 3},
         },
         "stop_controls": {
@@ -127,6 +131,7 @@ PROPOSER_JSON_SCHEMA = {
                 "abort_conditions": {
                     "type": "array",
                     "minItems": 2,
+                    "maxItems": 4,
                     "items": {"type": "string", "minLength": 3},
                 },
                 "sealed_target_status": {"type": "string", "minLength": 1},
@@ -153,7 +158,8 @@ PROPOSER_JSON_SCHEMA = {
 
 
 STAGE1_V2_SYSTEM = (
-    "Output ONE compact minified single-line JSON object matching ace.proposal.v1. "
+    "Output ONE compact minified single-line JSON object matching ace.proposal.v1 "
+    "(concise 1-sentence values, max 3 items in risks/uncertainties/abort_conditions). "
     "Copy EVERY evidence artifact name and 64-hex sha256 string verbatim from the prompt, "
     "include ALL listed options including do_not_run, set no_auto_retry=true and stop_visible=true, "
     "and keep cost_estimate within cost_ceiling."
@@ -194,6 +200,7 @@ def call_local_brain(messages, *, url, token, model_alias,
         "model": model_alias,
         "messages": messages,
         "temperature": temperature,
+        "repeat_penalty": 1.08,
         "seed": seed,
         "max_tokens": max_tokens,
         "response_format": {
@@ -239,7 +246,10 @@ def evaluate_arm(generations_dir, outcomes_path, walls_path=None,
     for ep in episodes:
         eid = ep["episode_id"]
         raw_path = os.path.join(generations_dir, eid + ".txt")
-        raw = open(raw_path, encoding="utf-8").read() if os.path.exists(raw_path) else ""
+        raw = ""
+        if os.path.exists(raw_path):
+            with open(raw_path, encoding="utf-8") as fh:
+                raw = fh.read()
         pkg = extract_package(raw) if raw else None
         gen_sha = hashlib.sha256(raw.encode("utf-8")).hexdigest() if raw else None
         if pkg is None:
