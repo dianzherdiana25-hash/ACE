@@ -1,0 +1,31 @@
+[suite] === Model SHA256s ===
+00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4  /workspace/ace-omega/models/Qwen3.5-4B-Q4_K_M.gguf
+3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597  /workspace/ace-omega/models/Qwen3-4B-Instruct-2507-Q4_K_M.gguf
+7b064f5842bf9532c91456deda288a1b672397a54fa729aa665952863033557c  /workspace/ace-omega/models/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf
+[suite] --- llama-bench -p 256 -n 128 -t 4 -r 3 : /workspace/ace-omega/models/Qwen3.5-4B-Q4_K_M.gguf ---
+load_backend: loaded RPC backend from /workspace/tools/llama.cpp/llama-b12316/libggml-rpc.so
+load_backend: loaded CPU backend from /workspace/tools/llama.cpp/llama-b12316/libggml-cpu-cascadelake.so
+| model                          |       size |     params | backend    | threads |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | --------------: | -------------------: |
+| qwen35 4B Q4_K - Medium        |   2.54 GiB |     4.21 B | CPU        |       4 |           pp256 |         33.72 ± 3.13 |
+| qwen35 4B Q4_K - Medium        |   2.54 GiB |     4.21 B | CPU        |       4 |           tg128 |          5.00 ± 0.35 |
+
+build: 5d4c8eeb2 (12316)
+[suite] --- llama-bench -p 256 -n 128 -t 4 -r 3 : /workspace/ace-omega/models/Qwen3-4B-Instruct-2507-Q4_K_M.gguf ---
+load_backend: loaded RPC backend from /workspace/tools/llama.cpp/llama-b12316/libggml-rpc.so
+load_backend: loaded CPU backend from /workspace/tools/llama.cpp/llama-b12316/libggml-cpu-cascadelake.so
+| model                          |       size |     params | backend    | threads |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | --------------: | -------------------: |
+| qwen3 4B Q4_K - Medium         |   2.32 GiB |     4.02 B | CPU        |       4 |           pp256 |         34.91 ± 2.08 |
+| qwen3 4B Q4_K - Medium         |   2.32 GiB |     4.02 B | CPU        |       4 |           tg128 |          7.67 ± 0.14 |
+
+build: 5d4c8eeb2 (12316)
+[suite] --- llama-bench -p 256 -n 128 -t 4 -r 3 : /workspace/ace-omega/models/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf ---
+load_backend: loaded RPC backend from /workspace/tools/llama.cpp/llama-b12316/libggml-rpc.so
+load_backend: loaded CPU backend from /workspace/tools/llama.cpp/llama-b12316/libggml-cpu-cascadelake.so
+| model                          |       size |     params | backend    | threads |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | --------------: | -------------------: |
+| llama 8B Q4_K - Medium         |   4.58 GiB |     8.03 B | CPU        |       4 |           pp256 |         19.62 ± 0.59 |
+| llama 8B Q4_K - Medium         |   4.58 GiB |     8.03 B | CPU        |       4 |           tg128 |          3.38 ± 0.22 |
+
+build: 5d4c8eeb2 (12316)
