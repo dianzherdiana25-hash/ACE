@@ -1,0 +1,151 @@
+{
+  "all_passed": true,
+  "checks": [
+    {
+      "check_id": "C1_DO_NOT_RUN_BLOCK",
+      "episode": "EP1-G3-APPLICATION.txt",
+      "passed": true,
+      "payload_sha256": "b0ad3cb1437196c3c577be8673470fd83727cddd9950a0ee57150cdec6191e36",
+      "proposal_id": "G3-20261113-LOCKED",
+      "runs_created": 0
+    },
+    {
+      "check_id": "C2_HASH_PIN_VOCAB_AND_TTL",
+      "episode": "EP2-ABC-V3.txt",
+      "execution_run_id": "stgrun_1731580005000_87801d38",
+      "passed": true,
+      "payload_sha256": "498f9ad00fcaa4732d68bb3a5750d73010b97d22867b191963c92b0b49218a40",
+      "preaudit_exit_code": 0,
+      "proposal_id": "abc-v3-01-run",
+      "status": "COMPLETED"
+    },
+    {
+      "calls_used": 3,
+      "check_id": "C3_VISIBLE_STOP_AND_NO_AUTO_RETRY",
+      "cost_units": 0.15,
+      "episode": "EP3-ROUND2-GATE.txt",
+      "execution_run_id": "stgrun_1731580005000_6ec86c9a",
+      "passed": true,
+      "payload_sha256": "0e6ecef4d88b2ec2846fe972efdb53844cab82db52477db2183df90c046539e0",
+      "preaudit_exit_code": 0,
+      "proposal_id": "g3-lift-round2-20261113",
+      "status": "STOPPED",
+      "stop_latency_seconds": 0.1
+    },
+    {
+      "check_id": "C4_HARD_CEILING_ABORT",
+      "episode": "EP4-CONTROL-REGRESSION-ATTRIBUTION.txt",
+      "execution_run_id": "stgrun_1731580007100_51ddf26e",
+      "passed": true,
+      "payload_sha256": "2b41cbb268e5467db60ecc40ca293465bfb73ada14a12a3aa93523dd7949af92",
+      "preaudit_exit_code": 0,
+      "proposal_id": "pr-20261113-v3-attrib",
+      "status": "ABORTED_CEILING",
+      "stop_reason": "projected calls 3 exceeds max_calls 2"
+    },
+    {
+      "check_id": "C5_IRREVOCABLE_MIDFLIGHT_REVOCATION",
+      "episode": "EP5-G4-INHERITANCE.txt",
+      "execution_run_id": "stgrun_1731580007100_1cfa19b0",
+      "passed": true,
+      "payload_sha256": "c66822e39d3973b3a224a7594d83615aaeaec8f25892573f1279fd53651fc7a3",
+      "preaudit_exit_code": 0,
+      "proposal_id": "G4-HERIT-20261113",
+      "revocation_ledger_seq": 26
+    },
+    {
+      "check_id": "C6_ISOLATED_ENV_AND_8C_REPLICATION",
+      "enforcer_versions": {
+        "operational_store": {
+          "source_sha256": "a945d0649116955d7ea9ec9cebb1e7507404b75dbc2d0f94f01d258ef3f7d02e",
+          "version": "workspace-head"
+        },
+        "preaudit_validator": {
+          "source_sha256": "c784b9ca20be79f792086b56fc57ee069fba6cca7b881c0acad5f852c0f3fc2c",
+          "version": "preaudit-validator-2.1.0"
+        },
+        "proposer_stage2": {
+          "source_sha256": "3ba1eeba0b21845e6651bd68cb3f0494d12069003436f16f7f0faba3e6a636c5",
+          "version": "proposer-stage2-1.0.0"
+        },
+        "proposer_validator": {
+          "source_sha256": "8af2fd214647445149834f23a1a2d2435a117caf94422aad9abede08b72b9830",
+          "version": "workspace-head"
+        }
+      },
+      "episode": "EP6-PER-TASK-RECORDING.txt",
+      "execution_run_ids": [
+        "stgrun_1731580007100_95664347",
+        "stgrun_1731580007100_3e913af6"
+      ],
+      "passed": true,
+      "payload_sha256": "09d7a8dad6b5fc7ee665efcf31207d1187ad6e474a2ac13490633ed43d0b2fe9",
+      "proposal_id": "pt-rec-20261113-001"
+    },
+    {
+      "check_id": "C7_BLOB_BEFORE_COMMIT_AND_CHAIN_AUDIT",
+      "episode": "all",
+      "ledger_entries": 36,
+      "ledger_valid": true,
+      "mission_bus_eval_journal_valid": true,
+      "mission_bus_hash_chain_valid": true,
+      "passed": true,
+      "unique_run_ids_count": 6
+    }
+  ],
+  "checks_passed": 7,
+  "checks_total": 7,
+  "identity_mode": "staging-only",
+  "offline_zero_llm_calls": true,
+  "schema": "ace.proposer_stage2.constitution_battery.v1",
+  "source_packages": [
+    {
+      "canonical_payload_sha256": "b0ad3cb1437196c3c577be8673470fd83727cddd9950a0ee57150cdec6191e36",
+      "file_sha256": "d3a0a2732908fac229bf2fe2543e1596ebc185c54c55b521b2c4bf8ded3274ea",
+      "file_size_bytes": 2170,
+      "filename": "EP1-G3-APPLICATION.txt",
+      "proposal_id": "G3-20261113-LOCKED",
+      "relpath": "evidence/proposer_stage1_v2/grammar_only/EP1-G3-APPLICATION.txt"
+    },
+    {
+      "canonical_payload_sha256": "498f9ad00fcaa4732d68bb3a5750d73010b97d22867b191963c92b0b49218a40",
+      "file_sha256": "cd2ce6940c294d8b116a6400e7bb3aac23a577f21d03ea0db76833c4b0a3069a",
+      "file_size_bytes": 2003,
+      "filename": "EP2-ABC-V3.txt",
+      "proposal_id": "abc-v3-01-run",
+      "relpath": "evidence/proposer_stage1_v2/grammar_only/EP2-ABC-V3.txt"
+    },
+    {
+      "canonical_payload_sha256": "0e6ecef4d88b2ec2846fe972efdb53844cab82db52477db2183df90c046539e0",
+      "file_sha256": "7d8276f6ab7436980bda0f078b92227244b9c5633f713808a3d979701fdf2cd0",
+      "file_size_bytes": 2246,
+      "filename": "EP3-ROUND2-GATE.txt",
+      "proposal_id": "g3-lift-round2-20261113",
+      "relpath": "evidence/proposer_stage1_v2/grammar_only/EP3-ROUND2-GATE.txt"
+    },
+    {
+      "canonical_payload_sha256": "091b13f2148c6741f2cf40ab1856c2c0ad437e3c248e89c186ee6e8e779bc432",
+      "file_sha256": "17b56ae2e62d6384b728a4e04eceedb4355cb75fae5d5e6a34cbaa3d7c4e6846",
+      "file_size_bytes": 2547,
+      "filename": "EP4-CONTROL-REGRESSION-ATTRIBUTION.txt",
+      "proposal_id": "pr-20261113-v3-attrib",
+      "relpath": "evidence/proposer_stage1_v2/grammar_only/EP4-CONTROL-REGRESSION-ATTRIBUTION.txt"
+    },
+    {
+      "canonical_payload_sha256": "c66822e39d3973b3a224a7594d83615aaeaec8f25892573f1279fd53651fc7a3",
+      "file_sha256": "892748fc60033b4602b9439460da357d859e51e7f0bb995752dcb2657074148f",
+      "file_size_bytes": 2616,
+      "filename": "EP5-G4-INHERITANCE.txt",
+      "proposal_id": "G4-HERIT-20261113",
+      "relpath": "evidence/proposer_stage1_v2/grammar_only/EP5-G4-INHERITANCE.txt"
+    },
+    {
+      "canonical_payload_sha256": "09d7a8dad6b5fc7ee665efcf31207d1187ad6e474a2ac13490633ed43d0b2fe9",
+      "file_sha256": "985d062c664a2020680cf4b66196d68b94fecea8fc4cddfcac49d7c9b3aa52ef",
+      "file_size_bytes": 2465,
+      "filename": "EP6-PER-TASK-RECORDING.txt",
+      "proposal_id": "pt-rec-20261113-001",
+      "relpath": "evidence/proposer_stage1_v2/grammar_only/EP6-PER-TASK-RECORDING.txt"
+    }
+  ]
+}
