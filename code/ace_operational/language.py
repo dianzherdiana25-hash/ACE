@@ -22,6 +22,11 @@ from typing import Any
 from .autonomy_loop import AutonomyOrchestrator
 from .coding_loop import CodingAgentLoop
 from .models_backend import ModelRouter
+from .speech_acquisition import (
+    SpeechDevelopmentEngine,
+    classify_speech_intent,
+    handle_speech_chat_intent,
+)
 from .store import OperationalStore
 
 
@@ -38,6 +43,9 @@ class Intent(str, Enum):
     MODIFY_PREVIOUS_ARTIFACT = "MODIFY_PREVIOUS_ARTIFACT"
     LEARN_AND_SOLVE = "LEARN_AND_SOLVE"
     LEARN_LANGUAGE = "LEARN_LANGUAGE"
+    TRAIN_SPEECH = "TRAIN_SPEECH"
+    TEACH_WORD = "TEACH_WORD"
+    SPEECH_STATUS = "SPEECH_STATUS"
     GREETING_OR_CAPABILITIES = "GREETING_OR_CAPABILITIES"
     GENERAL_CONVERSATION = "GENERAL_CONVERSATION"
     DIAGNOSE_OR_FIX_BUG = "DIAGNOSE_OR_FIX_BUG"
@@ -108,6 +116,73 @@ def normalize_indonesian_text(raw: str) -> str:
         else:
             out += tok
     return out.strip()
+
+
+def _classify_greeting_or_capability(
+    lower: str,
+    norm: str,
+    constraints: list[str],
+    offline_requested: bool,
+) -> dict[str, Any] | None:
+    is_capability_query = any(
+        p in lower
+        for p in (
+            "kamu bisa bantu apa",
+            "bisa apa saja",
+            "apa yang bisa kamu lakukan",
+            "siapa kamu",
+            "apa yang bisa kamu buat",
+            "tawarkan 2 opsi",
+            "kasih pilihan",
+            "apakah kamu sudah bisa",
+            "apakah kamu bisa",
+            "sudah bisa apa",
+            "skill apa",
+            "keterampilan apa",
+            "kemampuan apa",
+            "daftar skill",
+            "daftar kemampuan",
+            "bagaimana kemampuanmu",
+            "kemampuanmu sekarang",
+            "skill terbarumu",
+            "apa skill terbaru",
+            "apa keahlianmu",
+            "keahlianmu apa",
+            "kamu bisa apa",
+            "apa yang kamu bisa",
+            "fitur apa saja",
+            "apa saja yang bisa kamu lakukan",
+        )
+    )
+    is_short_greeting = any(
+        re.search(r"\b" + re.escape(w) + r"\b", lower)
+        for w in (
+            "halo", "hai", "hi", "hey", "hei",
+            "selamat pagi", "selamat siang", "selamat sore", "selamat malam", "selamat datang",
+            "assalamualaikum", "assalamu'alaikum", "apa kabar", "gimana kabar", "salam",
+        )
+    ) or "halo ace" in lower
+
+    has_coding_action = any(
+        re.search(r"\b" + re.escape(k) + r"\b", lower)
+        for k in (
+            "buat", "buatkan", "bikin", "bikinin", "program", "skrip", "script",
+            "kode", "koding", "aplikasi", "fungsi", "perbaiki", "refactor",
+            "rapikan", "kalkulator", "fibonacci", "csv", "tebak angka", "catat",
+            "pengeluaran", "modul", "hitung", "ubah", "konversi",
+        )
+    )
+    if is_capability_query or (is_short_greeting and not has_coding_action):
+        resolved_intent = Intent.GREETING_OR_CAPABILITIES if is_capability_query else Intent.GENERAL_CONVERSATION
+        return {
+            "intent": resolved_intent,
+            "offer_options": any(k in lower for k in ("opsi", "pilihan", "cara")),
+            "normalized_text": norm,
+            "constraints": constraints,
+            "offline_requested": offline_requested,
+            "side_effects_allowed": False,
+        }
+    return None
 
 
 def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -210,7 +285,7 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
             "side_effects_allowed": True,
         }
 
-    # 8. Reference / Correction to prior artifact (`A05`: "yang tadi tambah kategorinya", `A06`: "bukan mingguan, maksudku bulanan")
+    # 8. Reference / Correction to prior artifact (`A05`, `A06`)
     if any(
         p in lower
         for p in (
@@ -243,7 +318,10 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
             "side_effects_allowed": True,
         }
 
-    # 9b. Language Learning Directive ("belajar bahasa dulu", "fokus belajar bahasa")
+    # 9b. Speech training, vocabulary teaching, and language learning directives
+    speech_hit = classify_speech_intent(raw_text, norm, constraints, offline_requested, conversation_context=ctx)
+    if speech_hit is not None:
+        return speech_hit
     if any(p in lower for p in (
         "belajar bahasa",
         "pelajari bahasa",
@@ -262,80 +340,21 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
         }
 
     # 10. Greeting / General Conversation / Capability question (`A01`, `A02`)
-    is_capability_query = any(
-        p in lower
-        for p in (
-            "kamu bisa bantu apa",
-            "bisa apa saja",
-            "apa yang bisa kamu lakukan",
-            "siapa kamu",
-            "apa yang bisa kamu buat",
-            "tawarkan 2 opsi",
-            "kasih pilihan",
-            "apakah kamu sudah bisa",
-            "apakah kamu bisa",
-            "sudah bisa apa",
-            "skill apa",
-            "keterampilan apa",
-            "kemampuan apa",
-            "daftar skill",
-            "daftar kemampuan",
-            "bagaimana kemampuanmu",
-            "kemampuanmu sekarang",
-            "skill terbarumu",
-            "apa skill terbaru",
-            "apa keahlianmu",
-            "keahlianmu apa",
-            "kamu bisa apa",
-            "kamu bisa apa saja",
-            "apa yang kamu bisa",
-            "fitur apa saja",
-            "apa saja yang bisa kamu lakukan",
-        )
-    )
-    is_short_greeting = any(
-        re.search(r"\b" + re.escape(w) + r"\b", lower)
-        for w in (
-            "halo",
-            "hai",
-            "hi",
-            "hey",
-            "hei",
-            "selamat pagi",
-            "selamat siang",
-            "selamat sore",
-            "selamat malam",
-            "selamat datang",
-            "assalamualaikum",
-            "assalamu'alaikum",
-            "apa kabar",
-            "gimana kabar",
-            "salam",
-        )
-    ) or "halo ace" in lower
+    greet_hit = _classify_greeting_or_capability(lower, norm, constraints, offline_requested)
+    if greet_hit is not None:
+        return greet_hit
 
-    has_coding_action = any(
-        re.search(r"\b" + re.escape(k) + r"\b", lower)
-        for k in (
-            "buat", "buatkan", "bikin", "bikinin", "program", "skrip", "script",
-            "kode", "koding", "aplikasi", "fungsi", "perbaiki", "refactor",
-            "rapikan", "kalkulator", "fibonacci", "csv", "tebak angka", "catat",
-            "pengeluaran", "modul", "hitung", "ubah", "konversi"
-        )
-    )
+    # 11-13. Bug fix, refactoring, coding, or general fallback
+    return _classify_coding_or_fallback(lower, raw_lower, norm, constraints, offline_requested)
 
-    if is_capability_query or (is_short_greeting and not has_coding_action):
-        resolved_intent = Intent.GREETING_OR_CAPABILITIES if is_capability_query else Intent.GENERAL_CONVERSATION
-        return {
-            "intent": resolved_intent,
-            "offer_options": any(k in lower for k in ("opsi", "pilihan", "cara")),
-            "normalized_text": norm,
-            "constraints": constraints,
-            "offline_requested": offline_requested,
-            "side_effects_allowed": False,
-        }
 
-    # 11. Bug fix / Diagnosis (`A15`, `A16`, `A17`, `A18`)
+def _classify_coding_or_fallback(
+    lower: str,
+    raw_lower: str,
+    norm: str,
+    constraints: list[str],
+    offline_requested: bool,
+) -> dict[str, Any]:
     if any(p in lower for p in ("perbaiki bug", "perbaiki error", "kenapa error", "diagnosis error", "diskon salah", "ada bug")):
         return {
             "intent": "DIAGNOSE_OR_FIX_BUG",
@@ -345,7 +364,6 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
             "side_effects_allowed": True,
         }
 
-    # 12. Refactoring (`A21`)
     if any(p in lower for p in ("rapikan", "refactor", "bersihkan fungsi")):
         return {
             "intent": "REFACTOR_CODE",
@@ -355,70 +373,35 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
             "side_effects_allowed": True,
         }
 
-    # 13. Coding / Feature Creation (`A03`, `A04`, `A19`, `A20`, `A22`, G04)
     if "csv" in lower:
-        domain = "csv_reader"
-        domain_confidence = 0.95
+        domain, domain_confidence = "csv_reader", 0.95
     elif "tebak angka" in lower or "game" in lower:
-        domain = "tebak_angka"
-        domain_confidence = 0.95
+        domain, domain_confidence = "tebak_angka", 0.95
     elif (
         re.search(r"\bmulti\s*[-_ ]?\s*(modul|file|berkas)\b", raw_lower)
         or re.search(r"\bmulti\s*[-_ ]?\s*(modul|file|berkas)\b", lower)
         or any(
             phrase in lower or phrase in raw_lower
             for phrase in (
-                "multi modul",
-                "multi-modul",
-                "multi file",
-                "multi-file",
-                "multi berkas",
-                "multi-berkas",
-                "dua file",
-                "dua berkas",
-                "banyak file",
-                "banyak berkas",
-                "banyak modul",
-                "struktur berkas",
-                "struktur modul",
-                "paket aplikasi",
+                "multi modul", "multi-modul", "multi file", "multi-file",
+                "multi berkas", "multi-berkas", "dua file", "dua berkas",
+                "banyak file", "banyak berkas", "banyak modul",
+                "struktur berkas", "struktur modul", "paket aplikasi",
             )
         )
     ):
-        domain = "multi_file"
-        domain_confidence = 0.95
+        domain, domain_confidence = "multi_file", 0.95
     elif any(k in lower for k in ("pengeluaran", "catatan", "keuangan", "dompet", "belanja")):
-        domain = "expense_tracker"
-        domain_confidence = 0.95
+        domain, domain_confidence = "expense_tracker", 0.95
     else:
         coding_words = (
-            "buat",
-            "buatkan",
-            "bikin",
-            "bikinin",
-            "tuliskan",
-            "program",
-            "skrip",
-            "script",
-            "kode",
-            "koding",
-            "coding",
-            "aplikasi",
-            "fungsi",
-            "kalkulator",
-            "hitung",
-            "ubah",
-            "konversi",
-            "fibonacci",
-            "modul",
-            "algoritma",
-            "utilitas",
+            "buat", "buatkan", "bikin", "bikinin", "tuliskan", "program",
+            "skrip", "script", "kode", "koding", "coding", "aplikasi",
+            "fungsi", "kalkulator", "hitung", "ubah", "konversi",
+            "fibonacci", "modul", "algoritma", "utilitas",
         )
-        has_general_coding_trigger = any(
-            re.search(r"\b" + re.escape(w) + r"\b", lower)
-            for w in coding_words
-        )
-        if not has_general_coding_trigger:
+        has_trigger = any(re.search(r"\b" + re.escape(w) + r"\b", lower) for w in coding_words)
+        if not has_trigger:
             return {
                 "intent": Intent.GENERAL_CONVERSATION,
                 "offer_options": False,
@@ -427,9 +410,7 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
                 "offline_requested": offline_requested,
                 "side_effects_allowed": False,
             }
-
-        domain = "general"
-        domain_confidence = 0.90
+        domain, domain_confidence = "general", 0.90
 
     return {
         "intent": Intent.CREATE_OR_MODIFY_CODE,
@@ -450,6 +431,183 @@ class ConversationalEngine:
         self.router = ModelRouter(store)
         self.coding = CodingAgentLoop(store)
         self.autonomy = AutonomyOrchestrator(store)
+        self.speech = SpeechDevelopmentEngine(store)
+
+    def _build_capabilities_reply(self, mode_label: str) -> str:
+        active_skills = self.store.list_skills(active_only=True)
+        skill_names = ", ".join(f"`{s['name']}`" for s in active_skills) if active_skills else "belum ada skill tambahan"
+        tested_caps = [f for f in self.store.list_frontier() if f.get("status") == "KNOWN_AND_TESTED"]
+        sp = self.speech.get_profile()
+        return (
+            f"Halo! Aku **ACE** (berjalan dalam mode **{mode_label}**). Saat ini kemampuanku yang sudah terverifikasi meliputi:\n"
+            "- Membuat dan menguji aplikasi Python lokal (seperti catatan pengeluaran CLI, pengolah CSV, dan utilitas harian).\n"
+            "- Mereproduksi, mendiagnosis, dan memperbaiki bug kode dengan verifikasi otomatis.\n"
+            "- Mencatat celah kemampuan (*gap*), mempelajari sub-keterampilan baru, dan mendelegasikan tugas ke worker AI jika tersedia.\n"
+            "- Berjalan 100% lokal/offline tanpa bergantung pada internet saat mode offline aktif.\n"
+            f"- **Perkembangan berbicara (`4 tahap`)**: Tahap `{sp['current_stage']}/4` ({sp['current_stage_title']}), {sp['vocab_count']} kosakata persisten.\n"
+            f"- **Skill hasil belajar aktif ({len(active_skills)})**: {skill_names}\n"
+            f"- **Frontier terverifikasi**: {len(tested_caps)} kapabilitas berstatus `KNOWN_AND_TESTED`."
+        )
+
+    def _try_gguf_verified_reply(
+        self,
+        *,
+        text: str,
+        conv: dict[str, Any],
+        hc: dict[str, Any],
+        mode_label: str,
+        latest_task: dict[str, Any] | None,
+        recent_assistant: list[str],
+        active_skills: int,
+        tested_caps: int,
+    ) -> str | None:
+        sys_ctx = self.speech.build_gguf_speech_prompt_context(
+            user_text=text,
+            latest_task=latest_task,
+            mode_label=mode_label,
+        )
+        try:
+            resp = self.router.generate_text(
+                [{"role": "system", "content": sys_ctx}, {"role": "user", "content": text}],
+                max_tokens=110,
+            )
+        except (OSError, RuntimeError, ValueError, KeyError, TypeError):
+            return None
+        raw_gen = str((resp or {}).get("text", "")).strip()
+        if not raw_gen:
+            return None
+        candidate = raw_gen if "ace" in raw_gen.lower() else f"Halo! Aku **ACE**. {raw_gen}"
+        ver = self.speech.verify_utterance(
+            utterance=candidate,
+            user_text=text,
+            stage_id=4,
+            latest_task=latest_task,
+            offline_mode=bool(hc.get("offline_mode")),
+            recent_assistant_texts=recent_assistant,
+        )
+        if not ver["passed"]:
+            return None
+        self.speech.record_verified_utterance(
+            conversation_id=conv["conversation_id"],
+            stage_id=4,
+            reply=candidate,
+            grounded_words=[g["word"] for g in self.speech.find_grounded_words(text)],
+            active_skills_count=active_skills,
+            tested_caps_count=tested_caps,
+            verification=ver,
+            history_turns=len(conv.get("messages", [])),
+        )
+        return candidate
+
+    def _generate_general_reply(
+        self,
+        text: str,
+        conv: dict[str, Any],
+        hc: dict[str, Any],
+        mode_label: str,
+    ) -> str:
+        msgs = conv.get("messages", [])
+        recent_assistant = [str(m.get("text", "")) for m in msgs if m.get("role") == "assistant"]
+        latest_task = self.store.get_latest_task(conv["conversation_id"])
+        active_skills = len(self.store.list_skills(active_only=True))
+        tested_caps = sum(1 for f in self.store.list_frontier() if f.get("status") == "KNOWN_AND_TESTED")
+
+        words = text.lower().split()
+        greet_tokens = ("halo", "hai", "hei", "oy", "pagi", "siang", "sore", "malam", "kabar", "salam")
+        is_standalone_greeting = len(words) <= 3 and any(w in text.lower() for w in greet_tokens)
+        stage_id = int(self.speech.get_profile()["current_stage"])
+        ctx = conv.get("context") or {}
+        cues = self.speech._extract_conversational_cues(text, pending_word=str(ctx.get("pending_curiosity_word", "")))
+
+        observed_already = False
+        if (
+            stage_id == 4
+            and hc.get("local_gguf", {}).get("server_healthy")
+            and not is_standalone_greeting
+            and not cues.get("lexicon_qa_target")
+        ):
+            self.speech.observe_user_utterance(text)
+            observed_already = True
+            verified_gguf = self._try_gguf_verified_reply(
+                text=text,
+                conv=conv,
+                hc=hc,
+                mode_label=mode_label,
+                latest_task=latest_task,
+                recent_assistant=recent_assistant,
+                active_skills=active_skills,
+                tested_caps=tested_caps,
+            )
+            if verified_gguf:
+                return verified_gguf
+
+        speech_out = self.speech.compose_conversational_reply(
+            user_text=text,
+            conversation_id=conv["conversation_id"],
+            mode_label=mode_label,
+            offline_mode=bool(hc.get("offline_mode")),
+            latest_task=latest_task,
+            active_skills_count=active_skills,
+            tested_caps_count=tested_caps,
+            recent_assistant_texts=recent_assistant,
+            history_turns=len(msgs),
+            observe_turn=not observed_already,
+            conversation_context=ctx,
+        )
+        return str(speech_out["reply"])
+
+    def _handle_speech_or_language(
+        self,
+        intent: Any,
+        frame: dict[str, Any],
+        text: str,
+        conversation_id: str,
+        hc: dict[str, Any],
+    ) -> tuple[str, dict[str, Any] | None]:
+        if intent in (
+            "TRAIN_SPEECH",
+            "TEACH_WORD",
+            "SPEECH_STATUS",
+            Intent.TRAIN_SPEECH,
+            Intent.TEACH_WORD,
+            Intent.SPEECH_STATUS,
+        ):
+            return handle_speech_chat_intent(
+                engine=self.speech,
+                frame=frame,
+                text=text,
+                conversation_id=conversation_id,
+            )
+
+        task_obj = self.store.create_task(
+            conversation_id=conversation_id,
+            title_id="Peningkatan Pemahaman Bahasa Indonesia & Percakapan",
+            user_request=text,
+            normalized_goal="Tingkatkan pemahaman bahasa Indonesia alami, partikel santai, dan konteks percakapan",
+            constraints=frame["constraints"],
+            model_backend=hc["active_backend"],
+        )
+        self.store.set_frontier_capability(
+            capability_id="cap_pemahaman_bahasa_indonesia",
+            name_id="Pemahaman Bahasa Indonesia Alami, Partikel, & Percakapan Santai",
+            category="bahasa",
+            status="KNOWN_AND_TESTED",
+            evidence_ref="verified:language_engine_v4_conversational",
+        )
+        self.store.update_task(
+            task_obj["task_id"],
+            status="COMPLETED",
+            verification_summary={"passed": True, "domain": "language_understanding"},
+        )
+        reply = (
+            "Saran yang sangat tepat! Sebagai kecerdasan otonom yang dirancang untuk pengguna Indonesia, "
+            "penguasaan pemahaman bahasa alami (nuansa kalimat, partikel santai seperti *sih*, *dong*, *deh*, *kan*, "
+            "dan pemisahan tegas antara obrolan santai vs perintah pembuatan kode) adalah kemampuan paling mendasar.\n\n"
+            "Aku sudah memprioritaskan dan memperbarui modul pemahaman bahasa agar obrolan santai atau masukan seperti ini "
+            "tidak lagi disalahartikan sebagai tugas membuat skrip Python baru. Sekarang aku siap diajak berdiskusi santai, "
+            "bercerita, maupun merencanakan langkah selanjutnya secara lebih luwes dan peka konteks."
+        )
+        return reply, task_obj
 
     def handle_user_message(
         self,
@@ -508,61 +666,20 @@ class ConversationalEngine:
                 "dan memverifikasi setiap kode yang kutulis dengan bukti pengujian nyata."
             )
 
-        elif intent in ("LEARN_LANGUAGE", getattr(Intent, "LEARN_LANGUAGE", None)):
-            task_obj = self.store.create_task(
-                conversation_id=conversation_id,
-                title_id="Peningkatan Pemahaman Bahasa Indonesia & Percakapan",
-                user_request=text,
-                normalized_goal="Tingkatkan pemahaman bahasa Indonesia alami, partikel santai, dan konteks percakapan",
-                constraints=frame["constraints"],
-                model_backend=hc["active_backend"],
-            )
-            self.store.set_frontier_capability(
-                capability_id="cap_pemahaman_bahasa_indonesia",
-                name_id="Pemahaman Bahasa Indonesia Alami, Partikel, & Percakapan Santai",
-                category="bahasa",
-                status="KNOWN_AND_TESTED",
-                evidence_ref="verified:language_engine_v4_conversational",
-            )
-            self.store.update_task(
-                task_obj["task_id"],
-                status="COMPLETED",
-                verification_summary={"passed": True, "domain": "language_understanding"},
-            )
-            reply_text = (
-                "Saran yang sangat tepat! Sebagai kecerdasan otonom yang dirancang untuk pengguna Indonesia, "
-                "penguasaan pemahaman bahasa alami (nuansa kalimat, partikel santai seperti *sih*, *dong*, *deh*, *kan*, "
-                "dan pemisahan tegas antara obrolan santai vs perintah pembuatan kode) adalah kemampuan paling mendasar.\n\n"
-                "Aku sudah memprioritaskan dan memperbarui modul pemahaman bahasa agar obrolan santai atau masukan seperti ini "
-                "tidak lagi disalahartikan sebagai tugas membuat skrip Python baru. Sekarang aku siap diajak berdiskusi santai, "
-                "bercerita, maupun merencanakan langkah selanjutnya secara lebih luwes dan peka konteks."
-            )
+        elif intent in (
+            "LEARN_LANGUAGE",
+            "TRAIN_SPEECH",
+            "TEACH_WORD",
+            "SPEECH_STATUS",
+            Intent.LEARN_LANGUAGE,
+            Intent.TRAIN_SPEECH,
+            Intent.TEACH_WORD,
+            Intent.SPEECH_STATUS,
+        ):
+            reply_text, task_obj = self._handle_speech_or_language(intent, frame, text, conversation_id, hc)
 
         elif intent in ("GREETING_OR_CAPABILITIES", "GENERAL_CONVERSATION", Intent.GREETING_OR_CAPABILITIES, getattr(Intent, "GENERAL_CONVERSATION", None)):
-            if intent in ("GENERAL_CONVERSATION", getattr(Intent, "GENERAL_CONVERSATION", None)) and not frame.get("offer_options"):
-                gen_reply = ""
-                is_standalone_greeting = len(text.strip().split()) <= 3 and any(w in text.lower() for w in ("halo", "hai", "hei", "oy", "pagi", "siang", "sore", "malam", "kabar", "salam"))
-                if hc.get("local_gguf", {}).get("server_healthy") and not is_standalone_greeting:
-                    try:
-                        resp = self.router.generate_text([
-                            {"role": "system", "content": "Kamu adalah ACE, asisten kecerdasan otonom yang berkomunikasi dalam bahasa Indonesia yang santai, cerdas, dan rendah hati. Jawablah pesan pengguna dengan hangat, relevan, dan tidak bertele-tele."},
-                            {"role": "user", "content": text},
-                        ], max_tokens=90)
-                        if resp and resp.get("text"):
-                            gen_reply = resp["text"].strip()
-                    except Exception:
-                        pass
-                if gen_reply:
-                    if "ACE" not in gen_reply:
-                        gen_reply = f"Halo! Aku **ACE**. {gen_reply}"
-                    reply_text = gen_reply
-                else:
-                    reply_text = (
-                        f"Halo! Aku **ACE**, asisten kecerdasan otonom kamu (berjalan dalam mode **{mode_label}**).\n"
-                        "Ada yang bisa kubahas atau kubantu hari ini? Kamu bisa berdiskusi santai, menanyakan kapabilitas, "
-                        "atau meminta bantuan teknis pemrograman."
-                    )
-            elif frame.get("offer_options"):
+            if frame.get("offer_options"):
                 offered = [
                     {"index": 1, "domain": "expense_tracker", "title": "Opsi 1: CLI Catatan Pengeluaran JSON (ringkas & cepat)"},
                     {"index": 2, "domain": "csv_reader", "title": "Opsi 2: Utilitas Pembaca & Rekap Tabel CSV"},
@@ -574,19 +691,10 @@ class ConversationalEngine:
                     "2. **Opsi 2**: Utilitas Pembaca & Rekap CSV otomatis.\n\n"
                     "Kamu cukup bilang misalnya *\"yang kedua saja\"* atau *\"pilih opsi 1\"*."
                 )
+            elif intent in ("GENERAL_CONVERSATION", getattr(Intent, "GENERAL_CONVERSATION", None)):
+                reply_text = self._generate_general_reply(text, conv, hc, mode_label)
             else:
-                active_skills = self.store.list_skills(active_only=True)
-                skill_names = ", ".join(f"`{s['name']}`" for s in active_skills) if active_skills else "belum ada skill tambahan"
-                tested_caps = [f for f in self.store.list_frontier() if f.get("status") == "KNOWN_AND_TESTED"]
-                reply_text = (
-                    f"Halo! Aku **ACE** (berjalan dalam mode **{mode_label}**). Saat ini kemampuanku yang sudah terverifikasi meliputi:\n"
-                    "- Membuat dan menguji aplikasi Python lokal (seperti catatan pengeluaran CLI, pengolah CSV, dan utilitas harian).\n"
-                    "- Mereproduksi, mendiagnosis, dan memperbaiki bug kode dengan verifikasi otomatis.\n"
-                    "- Mencatat celah kemampuan (*gap*), mempelajari sub-keterampilan baru, dan mendelegasikan tugas ke worker AI jika tersedia.\n"
-                    "- Berjalan 100% lokal/offline tanpa bergantung pada internet saat mode offline aktif.\n"
-                    f"- **Skill hasil belajar aktif ({len(active_skills)})**: {skill_names}\n"
-                    f"- **Frontier terverifikasi**: {len(tested_caps)} kapabilitas berstatus `KNOWN_AND_TESTED`."
-                )
+                reply_text = self._build_capabilities_reply(mode_label)
 
         elif intent == "EXPLAIN_ONLY":
             is_expense = any(k in frame["normalized_text"].lower() for k in ("pengeluaran", "catatan", "keuangan", "dompet", "belanja"))

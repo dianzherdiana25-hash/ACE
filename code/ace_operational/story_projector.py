@@ -30,6 +30,35 @@ def _basename_list(refs: list[str]) -> str:
     return f"{clean[0]} dan {len(clean) - 1} berkas lainnya"
 
 
+def _project_skill_learned(detail: dict[str, Any], passed: Any, status: str) -> dict[str, Any]:
+    skill_name = str(detail.get("skill_name") or "keterampilan baru").strip()
+    if passed is False or status in ("FAILED", "FAILED_WITH_RECOVERY_STATE"):
+        story = (
+            f"Latihan keterampilan {skill_name} belum lulus ujian verifikasi sehingga hasilnya belum kuanggap berhasil. "
+            f"Aku mencatat bagian yang masih gagal untuk diperbaiki di percobaan berikutnya."
+        )
+        return {"story_text": story, "avatar_state": "bekerja", "is_story_card": True}
+    if "stage" in detail and "bicara" in skill_name:
+        vocab_count = detail.get("vocab_count", 0)
+        story = (
+            f"Aku baru menuntaskan latihan berbicara Tahap {detail['stage']}/4 ({skill_name}) "
+            f"dan ujian holdout lulus dengan {vocab_count} kosakata tersimpan."
+        )
+        return {"story_text": story, "avatar_state": "belajar", "is_story_card": True}
+    if "berbicara" in skill_name:
+        vocab_count = detail.get("vocab_count", 0)
+        story = (
+            f"Aku telah menuntaskan latihan keterampilan berbicara bertahap ({skill_name}) "
+            f"dan seluruh ujian holdout lulus dengan {vocab_count} kosakata tersimpan."
+        )
+        return {"story_text": story, "avatar_state": "belajar", "is_story_card": True}
+    story = (
+        f"Aku berhasil mempelajari dan menguji keterampilan baru untuk {skill_name} lewat dua kasus uji berbeda. "
+        f"Sekarang aku kembali melanjutkan tugas utamamu dengan bekal keterampilan tersebut."
+    )
+    return {"story_text": story, "avatar_state": "belajar", "is_story_card": True}
+
+
 def project_event_to_story(event: dict[str, Any]) -> dict[str, Any]:
     """Project an `ace.activity.v1` event into a human-friendly Indonesian story and avatar state."""
     kind = str(event.get("kind", "")).strip()
@@ -135,12 +164,7 @@ def project_event_to_story(event: dict[str, Any]) -> dict[str, Any]:
         return {"story_text": story, "avatar_state": "bekerja", "is_story_card": True}
 
     if kind == "skill_learned":
-        skill_name = str(detail.get("skill_name") or "keterampilan baru").strip()
-        story = (
-            f"Aku berhasil mempelajari dan menguji keterampilan baru untuk {skill_name} lewat dua kasus uji berbeda. "
-            f"Sekarang aku kembali melanjutkan tugas utamamu dengan bekal keterampilan tersebut."
-        )
-        return {"story_text": story, "avatar_state": "belajar", "is_story_card": True}
+        return _project_skill_learned(detail, passed, status)
 
     if kind == "task_paused":
         reason = str(detail.get("reason") or "menunggu instruksi atau syarat lanjutan darimu").strip()

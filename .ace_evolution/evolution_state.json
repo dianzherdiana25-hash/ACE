@@ -1,8 +1,150 @@
 {
   "completed_finding_keys": {},
   "generation_seq": 1,
-  "ratified_count": 0,
-  "ratified_history": [],
+  "ratified_count": 3,
+  "ratified_history": [
+    {
+      "changed_files": [
+        "code/ace_operational/autonomous_engine.py",
+        "code/ace_operational/language.py",
+        "code/ace_operational/speech_acquisition.py",
+        "code/ace_operational/story_projector.py",
+        "code/ace_operational/test_speech_acquisition.py",
+        "code/ace_operational/web_server.py"
+      ],
+      "mission_type": "user_mission",
+      "order_id": "mission-0001-skill-berbicara",
+      "resolution_note": "user_mission_verified",
+      "spore_sha256": "d62eb44291467a6aad847e08c2a78d6ede88528224bf54aa52c614a10a08cd82"
+    },
+    {
+      "changed_files": [
+        "code/ace_operational/autonomous_engine.py",
+        "code/ace_operational/language.py",
+        "code/ace_operational/speech_acquisition.py",
+        "code/ace_operational/story_projector.py",
+        "code/ace_operational/test_speech_acquisition.py",
+        "code/ace_operational/web_server.py"
+      ],
+      "mission_type": "user_mission",
+      "order_id": "mission-0001-skill-berbicara",
+      "resolution_note": "user_mission_verified",
+      "spore_sha256": "d62eb44291467a6aad847e08c2a78d6ede88528224bf54aa52c614a10a08cd82"
+    },
+    {
+      "changed_files": [
+        "code/ace_indo_nlp/__init__.py",
+        "code/ace_indo_nlp/discourse.py",
+        "code/ace_indo_nlp/lexicon_kb.py",
+        "code/ace_indo_nlp/morphology.py",
+        "code/ace_indo_nlp/phonotactics.py",
+        "code/ace_indo_nlp/test_discourse.py",
+        "code/ace_indo_nlp/test_lexicon_kb.py",
+        "code/ace_indo_nlp/test_morphology.py",
+        "code/ace_indo_nlp/test_phonotactics.py",
+        "code/ace_operational/autonomous_engine.py",
+        "code/ace_operational/language.py",
+        "code/ace_operational/speech_acquisition.py",
+        "code/ace_operational/story_projector.py",
+        "code/ace_operational/test_speech_acquisition.py",
+        "code/ace_operational/web_server.py"
+      ],
+      "mission_type": "user_mission",
+      "order_id": "mission-0001-skill-berbicara",
+      "resolution_note": "user_mission_verified",
+      "spore_sha256": "d62eb44291467a6aad847e08c2a78d6ede88528224bf54aa52c614a10a08cd82"
+    }
+  ],
+  "ratified_user_missions": [
+    {
+      "changed_files": [
+        "code/ace_operational/autonomous_engine.py",
+        "code/ace_operational/language.py",
+        "code/ace_operational/speech_acquisition.py",
+        "code/ace_operational/story_projector.py",
+        "code/ace_operational/test_speech_acquisition.py",
+        "code/ace_operational/web_server.py"
+      ],
+      "forgetting_count": 0,
+      "mission_seq": 1,
+      "order_id": "mission-0001-skill-berbicara",
+      "post_hashes": {
+        "code/ace_operational/autonomous_engine.py": "b5bf70c02db2490706a8aeba5044c4e040e0ac98298c0e6776330183dcc13789",
+        "code/ace_operational/language.py": "987ba1ea38ba4cfbd111f0feef00c002d5a6eaba131402379a8c167467408b84",
+        "code/ace_operational/speech_acquisition.py": "56d1be22daf06e5725d8c2c6a0b11deabeefdee22085064065bea88dec6898b2",
+        "code/ace_operational/story_projector.py": "5b6762d5e07d29e922d68b59bbabffb6861a836302b2b5df8c472efac8ccfda3",
+        "code/ace_operational/test_speech_acquisition.py": "302b8e750de246e5b4865a0eeb1cc41dd9e66beffa3f0d06a94238ba06a26336",
+        "code/ace_operational/web_server.py": "9f021a8ef11e36f0d729c2d885933ae0811e47f68d0503122e16d1566cd41e62"
+      },
+      "spore_sha256": "d62eb44291467a6aad847e08c2a78d6ede88528224bf54aa52c614a10a08cd82",
+      "title": "Misi Pengguna 0001: Skill Berbicara Bertahap 4 Tahap (Teks & Memori)"
+    },
+    {
+      "changed_files": [
+        "code/ace_operational/autonomous_engine.py",
+        "code/ace_operational/language.py",
+        "code/ace_operational/speech_acquisition.py",
+        "code/ace_operational/story_projector.py",
+        "code/ace_operational/test_speech_acquisition.py",
+        "code/ace_operational/web_server.py"
+      ],
+      "forgetting_count": 0,
+      "mission_seq": 1,
+      "order_id": "mission-0001-skill-berbicara",
+      "post_hashes": {
+        "code/ace_operational/autonomous_engine.py": "b5bf70c02db2490706a8aeba5044c4e040e0ac98298c0e6776330183dcc13789",
+        "code/ace_operational/language.py": "99f9ac225aeb36188381ffed03b06f830e5ac9b03d374dbc59f2e6198f6c03c4",
+        "code/ace_operational/speech_acquisition.py": "563e66940378d446a8eabd17d124beec614b69b7abe2aa72fb5dd2980edc85bc",
+        "code/ace_operational/story_projector.py": "a846ac9690c9aedffde9305e48b44b1bea61e7fb212c7c9c20f201f00749fa91",
+        "code/ace_operational/test_speech_acquisition.py": "eb60bab3f9700ab9fa346516a34e58e8d07585626ff512d6e7256e773dc6d51c",
+        "code/ace_operational/web_server.py": "40cfedd8ad5a71878a8a0fcd746246ee783141e989aed62b8c1755ff9e548e80"
+      },
+      "spore_sha256": "d62eb44291467a6aad847e08c2a78d6ede88528224bf54aa52c614a10a08cd82",
+      "title": "Misi Pengguna 0001: Skill Berbicara Bertahap 4 Tahap (Teks & Memori)"
+    },
+    {
+      "changed_files": [
+        "code/ace_indo_nlp/__init__.py",
+        "code/ace_indo_nlp/discourse.py",
+        "code/ace_indo_nlp/lexicon_kb.py",
+        "code/ace_indo_nlp/morphology.py",
+        "code/ace_indo_nlp/phonotactics.py",
+        "code/ace_indo_nlp/test_discourse.py",
+        "code/ace_indo_nlp/test_lexicon_kb.py",
+        "code/ace_indo_nlp/test_morphology.py",
+        "code/ace_indo_nlp/test_phonotactics.py",
+        "code/ace_operational/autonomous_engine.py",
+        "code/ace_operational/language.py",
+        "code/ace_operational/speech_acquisition.py",
+        "code/ace_operational/story_projector.py",
+        "code/ace_operational/test_speech_acquisition.py",
+        "code/ace_operational/web_server.py"
+      ],
+      "forgetting_count": 0,
+      "mission_seq": 1,
+      "order_id": "mission-0001-skill-berbicara",
+      "post_hashes": {
+        "code/ace_indo_nlp/__init__.py": "39084c6ab7b1f24a6a6fe61b0bd4af8e9bc5db402062897d93c82fec90e8642f",
+        "code/ace_indo_nlp/discourse.py": "f1dd26c2793cd3b5134edc0bd22c8041531bdf583d135e9f45c0a5ec82e82833",
+        "code/ace_indo_nlp/lexicon_kb.py": "48ca566d0f772e96078d9e80f305f8ea9337492ac599731675268f81dee0003d",
+        "code/ace_indo_nlp/morphology.py": "51a9a18fac6db4f3db998804d3c94fb31c27f5b393a1c9552fec76a0b8c82c1d",
+        "code/ace_indo_nlp/phonotactics.py": "495ce31d3caaf30296dc99ec7b22f1566ca7867a8f2bf7412dece9b404792d51",
+        "code/ace_indo_nlp/test_discourse.py": "a37cb15d5b1cdab034b2b46d8b9c13d0f439baaa44713cc06d9b8416e1948784",
+        "code/ace_indo_nlp/test_lexicon_kb.py": "18a58a198938d942a3dfa25f067325316c982c474648697fd0a5c3be4fbdc7be",
+        "code/ace_indo_nlp/test_morphology.py": "6bd3d6429bd1c4d2d9911c07b4c6b273fd8332763969b5f37a609e24f8ecd4a1",
+        "code/ace_indo_nlp/test_phonotactics.py": "7b4d57eef0e6f5794f1b9812765c7c783c63d1091834fa76c990f0a9729c24ca",
+        "code/ace_operational/autonomous_engine.py": "b5bf70c02db2490706a8aeba5044c4e040e0ac98298c0e6776330183dcc13789",
+        "code/ace_operational/language.py": "f48e7a13be224092e12b6be9e3added20736ef19622dde5d54bd40622f610983",
+        "code/ace_operational/speech_acquisition.py": "4dc42d8b5142a2a686197afd4e6200923c36c6e8f1b063bc897d9b4b6704b25f",
+        "code/ace_operational/story_projector.py": "a846ac9690c9aedffde9305e48b44b1bea61e7fb212c7c9c20f201f00749fa91",
+        "code/ace_operational/test_speech_acquisition.py": "24b68c0190d04a5fc10b09d11950fba2b8fa28419ca5c783473ce65a14482c44",
+        "code/ace_operational/web_server.py": "b8d94f6493e161b73af6d466a450aa46d281ef8bdc91a46eb173f10d1c08f689"
+      },
+      "spore_sha256": "d62eb44291467a6aad847e08c2a78d6ede88528224bf54aa52c614a10a08cd82",
+      "title": "Misi Pengguna 0001: Skill Berbicara Bertahap 4 Tahap (Teks & Memori)"
+    }
+  ],
   "rejected_count": 0,
-  "schema": "ace.passive_evolution_state.v1"
+  "schema": "ace.passive_evolution_state.v1",
+  "user_mission_seq": 1
 }

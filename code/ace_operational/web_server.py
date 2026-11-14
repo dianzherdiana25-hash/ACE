@@ -498,6 +498,92 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
       animation: floatSlow 3.5s ease-in-out infinite;
     }
 
+    .speech-badge-btn {
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .speech-badge-btn:hover {
+      border-color: var(--accent-secondary);
+    }
+
+    .speech-drawer {
+      max-width: 1320px;
+      margin: 12px auto 0;
+      padding: 14px 16px;
+      background: var(--bg-surface);
+      border: 1px solid rgba(112, 221, 209, 0.28);
+      border-radius: var(--radius-card);
+      display: grid;
+      gap: 12px;
+    }
+
+    .speech-drawer.hidden {
+      display: none;
+    }
+
+    .speech-stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+    }
+
+    .speech-stage-card {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: var(--bg-elevated);
+      border: 1px solid rgba(185, 163, 255, 0.18);
+      font-size: 12.5px;
+    }
+
+    .speech-stage-card.passed {
+      border-color: rgba(112, 221, 209, 0.5);
+    }
+
+    .speech-vocab-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    .speech-vocab-box {
+      padding: 12px;
+      border-radius: 14px;
+      background: var(--bg-elevated);
+      border: 1px solid rgba(185, 163, 255, 0.14);
+      font-size: 12.5px;
+    }
+
+    .speech-tag {
+      display: inline-block;
+      margin: 4px 6px 0 0;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(185, 163, 255, 0.15);
+      border: 1px solid rgba(185, 163, 255, 0.3);
+      color: var(--text-primary);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .speech-teach-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .speech-teach-form input,
+    .speech-teach-form select {
+      min-height: 40px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(185, 163, 255, 0.3);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 13px;
+    }
+
     /* Reduced Motion Accessibility (WEB20) */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after, .avatar-svg, .chip-btn {
@@ -524,8 +610,49 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
         <span id="text-mode">Memuat mode...</span>
       </span>
       <span class="status-pill" id="badge-model">Model: lokal</span>
+      <button type="button" class="status-pill speech-badge-btn" id="badge-speech" onclick="toggleSpeechDrawer()" aria-expanded="false">
+        Bicara: Tahap 0/4
+      </button>
     </div>
   </header>
+
+  <section class="speech-drawer hidden" id="speech-drawer" aria-label="Studio Perkembangan Berbicara Bahasa Indonesia">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <div>
+        <strong style="font-size:14px;">Studio Bahasa Indonesia &amp; Perkembangan Bicara ACE</strong>
+        <span id="speech-summary-meta" style="margin-left:8px;font-size:12px;color:var(--text-secondary);">Memuat profil...</span>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button type="button" class="control-btn" onclick="sendQuickPrompt('Latih skill berbicara bertahap')">Latih 4 Tahap</button>
+        <button type="button" class="control-btn" onclick="toggleSpeechDrawer()">Tutup</button>
+      </div>
+    </div>
+    <div class="speech-stage-grid" id="speech-stage-grid"></div>
+    <div class="speech-vocab-row">
+      <div class="speech-vocab-box">
+        <strong>Kosakata Ajaran &amp; Ralat Pengguna</strong>
+        <div id="speech-taught-list" style="margin-top:6px;color:var(--text-secondary);">Belum ada kosakata khusus.</div>
+      </div>
+      <div class="speech-vocab-box">
+        <strong>Kata Asing Terdengar (Klik untuk Ajari)</strong>
+        <div id="speech-heard-list" style="margin-top:6px;color:var(--text-secondary);">Belum ada kata menunggu makna.</div>
+      </div>
+    </div>
+    <form class="speech-teach-form" id="speech-teach-form" onsubmit="submitTeachWordForm(event)">
+      <input type="text" id="teach-word-input" placeholder="Kata (mis. lentera)" required style="min-width:140px;" />
+      <input type="text" id="teach-meaning-input" placeholder="Makna dalam Bahasa Indonesia" required style="flex:1;min-width:210px;" />
+      <select id="teach-role-input" aria-label="Peran kata">
+        <option value="">Otomatis</option>
+        <option value="objek">objek</option>
+        <option value="aksi">aksi</option>
+        <option value="sifat">sifat</option>
+        <option value="emosi">emosi</option>
+        <option value="waktu">waktu</option>
+        <option value="tempat">tempat</option>
+      </select>
+      <button type="submit" class="control-btn">Ajarkan Kata</button>
+    </form>
+  </section>
 
   <nav class="mobile-tabs" aria-label="Navigasi Ruang Kerja">
     <button type="button" class="tab-btn active" id="tab-ngobrol" onclick="switchMobileTab('ngobrol')">
@@ -556,6 +683,12 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
         </button>
         <button type="button" class="chip-btn" onclick="sendQuickPrompt('Udah sampai mana status sekarang?')">
           Cek progres
+        </button>
+        <button type="button" class="chip-btn" onclick="sendQuickPrompt('Latih berbicara tahap 1 dulu')">
+          Mulai bicara tahap 1
+        </button>
+        <button type="button" class="chip-btn" onclick="sendQuickPrompt('Latih skill berbicara bertahap')">
+          Latih skill berbicara
         </button>
       </div>
 
@@ -785,6 +918,10 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
           const modeLabel = st.offline_mode ? "Mode: Offline Lokal" : "Mode: " + String(st.mode || "lokal").toUpperCase();
           document.getElementById("text-mode").textContent = modeLabel;
           document.getElementById("badge-model").textContent = "Model: " + (st.active_backend || "lokal");
+          if (st.speech_profile) {
+            document.getElementById("badge-speech").textContent =
+              "Bicara: Tahap " + st.speech_profile.current_stage + "/4 (" + st.speech_profile.vocab_count + " kata)";
+          }
           if (st.active_task) {
             STATE.activeTaskId = st.active_task.task_id;
             document.getElementById("active-task-badge").textContent =
@@ -876,9 +1013,112 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
       }
     }
 
+    function toggleSpeechDrawer() {
+      const drawer = document.getElementById("speech-drawer");
+      const badge = document.getElementById("badge-speech");
+      const opening = drawer.classList.contains("hidden");
+      drawer.classList.toggle("hidden", !opening);
+      if (badge) badge.setAttribute("aria-expanded", opening ? "true" : "false");
+      if (opening) refreshSpeechStudio();
+    }
+
+    async function refreshSpeechStudio() {
+      try {
+        const res = await fetch("/api/speech");
+        if (!res.ok) return;
+        const sp = await res.json();
+        const meta = document.getElementById("speech-summary-meta");
+        if (meta) {
+          meta.textContent = "Tahap " + sp.current_stage + "/4 • " + sp.vocab_count + " kosakata • " + sp.verified_utterances + " ujaran";
+        }
+        const grid = document.getElementById("speech-stage-grid");
+        if (grid) {
+          grid.textContent = "";
+          (sp.stages || []).forEach((st) => {
+            const card = document.createElement("div");
+            card.className = "speech-stage-card" + (st.status === "PASSED" ? " passed" : "");
+            const title = document.createElement("div");
+            title.style.fontWeight = "700";
+            title.textContent = st.title_id;
+            const info = document.createElement("div");
+            info.style.color = "var(--text-secondary)";
+            info.style.marginTop = "4px";
+            info.textContent = st.status + " (" + st.passed_cases + "/" + st.total_cases + " holdout)";
+            card.appendChild(title);
+            card.appendChild(info);
+            grid.appendChild(card);
+          });
+        }
+        const taughtBox = document.getElementById("speech-taught-list");
+        if (taughtBox) {
+          taughtBox.textContent = "";
+          const taught = sp.user_taught_words || [];
+          if (taught.length === 0) {
+            taughtBox.textContent = "Belum ada kata khusus dari pengguna.";
+          } else {
+            taught.slice(0, 12).forEach((w) => {
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = "speech-tag";
+              const syl = (w.syllables || []).join("-");
+              btn.textContent = w.word + " (" + syl + ", " + w.role + "): " + w.meaning_id;
+              btn.onclick = () => {
+                document.getElementById("teach-word-input").value = w.word;
+                document.getElementById("teach-meaning-input").value = w.meaning_id;
+              };
+              taughtBox.appendChild(btn);
+            });
+          }
+        }
+        const heardBox = document.getElementById("speech-heard-list");
+        if (heardBox) {
+          heardBox.textContent = "";
+          const heard = sp.heard_words || [];
+          if (heard.length === 0) {
+            heardBox.textContent = "Belum ada kata asing menunggu definisi.";
+          } else {
+            heard.slice(0, 12).forEach((h) => {
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = "speech-tag";
+              btn.textContent = h.word + " (" + h.exposure_count + "x)";
+              btn.onclick = () => {
+                document.getElementById("teach-word-input").value = h.word;
+                document.getElementById("teach-meaning-input").focus();
+              };
+              heardBox.appendChild(btn);
+            });
+          }
+        }
+      } catch (err) {
+        console.warn("Gagal memuat /api/speech:", err);
+      }
+    }
+
+    async function submitTeachWordForm(e) {
+      e.preventDefault();
+      const wInput = document.getElementById("teach-word-input");
+      const mInput = document.getElementById("teach-meaning-input");
+      const rInput = document.getElementById("teach-role-input");
+      const w = wInput.value.trim();
+      const m = mInput.value.trim();
+      if (!w || !m) return;
+      const roleSuffix = rInput.value ? " (" + rInput.value + ")" : "";
+      wInput.value = "";
+      mInput.value = "";
+      await sendChatMessage("ajarkan kata " + w + " artinya " + m + roleSuffix);
+      await refreshSpeechStudio();
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
       refreshStatusAndHistory();
-      setInterval(refreshStatusAndHistory, 4000);
+      setInterval(() => {
+        refreshStatusAndHistory();
+        const drawer = document.getElementById("speech-drawer");
+        if (drawer && !drawer.classList.contains("hidden")) {
+          refreshSpeechStudio();
+        }
+      }, 4000);
     });
   </script>
 </body>
@@ -894,7 +1134,7 @@ def find_available_port(host: str, preferred_port: int, max_probes: int = 25) ->
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             try:
                 sock.bind((host, candidate))
-                return candidate
+                return int(sock.getsockname()[1])
             except OSError:
                 continue
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -947,7 +1187,21 @@ class ACEWebCore:
             },
             "gaps_open": len(self.store.list_gaps(status="OPEN")),
             "skills_active": len(self.store.list_skills(active_only=True)),
+            "speech_profile": self.chat_engine.speech.get_profile(),
         }
+
+    def dispatch_readonly_get(self, path: str) -> dict[str, Any] | None:
+        if path == "/api/gaps":
+            return {"gaps": self.store.list_gaps(), "frontier": self.store.list_frontier()}
+        if path == "/api/skills":
+            return {"skills": self.store.list_skills()}
+        if path == "/api/deliverables":
+            return self.store.export_deliverables_snapshot()
+        if path == "/api/experiments":
+            return {"experiments": self.store.list_experiments()}
+        if path == "/api/speech":
+            return self.chat_engine.speech.get_profile(include_vocab=True)
+        return None
 
     def control_task(self, task_id: str, action: str) -> dict[str, Any]:
         task = self.store.get_task(task_id)
@@ -1140,23 +1394,9 @@ def create_http_handler(core: ACEWebCore):
                 self.wfile.write(raw)
                 return
 
-            if path == "/api/gaps":
-                self._send_json({
-                    "gaps": core.store.list_gaps(),
-                    "frontier": core.store.list_frontier(),
-                })
-                return
-
-            if path == "/api/skills":
-                self._send_json({"skills": core.store.list_skills()})
-                return
-
-            if path == "/api/deliverables":
-                self._send_json(core.store.export_deliverables_snapshot())
-                return
-
-            if path == "/api/experiments":
-                self._send_json({"experiments": core.store.list_experiments()})
+            extra = core.dispatch_readonly_get(path)
+            if extra is not None:
+                self._send_json(extra)
                 return
 
             self._send_json({"error": f"Route tidak ditemukan: {path}"}, status=HTTPStatus.NOT_FOUND)

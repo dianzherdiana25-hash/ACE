@@ -1,0 +1,17 @@
+{
+  "antibodies_compiled": 0,
+  "austerity_ticks": 0,
+  "certified_skills": [
+    {
+      "birth_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "skill_id": "core_stage2_guard"
+    }
+  ],
+  "cycle_count": 1,
+  "health_score": 0.6,
+  "processed_task_ids": [
+    "ratify_mission_mission-0001-skill-berbicara"
+  ],
+  "quarantined_faults": 0,
+  "unhandled_crashes": 0
+}

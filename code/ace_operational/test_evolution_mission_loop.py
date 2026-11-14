@@ -10,6 +10,7 @@ from ace_operational.evolution_mission_loop import (
     EvolutionPatchVerifier,
     PassiveEvolutionPlanner,
     RealRepoAuditor,
+    UserMissionCoordinator,
 )
 
 
@@ -472,6 +473,82 @@ class EvolutionMissionLoopTests(unittest.TestCase):
             self.assertEqual(replan["status"], "MISSION_EMITTED")
             self.assertEqual(replan["top_finding"]["kind"], "oaie_high_search_cost")
 
+    def test_user_mission_lifecycle_preserves_static_backlog_and_enforces_quality(self) -> None:
+        base_target = (
+            '"""Clean base."""\n'
+            "def ping() -> str:\n"
+            "    return 'pong'\n"
+        )
+        base_test = (
+            '"""Tests."""\nimport unittest\nfrom ace_operational.target_mod import ping\n\n'
+            "class T(unittest.TestCase):\n    def test_ping(self) -> None:\n        self.assertEqual(ping(), 'pong')\n"
+        )
+        with tempfile.TemporaryDirectory(prefix="ace_user_mission_") as d:
+            repo, ws = Path(d) / "repo", Path(d) / "ws"
+            _create_sandbox_repo(repo, target_src=base_target, test_src=base_test)
+            # Emit a static passive work order first (e.g. complex or silent_except in extra.py)
+            extra = repo / "code" / "ace_operational" / "extra.py"
+            extra.write_text(
+                "def bad(x: str) -> int:\n    try:\n        return int(x)\n    except Exception:\n        pass\n    return 0\n"
+                + ("\ndef pad(v: int) -> int:\n    return v\n" * 8),
+                encoding="utf-8",
+            )
+            static_plan = PassiveEvolutionPlanner(ws, repo, scan_subpath="code/ace_operational").plan_next_evolution()
+            static_order_before = (ws / "EVOLUTION_WORK_ORDER.json").read_text(encoding="utf-8")
+
+            coord = UserMissionCoordinator(ws, repo, scan_subpath="code")
+            plan = coord.plan_user_mission(
+                mission_id="mission-0001-demo",
+                title="Tambah Modul Demo",
+                goal="Buat feature_mod.py + test_feature_mod.py dengan audit bersih",
+                target_files=[
+                    "code/ace_operational/feature_mod.py",
+                    "code/ace_operational/test_feature_mod.py",
+                ],
+                acceptance_checks=["PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_feature_mod -v"],
+                criteria=["Zero static findings", "Companion unittest passes"],
+            )
+            self.assertEqual(plan["status"], "USER_MISSION_EMITTED")
+            # Static EVOLUTION_WORK_ORDER.json MUST remain untouched!
+            self.assertEqual((ws / "EVOLUTION_WORK_ORDER.json").read_text(encoding="utf-8"), static_order_before)
+            self.assertEqual(static_plan["top_finding"]["file_path"], "code/ace_operational/extra.py")
+
+            # Quality gate rejects newly added module lacking companion test or docstring
+            feat = repo / "code" / "ace_operational" / "feature_mod.py"
+            feat.write_text(
+                "def greet(name: str) -> str:\n" + ("    _ = name\n" * 26) + "    return f'halo {name}'\n",
+                encoding="utf-8",
+            )
+            bad_audit = coord.verify_user_mission(mission_id="mission-0001-demo")
+            self.assertFalse(bad_audit["accepted"])
+            self.assertTrue(any("static_audit_regressions" in r for r in bad_audit["reasons"]))
+
+            # Clean implementation + real unit tests passes and ratifies into DAG + Spore
+            feat.write_text(
+                '"""Greeting module."""\n\n'
+                "def greet(name: str) -> str:\n"
+                "    clean = name.strip()\n"
+                "    return f'halo {clean}' if clean else 'halo dunia'\n",
+                encoding="utf-8",
+            )
+            feat_test = repo / "code" / "ace_operational" / "test_feature_mod.py"
+            feat_test.write_text(
+                '"""Feature tests."""\nimport unittest\nfrom ace_operational.feature_mod import greet\n\n'
+                "class FeatureTests(unittest.TestCase):\n"
+                "    def test_greet(self) -> None:\n"
+                "        self.assertEqual(greet('ACE'), 'halo ACE')\n"
+                "        self.assertEqual(greet('  '), 'halo dunia')\n",
+                encoding="utf-8",
+            )
+            ok = coord.verify_user_mission(mission_id="mission-0001-demo")
+            self.assertTrue(ok["accepted"], msg=str(ok))
+            self.assertEqual(ok["status"], "VERIFIED_AND_RATIFIED")
+            self.assertTrue(ok["dag_chain_valid"])
+            self.assertEqual(ok["forgetting_count"], 0)
+            self.assertTrue((ws / "user_missions" / "mission-0001-demo.ratified.json").is_file())
+            self.assertEqual((ws / "EVOLUTION_WORK_ORDER.json").read_text(encoding="utf-8"), static_order_before)
+
 
 if __name__ == "__main__":
     unittest.main()
+

@@ -1,0 +1,39 @@
+{
+  "nodes": [
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "8968cdc3c6a2ca1f8dcd4caffc42baefc6a2032b16e1fe510c41ad0c71f59477",
+      "node_id": "proof_ratify_mission_mission-0001-skill-berbicara",
+      "parent_ids": [],
+      "payload": {
+        "birth_sha256": "db47cf1031aa4805c89c22ba0fcf7d35ef958cbfeed50e891724dd450c725912",
+        "changed_files": [
+          "code/ace_operational/autonomous_engine.py",
+          "code/ace_operational/language.py",
+          "code/ace_operational/speech_acquisition.py",
+          "code/ace_operational/story_projector.py",
+          "code/ace_operational/test_speech_acquisition.py",
+          "code/ace_operational/web_server.py"
+        ],
+        "mission_type": "user_mission",
+        "order_id": "mission-0001-skill-berbicara",
+        "post_hashes": {
+          "code/ace_operational/autonomous_engine.py": "b5bf70c02db2490706a8aeba5044c4e040e0ac98298c0e6776330183dcc13789",
+          "code/ace_operational/language.py": "987ba1ea38ba4cfbd111f0feef00c002d5a6eaba131402379a8c167467408b84",
+          "code/ace_operational/speech_acquisition.py": "56d1be22daf06e5725d8c2c6a0b11deabeefdee22085064065bea88dec6898b2",
+          "code/ace_operational/story_projector.py": "5b6762d5e07d29e922d68b59bbabffb6861a836302b2b5df8c472efac8ccfda3",
+          "code/ace_operational/test_speech_acquisition.py": "302b8e750de246e5b4865a0eeb1cc41dd9e66beffa3f0d06a94238ba06a26336",
+          "code/ace_operational/web_server.py": "9f021a8ef11e36f0d729c2d885933ae0811e47f68d0503122e16d1566cd41e62"
+        },
+        "task_id": "ratify_mission_mission-0001-skill-berbicara",
+        "title": "Misi Pengguna 0001: Skill Berbicara Bertahap 4 Tahap (Teks & Memori)",
+        "verified": true
+      },
+      "prev_chain_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "weight": 1.0
+    }
+  ],
+  "schema": "ace.stigmergic_dag.v1",
+  "tail_hash": "8968cdc3c6a2ca1f8dcd4caffc42baefc6a2032b16e1fe510c41ad0c71f59477"
+}

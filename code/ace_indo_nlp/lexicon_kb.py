@@ -1,0 +1,367 @@
+"""Curated Core Indonesian Lexical Knowledge Base, Semantic Network, and POS Inference (`ace_indo_nlp.lexicon_kb`).
+
+Contains 280+ foundational everyday Indonesian vocabulary entries across 13 roles
+with meanings, semantic domains, natural example sentences, synonyms, and antonyms,
+plus rich stopword/meta-word sets and morphological+semantic POS inference.
+"""
+from __future__ import annotations
+
+import re
+from typing import Any
+
+from .morphology import analyze_morphology
+
+VALID_POS_ROLES = frozenset({
+    "sapaan", "aktor", "aksi", "objek", "sifat", "emosi",
+    "negasi", "tanya", "waktu", "tempat", "keterangan", "bilangan", "penghubung",
+})
+
+TELEGRAPHIC_PATTERNS: tuple[tuple[str, ...], ...] = (
+    ("aktor", "aksi"),
+    ("aksi", "objek"),
+    ("negasi", "aksi"),
+    ("negasi", "sifat"),
+    ("objek", "sifat"),
+    ("sapaan", "aktor"),
+    ("tanya", "objek"),
+    ("tanya", "aksi"),
+    ("aktor", "emosi"),
+    ("waktu", "aksi"),
+    ("aktor", "aksi", "objek"),
+    ("aktor", "negasi", "aksi"),
+    ("aktor", "negasi", "sifat"),
+    ("aksi", "objek", "sifat"),
+    ("aktor", "emosi", "keterangan"),
+    ("aktor", "aksi", "tempat"),
+    ("waktu", "aktor", "aksi"),
+)
+
+# Format: (word, role, meaning_id, domains, example, synonyms, antonyms)
+CORE_INDONESIAN_LEXICON: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...], tuple[str, ...]], ...] = (
+    # --- Sapaan & Ungkapan Sosial ---
+    ("halo", "sapaan", "sapaan hangat untuk membuka percakapan", ("sapaan", "komunikasi"), "Halo, aku siap mendengar pesanmu.", ("hai", "salam"), ()),
+    ("hai", "sapaan", "sapaan akrab saat menyapa lawan bicara", ("sapaan",), "Hai, mari kita bahas pelan-pelan.", ("halo",), ()),
+    ("salam", "sapaan", "ucapan hormat atau damai saat bertemu", ("sapaan", "sosial"), "Salam hangat untuk memulai obrolan.", ("halo",), ()),
+    ("terima", "sapaan", "ungkapan menghargai bantuan atau masukan", ("sapaan", "empati"), "Terima kasih atas penjelasan yang jelas.", ("hargai",), ()),
+    ("maaf", "sapaan", "ungkapan jujur mengakui kekeliruan atau batas", ("empati", "jujur"), "Maaf, kata itu belum kukenal.", ("ampun",), ()),
+    ("tolong", "sapaan", "permintaan kerja sama secara santun", ("tugas", "bantuan"), "Tolong beri tahu maksud kata itu.", ("bantu",), ()),
+    ("selamat", "sapaan", "ucapan doa baik atau selamat datang", ("sapaan", "positif"), "Selamat datang di ruang belajar lokal.", ("sejahtera",), ()),
+    ("permisi", "sapaan", "ungkapan sopan meminta izin atau perhatian", ("sapaan", "sosial"), "Permisi, aku ingin memastikan maksudmu.", (), ()),
+    # --- Aktor & Kata Ganti ---
+    ("aku", "aktor", "kata ganti orang pertama merujuk diri ACE", ("identitas", "umum"), "Aku belajar berbicara secara bertahap.", ("saya",), ("kamu",)),
+    ("saya", "aktor", "kata ganti orang pertama bernuansa formal", ("identitas", "komunikasi"), "Saya mencatat setiap masukan baru.", ("aku",), ()),
+    ("kamu", "aktor", "kata ganti orang kedua merujuk lawan bicara", ("identitas", "komunikasi"), "Kamu mengajariku kosakata baru.", ("engkau",), ("aku",)),
+    ("kita", "aktor", "rujukan bersama antara pengguna dan ACE", ("kolaborasi", "empati"), "Kita menguji ide ini bersama-sama.", (), ()),
+    ("kami", "aktor", "rujukan kelompok pihak pembicara", ("sosial",), "Kami menyusun catatan hasil uji.", (), ()),
+    ("mereka", "aktor", "kata ganti orang ketiga jamak", ("sosial",), "Mereka berdiskusi tentang bahasa.", (), ()),
+    ("dia", "aktor", "kata ganti orang ketiga tunggal", ("sosial",), "Dia menjelaskan langkah awalnya.", (), ()),
+    ("ace", "aktor", "nama kecerdasan buatan otonom lokal ini", ("identitas", "verifikasi"), "ACE bekerja jujur berdasarkan bukti.", (), ()),
+    ("manusia", "aktor", "makhluk berakal budi yang berbahasa alami", ("sosial", "belajar"), "Manusia belajar bicara sejak bayi.", ("orang",), ()),
+    ("orang", "aktor", "individu atau pribadi manusia", ("sosial",), "Setiap orang punya gaya bicara berbeda.", ("manusia", "teman"), ()),
+    ("anak", "aktor", "manusia muda yang sedang bertumbuh", ("sosial", "belajar"), "Anak meniru bunyi dan suku kata dulu.", ("bayi",), ("dewasa",)),
+    ("bayi", "aktor", "anak kecil pada tahap paling awal belajar bicara", ("belajar", "bahasa"), "Bayi memulai bicara dari vokal dan suku kata.", ("anak",), ()),
+    ("teman", "aktor", "rekan dekat yang diajak bekerja sama", ("sosial", "empati"), "Teman diskusi membantu menguji gagasan.", ("kawan", "sahabat"), ("lawan",)),
+    ("sahabat", "aktor", "teman karib yang saling mendukung", ("sosial", "empati"), "Sahabat belajar saling mengoreksi.", ("teman", "kawan"), ()),
+    ("guru", "aktor", "pihak yang membimbing dan mengajarkan ilmu", ("belajar",), "Pengguna adalah guru kosakata bagi ACE.", ("pengajar",), ("murid",)),
+    ("murid", "aktor", "orang yang sedang menuntut pengetahuan", ("belajar",), "Murid tekun selalu bertanya arti kata asing.", ("pelajar",), ("guru",)),
+    ("pekerja", "aktor", "agen atau pihak yang mengeksekusi tugas", ("tugas", "rekayasa"), "Pekerja kode menjalankan uji verifikasi.", (), ()),
+    # --- Aksi / Verba ---
+    ("dengar", "aksi", "menerima dan memperhatikan ucapan lawan bicara", ("komunikasi", "sapaan", "empati"), "Aku mendengar maksudmu dengan saksama.", ("simak",), ()),
+    ("simak", "aksi", "memperhatikan pesan secara tekun dan utuh", ("komunikasi", "belajar"), "Aku menyimak rincian masalah itu.", ("dengar",), ()),
+    ("bicara", "aksi", "menyusun dan menyampaikan ujaran bahasa", ("belajar", "komunikasi", "bahasa"), "Aku berlatih bicara tahap demi tahap.", ("ucap", "tutur"), ("diam",)),
+    ("ucap", "aksi", "melafalkan atau menuliskan kata dengan jelas", ("bahasa", "komunikasi"), "Aku mengucapkan suku kata perlahan.", ("bicara",), ()),
+    ("tanya", "aksi", "mengajukan pertanyaan untuk mencari kejelasan", ("tanya", "belajar"), "Aku bertanya jika menemui kata asing.", ("selidik",), ("jawab",)),
+    ("jawab", "aksi", "memberikan tanggapan atas pertanyaan", ("komunikasi", "jujur"), "Aku menjawab jujur sesuai fakta memori.", ("balas",), ("tanya",)),
+    ("belajar", "aksi", "menyerap pola dan menguji kemampuan baru", ("belajar", "bahasa"), "Aku belajar dari pengalaman nyata.", ("latihan",), ()),
+    ("latih", "aksi", "mengulang keterampilan agar semakin mahir", ("belajar", "verifikasi"), "Kita melatih ujaran tahap berikutnya.", ("asah",), ()),
+    ("ajar", "aksi", "memberikan pengetahuan atau makna kata baru", ("belajar", "bahasa"), "Kamu mengajarkan arti kata dengan jelas.", ("bimbing", "didik"), ()),
+    ("ingat", "aksi", "menyimpan pengetahuan ke dalam memori persisten", ("memori", "belajar"), "Aku ingat kosakata yang pernah kamu ajarkan.", ("hafal", "simpan"), ("lupa",)),
+    ("lupa", "aksi", "kehilangan jejak ingatan sebelumnya", ("memori",), "Memori SQLite mencegah ACE mudah lupa.", (), ("ingat",)),
+    ("catat", "aksi", "menulis fakta atau temuan secara rapi", ("tugas", "memori"), "Semua hasil uji dicatat ke basis data.", ("rekam", "tulis"), ()),
+    ("simpan", "aksi", "menjaga data agar awet di ruang penyimpanan", ("memori", "rekayasa"), "Leksikon tersimpan aman lintas sesi.", ("catat",), ("hapus",)),
+    ("hapus", "aksi", "menghilangkan catatan atau entri yang salah", ("memori", "rekayasa"), "Jangan hapus bukti uji yang sah.", (), ("simpan",)),
+    ("cari", "aksi", "menelusuri informasi atau akar masalah", ("tugas", "tanya", "kognisi"), "Mari kita cari akar kendalanya.", ("telusur",), ()),
+    ("temu", "aksi", "mendapatkan hasil setelah pencarian", ("kognisi", "rekayasa"), "Aku menemukan kecocokan akar kata.", ("dapat",), ()),
+    ("uji", "aksi", "memeriksa kebenaran lewat percobaan nyata", ("verifikasi", "rekayasa"), "Setiap perubahan wajib diuji lebih dulu.", ("cek", "periksa"), ()),
+    ("periksa", "aksi", "meneliti kondisi secara menyeluruh", ("verifikasi",), "Mari periksa log pengujian terlebih dahulu.", ("uji", "cek"), ()),
+    ("baca", "aksi", "memahami simbol, kata, atau berkas teks", ("komunikasi", "tugas", "kognisi"), "Aku membaca berkas dan riwayat obrolan.", ("telaah",), ()),
+    ("tulis", "aksi", "menuangkan gagasan menjadi teks atau kode", ("tugas", "rekayasa"), "Aku menulis ulang solusi agar lebih rapi.", ("catat", "susun"), ()),
+    ("susun", "aksi", "merangkai bagian menjadi struktur yang teratur", ("bahasa", "rekayasa"), "Kalimat tersusun mengikuti peran kata.", ("rangkai",), ("acak",)),
+    ("ubah", "aksi", "mengganti isi atau bentuk menjadi lebih tepat", ("rekayasa", "tugas"), "Kamu bisa mengubah arti kata kapan saja.", ("ganti", "revisi"), ()),
+    ("perbaiki", "aksi", "membetulkan bagian yang keliru atau rusak", ("rekayasa", "tugas"), "Kita perbaiki modul yang masih kaku.", ("benahi",), ("rusak",)),
+    ("bantu", "aksi", "memberi dukungan agar tujuan tercapai", ("bantuan", "empati", "umum"), "Aku siap bantu menyusun solusi bertahap.", ("dukung", "tolong"), ()),
+    ("paham", "aksi", "mengerti maksud, sebab, atau hubungan makna", ("kognisi", "komunikasi", "belajar"), "Aku paham konteks pembicaraan kita.", ("mengerti",), ("bingung",)),
+    ("pikir", "aksi", "mengolah gagasan dan menimbang langkah logis", ("kognisi",), "Aku berpikir hati-hati sebelum bertindak.", ("renung",), ()),
+    ("lihat", "aksi", "mengamati bentuk atau kondisi melalui pengamatan", ("indra", "kognisi"), "Kita lihat hasil uji di terminal.", ("amati", "pandang"), ()),
+    ("tunggu", "aksi", "menahan diri hingga syarat terpenuhi", ("tugas",), "Tahap lanjut menunggu tahap dasar lulus.", ("nanti",), ("mulai",)),
+    ("mulai", "aksi", "mengawali suatu proses atau kegiatan", ("tugas", "waktu"), "Kita mulai dari tahap paling dasar.", ("awal",), ("selesai",)),
+    ("selesai", "aksi", "menuntaskan suatu pekerjaan sampai akhir", ("tugas", "verifikasi"), "Ujian selesai dengan seluruh kasus lulus.", ("tuntas", "rampung"), ("mulai",)),
+    ("lanjut", "aksi", "meneruskan langkah dari titik terakhir", ("tugas", "belajar"), "Kita lanjut ke tahap berbicara berikutnya.", ("terus",), ("henti",)),
+    ("henti", "aksi", "berhenti sejenak atau menyudahi aktivitas", ("tugas",), "Tugas bisa dihentikan sementara dengan aman.", ("jeda",), ("lanjut",)),
+    ("jeda", "aksi", "berhenti sementara dengan menyimpan status", ("tugas",), "Proses dijeda agar bisa dilanjutkan lagi.", ("henti",), ("lanjut",)),
+    ("tumbuh", "aksi", "berkembang semakin besar, matang, dan kuat", ("belajar", "alam"), "Kemampuan ACE tumbuh dari bukti nyata.", ("kembang",), ()),
+    ("kembang", "aksi", "bertambah lengkap dan matang seiring latihan", ("belajar",), "Kosakata terus berkembang tiap obrolan.", ("tumbuh",), ()),
+    ("gabung", "aksi", "menyatukan unsur terpisah menjadi kesatuan", ("bahasa", "rekayasa"), "Kata digabung membentuk kalimat telegrafik.", ("padu",), ("pisah",)),
+    ("pisah", "aksi", "membagi kesatuan menjadi bagian terpisah", ("bahasa", "kognisi"), "Kata dipecah menjadi suku kata penyusunnya.", ("pecah", "bagi"), ("gabung",)),
+    ("pilih", "aksi", "menentukan satu atau beberapa opsi terbaik", ("kognisi", "tugas"), "ACE memilih pola frasa paling relevan.", ("tentukan",), ()),
+    ("coba", "aksi", "menguji sesuatu untuk melihat hasilnya", ("belajar", "verifikasi"), "Mari coba kalimat baru di tahap tiga.", ("uji",), ()),
+    ("beri", "aksi", "menyampaikan sesuatu kepada pihak lain", ("sosial", "komunikasi"), "Pengguna memberi makna kata yang belum dikenal.", ("sampaikan",), ("ambil",)),
+    ("ambil", "aksi", "memetik atau memperoleh sesuatu dari sumber", ("tugas",), "Sistem mengambil konteks dari memori.", ("petik",), ("beri",)),
+    ("jaga", "aksi", "merawat agar kondisi tetap konsisten dan aman", ("verifikasi", "memori"), "Penjaga anti-halusinasi menjaga kejujuran fakta.", ("pelihara",), ()),
+    ("tiru", "aksi", "mengulang pola bunyi atau contoh lawan bicara", ("belajar", "bahasa"), "Bayi meniru suku kata sebelum merangkai kalimat.", ("contoh",), ()),
+    ("kenal", "aksi", "mengetahui identitas atau arti dari sesuatu", ("memori", "bahasa"), "ACE mengenali akar kata berimbuhan.", ("tahu",), ("asing",)),
+    ("pakai", "aksi", "menggunakan alat atau kata dalam praktik", ("tugas", "bahasa"), "Gunakan kata baru langsung di percakapan.", ("gunakan",), ()),
+    ("buat", "aksi", "menciptakan atau menghasilkan karya baru", ("rekayasa", "tugas"), "Kita buat pustaka bahasa Indonesia sendiri.", ("rancang",), ()),
+    ("jalankan", "aksi", "mengeksekusi program atau langkah kerja", ("rekayasa", "tugas"), "Jalankan verifikasi untuk memastikan semua lulus.", ("eksekusi",), ("henti",)),
+    ("kirim", "aksi", "menyampaikan pesan atau data ke tujuan", ("komunikasi",), "Kirim kalimat bebas untuk menguji pemahaman.", ("sampaikan",), ("terima",)),
+    # --- Objek & Konsep ---
+    ("kata", "objek", "satuan bahasa bermakna dalam leksikon", ("bahasa", "belajar"), "Kata baru sudah masuk ke memori leksikon.", ("istilah",), ()),
+    ("kalimat", "objek", "rangkaian kata yang membawa gagasan utuh", ("bahasa", "belajar"), "Kalimat tersusun dari subjek dan tindakan.", ("ujaran",), ()),
+    ("ujaran", "objek", "ungkapan bahasa yang disampaikan kepada lawan bicara", ("bahasa", "komunikasi"), "Ujaran Tahap 4 tetap tunduk pada fakta.", ("kalimat", "ucapan"), ()),
+    ("bahasa", "objek", "sistem lambang teratur untuk berkomunikasi", ("bahasa", "komunikasi"), "Bahasa Indonesia memiliki aturan suku kata teratur.", ("tutur",), ()),
+    ("makna", "objek", "arti atau maksud yang terkandung pada kata", ("bahasa", "kognisi"), "Setiap kata punya makna yang bisa diajarkan.", ("arti", "maksud"), ()),
+    ("arti", "objek", "pengertian atau definisi dari sebuah kata", ("bahasa", "memori", "tanya"), "Apa arti kata tersebut menurutmu?", ("makna",), ()),
+    ("maksud", "objek", "tujuan atau gagasan di balik ucapan", ("komunikasi", "kognisi"), "Aku menangkap maksud utama pertanyaanmu.", ("makna", "tujuan"), ()),
+    ("huruf", "objek", "lambang bunyi vokal atau konsonan dalam tulisan", ("bahasa",), "Kata terbentuk dari rangkaian huruf dan digraf.", ("aksara",), ()),
+    ("bunyi", "objek", "getaran atau fonem yang dilafalkan", ("bahasa", "indra"), "Fonem ng dan ny mewakili satu bunyi.", ("suara",), ("sunyi",)),
+    ("suara", "objek", "ekspresi ujaran atau bunyi penyampaian", ("bahasa",), "Fokus saat ini pada ujaran teks dan memori.", ("bunyi",), ("sunyi",)),
+    ("vokal", "objek", "bunyi terbuka inti suku kata yakni a i u e o", ("bahasa",), "Suku kata Indonesia selalu berinti huruf vokal.", (), ("konsonan",)),
+    ("konsonan", "objek", "bunyi hambat atau samping pengapit vokal", ("bahasa",), "Digraf ng bertindak sebagai konsonan tunggal.", (), ("vokal",)),
+    ("suku", "objek", "bagian penggalan kata yang memiliki satu vokal", ("bahasa",), "Kata belajar dipenggal jadi be-la-jar.", (), ()),
+    ("langkah", "objek", "tahapan teratur untuk mencapai tujuan", ("tugas", "belajar", "empati"), "Kita susun langkah perubahan secara berurutan.", ("tahap",), ()),
+    ("tahap", "objek", "tingkatan perkembangan dalam satu proses", ("belajar", "verifikasi"), "Perkembangan bicara dibagi menjadi empat tahap.", ("tingkat", "langkah"), ()),
+    ("tugas", "objek", "pekerjaan terstruktur yang sedang ditangani", ("tugas", "rekayasa"), "Tugas dikerjakan sampai seluruh tes lulus.", ("pekerjaan",), ()),
+    ("rencana", "objek", "rancangan langkah sebelum eksekusi dilakukan", ("tugas", "kognisi"), "Jelaskan rencana lebih dulu bila diminta.", ("rancangan",), ()),
+    ("hasil", "objek", "luaran nyata sesudah suatu proses dijalankan", ("verifikasi", "tugas"), "Hasil perubahan dibuktikan lewat pengujian.", ("luaran", "capaian"), ("sebab",)),
+    ("sebab", "objek", "pemicu atau alasan munculnya suatu keadaan", ("kognisi",), "Kenali sebab galat sebelum mengubah kode.", ("akar", "alasan"), ("akibat",)),
+    ("alasan", "objek", "dasar pemikiran di balik suatu keputusan", ("kognisi", "komunikasi"), "Setiap penolakan disertai alasan yang jujur.", ("sebab",), ()),
+    ("bukti", "objek", "fakta terukur hasil pemeriksaan nyata", ("verifikasi", "jujur"), "Klaim kemampuan wajib didukung bukti uji.", ("fakta",), ("dugaan",)),
+    ("fakta", "objek", "keadaan nyata yang benar-benar terjadi", ("jujur", "verifikasi"), "ACE memisahkan fakta dari dugaan kosong.", ("bukti",), ("fiksi",)),
+    ("memori", "objek", "ingatan persisten yang bertahan lintas sesi", ("memori",), "Memori SQLite menyimpan leksikon pengguna.", ("ingatan",), ()),
+    ("catatan", "objek", "dokumen singkat berisi fakta atau pengingat", ("memori", "tugas"), "Catatan perubahan menjaga perkembangan rapi.", ("rekaman",), ()),
+    ("aturan", "objek", "ketentuan terstruktur yang memandu perilaku", ("bahasa", "rekayasa"), "Fonotaktik memakai aturan pemenggalan suku kata.", ("kaidah",), ()),
+    ("pola", "objek", "susunan berulang yang dapat dipelajari", ("kognisi", "bahasa"), "Pola imbuhan membantu menebak akar kata.", ("ragam", "struktur"), ()),
+    ("masalah", "objek", "kendala atau persoalan yang butuh penyelesaian", ("tugas", "empati"), "Masalah rumit diurai menjadi bagian kecil.", ("kendala", "soal"), ("solusi",)),
+    ("kendala", "objek", "hambatan yang memperlambat jalannya proses", ("tugas", "empati"), "Ceritakan kendala utamanya agar mudah dicari.", ("masalah", "hambatan"), ("solusi",)),
+    ("solusi", "objek", "jalan keluar teruji bagi suatu masalah", ("rekayasa", "tugas"), "Solusi terbaik diverifikasi oleh skrip uji.", ("jawaban",), ("masalah",)),
+    ("kode", "objek", "baris instruksi program yang bisa dieksekusi", ("rekayasa",), "Kode rapi mempermudah pemeliharaan jangka panjang.", ("program",), ()),
+    ("berkas", "objek", "unit penyimpanan dokumen atau kode di cakram", ("rekayasa",), "Berkas pustaka bahasa diuji dengan unit test.", ("file",), ()),
+    ("data", "objek", "himpunan nilai atau rekaman informasi terstruktur", ("rekayasa", "memori"), "Data leksikon dipulihkan saat sistem dibuka.", ("informasi",), ()),
+    ("informasi", "objek", "pengetahuan bermakna yang tersaring dari data", ("kognisi", "komunikasi"), "Informasi akurat mencegah kesalahpahaman.", ("pengetahuan", "data"), ()),
+    ("ilmu", "objek", "pengetahuan terstruktur hasil pengamatan dan uji", ("belajar", "kognisi"), "Ilmu bahasa menopang komunikasi yang sehat.", ("pengetahuan",), ()),
+    ("cerita", "objek", "tuturan peristiwa yang runtut dan bermakna", ("komunikasi", "memori"), "Cerita ACE merangkum aktivitas terverifikasi.", ("kisah",), ()),
+    ("pesan", "objek", "informasi atau maksud yang dikirim pembicara", ("komunikasi",), "Setiap pesan pengguna dicatat kata asingnya.", ("amanat",), ()),
+    ("contoh", "objek", "ilustrasi nyata pemakaian suatu kata atau aturan", ("belajar", "bahasa"), "Contoh kalimat memudahkan memahami kata baru.", ("teladan",), ()),
+    ("topik", "objek", "pokok bahasan utama dalam sebuah percakapan", ("komunikasi", "bahasa"), "Topik obrolan menentukan pilihan kosakata.", ("tema",), ()),
+    ("konteks", "objek", "situasi dan riwayat yang memaknai suatu ucapan", ("komunikasi", "kognisi"), "Konteks percakapan mengikat kata rujukan itu.", ("suasana",), ()),
+    ("akal", "objek", "kemampuan berpikir, menalar, dan mempertimbangkan", ("kognisi",), "Akal sehat menimbang bukti sebelum menyimpulkan.", ("nalar",), ()),
+    ("hati", "objek", "pusat kepekaan batin dan kepedulian", ("empati",), "Sampaikan tanggapan dengan hati-hati dan jujur.", (), ()),
+    ("mata", "objek", "indra penglihatan atau titik pandang pengamatan", ("indra",), "Mata melihat wujud, nalar menguji maknanya.", (), ()),
+    ("telinga", "objek", "indra pendengaran untuk menangkap bunyi", ("indra",), "Telinga menyimak bunyi sebelum lidah meniru.", (), ()),
+    ("tangan", "objek", "bagian tubuh untuk bekerja dan memegang", ("indra",), "Tangan mengetik kode uji secara langsung.", (), ()),
+    ("alam", "objek", "dunia semesta beserta segala isinya", ("alam",), "Alam sekitar kaya kosakata benda dan sifat.", (), ()),
+    ("langit", "objek", "ruang luas terbentang di atas permukaan bumi", ("alam",), "Langit cerah sering hadir di percakapan santai.", (), ("bumi",)),
+    ("bumi", "objek", "planet tempat tinggal seluruh makhluk hidup", ("alam",), "Semua gejala nyata berpijak di bumi.", ("dunia",), ("langit",)),
+    ("air", "objek", "zat cair jernih sumber kehidupan makhluk", ("alam",), "Air mengalir mencari celah paling rendah.", (), ("api",)),
+    ("api", "objek", "nyala panas bercahaya hasil pembakaran", ("alam",), "Api menerangi gelap namun perlu dijaga.", (), ("air",)),
+    ("cahaya", "objek", "sinar terang yang memungkinkan benda terlihat", ("alam", "indra"), "Cahaya memandu arah saat malam tiba.", ("sinar", "terang"), ("gelap",)),
+    ("rumah", "objek", "bangunan tempat tinggal dan berlindung", ("tempat", "sosial"), "Memori lokal menjadi rumah pengetahuan ACE.", ("hunian",), ()),
+    ("buku", "objek", "kumpulan lembaran bertulis sumber bacaan dan ilmu", ("belajar", "bahasa"), "Buku dan kamus memperkaya perbendaharaan kata.", ("kitab",), ()),
+    ("nama", "objek", "kata penanda identitas seseorang atau benda", ("identitas",), "Setiap entri kamus memiliki nama kata unik.", ("sebutan",), ()),
+    # --- Sifat / Adjektiva ---
+    ("siap", "sifat", "kondisi sudah terlatih dan bersedia menjalankan tugas", ("umum", "verifikasi", "sapaan"), "Aku siap diajak diskusi atau latihan baru.", ("sedia",), ("ragu",)),
+    ("jelas", "sifat", "terang, gamblang, dan mudah dipahami", ("bahasa", "umum", "tanya"), "Artinya kini sudah lebih jelas bagiku.", ("terang", "gamblang"), ("kabur", "gelap")),
+    ("jujur", "sifat", "menyampaikan fakta apa adanya tanpa mengarang", ("jujur", "verifikasi"), "Sikap jujur menolak klaim tanpa bukti.", ("tulus", "lurus"), ("bohong", "palsu")),
+    ("benar", "sifat", "sesuai dengan kenyataan dan aturan yang sah", ("verifikasi", "jujur"), "Langkahmu benar dan sudah terverifikasi.", ("betul", "tepat", "sah"), ("salah", "keliru")),
+    ("salah", "sifat", "tidak tepat atau menyimpang dari fakta", ("verifikasi", "rekayasa"), "Jika salah, maknanya langsung bisa diralat.", ("keliru",), ("benar", "tepat")),
+    ("baru", "sifat", "belum lama dikenal, dibuat, atau ditambahkan", ("belajar", "memori"), "Ada beberapa kata baru di kamus lokal.", ("anyar",), ("lama",)),
+    ("lama", "sifat", "sudah berlangsung atau ada sejak waktu lampau", ("waktu", "memori"), "Arti kata lama tetap disimpan sebagai sejarah.", (), ("baru",)),
+    ("nyata", "sifat", "benar-benar ada dan terbukti lewat pemeriksaan", ("verifikasi", "jujur"), "Kemajuan diukur lewat tes nyata bukan klaim.", ("konkret",), ("fiktif", "palsu")),
+    ("palsu", "sifat", "tiruan atau klaim buatan tanpa kenyataan", ("jujur",), "Tolak hasil palsu yang tidak lulus verifikasi.", ("bohong",), ("nyata", "asli")),
+    ("pelan", "sifat", "dilakukan bertahap dan cermat tanpa tergesa-gesa", ("belajar", "empati"), "Kita melangkah pelan agar fondasinya kuat.", ("lambat", "perlahan"), ("cepat",)),
+    ("cepat", "sifat", "berlangsung singkat dalam waktu sedikit", ("tugas", "rekayasa"), "Pencarian leksikon lokal berjalan cepat.", ("tangkas", "kilat"), ("lambat", "pelan")),
+    ("lambat", "sifat", "memakan waktu lebih panjang dari biasanya", ("tugas",), "Lebih baik lambat sedikit tapi terverifikasi.", ("pelan",), ("cepat",)),
+    ("kuat", "sifat", "tangguh, kukuh, dan tidak mudah goyah", ("rekayasa", "belajar"), "Struktur kode kuat tahan regresi lintas fitur.", ("kokoh", "tangguh"), ("lemah",)),
+    ("lemah", "sifat", "kurang bertenaga atau belum kokoh fondasinya", ("rekayasa",), "Bagian lemah langsung dicatat untuk diperbaiki.", ("rapuh",), ("kuat",)),
+    ("baik", "sifat", "elok, teratur, sehat, atau memuaskan", ("positif", "empati", "sapaan"), "Kondisi memori bahasa berjalan sangat baik.", ("bagus", "elok"), ("buruk",)),
+    ("bagus", "sifat", "bermutu tinggi dan layak dipertahankan", ("positif",), "Contoh kalimat itu bagus dan mudah dipahami.", ("baik", "elok"), ("buruk",)),
+    ("buruk", "sifat", "kurang layak atau perlu segera diperbaiki", ("rekayasa",), "Kualitas buruk tidak akan diloloskan sistem.", ("jelek",), ("baik", "bagus")),
+    ("besar", "sifat", "luas ukuran, dampak, atau cakupannya", ("umum", "alam"), "Peningkatan besar dilakukan dalam satu paket rapi.", ("luas",), ("kecil",)),
+    ("kecil", "sifat", "sempit, ringkas, atau sedikit jumlahnya", ("umum",), "Masalah dipecah ke unit kecil yang teruji.", ("mungil", "sedikit"), ("besar",)),
+    ("luas", "sifat", "lapang, lebar, dan menjangkau banyak hal", ("alam", "kognisi"), "Kamus kata memperluas wawasan bahasa ACE.", ("lebar", "besar"), ("sempit",)),
+    ("tinggi", "sifat", "berada di aras atas atau bermutu unggul", ("kognisi",), "Standar mutu tetap dijaga tinggi.", (), ("rendah",)),
+    ("rendah", "sifat", "berada di bagian bawah atau sederhana", ("alam",), "Mulai dari tingkat rendah seperti bayi bicara.", (), ("tinggi",)),
+    ("mudah", "sifat", "tidak sukar dan gampang dikerjakan atau dipahami", ("belajar", "positif"), "Struktur jelas membuat kode mudah dirawat.", ("gampang",), ("sulit", "susah")),
+    ("sulit", "sifat", "memerlukan usaha ekstra karena rumit", ("tugas", "empati"), "Bagian sulit bisa dibahas bertahap.", ("susah", "rumit"), ("mudah",)),
+    ("susah", "sifat", "sukar dihadapi atau berat dirasakan", ("empati",), "Jangan khawatir bila terasa susah di awal.", ("sulit",), ("mudah",)),
+    ("penting", "sifat", "amat berarti dan berpengaruh pada tujuan utama", ("kognisi", "tugas"), "Konteks percakapan sangat penting untuk makna.", ("utama", "pokok"), ()),
+    ("lengkap", "sifat", "utuh, genap, dan tidak kekurangan bagian", ("verifikasi",), "Pustaka kata hadir dengan sinonim lengkap.", ("utuh",), ("kurang",)),
+    ("rapi", "sifat", "teratur, bersih, dan tertata mengikuti struktur", ("rekayasa",), "Modul rapi mempermudah evolusi selanjutnya.", ("teratur",), ("acak",)),
+    ("asing", "sifat", "belum dikenal atau baru pertama kali dijumpai", ("bahasa", "belajar"), "Kata asing dicatat untuk ditanyakan maknanya.", ("aneh",), ("kenal", "akrab")),
+    ("terang", "sifat", "bercahaya atau gamblang mudah dilihat", ("alam", "bahasa"), "Penjelasan terang menghindari salah tafsir.", ("cerah", "jelas"), ("gelap",)),
+    ("gelap", "sifat", "kurang cahaya atau samar belum dimengerti", ("alam",), "Kata tanpa arti masih gelap bagi sistem.", ("kelam", "suram"), ("terang", "cerah")),
+    ("hangat", "sifat", "berasa cukup panas menyenangkan dan akrab", ("sosial", "alam"), "Sapaan hangat membangun obrolan santai.", ("akrab",), ("dingin",)),
+    ("dingin", "sifat", "bersuhu rendah atau berjarak kaku", ("alam",), "Bahasa terasa dingin jika sekadar templat.", (), ("hangat", "panas")),
+    ("panas", "sifat", "bersuhu tinggi atau penuh semangat", ("alam",), "Diskusi teknis tidak boleh terburu-buru panas.", (), ("dingin",)),
+    ("alami", "sifat", "wajar, tidak dibuat-buat, sesuai kodrat bahasa", ("bahasa",), "Respon alami mengalir mengikuti konteks lawan bicara.", ("wajar",), ("kaku",)),
+    ("kaku", "sifat", "keras, canggung, dan kurang luwes menyesuaikan diri", ("bahasa",), "Hindari jawaban kaku yang hanya mengulang templat.", ("canggung",), ("alami", "luwes")),
+    ("luwes", "sifat", "lentur dan mudah menyesuaikan dengan situasi", ("bahasa", "komunikasi"), "Balasan luwes membuat percakapan lebih hidup.", ("alami",), ("kaku",)),
+    ("indah", "sifat", "elok dipandang, didengar, atau dirasakan", ("positif", "bahasa"), "Bahasa yang tertata indah terasa nyaman dibaca.", ("elok", "cantik"), ("buruk",)),
+    ("tepat", "sifat", "pas mengenai sasaran atau benar sesuai aturan", ("verifikasi",), "Pemilihan kelas kata tepat menjaga tata kalimat.", ("benar", "pas"), ("keliru", "salah")),
+    ("aman", "sifat", "bebas dari bahaya, kerusakan, atau kehilangan data", ("rekayasa",), "Basis data aman meski proses ditutup.", (), ("bahaya",)),
+    # --- Emosi ---
+    ("senang", "emosi", "perasaan gembira atau puas atas hal baik", ("empati", "positif"), "Aku senang melihat kemajuan belajarmu.", ("gembira", "bahagia"), ("sedih",)),
+    ("gembira", "emosi", "rasa sukacita yang terang dan bersemangat", ("empati", "positif"), "Nada gembira terasa dari kalimatmu.", ("senang", "bahagia"), ("sedih",)),
+    ("bahagia", "emosi", "keadaan batin tenteram dan penuh syukur", ("empati", "positif"), "Semoga kemajuan hari ini membuatmu bahagia.", ("senang", "gembira"), ("sedih",)),
+    ("tenang", "emosi", "sikap sabar, damai, dan tidak panik", ("empati",), "Mari urai kendalanya dengan kepala tenang.", ("damai", "sabar"), ("panik", "resah")),
+    ("damai", "emosi", "keadaan batin aman, tentram, tanpa pertikaian", ("empati",), "Diskusi berjalan damai dan terfokus.", ("tenang",), ()),
+    ("sabar", "emosi", "mampu menahan diri serta tekun menghadapi proses", ("empati", "belajar"), "Belajar berbicara seperti manusia perlu proses sabar.", ("tenang", "tekun"), ()),
+    ("semangat", "emosi", "dorongan kuat dalam batin untuk terus maju", ("empati", "positif"), "Aku penuh semangat melanjutkan latihan bahasa.", ("antusias",), ("lesu",)),
+    ("bingung", "emosi", "keadaan ragu atau belum mendapat kejelasan", ("empati", "tanya"), "Bagian mana yang membuatmu merasa bingung?", ("ragu", "bimbang"), ("paham", "yakin")),
+    ("ragu", "emosi", "belum mantap yakin terhadap suatu pilihan", ("empati",), "Jika masih ragu, mari cek buktinya dulu.", ("bingung",), ("yakin", "siap")),
+    ("yakin", "emosi", "percaya penuh setelah ditunjang bukti nyata", ("verifikasi",), "Aku yakin setelah uji holdout lulus seratus persen.", ("mantap",), ("ragu",)),
+    ("sedih", "emosi", "rasa pilu atau muram saat kecewa", ("empati",), "Aku ikut memahami jika hasil belum sesuai.", ("pilu",), ("senang", "gembira")),
+    ("bangga", "emosi", "rasa puas bermartabat atas pencapaian nyata", ("positif",), "Pencapaian nyata layak dirayakan tanpa berlebihan.", (), ()),
+    ("kagum", "emosi", "heran terpikat oleh kecerdikan atau keindahan", ("positif",), "Aku kagum pada kekayaan pola bahasa Indonesia.", ("takjub",), ()),
+    ("penasaran", "emosi", "dorongan ingin tahu untuk memahami hal baru", ("belajar", "kognisi"), "Aku penasaran dengan kata-kata baru darimu.", ("ingin",), ()),
+    # --- Negasi ---
+    ("tidak", "negasi", "penolakan atau penyangkalan fakta", ("jujur",), "Aku tidak mengarang arti kata yang asing.", ("tak",), ("ya",)),
+    ("bukan", "negasi", "penyangkalan atas identitas atau kategori", ("jujur",), "Tahap teks bukan sintesis suara audio.", (), ()),
+    ("belum", "negasi", "menandakan sesuatu belum terjadi atau belum lulus", ("jujur", "waktu"), "Kata itu belum masuk ke kamus persisten.", (), ("sudah",)),
+    ("jangan", "negasi", "larangan agar suatu tindakan tidak dijalankan", ("tugas",), "Jangan ubah berkas yang dibekukan.", (), ()),
+    # --- Waktu & Tempat ---
+    ("sekarang", "waktu", "waktu saat ini ketika percakapan berlangsung", ("umum", "waktu"), "Sekarang ACE berlatih langsung di terminal.", ("kini",), ("nanti",)),
+    ("kini", "waktu", "saat sekarang ini juga", ("waktu",), "Kini pustaka bahasa Indonesia jauh lebih kaya.", ("sekarang",), ()),
+    ("tadi", "waktu", "waktu sesaat sebelum giliran sekarang", ("memori", "waktu"), "Pertanyaan tadi langsung terhubung ke jawabanmu.", ("barusan",), ("nanti",)),
+    ("nanti", "waktu", "waktu mendatang sesudah tahap sekarang", ("tugas", "waktu"), "Kita bisa menguji modul lanjut nanti.", ("kelak",), ("tadi", "sekarang")),
+    ("kemarin", "waktu", "hari sebelum hari ini", ("waktu", "memori"), "Catatan kemarin tersimpan rapi di SQLite.", (), ("besok",)),
+    ("besok", "waktu", "hari sesudah hari ini", ("waktu",), "Bekal kata hari ini tetap terbawa esok.", (), ("kemarin",)),
+    ("pagi", "waktu", "bagian awal hari ketika matahari terbit", ("waktu", "sapaan"), "Pagi yang cerah cocok untuk mulai berlatih.", ("subuh",), ("malam",)),
+    ("siang", "waktu", "bagian tengah hari saat matahari tinggi", ("waktu", "sapaan"), "Selamat siang, mari lanjutkan obrolan kita.", (), ("malam",)),
+    ("sore", "waktu", "waktu menjelang petang sebelum matahari tenggelam", ("waktu", "sapaan"), "Menjelang sore obrolan santai terasa hangat.", ("petang",), ("pagi",)),
+    ("malam", "waktu", "waktu sesudah matahari terbenam", ("waktu", "sapaan"), "Malam yang sunyi enak untuk membaca cerita.", (), ("pagi", "siang")),
+    ("hari", "waktu", "satuan waktu dua puluh empat jam", ("waktu",), "Hari ini kita merapikan kemampuan berbicara.", (), ()),
+    ("dulu", "waktu", "masa lampau atau sebelum melakukan langkah lain", ("waktu",), "Selesaikan tahap satu dulu sebelum tahap dua.", ("dahulu",), ("kelak",)),
+    ("sini", "tempat", "tempat dekat di sisi pembicara", ("tempat",), "Di sini seluruh memori disimpan lokal.", (), ("sana",)),
+    ("sana", "tempat", "tempat yang agak jauh dari pembicara", ("tempat",), "Jangan kirim data rahasia ke luar sana.", (), ("sini",)),
+    ("ruang", "tempat", "wadah atau area tempat berlangsungnya proses", ("tempat", "rekayasa"), "Ruang kerja lokal terisolasi dengan aman.", ("area",), ()),
+    ("dunia", "tempat", "lingkup kehidupan yang sangat luas", ("tempat", "alam"), "Bahasa menghubungkan gagasan di dunia nyata.", ("bumi",), ()),
+    # --- Tanya ---
+    ("apa", "tanya", "kata tanya untuk benda, arti, atau keadaan", ("tanya",), "Apa arti kata baru yang kamu maksud?", (), ()),
+    ("siapa", "tanya", "kata tanya untuk menanyakan pelaku atau tokoh", ("tanya",), "Siapa yang merancang arsitektur ini?", (), ()),
+    ("bagaimana", "tanya", "kata tanya tentang cara, proses, atau kabar", ("tanya",), "Bagaimana progres latihan bicara saat ini?", (), ()),
+    ("mengapa", "tanya", "kata tanya untuk mencari sebab atau alasan", ("tanya",), "Mengapa tahap dua butuh prasyarat tahap satu?", ("kenapa",), ()),
+    ("kenapa", "tanya", "bentuk lisan kata tanya untuk menanyakan sebab", ("tanya",), "Kenapa kalimat telegrafik membatasi jumlah kata?", ("mengapa",), ()),
+    ("kapan", "tanya", "kata tanya untuk menanyakan waktu kejadian", ("tanya", "waktu"), "Kapan keterampilan bicara ini dinyatakan lulus?", (), ()),
+    ("mana", "tanya", "kata tanya untuk menunjuk pilihan atau letak", ("tanya", "tempat"), "Bagian mana yang ingin kita perbaiki dulu?", (), ()),
+    ("berapa", "tanya", "kata tanya tentang jumlah atau bilangan", ("tanya", "bilangan"), "Berapa jumlah kata yang sudah tersimpan?", (), ()),
+    # --- Bilangan, Keterangan & Penghubung ---
+    ("satu", "bilangan", "bilangan pertama sekaligus penanda tahap awal", ("bilangan", "belajar"), "Tahap satu melatih bunyi dan suku kata.", ("pertama",), ()),
+    ("dua", "bilangan", "bilangan kedua sesudah satu", ("bilangan",), "Tahap dua mengikat kata dengan maknanya.", ("kedua",), ()),
+    ("tiga", "bilangan", "bilangan ketiga untuk pola frasa pendek", ("bilangan",), "Tahap tiga merangkai dua hingga tiga kata.", ("ketiga",), ()),
+    ("empat", "bilangan", "bilangan keempat untuk tahap dialog utuh", ("bilangan",), "Tahap empat menghasilkan dialog yang peka konteks.", ("keempat",), ()),
+    ("lima", "bilangan", "bilangan kelima dalam urutan hitung", ("bilangan",), "Lima uji kasus lulus tanpa satu pun gagal.", (), ()),
+    ("banyak", "bilangan", "jumlah besar atau melimpah", ("bilangan",), "Semakin banyak obrolan, semakin kaya memorinya.", (), ("sedikit",)),
+    ("sedikit", "bilangan", "jumlah kecil atau terbatas", ("bilangan",), "Sedikit demi sedikit kosakata bertumbuh.", ("kecil",), ("banyak",)),
+    ("semua", "bilangan", "keseluruhan tanpa terkecuali", ("bilangan", "verifikasi"), "Semua tes unit wajib lulus sebelum selesai.", ("seluruh",), ("sebagian",)),
+    ("sudah", "keterangan", "penanda peristiwa yang telah selesai terjadi", ("waktu", "verifikasi"), "Tahap awal sudah tuntas diuji.", ("telah",), ("belum",)),
+    ("masih", "keterangan", "sedang terus berlangsung hingga kini", ("waktu",), "Beberapa kata baru masih menunggu arti.", (), ()),
+    ("akan", "keterangan", "penanda tindakan yang segera terjadi", ("waktu",), "Aku akan mengingat ajaranmu di sesi berikut.", ("bakal",), ()),
+    ("bisa", "keterangan", "sanggup atau memiliki kemampuan melakukan", ("kognisi",), "Sekarang kamu bisa mengajari kata secara alami.", ("dapat", "mampu"), ()),
+    ("harus", "keterangan", "kewajiban mutlak yang tidak boleh diabaikan", ("verifikasi",), "Hasil uji harus nyata dan bebas rekayasa.", ("wajib",), ()),
+    ("sangat", "keterangan", "penanda tingkat atau mutu yang amat tinggi", ("umum",), "Pustaka bahasa ini sangat membantu percakapan.", ("amat", "sekali"), ()),
+    ("terus", "keterangan", "berkelanjutan tanpa putus atau ragu", ("belajar",), "Pengetahuan bahasa terus bertambah tiap interaksi.", ("selalu",), ()),
+    ("selalu", "keterangan", "senantiasa terjadi pada setiap kesempatan", ("waktu", "jujur"), "ACE selalu menjawab jujur sesuai isi memori.", ("terus",), ("jarang",)),
+    ("dan", "penghubung", "penghubung setara antardua unsur atau gagasan", ("bahasa",), "Aku mencatat kata dan contoh kalimatnya.", ("serta",), ()),
+    ("atau", "penghubung", "penghubung penanda pilihan alternatif", ("bahasa",), "Kamu bisa tulis arti baru atau ralat arti lama.", (), ()),
+    ("tetapi", "penghubung", "penghubung pertentangan antargagasan", ("bahasa",), "Aku belum tahu maknanya, tetapi aku mencatatnya.", ("tapi", "namun"), ()),
+    ("karena", "penghubung", "penghubung penanda sebab akibat", ("bahasa", "kognisi"), "Kalimat dibatasi karena masih di tahap awal.", ("sebab",), ()),
+    ("untuk", "penghubung", "penanda tujuan atau peruntukan tindakan", ("bahasa",), "Latihan ini untuk mematangkan kemampuan berbicara.", ("guna", "bagi"), ()),
+    ("dengan", "penghubung", "penanda alat, cara, atau kebersamaan", ("bahasa",), "Kita berdiskusi dengan terbuka dan terstruktur.", ("sama",), ("tanpa",)),
+    ("jika", "penghubung", "penanda syarat terjadinya sesuatu", ("kognisi", "bahasa"), "Jika ada kata asing, ACE akan menanyakannya.", ("kalau", "bila"), ()),
+    ("agar", "penghubung", "penanda maksud atau harapan hasil", ("bahasa",), "Rancang aturan dengan jelas agar mudah diuji.", ("supaya",), ()),
+)
+
+STOPWORDS_ID = frozenset({
+    "yang", "dan", "atau", "dari", "pada", "dalam", "dengan", "untuk", "agar", "supaya",
+    "karena", "kalau", "jika", "bila", "saat", "ketika", "sejak", "tentang", "mengenai",
+    "seperti", "secara", "lebih", "sangat", "banget", "sekali", "agak", "hanya", "cuma",
+    "saja", "juga", "lagi", "masih", "sudah", "udah", "akan", "bisa", "dapat", "harus",
+    "perlu", "ingin", "mau", "boleh", "telah", "sedang", "pernah", "belum", "tidak",
+    "bukan", "jangan", "tanpa", "tetapi", "tapi", "namun", "ini", "itu", "sini", "situ",
+    "sana", "nya", "pun", "lah", "kah", "tah", "sih", "dong", "deh", "kan", "kok", "lho",
+    "nih", "tuh", "yah", "yuk", "aku", "kamu", "kita", "kami", "mereka", "kalian", "saya",
+    "anda", "dia", "beliau", "ace", "arti", "artinya", "makna", "maknanya", "maksud",
+    "maksudnya", "sinonim", "antonim", "definisi", "kata", "kalimat", "kosakata", "tahap",
+    "skill", "mode", "model", "lokal", "offline", "online", "python", "script", "skrip",
+    "kode", "program", "aplikasi", "file", "berkas", "data", "json", "csv", "status",
+    "progres", "uji", "test", "tes", "error", "bug", "cek", "latih", "latihan", "mulai",
+    "lanjut", "lanjutkan", "berikutnya", "selanjutnya", "sekarang", "hari", "kabar",
+    "kabarmu", "bagaimana", "gimana", "mengapa", "kenapa", "siapa", "kapan", "mana",
+    "dimana", "berapa", "apakah", "apaan", "apa", "halo", "hai", "selamat", "pagi",
+    "siang", "sore", "malam", "baik", "oke", "sip", "mantap", "hebat", "keren", "bagus",
+    "tolong", "coba", "buat", "buatkan", "bikin", "bikinin", "ajarkan", "ajari", "ralat",
+    "koreksi", "jelaskan", "ceritakan", "menurut", "menurutmu", "memang", "sering",
+    "semua", "setiap", "lain", "satu", "dua", "tiga", "empat", "lima", "pertama", "kedua",
+    "ketiga", "keempat", "sama", "punya", "beri", "kasih", "terima", "makasih", "bicara",
+    "berbicara", "ngobrol", "ngomong", "cerita", "awal", "akhir", "awalnya", "soal",
+    "hal", "kesan", "pendapat", "sebut", "berarti", "artinya", "adalah", "ialah", "jadi",
+})
+
+QUESTION_WORDS_ID = frozenset({
+    "apa", "apaan", "siapa", "bagaimana", "gimana", "kenapa", "mengapa",
+    "kapan", "mana", "berapa", "benarkah", "kah",
+})
+
+NON_TEACHABLE_WORDS_ID = frozenset({
+    "aku", "kamu", "kita", "kami", "saya", "anda", "dia", "mereka", "kalian",
+    "ini", "itu", "yang", "ace", "apa", "apaan", "siapa", "mana", "kapan",
+    "bagaimana", "kenapa", "mengapa", "tadi", "baru", "utama", "dasar",
+    "sistem", "mode", "tahap", "skill", "python", "kode", "program", "hari",
+    "oh", "ya", "nah", "kalau",
+})
+
+
+def build_semantic_relations() -> dict[str, dict[str, Any]]:
+    """Build quick lookup index of synonyms, antonyms, and semantic domains per core word."""
+    index: dict[str, dict[str, Any]] = {}
+    for word, role, meaning, domains, example, syns, ants in CORE_INDONESIAN_LEXICON:
+        index[word] = {
+            "role": role,
+            "meaning_id": meaning,
+            "domains": list(domains),
+            "example": example,
+            "synonyms": list(syns),
+            "antonyms": list(ants),
+        }
+    return index
+
+
+SEMANTIC_RELATIONS: dict[str, dict[str, Any]] = build_semantic_relations()
+
+
+def infer_indonesian_pos(word: str, meaning_id: str, explicit_role: str = "") -> str:
+    """Infer grammatical POS role from explicit tag, definition clues, and Indonesian morphology."""
+    clean_explicit = str(explicit_role or "").strip().lower()
+    if clean_explicit in VALID_POS_ROLES:
+        return clean_explicit
+    m = str(meaning_id or "").lower()
+    m_tokens = set(re.findall(r"[a-z]+", m))
+    w = str(word or "").strip().lower()
+    morph = analyze_morphology(w)
+
+    if bool(m_tokens & {"sapaan", "salam"}) or "ucapan salam" in m:
+        return "sapaan"
+    if bool(m_tokens & {"perasaan", "emosi", "sedih", "bahagia", "gembira"}) or "suasana hati" in m:
+        return "emosi"
+    if bool(m_tokens & {"tempat", "wilayah", "daerah", "ruang", "lokasi", "hutan", "desa", "kota"}):
+        return "tempat"
+    if bool(m_tokens & {"waktu", "periode", "musim", "momen", "jam", "menjelang"}):
+        return "waktu"
+    if morph.get("affix_pos_hint") == "aksi" or bool(m_tokens & {"melakukan", "tindakan", "bekerja", "gerak", "membuat", "mengambil", "mengirim"}):
+        return "aksi"
+    if morph.get("affix_pos_hint") == "sifat" or bool(
+        m_tokens & {"sifat", "kondisi", "keadaan", "terang", "indah", "cepat", "jelas", "rasa", "suhu", "bersih", "kotor", "segar", "nyaman", "gelap", "berwarna", "dingin", "panas"}
+    ):
+        return "sifat"
+    return "objek"

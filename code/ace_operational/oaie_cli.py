@@ -16,7 +16,11 @@ import sys
 from typing import Any
 
 from .compositional_oaie import CompositionalOAIERunner
-from .evolution_mission_loop import EvolutionPatchVerifier, PassiveEvolutionPlanner
+from .evolution_mission_loop import (
+    EvolutionPatchVerifier,
+    PassiveEvolutionPlanner,
+    UserMissionCoordinator,
+)
 from .neuro_formal_genesis import run_neuro_formal_genesis_cycle
 from .oaie_unlimited import run_oaie_unlimited_cycle
 from .sovereign_runtime import SovereignRuntimeSupervisor
@@ -39,12 +43,41 @@ def _resolve_passive_workspace(ws: Path) -> Path:
         ws.name in {"passive_evolution", ".ace_evolution"}
         or (ws / "EVOLUTION_WORK_ORDER.json").is_file()
         or (ws / "evolution_state.json").is_file()
+        or (ws / "user_missions").is_dir()
     ):
         return ws
     return ws / "passive_evolution"
 
 
+def _dispatch_mission_command(args: argparse.Namespace, ws: Path) -> dict[str, Any] | None:
+    if args.command == "mission-plan":
+        coord = UserMissionCoordinator(
+            _resolve_passive_workspace(ws),
+            Path(args.repo_root),
+            scan_subpath=args.scan_subpath,
+        )
+        return coord.plan_user_mission(
+            mission_id=args.mission_id,
+            title=args.title,
+            goal=args.goal,
+            target_files=args.target_files or [],
+            acceptance_checks=args.checks or [],
+            criteria=args.criteria or [],
+        )
+    if args.command == "mission-verify":
+        coord = UserMissionCoordinator(_resolve_passive_workspace(ws), Path(args.repo_root))
+        return coord.verify_user_mission(
+            mission_id=args.mission_id,
+            extra_checks=args.extra_checks,
+        )
+    return None
+
+
 def _dispatch_evolve_command(args: argparse.Namespace, ws: Path) -> dict[str, Any] | None:
+    mission_out = _dispatch_mission_command(args, ws)
+    if mission_out is not None:
+        return mission_out
+
     if args.command == "evolve-plan":
         passive_ws = _resolve_passive_workspace(ws)
         planner = PassiveEvolutionPlanner(
@@ -164,6 +197,23 @@ def run_cli_action(args: argparse.Namespace) -> dict[str, Any]:
     return _dispatch_runtime_command(args, ws)
 
 
+def _add_mission_subparsers(sub: Any) -> None:
+    mp = sub.add_parser("mission-plan", help="Emit a human-directed User Mission work order without overwriting static backlog")
+    mp.add_argument("--repo-root", default=".")
+    mp.add_argument("--scan-subpath", default="code")
+    mp.add_argument("--mission-id", required=True)
+    mp.add_argument("--title", required=True)
+    mp.add_argument("--goal", required=True)
+    mp.add_argument("--target-file", dest="target_files", action="append", required=True)
+    mp.add_argument("--check", dest="checks", action="append")
+    mp.add_argument("--criterion", dest="criteria", action="append")
+
+    mv = sub.add_parser("mission-verify", help="Verify User Mission edits fail-closed & ratify into DAG + Spore")
+    mv.add_argument("--repo-root", default=".")
+    mv.add_argument("--mission-id", default=None)
+    mv.add_argument("--check", dest="extra_checks", action="append")
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build argument parser for ACE OAIE-∞ CLI."""
     parser = argparse.ArgumentParser(prog="ace-oaie", description="ACE OAIE-∞ & Passive Evolution CLI")
@@ -194,6 +244,8 @@ def build_parser() -> argparse.ArgumentParser:
     ev_ver = sub.add_parser("evolve-verify", help="Verify AI edits fail-closed & ratify into DAG + Spore")
     ev_ver.add_argument("--repo-root", default=".")
     ev_ver.add_argument("--check", dest="extra_checks", action="append")
+
+    _add_mission_subparsers(sub)
 
     ev = sub.add_parser("evolve-once", help="Run a unified zero-theater self-evolution generation")
     ev.add_argument("--generation-id", default="gen-1")

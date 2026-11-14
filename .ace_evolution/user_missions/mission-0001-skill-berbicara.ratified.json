@@ -1,0 +1,91 @@
+{
+  "accepted": true,
+  "changed_files": [
+    "code/ace_indo_nlp/__init__.py",
+    "code/ace_indo_nlp/discourse.py",
+    "code/ace_indo_nlp/lexicon_kb.py",
+    "code/ace_indo_nlp/morphology.py",
+    "code/ace_indo_nlp/phonotactics.py",
+    "code/ace_indo_nlp/test_discourse.py",
+    "code/ace_indo_nlp/test_lexicon_kb.py",
+    "code/ace_indo_nlp/test_morphology.py",
+    "code/ace_indo_nlp/test_phonotactics.py",
+    "code/ace_operational/autonomous_engine.py",
+    "code/ace_operational/language.py",
+    "code/ace_operational/speech_acquisition.py",
+    "code/ace_operational/story_projector.py",
+    "code/ace_operational/test_speech_acquisition.py",
+    "code/ace_operational/web_server.py"
+  ],
+  "check_results": [
+    {
+      "command": "PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_speech_acquisition -v",
+      "output_tail": "38:50 [INFO] [ACE-AutonomyEngine] Learned and verified developmental speech skill with receipt rcpt_1794677930842_84822444\nok\ntest_v3_anaphora_revision_colloquial_semantics_and_provenance (ace_operational.test_speech_acquisition.SpeechAcquisitionTests.test_v3_anaphora_revision_colloquial_semantics_and_provenance) ... ok\ntest_v3_legacy_schema_migration_and_web_speech_drawer (ace_operational.test_speech_acquisition.SpeechAcquisitionTests.test_v3_legacy_schema_migration_and_web_speech_drawer) ... ok\n\n----------------------------------------------------------------------\nRan 11 tests in 5.184s\n\nOK",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_edition4_acceptance -v",
+      "output_tail": "ce.Edition4IntegratedAcceptanceTests.test_g08_cold_subprocess_crash_recovery_and_execution) ... ok\ntest_inst01_to_inst24_installer_profiles_idempotency_rollback_and_cli (ace_operational.test_edition4_acceptance.Edition4IntegratedAcceptanceTests.test_inst01_to_inst24_installer_profiles_idempotency_rollback_and_cli) ... ok\ntest_web01_to_web24_anime_localhost_ui_and_api (ace_operational.test_edition4_acceptance.Edition4IntegratedAcceptanceTests.test_web01_to_web24_anime_localhost_ui_and_api) ... ok\n\n----------------------------------------------------------------------\nRan 21 tests in 10.740s\n\nOK",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "PYTHONPATH=code /usr/bin/python3 -m unittest ace_indo_nlp.test_discourse -v",
+      "output_tail": "test_query_extraction_discourse_cues_and_realization (ace_indo_nlp.test_discourse.DiscourseTests.test_query_extraction_discourse_cues_and_realization) ... ok\ntest_teaching_anaphora_and_correction_parsing (ace_indo_nlp.test_discourse.DiscourseTests.test_teaching_anaphora_and_correction_parsing) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.006s\n\nOK",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "PYTHONPATH=code /usr/bin/python3 -m unittest ace_indo_nlp.test_lexicon_kb -v",
+      "output_tail": "test_core_lexicon_integrity_and_phonotactic_soundness (ace_indo_nlp.test_lexicon_kb.LexiconKBTests.test_core_lexicon_integrity_and_phonotactic_soundness) ... ok\ntest_semantic_relations_pos_inference_and_telegraphic_patterns (ace_indo_nlp.test_lexicon_kb.LexiconKBTests.test_semantic_relations_pos_inference_and_telegraphic_patterns) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.002s\n\nOK",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "PYTHONPATH=code /usr/bin/python3 -m unittest ace_indo_nlp.test_morphology -v",
+      "output_tail": "test_colloquial_normalization_and_edit_distance (ace_indo_nlp.test_morphology.MorphologyTests.test_colloquial_normalization_and_edit_distance) ... ok\ntest_nazief_adriani_nasalization_clitics_and_multi_prefix (ace_indo_nlp.test_morphology.MorphologyTests.test_nazief_adriani_nasalization_clitics_and_multi_prefix) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nOK",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "PYTHONPATH=code /usr/bin/python3 -m unittest ace_indo_nlp.test_phonotactics -v",
+      "output_tail": "test_digraph_tokenization_and_syllabification (ace_indo_nlp.test_phonotactics.PhonotacticsTests.test_digraph_tokenization_and_syllabification) ... ok\ntest_echo_input_syllables (ace_indo_nlp.test_phonotactics.PhonotacticsTests.test_echo_input_syllables) ... ok\ntest_invalid_phonotactics_and_babble_synthesis (ace_indo_nlp.test_phonotactics.PhonotacticsTests.test_invalid_phonotactics_and_babble_synthesis) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "/usr/bin/python3 tools/verify_sources.py",
+      "output_tail": "PASS: 25 imported files match their recorded Git blob IDs (offline)",
+      "passed": true,
+      "returncode": 0
+    }
+  ],
+  "dag_chain_valid": true,
+  "dag_tick_status": "idempotent_skip",
+  "forgetting_count": 0,
+  "order_id": "mission-0001-skill-berbicara",
+  "parent_ids": [
+    "proof_ratify_mission_mission-0001-skill-berbicara"
+  ],
+  "post_hashes": {
+    "code/ace_indo_nlp/__init__.py": "39084c6ab7b1f24a6a6fe61b0bd4af8e9bc5db402062897d93c82fec90e8642f",
+    "code/ace_indo_nlp/discourse.py": "f1dd26c2793cd3b5134edc0bd22c8041531bdf583d135e9f45c0a5ec82e82833",
+    "code/ace_indo_nlp/lexicon_kb.py": "48ca566d0f772e96078d9e80f305f8ea9337492ac599731675268f81dee0003d",
+    "code/ace_indo_nlp/morphology.py": "51a9a18fac6db4f3db998804d3c94fb31c27f5b393a1c9552fec76a0b8c82c1d",
+    "code/ace_indo_nlp/phonotactics.py": "495ce31d3caaf30296dc99ec7b22f1566ca7867a8f2bf7412dece9b404792d51",
+    "code/ace_indo_nlp/test_discourse.py": "a37cb15d5b1cdab034b2b46d8b9c13d0f439baaa44713cc06d9b8416e1948784",
+    "code/ace_indo_nlp/test_lexicon_kb.py": "18a58a198938d942a3dfa25f067325316c982c474648697fd0a5c3be4fbdc7be",
+    "code/ace_indo_nlp/test_morphology.py": "6bd3d6429bd1c4d2d9911c07b4c6b273fd8332763969b5f37a609e24f8ecd4a1",
+    "code/ace_indo_nlp/test_phonotactics.py": "7b4d57eef0e6f5794f1b9812765c7c783c63d1091834fa76c990f0a9729c24ca",
+    "code/ace_operational/autonomous_engine.py": "b5bf70c02db2490706a8aeba5044c4e040e0ac98298c0e6776330183dcc13789",
+    "code/ace_operational/language.py": "f48e7a13be224092e12b6be9e3added20736ef19622dde5d54bd40622f610983",
+    "code/ace_operational/speech_acquisition.py": "4dc42d8b5142a2a686197afd4e6200923c36c6e8f1b063bc897d9b4b6704b25f",
+    "code/ace_operational/story_projector.py": "a846ac9690c9aedffde9305e48b44b1bea61e7fb212c7c9c20f201f00749fa91",
+    "code/ace_operational/test_speech_acquisition.py": "24b68c0190d04a5fc10b09d11950fba2b8fa28419ca5c783473ce65a14482c44",
+    "code/ace_operational/web_server.py": "b8d94f6493e161b73af6d466a450aa46d281ef8bdc91a46eb173f10d1c08f689"
+  },
+  "schema": "ace.user_mission_verify.v1",
+  "spore_sha256": "d62eb44291467a6aad847e08c2a78d6ede88528224bf54aa52c614a10a08cd82",
+  "status": "VERIFIED_AND_RATIFIED"
+}

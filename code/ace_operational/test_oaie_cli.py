@@ -125,6 +125,77 @@ class OaieCliTests(unittest.TestCase):
             ver = json.loads(ver_proc.stdout)
             self.assertTrue(ver["accepted"], msg=str(ver))
 
+    def test_user_mission_cli_plan_and_verify(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ace_cli_mission_") as d:
+            sandbox = Path(d) / "repo"
+            pkg = sandbox / "code" / "ace_operational"
+            pkg.mkdir(parents=True, exist_ok=True)
+            (pkg / "__init__.py").write_text('"""Pkg."""\n', encoding="utf-8")
+
+            plan_proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "ace_operational.oaie_cli",
+                    "mission-plan",
+                    "--repo-root",
+                    str(sandbox),
+                    "--mission-id",
+                    "mission-0001-cli",
+                    "--title",
+                    "CLI User Mission",
+                    "--goal",
+                    "Tambah modul bicara uji CLI",
+                    "--target-file",
+                    "code/ace_operational/hello_mod.py",
+                    "--target-file",
+                    "code/ace_operational/test_hello_mod.py",
+                ],
+                cwd=str(Path(__file__).resolve().parents[2]),
+                env={**os.environ, "PYTHONPATH": "code"},
+                capture_output=True,
+                text=True,
+                check=True,
+                timeout=60,
+            )
+            plan = json.loads(plan_proc.stdout)
+            self.assertEqual(plan["status"], "USER_MISSION_EMITTED")
+            self.assertTrue((sandbox / ".ace_evolution" / "user_missions" / "CURRENT_USER_MISSION.json").is_file())
+
+            (pkg / "hello_mod.py").write_text(
+                '"""Hello module."""\n\ndef say_hi(who: str) -> str:\n    return f"hai {who}"\n',
+                encoding="utf-8",
+            )
+            (pkg / "test_hello_mod.py").write_text(
+                '"""Tests."""\nimport unittest\nfrom ace_operational.hello_mod import say_hi\n\n'
+                "class T(unittest.TestCase):\n"
+                "    def test_say_hi(self) -> None:\n"
+                '        self.assertEqual(say_hi("ACE"), "hai ACE")\n'
+                '        self.assertEqual(say_hi("dunia"), "hai dunia")\n',
+                encoding="utf-8",
+            )
+            ver_proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "ace_operational.oaie_cli",
+                    "mission-verify",
+                    "--repo-root",
+                    str(sandbox),
+                ],
+                cwd=str(Path(__file__).resolve().parents[2]),
+                env={**os.environ, "PYTHONPATH": "code"},
+                capture_output=True,
+                text=True,
+                check=True,
+                timeout=60,
+            )
+            ver = json.loads(ver_proc.stdout)
+            self.assertTrue(ver["accepted"], msg=str(ver))
+            self.assertEqual(ver["order_id"], "mission-0001-cli")
+            self.assertEqual(ver["forgetting_count"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()
+

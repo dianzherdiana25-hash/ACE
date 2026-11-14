@@ -25,6 +25,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 from typing import Any
@@ -1465,3 +1466,374 @@ class EvolutionPatchVerifier:
             after_metrics=after_metrics,
             refreshed_comp_report=refreshed_comp,
         )
+
+
+def _render_user_mission_markdown(order: dict[str, Any]) -> str:
+    """Render an AI-agnostic User Mission brief stored in `.ace_evolution/user_missions/`."""
+    checks_md = "\n".join(f"- `{cmd}`" for cmd in order["acceptance_checks"]) or "- `(auto-inferred tests + tools/verify_sources.py)`"
+    targets_md = "\n".join(f"- `{t}`" for t in order["target_files"])
+    forbidden_md = "\n".join(f"- `{p}`" for p in order["forbidden_paths"])
+    criteria_md = "\n".join(f"- {c}" for c in order.get("criteria", [])) or "- Implement real, verified behavior with companion unit tests."
+    return (
+        f"# ACE User Mission Work Order: `{order['order_id']}`\n\n"
+        f"- **Mission Sequence**: `{order['mission_seq']}`\n"
+        f"- **Title**: {order['title']}\n"
+        f"- **Order SHA-256**: `{order['order_sha256']}`\n\n"
+        f"## 1. Objective\n{order['goal']}\n\n"
+        f"## 2. Success Criteria\n{criteria_md}\n\n"
+        f"## 3. Target Files\n{targets_md}\n\n"
+        f"## 4. Strictly Forbidden Custody & Upstream Paths\n{forbidden_md}\n\n"
+        f"## 5. Acceptance Verification Commands\n{checks_md}\n\n"
+        f"Then ratify cleanly without clobbering `EVOLUTION_WORK_ORDER.json` via:\n"
+        f"```bash\n"
+        f"PYTHONPATH=code python3 -m ace_operational.oaie_cli "
+        f"--workspace \"{order['workspace']}\" mission-verify "
+        f"--mission-id \"{order['order_id']}\" --repo-root \"{order['repo_root']}\"\n"
+        f"```\n"
+    )
+
+
+class UserMissionCoordinator:
+    """Manages human-directed ACE evolution missions alongside the static audit backlog."""
+
+    _ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{1,80}$")
+
+    def __init__(
+        self,
+        workspace: str | Path,
+        repo_root: str | Path,
+        *,
+        scan_subpath: str = "code",
+    ) -> None:
+        self.workspace = Path(workspace).resolve()
+        self.workspace.mkdir(parents=True, exist_ok=True)
+        self.repo_root = Path(repo_root).resolve()
+        self.scan_subpath = scan_subpath.strip("/")
+        self.missions_dir = self.workspace / "user_missions"
+        self.missions_dir.mkdir(parents=True, exist_ok=True)
+        self.current_json_path = self.missions_dir / "CURRENT_USER_MISSION.json"
+        self.current_md_path = self.missions_dir / "CURRENT_USER_MISSION.md"
+        self.state_path = self.workspace / "evolution_state.json"
+        self.auditor = RealRepoAuditor(self.repo_root, scan_subpath=self.scan_subpath)
+        self.protected_paths = load_protected_upstream_paths(self.repo_root)
+
+    def _validate_mission_id(self, mission_id: str) -> str:
+        clean = str(mission_id or "").strip()
+        if not clean or ".." in clean or not self._ID_RE.fullmatch(clean):
+            raise ValueError(f"Invalid mission_id: {mission_id!r}")
+        return clean
+
+    def _normalize_target_files(self, target_files: list[str]) -> list[str]:
+        norm_targets: list[str] = []
+        for raw in target_files:
+            rel = str(raw).replace("\\", "/").lstrip("./").strip("/")
+            if not rel or ".." in Path(rel).parts:
+                raise ValueError(f"Invalid target_file path: {raw!r}")
+            if is_forbidden_path(rel, self.protected_paths):
+                raise ValueError(f"Forbidden protected target file: {rel}")
+            if rel not in norm_targets:
+                norm_targets.append(rel)
+        if not norm_targets:
+            raise ValueError("At least one editable target_file is required")
+        return norm_targets
+
+    def _snapshot_audit_details(self, files: list[str]) -> dict[str, dict[str, Any]]:
+        details: dict[str, dict[str, Any]] = {}
+        for rel in files:
+            fpath = self.repo_root / rel
+            if not fpath.is_file() or not rel.endswith(".py"):
+                continue
+            items = self.auditor._audit_single_python_file(fpath)
+            details[rel] = {
+                "counts_by_kind": self._count_findings_by_kind(items),
+                "complex_symbols": {
+                    it.symbol: dict(it.measured_metrics)
+                    for it in items
+                    if it.kind == "complex_function"
+                },
+            }
+        return details
+
+    @staticmethod
+    def _count_findings_by_kind(items: list[AuditFinding]) -> dict[str, int]:
+        counts: dict[str, int] = {}
+        for item in items:
+            counts[item.kind] = counts.get(item.kind, 0) + 1
+        return counts
+
+    def _audit_modified_existing_file(
+        self,
+        *,
+        rel: str,
+        after_items: list[AuditFinding],
+        before_detail: dict[str, Any],
+    ) -> list[str]:
+        reasons: list[str] = []
+        before_counts = before_detail.get("counts_by_kind", {})
+        after_counts = self._count_findings_by_kind(after_items)
+        for kind in ("syntax_error", "unguarded_verified_true", "silent_except_pass", "trivial_test_assertion", "missing_module_docstring"):
+            if after_counts.get(kind, 0) > int(before_counts.get(kind, 0)):
+                reasons.append(f"audit_regression:{rel}:{kind}:{before_counts.get(kind, 0)}->{after_counts.get(kind, 0)}")
+
+        before_complex = before_detail.get("complex_symbols", {})
+        for item in after_items:
+            if item.kind != "complex_function":
+                continue
+            prev = before_complex.get(item.symbol)
+            if prev is None:
+                reasons.append(f"new_complex_function:{rel}:{item.symbol}")
+                continue
+            cur = item.measured_metrics
+            if (
+                int(cur["loc"]) > int(prev["loc"])
+                or int(cur["branches"]) > int(prev["branches"])
+                or int(cur["max_nesting"]) > int(prev["max_nesting"])
+            ):
+                reasons.append(f"worsened_complex_function:{rel}:{item.symbol}")
+        return reasons
+
+    def _audit_mission_changes(
+        self,
+        order: dict[str, Any],
+        changed_files: list[str],
+    ) -> list[str]:
+        reasons: list[str] = []
+        snap_hashes = order.get("snapshot_file_hashes", {})
+        before_details = order.get("before_target_audit_details", {})
+        for rel in changed_files:
+            fpath = self.repo_root / rel
+            if not fpath.is_file() or not rel.endswith(".py"):
+                continue
+            after_items = self.auditor._audit_single_python_file(fpath)
+            if rel not in snap_hashes:
+                if after_items:
+                    kinds = [it.kind for it in after_items]
+                    reasons.append(f"new_file_audit_findings:{rel}:{kinds}")
+                continue
+            reasons.extend(
+                self._audit_modified_existing_file(
+                    rel=rel,
+                    after_items=after_items,
+                    before_detail=before_details.get(rel, {}),
+                )
+            )
+        return reasons
+
+    def _load_order(self, mission_id: str | None) -> dict[str, Any]:
+        if mission_id:
+            clean = self._validate_mission_id(mission_id)
+            path = self.missions_dir / f"{clean}.json"
+        else:
+            path = self.current_json_path
+        if not path.is_file():
+            raise FileNotFoundError(f"Missing user mission work order at {path}")
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        claimed = raw.get("order_sha256", "")
+        body = {k: v for k, v in raw.items() if k != "order_sha256"}
+        recomputed = _sha256_bytes(_canonical_json(body).encode("utf-8"))
+        if claimed != recomputed:
+            raise ValueError(f"User mission SHA-256 mismatch (tampered {path.name})")
+        return raw
+
+    def plan_user_mission(
+        self,
+        *,
+        mission_id: str,
+        title: str,
+        goal: str,
+        target_files: list[str],
+        acceptance_checks: list[str] | None = None,
+        criteria: list[str] | None = None,
+    ) -> dict[str, Any]:
+        """Snapshot repository baseline and emit a sealed User Mission without disturbing static backlog."""
+        clean_id = self._validate_mission_id(mission_id)
+        norm_targets = self._normalize_target_files(target_files)
+        planner = PassiveEvolutionPlanner(self.workspace, self.repo_root, scan_subpath=self.scan_subpath)
+        state = planner._load_state()
+        next_seq = int(state.get("user_mission_seq", 0)) + 1
+        state["user_mission_seq"] = next_seq
+        planner._save_state(state)
+
+        snap_hashes, snap_asserts, snap_trivial = _snapshot_repo_state(self.repo_root, self.scan_subpath)
+        before_target_audit = planner._snapshot_before_ast_counts(norm_targets)
+        existing_code_files = [rel for rel in snap_hashes if rel.endswith(".py") and not is_forbidden_path(rel, self.protected_paths)]
+        before_audit_details = self._snapshot_audit_details(sorted(set(existing_code_files) | set(norm_targets)))
+
+        order_body: dict[str, Any] = {
+            "schema": "ace.user_mission_order.v1",
+            "order_id": clean_id,
+            "mission_seq": next_seq,
+            "title": str(title).strip() or clean_id,
+            "goal": str(goal).strip(),
+            "criteria": [str(c) for c in (criteria or []) if str(c).strip()],
+            "workspace": _portable_path(self.workspace, self.repo_root),
+            "repo_root": _portable_path(self.repo_root, self.repo_root),
+            "scan_subpath": self.scan_subpath,
+            "target_files": norm_targets,
+            "before_hashes": {rel: snap_hashes.get(rel, "") for rel in norm_targets},
+            "before_target_ast_counts": before_target_audit,
+            "before_target_audit_details": before_audit_details,
+            "forbidden_paths": sorted(list(FROZEN_CUSTODY_PREFIXES) + list(FROZEN_EXACT_PATHS)),
+            "acceptance_checks": [str(c) for c in (acceptance_checks or []) if str(c).strip()],
+            "snapshot_file_hashes": snap_hashes,
+            "snapshot_test_assert_counts": snap_asserts,
+            "snapshot_test_trivial_counts": snap_trivial,
+        }
+        order_sha = _sha256_bytes(_canonical_json(order_body).encode("utf-8"))
+        order = {**order_body, "order_sha256": order_sha}
+        order_json = json.dumps(order, indent=2, sort_keys=True)
+        order_md = _render_user_mission_markdown(order)
+
+        mission_json_path = self.missions_dir / f"{clean_id}.json"
+        mission_md_path = self.missions_dir / f"{clean_id}.md"
+        atomic_write_verified(mission_json_path, order_json)
+        atomic_write_verified(mission_md_path, order_md)
+        atomic_write_verified(self.current_json_path, order_json)
+        atomic_write_verified(self.current_md_path, order_md)
+
+        return {
+            "schema": "ace.user_mission_plan.v1",
+            "status": "USER_MISSION_EMITTED",
+            "order_id": clean_id,
+            "mission_seq": next_seq,
+            "order_sha256": order_sha,
+            "target_files": norm_targets,
+            "mission_json_path": str(mission_json_path),
+            "mission_md_path": str(mission_md_path),
+        }
+
+    def _ratify_user_mission(
+        self,
+        *,
+        verifier: EvolutionPatchVerifier,
+        order: dict[str, Any],
+        changed_files: list[str],
+        check_results: list[dict[str, Any]],
+    ) -> dict[str, Any]:
+        order_id = order["order_id"]
+        prev_proofs = verifier.supervisor.dag.nodes("proof_pheromone")
+        parent_ids = (prev_proofs[-1].node_id,) if prev_proofs else ()
+        post_hashes = {
+            rel: _sha256_file(self.repo_root / rel)
+            for rel in sorted(set(order.get("target_files", [])) | set(changed_files))
+            if (self.repo_root / rel).is_file()
+        }
+        all_passed = bool(changed_files) and bool(check_results) and all(c["passed"] for c in check_results)
+        tick = verifier.supervisor.run_single_tick(
+            {
+                "task_id": f"ratify_mission_{order_id}",
+                "expected_benefit": 2.5,
+                "estimated_dt": 0.4,
+                "remaining_budget_ratio": 1.0,
+            },
+            executor_fn=lambda _: {
+                "verified": all_passed,
+                "order_id": order_id,
+                "mission_type": "user_mission",
+                "title": order["title"],
+                "changed_files": changed_files,
+                "post_hashes": post_hashes,
+                "parent_ids": parent_ids,
+            },
+        )
+        spore = SubstrateSpore.export_spore(
+            spore_path=verifier.spore_path,
+            dag=verifier.supervisor.dag,
+            certified_skills=verifier.supervisor.state["certified_skills"],
+            checkpoint_state=verifier.supervisor.state,
+        )
+        exam = SubstrateSpore.import_and_verify_spore(
+            spore_path=verifier.spore_path,
+            target_workspace=self.workspace / "continuity_probe",
+            expected_ancestor_skills=["core_stage2_guard"],
+            antibody_probes=[],
+        )
+
+        state = verifier._load_state_or_init()
+        state["ratified_count"] = int(state.get("ratified_count", 0)) + 1
+        entry = {
+            "order_id": order_id,
+            "mission_seq": order["mission_seq"],
+            "title": order["title"],
+            "changed_files": changed_files,
+            "post_hashes": post_hashes,
+            "spore_sha256": spore["spore_sha256"],
+            "forgetting_count": exam["forgetting_count"],
+        }
+        state.setdefault("ratified_user_missions", []).append(entry)
+        state.setdefault("ratified_history", []).append(
+            {
+                "order_id": order_id,
+                "mission_type": "user_mission",
+                "resolution_note": "user_mission_verified",
+                "changed_files": changed_files,
+                "spore_sha256": spore["spore_sha256"],
+            }
+        )
+        atomic_write_verified(verifier.state_path, json.dumps(state, indent=2, sort_keys=True))
+        receipt = {
+            "schema": "ace.user_mission_verify.v1",
+            "order_id": order_id,
+            "accepted": all_passed and exam["forgetting_count"] == 0,
+            "status": "VERIFIED_AND_RATIFIED",
+            "changed_files": changed_files,
+            "post_hashes": post_hashes,
+            "check_results": check_results,
+            "dag_tick_status": tick["status"],
+            "dag_chain_valid": verifier.supervisor.dag.verify_chain(),
+            "parent_ids": list(parent_ids),
+            "spore_sha256": spore["spore_sha256"],
+            "forgetting_count": exam["forgetting_count"],
+        }
+        atomic_write_verified(
+            self.missions_dir / f"{order_id}.ratified.json",
+            json.dumps(receipt, indent=2, sort_keys=True),
+        )
+        return receipt
+
+    def verify_user_mission(
+        self,
+        *,
+        mission_id: str | None = None,
+        extra_checks: list[str] | None = None,
+    ) -> dict[str, Any]:
+        """Verify a User Mission fail-closed and ratify into StigmergicDAG + SubstrateSpore."""
+        order = self._load_order(mission_id)
+        verifier = EvolutionPatchVerifier(self.workspace, self.repo_root)
+        changed_files, touched_forbidden = verifier._detect_changes(order)
+        reasons: list[str] = []
+        if touched_forbidden:
+            reasons.append(f"forbidden_paths_modified:{touched_forbidden}")
+        if not changed_files:
+            reasons.append("no_target_changes_detected")
+        if changed_files and not any(f in changed_files for f in order.get("target_files", [])):
+            reasons.append("target_files_unchanged")
+        ast_violations = verifier._check_ast_anti_cheat(order, changed_files)
+        if ast_violations:
+            reasons.append(f"ast_anti_cheat_violations:{ast_violations}")
+        audit_violations = self._audit_mission_changes(order, changed_files)
+        if audit_violations:
+            reasons.append(f"static_audit_regressions:{audit_violations}")
+        if reasons:
+            return verifier._quarantine_failure(
+                order,
+                reasons,
+                {"changed_files": changed_files, "touched_forbidden": touched_forbidden, "check_results": []},
+            )
+
+        verifier._purge_stale_pyc(changed_files)
+        check_results = verifier._run_acceptance_checks(order, extra_checks, changed_files)
+        failed_checks = [c["command"] for c in check_results if not c["passed"]]
+        if failed_checks:
+            return verifier._quarantine_failure(
+                order,
+                [f"acceptance_checks_failed:{failed_checks}"],
+                {"changed_files": changed_files, "touched_forbidden": [], "check_results": check_results},
+            )
+        return self._ratify_user_mission(
+            verifier=verifier,
+            order=order,
+            changed_files=changed_files,
+            check_results=check_results,
+        )
+

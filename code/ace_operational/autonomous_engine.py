@@ -24,6 +24,7 @@ from typing import Any
 
 from ace_operational.autonomy_loop import AutonomyOrchestrator
 from ace_operational.models_backend import ModelRouter
+from ace_operational.speech_acquisition import SpeechDevelopmentEngine
 from ace_operational.store import OperationalStore
 
 logging.basicConfig(
@@ -380,8 +381,28 @@ class ContinuousAutonomousEngine:
             logger.info(f"Successfully advanced {executed_count} agenda tasks")
         return executed_count
 
+    def _ensure_developmental_speech_skill(self) -> dict[str, Any] | None:
+        existing_skills = {s["name"]: s for s in self.store.list_skills()}
+        if "keterampilan_berbicara_bertahap_id" in existing_skills:
+            return None
+        logger.info("[Language Learning] Menjalankan kurikulum perkembangan berbicara 4 tahap...")
+        speech_engine = SpeechDevelopmentEngine(self.store)
+        grad = speech_engine.train_and_graduate(
+            conversation_id="autonomous_speech_loop",
+            user_request="Kurikulum otomatis skill berbicara Bahasa Indonesia 4 tahap",
+        )
+        if grad.get("passed"):
+            receipt_id = grad["stages"][-1]["receipt_id"] if grad.get("stages") else ""
+            logger.info("Learned and verified developmental speech skill with receipt %s", receipt_id)
+            return {"skill": "keterampilan_berbicara_bertahap_id", "receipt": receipt_id}
+        return None
+
     def execute_continuous_language_learning(self) -> dict[str, Any] | None:
         """Continuously and indefinitely learn Indonesian language modules, grammar, and dialogue."""
+        speech_res = self._ensure_developmental_speech_skill()
+        if speech_res is not None:
+            return speech_res
+
         existing_skills = {s["name"]: s for s in self.store.list_skills()}
 
         # 1. Check curriculum items that haven't been learned yet
