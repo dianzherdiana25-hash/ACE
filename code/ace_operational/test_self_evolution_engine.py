@@ -103,6 +103,13 @@ class TestSelfEvolutionEngine(unittest.TestCase):
         self.assertFalse(cycle["inference_bench"]["backend_healthy"])
         self.assertIn("HOLD", cycle["self_improvement_proposal"]["recommendation"])
         self.assertIn("self_improvement_proposal", cycle)
+        self.assertIn("repo_audit", cycle)
+        self.assertNotEqual(
+            cycle["self_improvement_proposal"]["objective"],
+            "Tingkatkan efisiensi cache parser AST dan kurangi latency inferensi model",
+        )
+        self.assertGreater(cycle["self_improvement_proposal"]["findings_count"], 0)
+        self.assertGreaterEqual(len(cycle["self_improvement_proposal"]["top_findings"]), 1)
         self.assertTrue(self.engine.status_path.exists())
 
 

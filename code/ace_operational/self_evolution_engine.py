@@ -184,11 +184,17 @@ class SelfEvolutionEngine:
 
     def run_evolution_cycle(self) -> dict[str, Any]:
         """Execute one complete cycle of recursive self-evolution."""
+        from .evolution_mission_loop import RealRepoAuditor
+
         start_t = time.time()
         logger.info("=== Starting ACE Self-Evolution Cycle ===")
 
-        # 1. Audit own codebase
+        # 1. Audit own codebase (syntax + real AST structural audit)
         code_health = self.audit_internal_codebase()
+        repo_root = self.code_root.parent
+        scan_subpath = self.code_root.name
+        repo_audit = RealRepoAuditor(repo_root, scan_subpath=scan_subpath).audit()
+        real_findings = repo_audit.get("findings", [])
 
         # 2. Benchmark inference
         inference_bench = self.benchmark_cognitive_inference()
@@ -196,14 +202,30 @@ class SelfEvolutionEngine:
         # 3. Promote verified capabilities
         promoted = self.verify_and_promote_self_capabilities()
 
-        # 4. Generate next self-improvement proposal
+        # 4. Generate evidence-grounded self-improvement proposal from real findings
+        if real_findings:
+            top = real_findings[0]
+            priority = top["severity"]
+            objective = top["summary"]
+            target_ref = f"{top['file_path']}:L{top['start_line']}-L{top['end_line']}"
+            action_hint = top["recommended_action"]
+        else:
+            priority = "LOW"
+            objective = "Pertahankan kesehatan kodebase (0 temuan AST aktif ditemukan)"
+            target_ref = "N/A"
+            action_hint = "Tidak ada temuan statis terbuka."
+
         proposal = {
             "target_domain": "self_optimization",
-            "priority": "HIGH",
-            "objective": "Tingkatkan efisiensi cache parser AST dan kurangi latency inferensi model",
+            "priority": priority,
+            "objective": objective,
+            "target_file": target_ref,
+            "recommended_action": action_hint,
+            "findings_count": len(real_findings),
+            "top_findings": real_findings[:5],
             "recommendation": (
-                f"Seluruh {code_health['total_python_files']} berkas Python bersih tanpa syntax error. "
-                f"Skor kesehatan kode: {code_health['health_score']}%. "
+                f"Seluruh {code_health['total_python_files']} berkas Python bersih tanpa syntax error; "
+                f"terdeteksi {len(real_findings)} temuan audit statis nyata. "
                 f"Status inferensi: {inference_bench['status']}; perkiraan throughput "
                 f"berdasarkan jumlah kata: {inference_bench['throughput_tokens_per_sec']} token/detik. "
                 f"Terpromosikan {len(promoted)} kapabilitas baru ke Frontier Registry."
@@ -214,6 +236,11 @@ class SelfEvolutionEngine:
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "duration_seconds": round(time.time() - start_t, 3),
             "code_health": code_health,
+            "repo_audit": {
+                "files_scanned": repo_audit["files_scanned"],
+                "findings_count": len(real_findings),
+                "top_findings": real_findings[:5],
+            },
             "inference_bench": inference_bench,
             "promoted_capabilities": promoted,
             "self_improvement_proposal": proposal,
@@ -232,6 +259,7 @@ class SelfEvolutionEngine:
                     "last_cycle_at": cycle_result["timestamp"],
                     "code_health_score": code_health["health_score"],
                     "total_loc": code_health["total_lines_of_code"],
+                    "findings_count": len(real_findings),
                     "promoted_count": len(promoted),
                     "proposal": proposal["recommendation"],
                 }, indent=2, ensure_ascii=False),

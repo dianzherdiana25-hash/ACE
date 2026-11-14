@@ -1,0 +1,8 @@
+{
+  "completed_finding_keys": {},
+  "generation_seq": 1,
+  "ratified_count": 0,
+  "ratified_history": [],
+  "rejected_count": 0,
+  "schema": "ace.passive_evolution_state.v1"
+}

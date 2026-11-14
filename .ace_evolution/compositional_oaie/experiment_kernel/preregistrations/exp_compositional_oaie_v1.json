@@ -1,0 +1,38 @@
+{
+ "baseline_candidate_id": "cold_fresh",
+ "budget": {
+  "max_candidates": 160000,
+  "max_level": 2,
+  "timeout_sec": 2.0
+ },
+ "canary_tokens": [
+  "ACE_SEALED_CANARY_999"
+ ],
+ "candidate_digests": {
+  "ace_evolving": "23e5c9552ea14853d653af95ed909c3c907dc71c5f64dee8f8220502d95c8b99",
+  "cold_double_budget": "2119e29d766a1ffd9d51ca26abf3e3214ad945e510cbebcb6b39e4164560f670",
+  "cold_fresh": "92eaeca146e3ebf9c946b008f660b223a5c18d44996d3bdb9b8e7692747a6aa2",
+  "sham_control": "bf909c8d7df87aa88a430f4122d0c1824680fd0fcd53417600f582017afb825f"
+ },
+ "candidate_ids": [
+  "ace_evolving",
+  "cold_double_budget",
+  "cold_fresh",
+  "sham_control"
+ ],
+ "evaluator_digest": "6d72663e6762a16441651039e8535cc69cb5897d5b09fcab897451baca66b762",
+ "evaluator_id": "independent_holdout_verifier_v1",
+ "experiment_id": "exp_compositional_oaie_v1",
+ "fixture_digest": "ae6c08d8f592a2c6956f8dfd5634b929d847ea348065f5a192bd6c884010d3c2",
+ "hypothesis": "Hierarchical skill promotion + Wake-Sleep MDL abstraction enables ace_evolving to solve deeper multi-domain tasks at 1x budget where cold_fresh, 2x cold_double_budget, and sham_control fail.",
+ "negative_control_id": "sham_control",
+ "protocol": {
+  "max_candidates": 160000,
+  "max_level": 2,
+  "pass_rule": {
+   "gte": 0.99,
+   "metric": "total_solve_rate"
+  }
+ },
+ "protocol_hash": "a71d7426c038858db4723a0f0ce8ca4c6e5644115e0de6d6ada92d9df27e6b61"
+}

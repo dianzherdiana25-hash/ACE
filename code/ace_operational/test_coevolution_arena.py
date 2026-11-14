@@ -29,11 +29,22 @@ class CoEvolutionArenaTests(unittest.TestCase):
 
         # Antibody immunization blocks all 3 malicious repeat payloads and allows the 1 clean payload
         self.assertEqual(r1["immunization"]["antibodies_compiled"], 4)
+        self.assertGreater(r1["immunization"]["conflicts_detected"], 0)
+        self.assertGreater(r1["immunization"]["triggers_detected"], 0)
         self.assertEqual(r1["blocked_repeat_attacks"], 3)
 
-        # Minimax Nash convergence
-        self.assertTrue(r1["minimax_equilibrium"]["is_epsilon_nash"])
-        self.assertLess(r1["minimax_equilibrium"]["duality_gap"], 0.08)
+        # Empirical unpatched baseline solved 0 vs co-evolving solver solved 8/8
+        self.assertTrue(all(w["static_baseline_solved"] == 0 for w in r1["waves"]))
+
+        # Minimax Nash convergence with empirically measured policy loss matrix (3 policies x 8 tasks)
+        eq = r1["minimax_equilibrium"]
+        self.assertEqual(len(eq["empirical_loss_matrix"]), 3)
+        self.assertEqual(len(eq["empirical_loss_matrix"][0]), 8)
+        self.assertGreater(sum(eq["empirical_loss_matrix"][0]), 0.0)  # unpatched loses
+        self.assertGreater(sum(eq["empirical_loss_matrix"][1]), 0.0)  # single_step fails compound tasks
+        self.assertEqual(sum(eq["empirical_loss_matrix"][2]), 0.0)    # cumulative BFS solves all 8
+        self.assertTrue(eq["is_epsilon_nash"])
+        self.assertLess(eq["duality_gap"], 0.08)
 
     def test_unsolvable_and_trivial_challenges_rejected_fail_closed(self):
         challenger = AdversarialChallenger()

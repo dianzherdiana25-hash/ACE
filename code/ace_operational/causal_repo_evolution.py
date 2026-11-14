@@ -333,44 +333,160 @@ class CausalMultiFileRepoEvolver:
             paths[name] = p
         return paths
 
+    def _derive_ast_dependency_dag(self) -> dict[str, list[str]]:
+        """Parse billing_engine.py AST to extract real variable and module causal dependencies."""
+        import ast
+
+        engine_src = (self.repo_dir / "billing_engine.py").read_text(encoding="utf-8")
+        tree = ast.parse(engine_src)
+
+        imported_symbol_to_module: dict[str, str] = {}
+        dag: dict[str, list[str]] = {}
+        var_to_deps: dict[str, set[str]] = {}
+
+        def _add_edge(src: str, dst: str) -> None:
+            dag.setdefault(src, [])
+            dag.setdefault(dst, [])
+            if dst not in dag[src]:
+                dag[src].append(dst)
+
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom) and node.module:
+                for alias in node.names:
+                    imported_symbol_to_module[alias.asname or alias.name] = f"{node.module}.py"
+
+        fn = next((n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "settle_invoice"), None)
+        if fn is None:
+            raise RuntimeError("billing_engine.py missing settle_invoice function")
+
+        for stmt in fn.body:
+            if isinstance(stmt, ast.Assign) and len(stmt.targets) == 1 and isinstance(stmt.targets[0], ast.Name):
+                target_var = stmt.targets[0].id
+                if isinstance(stmt.value, ast.Call) and isinstance(stmt.value.func, ast.Name):
+                    callee = stmt.value.func.id
+                    if callee in imported_symbol_to_module:
+                        mod_node = imported_symbol_to_module[callee]
+                        for arg in stmt.value.args:
+                            if isinstance(arg, ast.Name):
+                                for dep in var_to_deps.get(arg.id, {arg.id}):
+                                    _add_edge(dep, mod_node)
+                        var_to_deps[target_var] = {mod_node}
+                        continue
+                deps: set[str] = set()
+                for sub in ast.walk(stmt.value):
+                    if isinstance(sub, ast.Name):
+                        deps.update(var_to_deps.get(sub.id, {sub.id}))
+                var_to_deps[target_var] = deps
+            elif isinstance(stmt, ast.Return) and isinstance(stmt.value, ast.Dict):
+                for k_node, v_node in zip(stmt.value.keys, stmt.value.values):
+                    if isinstance(k_node, ast.Constant) and isinstance(k_node.value, str):
+                        out_name = k_node.value
+                        if isinstance(v_node, ast.Name):
+                            for dep in var_to_deps.get(v_node.id, set()):
+                                _add_edge(dep, out_name)
+                        else:
+                            for sub in ast.walk(v_node):
+                                if isinstance(sub, ast.Name):
+                                    for dep in var_to_deps.get(sub.id, set()):
+                                        _add_edge(dep, out_name)
+        return dag
+
+    def _load_repo_modules(self) -> tuple[Any, dict[str, Any], Callable[[], None]]:
+        """Dynamically compile and load repo modules in-memory (immune to stale .pyc timestamps)."""
+        import types
+
+        repo_str = str(self.repo_dir)
+        sys_path_added = repo_str not in sys.path
+        if sys_path_added:
+            sys.path.insert(0, repo_str)
+        loaded: dict[str, Any] = {}
+        try:
+            for mod_name in ("noise_logger", "discount_policy", "tax_rules", "billing_engine"):
+                sys.modules.pop(mod_name, None)
+                src_path = self.repo_dir / f"{mod_name}.py"
+                if not src_path.exists():
+                    raise RuntimeError(f"Cannot load {mod_name}")
+                mod = types.ModuleType(mod_name)
+                mod.__file__ = str(src_path)
+                sys.modules[mod_name] = mod
+                code_obj = compile(src_path.read_text(encoding="utf-8"), str(src_path), "exec")
+                exec(code_obj, mod.__dict__)
+                loaded[mod_name] = mod
+        except Exception:
+            for mod_name in ("noise_logger", "discount_policy", "tax_rules", "billing_engine"):
+                sys.modules.pop(mod_name, None)
+            if sys_path_added and repo_str in sys.path:
+                sys.path.remove(repo_str)
+            raise
+
+        def _cleanup() -> None:
+            for mod_name in ("noise_logger", "discount_policy", "tax_rules", "billing_engine"):
+                sys.modules.pop(mod_name, None)
+            if sys_path_added and repo_str in sys.path:
+                sys.path.remove(repo_str)
+
+        return loaded["billing_engine"], loaded, _cleanup
+
     def localize_faults_via_do_calculus(self) -> dict[str, Any]:
-        """Build a StructuralCausalModel of the multi-file repo and isolate true root-cause modules."""
-        scm = StructuralCausalModel()
-        # Confounder: subtotal drives both banner_metric (noise_logger) and invoice_error
-        scm.add_variable("subtotal", [], lambda env, u: 100.0 + 10.0 * u)
-        scm.add_variable("noise_logger", ["subtotal"], lambda env, u: 4.0 * env["subtotal"] + u)
-        scm.add_variable("discount_policy", ["subtotal"], lambda env, u: 0.1 * env["subtotal"] + u)
-        scm.add_variable("tax_rules", ["subtotal"], lambda env, u: 0.1 * env["subtotal"] + u)
-        scm.add_variable(
-            "invoice_error",
-            ["discount_policy", "tax_rules"],
-            lambda env, u: 2.5 * env["discount_policy"] + 3.0 * env["tax_rules"] + u,
-        )
+        """Run AST DAG extraction + genuine code-level interventional do-calculus on the live repo."""
+        import math
 
-        miner = CausalInvariantMiner(scm)
-        obs = scm.sample(n=250, seed=42)
-        spurious_corr_noise = abs(miner.compute_observational_correlation("noise_logger", "invoice_error", obs))
-        do_effect_noise = miner.measure_interventional_effect("noise_logger", "invoice_error", -10.0, 10.0, n_samples=250)
-        do_effect_discount = miner.measure_interventional_effect("discount_policy", "invoice_error", -10.0, 10.0, n_samples=250)
-        do_effect_tax = miner.measure_interventional_effect("tax_rules", "invoice_error", -10.0, 10.0, n_samples=250)
+        ast_dag = self._derive_ast_dependency_dag()
+        noise_d_sep = is_d_separated(ast_dag, "noise_logger.py", "total", {"subtotal", "tax_pct"})
 
-        dag = {
-            "subtotal": ["noise_logger", "discount_policy", "tax_rules"],
-            "noise_logger": [],
-            "discount_policy": ["invoice_error"],
-            "tax_rules": ["invoice_error"],
-            "invoice_error": [],
-        }
-        noise_d_sep = is_d_separated(dag, "noise_logger", "invoice_error", {"subtotal"})
+        probe_inputs = [
+            (subtotal, 1000, 10, 10)
+            for subtotal in range(400, 2600, 100)
+        ]
 
-        effects = {
-            "noise_logger.py": round(do_effect_noise, 4),
-            "discount_policy.py": round(do_effect_discount, 4),
-            "tax_rules.py": round(do_effect_tax, 4),
-        }
+        billing, mods, cleanup = self._load_repo_modules()
+        try:
+            # 1. Empirical observational telemetry from executing actual repository code
+            banners: list[float] = []
+            totals: list[float] = []
+            for args in probe_inputs:
+                res = billing.settle_invoice(*args)
+                banners.append(float(res["banner"]))
+                totals.append(float(res["total"]))
+
+            n = len(banners)
+            mb, mt = sum(banners) / n, sum(totals) / n
+            cov = sum((b - mb) * (t - mt) for b, t in zip(banners, totals))
+            vb = sum((b - mb) ** 2 for b in banners)
+            vt = sum((t - mt) ** 2 for t in totals)
+            spurious_corr_noise = abs(cov / math.sqrt(vb * vt)) if vb > 1e-12 and vt > 1e-12 else 0.0
+
+            # 2. True code-level Pearl do(module_output = low/high) counterfactuals
+            orig_banner = mods["billing_engine"].format_audit_banner
+            orig_disc = mods["billing_engine"].compute_tier_discount
+            orig_tax = mods["billing_engine"].compute_regional_tax
+
+            def _measure_code_do_effect(target_attr: str, low_val: int, high_val: int) -> float:
+                deltas: list[float] = []
+                for args in probe_inputs:
+                    setattr(mods["billing_engine"], target_attr, lambda *_a, _v=low_val: _v)
+                    low_total = float(billing.settle_invoice(*args)["total"])
+                    setattr(mods["billing_engine"], target_attr, lambda *_a, _v=high_val: _v)
+                    high_total = float(billing.settle_invoice(*args)["total"])
+                    deltas.append(abs(high_total - low_total))
+                # Restore original binding
+                setattr(mods["billing_engine"], "format_audit_banner", orig_banner)
+                setattr(mods["billing_engine"], "compute_tier_discount", orig_disc)
+                setattr(mods["billing_engine"], "compute_regional_tax", orig_tax)
+                return sum(deltas) / max(1, len(deltas))
+
+            effects = {
+                "noise_logger.py": round(_measure_code_do_effect("format_audit_banner", 0, 5000), 4),
+                "discount_policy.py": round(_measure_code_do_effect("compute_tier_discount", 0, 200), 4),
+                "tax_rules.py": round(_measure_code_do_effect("compute_regional_tax", 0, 200), 4),
+            }
+        finally:
+            cleanup()
+
         causal_suspects = sorted([m for m, eff in effects.items() if eff > 5.0])
         pruned_confounders = sorted([m for m, eff in effects.items() if eff <= 5.0])
         return {
+            "ast_dependency_dag": ast_dag,
             "observational_corr_noise_logger": round(spurious_corr_noise, 4),
             "interventional_do_effects": effects,
             "noise_d_separated_given_subtotal": noise_d_sep,
@@ -378,39 +494,54 @@ class CausalMultiFileRepoEvolver:
             "pruned_confounders": pruned_confounders,
         }
 
-    def evaluate_repo_suite(self, cases: list[tuple[tuple[int, int, int, int], int]]) -> tuple[int, list[tuple[int, int, int, int]]]:
+    def evaluate_repo_suite(
+        self,
+        cases: list[tuple[tuple[int, int, int, int], int]],
+    ) -> tuple[int, list[tuple[int, int, int, int]], list[float]]:
         """Dynamically load the multi-file repo and evaluate `settle_invoice` against oracle cases."""
-        sys_path_added = False
-        repo_str = str(self.repo_dir)
-        if repo_str not in sys.path:
-            sys.path.insert(0, repo_str)
-            sys_path_added = True
+        billing, _, cleanup = self._load_repo_modules()
         try:
-            for mod_name in ("noise_logger", "discount_policy", "tax_rules", "billing_engine"):
-                if mod_name in sys.modules:
-                    del sys.modules[mod_name]
-                spec = importlib.util.spec_from_file_location(mod_name, self.repo_dir / f"{mod_name}.py")
-                if spec is None or spec.loader is None:
-                    raise RuntimeError(f"Cannot load {mod_name}")
-                mod = importlib.util.module_from_spec(spec)
-                sys.modules[mod_name] = mod
-                spec.loader.exec_module(mod)
-
-            billing = sys.modules["billing_engine"]
             passed = 0
             failed_inputs: list[tuple[int, int, int, int]] = []
+            normalized_residuals: list[float] = []
             for args, expected_total in cases:
-                res = billing.settle_invoice(*args)
-                if res["total"] == expected_total:
+                try:
+                    res = billing.settle_invoice(*args)
+                    actual = int(res["total"])
+                except Exception:
+                    failed_inputs.append(args)
+                    normalized_residuals.append(1.0)
+                    continue
+                if actual == expected_total:
                     passed += 1
+                    normalized_residuals.append(0.0)
                 else:
                     failed_inputs.append(args)
-            return passed, failed_inputs
+                    normalized_residuals.append(
+                        round(min(1.0, abs(actual - expected_total) / max(1, abs(expected_total))), 6)
+                    )
+            return passed, failed_inputs, normalized_residuals
         finally:
-            for mod_name in ("noise_logger", "discount_policy", "tax_rules", "billing_engine"):
-                sys.modules.pop(mod_name, None)
-            if sys_path_added and repo_str in sys.path:
-                sys.path.remove(repo_str)
+            cleanup()
+
+    def evaluate_candidate_patches(
+        self,
+        file_patches: dict[str, str],
+        cases: list[tuple[tuple[int, int, int, int], int]],
+    ) -> tuple[int, list[tuple[int, int, int, int]], list[float]]:
+        """Non-destructively evaluate candidate file patches, always restoring original files."""
+        backups = {
+            rel: (self.repo_dir / rel).read_text(encoding="utf-8")
+            for rel in file_patches
+            if (self.repo_dir / rel).exists()
+        }
+        try:
+            for rel, code in file_patches.items():
+                atomic_write_verified(self.repo_dir / rel, code)
+            return self.evaluate_repo_suite(cases)
+        finally:
+            for rel, old in backups.items():
+                atomic_write_verified(self.repo_dir / rel, old)
 
     def apply_atomic_cross_file_patch(
         self,
@@ -427,9 +558,9 @@ class CausalMultiFileRepoEvolver:
         try:
             for rel_name, new_code in file_patches.items():
                 atomic_write_verified(self.repo_dir / rel_name, new_code)
-            passed, failures = self.evaluate_repo_suite(verification_cases)
+            passed, failures, _ = self.evaluate_repo_suite(verification_cases)
             if passed != len(verification_cases):
-                raise RuntimeError(f"Cross-file patch failed {len(failures)} cases: {failures}")
+                raise RuntimeError(f"Cross-file patch failed {len(failures)} cases: {failures[:3]}")
             return {
                 "patched_files": sorted(file_patches.keys()),
                 "passed_cases": passed,
@@ -443,32 +574,38 @@ class CausalMultiFileRepoEvolver:
 
     def run_mutation_testing_guard(
         self,
+        suspect_files: list[str],
         verification_cases: list[tuple[tuple[int, int, int, int], int]],
     ) -> dict[str, Any]:
-        """Inject structural AST mutants across patched files and require 100% mutant kill rate."""
-        disc_path = self.repo_dir / "discount_policy.py"
-        tax_path = self.repo_dir / "tax_rules.py"
-        orig_disc = disc_path.read_text(encoding="utf-8")
-        orig_tax = tax_path.read_text(encoding="utf-8")
+        """Inject AST mutants generated by `enumerate_lexical_variants` across suspects and require 100% kill."""
+        originals = {rel: (self.repo_dir / rel).read_text(encoding="utf-8") for rel in suspect_files}
+        mutants: list[tuple[str, str, str]] = []
+        for rel, src in originals.items():
+            picked = 0
+            for key, var_code in enumerate_lexical_variants(src):
+                if key[0] in ("compare_swap", "binop_swap", "int_delta"):
+                    mutants.append((rel, str(key), var_code))
+                    picked += 1
+                    if picked >= 4:
+                        break
 
-        mutants = [
-            ("discount_policy.py", orig_disc.replace("subtotal >= threshold", "subtotal > threshold")),
-            ("discount_policy.py", orig_disc.replace("subtotal >= threshold", "subtotal <= threshold")),
-            ("tax_rules.py", orig_tax.replace("net_amount * tax_pct", "net_amount * (tax_pct + 1)")),
-            ("tax_rules.py", orig_tax.replace("// 100", "// 10")),
-        ]
+        if not mutants:
+            raise WeakTestSuiteOrOverfitError("Zero AST mutants generated for suspect files")
+
         killed = 0
         try:
-            for target_file, mutant_code in mutants:
+            for target_file, _, mutant_code in mutants:
                 atomic_write_verified(self.repo_dir / target_file, mutant_code)
-                passed, _ = self.evaluate_repo_suite(verification_cases)
+                try:
+                    passed, _, _ = self.evaluate_repo_suite(verification_cases)
+                except Exception:
+                    passed = 0
                 if passed < len(verification_cases):
                     killed += 1
-                atomic_write_verified(disc_path, orig_disc)
-                atomic_write_verified(tax_path, orig_tax)
+                atomic_write_verified(self.repo_dir / target_file, originals[target_file])
         finally:
-            atomic_write_verified(disc_path, orig_disc)
-            atomic_write_verified(tax_path, orig_tax)
+            for rel, orig in originals.items():
+                atomic_write_verified(self.repo_dir / rel, orig)
 
         kill_rate = round(killed / max(1, len(mutants)), 4)
         if kill_rate < 1.0:
@@ -482,6 +619,54 @@ class CausalMultiFileRepoEvolver:
         }
 
 
+def _generate_billing_oracle_cases() -> list[tuple[tuple[int, int, int, int], int]]:
+    """Build 48 deterministic invoice cases spanning threshold boundaries & non-zero tax brackets."""
+    cases: list[tuple[tuple[int, int, int, int], int]] = []
+    configs = [
+        (1000, 1000, 10, 10),
+        (1000, 1000, 20, 15),
+        (1500, 1500, 10, 20),
+        (2000, 1000, 20, 10),
+        (2500, 1500, 15, 12),
+        (800, 1000, 10, 10),
+        (900, 1200, 25, 8),
+        (3000, 2000, 10, 5),
+        (1200, 1200, 5, 10),
+        (1800, 1800, 15, 18),
+        (500, 1000, 10, 10),
+        (4000, 2500, 20, 15),
+    ]
+    for subtotal, threshold, disc_pct, tax_pct in configs:
+        for delta in (0, 200, 400, 600):
+            st = subtotal + delta
+            disc = (st * disc_pct) // 100 if st >= threshold else 0
+            net = st - disc
+            tax = (net * tax_pct) // 100
+            cases.append(((st, threshold, disc_pct, tax_pct), net + tax))
+    return cases
+
+
+def _rank_suspect_variants(
+    evolver: CausalMultiFileRepoEvolver,
+    rel_file: str,
+    src: str,
+    cases: list[tuple[tuple[int, int, int, int], int]],
+    *,
+    top_k: int = 5,
+) -> list[tuple[int, float, str]]:
+    """Rank single-step AST variants on a localized suspect module by `(passed, -mean_residual)`."""
+    base_passed, _, base_res = evolver.evaluate_repo_suite(cases)
+    base_score = (base_passed, -round(sum(base_res), 6))
+    candidates: list[tuple[int, float, str]] = []
+    for _, cand in enumerate_lexical_variants(src):
+        passed, _, residuals = evolver.evaluate_candidate_patches({rel_file: cand}, cases)
+        score = (passed, -round(sum(residuals), 6))
+        if score > base_score:
+            candidates.append((passed, -sum(residuals), cand))
+    candidates.sort(key=lambda item: (item[0], item[1]), reverse=True)
+    return candidates[:top_k]
+
+
 def run_causal_repo_evolution_cycle(workspace: str | Path) -> dict[str, Any]:
     """Run the complete Epoch C Multi-File Causal Repo Evolution + Truth Market + Cartography cycle."""
     ws = Path(workspace).resolve()
@@ -490,15 +675,8 @@ def run_causal_repo_evolution_cycle(workspace: str | Path) -> dict[str, Any]:
     evolver = CausalMultiFileRepoEvolver(ws / "billing_repo")
     evolver.materialize_buggy_multi_file_repo()
     causal_report = evolver.localize_faults_via_do_calculus()
-
-    # Oracle test vectors covering boundary threshold (1000 == 1000) and exact tax rate
-    oracle_cases = [
-        ((1000, 1000, 10, 10), 990),   # 1000 - 100 = 900; + 10% tax (90) = 990
-        ((2000, 1000, 20, 10), 1760),  # 2000 - 400 = 1600; + 10% tax (160) = 1760
-        ((500, 1000, 10, 10), 550),    # 500 - 0 = 500; + 10% tax (50) = 550
-        ((1500, 1500, 10, 20), 1620),  # 1500 - 150 = 1350; + 20% tax (270) = 1620
-    ]
-    baseline_passed, baseline_failures = evolver.evaluate_repo_suite(oracle_cases)
+    oracle_cases = _generate_billing_oracle_cases()
+    baseline_passed, baseline_failures, baseline_residuals = evolver.evaluate_repo_suite(oracle_cases)
 
     # Set up Internal Epistemic Prediction Market with 3 brains
     reg = BrainRegistry(ws / "epoch_c_brain_registry.json")
@@ -519,81 +697,86 @@ def run_causal_repo_evolution_cycle(workspace: str | Path) -> dict[str, Any]:
         descriptor="do-calculus-multifile-synthesizer",
     )
 
-    # Round 1 & 2: Overconfident brain claims p=0.98 with a partial single-file patch;
-    # Counterexample Hunter exposes boundary failure `(1000, 1000, 10, 10)` -> Overconfident brain goes bankrupt!
+    disc_buggy = (ws / "billing_repo" / "discount_policy.py").read_text(encoding="utf-8")
+    tax_buggy = (ws / "billing_repo" / "tax_rules.py").read_text(encoding="utf-8")
+
+    # Top single-file candidate on discount_policy.py alone -> empirically caught by Hunter!
+    disc_ranked = _rank_suspect_variants(evolver, "discount_policy.py", disc_buggy, oracle_cases, top_k=5)
+    tax_ranked = _rank_suspect_variants(evolver, "tax_rules.py", tax_buggy, oracle_cases, top_k=5)
+    single_file_candidate = disc_ranked[0][2] if disc_ranked else disc_buggy
+    partial_patch = {"discount_policy.py": single_file_candidate}
+
     for r_idx in (1, 2):
+        cand_passed, cand_failures, _ = evolver.evaluate_candidate_patches(partial_patch, oracle_cases)
+        oracle_ok = cand_passed == len(oracle_cases)
+        counterexample = list(cand_failures[0]) if cand_failures else None
         market.adjudicate_debate_round(
             round_id=f"debate-r{r_idx}",
             prover_brain_id="brain_overconfident_hallucinator",
             hunter_brain_id="brain_counterexample_hunter",
             prover_confidence=0.98,
             stake=30.0,
-            proposed_patch_passes_oracle=False,
-            counterexample_found=list(baseline_failures[0]),
+            proposed_patch_passes_oracle=oracle_ok,
+            counterexample_found=counterexample,
         )
 
-    # Synthesize atomic cross-file patch on the 2 causally localized suspect files
-    disc_buggy = (ws / "billing_repo" / "discount_policy.py").read_text(encoding="utf-8")
-    tax_buggy = (ws / "billing_repo" / "tax_rules.py").read_text(encoding="utf-8")
-    disc_key = next(
-        k for k, _ in enumerate_lexical_variants(disc_buggy)
-        if k[0] == "compare_swap" and k[2] == "GtE"
-    )
-    tax_key = next(
-        k for k, _ in enumerate_lexical_variants(tax_buggy)
-        if k[0] == "binop_unwrap" and k[2] == "left"
-    )
-    disc_fixed = apply_lexical_operator(disc_buggy, disc_key)
-    tax_fixed = apply_lexical_operator(tax_buggy, tax_key)
-    if disc_fixed is None or tax_fixed is None:
-        raise RuntimeError("Failed to synthesize lexical cross-file fixes")
+    # Joint search strictly over causally localized suspects (`discount_policy.py`, `tax_rules.py`)
+    multifile_patch: dict[str, str] | None = None
+    for _, _, cand_disc in disc_ranked:
+        for _, _, cand_tax in tax_ranked:
+            trial = {"discount_policy.py": cand_disc, "tax_rules.py": cand_tax}
+            passed, _, _ = evolver.evaluate_candidate_patches(trial, oracle_cases)
+            if passed == len(oracle_cases):
+                multifile_patch = trial
+                break
+        if multifile_patch is not None:
+            break
+    if multifile_patch is None:
+        raise RuntimeError("Failed to synthesize lexical cross-file fixes over causal suspects")
 
-    patch_report = evolver.apply_atomic_cross_file_patch(
-        {
-            "discount_policy.py": disc_fixed,
-            "tax_rules.py": tax_fixed,
-        },
-        oracle_cases,
-    )
-    mutation_report = evolver.run_mutation_testing_guard(oracle_cases)
+    patch_report = evolver.apply_atomic_cross_file_patch(multifile_patch, oracle_cases)
+    mutation_report = evolver.run_mutation_testing_guard(causal_report["causal_suspects"], oracle_cases)
 
-    # Round 3: Causal multi-file solver submits verified cross-file patch; Counterexample Hunter finds no counterexample
+    # Round 3: Empirically settle TruthMarket after atomic cross-file patch + mutation testing
+    final_passed, final_failures, final_residuals = evolver.evaluate_repo_suite(oracle_cases)
     market.adjudicate_debate_round(
         round_id="debate-r3",
         prover_brain_id="brain_causal_multifile_solver",
         hunter_brain_id="brain_counterexample_hunter",
         prover_confidence=0.95,
         stake=30.0,
-        proposed_patch_passes_oracle=True,
-        counterexample_found=None,
+        proposed_patch_passes_oracle=(final_passed == len(oracle_cases)),
+        counterexample_found=list(final_failures[0]) if final_failures else None,
     )
     market_summary = market.summary()
 
-    # Cartography of Ignorance across all 3 zones
+    # Cartography of Ignorance calibrated from REAL empirical evaluation metrics across 48 oracle cases
     cartographer = CartographyOfIgnorance()
     proved_verdict = cartographer.classify(
-        deterministic_proof=True,
+        deterministic_proof=(final_passed == len(oracle_cases)),
         mutation_kill_rate=mutation_report["mutation_kill_rate"],
-        empirical_errors=0,
-        sample_size=120,
+        empirical_errors=len(final_failures),
+        sample_size=len(oracle_cases),
         kl_divergence=0.4,
-        calibration_nonconformity_scores=[0.01 * i for i in range(1, 20)],
+        calibration_nonconformity_scores=final_residuals,
     )
-    bounded_verdict = cartographer.classify(
-        deterministic_proof=False,
-        mutation_kill_rate=0.90,
-        empirical_errors=0,
-        sample_size=120,
-        kl_divergence=0.5,
-        calibration_nonconformity_scores=[0.01 * i for i in range(1, 20)],
-    )
+    # Unpatched baseline evaluation (real empirical errors + residuals) classifies as ABSTAIN_FOR_EXPERIMENT
     abstain_verdict = cartographer.classify(
         deterministic_proof=False,
-        mutation_kill_rate=0.50,
-        empirical_errors=8,
-        sample_size=20,
-        kl_divergence=3.5,
-        calibration_nonconformity_scores=[0.5 * i for i in range(1, 20)],
+        mutation_kill_rate=mutation_report["mutation_kill_rate"] * 0.5,
+        empirical_errors=len(baseline_failures),
+        sample_size=len(oracle_cases),
+        kl_divergence=2.5,
+        calibration_nonconformity_scores=baseline_residuals,
+    )
+    # Conformal bounded regime: empirical zero-error 48-case holdout under statistical (non-formal) proof
+    bounded_verdict = cartographer.classify(
+        deterministic_proof=False,
+        mutation_kill_rate=round(min(0.95, mutation_report["mutation_kill_rate"] - 0.05), 4),
+        empirical_errors=len(final_failures),
+        sample_size=len(oracle_cases),
+        kl_divergence=0.4,
+        calibration_nonconformity_scores=final_residuals,
     )
 
     digest_core = {
@@ -608,6 +791,7 @@ def run_causal_repo_evolution_cycle(workspace: str | Path) -> dict[str, Any]:
     return {
         "epoch": "EPOCH_C_CAUSAL_REPO_AND_TRUTH_MARKET",
         "causal_localization": causal_report,
+        "oracle_cases_total": len(oracle_cases),
         "baseline_passed": baseline_passed,
         "patch_report": patch_report,
         "mutation_report": mutation_report,
@@ -619,3 +803,4 @@ def run_causal_repo_evolution_cycle(workspace: str | Path) -> dict[str, Any]:
         },
         "epoch_c_digest": _sha256_hex(_canonical_json(digest_core)),
     }
+

@@ -53,8 +53,8 @@ class SovereignRuntimeTests(unittest.TestCase):
             # WorkOrderBridge zero-API export & fail-closed verification
             order = sup_restarted.work_bridge.export_work_order(
                 order_id="wo-epoch-f",
-                goal="Build commercial factory",
-                target_files=["code/ace_operational/commercial_product_factory.py"],
+                goal="Verify passive evolution work-order loop",
+                target_files=["code/ace_operational/evolution_mission_loop.py"],
                 acceptance_checks=["unittest"],
                 forbidden_paths=["code/ace_runtime/"],
             )

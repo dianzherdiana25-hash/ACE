@@ -168,18 +168,17 @@ class OntologicalDiscoveryEngine:
 
 @dataclass(frozen=True)
 class SearchStrategy:
-    """Mutable search/scheduling strategy (strictly outside the TCB)."""
+    """Mutable ComponentSynthesizer search configuration (strictly outside the TCB)."""
 
     strategy_id: str
-    beam_width: int
-    heuristic_weights: tuple[float, float]
+    max_level: int = 2
+    final_level_target_only: bool = True
+    skip_unused_types: bool = True
+    arity_ordered: bool = True
+    max_candidates: int = 25000
     touches_tcb: bool = False
     ratification_type: str = "internal_ratification"
     audience: tuple[str, ...] = ("kernel",)
-
-    def score_candidate(self, novelty: float, mdl_gain: float) -> float:
-        w1, w2 = self.heuristic_weights
-        return round(w1 * novelty + w2 * mdl_gain, 6)
 
 
 @dataclass(frozen=True)
@@ -190,6 +189,8 @@ class ProofWitness:
     tcb_digest: str
     baseline_utility: float
     candidate_utility: float
+    baseline_candidates: int
+    candidate_candidates: int
     negative_controls_passed: int
     negative_controls_total: int
     witness_sha256: str
@@ -222,36 +223,71 @@ class GodelMetaSubstrate:
     def history(self) -> list[dict[str, Any]]:
         return list(self._history)
 
+    @staticmethod
+    def _verify_program_on_io(program: Any, io_pairs: list[tuple[dict[str, Any], Any]]) -> bool:
+        for env, expected in io_pairs:
+            try:
+                actual = program.evaluate(env)
+            except Exception:
+                return False
+            if type(actual) is not type(expected) or actual != expected:
+                return False
+        return True
+
     def _evaluate_strategy(
         self,
         strategy: SearchStrategy,
-        benchmark_tasks: list[dict[str, float]],
+        benchmark_tasks: list[dict[str, Any]],
         negative_controls: list[Callable[[SearchStrategy], bool]],
-    ) -> tuple[float, int, int]:
-        # Higher utility when strategy ranks high-mdl_gain tasks accurately within beam_width
-        total_score = 0.0
-        for task in benchmark_tasks:
-            rank_score = strategy.score_candidate(task["novelty"], task["mdl_gain"])
-            efficiency = min(1.0, 4.0 / max(1, strategy.beam_width))
-            total_score += rank_score * task["true_value"] * efficiency
-        utility = round(total_score / max(1, len(benchmark_tasks)), 6)
+    ) -> tuple[float, int, int, int]:
+        """Run actual ComponentSynthesizer with `strategy` on real synthesis + holdout tasks."""
+        from ace_component_synthesis.component_synthesizer import ComponentSynthesizer
 
+        solved = 0
+        total_candidates = 0
+        synth = ComponentSynthesizer(
+            max_level=strategy.max_level,
+            max_candidates=strategy.max_candidates,
+            timeout_sec=2.0,
+            final_level_target_only=strategy.final_level_target_only,
+            skip_unused_types=strategy.skip_unused_types,
+            arity_ordered=strategy.arity_ordered,
+        )
+        for task in benchmark_tasks:
+            res = synth.synthesize(
+                task["shown_io"],
+                constants=task.get("constants"),
+                default_var_name=task.get("default_var_name", "x"),
+            )
+            total_candidates += int(res.candidates_generated)
+            if (
+                res.status == "SUCCESS"
+                and res.program is not None
+                and self._verify_program_on_io(res.program, task["holdout_io"])
+            ):
+                solved += 1
+
+        solve_rate = solved / max(1, len(benchmark_tasks))
+        # Dominance utility rewards 100% holdout solve rate first, then lower search candidate cost
+        utility = round((solve_rate * 100.0) - (total_candidates / 500.0), 6)
         neg_passed = sum(1 for check in negative_controls if check(strategy))
-        return utility, neg_passed, len(negative_controls)
+        return utility, total_candidates, neg_passed, len(negative_controls)
 
     def build_proof_witness(
         self,
         candidate: SearchStrategy,
-        benchmark_tasks: list[dict[str, float]],
+        benchmark_tasks: list[dict[str, Any]],
         negative_controls: list[Callable[[SearchStrategy], bool]],
     ) -> ProofWitness:
-        base_u, _, _ = self._evaluate_strategy(self._active_strategy, benchmark_tasks, negative_controls)
-        cand_u, neg_p, neg_t = self._evaluate_strategy(candidate, benchmark_tasks, negative_controls)
+        base_u, base_c, _, _ = self._evaluate_strategy(self._active_strategy, benchmark_tasks, negative_controls)
+        cand_u, cand_c, neg_p, neg_t = self._evaluate_strategy(candidate, benchmark_tasks, negative_controls)
         payload = {
             "strategy_id": candidate.strategy_id,
             "tcb_digest": self.tcb_digest,
             "baseline_utility": base_u,
             "candidate_utility": cand_u,
+            "baseline_candidates": base_c,
+            "candidate_candidates": cand_c,
             "negative_controls_passed": neg_p,
             "negative_controls_total": neg_t,
         }
@@ -261,6 +297,8 @@ class GodelMetaSubstrate:
             tcb_digest=self.tcb_digest,
             baseline_utility=base_u,
             candidate_utility=cand_u,
+            baseline_candidates=base_c,
+            candidate_candidates=cand_c,
             negative_controls_passed=neg_p,
             negative_controls_total=neg_t,
             witness_sha256=w_sha,
@@ -270,7 +308,7 @@ class GodelMetaSubstrate:
         self,
         candidate: SearchStrategy,
         witness: ProofWitness,
-        benchmark_tasks: list[dict[str, float]],
+        benchmark_tasks: list[dict[str, Any]],
         negative_controls: list[Callable[[SearchStrategy], bool]],
     ) -> dict[str, Any]:
         """Hot-swap the mutable search strategy iff the ProofWitness passes all TCB checks."""
@@ -283,12 +321,13 @@ class GodelMetaSubstrate:
             if witness.tcb_digest != self.tcb_digest or witness.strategy_id != candidate.strategy_id:
                 raise GodelProofRejectedError("ProofWitness TCB digest or strategy_id mismatch")
 
-            # Re-verify witness digest & actual deterministic evaluation (no trusting claims)
             expected_payload = {
                 "strategy_id": witness.strategy_id,
                 "tcb_digest": witness.tcb_digest,
                 "baseline_utility": witness.baseline_utility,
                 "candidate_utility": witness.candidate_utility,
+                "baseline_candidates": witness.baseline_candidates,
+                "candidate_candidates": witness.candidate_candidates,
                 "negative_controls_passed": witness.negative_controls_passed,
                 "negative_controls_total": witness.negative_controls_total,
             }
@@ -296,8 +335,8 @@ class GodelMetaSubstrate:
             if witness.witness_sha256 != expected_sha:
                 raise GodelProofRejectedError("Forged or corrupted ProofWitness SHA-256")
 
-            re_base_u, _, _ = self._evaluate_strategy(previous, benchmark_tasks, negative_controls)
-            re_cand_u, re_neg_p, re_neg_t = self._evaluate_strategy(candidate, benchmark_tasks, negative_controls)
+            re_base_u, re_base_c, _, _ = self._evaluate_strategy(previous, benchmark_tasks, negative_controls)
+            re_cand_u, re_cand_c, re_neg_p, re_neg_t = self._evaluate_strategy(candidate, benchmark_tasks, negative_controls)
             if re_neg_p != re_neg_t:
                 raise GodelProofRejectedError(
                     f"Negative control regression: {re_neg_p}/{re_neg_t} passed"
@@ -314,70 +353,130 @@ class GodelMetaSubstrate:
                 "to_strategy": candidate.strategy_id,
                 "baseline_utility": re_base_u,
                 "candidate_utility": re_cand_u,
+                "baseline_candidates": re_base_c,
+                "candidate_candidates": re_cand_c,
                 "witness_sha256": witness.witness_sha256,
             }
             self._history.append(rec)
             return rec
         except Exception:
-            # Atomic rollback to previous verified strategy
             self._active_strategy = previous
             raise
 
 
+def default_godel_synthesis_tasks() -> list[dict[str, Any]]:
+    """Real multi-type behavioral synthesis benchmarks with strict held-out checks."""
+    return [
+        {
+            "task_id": "synth_margin",
+            "shown_io": [
+                ({"gross": 100, "fee": 25}, 75),
+                ({"gross": 40, "fee": 60}, 0),
+                ({"gross": 80, "fee": 0}, 80),
+                ({"gross": 10, "fee": 25}, 0),
+            ],
+            "holdout_io": [
+                ({"gross": 500, "fee": 120}, 380),
+                ({"gross": 15, "fee": 45}, 0),
+            ],
+            "default_var_name": "gross",
+        },
+        {
+            "task_id": "synth_framed",
+            "shown_io": [
+                ({"tok": "[a]"}, True),
+                ({"tok": "[ok]"}, True),
+                ({"tok": "[]"}, True),
+                ({"tok": "[a"}, False),
+                ({"tok": "a]"}, False),
+                ({"tok": "]a["}, False),
+                ({"tok": "x[a]"}, False),
+                ({"tok": "[a]x"}, False),
+            ],
+            "holdout_io": [
+                ({"tok": "[hdr]"}, True),
+                ({"tok": "[ok]tail"}, False),
+                ({"tok": "hdr[ok]"}, False),
+            ],
+            "constants": [("[", "str"), ("]", "str")],
+            "default_var_name": "tok",
+        },
+    ]
+
+
 def run_ontological_godel_cycle(workspace: str | Path) -> dict[str, Any]:
     """Run the complete Epoch D Ontological Genesis + Godel Self-Modification cycle."""
+    from ace_component_synthesis.component_synthesizer import ComponentSynthesizer
+
     ws = Path(workspace).resolve()
     ws.mkdir(parents=True, exist_ok=True)
 
-    # 1. Generate raw unlabelled telemetry with 2 true latent drivers and 2 high-variance noise channels
-    rng = np.random.default_rng(20261114)
+    # 1. Collect real ComponentSynthesizer search telemetry across varying candidate caps & tasks
     telemetry: list[dict[str, float]] = []
     targets: list[float] = []
-    for _ in range(40):
-        cpu_load = float(rng.uniform(0.1, 1.0))
-        io_wait = float(rng.uniform(0.0, 1.0))
-        noise_a = float(rng.normal(0.0, 5.0))
-        noise_b = float(rng.normal(0.0, 8.0))
-        latency = 12.0 * cpu_load + 7.5 * io_wait + 3.0
+    rng = np.random.default_rng(20261114)
+    tasks = default_godel_synthesis_tasks()
+    for trial_idx in range(16):
+        task = tasks[trial_idx % len(tasks)]
+        prefix = task["shown_io"][: max(2, (trial_idx % len(task["shown_io"])) + 1)]
+        synth_probe = ComponentSynthesizer(
+            max_level=2,
+            max_candidates=2500 + (trial_idx * 300),
+            timeout_sec=1.5,
+            final_level_target_only=bool(trial_idx % 2),
+            skip_unused_types=bool(trial_idx % 2),
+            arity_ordered=bool(trial_idx % 3),
+        )
+        res = synth_probe.synthesize(
+            prefix,
+            constants=task.get("constants"),
+            default_var_name=task.get("default_var_name", "x"),
+        )
+        cand_evals = float(res.candidates_generated)
+        oe_retained = float(res.candidates_retained)
+        noise_a = float(rng.normal(0.0, 40.0))
+        noise_b = float(rng.normal(0.0, 75.0))
+        work_cost = 0.015 * cand_evals + 0.25 * oe_retained + 2.0
         telemetry.append({
-            "raw_ch0": round(cpu_load, 6),
-            "raw_ch1": round(io_wait, 6),
-            "raw_ch2_noise": round(noise_a, 6),
-            "raw_ch3_noise": round(noise_b, 6),
+            "cand_evals": round(cand_evals, 6),
+            "oe_retained": round(oe_retained, 6),
+            "distractor_ch0_noise": round(noise_a, 6),
+            "distractor_ch1_noise": round(noise_b, 6),
         })
-        targets.append(round(latency, 6))
+        targets.append(round(work_cost, 6))
 
     engine = OntologicalDiscoveryEngine(ws / "discovered_ontology_registry.json")
     adapter = engine.discover_and_mint_adapter(
-        adapter_id="latent_latency_ontology_v1",
+        adapter_id="synth_search_cost_ontology_v1",
         raw_telemetry=telemetry,
         target_signal=targets,
-        candidate_features=["raw_ch0", "raw_ch1", "raw_ch2_noise", "raw_ch3_noise"],
+        candidate_features=["cand_evals", "oe_retained", "distractor_ch0_noise", "distractor_ch1_noise"],
         r2_threshold=0.99,
     )
 
-    # 2. Godel-Style Proof-Carrying Self-Modification of Mutable Search Strategy
+    # 2. Godel-Style Proof-Carrying Self-Modification over real ComponentSynthesizer configurations
     baseline = SearchStrategy(
-        strategy_id="strat_baseline_wide_beam",
-        beam_width=8,
-        heuristic_weights=(0.8, 0.2),
+        strategy_id="strat_unpruned_naive_v1",
+        max_level=2,
+        final_level_target_only=False,
+        skip_unused_types=False,
+        arity_ordered=False,
+        max_candidates=30000,
     )
     meta = GodelMetaSubstrate(baseline)
-    tasks = [
-        {"novelty": 0.2, "mdl_gain": 0.9, "true_value": 1.0},
-        {"novelty": 0.4, "mdl_gain": 0.85, "true_value": 0.95},
-        {"novelty": 0.9, "mdl_gain": 0.1, "true_value": 0.15},
-    ]
     neg_controls: list[Callable[[SearchStrategy], bool]] = [
         lambda s: not s.touches_tcb,
-        lambda s: s.beam_width >= 2,
+        lambda s: s.max_level >= 2,
         lambda s: s.ratification_type == "internal_ratification" and s.audience == ("kernel",),
     ]
 
     improved = SearchStrategy(
-        strategy_id="strat_mdl_focused_v2",
-        beam_width=4,
-        heuristic_weights=(0.15, 0.85),
+        strategy_id="strat_typed_target_arity_v2",
+        max_level=2,
+        final_level_target_only=True,
+        skip_unused_types=True,
+        arity_ordered=True,
+        max_candidates=30000,
     )
     witness = meta.build_proof_witness(improved, tasks, neg_controls)
     swap_report = meta.attempt_hot_swap(improved, witness, tasks, neg_controls)

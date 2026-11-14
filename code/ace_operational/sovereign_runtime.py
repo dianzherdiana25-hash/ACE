@@ -19,6 +19,7 @@ Implements the unbreakable multi-timescale runtime layer for OAIE-∞:
 """
 from __future__ import annotations
 
+import ast
 from dataclasses import dataclass
 import hashlib
 import json
@@ -290,6 +291,82 @@ class SubstrateSpore:
         return body
 
     @staticmethod
+    def _verify_skill_behavior(skill: dict[str, Any]) -> tuple[int, int]:
+        """Re-verify executable certified_skill source code & holdout cases in isolation.
+
+        Returns ``(cases_checked, failures_count)``.
+        """
+        source_code = skill.get("source_code")
+        entrypoint = skill.get("entrypoint")
+        if not source_code or not entrypoint:
+            return 0, 0
+
+        expected_src_sha = skill.get("source_sha256")
+        if expected_src_sha:
+            actual_src_sha = hashlib.sha256(str(source_code).encode("utf-8")).hexdigest()
+            if actual_src_sha != expected_src_sha:
+                raise SporeContinuityError(
+                    f"Source SHA-256 mismatch for inherited skill {skill.get('skill_id')!r}"
+                )
+
+        try:
+            tree = ast.parse(str(source_code))
+        except SyntaxError as exc:
+            raise SporeContinuityError(
+                f"Syntax error in inherited skill {skill.get('skill_id')!r}: {exc}"
+            ) from exc
+
+        forbidden_calls = {"eval", "exec", "open", "__import__", "compile"}
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.Import, ast.ImportFrom)):
+                raise SporeContinuityError(
+                    f"Forbidden import in inherited skill {skill.get('skill_id')!r}"
+                )
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+                if node.func.id in forbidden_calls:
+                    raise SporeContinuityError(
+                        f"Forbidden call {node.func.id!r} in inherited skill {skill.get('skill_id')!r}"
+                    )
+
+        ns: dict[str, Any] = {}
+        try:
+            exec(compile(tree, f"<spore:{skill.get('skill_id')}>", "exec"), ns)
+        except Exception as exc:
+            raise SporeContinuityError(
+                f"Compilation failed for inherited skill {skill.get('skill_id')!r}: {exc}"
+            ) from exc
+
+        fn = ns.get(str(entrypoint))
+        if not callable(fn):
+            raise SporeContinuityError(
+                f"Missing entrypoint {entrypoint!r} in inherited skill {skill.get('skill_id')!r}"
+            )
+
+        cases = skill.get("verification_cases") or skill.get("holdout_io") or []
+        checked = 0
+        failures = 0
+        for case in cases:
+            args, expected = case[0], case[1]
+            checked += 1
+            try:
+                if isinstance(args, dict):
+                    out1 = fn(**args)
+                    out2 = fn(**args)
+                else:
+                    out1 = fn(*tuple(args))
+                    out2 = fn(*tuple(args))
+                if (
+                    type(out1) is not type(expected)
+                    or out1 != expected
+                    or type(out2) is not type(expected)
+                    or out2 != expected
+                ):
+                    failures += 1
+            except Exception:
+                failures += 1
+        return checked, failures
+
+    @staticmethod
     def import_and_verify_spore(
         *,
         spore_path: str | Path,
@@ -319,10 +396,25 @@ class SubstrateSpore:
         if not restored_dag.verify_chain() or restored_dag.tail_hash() != raw.get("dag_tail_hash"):
             raise SporeContinuityError("Restored DAG hash chain failed continuity exam")
 
-        skill_ids = {s["skill_id"] for s in raw.get("certified_skills", [])}
+        certified_skills = raw.get("certified_skills", [])
+        skill_ids = {s["skill_id"] for s in certified_skills}
         missing_skills = [sid for sid in expected_ancestor_skills if sid not in skill_ids]
         if missing_skills:
             raise SporeContinuityError(f"Zero-forgetting exam failed: missing skills {missing_skills}")
+
+        behavioral_checks_run = 0
+        forgetting_count = 0
+        failed_skills: list[str] = []
+        for skill in certified_skills:
+            checked, failures = SubstrateSpore._verify_skill_behavior(skill)
+            behavioral_checks_run += checked
+            if failures > 0:
+                forgetting_count += failures
+                failed_skills.append(str(skill.get("skill_id")))
+        if forgetting_count > 0:
+            raise SporeContinuityError(
+                f"Behavioral continuity exam failed ({forgetting_count} case failures) on skills: {failed_skills}"
+            )
 
         fossil_signatures = {
             n.payload.get("signature")
@@ -337,7 +429,9 @@ class SubstrateSpore:
             "spore_sha256": claimed_sha,
             "restored_nodes": len(restored_dag.nodes()),
             "restored_skills": len(skill_ids),
-            "forgetting_count": 0,
+            "behavioral_checks_run": behavioral_checks_run,
+            "behavioral_checks_passed": behavioral_checks_run,
+            "forgetting_count": forgetting_count,
         }
 
 
@@ -422,10 +516,17 @@ class SovereignRuntimeSupervisor:
             else:
                 exec_out = {"verified": True, "skill_id": f"skill_{task_id}"}
 
+            if not bool(exec_out.get("verified", False)):
+                raise RuntimeError(str(exec_out.get("failure_reason") or f"Verification failed for {task_id}"))
+
+            parent_ids = tuple(str(pid) for pid in exec_out.get("parent_ids", ()))
+            clean_payload = {k: v for k, v in exec_out.items() if k != "parent_ids"}
+
             self.dag.append(
                 node_id=f"proof_{task_id}",
                 kind="proof_pheromone",
-                payload={"task_id": task_id, "birth_sha256": hashlib.sha256(task_id.encode()).hexdigest(), **exec_out},
+                parent_ids=parent_ids,
+                payload={"task_id": task_id, "birth_sha256": hashlib.sha256(task_id.encode()).hexdigest(), **clean_payload},
                 weight=1.0,
             )
             self._state["health_score"] = round(min(1.0, self._state["health_score"] + 0.1), 4)

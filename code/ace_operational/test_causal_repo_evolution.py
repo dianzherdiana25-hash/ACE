@@ -24,15 +24,22 @@ class CausalRepoEvolutionTests(unittest.TestCase):
 
             # 1. Causal localization prunes correlated confounder noise_logger.py and isolates true suspects
             causal = r1["causal_localization"]
+            self.assertIn("ast_dependency_dag", causal)
             self.assertGreater(causal["observational_corr_noise_logger"], 0.5)
+            self.assertEqual(causal["interventional_do_effects"]["noise_logger.py"], 0.0)
+            self.assertGreater(causal["interventional_do_effects"]["discount_policy.py"], 5.0)
+            self.assertGreater(causal["interventional_do_effects"]["tax_rules.py"], 5.0)
             self.assertTrue(causal["noise_d_separated_given_subtotal"])
             self.assertEqual(causal["pruned_confounders"], ["noise_logger.py"])
             self.assertEqual(causal["causal_suspects"], ["discount_policy.py", "tax_rules.py"])
 
-            # 2. Cross-file patch lifts repo pass count from 0/4 to 4/4 and kills 4/4 mutants
+            # 2. Cross-file patch lifts repo pass count from < 48 (actually 0/48) to 48/48 and kills 100% mutants
+            total = r1["oracle_cases_total"]
+            self.assertEqual(total, 48)
             self.assertEqual(r1["baseline_passed"], 0)
-            self.assertEqual(r1["patch_report"]["passed_cases"], 4)
+            self.assertEqual(r1["patch_report"]["passed_cases"], total)
             self.assertEqual(r1["mutation_report"]["mutation_kill_rate"], 1.0)
+            self.assertGreaterEqual(r1["mutation_report"]["mutants_tested"], 6)
 
             # 3. Internal Epistemic Prediction Market bankrupts and dismisses overconfident hallucinator
             standings = {s["brain_id"]: s for s in r1["truth_market"]["standings"]}
@@ -40,6 +47,9 @@ class CausalRepoEvolutionTests(unittest.TestCase):
             self.assertLessEqual(standings["brain_overconfident_hallucinator"]["credits"], 20.0)
             self.assertEqual(standings["brain_causal_multifile_solver"]["status"], "active")
             self.assertGreater(standings["brain_counterexample_hunter"]["credits"], 150.0)
+            # Hunter actually caught real counterexamples in round 1 & 2
+            self.assertIsNotNone(r1["truth_market"]["rounds"][0]["counterexample_found"])
+            self.assertIsNone(r1["truth_market"]["rounds"][2]["counterexample_found"])
 
             # 4. Cartography of Ignorance maps PROVED, CONFORMAL_BOUNDED, and ABSTAIN_FOR_EXPERIMENT
             cart = r1["cartography"]
@@ -64,6 +74,11 @@ class CausalRepoEvolutionTests(unittest.TestCase):
                     cases,
                 )
             self.assertEqual((evolver.repo_dir / "tax_rules.py").read_text(encoding="utf-8"), orig_tax)
+
+            # 1b. Weak non-boundary test suite leaves boundary mutant (> vs >=) alive and raises WeakTestSuiteOrOverfitError
+            weak_cases = [((2000, 1000, 10, 10), 1962)]  # passes both > and >= when subtotal != threshold
+            with self.assertRaises(WeakTestSuiteOrOverfitError):
+                evolver.run_mutation_testing_guard(["discount_policy.py", "tax_rules.py"], weak_cases)
 
             # 2. UniversalBrainGovernor hook returns ABSTAIN_FOR_EXPERIMENT when errors > 0
             zone_doc = UniversalBrainGovernor.evaluate_epistemic_zone(

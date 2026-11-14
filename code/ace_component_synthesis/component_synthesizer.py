@@ -127,10 +127,14 @@ class ComponentNode:
             "children": [c.to_dict() for c in self.children],
         }
 
-    def compile_to_callable(self, var_names: List[str]) -> Callable[..., Any]:
+    def compile_to_callable(
+        self,
+        var_names: List[str],
+        extra_globals: Optional[Dict[str, Any]] = None,
+    ) -> Callable[..., Any]:
         """Compiles this AST node into a high-performance native Python callable."""
         code_str = f"def synthesized_fn({', '.join(var_names)}):\n    return {self.to_code()}"
-        local_ns: Dict[str, Any] = {}
+        local_ns: Dict[str, Any] = dict(extra_globals) if extra_globals else {}
         exec(code_str, local_ns)
         return local_ns["synthesized_fn"]
 
@@ -564,11 +568,18 @@ class ComponentSynthesizer:
         max_level: int = 4,
         max_candidates: int = 50000,
         timeout_sec: float = 30.0,
+        *,
+        final_level_target_only: bool = False,
+        skip_unused_types: bool = False,
+        arity_ordered: bool = False,
     ):
         self.library = library or ComponentLibrary.default()
         self.max_level = max_level
         self.max_candidates = max_candidates
         self.timeout_sec = timeout_sec
+        self.final_level_target_only = final_level_target_only
+        self.skip_unused_types = skip_unused_types
+        self.arity_ordered = arity_ordered
 
     def synthesize(
         self,
@@ -592,6 +603,28 @@ class ComponentSynthesizer:
             for comp in custom_components:
                 active_library.register(comp)
 
+        uses_str = True
+        if self.skip_unused_types:
+            const_types = {
+                (item[1] if isinstance(item, tuple) and len(item) == 2 else _infer_type(item))
+                for item in (constants or ())
+            }
+            uses_str = (
+                target_type == TYPE_STR
+                or TYPE_STR in var_types.values()
+                or TYPE_STR in const_types
+            )
+
+        ordered_components = list(active_library.all_components())
+        if self.skip_unused_types and not uses_str:
+            ordered_components = [
+                c
+                for c in ordered_components
+                if TYPE_STR not in c.arg_types and c.return_type != TYPE_STR
+            ]
+        if self.arity_ordered:
+            ordered_components.sort(key=lambda c: (len(c.arg_types), c.name))
+
         # 3. Setup Observational Equivalence Store
         oe_store = ObservationalEquivalenceStore()
         candidates_generated = 0
@@ -599,23 +632,24 @@ class ComponentSynthesizer:
         # 4. Prepare Constants
         processed_constants: List[Tuple[Any, str]] = []
         # Built-in sensible constants
-        default_consts = [
+        default_consts: List[Tuple[Any, str]] = [
             (0, TYPE_INT),
             (1, TYPE_INT),
             (2, TYPE_INT),
             (True, TYPE_BOOL),
             (False, TYPE_BOOL),
-            ("", TYPE_STR),
         ]
-        # Auto-extract string constants from envs and outputs
-        auto_strings: Set[str] = set()
-        for env in envs:
-            for v in env.values():
-                if isinstance(v, str):
-                    for char in v:
-                        auto_strings.add(char)
-        for s in auto_strings:
-            default_consts.append((s, TYPE_STR))
+        if uses_str:
+            default_consts.append(("", TYPE_STR))
+            # Auto-extract string constants from envs and outputs
+            auto_strings: Set[str] = set()
+            for env in envs:
+                for v in env.values():
+                    if isinstance(v, str):
+                        for char in v:
+                            auto_strings.add(char)
+            for s in auto_strings:
+                default_consts.append((s, TYPE_STR))
 
         seen_consts: Set[Tuple[Any, str]] = set()
         for c in default_consts:
@@ -712,7 +746,9 @@ class ComponentSynthesizer:
                 for t in (TYPE_INT, TYPE_BOOL, TYPE_STR)
             }
 
-            for comp in active_library.all_components():
+            for comp in ordered_components:
+                if self.final_level_target_only and level == self.max_level and comp.return_type != target_type:
+                    continue
                 if time.time() - start_time > self.timeout_sec or candidates_generated >= self.max_candidates:
                     break
 

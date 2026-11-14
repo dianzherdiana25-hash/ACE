@@ -13,3 +13,5 @@ evidence/self_dev/*.json.gz
 *.egg-info/
 build/
 dist/
+.ace_evolution/.*.lock
+.ace_evolution/**/.*.lock
