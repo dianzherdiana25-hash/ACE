@@ -555,7 +555,9 @@ def apply_chain(code: str, chain: tuple) -> str | None:
 
 def solve_task(task, adapter, extra_keys=(), extra_chains=(),
                *, max_score_calls: int | None = None,
-               trace: list | None = None) -> str:
+               trace: list | None = None,
+               guard: bool = False,
+               guard_stats: dict[str, int] | None = None) -> str:
     """Budgeted per-arm solver — the greedy loop lifted
     out of `run_discovery` (A/B/C v3 build, PR #147
     step 1), behaviour-identical: variant sources are
@@ -577,26 +579,47 @@ def solve_task(task, adapter, extra_keys=(), extra_chains=(),
     order (baseline, then extra_keys in order, then
     extra_chains in order). When `trace` is None no
     provenance is recorded and the solver is
-    behaviour-identical to the un-traced form."""
+    behaviour-identical to the un-traced form.
+
+    `guard` (Lineage-Guard, PR #206 / `GUARD_ADOPTED`):
+    when True, preserves one reserved frontier slot for
+    the highest-ranked `BASE`-lineage candidate whenever
+    the post-selection frontier would otherwise contain
+    no `BASE` member and at least one `BASE` candidate
+    was scored in the round. When `guard` is False
+    (default), behaviour is bit-for-bit identical to
+    the unguarded solver."""
     provenance: dict[str, tuple] = {}
+    label_of: dict[str, str] = {}
 
     def extended_variants(code):
+        parent_label = label_of[code] if guard else ""
         variants = adapter.baseline_variants(code)
+        if guard:
+            for text in variants:
+                if text not in label_of:
+                    label_of[text] = parent_label
         if trace is not None:
             for text in variants:
                 provenance.setdefault(text, ("baseline", None))
         for key in extra_keys:
             text = apply_operator(code, key)
-            if text is not None and text not in variants:
-                variants.append(text)
-                if trace is not None:
-                    provenance.setdefault(text, ("key", key))
+            if text is not None:
+                if guard and text not in label_of:
+                    label_of[text] = "ENRICHED"
+                if text not in variants:
+                    variants.append(text)
+                    if trace is not None:
+                        provenance.setdefault(text, ("key", key))
         for chain in extra_chains:
             text = apply_chain(code, chain)
-            if text is not None and text not in variants:
-                variants.append(text)
-                if trace is not None:
-                    provenance.setdefault(text, ("chain", chain))
+            if text is not None:
+                if guard and text not in label_of:
+                    label_of[text] = "ENRICHED"
+                if text not in variants:
+                    variants.append(text)
+                    if trace is not None:
+                        provenance.setdefault(text, ("chain", chain))
         return variants
 
     budget = adapter.make_budget(task)
@@ -608,6 +631,8 @@ def solve_task(task, adapter, extra_keys=(), extra_chains=(),
         return _safe_score(budget, code)
 
     start = task["buggy_code"]
+    if guard:
+        label_of[start] = "BASE"
     best_code, best_score = start, score(start)
     frontier, seen = [start], {start}
     for _ in range(6):
@@ -635,6 +660,14 @@ def solve_task(task, adapter, extra_keys=(), extra_chains=(),
             if trace is not None:
                 trace.append(provenance[scored[0][1]])
         frontier = [c for s, c in scored[:4] if s >= best_score]
+        if guard and frontier and all(
+                label_of[c] != "BASE" for c in frontier):
+            base_scored = [c for s, c in scored
+                           if label_of[c] == "BASE"]
+            if base_scored:
+                frontier = frontier[:-1] + [base_scored[0]]
+                if guard_stats is not None:
+                    guard_stats["triggers"] = guard_stats.get("triggers", 0) + 1
         if not frontier:
             break
     return best_code
@@ -646,13 +679,16 @@ def run_discovery(*, pool: list[dict[str, Any]],
                   pair_pool: list[dict[str, Any]] | None = None,
                   chain_pool: list[dict[str, Any]] | None = None,
                   min_pool_fixes: int = 2,
-                  adapter=None) -> dict[str, Any]:
+                  adapter=None,
+                  guard: bool = False) -> dict[str, Any]:
     """Pool -> candidate operators -> admission (>= min_pool_fixes
     pool tasks fixed) -> measured transfer on evaluation + control
     regression, all with the extended greedy solver. `pair_pool`
     tasks (stage L2) feed pair discovery only: a shown-perfect
     pair credits both constituent keys toward the admission of
-    each of the task's defect classes."""
+    each of the task's defect classes. `guard` enables the
+    adopted Lineage-Guard BASE-slot preservation inside
+    `solve_task`."""
     by_class: dict[str, Any] = {}
     admitted_keys: dict[str, list[tuple]] = {}
     pool_by_class: dict[str, list] = {}
@@ -694,7 +730,7 @@ def run_discovery(*, pool: list[dict[str, Any]],
         # Delegates to the lifted module-level solver
         # (v3 build); uncapped = the v4 behaviour.
         return solve_task(task, adapter, extra_keys,
-                          extra_chains)
+                          extra_chains, guard=guard)
 
     def solved(task, extra_keys, extra_chains=()) -> bool:
         code = solve_with(task, extra_keys, extra_chains)

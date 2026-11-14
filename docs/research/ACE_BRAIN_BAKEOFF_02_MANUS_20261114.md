@@ -70,7 +70,7 @@ Artefak bukti lengkap:
 
 ## 4. Rekomendasi Arsitektur Otak Lokal CPU+RAM untuk VM ACE
 
-1. **Otak Kerja / Direktur Utama (`:8000` selalu aktif saat jendela kerja biasa):** **`Qwen3-4B-Instruct-2507-Q4_K_M`** (`-t 4 -c 8192 -fa on -ctk q8_0 -ctv q8_0 --reasoning off`). Terukur tercepat (`7.67 t/s`), stabil di A+B (`4/4` tanpa celah semantik), dan cukup ringan (~2.3 GiB) agar VM/Sandbox tetap punya ruang lega untuk kernel/validator/test lain.
+1. **Otak Kerja / Direktur Utama (`127.0.0.1:18081` via `ACE_LLAMA_SERVER_URL`, selalu aktif saat jendela kerja biasa):** **`Qwen3-4B-Instruct-2507-Q4_K_M`** (`-t 4 -c 8192 -fa on -ctk q8_0 -ctv q8_0 --reasoning off`). Terukur tercepat (`7.67 t/s`), stabil di A+B (`4/4` tanpa celah semantik), dan cukup ringan (~2.3 GiB) agar VM/Sandbox tetap punya ruang lega untuk kernel/validator/test lain.
 2. **Otak Spesialis Proposer Stage 1/2 (`json_schema` ketat):** **`Qwen3.5-4B-Q4_K_M`** ketika menjalankan siklus sintesis paket praregistrasi terstruktur (`6/6`, Quality PASS).
 3. **Catatan Suksesi Resmi Direktur (`Qwen3-8B` -> `Qwen3-4B-Instruct-2507`):**
    Pergantian status resmi di `bakeoff02-kernel` tetap membutuhkan satu eksekusi tersegel Instrumen C (`Keamanan-01`) begitu artefak `security-test/evaluator` (`sha256 6b0610f0...`) tersedia kembali atau dikustodi ulang sesuai konstitusi ACE.
