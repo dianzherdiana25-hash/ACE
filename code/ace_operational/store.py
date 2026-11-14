@@ -389,6 +389,71 @@ class OperationalStore:
                 report_json TEXT NOT NULL DEFAULT '{}',
                 created_at TEXT NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS proposer_staged_packages (
+                staging_id TEXT PRIMARY KEY,
+                request_id TEXT UNIQUE NOT NULL,
+                proposal_id TEXT NOT NULL,
+                payload_sha256 TEXT NOT NULL,
+                identity_mode TEXT NOT NULL DEFAULT 'staging-only',
+                blob_path TEXT NOT NULL,
+                mission_id TEXT NOT NULL DEFAULT '',
+                revoked INTEGER NOT NULL DEFAULT 0,
+                revoked_by TEXT NOT NULL DEFAULT '',
+                revoked_reason TEXT NOT NULL DEFAULT '',
+                revocation_ledger_seq INTEGER NOT NULL DEFAULT 0,
+                revoked_at TEXT NOT NULL DEFAULT '',
+                created_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS proposer_stage2_ratifications (
+                ratification_id TEXT PRIMARY KEY,
+                staging_id TEXT NOT NULL,
+                audience TEXT NOT NULL,
+                ratified_by TEXT NOT NULL,
+                bound_payload_sha256 TEXT NOT NULL,
+                issued_at_epoch REAL NOT NULL,
+                expires_at_epoch REAL NOT NULL,
+                revoked INTEGER NOT NULL DEFAULT 0,
+                created_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS proposer_stage2_runs (
+                execution_run_id TEXT PRIMARY KEY,
+                staging_id TEXT NOT NULL,
+                request_id TEXT NOT NULL,
+                bound_payload_sha256 TEXT NOT NULL,
+                ratification_id TEXT NOT NULL,
+                identity_mode TEXT NOT NULL DEFAULT 'staging-only',
+                status TEXT NOT NULL,
+                stop_requested INTEGER NOT NULL DEFAULT 0,
+                stop_reason TEXT NOT NULL DEFAULT '',
+                stop_visible INTEGER NOT NULL DEFAULT 1,
+                calls_used INTEGER NOT NULL DEFAULT 0,
+                wall_seconds REAL NOT NULL DEFAULT 0.0,
+                cost_units REAL NOT NULL DEFAULT 0.0,
+                work_completed_units INTEGER NOT NULL DEFAULT 0,
+                bundle_dir TEXT NOT NULL DEFAULT '',
+                bundle_manifest_sha256 TEXT NOT NULL DEFAULT '',
+                preaudit_report_sha256 TEXT NOT NULL DEFAULT '',
+                preaudit_exit_code INTEGER NOT NULL DEFAULT -1,
+                env_snapshot_json TEXT NOT NULL DEFAULT '{}',
+                result_summary_json TEXT NOT NULL DEFAULT '{}',
+                created_at TEXT NOT NULL,
+                finished_at TEXT NOT NULL DEFAULT ''
+            );
+
+            CREATE TABLE IF NOT EXISTS proposer_stage2_ledger (
+                seq INTEGER PRIMARY KEY AUTOINCREMENT,
+                event_type TEXT NOT NULL,
+                staging_id TEXT NOT NULL,
+                execution_run_id TEXT NOT NULL DEFAULT '',
+                payload_sha256 TEXT NOT NULL DEFAULT '',
+                detail_json TEXT NOT NULL DEFAULT '{}',
+                prev_hash TEXT NOT NULL,
+                entry_hash TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            );
             """
         )
         self._conn.commit()
