@@ -425,6 +425,13 @@ class AutopoieticSkillForge:
 
         raise ValueError(f"Failed to synthesize verified skill for {skill_id}")
 
+    def synthesize_from_spec(self, spec: Any) -> tuple[SynthesizedSkill, dict[str, Any]]:
+        """Synthesize a verified skill directly from a `FormalSkillSpec` (zero hand-written templates)."""
+        from .neuro_formal_genesis import SpecDrivenProgramSynthesizer
+
+        synthesizer = SpecDrivenProgramSynthesizer()
+        return synthesizer.synthesize_from_spec(spec, self)
+
     def synthesize_composite_operator(
         self,
         *,
