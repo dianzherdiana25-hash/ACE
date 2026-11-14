@@ -1,0 +1,37 @@
+{
+ "base_total_s": 0.07917336899663496,
+ "budget_limit": 200,
+ "cand_total_s": 0.07148164599948359,
+ "delta_preregistered": 0.05,
+ "families": [
+  "pricing",
+  "shipping"
+ ],
+ "levels": [
+  1,
+  2,
+  3
+ ],
+ "median_ratio_cand_over_base": 0.9027968285318213,
+ "output_mismatches": [],
+ "ratio_ci95": [
+  0.8983577465173251,
+  0.9086907424297335
+ ],
+ "seeds": [
+  901,
+  902,
+  903,
+  904,
+  905,
+  906,
+  907,
+  908,
+  909,
+  910,
+  911,
+  912
+ ],
+ "tasks": 72,
+ "verdict": "CONFIRMED"
+}
