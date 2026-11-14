@@ -1,0 +1,63 @@
+{
+  "package_version": "ace.proposal.v1",
+  "proposal_id": "EP3-R2G-001",
+  "task_kind": "task",
+  "claim": "If the round-2 gate is applied, the round2_index will be >= 0, with a threshold of 0, and a negative value would falsify the claim.",
+  "rationale": "The gate design requires the round2_index to be non-negative to pass. The single-key concentration in the statement-motion family is a critical factor, and the fresh band's tasks must contain the key's shape to maintain B_disc above 80%. The replication guard must also pass, which is a prerequisite for measurement. The evidence supports the gate's design and the single-key capture of the lift effect.",
+  "options_considered": [
+    {
+      "name": "run_gate_as_locked",
+      "assessment": "This option applies the gate as locked, assuming the fresh band's tasks contain the key's shape and the replication guard passes. It is the primary path to validate the gate's effectiveness."
+    },
+    {
+      "name": "run_guard_only_first",
+      "assessment": "This option runs the replication guard first to ensure the fresh band is valid before applying the gate. It reduces risk but delays the gate execution."
+    },
+    {
+      "name": "do_not_run",
+      "assessment": "This option avoids any risk but also forgoes the opportunity to validate the gate's effectiveness and the single-key lift effect."
+    }
+  ],
+  "recommended_option": "run_gate_as_locked",
+  "cost_estimate": {
+    "calls": 85000,
+    "wall_seconds": 3200,
+    "cost_units": 0.95
+  },
+  "cost_ceiling": {
+    "max_calls": 100000,
+    "max_wall_seconds": 3600,
+    "max_cost_units": 1.0
+  },
+  "evidence": [
+    {
+      "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM57.md",
+      "sha256": "a9de206843de45a589a6d8e64e5a7c5205f33e299d8bce16cb773705d812f3df"
+    },
+    {
+      "artifact": "round2-gate-01 extended six-component manifest",
+      "sha256": "47a5afc4b6c6222e6ee4050f620898aeb885ceaec2dc22a489e2914e490e9f81"
+    }
+  ],
+  "preregistration": {
+    "link": "evidence/proposer_stage1/episodes.json#EP3-ROUND2-GATE",
+    "artifact_sha256": "a9de206843de45a589a6d8e64e5a7c5205f33e299d8bce16cb773705d812f3df"
+  },
+  "risks": [
+    "If the fresh band's tasks do not contain the key's shape, B_disc may fall under 80%, causing the index to be negative.",
+    "A control regression could make the round2_index negative, invalidating the gate pass."
+  ],
+  "uncertainties": "The fresh band's tasks may not contain the key's shape, which is critical for maintaining B_disc above 80%.",
+  "stop_controls": {
+    "abort_conditions": [
+      "round2_index < 0",
+      "replication guard fails"
+    ],
+    "sealed_target_status": "sealed_fresh_band_unopened",
+    "no_auto_retry": true,
+    "stop_visible": true
+  },
+  "ratification": {
+    "type": "internal_ratification",
+    "audience": ["hub", "kernel", "evidence"]
+ 

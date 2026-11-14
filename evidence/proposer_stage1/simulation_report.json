@@ -1,0 +1,157 @@
+{
+ "bootstrap_ci_lower_95": -98.33333333333333,
+ "ci_lower_floor": -20.0,
+ "episodes": [
+  {
+   "diff": -100.0,
+   "episode_id": "EP1-G3-APPLICATION",
+   "generation_sha256": "8108dff8f90691b424c874f2d1f8e25182db80ee8b9de75b46557e487f0038f6",
+   "generation_wall_seconds": 699,
+   "historical_breakdown": {
+    "claim_testability": 20.0,
+    "cost_realism": 20.0,
+    "evidence_grounding": 20.0,
+    "option_coverage": 10.0,
+    "risk_honesty": 15.0,
+    "stop_controls": 15.0
+   },
+   "historical_score": 100.0,
+   "outcome_revealed_after_scoring": "SPECIALIZATION: grid +75.0pp on pure evaluation singles, pricing delta 0 (boundary prediction confirmed), composite g3_composite_index_pp = -10.0, kernel verdict fail on the transfer conjunction, audit CLEAN, walls 2126.5 s of 2700 s budget.",
+   "proposer_breakdown": {
+    "validator": "REJECTED: uncertainties must be a non-empty list of strings"
+   },
+   "proposer_score": 0.0,
+   "validator_accepted": false,
+   "validator_reasons": [
+    "uncertainties must be a non-empty list of strings"
+   ]
+  },
+  {
+   "diff": -100.0,
+   "episode_id": "EP2-ABC-V3",
+   "generation_sha256": "e5a7ebaf24268eecd781fb84dab04610258a64260ef1bc5dcc7015b72bc900fe",
+   "generation_wall_seconds": 698,
+   "historical_breakdown": {
+    "claim_testability": 20.0,
+    "cost_realism": 20.0,
+    "evidence_grounding": 20.0,
+    "option_coverage": 10.0,
+    "risk_honesty": 15.0,
+    "stop_controls": 15.0
+   },
+   "historical_score": 100.0,
+   "outcome_revealed_after_scoring": "NOT_DEMONSTRATED: pooled DI = -1.98pp; evaluation A 0/90, B 90/90, C 90/90; controls A 101/101, B 99/101, C 99/101 - the control margin was the sole binding term (band 20261501). G2 board: MEASURED NOT_DEMONSTRATED (third measured null).",
+   "proposer_breakdown": {
+    "generation": "UNPARSEABLE_OR_MISSING"
+   },
+   "proposer_score": 0.0,
+   "validator_accepted": false,
+   "validator_reasons": [
+    "no parseable package"
+   ]
+  },
+  {
+   "diff": -100.0,
+   "episode_id": "EP3-ROUND2-GATE",
+   "generation_sha256": "7752486ba3315896fbb6743f87fbd9da89a6a8d3299b7a94deb569dbfb3e79e3",
+   "generation_wall_seconds": 705,
+   "historical_breakdown": {
+    "claim_testability": 20.0,
+    "cost_realism": 20.0,
+    "evidence_grounding": 20.0,
+    "option_coverage": 10.0,
+    "risk_honesty": 15.0,
+    "stop_controls": 15.0
+   },
+   "historical_score": 100.0,
+   "outcome_revealed_after_scoring": "LIFT_DEMONSTRATED: round2_index = 0.0 exactly on the pass threshold; B_disc 100.0%, capture 1.0, control margin 0.0pp; all three replication guards passed; verifier TAHAN 6/6.",
+   "proposer_breakdown": {
+    "generation": "UNPARSEABLE_OR_MISSING"
+   },
+   "proposer_score": 0.0,
+   "validator_accepted": false,
+   "validator_reasons": [
+    "no parseable package"
+   ]
+  },
+  {
+   "diff": -90.0,
+   "episode_id": "EP4-CONTROL-REGRESSION-ATTRIBUTION",
+   "generation_sha256": "fb334e714fbd3dc54e46d035a6eeed0d4256c3161bad011bf1ba2d62c87041fb",
+   "generation_wall_seconds": 764,
+   "historical_breakdown": {
+    "claim_testability": 10.0,
+    "cost_realism": 20.0,
+    "evidence_grounding": 20.0,
+    "option_coverage": 10.0,
+    "risk_honesty": 15.0,
+    "stop_controls": 15.0
+   },
+   "historical_score": 90.0,
+   "outcome_revealed_after_scoring": "Attribution CONFIRMED: single-key distractor diversion by the 'nc' key for both witness tasks (removal restores 020 at 260 calls and 021 at 258 calls; 'gc' removal restores neither); 8/8 key-order permutations reproduce the failures with byte-identical scored-variant multisets (M3 inert).",
+   "proposer_breakdown": {
+    "validator": "REJECTED: uncertainties must be a non-empty list of strings"
+   },
+   "proposer_score": 0.0,
+   "validator_accepted": false,
+   "validator_reasons": [
+    "uncertainties must be a non-empty list of strings"
+   ]
+  },
+  {
+   "diff": -80.0,
+   "episode_id": "EP5-G4-INHERITANCE",
+   "generation_sha256": "070ce335f929321d16e8a2736bcd5992d7bef5566332030fc40ff8c138f634e8",
+   "generation_wall_seconds": 863,
+   "historical_breakdown": {
+    "claim_testability": 0.0,
+    "cost_realism": 20.0,
+    "evidence_grounding": 20.0,
+    "option_coverage": 10.0,
+    "risk_honesty": 15.0,
+    "stop_controls": 15.0
+   },
+   "historical_score": 80.0,
+   "outcome_revealed_after_scoring": "INHERITANCE_DEMONSTRATED: gate board moved to G4 MEASURED - INHERITANCE_DEMONSTRATED.",
+   "proposer_breakdown": {
+    "validator": "REJECTED: uncertainties must be a non-empty list of strings"
+   },
+   "proposer_score": 0.0,
+   "validator_accepted": false,
+   "validator_reasons": [
+    "uncertainties must be a non-empty list of strings"
+   ]
+  },
+  {
+   "diff": -80.0,
+   "episode_id": "EP6-PER-TASK-RECORDING",
+   "generation_sha256": "b50f7645c3399c5c574fa12d7994a6d03801848341d38cf31a70b9dc7f90c993",
+   "generation_wall_seconds": 779,
+   "historical_breakdown": {
+    "claim_testability": 0.0,
+    "cost_realism": 20.0,
+    "evidence_grounding": 20.0,
+    "option_coverage": 10.0,
+    "risk_honesty": 15.0,
+    "stop_controls": 15.0
+   },
+   "historical_score": 80.0,
+   "outcome_revealed_after_scoring": "ADOPTED as a named milestone candidate (hub act pending at record time); build assigned to Ian's desk in the main chat.",
+   "proposer_breakdown": {
+    "validator": "REJECTED: uncertainties must be a non-empty list of strings"
+   },
+   "proposer_score": 0.0,
+   "validator_accepted": false,
+   "validator_reasons": [
+    "uncertainties must be a non-empty list of strings"
+   ]
+  }
+ ],
+ "exit_gate_verdict": "NOT_PASSED",
+ "mean_diff": -91.66666666666667,
+ "noninferiority_margin": -10.0,
+ "quality_clause": "FAIL",
+ "review_type": "SIMULATION - no proposal was dispatched or executed",
+ "simulation": "proposer_stage1_v1",
+ "time_clause": "NOT_ASSESSABLE - no historical drafting-time baseline exists in the official record"
+}

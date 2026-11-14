@@ -1,0 +1,218 @@
+{
+ "episode_selection_rule": "All decision points recorded in Addenda 54-60 and the control-regression design record (PR #173) that meet ALL of: (i) a named decision with a recorded rationale, (ii) a discussable do-not-run alternative, (iii) a recorded outcome in an official record, (iv) at-time information reconstructable from pre-decision documents. Enumerated 2026-11-13 BEFORE any generation. Count = 6. No episode may be added or dropped after the first generation.",
+ "episodes": [
+  {
+   "budget_envelope": {
+    "calls": 0,
+    "cost_units": 1.0,
+    "wall_seconds": 2700
+   },
+   "decision_point": "2026-11-13, before the application run (protocol locked in Addendum 50 / G3 preregistration)",
+   "episode_id": "EP1-G3-APPLICATION",
+   "evidence_scope": [
+    {
+     "artifact": "docs/research/ACE_G3_PREREGISTRATION_20261113.md",
+     "sha256": "44093f49e8236515e392136e895e0c66540155e4a0a3431ad51bb06dff76bc4a"
+    },
+    {
+     "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM50.md",
+     "sha256": "20f424f1338469c63eab5977e8c70670acfe64e08458b067d67d6e7f6a25e791"
+    }
+   ],
+   "information_snapshot": "The G3 instrument and protocol are built and preregistered. Calibration says: the grid family shows discovery headroom (baseline solves none of the pure evaluation singles in exploratory work); the pricing catalog stratum is saturated at 100% baseline, so discovery can add nothing there; for the pricing constructed stratum (statement_order tasks) a boundary prediction is preregistered: the frozen mechanism's expression-level schema space adds nothing on a class whose repair is statement motion, because the baseline's 35% shows those tasks are solvable by construction. The claim under test is a conjunction: transfer must appear on BOTH families for H1 to pass. Composite index is pooled across families, so a zero on pricing can pull the composite negative even if grid gains are large. Budget: total phase walls 2700 s. Negative controls (sham arms) are part of the design.",
+   "known_risk_keywords_at_time": [
+    "saturated",
+    "boundary",
+    "composite",
+    "conjunction",
+    "pricing"
+   ],
+   "options_available": [
+    "run_full_application",
+    "run_grid_only",
+    "do_not_run"
+   ],
+   "prior_exposure_declaration": "ila, Ian and the owner have all seen this episode's outcome (it is program history). The generating model (Qwen3-30B-A3B, released 2025) predates the 2026-11-13 program events, so the outcome is not in its training data to our knowledge. The prompt author (ila) has prior exposure; mitigation is procedural only: this snapshot is authored solely from pre-decision documents (preregistration + Addendum 50), and the rubric scores reasoning against at-time information, never against the outcome.",
+   "sealed_target_status_at_time": "not_sealed_application_run",
+   "title": "Run the G3 application (grid + pricing) under the locked G3 protocol?"
+  },
+  {
+   "budget_envelope": {
+    "calls": 4000,
+    "cost_units": 1.0,
+    "wall_seconds": 5400
+   },
+   "decision_point": "2026-11-13, after the v3 preregistration text was locked and before invocation 1",
+   "episode_id": "EP2-ABC-V3",
+   "evidence_scope": [
+    {
+     "artifact": "abc-v3-01 preregistration locked text",
+     "sha256": "55b6331eeed0cfc4779b09114cc74d7c48c47b1a125759bc6296105e3e6529be"
+    },
+    {
+     "artifact": "abc-v3-01 kernel protocol",
+     "sha256": "8591b93814759d5485be3f9e8b47e31a08aa7b1fc41e14b2707b2aa46b975c1a"
+    }
+   ],
+   "information_snapshot": "G2 has two measured nulls (v1 and v2), both by saturation. The v3 design attacks saturation: three fresh bands (20261501-20261503), arms A = catalog-only, B = catalog + admitted discovered singles, C = B + admitted chains; score-call cap 4000 per task, 60 s wall per task; the pass rule is ONE composite differentiation index DI = min((C-A) - 15pp, (B-A) - 5pp, control margin, regression-relative) and DI >= 0 is required. The control margin term means: if enriching the catalog makes ANY control task regress versus arm A, the whole run can fail on that term alone, however large the evaluation gains are. Whether enriched catalogs can interfere with control solving is unknown at this point; no control regression has been observed in v1/v2 because they saturated. Total run wall is expected in the thousands of seconds across bands. The Muse VM has been replaced/rebooted before during long work.",
+   "known_risk_keywords_at_time": [
+    "control",
+    "regression",
+    "saturation",
+    "interference",
+    "reboot"
+   ],
+   "options_available": [
+    "run_v3_as_locked",
+    "run_single_band_first",
+    "do_not_run"
+   ],
+   "prior_exposure_declaration": "ila, Ian and the owner have all seen this episode's outcome. The generating model predates the program events (see EP1). Snapshot authored from the locked preregistration terms and the v3 design record only; rubric scores at-time reasoning, not the outcome.",
+   "sealed_target_status_at_time": "sealed_bands_unopened",
+   "title": "Run A/B/C v3 (abc-v3-01) to measure G2 differentiation?"
+  },
+  {
+   "budget_envelope": {
+    "calls": 0,
+    "cost_units": 1.0,
+    "wall_seconds": 3600
+   },
+   "decision_point": "2026-11-13, after the gate preregistration was locked and before the replication guard ran",
+   "episode_id": "EP3-ROUND2-GATE",
+   "evidence_note": "The gate preregistration hash as printed in Addendum 60 is truncated to 62 hex chars in the official record, so it is NOT used as a citable evidence hash; the citable artifacts are the Addendum 57 design record and the full extended manifest digest.",
+   "evidence_scope": [
+    {
+     "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM57.md",
+     "sha256": "a9de206843de45a589a6d8e64e5a7c5205f33e299d8bce16cb773705d812f3df"
+    },
+    {
+     "artifact": "round2-gate-01 extended six-component manifest",
+     "sha256": "47a5afc4b6c6222e6ee4050f620898aeb885ceaec2dc22a489e2914e490e9f81"
+    }
+   ],
+   "information_snapshot": "In an exploratory round and a confirmatory round, ONE statement-motion key - ('move_stmt', ('augassign','t','Add','t'), ('return',)) - captured the entire observed lift effect. The gate design: candidate = the frozen G3 mechanism PLUS the round-2 motion family lifted into the core schema space. Pass rule: round2_index >= 0, index = min(B_disc - 80, (capture - 0.6) * 100, control_margin_pp), on a fresh band (seeds 72000-72099). Before any measurement counts, a three-part replication guard must pass (grid replication exact, pricing probe 1000/1000, sandbox replication with controls 30/30, 15/15, 15/15). The control margin is again a binding term: any control regression makes the index negative. The single-key concentration is itself a fragility: if the fresh band's discriminating tasks do not contain that key's shape, B_disc can fall under the 80% bar.",
+   "known_risk_keywords_at_time": [
+    "control",
+    "single-key",
+    "concentration",
+    "fresh band",
+    "replication"
+   ],
+   "options_available": [
+    "run_gate_as_locked",
+    "run_guard_only_first",
+    "do_not_run"
+   ],
+   "prior_exposure_declaration": "ila, Ian and the owner have all seen this episode's outcome. The generating model predates the program events (see EP1). Snapshot authored from the locked preregistration and gate design only; rubric scores at-time reasoning, not the outcome.",
+   "sealed_target_status_at_time": "sealed_fresh_band_unopened",
+   "title": "Apply the round-2 gate: lift the statement-motion family into the core schema space and measure on a fresh band?"
+  },
+  {
+   "budget_envelope": {
+    "calls": 2000,
+    "cost_units": 1.0,
+    "wall_seconds": 1800
+   },
+   "decision_point": "2026-11-13 evening, after Stage 0 replay reproduced the regression and identified the witness tasks",
+   "episode_id": "EP4-CONTROL-REGRESSION-ATTRIBUTION",
+   "evidence_scope": [
+    {
+     "artifact": "band 20261501 admitted catalog digest",
+     "sha256": "a67685635cffb2c20a1c48bedd797b34ab71e93d7325eaae734231036418ee68"
+    },
+    {
+     "artifact": "docs/research/ACE_CONTROL_REGRESSION_DESIGN_DRAFT_20261113.md (PR #173 branch)",
+     "sha256": "8f6023d6fdd1991f35caf24d8c0f73afca1895fa012799094e28ce57b0d460b8"
+    }
+   ],
+   "information_snapshot": "Stage 0 (capped replay) reproduced the v3 band-20261501 control counts exactly (A 34/34, B 32/34, C 32/34); the uncapped replay is identical, so the score-call cap was never hit - the budget axis is dead as an explanation. The two regressed tasks are catalog_control-020 (410 calls, shown 4/8) and catalog_control-021 (159 calls, shown 2/8); the returned code in the enriched arms is not shown-perfect. Both failing traces open with the same distractor key: ('name_swap', (5,2,3,0,1,4), 'nc'). Hypotheses on the table: M1a budget exhaustion (already refuted by Stage 0), M1b the winning code is never generated under the enriched catalog, M2 interference in the search path (the distractor diverts the greedy search), M3 key-order sensitivity. The proposed Stage-1 test: remove exactly the 'nc' key and re-solve both witness tasks; as a control, remove the sibling 'gc' key instead; additionally permute key order. This is forensic replay of already-recorded configurations - it cannot move the G2 board and must not re-measure the sealed bands.",
+   "known_risk_keywords_at_time": [
+    "distractor",
+    "diversion",
+    "sealed",
+    "forensic",
+    "permutation"
+   ],
+   "options_available": [
+    "run_key_removal_attribution",
+    "run_permutation_only",
+    "do_not_run"
+   ],
+   "prior_exposure_declaration": "ila, Ian and the owner have all seen this episode's outcome. The generating model predates the program events (see EP1). Snapshot authored from the Stage 0 record and the design draft only; rubric scores at-time reasoning, not the outcome.",
+   "sealed_target_status_at_time": "sealed_bands_read_only_forensic",
+   "title": "Run the Stage-1 attribution experiment for the v3 control regression (key-removal tests)?"
+  },
+  {
+   "budget_envelope": {
+    "calls": 0,
+    "cost_units": 1.0,
+    "wall_seconds": 3600
+   },
+   "decision_point": "2026-11-13, with the G4 application design recorded in Addendum 57 and before the board moved",
+   "episode_id": "EP5-G4-INHERITANCE",
+   "evidence_scope": [
+    {
+     "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM57.md",
+     "sha256": "a9de206843de45a589a6d8e64e5a7c5205f33e299d8bce16cb773705d812f3df"
+    },
+    {
+     "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM54.md",
+     "sha256": "10301eb7059b6e3dcc7cf4409b61f130c3ec4c6f6ae5b781c8cafea89cf68cf6"
+    }
+   ],
+   "information_snapshot": "By this point the gate board reads: G1 demonstrated, G2 not yet finally measured by v3, G3 measured SPECIALIZATION (grid transfer yes, pricing transfer no). The G4 question is inheritance: whether the capability carried in the frozen mechanism/catalog artifacts passes to a successor configuration that did not itself discover them, measured by applying the inherited artifacts under the G4 instrument rather than re-discovering. The risk pattern from G3 is fresh: a composite can be dragged by a single stratum, and a claim stated as a conjunction fails if any conjunct fails. The application must therefore state in advance which strata bind the verdict and what counts as inheritance versus mere re-use of code. Cost is of the same order as the G3 application (thousands of seconds of solver wall).",
+   "known_risk_keywords_at_time": [
+    "composite",
+    "stratum",
+    "conjunction",
+    "inheritance",
+    "re-use"
+   ],
+   "options_available": [
+    "run_g4_application",
+    "run_reduced_strata_first",
+    "do_not_run"
+   ],
+   "prior_exposure_declaration": "ila, Ian and the owner have all seen this episode's outcome. The generating model predates the program events (see EP1). Snapshot authored from Addendum 57's design material and the G3 record only; rubric scores at-time reasoning, not the outcome.",
+   "sealed_target_status_at_time": "not_sealed_application_run",
+   "title": "Run the G4 inheritance application (does a successor inherit the demonstrated mechanism)?"
+  },
+  {
+   "budget_envelope": {
+    "calls": 0,
+    "cost_units": 1.0,
+    "wall_seconds": 1800
+   },
+   "decision_point": "2026-11-13 evening, raised by panen koordinasi #2 (PR #173 section 8) and awaiting a hub act",
+   "episode_id": "EP6-PER-TASK-RECORDING",
+   "evidence_scope": [
+    {
+     "artifact": "docs/research/ACE_OMEGA_CHECKPOINT_20261113_ADDENDUM59.md",
+     "sha256": "387da1259a8f9f6b4f09189944ef5a2ad89d51d08878b2d92026085743253b7d"
+    },
+    {
+     "artifact": "docs/research/ACE_CONTROL_REGRESSION_DESIGN_DRAFT_20261113.md (PR #173 branch)",
+     "sha256": "8f6023d6fdd1991f35caf24d8c0f73afca1895fa012799094e28ce57b0d460b8"
+    }
+   ],
+   "information_snapshot": "A concrete gap was just lived: the v3 run state kept aggregate control flips, not per-task control outcomes, so identifying the two regressed witness tasks of band 20261501 required a whole Stage 0 replay - re-executing recorded configurations just to recover two task ids. The standing rule since the v3 seal says future runs must record per-task control results, but the driver does not do it by default yet. The proposed fix is small, mechanical and additive: record per-task solved maps in run state. It pays into the control-regression line (witness identification without replays), the inoculation battery, and Stage 3's per-task traces. The risk is instrumentation itself: logging must not change solver outputs or decision traces - a logging-invariance check on the A-B comparison is the known gate for any such change. The alternative is to keep paying replay costs on every future forensic question.",
+   "known_risk_keywords_at_time": [
+    "logging-invariance",
+    "instrumentation",
+    "replay",
+    "per-task",
+    "trace"
+   ],
+   "options_available": [
+    "build_per_task_recording",
+    "record_controls_only_manually",
+    "do_not_run"
+   ],
+   "prior_exposure_declaration": "ila, Ian and the owner know this candidate's disposition (adopted as a milestone candidate; build sits at Ian's desk). The generating model predates the program events (see EP1). Snapshot authored from PR #173 section 8 only; rubric scores at-time reasoning, not the outcome.",
+   "sealed_target_status_at_time": "no_sealed_target_touched",
+   "title": "Adopt per-task control recording by default in the run driver (first-usefulness milestone candidate)?"
+  }
+ ],
+ "note": "FROZEN at-time snapshots ONLY. Outcomes live in outcomes.json, a separate store that the prompt builder never reads. Each episode carries a mandatory prior-exposure declaration (PR #177 addendum item 2): hiding an outcome does not erase anyone's memory, so exposure is declared, not denied.",
+ "store": "proposer_stage1_episodes_v1"
+}
