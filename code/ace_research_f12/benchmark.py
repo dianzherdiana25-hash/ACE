@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 import gzip
 import hashlib
 import json
+import logging
 from pathlib import Path
 import random
 import sys
@@ -218,8 +219,13 @@ def execute_full_f12_benchmark(output_path: Path) -> Dict[str, Any]:
             try:
                 ace_rt.acquire_task(task_dict)
                 runtime_task_ids.append(task_dict["name"])
-            except Exception:
-                pass
+            except Exception as exc:
+                # A task that fails registration is skipped, but
+                # never silently: the benchmark's coverage is part
+                # of its result.
+                logging.getLogger(__name__).warning(
+                    "task registration failed for %s: %s",
+                    task_dict["name"], exc)
 
     # 2. Setup Host Controller for Arms Evaluation
     holdout_banks = {t.task_id: list(t.holdout_pool) for t in tasks.values()}

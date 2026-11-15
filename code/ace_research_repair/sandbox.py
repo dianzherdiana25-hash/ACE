@@ -73,6 +73,8 @@ def is_os_sandbox_available() -> tuple[bool, str]:
             if r.returncode == 0:
                 return True, "bwrap"
         except Exception:
+            # Capability probe: failure means this isolation
+            # backend is unavailable; fall through to the next.
             pass
 
     unshare_path = shutil.which("unshare")
@@ -86,6 +88,7 @@ def is_os_sandbox_available() -> tuple[bool, str]:
             if r.returncode == 0:
                 return True, "unshare_user_net"
         except Exception:
+            # Capability probe: see the bwrap probe above.
             pass
 
     return False, "NO_OS_SANDBOX"
@@ -163,17 +166,20 @@ def _make_preexec(
             try:
                 resource.setrlimit(resource.RLIMIT_AS, (mem_limit_bytes, mem_limit_bytes))
             except (ValueError, OSError):
+                # Best-effort limit: a platform that rejects one
+                # limit keeps its default; the others still apply
+                # (same rule for RLIMIT_FSIZE / RLIMIT_NOFILE below).
                 pass
         if hasattr(resource, "RLIMIT_FSIZE"):
             try:
                 resource.setrlimit(resource.RLIMIT_FSIZE, (fsize_limit_bytes, fsize_limit_bytes))
             except (ValueError, OSError):
-                pass
+                pass  # same best-effort rule as RLIMIT_AS above
         if hasattr(resource, "RLIMIT_NOFILE"):
             try:
                 resource.setrlimit(resource.RLIMIT_NOFILE, (nofile_limit, nofile_limit))
             except (ValueError, OSError):
-                pass
+                pass  # same best-effort rule as RLIMIT_AS above
 
     return _apply_limits
 
@@ -511,6 +517,8 @@ def _execute_staged_python(
             try:
                 os.killpg(proc.pid, signal.SIGKILL)
             except ProcessLookupError:
+                # The process already exited between the timeout
+                # and the kill — the desired end state.
                 pass
             proc.communicate()
             return True, None, "TimeoutExpired"

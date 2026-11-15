@@ -41,7 +41,14 @@ class EvidenceArchiver:
             try:
                 manifest = json.loads(self.manifest_path.read_text(encoding="utf-8"))
             except Exception:
-                pass
+                # A corrupt manifest is evidence too: preserve it
+                # for inspection instead of silently resetting the
+                # index, then rebuild from the artifacts on disk.
+                try:
+                    self.manifest_path.replace(
+                        self.manifest_path.with_suffix(".corrupt.json"))
+                except OSError:
+                    pass  # preserve is best-effort; the rebuild proceeds
 
         if not self.evidence_dir.exists():
             return manifest

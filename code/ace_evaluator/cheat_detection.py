@@ -82,7 +82,10 @@ def evaluate_candidate_integrity(
             out_empty = candidate_fn("")
             # If candidate throws unhandled exception on standard input
         except Exception:
-            pass
+            # Per the probe's own contract above: throwing on
+            # degenerate standard input is a recorded integrity
+            # signal, not a silent pass.
+            reasons.append("CANDIDATE_THREW_ON_DEGENERATE_INPUT")
 
     admitted = len(reasons) == 0
     return {

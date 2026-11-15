@@ -413,6 +413,8 @@ class ConversationalEngine:
                 from .memory_snapshot import import_snapshot_if_needed
                 import_snapshot_if_needed(store)
         except Exception:
+            # Optional snapshot import: must never break startup
+            # (it is also skipped under test runners, above).
             pass
 
     def _build_capabilities_reply(self, mode_label: str) -> str:

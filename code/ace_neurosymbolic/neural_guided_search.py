@@ -344,6 +344,7 @@ class StatisticalFeatureEstimator:
                     if pred == y:
                         matches += 1
                 except Exception:
+                    # Scoring semantics: a candidate that raises does not score this case.
                     pass
             return matches / n
 

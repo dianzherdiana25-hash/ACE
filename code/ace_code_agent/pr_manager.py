@@ -11,6 +11,7 @@ Handles end-to-end Git operations and GitHub Pull Request lifecycle:
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 import re
 import subprocess
@@ -210,8 +211,12 @@ class AutonomousPRManager:
                     pr_meta.pr_number = pr_num
                     pr_meta.pr_url = pr_url
                     return True, "PR already open.", pr_num, pr_url
-                except Exception:
-                    pass
+                except Exception as exc:
+                    # Probe failure falls through to PR creation,
+                    # but is logged: an unparseable gh response is
+                    # how duplicate-PR attempts start.
+                    logging.getLogger(__name__).warning(
+                        "existing-PR check failed: %s", exc)
 
             # Create new PR
             cmd = [

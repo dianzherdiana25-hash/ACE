@@ -551,6 +551,7 @@ class OperationalStore:
                 try:
                     self.fenced.release(self._active_leases.pop("runtime"))
                 except Exception:
+                    # Best-effort release: the fenced lease expires by TTL regardless.
                     pass
             lease = self.fenced.acquire("runtime", owner, ttl=float(ttl_sec))
             self._active_leases["runtime"] = lease
@@ -564,6 +565,7 @@ class OperationalStore:
                 try:
                     self.fenced.release(lease)
                 except Exception:
+                    # Best-effort release: the fenced lease expires by TTL regardless.
                     pass
 
     def current_lease_epoch(self) -> int:
