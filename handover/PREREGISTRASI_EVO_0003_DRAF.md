@@ -4,15 +4,20 @@ Status: **DRAF** — berlaku hanya sesudah ratifikasi hub. Ditulis atas
 keputusan pemilik 2026-11-16 01:05 (bentuk kilat) + perintah jalan 01:08.
 Kendaraan evolusi: slate v2 ACE sendiri (PR #238, brain_endpoints).
 
-## 0. Kolom terbuka — basis Fase 0
+## 0. Kolom basis Fase 0 — TERISI
 
-**TERBUKA, menunggu kata pemilik.** Dua pilihan:
-(a) merge dulu — larian di atas main hasil merge PR-PR ter-ratifikasi;
-(b) basis bertumpuk — larian di atas tumpukan cabang tanpa merge.
-Draf ini TIDAK memilih. Panggung yang tergantung pohon kode (generator
-katalog band, saringan kesesuaian baterai, skrip ledakan yang dipin ke
-digest pohon) menunggu kolom ini. Panggung korpora/band/baterai sebagai
-DATA berjalan sekarang (nota panggung menyertai draf ini).
+**Kata pemilik (2026-11-16 01:29, via hub): "Merge PR pemikul beban
+dulu, lalu 0003 di atas main."** Empat PR kode ter-merge berurutan:
+#232 (merge bc898798) → #233 (bf4036ad) → #235 (da4e7d10) → #238
+(f6d75462), tanpa konflik.
+
+**Basis ledakan = `main` @ f6d7546213449f8fc65b825fc87b5b87a69eec0e**,
+terverifikasi pada worktree pristine dari basis itu: modul
+brain_endpoints + memory_writeback hadir dan ter-impor; default
+`guard=True` pada semua permukaan solver publik (abstraction_engine,
+admission_hygiene, lexical_ops); 30 tes modul tersentuh (brain_endpoints,
+lineage_guard_default, memory_writeback, sovereign_runtime) hijau di
+venv verifikasi. Panggung tergantung pohon berjalan di atas basis ini.
 
 ## 1. Klaim yang diuji
 
