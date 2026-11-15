@@ -208,8 +208,18 @@ class ChatResult:
 
 
 def parse_chat_response(payload: dict) -> ChatResult:
-    """Split the answer channel from the reasoning channel."""
-    msg = payload["choices"][0]["message"]
+    """Split the answer channel from the reasoning channel.
+
+    A 200 response whose body does not carry the chat-completion shape
+    is an organ fault, not data: it raises BrainUnavailable like any
+    other organ failure (fail-closed)."""
+    try:
+        msg = payload["choices"][0]["message"]
+        if not isinstance(msg, dict):
+            raise TypeError("message is not an object")
+    except (KeyError, IndexError, TypeError) as exc:
+        raise BrainUnavailable(
+            f"malformed chat response shape: {exc!r}") from exc
     timings = payload.get("timings") or {}
     return ChatResult(
         content=msg.get("content") or "",
@@ -269,7 +279,11 @@ def embed(texts: list[str], *, timeout: float = 120.0,
     vectors: list[list[float]] = []
     items = out if isinstance(out, list) else [out]
     for item in items:
-        emb = item["embedding"]
+        try:
+            emb = item["embedding"]
+        except (KeyError, TypeError) as exc:
+            raise BrainUnavailable(
+                f"malformed embedding response shape: {exc!r}") from exc
         if emb and isinstance(emb[0], list):
             vectors.extend(emb)
         else:
