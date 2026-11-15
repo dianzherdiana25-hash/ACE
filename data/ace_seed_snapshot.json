@@ -1,7 +1,7 @@
 {
   "schema": "ace.seed_snapshot.v1",
-  "exported_at": "2026-11-15T08:06:12Z",
-  "vocab_count": 844,
+  "exported_at": "2026-11-15T08:09:05Z",
+  "vocab_count": 864,
   "memories_count": 2,
   "dialog_corpus_count": 133,
   "lexicon": [
@@ -611,6 +611,11 @@
       "role": "emosi"
     },
     {
+      "word": "gairah",
+      "meaning_id": "perasaan panas karena cuaca panas ekstrem",
+      "role": "emosi"
+    },
+    {
       "word": "gembira",
       "meaning_id": "rasa sukacita yang terang dan bersemangat",
       "role": "emosi"
@@ -831,6 +836,11 @@
       "role": "objek"
     },
     {
+      "word": "apresiasi",
+      "meaning_id": "perhatian atau penghargaan",
+      "role": "objek"
+    },
+    {
       "word": "arsitektur",
       "meaning_id": "konsep pembangunan bangunan yang mempertimbangkan estetika dan fungsi",
       "role": "objek"
@@ -848,6 +858,11 @@
     {
       "word": "aslinya",
       "meaning_id": "sebenarnya",
+      "role": "objek"
+    },
+    {
+      "word": "atas",
+      "meaning_id": "di atas, sebagai penanda posisi",
       "role": "objek"
     },
     {
@@ -1401,6 +1416,11 @@
       "role": "objek"
     },
     {
+      "word": "ganjaran",
+      "meaning_id": "ancaman cuaca ekstrem karena kelembaban tinggi",
+      "role": "objek"
+    },
+    {
       "word": "ganti",
       "meaning_id": "proses mengganti suatu peralatan",
       "role": "objek"
@@ -1446,6 +1466,11 @@
       "role": "objek"
     },
     {
+      "word": "gema",
+      "meaning_id": "getaran yang terdengar di udara saat hujan lebat",
+      "role": "objek"
+    },
+    {
       "word": "genangan",
       "meaning_id": "air yang terkumpul di permukaan",
       "role": "objek"
@@ -1463,6 +1488,16 @@
     {
       "word": "gerak",
       "meaning_id": "perubahan posisi tubuh secara aktif",
+      "role": "objek"
+    },
+    {
+      "word": "gerhana",
+      "meaning_id": "fenomena matahari tersembul oleh bulan",
+      "role": "objek"
+    },
+    {
+      "word": "gerimis",
+      "meaning_id": "hujan ringan yang turun secara perlahan",
       "role": "objek"
     },
     {
@@ -1491,13 +1526,33 @@
       "role": "objek"
     },
     {
+      "word": "gradasi",
+      "meaning_id": "perubahan warna langit dari senja sampai malam",
+      "role": "objek"
+    },
+    {
       "word": "grate",
       "meaning_id": "alat memotong bahan makanan",
       "role": "objek"
     },
     {
+      "word": "gundukan",
+      "meaning_id": "kumpulan tanah atau kerikil yang tidak rata",
+      "role": "objek"
+    },
+    {
       "word": "gunting",
       "meaning_id": "alat pemotong untuk kertas atau logam",
+      "role": "objek"
+    },
+    {
+      "word": "gunung",
+      "meaning_id": "lereng tinggi yang terbentuk dari batuan",
+      "role": "objek"
+    },
+    {
+      "word": "gunungapi",
+      "meaning_id": "pegunungan dengan aktivitas meletupkan",
       "role": "objek"
     },
     {
@@ -1926,6 +1981,11 @@
       "role": "objek"
     },
     {
+      "word": "kepercayaan",
+      "meaning_id": "keyakinan terhadap sesuatu",
+      "role": "objek"
+    },
+    {
       "word": "kerang",
       "meaning_id": "hewan laut berbentuk kerucut yang hidup di dasar laut",
       "role": "objek"
@@ -2013,6 +2073,11 @@
     {
       "word": "kolaborasi",
       "meaning_id": "kerja sama antarindividu atau tim untuk mencapai tujuan bersama",
+      "role": "objek"
+    },
+    {
+      "word": "kolega",
+      "meaning_id": "rekan kerja sejawat",
       "role": "objek"
     },
     {
@@ -2323,6 +2388,11 @@
     {
       "word": "menghadapi",
       "meaning_id": "Menangani atau menghadapi sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "menghargai",
+      "meaning_id": "memberi nilai positif kepada sesuatu",
       "role": "objek"
     },
     {
@@ -2791,6 +2861,11 @@
       "role": "objek"
     },
     {
+      "word": "saran",
+      "meaning_id": "saran atau pendapat untuk memperbaiki",
+      "role": "objek"
+    },
+    {
       "word": "sastra",
       "meaning_id": "genre puisi atau novel",
       "role": "objek"
@@ -3073,6 +3148,11 @@
     {
       "word": "tertentu",
       "meaning_id": "Kata \"tertentu\" memiliki makna spesifik, berarti pasti atau tentu saja",
+      "role": "objek"
+    },
+    {
+      "word": "tetap",
+      "meaning_id": "tidak berubah, terus-menerus",
       "role": "objek"
     },
     {
@@ -3486,6 +3566,11 @@
       "role": "sifat"
     },
     {
+      "word": "hormat",
+      "meaning_id": "rasa penghargaan terhadap orang lain",
+      "role": "sifat"
+    },
+    {
       "word": "indah",
       "meaning_id": "elok dipandang, didengar, atau dirasakan",
       "role": "sifat"
@@ -3851,6 +3936,11 @@
       "role": "sifat"
     },
     {
+      "word": "triknya",
+      "meaning_id": "cara cepat atau rahasia yang digunakan",
+      "role": "sifat"
+    },
+    {
       "word": "wabah",
       "meaning_id": "kerusakan atau keadaan buruk dikarenakan awan panjang",
       "role": "sifat"
@@ -3953,6 +4043,11 @@
     {
       "word": "gipet",
       "meaning_id": "tempat menaruh bumbu atau rempah",
+      "role": "tempat"
+    },
+    {
+      "word": "gurun",
+      "meaning_id": "daerah kering dengan banyak pasir dan tanah keras",
       "role": "tempat"
     },
     {
@@ -4133,6 +4228,11 @@
     {
       "word": "efisien",
       "meaning_id": "yang beroperasi dengan baik dan tidak memerlukan banyak waktu atau sumber daya",
+      "role": "waktu"
+    },
+    {
+      "word": "gugur",
+      "meaning_id": "waktu musim ketika daun jatuh di pegunungan",
       "role": "waktu"
     },
     {
@@ -5190,5 +5290,5 @@
       "backend": "local-gguf-server"
     }
   ],
-  "snapshot_version": "cf50f0fc9d6d8f6b"
+  "snapshot_version": "a462efe7d41ab52d"
 }
