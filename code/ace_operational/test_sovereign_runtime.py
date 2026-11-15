@@ -68,6 +68,23 @@ class SovereignRuntimeTests(unittest.TestCase):
             )
             self.assertFalse(bad_sub["accepted"])
 
+    def test_no_executor_fails_closed(self) -> None:
+        # Absorption audit items #5/#6: run_single_tick without an
+        # executor must NOT fabricate {"verified": True}. The task
+        # is quarantined as a fault, no proof pheromone is written,
+        # and health does not increase.
+        with tempfile.TemporaryDirectory() as d:
+            sup = SovereignRuntimeSupervisor(Path(d))
+            result = sup.run_single_tick(
+                {"task_id": "no_exec_1", "expected_benefit": 1.0,
+                 "estimated_dt": 0.4, "remaining_budget_ratio": 1.0})
+            self.assertEqual(result["status"], "quarantined_into_antibody")
+            self.assertEqual(result["health_score"], 0.5)
+            self.assertEqual(result["antibodies_compiled"], 1)
+            proofs = [n for n in sup.dag.nodes(kind="proof_pheromone")
+                      if n.payload.get("task_id") == "no_exec_1"]
+            self.assertEqual(proofs, [])
+
     def test_substrate_spore_migration_and_tamper_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as src_dir, tempfile.TemporaryDirectory() as dst_dir:
             sup = SovereignRuntimeSupervisor(src_dir)
