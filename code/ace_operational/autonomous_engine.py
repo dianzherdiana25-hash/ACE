@@ -588,7 +588,7 @@ class ContinuousAutonomousEngine:
         ungrounded = speech_engine.list_heard_words(ungrounded_only=True, limit=limit)
         if not ungrounded:
             return []
-        known_roots = set(speech_engine.list_known_words())
+        known_roots = {str(w.get("word", "")).lower() for w in speech_engine.list_lexicon() if w.get("word")}
         learned: list[dict[str, Any]] = []
         for item in ungrounded:
             word = str(item.get("word", "")).strip().lower()
