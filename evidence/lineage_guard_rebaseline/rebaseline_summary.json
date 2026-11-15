@@ -1,0 +1,176 @@
+{
+ "experiment": "misi10-rebaseline-discovery",
+ "scope": "DISCOVERY ONLY \u2014 no cells, no sealed run, no verdict",
+ "code_base": "origin/main 7541782",
+ "bands": [
+  {
+   "band": 20261801,
+   "seconds": 1527.68,
+   "n_pool": 12,
+   "n_evaluation": 29,
+   "n_control": 34,
+   "n_pair_pool": 6,
+   "n_keys": 6,
+   "n_chains": 2,
+   "keys": [
+    "('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult')",
+    "('binop_unwrap', (5, 2, 3, 0, 1, 4), 'left')",
+    "('int_constant', (5, 2, 3, 0, 1, 4, 2), 0)",
+    "('int_constant', (5, 2, 3, 1, 1, 2), 1)",
+    "('return_indices', (6,), ('gr', 'gc'))",
+    "('string_literal', (5, 2, 3, 0, 4, 2), '#')"
+   ],
+   "chains": [
+    "(('int_constant', (5, 2, 3, 1, 1, 2), 1), ('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult'))",
+    "(('return_indices', (6,), ('gr', 'sr')), ('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult'), ('return_indices', (6,), ('gr', 'gc')))"
+   ],
+   "catalog_digest": "a9ddf613eda090d88897866444f7db274aeb89b3f50cf3e375363fa0d056e711",
+   "code_base": "origin/main 7541782 (wt-m9main)",
+   "driver": "misi10 discover_bands.py (pola probe R5)"
+  },
+  {
+   "band": 20261802,
+   "seconds": 2966.02,
+   "n_pool": 12,
+   "n_evaluation": 30,
+   "n_control": 34,
+   "n_pair_pool": 6,
+   "n_keys": 60,
+   "n_chains": 1,
+   "keys": [
+    "('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult')",
+    "('binop_unwrap', (5, 2, 3, 0, 1, 4), 'left')",
+    "('int_constant', (5, 2, 3, 0, 1, 4, 2), 0)",
+    "('int_constant', (5, 2, 3, 1, 1, 2), 1)",
+    "('return_indices', (6,), ('gr', 'gc'))",
+    "('string_literal', (5, 2, 3, 0, 4, 2), '#')",
+    "('name_swap', (5, 2, 2, 1, 0, 0), 'c')",
+    "('name_swap', (5, 2, 2, 1, 0, 0), 'cols')",
+    "('name_swap', (5, 2, 2, 1, 0, 0), 'dc')",
+    "('name_swap', (5, 2, 2, 1, 0, 0), 'sc')",
+    "('name_swap', (5, 2, 2, 1, 0, 0), 'sr')",
+    "('name_swap', (5, 2, 2, 1, 0, 2), 'cols')",
+    "('name_swap', (5, 2, 2, 1, 0, 2), 'gc')",
+    "('name_swap', (5, 2, 2, 1, 0, 2), 'r')",
+    "('name_swap', (5, 2, 2, 1, 0, 2), 'rows')",
+    "('name_swap', (5, 2, 2, 1, 0, 2), 'sc')",
+    "('name_swap', (5, 2, 2, 1, 0, 2), 'sr')",
+    "('name_swap', (5, 2, 2, 1, 1, 0), 'cols')",
+    "('name_swap', (5, 2, 2, 1, 1, 0), 'dr')",
+    "('name_swap', (5, 2, 2, 1, 1, 0), 'r')",
+    "('name_swap', (5, 2, 2, 1, 1, 0), 'rows')",
+    "('name_swap', (5, 2, 2, 1, 1, 2), 'cols')",
+    "('name_swap', (5, 2, 2, 1, 1, 2), 'gr')",
+    "('name_swap', (5, 2, 2, 1, 1, 2), 'rows')",
+    "('int_constant', (5, 2, 3, 0, 1, 0), 2)",
+    "('name_swap', (5, 2, 3, 0, 1, 3), 'cols')",
+    "('name_swap', (5, 2, 3, 0, 1, 3), 'rows')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'dc')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'dr')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'gc')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'gr')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'nr')",
+    "('name_swap', (5, 2, 3, 0, 1, 4), 'r')",
+    "('int_constant', (5, 2, 3, 0, 2, 0), 2)",
+    "('name_swap', (5, 2, 3, 0, 2, 3), 'cols')",
+    "('name_swap', (5, 2, 3, 0, 2, 4), 'c')",
+    "('name_swap', (5, 2, 3, 0, 2, 4), 'dc')",
+    "('name_swap', (5, 2, 3, 0, 2, 4), 'gc')",
+    "('name_swap', (5, 2, 3, 0, 2, 4), 'nc')",
+    "('unary_not', (5, 2, 3, 0, 3), 'wrap')",
+    "('compare_swap', (5, 2, 3, 0, 3), 'Lt')",
+    "('compare_swap', (5, 2, 3, 0, 3), 'Gt')",
+    "('compare_swap', (5, 2, 3, 0, 3), 'NotEq')",
+    "('subscript_index', (5, 2, 3, 0, 3, 0, 0), 'sr')",
+    "('subscript_index', (5, 2, 3, 0, 3, 0, 0), 'sc')",
+    "('name_swap', (5, 2, 3, 0, 3, 0, 0, 0), 'grid')",
+    "('name_swap', (5, 2, 3, 0, 3, 0, 0, 1), 'r')",
+    "('int_constant', (5, 2, 3, 0, 3, 2, 1), 0)",
+    "('int_constant', (5, 2, 3, 0, 3, 2, 1), 2)",
+    "('unary_not', (5, 2, 3, 0, 4), 'wrap')",
+    "('compare_swap', (5, 2, 3, 0, 4), 'Gt')",
+    "('compare_swap', (5, 2, 3, 0, 4), 'GtE')",
+    "('compare_swap', (5, 2, 3, 0, 4), 'Eq')",
+    "('name_swap', (5, 2, 3, 2, 0, 0, 0), 'dist')",
+    "('name_swap', (5, 2, 3, 2, 0, 1, 0), 'nc')",
+    "('name_swap', (5, 2, 3, 2, 0, 1, 0), 'r')",
+    "('name_swap', (5, 2, 3, 2, 0, 1, 0), 'sc')",
+    "('name_swap', (5, 2, 3, 2, 0, 1, 0), 'sr')",
+    "('name_swap', (5, 2, 3, 2, 0, 1, 1), 'nr')"
+   ],
+   "chains": [
+    "(('int_constant', (5, 2, 3, 1, 1, 2), 1), ('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult'))"
+   ],
+   "catalog_digest": "3aab94cf1b8847a5a6a958d443ef19494b1c2fc7fb96d58c4a47d99812dd8df7",
+   "code_base": "origin/main 7541782 (wt-m9main)",
+   "driver": "misi10 discover_bands.py (pola probe R5)"
+  },
+  {
+   "band": 20261803,
+   "seconds": 1087.57,
+   "n_pool": 12,
+   "n_evaluation": 30,
+   "n_control": 34,
+   "n_pair_pool": 6,
+   "n_keys": 6,
+   "n_chains": 0,
+   "keys": [
+    "('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult')",
+    "('binop_unwrap', (5, 2, 3, 0, 1, 4), 'left')",
+    "('int_constant', (5, 2, 3, 0, 1, 4, 2), 0)",
+    "('int_constant', (5, 2, 3, 1, 1, 2), 1)",
+    "('return_indices', (6,), ('gr', 'gc'))",
+    "('string_literal', (5, 2, 3, 0, 4, 2), '#')"
+   ],
+   "chains": [],
+   "catalog_digest": "465508efbe082f31a3f87ccf01742cfc43fb76c97477577027a9bc0e44c35913",
+   "code_base": "origin/main 7541782 (wt-m9main)",
+   "driver": "misi10 discover_bands.py (pola probe R5)"
+  },
+  {
+   "band": 20261804,
+   "seconds": 1328.17,
+   "n_pool": 12,
+   "n_evaluation": 30,
+   "n_control": 34,
+   "n_pair_pool": 6,
+   "n_keys": 6,
+   "n_chains": 1,
+   "keys": [
+    "('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult')",
+    "('binop_unwrap', (5, 2, 3, 0, 1, 4), 'left')",
+    "('int_constant', (5, 2, 3, 0, 1, 4, 2), 0)",
+    "('int_constant', (5, 2, 3, 1, 1, 2), 1)",
+    "('return_indices', (6,), ('gr', 'gc'))",
+    "('string_literal', (5, 2, 3, 0, 4, 2), '#')"
+   ],
+   "chains": [
+    "(('return_indices', (6,), ('gr', 'gc')), ('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult'))"
+   ],
+   "catalog_digest": "5005072890bf608dc78a98965e6c9a3bf729a517c9689a12a9ccc051cbbaf62a",
+   "code_base": "origin/main 7541782 (wt-m9main)",
+   "driver": "misi10 discover_bands.py (pola probe R5)"
+  }
+ ],
+ "final_bands": {
+  "suitable": [
+   20261801,
+   20261803,
+   20261804
+  ],
+  "rejected": [
+   {
+    "band": 20261802,
+    "reason": "naturally admits the registry causal key ('name_swap', (5, 2, 3, 0, 1, 4), 'nc') plus 2 other 'nc' name_swap variants; infected construction degenerate (Stage L2 expansion effect)"
+   }
+  ],
+  "replacement": {
+   "band": 20261804,
+   "replaces": 20261802,
+   "seconds": 1328.17,
+   "catalog_digest": "5005072890bf608dc78a98965e6c9a3bf729a517c9689a12a9ccc051cbbaf62a",
+   "note": "digest equals the not-ratified confirmation band 20261701's digest: identical admitted set (same 6 old-schema keys, 1 chain) - explanation, not an anomaly"
+  }
+ }
+}
