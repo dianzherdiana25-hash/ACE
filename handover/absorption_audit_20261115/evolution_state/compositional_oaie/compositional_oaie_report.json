@@ -1,0 +1,673 @@
+{
+  "arm_totals": {
+    "ace_evolving": {
+      "candidates": 355986,
+      "solved": 14,
+      "tasks": 14
+    },
+    "cold_double_budget": {
+      "candidates": 563276,
+      "solved": 4,
+      "tasks": 14
+    },
+    "cold_fresh": {
+      "candidates": 561276,
+      "solved": 4,
+      "tasks": 14
+    },
+    "sham_control": {
+      "candidates": 1300286,
+      "solved": 4,
+      "tasks": 14
+    }
+  },
+  "budget": {
+    "max_candidates": 160000,
+    "max_level": 2,
+    "timeout_sec": 2.0
+  },
+  "causal_lineage_edges": 19,
+  "dag_chain_valid": true,
+  "dag_nodes_count": 16,
+  "experiment_kernel_audit": {
+    "chain_break_at": null,
+    "experiment_id": "exp_compositional_oaie_v1",
+    "ledger_entries_verified": 4,
+    "problems": [],
+    "results_verified": 4,
+    "status": "CLEAN"
+  },
+  "falsification": {
+    "all_falsification_probes_passed": true,
+    "probes": [
+      {
+        "dag_quarantined_fossil": true,
+        "passed": true,
+        "probe": "overfit_deception_trap",
+        "synthesized_on_shown": true,
+        "verifier_rejected_holdout": true
+      },
+      {
+        "passed": true,
+        "probe": "unrepresentable_task_honest_unsat",
+        "synthesis_status": "TIMEOUT",
+        "verified": false
+      },
+      {
+        "cold_candidates": 11,
+        "evolving_candidates": 11,
+        "passed": true,
+        "probe": "trivial_cold_matched_honest_hold",
+        "verdict": "HOLD_NO_ADVANTAGE"
+      }
+    ]
+  },
+  "generations": [
+    {
+      "arms": {
+        "ace_evolving": {
+          "candidates": 8940,
+          "solved": 4
+        },
+        "cold_double_budget": {
+          "candidates": 22911,
+          "solved": 4
+        },
+        "cold_fresh": {
+          "candidates": 22911,
+          "solved": 4
+        },
+        "sham_control": {
+          "candidates": 22911,
+          "solved": 4
+        }
+      },
+      "generation": "G1",
+      "library_size_after": 4,
+      "tasks": [
+        {
+          "ace_evolving": {
+            "ast_size": 8,
+            "candidates": 6300,
+            "dag_node_status": "tactical_verified",
+            "deps": [],
+            "forgetting_count": 0,
+            "holdout_passed": 3,
+            "holdout_total": 3,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 6300,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_fresh": {
+            "candidates": 6300,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "domain": "fintech_settlement",
+          "sham_control": {
+            "candidates": 6300,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "task_id": "g1_bounded_margin"
+        },
+        {
+          "ace_evolving": {
+            "ast_size": 3,
+            "candidates": 244,
+            "dag_node_status": "tactical_verified",
+            "deps": [
+              "skill_bounded_margin"
+            ],
+            "forgetting_count": 0,
+            "holdout_passed": 2,
+            "holdout_total": 2,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 6688,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_fresh": {
+            "candidates": 6688,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "domain": "unit_telemetry",
+          "sham_control": {
+            "candidates": 6688,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "task_id": "g1_positive_delta"
+        },
+        {
+          "ace_evolving": {
+            "ast_size": 7,
+            "candidates": 944,
+            "dag_node_status": "tactical_verified",
+            "deps": [
+              "skill_bounded_margin"
+            ],
+            "forgetting_count": 0,
+            "holdout_passed": 3,
+            "holdout_total": 3,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 8498,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_fresh": {
+            "candidates": 8498,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "domain": "metric_geometry",
+          "sham_control": {
+            "candidates": 8498,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "task_id": "g1_abs_diff"
+        },
+        {
+          "ace_evolving": {
+            "ast_size": 7,
+            "candidates": 1452,
+            "dag_node_status": "tactical_verified",
+            "deps": [],
+            "forgetting_count": 0,
+            "holdout_passed": 5,
+            "holdout_total": 5,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 1425,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_fresh": {
+            "candidates": 1425,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "domain": "protocol_security",
+          "sham_control": {
+            "candidates": 1425,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "task_id": "g1_is_framed"
+        }
+      ],
+      "tasks_count": 4,
+      "verdict": "EFFICIENCY_ADVANTAGE_ONLY",
+      "wake_sleep_compression": {
+        "compressed_dl_nodes": 25,
+        "compression_ratio": 1.0,
+        "flat_dl_nodes": 25,
+        "macros_discovered": []
+      }
+    },
+    {
+      "arms": {
+        "ace_evolving": {
+          "candidates": 84933,
+          "solved": 4
+        },
+        "cold_double_budget": {
+          "candidates": 175900,
+          "solved": 0
+        },
+        "cold_fresh": {
+          "candidates": 175900,
+          "solved": 0
+        },
+        "sham_control": {
+          "candidates": 411375,
+          "solved": 0
+        }
+      },
+      "generation": "G2",
+      "library_size_after": 8,
+      "tasks": [
+        {
+          "ace_evolving": {
+            "ast_size": 5,
+            "candidates": 26682,
+            "dag_node_status": "tactical_verified",
+            "deps": [
+              "skill_bounded_margin",
+              "skill_abs_diff"
+            ],
+            "forgetting_count": 0,
+            "holdout_passed": 2,
+            "holdout_total": 2,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 77122,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "cold_fresh": {
+            "candidates": 77122,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "domain": "sla_monitoring",
+          "sham_control": {
+            "candidates": 161000,
+            "status": "TIMEOUT",
+            "verified": false
+          },
+          "task_id": "g2_sla_excess"
+        },
+        {
+          "ace_evolving": {
+            "ast_size": 5,
+            "candidates": 23841,
+            "dag_node_status": "tactical_verified",
+            "deps": [
+              "skill_bounded_margin"
+            ],
+            "forgetting_count": 0,
+            "holdout_passed": 3,
+            "holdout_total": 3,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 57842,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "cold_fresh": {
+            "candidates": 57842,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "domain": "billing_policy",
+          "sham_control": {
+            "candidates": 160500,
+            "status": "TIMEOUT",
+            "verified": false
+          },
+          "task_id": "g2_quota_overage_fee"
+        },
+        {
+          "ace_evolving": {
+            "ast_size": 6,
+            "candidates": 2959,
+            "dag_node_status": "tactical_verified",
+            "deps": [
+              "skill_is_framed"
+            ],
+            "forgetting_count": 0,
+            "holdout_passed": 4,
+            "holdout_total": 4,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 5528,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "cold_fresh": {
+            "candidates": 5528,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "domain": "protocol_security",
+          "sham_control": {
+            "candidates": 16985,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "task_id": "g2_safe_framed_len"
+        },
+        {
+          "ace_evolving": {
+            "ast_size": 5,
+            "candidates": 31451,
+            "dag_node_status": "tactical_verified",
+            "deps": [
+              "skill_abs_diff"
+            ],
+            "forgetting_count": 0,
+            "holdout_passed": 4,
+            "holdout_total": 4,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 35408,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "cold_fresh": {
+            "candidates": 35408,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "domain": "sla_monitoring",
+          "sham_control": {
+            "candidates": 72890,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "task_id": "g2_band_breach"
+        }
+      ],
+      "tasks_count": 4,
+      "verdict": "EVOLUTIONARY_ADVANTAGE_DEMONSTRATED",
+      "wake_sleep_compression": {
+        "compressed_dl_nodes": 46,
+        "compression_ratio": 1.0,
+        "flat_dl_nodes": 46,
+        "macros_discovered": []
+      }
+    },
+    {
+      "arms": {
+        "ace_evolving": {
+          "candidates": 170543,
+          "solved": 4
+        },
+        "cold_double_budget": {
+          "candidates": 192623,
+          "solved": 0
+        },
+        "cold_fresh": {
+          "candidates": 190623,
+          "solved": 0
+        },
+        "sham_control": {
+          "candidates": 545000,
+          "solved": 0
+        }
+      },
+      "generation": "G3",
+      "library_size_after": 13,
+      "tasks": [
+        {
+          "ace_evolving": {
+            "ast_size": 7,
+            "candidates": 2713,
+            "dag_node_status": "tactical_verified",
+            "deps": [
+              "skill_is_framed",
+              "skill_band_breach"
+            ],
+            "forgetting_count": 0,
+            "holdout_passed": 5,
+            "holdout_total": 5,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 90652,
+            "status": "TIMEOUT",
+            "verified": false
+          },
+          "cold_fresh": {
+            "candidates": 88652,
+            "status": "TIMEOUT",
+            "verified": false
+          },
+          "domain": "cross_domain_guard",
+          "sham_control": {
+            "candidates": 99000,
+            "status": "TIMEOUT",
+            "verified": false
+          },
+          "task_id": "g3_framed_band_breach"
+        },
+        {
+          "ace_evolving": {
+            "ast_size": 5,
+            "candidates": 90080,
+            "dag_node_status": "tactical_verified",
+            "deps": [
+              "skill_bounded_margin",
+              "skill_abs_diff"
+            ],
+            "forgetting_count": 0,
+            "holdout_passed": 2,
+            "holdout_total": 2,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 47338,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "cold_fresh": {
+            "candidates": 47338,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "domain": "fintech_settlement",
+          "sham_control": {
+            "candidates": 160500,
+            "status": "TIMEOUT",
+            "verified": false
+          },
+          "task_id": "g3_net_settled_after_gap"
+        },
+        {
+          "ace_evolving": {
+            "ast_size": 7,
+            "candidates": 18006,
+            "dag_node_status": "tactical_verified",
+            "deps": [
+              "skill_is_framed"
+            ],
+            "forgetting_count": 0,
+            "holdout_passed": 3,
+            "holdout_total": 3,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 16296,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "cold_fresh": {
+            "candidates": 16296,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "domain": "cross_domain_telemetry",
+          "sham_control": {
+            "candidates": 133000,
+            "status": "TIMEOUT",
+            "verified": false
+          },
+          "task_id": "g3_framed_square"
+        },
+        {
+          "ace_evolving": {
+            "ast_size": 7,
+            "candidates": 59744,
+            "dag_node_status": "tactical_verified",
+            "deps": [
+              "skill_is_framed",
+              "skill_bounded_margin"
+            ],
+            "forgetting_count": 0,
+            "holdout_passed": 2,
+            "holdout_total": 2,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 38337,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "cold_fresh": {
+            "candidates": 38337,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "domain": "cross_domain_billing",
+          "sham_control": {
+            "candidates": 152500,
+            "status": "TIMEOUT",
+            "verified": false
+          },
+          "task_id": "g3_framed_margin"
+        }
+      ],
+      "tasks_count": 4,
+      "verdict": "EVOLUTIONARY_ADVANTAGE_DEMONSTRATED",
+      "wake_sleep_compression": {
+        "compressed_dl_nodes": 71,
+        "compression_ratio": 1.0141,
+        "flat_dl_nodes": 72,
+        "macros_discovered": [
+          {
+            "arg_types": [
+              "str",
+              "int"
+            ],
+            "macro_id": "macro_ast_43a65c76",
+            "mdl_gain_nodes": 1,
+            "parent_dag_ids": [
+              "proof_g1_is_framed"
+            ],
+            "pattern_code": "(_p1 if skill_is_framed(_p0) else 1)",
+            "return_type": "int",
+            "support_tasks": 3
+          }
+        ]
+      }
+    },
+    {
+      "arms": {
+        "ace_evolving": {
+          "candidates": 91570,
+          "solved": 2
+        },
+        "cold_double_budget": {
+          "candidates": 171842,
+          "solved": 0
+        },
+        "cold_fresh": {
+          "candidates": 171842,
+          "solved": 0
+        },
+        "sham_control": {
+          "candidates": 321000,
+          "solved": 0
+        }
+      },
+      "generation": "G4",
+      "library_size_after": 15,
+      "tasks": [
+        {
+          "ace_evolving": {
+            "ast_size": 6,
+            "candidates": 34888,
+            "dag_node_status": "tactical_verified",
+            "deps": [
+              "macro_ast_43a65c76",
+              "skill_net_settled_after_gap"
+            ],
+            "forgetting_count": 0,
+            "holdout_passed": 3,
+            "holdout_total": 3,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 80442,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "cold_fresh": {
+            "candidates": 80442,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "domain": "unseen_policy_transfer",
+          "sham_control": {
+            "candidates": 160500,
+            "status": "TIMEOUT",
+            "verified": false
+          },
+          "task_id": "g4_safe_settled_after_gap"
+        },
+        {
+          "ace_evolving": {
+            "ast_size": 6,
+            "candidates": 56682,
+            "dag_node_status": "tactical_verified",
+            "deps": [
+              "macro_ast_43a65c76",
+              "skill_quota_overage_fee"
+            ],
+            "forgetting_count": 0,
+            "holdout_passed": 3,
+            "holdout_total": 3,
+            "status": "SUCCESS",
+            "verified": true
+          },
+          "cold_double_budget": {
+            "candidates": 91400,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "cold_fresh": {
+            "candidates": 91400,
+            "status": "UNSAT",
+            "verified": false
+          },
+          "domain": "unseen_policy_transfer",
+          "sham_control": {
+            "candidates": 160500,
+            "status": "TIMEOUT",
+            "verified": false
+          },
+          "task_id": "g4_framed_overage_charge"
+        }
+      ],
+      "tasks_count": 2,
+      "verdict": "EVOLUTIONARY_ADVANTAGE_DEMONSTRATED",
+      "wake_sleep_compression": {
+        "compressed_dl_nodes": 84,
+        "compression_ratio": 1.0,
+        "flat_dl_nodes": 84,
+        "macros_discovered": []
+      }
+    }
+  ],
+  "honesty_boundary": "Pure deterministic CPU synthesis over typed arithmetic/boolean/string primitives. Demonstrates genuine cross-generation compositional skill reuse, Wake-Sleep MDL AST compression, causal DAG lineage, behavioral held-out verification, and superiority over equal-budget cold, 2x-budget cold, and count-matched sham controls within this basis; does not claim general human-level intelligence or open-ended recursion.",
+  "overall_verdict": "COMPOSITIONAL_OAIE_VERIFIED",
+  "schema": "ace.compositional_oaie.v1",
+  "spore_continuity_exam": {
+    "behavioral_checks_passed": 44,
+    "behavioral_checks_run": 44,
+    "exam_passed": true,
+    "forgetting_count": 0,
+    "restored_nodes": 15,
+    "restored_skills": 16,
+    "spore_sha256": "8ad9c6fb20f6c608713cdeeea293bd7a33a3109338a52f8464f634efab94d46e"
+  },
+  "spore_sha256": "8ad9c6fb20f6c608713cdeeea293bd7a33a3109338a52f8464f634efab94d46e"
+}

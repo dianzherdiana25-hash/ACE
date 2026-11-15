@@ -1,0 +1,16 @@
+{
+  "schema": "ace.autonomous_engine.status.v1",
+  "running": true,
+  "cycle_count": 533,
+  "lang_cursor": 0,
+  "tech_cursor": 47,
+  "current_action": "idle_waiting_next_cycle",
+  "pid": 273799,
+  "updated_at": "2026-11-15T15:40:32Z",
+  "details": {
+    "last_cycle_completed": 533,
+    "track": "language",
+    "vocab_added": 0,
+    "next_cycle_in_seconds": 10.0
+  }
+}
