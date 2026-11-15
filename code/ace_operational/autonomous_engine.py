@@ -598,7 +598,7 @@ class ContinuousAutonomousEngine:
             if not resolved:
                 continue
             meaning_id, role, origin = resolved
-            res = speech_engine.teach_word(word, meaning_id, role=role, taught_note=f"Auto-teach ({origin})")
+            res = speech_engine.teach_word(word, meaning_id, role=role)
             if res.get("accepted"):
                 known_roots.add(word)
                 learned.append({"word": word, "meaning_id": meaning_id, "source": origin})
