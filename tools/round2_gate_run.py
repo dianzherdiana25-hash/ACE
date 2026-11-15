@@ -98,9 +98,12 @@ def guard1():
     evaluation = [t for t in evaluation if t["task_id"] not in pair_ids]
     control = [t for t in tasks if t["subset"] == "catalog_control"]
     t0 = time.time()
+    # guard=False pinned: the round-2 gate compares against the
+    # frozen v4 reference, so it keeps unguarded semantics even
+    # though run_discovery now defaults guard on (PR #230).
     report = run_discovery(pool=pool, evaluation=evaluation,
                            control=control, pair_pool=pair_pool,
-                           chain_pool=pair_pool)
+                           chain_pool=pair_pool, guard=False)
     report["elapsed_seconds"] = round(time.time() - t0, 1)
     report["pool_tasks"] = len(pool)
     report["evaluation_tasks"] = len(evaluation)

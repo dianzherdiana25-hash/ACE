@@ -170,10 +170,6 @@ class TestSolveTask(unittest.TestCase):
         # Unguarded stalls on ENRICHED dead-ends (score 2 < 3)
         unguarded = solve_task(task, adapter, tuple(int_keys), (), guard=False)
         self.assertNotEqual(unguarded, base_win)
-        self.assertEqual(
-            solve_task(task, adapter, tuple(int_keys), ()),
-            unguarded,
-        )
 
         # Guarded triggers once in round 1 and recovers base_win
         stats: dict[str, int] = {}
@@ -183,6 +179,15 @@ class TestSolveTask(unittest.TestCase):
         )
         self.assertEqual(guarded, base_win)
         self.assertEqual(stats.get("triggers"), 1)
+
+        # Default call (no guard argument) is the guarded solver
+        # since GUARD_ADOPTED absorption (PR #230 / PR #231 item
+        # #12): the adopted guard is the standard behaviour, and
+        # guard=False is the explicit opt-out pinned above.
+        self.assertEqual(
+            solve_task(task, adapter, tuple(int_keys), ()),
+            guarded,
+        )
 
 
 if __name__ == "__main__":
