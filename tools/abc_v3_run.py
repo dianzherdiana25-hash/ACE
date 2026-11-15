@@ -263,11 +263,16 @@ def run_band(seed):
     _heartbeat(band=seed, phase="discovery")
     discovery = _load_checkpoint(f"discovery_{seed}.json")
     if discovery is None:
+        # guard=False pinned: the v3 census is a measurement
+        # instrument and keeps its frozen unguarded semantics
+        # even though run_discovery now defaults guard on
+        # (GUARD_ADOPTED, PR #230).
         discovery = run_discovery(pool=pool, evaluation=evaluation,
                                   control=control,
                                   pair_pool=split["pair_pool"],
                                   chain_pool=split["pair_pool"],
-                                  adapter=GRID_ADAPTER)
+                                  adapter=GRID_ADAPTER,
+                                  guard=False)
         _save_checkpoint(f"discovery_{seed}.json", discovery)
     keys, chains = _extract_admitted(discovery)
     digest = catalog_digest(keys, chains)

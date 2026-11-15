@@ -556,7 +556,7 @@ def apply_chain(code: str, chain: tuple) -> str | None:
 def solve_task(task, adapter, extra_keys=(), extra_chains=(),
                *, max_score_calls: int | None = None,
                trace: list | None = None,
-               guard: bool = False,
+               guard: bool = True,
                guard_stats: dict[str, int] | None = None) -> str:
     """Budgeted per-arm solver — the greedy loop lifted
     out of `run_discovery` (A/B/C v3 build, PR #147
@@ -586,9 +586,11 @@ def solve_task(task, adapter, extra_keys=(), extra_chains=(),
     the highest-ranked `BASE`-lineage candidate whenever
     the post-selection frontier would otherwise contain
     no `BASE` member and at least one `BASE` candidate
-    was scored in the round. When `guard` is False
-    (default), behaviour is bit-for-bit identical to
-    the unguarded solver."""
+    was scored in the round. Default is True since the
+    sealed confirmation verdict GUARD_ADOPTED (PR #230);
+    pass `guard=False` explicitly to reproduce the
+    unguarded solver bit-for-bit (measurement baselines
+    and replication gates do exactly that)."""
     provenance: dict[str, tuple] = {}
     label_of: dict[str, str] = {}
 
@@ -680,7 +682,7 @@ def run_discovery(*, pool: list[dict[str, Any]],
                   chain_pool: list[dict[str, Any]] | None = None,
                   min_pool_fixes: int = 2,
                   adapter=None,
-                  guard: bool = False) -> dict[str, Any]:
+                  guard: bool = True) -> dict[str, Any]:
     """Pool -> candidate operators -> admission (>= min_pool_fixes
     pool tasks fixed) -> measured transfer on evaluation + control
     regression, all with the extended greedy solver. `pair_pool`
@@ -688,7 +690,9 @@ def run_discovery(*, pool: list[dict[str, Any]],
     pair credits both constituent keys toward the admission of
     each of the task's defect classes. `guard` enables the
     adopted Lineage-Guard BASE-slot preservation inside
-    `solve_task`."""
+    `solve_task`; it defaults to True (GUARD_ADOPTED,
+    PR #230) — pass False explicitly for an unguarded
+    measurement baseline."""
     by_class: dict[str, Any] = {}
     admitted_keys: dict[str, list[tuple]] = {}
     pool_by_class: dict[str, list] = {}
