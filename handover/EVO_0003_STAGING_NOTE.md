@@ -41,9 +41,18 @@ lineages (020/021/022 class tasks), each variant = one registry entry
 6. (5,2,4,0,1,3) 'nc' — inner pair exchange.
 7. (1,2,3,0,5,4) 'nc' — reverse-tail.
 8. (5,2,3,4,1,0) 'nc' — sink rotation.
-9–12. RESERVE slots: four further permutations to be drawn by seeded
-   RNG at staging-freeze time and recorded in the blast manifest, so the
-   exact set is fixed by digest before the run, not chosen after.
+9–12. DRAWN at staging time by seeded RNG (seed 20261900, draw recorded
+   here so the set is fixed as data before any freeze):
+   (4,1,5,0,3,2), (2,3,0,1,4,5), (2,4,5,3,0,1), (0,4,1,2,3,5) — all 'nc'.
+
+## Dialogue corpus (tail) — STAGED v1
+
+`corpus_tail_v1.jsonl` (16 rows: 8 dialogue prompts dlg-001..008,
+4 code episodes ep-code-001..004, 4 language episodes ep-lang-001..004),
+sha256 60177c51e095ea685fee84d474fbd204568b3d10db1361a68244aba1dba0637e.
+Generation is generation-bound and runs DETACHED in the tail, never in
+the blast. Corpus growth beyond v1 happens only by a named staging
+revision with a new digest.
 
 Each variant must pass the same suitability screen the re-baseline used
 (a band is suitable only if the variant's causal key is NOT naturally
