@@ -1,0 +1,50 @@
+{
+ "20261801": {
+  "recomputed_digest": "a9ddf613eda090d88897866444f7db274aeb89b3f50cf3e375363fa0d056e711",
+  "record_digest": "a9ddf613eda090d88897866444f7db274aeb89b3f50cf3e375363fa0d056e711",
+  "match": true,
+  "n_keys": 6,
+  "n_keys_record": 6,
+  "n_chains": 2,
+  "n_chains_record": 2,
+  "causal_key_naturally_admitted": false,
+  "nc_name_swap_keys": []
+ },
+ "20261802": {
+  "recomputed_digest": "3aab94cf1b8847a5a6a958d443ef19494b1c2fc7fb96d58c4a47d99812dd8df7",
+  "record_digest": "3aab94cf1b8847a5a6a958d443ef19494b1c2fc7fb96d58c4a47d99812dd8df7",
+  "match": true,
+  "n_keys": 60,
+  "n_keys_record": 60,
+  "n_chains": 1,
+  "n_chains_record": 1,
+  "causal_key_naturally_admitted": true,
+  "nc_name_swap_keys": [
+   "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')",
+   "('name_swap', (5, 2, 3, 0, 2, 4), 'nc')",
+   "('name_swap', (5, 2, 3, 2, 0, 1, 0), 'nc')"
+  ]
+ },
+ "20261803": {
+  "recomputed_digest": "465508efbe082f31a3f87ccf01742cfc43fb76c97477577027a9bc0e44c35913",
+  "record_digest": "465508efbe082f31a3f87ccf01742cfc43fb76c97477577027a9bc0e44c35913",
+  "match": true,
+  "n_keys": 6,
+  "n_keys_record": 6,
+  "n_chains": 0,
+  "n_chains_record": 0,
+  "causal_key_naturally_admitted": false,
+  "nc_name_swap_keys": []
+ },
+ "20261804": {
+  "recomputed_digest": "5005072890bf608dc78a98965e6c9a3bf729a517c9689a12a9ccc051cbbaf62a",
+  "record_digest": "5005072890bf608dc78a98965e6c9a3bf729a517c9689a12a9ccc051cbbaf62a",
+  "match": true,
+  "n_keys": 6,
+  "n_keys_record": 6,
+  "n_chains": 1,
+  "n_chains_record": 1,
+  "causal_key_naturally_admitted": false,
+  "nc_name_swap_keys": []
+ }
+}
