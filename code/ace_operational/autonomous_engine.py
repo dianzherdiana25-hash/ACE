@@ -549,6 +549,14 @@ class ContinuousAutonomousEngine:
             if base:
                 return f"bentuk santai dari '{std}' ({base['meaning_id']})", str(base.get("role") or ""), "auto_slang"
 
+        base_exact = speech_engine.lookup_word(word, allow_fuzzy=False)
+        if base_exact and base_exact.get("word") != word:
+            return (
+                f"bentuk dari '{base_exact['word']}' ({base_exact['meaning_id']})",
+                str(base_exact.get("role") or ""),
+                "auto_morphology",
+            )
+
         morph = analyze_morphology(word, known_roots=known_roots)
         root = str(morph.get("root") or "")
         if root and root != word:
