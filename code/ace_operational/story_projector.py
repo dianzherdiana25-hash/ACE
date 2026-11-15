@@ -52,6 +52,24 @@ def _project_skill_learned(detail: dict[str, Any], passed: Any, status: str) -> 
             f"dan seluruh ujian holdout lulus dengan {vocab_count} kosakata tersimpan."
         )
         return {"story_text": story, "avatar_state": "belajar", "is_story_card": True}
+    learning_kind = str(detail.get("learning_kind") or "").strip()
+    if learning_kind == "vocab_batch":
+        count = int(detail.get("count") or 0)
+        domain = str(detail.get("domain") or "bahasa Indonesia").strip()
+        samples = [str(w).strip() for w in (detail.get("sample_words") or []) if str(w).strip()][:4]
+        sample_note = f" seperti {', '.join(samples)}" if samples else ""
+        story = (
+            f"Aku baru menghimpun {count} kosakata bahasa Indonesia bertema {domain}{sample_note}. "
+            f"Kosakata baru sudah masuk ke leksikon aktif agar percakapan makin luwes."
+        )
+        return {"story_text": story, "avatar_state": "belajar", "is_story_card": True}
+    if learning_kind == "technical_curriculum":
+        title = str(detail.get("title_id") or skill_name).strip()
+        story = (
+            f"Aku baru menuntaskan latihan teknis '{title}' ({skill_name}) "
+            f"dan memverifikasi kodenya lewat kompilasi serta eksekusi uji nyata."
+        )
+        return {"story_text": story, "avatar_state": "belajar", "is_story_card": True}
     story = (
         f"Aku berhasil mempelajari dan menguji keterampilan baru untuk {skill_name} lewat dua kasus uji berbeda. "
         f"Sekarang aku kembali melanjutkan tugas utamamu dengan bekal keterampilan tersebut."

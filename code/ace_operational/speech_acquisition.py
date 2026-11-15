@@ -1322,7 +1322,7 @@ class SpeechDevelopmentEngine:
         """Score an outgoing Indonesian utterance against stage bounds, anti-hallucination, and novelty gates."""
         words = re.findall(r"[A-Za-z0-9_'-]+", utterance)
         min_words = 2 if stage_id <= 2 else (3 if stage_id == 3 else 5)
-        max_words = 35 if stage_id == 1 else (48 if stage_id == 2 else (60 if stage_id == 3 else 135))
+        max_words = 35 if stage_id == 1 else (48 if stage_id == 2 else (60 if stage_id == 3 else 260))
         bounds_ok = min_words <= len(words) <= max_words
 
         hallucination_violations: list[str] = []

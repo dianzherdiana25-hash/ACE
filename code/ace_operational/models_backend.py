@@ -183,10 +183,36 @@ def _loopback_url(raw_url: str) -> str:
     return f"{parts.scheme}://{host}" + (f":{parts.port}" if parts.port else "")
 
 
+def _resolve_local_api_key() -> str:
+    """Resolve optional loopback llama-server API key from env or key file."""
+    direct = os.environ.get("ACE_LLAMA_API_KEY", "").strip()
+    if direct:
+        return direct
+    key_file = os.environ.get("ACE_LLAMA_API_KEY_FILE", "").strip()
+    if not key_file:
+        return ""
+    key_path = Path(key_file).expanduser()
+    try:
+        lines = key_path.read_text(encoding="utf-8").splitlines() if key_path.is_file() else []
+    except OSError:
+        return ""
+    for raw_line in lines:
+        line = raw_line.strip()
+        if line and not line.startswith("#"):
+            return line
+    return ""
+
+
 def _local_json(url: str, *, body: dict[str, Any] | None = None, timeout: float = 0.6) -> dict[str, Any]:
+    parts = urlsplit(url)
+    _loopback_url(f"{parts.scheme}://{parts.netloc}")
+    headers = {"Content-Type": "application/json", "User-Agent": "ACE/omega"}
+    api_key = _resolve_local_api_key()
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
     # Inherited cloud proxies must never receive local prompts or health checks.
     opener = build_opener(ProxyHandler({}), _NoLocalRedirect())
-    request = Request(url, headers={"Content-Type": "application/json", "User-Agent": "ACE/omega"},
+    request = Request(url, headers=headers,
                       data=None if body is None else json.dumps(body).encode("utf-8"))
     with opener.open(request, timeout=timeout) as response:
         raw = response.read(4 * 1024 * 1024 + 1)

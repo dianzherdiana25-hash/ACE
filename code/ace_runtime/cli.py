@@ -175,6 +175,12 @@ def parser():
     cont_p.add_argument("--workspace", default=None, type=Path)
     cont_p.add_argument("--max-steps", default=4, type=int)
 
+    eng_p = commands.add_parser("engine", help="jalankan siklus belajar & evolusi otonom campuran (bahasa + teknis)")
+    eng_p.add_argument("--workspace", default=None, type=Path)
+    eng_p.add_argument("--interval", default=6.0, type=float, help="jeda antar siklus dalam detik")
+    eng_p.add_argument("--once", action="store_true", help="jalankan satu siklus lalu keluar")
+    eng_p.add_argument("--cycles", default=0, type=int, help="jumlah siklus maksimal (0 = tanpa batas)")
+
     return result
 
 
@@ -374,6 +380,31 @@ def _handle_operational_command(args) -> int:
             print(json.dumps(res, sort_keys=True, ensure_ascii=False))
             return 0
 
+        if args.command == "engine":
+            from ace_operational.autonomous_engine import ContinuousAutonomousEngine
+
+            auto = ContinuousAutonomousEngine(
+                store=store,
+                workspace=store.workspace,
+                tick_interval_seconds=max(0.2, float(args.interval)),
+            )
+            if getattr(args, "once", False):
+                res = auto.execute_cycle()
+                print(json.dumps(res, sort_keys=True, ensure_ascii=False))
+                return 0
+            max_cycles = int(getattr(args, "cycles", 0) or 0)
+            if max_cycles > 0:
+                results = []
+                for idx in range(max_cycles):
+                    results.append(auto.execute_cycle())
+                    if idx + 1 < max_cycles and auto.tick_interval_seconds > 0:
+                        import time
+                        time.sleep(min(auto.tick_interval_seconds, 1.0))
+                print(json.dumps({"cycles_executed": len(results), "results": results}, sort_keys=True, ensure_ascii=False))
+                return 0
+            auto.run_forever()
+            return 0
+
         if args.command == "web":
             server = ACEWebServer(
                 store,
@@ -410,7 +441,7 @@ def main(argv=None):
         operational_cmds = {
             "chat", "do", "web", "start", "stop", "resume",
             "models", "evidence", "agenda", "learn", "bridge", "update", "rollback",
-            "deliverables", "continue",
+            "deliverables", "continue", "engine",
         }
         if args.command in operational_cmds:
             return _handle_operational_command(args)
