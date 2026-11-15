@@ -1,0 +1,4 @@
+[lg-gate] registry: ['name-swap-523014-nc-band20261501']; catalog under test: 59 keys (admitted 60 minus registered)
+[lg-gate] stock: overall=SUSCEPTIBLE
+[lg-gate] guarded: overall=NOT_SUSCEPTIBLE
+[lg-gate] anchor=NO_REGRESSION l5_violations=0 — GATE PASS

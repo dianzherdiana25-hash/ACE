@@ -1,0 +1,16 @@
+{
+ "artifact": "lineage-guard step-4 anchor comparison (PR #167 anchor verdict form, computed over the PR #175 battery bindings)",
+ "baseline": {
+  "binding": "stock (solve_task_param defaults, guard OFF)",
+  "solved": 2,
+  "outcomes": 4
+ },
+ "candidate": {
+  "binding": "guarded (solve_task_guarded, guard ON)",
+  "solved": 4,
+  "outcomes": 4
+ },
+ "regressions": [],
+ "l5_violations": [],
+ "verdict": "NO_REGRESSION"
+}

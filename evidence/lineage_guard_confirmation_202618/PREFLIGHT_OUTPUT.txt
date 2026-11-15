@@ -1,0 +1,29 @@
+act exists                                          PASS
+act sha 60fc25e167d5d661                            PASS
+act fields (verdict_ref, seeds, registry_snapshot,
+  operator, window)                                 PASS
+act seeds consecutive triple [20261803, 20261804,
+  20261805]                                         PASS
+act window exact (hub inscription)                  PASS
+registry exists                                     PASS
+registry sha == act f9d8982a1314cc58                PASS
+registry ids == act
+  ['name-swap-523014-nc-band20261501']              PASS
+battery module exists in --battery-dir              PASS
+battery module sha cbc5e7df386f3187                 PASS
+battery registry alongside                          PASS
+harness sha (supplement #2)                         PASS
+gate sha (supplement #2)                            PASS
+discovery 20261803 digest 465508efbe082f31          PASS
+discovery 20261804 digest 5005072890bf608d          PASS
+discovery 20261805 digest 465508efbe082f31          PASS
+base abc_v3_run.py                                  PASS
+base wt-abcv3                                       PASS
+state dir exists                                    PASS
+population 80/80 + tree digest c02221775c2b8111     PASS
+MemAvailable >= 4 GiB (22,540,812 kB)               PASS
+PREFLIGHT_PASS
+
+Run inside the custody home (sandbox 2887726280f4, SSH door)
+by preflight_q1.py at 2026-11-15 ~21:39 WIB, immediately
+before the attempt-3 launch. 21/21 checks green.

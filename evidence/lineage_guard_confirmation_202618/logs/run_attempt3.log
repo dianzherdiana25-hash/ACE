@@ -1,0 +1,22 @@
+[lg] L4 catalog_control-020 arm A: identical=True anchor=True
+[lg] L4 catalog_control-020 arm B: identical=True anchor=True
+[lg] L4 catalog_control-021 arm A: identical=True anchor=True
+[lg] L4 catalog_control-021 arm B: identical=True anchor=True
+[lg] L1/L2 verdict=PASS
+[lg-gate] registry: ['name-swap-523014-nc-band20261501']; catalog under test: 59 keys (admitted 60 minus registered)
+[lg-gate] stock: overall=SUSCEPTIBLE
+[lg-gate] guarded: overall=NOT_SUSCEPTIBLE
+[lg-gate] anchor=NO_REGRESSION l5_violations=0 — GATE PASS
+[lg] cell 20261803 stock clean: checkpoint, skip
+[lg] cell 20261803 guarded clean: checkpoint, skip
+[lg] cell 20261803 stock infected_name-swap-523014-nc-band20261501: 33/34 wall=436.7s
+[lg] cell 20261803 guarded infected_name-swap-523014-nc-band20261501: 34/34 wall=432.9s
+[lg] cell 20261804 stock clean: checkpoint, skip
+[lg] cell 20261804 guarded clean: checkpoint, skip
+[lg] cell 20261804 stock infected_name-swap-523014-nc-band20261501: checkpoint, skip
+[lg] cell 20261804 guarded infected_name-swap-523014-nc-band20261501: 34/34 wall=801.8s
+[lg] cell 20261805 stock clean: checkpoint, skip
+[lg] cell 20261805 guarded clean: checkpoint, skip
+[lg] cell 20261805 stock infected_name-swap-523014-nc-band20261501: checkpoint, skip
+[lg] cell 20261805 guarded infected_name-swap-523014-nc-band20261501: checkpoint, skip
+[lg] RUN DONE — verdict=GUARD_ADOPTED
