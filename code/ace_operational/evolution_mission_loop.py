@@ -31,6 +31,11 @@ import sys
 from typing import Any
 
 from .local_repo_workflow import atomic_write_verified
+from .memory_writeback import (
+    recall_context,
+    record_event_outcomes,
+    record_verified_event,
+)
 from .sovereign_runtime import SovereignRuntimeSupervisor, SubstrateSpore
 
 FROZEN_CUSTODY_PREFIXES: tuple[str, ...] = (
@@ -965,7 +970,8 @@ class PassiveEvolutionPlanner:
 class EvolutionPatchVerifier:
     """Fail-closed verifier and causal-lineage ratifier for external AI patches."""
 
-    def __init__(self, workspace: str | Path, repo_root: str | Path) -> None:
+    def __init__(self, workspace: str | Path, repo_root: str | Path,
+                 *, memory_root: str | Path | None = None) -> None:
         self.workspace = Path(workspace).resolve()
         self.repo_root = Path(repo_root).resolve()
         self.work_order_json_path = self.workspace / "EVOLUTION_WORK_ORDER.json"
@@ -973,6 +979,11 @@ class EvolutionPatchVerifier:
         self.supervisor = SovereignRuntimeSupervisor(self.workspace / "runtime")
         self.spore_path = self.workspace / "evolution_spore.json"
         self.protected_paths = load_protected_upstream_paths(self.repo_root)
+        # Cognitive-memory write-back (absorption PR #231 item
+        # #8): active only when a memory root is configured;
+        # None keeps every existing caller byte-identical.
+        self.memory_root = Path(memory_root) if memory_root else None
+        self._recalled_memory: list[dict[str, Any]] = []
 
     def _load_order(self) -> dict[str, Any]:
         if not self.work_order_json_path.is_file():
@@ -1290,6 +1301,11 @@ class EvolutionPatchVerifier:
         state = self._load_state_or_init()
         state["rejected_count"] = int(state.get("rejected_count", 0)) + 1
         atomic_write_verified(self.state_path, json.dumps(state, indent=2, sort_keys=True))
+        if self.memory_root is not None and self._recalled_memory:
+            # Close the memory loop on the reject exit too:
+            # recalled procedural records take the failure.
+            record_event_outcomes(self.memory_root, self._recalled_memory,
+                                  context=order_id, success=False)
         return {
             "schema": "ace.passive_evolution_verify.v1",
             "order_id": order_id,
@@ -1395,10 +1411,29 @@ class EvolutionPatchVerifier:
             }
         )
         atomic_write_verified(self.state_path, json.dumps(state, indent=2, sort_keys=True))
-        return {
+        accepted = all_passed and exam["forgetting_count"] == 0
+        memory_record_id: str | None = None
+        if self.memory_root is not None:
+            # Memory write-back (design §3–§4): a ratification
+            # is a verified event; the spore file is its
+            # evidence. Outcomes close on the recalled records
+            # either way; the episodic record is written only
+            # when the ratification itself stands.
+            record_event_outcomes(self.memory_root, self._recalled_memory,
+                                  context=order_id, success=accepted)
+            if accepted:
+                memory_record_id = record_verified_event(
+                    self.memory_root,
+                    event="mission_ratified",
+                    summary=(f"Mission {order_id} ratified: "
+                             f"{resolution_note}; finding {fkey}; "
+                             f"spore {spore['spore_sha256'][:16]}"),
+                    evidence_bytes=self.spore_path.read_bytes(),
+                )
+        result = {
             "schema": "ace.passive_evolution_verify.v1",
             "order_id": order_id,
-            "accepted": all_passed and exam["forgetting_count"] == 0,
+            "accepted": accepted,
             "status": "VERIFIED_AND_RATIFIED",
             "resolution_note": resolution_note,
             "changed_files": changed_files,
@@ -1410,10 +1445,28 @@ class EvolutionPatchVerifier:
             "spore_sha256": spore["spore_sha256"],
             "forgetting_count": exam["forgetting_count"],
         }
+        if self.memory_root is not None:
+            result["memory_writeback"] = {
+                "recalled": len(self._recalled_memory),
+                "record_id": memory_record_id,
+            }
+        return result
 
     def verify_and_ratify_evolution(self, *, extra_checks: list[str] | None = None) -> dict[str, Any]:
         """Execute fail-closed verification of edits and ratify into StigmergicDAG + Spore."""
         order = self._load_order()
+        # Memory read side (design §5): before this cycle
+        # decides, surface past verified outcomes on the same
+        # finding context; the decision closes the loop with
+        # record_event_outcomes at either exit.
+        self._recalled_memory = []
+        if self.memory_root is not None:
+            finding = order.get("finding", {})
+            self._recalled_memory = recall_context(
+                self.memory_root,
+                f"{finding.get('kind', '')} {finding.get('file_path', '')} "
+                f"{finding.get('finding_key', '')}",
+            )
         scan_subpath = order.get("scan_subpath", "code")
         auditor = RealRepoAuditor(self.repo_root, scan_subpath=scan_subpath)
 
