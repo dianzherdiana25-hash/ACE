@@ -1638,7 +1638,7 @@ class SpeechDevelopmentEngine:
             f"Kata asing yang baru terdengar dan boleh ditanyakan artinya: {heard_str}. "
             f"Jawab pesan pengguna dengan Bahasa Indonesia yang santai, hangat, dan mengalir seperti teman ngobrol (pakai 'aku/kamu', "
             f"jangan kaku seperti robot, dan jangan mengulang perkenalan di setiap balasan). "
-            f"Tetap jujur, ringkas, dan relevan terhadap: {user_text[:120]}"
+            f"Tetap jujur, tuntas dalam 2-4 kalimat utuh, dan relevan terhadap: {user_text[:120]}"
         )
 
     def compose_conversational_reply(

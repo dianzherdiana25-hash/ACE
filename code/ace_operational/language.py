@@ -456,7 +456,7 @@ class ConversationalEngine:
         try:
             resp = self.router.generate_text(
                 messages,
-                max_tokens=160,
+                max_tokens=240,
                 temperature=0.7,
             )
         except (OSError, RuntimeError, ValueError, KeyError, TypeError):
