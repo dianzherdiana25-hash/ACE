@@ -499,10 +499,20 @@ class ContinuousAutonomousEngine:
             "penggunaan imbuhan me-kan vs me-i dengan contoh nyata",
             "ragam bahasa santai anak muda Indonesia vs padanan bakunya",
             "kosakata seputar alam, cuaca, dan suasana senja di Indonesia",
-            "etika bertutur kata yang halus saat menolak atau mengkritik dalam bahasa Indonesia",
+            "etika bertutur kata yang halus saat menolak atau mengkritik di tempat kerja",
             "istilah kuliner atau tradisi Nusantara beserta artinya",
             "peribahasa Indonesia beserta pelajaran praktisnya",
             "padanan kata Indonesia yang tepat untuk istilah teknologi sehari-hari",
+            "konsep pemrograman dasar (fungsi, variabel, loop, debugging) dijelaskan dengan bahasa Indonesia santai",
+            "perbandingan kegunaan bahasa pemrograman seperti Python, JavaScript, atau SQL dalam proyek nyata",
+            "cara menjelaskan masalah teknis atau bug kode ke rekan kerja non-teknis dengan jelas",
+            "produktivitas kerja, manajemen waktu, dan komunikasi efektif di tim atau proyek",
+            "literasi finansial pribadi: menabung, dana darurat, anggaran bulanan, dan menghindari utang konsumtif",
+            "istilah keuangan dan bisnis (arus kas, modal, margin, investasi, inflasi) dalam bahasa sederhana",
+            "kebiasaan baik saat menulis kode yang rapi, mudah dibaca, dan tahan error",
+            "pengambilan keputusan praktis saat menghadapi deadline ketat atau prioritas yang bentrok",
+            "obrolan kasual sehari-hari tentang hobi, buku, musik, atau cara melepas penat",
+            "cara berpikir terstruktur untuk memecahkan masalah rumit menjadi langkah-langkah kecil",
         ]
         theme = themes[self.cycle_count % len(themes)]
 
@@ -528,8 +538,8 @@ class ContinuousAutonomousEngine:
                     {
                         "role": "system",
                         "content": (
-                            "Buat tepat SATU pertanyaan latihan bahasa Indonesia yang singkat (10-22 kata), "
-                            "spesifik, dan menarik. Tulis pertanyaannya saja tanpa pengantar atau tanda kutip."
+                            "Buat tepat SATU pertanyaan diskusi atau latihan bahasa Indonesia yang singkat (10-24 kata), "
+                            "spesifik, dan menarik sesuai tema. Tulis pertanyaannya saja tanpa pengantar atau tanda kutip."
                         ),
                     },
                     {
@@ -537,7 +547,8 @@ class ContinuousAutonomousEngine:
                         "content": f"Tema siklus #{self.cycle_count}: {theme}.{avoid_note}",
                     },
                 ],
-                max_tokens=60,
+                max_tokens=70,
+                temperature=0.8,
             )
             candidate_q = str((gen_q or {}).get("text", "")).strip().strip("\"'")
             if 15 <= len(candidate_q) <= 220 and candidate_q not in recent_prompts:
@@ -662,6 +673,12 @@ class ContinuousAutonomousEngine:
             "kendaraan, jalanan, dan perjalanan",
             "kesehatan, bagian tubuh, dan pengobatan",
             "perdagangan, pasar, dan keuangan",
+            "pemrograman, algoritma, dan pengembangan perangkat lunak",
+            "jaringan komputer, server, keamanan, dan basis data",
+            "dunia kerja, kantor, manajemen proyek, dan kolaborasi tim",
+            "finansial, akuntansi, investasi, pajak, dan perbankan",
+            "hukum, aturan, kontrak, dan administrasi",
+            "logika, analisis masalah, riset, dan pengambilan keputusan",
         ]
         letters = "abcdefghjklmnprstw"
         domain = domains[self.cycle_count % len(domains)]
