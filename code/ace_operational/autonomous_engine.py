@@ -22,6 +22,7 @@ import sys
 import time
 from typing import Any
 
+from ace_indo_nlp.morphology import COLLOQUIAL_SLANG_MAP, analyze_morphology
 from ace_operational.autonomy_loop import AutonomyOrchestrator
 from ace_operational.models_backend import ModelRouter
 from ace_operational.speech_acquisition import SpeechDevelopmentEngine
@@ -536,6 +537,73 @@ class ContinuousAutonomousEngine:
             logger.warning(f"Dynamic language practice failed: {e}")
         return None
 
+    def _resolve_word_meaning(
+        self,
+        speech_engine: SpeechDevelopmentEngine,
+        word: str,
+        known_roots: set[str],
+    ) -> tuple[str, str, str] | None:
+        std = COLLOQUIAL_SLANG_MAP.get(word)
+        if std:
+            base = speech_engine.lookup_word(std, allow_fuzzy=False)
+            if base:
+                return f"bentuk santai dari '{std}' ({base['meaning_id']})", str(base.get("role") or ""), "auto_slang"
+
+        morph = analyze_morphology(word, known_roots=known_roots)
+        root = str(morph.get("root") or "")
+        if root and root != word:
+            base = speech_engine.lookup_word(root, allow_fuzzy=False)
+            if base:
+                return (
+                    f"bentuk berimbuhan dari '{root}' ({base['meaning_id']})",
+                    str(morph.get("pos_hint") or base.get("role") or ""),
+                    "auto_morphology",
+                )
+
+        hc = self.models.health_check()
+        if hc.get("local_gguf", {}).get("server_healthy"):
+            resp = self.models.generate_text(
+                [
+                    {"role": "system", "content": "Jawab hanya arti singkat kata Bahasa Indonesia dalam 3-8 kata tanpa tanda kutip."},
+                    {"role": "user", "content": f"Apa arti kata '{word}' dalam Bahasa Indonesia?"},
+                ],
+                max_tokens=40,
+            )
+            ans = str((resp or {}).get("text", "")).strip().strip(".\"' ")
+            if 3 <= len(ans) <= 120:
+                return ans, "", "auto_gguf"
+        return None
+
+    def _auto_teach_heard_words(self, limit: int = 5) -> list[dict[str, Any]]:
+        """Automatically ground newly encountered Indonesian words during auto-run cycles."""
+        speech_engine = SpeechDevelopmentEngine(self.store)
+        ungrounded = speech_engine.list_heard_words(ungrounded_only=True, limit=limit)
+        if not ungrounded:
+            return []
+        known_roots = set(speech_engine.list_known_words())
+        learned: list[dict[str, Any]] = []
+        for item in ungrounded:
+            word = str(item.get("word", "")).strip().lower()
+            if not word:
+                continue
+            resolved = self._resolve_word_meaning(speech_engine, word, known_roots)
+            if not resolved:
+                continue
+            meaning_id, role, origin = resolved
+            res = speech_engine.teach_word(word, meaning_id, role=role, source=origin)
+            if res.get("accepted"):
+                known_roots.add(word)
+                learned.append({"word": word, "meaning_id": meaning_id, "source": origin})
+                self.store.emit_event(
+                    kind="skill_learned",
+                    status="COMPLETED",
+                    summary_code=f"Auto-ajar kata baru: {word}",
+                    verification_passed=True,
+                    technical_detail={"skill_name": f"kosakata:{word}", "meaning_id": meaning_id, "source": origin},
+                )
+                logger.info(f"[Auto-Teach] Grounded new word '{word}' ({origin}): {meaning_id}")
+        return learned
+
     def execute_cycle(self) -> None:
         """Run a single autonomous cycle."""
         self.cycle_count += 1
@@ -550,10 +618,11 @@ class ContinuousAutonomousEngine:
         self.update_status_file("advancing_agenda")
         advanced_count = self.check_and_advance_agenda()
 
-        # Step 3: Continuous Language Learning Loop (Endless Evolution)
+        # Step 3: Continuous Language Learning Loop & Auto-Teaching New Words
         if advanced_count == 0:
             self.update_status_file("learning_indonesian_language")
             self.execute_continuous_language_learning()
+            self._auto_teach_heard_words()
 
         # Step 4: Heartbeat & sync
         self.update_status_file("idle_waiting_next_cycle", {
