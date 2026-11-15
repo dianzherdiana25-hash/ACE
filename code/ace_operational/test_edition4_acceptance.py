@@ -45,6 +45,17 @@ from ace_operational.web_server import ACEWebServer, ANIME_WEB_HTML
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
+def _use_server_token(testcase: unittest.TestCase, server) -> None:
+    """WEB25: send the server's token on every urllib call in this test process."""
+    import urllib.request as _ur
+
+    prev_opener = _ur._opener
+    opener = _ur.build_opener()
+    opener.addheaders = [("X-ACE-Token", server.auth_token)]
+    _ur.install_opener(opener)
+    testcase.addCleanup(_ur.install_opener, prev_opener)
+
+
 class Edition4IntegratedAcceptanceTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(prefix="ace-ed4-")
@@ -511,6 +522,7 @@ class Edition4IntegratedAcceptanceTests(unittest.TestCase):
         server = ACEWebServer(self.store, host="127.0.0.1", port=busy_port)
         url = server.start_background()
         self.addCleanup(server.stop)
+        _use_server_token(self, server)
         self.assertTrue(server.port_fallback_used)
         self.assertNotEqual(server.actual_port, busy_port)
 

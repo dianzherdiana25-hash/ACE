@@ -25,9 +25,11 @@ from ace_operational.story_projector import project_event_to_story
 from ace_operational.web_server import ACEWebServer
 
 
-def _http_json(url: str, *, method: str = "GET", payload: dict | None = None) -> tuple[int, dict]:
+def _http_json(url: str, *, method: str = "GET", payload: dict | None = None, token: str | None = None) -> tuple[int, dict]:
     data = json.dumps(payload).encode("utf-8") if payload is not None else None
     headers = {"Content-Type": "application/json"} if payload is not None else {}
+    if token:
+        headers["X-ACE-Token"] = token
     req = Request(url, data=data, headers=headers, method=method)
     try:
         with urlopen(req, timeout=10) as resp:
@@ -221,6 +223,7 @@ class MemoryBridgeTests(unittest.TestCase):
         server = ACEWebServer(self.store, host="127.0.0.1", port=0)
         url = server.start_background()
         self.addCleanup(server.stop)
+        tok = server.auth_token  # WEB25: memory endpoints require the local token
 
         with urlopen(f"{url}/", timeout=10) as resp:
             html = resp.read().decode("utf-8")
@@ -229,50 +232,50 @@ class MemoryBridgeTests(unittest.TestCase):
             self.assertIn(token, html)
 
         # Validation guards
-        st_bad, _ = _http_json(f"{url}/api/memory", method="POST", payload={"text": "   "})
+        st_bad, _ = _http_json(f"{url}/api/memory", method="POST", payload={"text": "   "}, token=tok)
         self.assertEqual(st_bad, 400)
-        st_sens, _ = _http_json(f"{url}/api/memory", method="POST", payload={"text": "Fakta uji", "sensitivity": "bogus"})
+        st_sens, _ = _http_json(f"{url}/api/memory", method="POST", payload={"text": "Fakta uji", "sensitivity": "bogus"}, token=tok)
         self.assertEqual(st_sens, 400)
 
         # Create public & private memory items
-        st1, d1 = _http_json(f"{url}/api/memory", method="POST", payload={"text": "Kota favoritku adalah Yogyakarta"})
+        st1, d1 = _http_json(f"{url}/api/memory", method="POST", payload={"text": "Kota favoritku adalah Yogyakarta"}, token=tok)
         self.assertEqual(st1, 200)
         self.assertTrue(d1["stored"])
         rec_id = d1["record_id"]
 
-        st2, d2 = _http_json(f"{url}/api/memory", method="POST", payload={"text": "Kode pintu rahasia 7788", "sensitivity": "private"})
+        st2, d2 = _http_json(f"{url}/api/memory", method="POST", payload={"text": "Kode pintu rahasia 7788", "sensitivity": "private"}, token=tok)
         self.assertEqual(st2, 200)
         self.assertEqual(d2["sensitivity"], "private")
 
-        st_stat, d_stat = _http_json(f"{url}/api/status")
+        st_stat, d_stat = _http_json(f"{url}/api/status", token=tok)
         self.assertEqual(st_stat, 200)
         self.assertEqual(d_stat["memory_summary"]["active_records"], 2)
         self.assertTrue(d_stat["memory_summary"]["chain_ok"])
 
         # Default snapshot & recall hide private; include_private reveals it
-        _, snap_def = _http_json(f"{url}/api/memory")
+        _, snap_def = _http_json(f"{url}/api/memory", token=tok)
         self.assertEqual(len(snap_def["active_records"]), 1)
-        _, snap_priv = _http_json(f"{url}/api/memory?include_private=1")
+        _, snap_priv = _http_json(f"{url}/api/memory?include_private=1", token=tok)
         self.assertEqual(len(snap_priv["active_records"]), 2)
 
-        _, rec_def = _http_json(f"{url}/api/memory/recall", method="POST", payload={"query": "7788"})
+        _, rec_def = _http_json(f"{url}/api/memory/recall", method="POST", payload={"query": "7788"}, token=tok)
         self.assertEqual(rec_def["returned"], 0)
-        _, rec_priv = _http_json(f"{url}/api/memory/recall", method="POST", payload={"query": "7788", "include_private": True})
+        _, rec_priv = _http_json(f"{url}/api/memory/recall", method="POST", payload={"query": "7788", "include_private": True}, token=tok)
         self.assertEqual(rec_priv["returned"], 1)
 
-        st_lim, _ = _http_json(f"{url}/api/memory/recall", method="POST", payload={"query": "kota", "limit": "bukan-angka"})
+        st_lim, _ = _http_json(f"{url}/api/memory/recall", method="POST", payload={"query": "kota", "limit": "bukan-angka"}, token=tok)
         self.assertEqual(st_lim, 400)
 
         # Audited tombstone forget + 404 guard
-        st_404, _ = _http_json(f"{url}/api/memory/forget", method="POST", payload={"record_id": "mem_tidak_ada"})
+        st_404, _ = _http_json(f"{url}/api/memory/forget", method="POST", payload={"record_id": "mem_tidak_ada"}, token=tok)
         self.assertEqual(st_404, 404)
 
-        st_f, d_f = _http_json(f"{url}/api/memory/forget", method="POST", payload={"record_id": rec_id})
+        st_f, d_f = _http_json(f"{url}/api/memory/forget", method="POST", payload={"record_id": rec_id}, token=tok)
         self.assertEqual(st_f, 200)
         self.assertEqual(d_f["tombstone"]["record_id"], rec_id)
         self.assertTrue(d_f["audit"]["chain_ok"])
 
-        _, aud_res = _http_json(f"{url}/api/memory/audit")
+        _, aud_res = _http_json(f"{url}/api/memory/audit", token=tok)
         self.assertTrue(aud_res["chain_ok"])
         self.assertEqual(aud_res["active_records"], 1)
         self.assertEqual(len(aud_res["tombstones"]), 1)

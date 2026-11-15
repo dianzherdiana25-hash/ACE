@@ -25,6 +25,17 @@ from ace_operational.story_projector import project_event_to_story
 from ace_operational.web_server import ACEWebServer
 
 
+def _use_server_token(testcase: unittest.TestCase, server) -> None:
+    """WEB25: send the server's token on every urllib call in this test process."""
+    import urllib.request as _ur
+
+    prev_opener = _ur._opener
+    opener = _ur.build_opener()
+    opener.addheaders = [("X-ACE-Token", server.auth_token)]
+    _ur.install_opener(opener)
+    testcase.addCleanup(_ur.install_opener, prev_opener)
+
+
 class SpeechAcquisitionTests(unittest.TestCase):
     def setUp(self) -> None:
         self.tmp = tempfile.TemporaryDirectory(prefix="ace-speech-")
@@ -228,6 +239,7 @@ class SpeechAcquisitionTests(unittest.TestCase):
         server = ACEWebServer(self.store, host="127.0.0.1", port=0)
         url = server.start_background()
         self.addCleanup(server.stop)
+        _use_server_token(self, server)
 
         with urlopen(f"{url}/") as home:
             html = home.read().decode("utf-8")
@@ -491,6 +503,7 @@ class SpeechAcquisitionTests(unittest.TestCase):
         server = ACEWebServer(legacy_store, host="127.0.0.1", port=0)
         url = server.start_background()
         self.addCleanup(server.stop)
+        _use_server_token(self, server)
         with urlopen(f"{url}/") as home:
             html = home.read().decode("utf-8")
         self.assertIn("speech-drawer", html)
@@ -557,6 +570,7 @@ class SpeechAcquisitionTests(unittest.TestCase):
         server = ACEWebServer(self.store, host="127.0.0.1", port=0)
         url = server.start_background()
         self.addCleanup(server.stop)
+        _use_server_token(self, server)
 
         with urlopen(f"{url}/") as home:
             html = home.read().decode("utf-8")

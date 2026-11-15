@@ -419,12 +419,14 @@ def _handle_operational_command(args) -> int:
                 "actual_port": server.actual_port,
                 "port_fallback_used": server.port_fallback_used,
                 "workspace": str(store.workspace),
+                "auth_file": str(server.auth_file),
             }
             if args.check_only:
                 server.stop()
                 print(json.dumps(info, sort_keys=True, ensure_ascii=False))
                 return 0
             print(f"ACE Studio Web aktif di: {server.url}", flush=True)
+            print(f"Token akses API Web Studio (WEB25): berkas {server.auth_file} — kirim sebagai header X-ACE-Token", flush=True)
             try:
                 server.serve_forever()
             except KeyboardInterrupt:
