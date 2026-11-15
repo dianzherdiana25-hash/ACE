@@ -643,7 +643,85 @@ class ContinuousAutonomousEngine:
                 return ans, "", "auto_gguf"
         return None
 
-    def _auto_teach_heard_words(self, limit: int = 5) -> list[dict[str, Any]]:
+    def _explore_vocabulary_batch(self, batch_size: int = 12) -> list[dict[str, Any]]:
+        """Actively harvest and ground a batch of new Indonesian vocabulary via local GGUF."""
+        hc = self.models.health_check()
+        if not hc.get("local_gguf", {}).get("server_healthy"):
+            return []
+
+        domains = [
+            "alam, cuaca, geografis, dan flora fauna Nusantara",
+            "emosi, perasaan batin, dan karakter manusia",
+            "kuliner, bumbu, rasa, dan cara memasak",
+            "seni, sastra, musik, dan estetika",
+            "sains, teknologi, dan pengetahuan umum",
+            "profesi, pekerjaan, dan kegiatan ekonomi",
+            "sifat benda, tekstur, warna, dan ukuran",
+            "tindakan fisik, gerakan, dan aktivitas sehari-hari",
+            "interaksi sosial, sopan santun, dan komunikasi",
+            "kata kerja abstrak, pemikiran, dan pengambilan keputusan",
+        ]
+        domain = domains[self.cycle_count % len(domains)]
+
+        speech_engine = SpeechDevelopmentEngine(self.store)
+        known_words = {str(w.get("word", "")).lower() for w in speech_engine.list_lexicon() if w.get("word")}
+        sample_known = ", ".join(sorted(known_words)[-15:])
+
+        resp = self.models.generate_text(
+            [
+                {
+                    "role": "system",
+                    "content": (
+                        f"Berikan tepat {batch_size} kata Bahasa Indonesia tunggal (hanya 1 kata alfabet huruf kecil, "
+                        "minimal 4 huruf, bukan kata majemuk/frasa) yang beragam beserta arti singkatnya (3-8 kata). "
+                        "Format WAJIB satu baris per kata: `kata: arti singkat` tanpa nomor atau tanda bullet."
+                    ),
+                },
+                {
+                    "role": "user",
+                    "content": (
+                        f"Domain siklus #{self.cycle_count}: {domain}. "
+                        f"Jangan ulangi kata-kata ini: {sample_known}."
+                    ),
+                },
+            ],
+            max_tokens=320,
+        )
+        raw_text = str((resp or {}).get("text", "")).strip()
+        if not raw_text:
+            return []
+
+        learned: list[dict[str, Any]] = []
+        for line in raw_text.splitlines():
+            cleaned = line.strip().lstrip("-*•0123456789. ")
+            if ":" not in cleaned:
+                continue
+            word_part, meaning_part = cleaned.split(":", 1)
+            word = word_part.strip().strip("\"'`* ").lower()
+            meaning_id = meaning_part.strip().strip(".\"' ")
+            if not word.isalpha() or len(word) < 4 or word in known_words:
+                continue
+            if not (3 <= len(meaning_id) <= 120):
+                continue
+            res = speech_engine.teach_word(word, meaning_id, role="")
+            if res.get("accepted"):
+                known_words.add(word)
+                learned.append({"word": word, "meaning_id": meaning_id, "source": "auto_gguf_batch"})
+                self.store.emit_event(
+                    kind="skill_learned",
+                    status="COMPLETED",
+                    summary_code=f"Eksplorasi kosakata: {word}",
+                    verification_passed=True,
+                    technical_detail={"skill_name": f"kosakata:{word}", "meaning_id": meaning_id, "source": "auto_gguf_batch"},
+                )
+        if learned:
+            logger.info(
+                f"[Vocab Batch] Grounded {len(learned)} new words ({domain[:30]}...): "
+                f"{', '.join(item['word'] for item in learned[:6])}"
+            )
+        return learned
+
+    def _auto_teach_heard_words(self, limit: int = 15) -> list[dict[str, Any]]:
         """Automatically ground newly encountered Indonesian words during auto-run cycles."""
         speech_engine = SpeechDevelopmentEngine(self.store)
         ungrounded = speech_engine.list_heard_words(ungrounded_only=True, limit=limit)
@@ -691,6 +769,7 @@ class ContinuousAutonomousEngine:
         if advanced_count == 0:
             self.update_status_file("learning_indonesian_language")
             self.execute_continuous_language_learning()
+        self._explore_vocabulary_batch()
         self._auto_teach_heard_words()
 
         # Step 4: Heartbeat & sync
