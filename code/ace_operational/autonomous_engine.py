@@ -295,7 +295,7 @@ class ContinuousAutonomousEngine:
         self,
         store: OperationalStore | None = None,
         workspace: Path | None = None,
-        tick_interval_seconds: float = 6.0,
+        tick_interval_seconds: float = 1.5,
     ):
         self.workspace = workspace or (Path.home() / ".local" / "share" / "ace" / "workspace")
         self.workspace.mkdir(parents=True, exist_ok=True)
@@ -643,7 +643,7 @@ class ContinuousAutonomousEngine:
                 return ans, "", "auto_gguf"
         return None
 
-    def _explore_vocabulary_batch(self, batch_size: int = 12) -> list[dict[str, Any]]:
+    def _explore_vocabulary_batch(self, batch_size: int = 30) -> list[dict[str, Any]]:
         """Actively harvest and ground a batch of new Indonesian vocabulary via local GGUF."""
         hc = self.models.health_check()
         if not hc.get("local_gguf", {}).get("server_healthy"):
@@ -660,12 +660,14 @@ class ContinuousAutonomousEngine:
             "tindakan fisik, gerakan, dan aktivitas sehari-hari",
             "interaksi sosial, sopan santun, dan komunikasi",
             "kata kerja abstrak, pemikiran, dan pengambilan keputusan",
+            "arsitektur, rumah tangga, peralatan, dan perabotan",
+            "kesehatan, tubuh manusia, olahraga, dan kebugaran",
         ]
         domain = domains[self.cycle_count % len(domains)]
 
         speech_engine = SpeechDevelopmentEngine(self.store)
         known_words = {str(w.get("word", "")).lower() for w in speech_engine.list_lexicon() if w.get("word")}
-        sample_known = ", ".join(sorted(known_words)[-15:])
+        sample_known = ", ".join(sorted(known_words)[-20:])
 
         resp = self.models.generate_text(
             [
@@ -673,7 +675,7 @@ class ContinuousAutonomousEngine:
                     "role": "system",
                     "content": (
                         f"Berikan tepat {batch_size} kata Bahasa Indonesia tunggal (hanya 1 kata alfabet huruf kecil, "
-                        "minimal 4 huruf, bukan kata majemuk/frasa) yang beragam beserta arti singkatnya (3-8 kata). "
+                        "minimal 4 huruf, bukan kata majemuk/frasa) yang beragam beserta arti singkatnya (3-7 kata). "
                         "Format WAJIB satu baris per kata: `kata: arti singkat` tanpa nomor atau tanda bullet."
                     ),
                 },
@@ -685,7 +687,7 @@ class ContinuousAutonomousEngine:
                     ),
                 },
             ],
-            max_tokens=320,
+            max_tokens=560,
         )
         raw_text = str((resp or {}).get("text", "")).strip()
         if not raw_text:
@@ -717,11 +719,11 @@ class ContinuousAutonomousEngine:
         if learned:
             logger.info(
                 f"[Vocab Batch] Grounded {len(learned)} new words ({domain[:30]}...): "
-                f"{', '.join(item['word'] for item in learned[:6])}"
+                f"{', '.join(item['word'] for item in learned[:8])}"
             )
         return learned
 
-    def _auto_teach_heard_words(self, limit: int = 15) -> list[dict[str, Any]]:
+    def _auto_teach_heard_words(self, limit: int = 30) -> list[dict[str, Any]]:
         """Automatically ground newly encountered Indonesian words during auto-run cycles."""
         speech_engine = SpeechDevelopmentEngine(self.store)
         ungrounded = speech_engine.list_heard_words(ungrounded_only=True, limit=limit)
@@ -729,26 +731,68 @@ class ContinuousAutonomousEngine:
             return []
         known_roots = {str(w.get("word", "")).lower() for w in speech_engine.list_lexicon() if w.get("word")}
         learned: list[dict[str, Any]] = []
+        need_gguf: list[str] = []
+
         for item in ungrounded:
             word = str(item.get("word", "")).strip().lower()
             if not word:
                 continue
-            resolved = self._resolve_word_meaning(speech_engine, word, known_roots)
-            if not resolved:
-                continue
-            meaning_id, role, origin = resolved
-            res = speech_engine.teach_word(word, meaning_id, role=role)
-            if res.get("accepted"):
-                known_roots.add(word)
-                learned.append({"word": word, "meaning_id": meaning_id, "source": origin})
-                self.store.emit_event(
-                    kind="skill_learned",
-                    status="COMPLETED",
-                    summary_code=f"Auto-ajar kata baru: {word}",
-                    verification_passed=True,
-                    technical_detail={"skill_name": f"kosakata:{word}", "meaning_id": meaning_id, "source": origin},
+            std = COLLOQUIAL_SLANG_MAP.get(word)
+            resolved: tuple[str, str, str] | None = None
+            if std:
+                base = speech_engine.lookup_word(std, allow_fuzzy=False)
+                if base:
+                    resolved = (f"bentuk santai dari '{std}' ({base['meaning_id']})", str(base.get("role") or ""), "auto_slang")
+            if resolved is None:
+                base_exact = speech_engine.lookup_word(word, allow_fuzzy=False)
+                if base_exact and base_exact.get("word") != word:
+                    resolved = (f"bentuk dari '{base_exact['word']}' ({base_exact['meaning_id']})", str(base_exact.get("role") or ""), "auto_morphology")
+            if resolved is None:
+                morph = analyze_morphology(word, known_roots=known_roots)
+                root = str(morph.get("root") or "")
+                if root and root != word:
+                    base = speech_engine.lookup_word(root, allow_fuzzy=False)
+                    if base:
+                        resolved = (f"bentuk berimbuhan dari '{root}' ({base['meaning_id']})", str(morph.get("pos_hint") or base.get("role") or ""), "auto_morphology")
+            if resolved is not None:
+                meaning_id, role, origin = resolved
+                res = speech_engine.teach_word(word, meaning_id, role=role)
+                if res.get("accepted"):
+                    known_roots.add(word)
+                    learned.append({"word": word, "meaning_id": meaning_id, "source": origin})
+                    logger.info(f"[Auto-Teach] Grounded new word '{word}' ({origin}): {meaning_id}")
+            else:
+                need_gguf.append(word)
+
+        if need_gguf:
+            hc = self.models.health_check()
+            if hc.get("local_gguf", {}).get("server_healthy"):
+                resp = self.models.generate_text(
+                    [
+                        {
+                            "role": "system",
+                            "content": (
+                                "Jelaskan arti singkat (3-8 kata) setiap kata Bahasa Indonesia berikut. "
+                                "Format WAJIB satu baris per kata: `kata: arti singkat` tanpa nomor."
+                            ),
+                        },
+                        {"role": "user", "content": ", ".join(need_gguf)},
+                    ],
+                    max_tokens=max(120, len(need_gguf) * 24),
                 )
-                logger.info(f"[Auto-Teach] Grounded new word '{word}' ({origin}): {meaning_id}")
+                for line in str((resp or {}).get("text", "")).splitlines():
+                    cleaned = line.strip().lstrip("-*•0123456789. ")
+                    if ":" not in cleaned:
+                        continue
+                    w_part, m_part = cleaned.split(":", 1)
+                    w_clean = w_part.strip().strip("\"'`* ").lower()
+                    m_clean = m_part.strip().strip(".\"' ")
+                    if w_clean in need_gguf and 3 <= len(m_clean) <= 120:
+                        res = speech_engine.teach_word(w_clean, m_clean, role="")
+                        if res.get("accepted"):
+                            known_roots.add(w_clean)
+                            learned.append({"word": w_clean, "meaning_id": m_clean, "source": "auto_gguf"})
+                            logger.info(f"[Auto-Teach] Grounded new word '{w_clean}' (auto_gguf): {m_clean}")
         return learned
 
     def execute_cycle(self) -> None:
@@ -814,7 +858,7 @@ class ContinuousAutonomousEngine:
 
 
 def main():
-    engine = ContinuousAutonomousEngine(tick_interval_seconds=6.0)
+    engine = ContinuousAutonomousEngine(tick_interval_seconds=1.5)
     engine.run_forever()
 
 
