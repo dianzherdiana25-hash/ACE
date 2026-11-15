@@ -492,27 +492,88 @@ class ContinuousAutonomousEngine:
         if not hc.get("local_gguf", {}).get("server_healthy"):
             return None
 
-        sample_prompts = [
-            "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
-            "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
-            "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
-            "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
-            "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+        themes = [
+            "kosakata Indonesia yang jarang dipakai namun indah beserta contoh kalimatnya",
+            "idiom atau ungkapan khas Indonesia dan maknanya dalam percakapan",
+            "perbedaan nuansa dua kata sinonim dalam bahasa Indonesia",
+            "penggunaan imbuhan me-kan vs me-i dengan contoh nyata",
+            "ragam bahasa santai anak muda Indonesia vs padanan bakunya",
+            "kosakata seputar alam, cuaca, dan suasana senja di Indonesia",
+            "etika bertutur kata yang halus saat menolak atau mengkritik dalam bahasa Indonesia",
+            "istilah kuliner atau tradisi Nusantara beserta artinya",
+            "peribahasa Indonesia beserta pelajaran praktisnya",
+            "padanan kata Indonesia yang tepat untuk istilah teknologi sehari-hari",
         ]
-        prompt = sample_prompts[self.cycle_count % len(sample_prompts)]
+        theme = themes[self.cycle_count % len(themes)]
+
+        recent_prompts: list[str] = []
+        if self.corpus_file.exists():
+            try:
+                lines = self.corpus_file.read_text(encoding="utf-8").splitlines()[-6:]
+                for raw in lines:
+                    if raw.strip():
+                        recent_prompts.append(str(json.loads(raw).get("prompt", "")))
+            except Exception:
+                pass
+
+        prompt = ""
+        try:
+            avoid_note = (
+                f" Hindari mengulang topik yang mirip dengan: {'; '.join(p[:60] for p in recent_prompts[-3:] if p)}."
+                if recent_prompts
+                else ""
+            )
+            gen_q = self.models.generate_text(
+                [
+                    {
+                        "role": "system",
+                        "content": (
+                            "Buat tepat SATU pertanyaan latihan bahasa Indonesia yang singkat (10-22 kata), "
+                            "spesifik, dan menarik. Tulis pertanyaannya saja tanpa pengantar atau tanda kutip."
+                        ),
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Tema siklus #{self.cycle_count}: {theme}.{avoid_note}",
+                    },
+                ],
+                max_tokens=60,
+            )
+            candidate_q = str((gen_q or {}).get("text", "")).strip().strip("\"'")
+            if 15 <= len(candidate_q) <= 220 and candidate_q not in recent_prompts:
+                prompt = candidate_q
+        except Exception:
+            prompt = ""
+
+        if not prompt:
+            fallback_prompts = [
+                "Jelaskan arti ungkapan 'ringan tangan' dan berikan satu contoh kalimatnya.",
+                "Apa bedanya kata 'melihat', 'memandang', dan 'menatap' dalam bahasa Indonesia?",
+                "Sebutkan tiga kata serapan bahasa Indonesia dari bahasa daerah beserta artinya.",
+                "Bagaimana cara menggunakan imbuhan 'ber-an' yang benar dalam kalimat sehari-hari?",
+                "Berikan contoh kalimat dengan kata 'temaram' dan jelaskan nuansanya.",
+            ]
+            prompt = fallback_prompts[self.cycle_count % len(fallback_prompts)]
+
         logger.info(f"[Continuous Language Learning] Exploring dynamic dialogue: '{prompt}'...")
 
         try:
             resp = self.models.generate_text([
                 {"role": "system", "content": "Kamu adalah ACE, entitas kecerdasan otonom yang mendalami bahasa Indonesia. Berikan jawaban yang bernas, santai, dan tepat bahasa."},
                 {"role": "user", "content": prompt},
-            ], max_tokens=128)
+            ], max_tokens=160)
             ans = resp.get("text", "").strip()
             if ans:
+                try:
+                    SpeechDevelopmentEngine(self.store).observe_user_utterance(ans)
+                except Exception:
+                    pass
+
                 # Save to corpus
                 entry = {
                     "cycle": self.cycle_count,
                     "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                    "theme": theme,
                     "prompt": prompt,
                     "response": ans,
                     "backend": resp.get("backend_used", "local-gguf"),
