@@ -630,7 +630,7 @@ class ContinuousAutonomousEngine:
         if advanced_count == 0:
             self.update_status_file("learning_indonesian_language")
             self.execute_continuous_language_learning()
-            self._auto_teach_heard_words()
+        self._auto_teach_heard_words()
 
         # Step 4: Heartbeat & sync
         self.update_status_file("idle_waiting_next_cycle", {
