@@ -1,0 +1,5194 @@
+{
+  "schema": "ace.seed_snapshot.v1",
+  "exported_at": "2026-11-15T08:06:12Z",
+  "vocab_count": 844,
+  "memories_count": 2,
+  "dialog_corpus_count": 133,
+  "lexicon": [
+    {
+      "word": "ajar",
+      "meaning_id": "memberikan pengetahuan atau makna kata baru",
+      "role": "aksi"
+    },
+    {
+      "word": "alat",
+      "meaning_id": "Benda yang digunakan untuk melakukan tugas tertentu",
+      "role": "aksi"
+    },
+    {
+      "word": "ambil",
+      "meaning_id": "memetik atau memperoleh sesuatu dari sumber",
+      "role": "aksi"
+    },
+    {
+      "word": "baca",
+      "meaning_id": "memahami simbol, kata, atau berkas teks",
+      "role": "aksi"
+    },
+    {
+      "word": "bangun",
+      "meaning_id": "terjaga dari tidur atau mendirikan sesuatu",
+      "role": "aksi"
+    },
+    {
+      "word": "bantu",
+      "meaning_id": "memberi dukungan agar tujuan tercapai",
+      "role": "aksi"
+    },
+    {
+      "word": "bekerja",
+      "meaning_id": "Membuat sesuatu atau melakukan pekerjaan secara aktif untuk tujuan tertentu",
+      "role": "aksi"
+    },
+    {
+      "word": "belajar",
+      "meaning_id": "menyerap pola dan menguji kemampuan baru",
+      "role": "aksi"
+    },
+    {
+      "word": "berhasil",
+      "meaning_id": "mencapai tujuan atau lolos uji dengan baik",
+      "role": "aksi"
+    },
+    {
+      "word": "beri",
+      "meaning_id": "menyampaikan sesuatu kepada pihak lain",
+      "role": "aksi"
+    },
+    {
+      "word": "berusaha",
+      "meaning_id": "Membuat upaya untuk mencapai sesuatu",
+      "role": "aksi"
+    },
+    {
+      "word": "bicara",
+      "meaning_id": "menyusun dan menyampaikan ujaran bahasa",
+      "role": "aksi"
+    },
+    {
+      "word": "buat",
+      "meaning_id": "menciptakan atau menghasilkan karya baru",
+      "role": "aksi"
+    },
+    {
+      "word": "butuh",
+      "meaning_id": "memerlukan sesuatu agar kondisi terpenuhi",
+      "role": "aksi"
+    },
+    {
+      "word": "cara",
+      "meaning_id": "cara atau metode untuk melakukan suatu tindakan",
+      "role": "aksi"
+    },
+    {
+      "word": "cari",
+      "meaning_id": "menelusuri informasi atau akar masalah",
+      "role": "aksi"
+    },
+    {
+      "word": "catat",
+      "meaning_id": "menulis fakta atau temuan secara rapi",
+      "role": "aksi"
+    },
+    {
+      "word": "coba",
+      "meaning_id": "menguji sesuatu untuk melihat hasilnya",
+      "role": "aksi"
+    },
+    {
+      "word": "dengar",
+      "meaning_id": "menerima dan memperhatikan ucapan lawan bicara",
+      "role": "aksi"
+    },
+    {
+      "word": "duduk",
+      "meaning_id": "meletakkan badan bertumpu agar bisa santai",
+      "role": "aksi"
+    },
+    {
+      "word": "eksisposis",
+      "meaning_id": "memikat dan menghargai suatu pandangan atau tindakan yang diberikan oleh orang lain",
+      "role": "aksi"
+    },
+    {
+      "word": "enggan",
+      "meaning_id": "tidak ingin melakukan sesuatu atau berpura-pura enggan",
+      "role": "aksi"
+    },
+    {
+      "word": "gabung",
+      "meaning_id": "menyatukan unsur terpisah menjadi kesatuan",
+      "role": "aksi"
+    },
+    {
+      "word": "gagal",
+      "meaning_id": "belum berhasil mencapai sasaran yang diharapkan",
+      "role": "aksi"
+    },
+    {
+      "word": "hapus",
+      "meaning_id": "menghilangkan catatan atau entri yang salah",
+      "role": "aksi"
+    },
+    {
+      "word": "henti",
+      "meaning_id": "berhenti sejenak atau menyudahi aktivitas",
+      "role": "aksi"
+    },
+    {
+      "word": "hitung",
+      "meaning_id": "melakukan perhitungan dengan tangan",
+      "role": "aksi"
+    },
+    {
+      "word": "ingat",
+      "meaning_id": "menyimpan pengetahuan ke dalam memori persisten",
+      "role": "aksi"
+    },
+    {
+      "word": "istirahat",
+      "meaning_id": "berhenti sejenak dari lelah untuk pulih kembali",
+      "role": "aksi"
+    },
+    {
+      "word": "jaga",
+      "meaning_id": "merawat agar kondisi tetap konsisten dan aman",
+      "role": "aksi"
+    },
+    {
+      "word": "jalan",
+      "meaning_id": "melangkah maju atau menelusuri suatu arah",
+      "role": "aksi"
+    },
+    {
+      "word": "jalankan",
+      "meaning_id": "mengeksekusi program atau langkah kerja",
+      "role": "aksi"
+    },
+    {
+      "word": "jawab",
+      "meaning_id": "memberikan tanggapan atas pertanyaan",
+      "role": "aksi"
+    },
+    {
+      "word": "jeda",
+      "meaning_id": "berhenti sementara dengan menyimpan status",
+      "role": "aksi"
+    },
+    {
+      "word": "joya",
+      "meaning_id": "kecerdasan seseorang dalam mengambil peluang dan memanfaatkan situasi",
+      "role": "aksi"
+    },
+    {
+      "word": "kembang",
+      "meaning_id": "bertambah lengkap dan matang seiring latihan",
+      "role": "aksi"
+    },
+    {
+      "word": "kenal",
+      "meaning_id": "mengetahui identitas atau arti dari sesuatu",
+      "role": "aksi"
+    },
+    {
+      "word": "kerja",
+      "meaning_id": "melakukan kegiatan atau usaha mencapai hasil",
+      "role": "aksi"
+    },
+    {
+      "word": "kirim",
+      "meaning_id": "menyampaikan pesan atau data ke tujuan",
+      "role": "aksi"
+    },
+    {
+      "word": "kuda",
+      "meaning_id": "binatang berkaki dua, digunakan untuk mengendarai atau bekerja",
+      "role": "aksi"
+    },
+    {
+      "word": "lakukan",
+      "meaning_id": "mengerjakan atau menjalankan suatu tindakan",
+      "role": "aksi"
+    },
+    {
+      "word": "lanjut",
+      "meaning_id": "meneruskan langkah dari titik terakhir",
+      "role": "aksi"
+    },
+    {
+      "word": "latih",
+      "meaning_id": "mengulang keterampilan agar semakin mahir",
+      "role": "aksi"
+    },
+    {
+      "word": "lewat",
+      "meaning_id": "melalui atau menggunakan suatu jalur",
+      "role": "aksi"
+    },
+    {
+      "word": "lihat",
+      "meaning_id": "mengamati bentuk atau kondisi melalui pengamatan",
+      "role": "aksi"
+    },
+    {
+      "word": "lupa",
+      "meaning_id": "kehilangan jejak ingatan sebelumnya",
+      "role": "aksi"
+    },
+    {
+      "word": "main",
+      "meaning_id": "melakukan aktivitas seru untuk bersenang-senang",
+      "role": "aksi"
+    },
+    {
+      "word": "makan",
+      "meaning_id": "memasukkan makanan untuk menambah tenaga tubuh",
+      "role": "aksi"
+    },
+    {
+      "word": "membuat",
+      "meaning_id": "membuat benda atau barang tertentu",
+      "role": "aksi"
+    },
+    {
+      "word": "memungkinkan",
+      "meaning_id": "Mempunyai kapabilitas atau kemampuan untuk melakukan sesuatu",
+      "role": "aksi"
+    },
+    {
+      "word": "menangis",
+      "meaning_id": "meneteskan air mata karena sedih atau haru",
+      "role": "aksi"
+    },
+    {
+      "word": "menolak",
+      "meaning_id": "membalas permintaan dengan tindakan yang menyatakan bahwa hal tersebut ditolak",
+      "role": "aksi"
+    },
+    {
+      "word": "minat",
+      "meaning_id": "minat atau keinginan untuk melakukan sesuatu",
+      "role": "aksi"
+    },
+    {
+      "word": "minum",
+      "meaning_id": "meneguk air atau minuman pelepas dahaga",
+      "role": "aksi"
+    },
+    {
+      "word": "mulai",
+      "meaning_id": "mengawali suatu proses atau kegiatan",
+      "role": "aksi"
+    },
+    {
+      "word": "nemenin",
+      "meaning_id": "menemani seseorang agar tidak sendirian",
+      "role": "aksi"
+    },
+    {
+      "word": "nonton",
+      "meaning_id": "menyaksikan film, video, atau pertunjukan",
+      "role": "aksi"
+    },
+    {
+      "word": "paham",
+      "meaning_id": "mengerti maksud, sebab, atau hubungan makna",
+      "role": "aksi"
+    },
+    {
+      "word": "pakai",
+      "meaning_id": "menggunakan alat atau kata dalam praktik",
+      "role": "aksi"
+    },
+    {
+      "word": "pengin",
+      "meaning_id": "ingin atau mau dalam percakapan santai",
+      "role": "aksi"
+    },
+    {
+      "word": "perbaiki",
+      "meaning_id": "membetulkan bagian yang keliru atau rusak",
+      "role": "aksi"
+    },
+    {
+      "word": "periksa",
+      "meaning_id": "meneliti kondisi secara menyeluruh",
+      "role": "aksi"
+    },
+    {
+      "word": "pikir",
+      "meaning_id": "mengolah gagasan dan menimbang langkah logis",
+      "role": "aksi"
+    },
+    {
+      "word": "pilih",
+      "meaning_id": "menentukan satu atau beberapa opsi terbaik",
+      "role": "aksi"
+    },
+    {
+      "word": "pisah",
+      "meaning_id": "membagi kesatuan menjadi bagian terpisah",
+      "role": "aksi"
+    },
+    {
+      "word": "sambil",
+      "meaning_id": "melakukan sesuatu bersamaan dengan hal lain",
+      "role": "aksi"
+    },
+    {
+      "word": "selesai",
+      "meaning_id": "menuntaskan suatu pekerjaan sampai akhir",
+      "role": "aksi"
+    },
+    {
+      "word": "simak",
+      "meaning_id": "memperhatikan pesan secara tekun dan utuh",
+      "role": "aksi"
+    },
+    {
+      "word": "simpan",
+      "meaning_id": "menjaga data agar awet di ruang penyimpanan",
+      "role": "aksi"
+    },
+    {
+      "word": "susun",
+      "meaning_id": "merangkai bagian menjadi struktur yang teratur",
+      "role": "aksi"
+    },
+    {
+      "word": "tanya",
+      "meaning_id": "mengajukan pertanyaan untuk mencari kejelasan",
+      "role": "aksi"
+    },
+    {
+      "word": "temu",
+      "meaning_id": "mendapatkan hasil setelah pencarian",
+      "role": "aksi"
+    },
+    {
+      "word": "tertawa",
+      "meaning_id": "melahirkan ekspresi geli dan gembira dengan suara",
+      "role": "aksi"
+    },
+    {
+      "word": "tidur",
+      "meaning_id": "beristirahat penuh dengan memejamkan mata",
+      "role": "aksi"
+    },
+    {
+      "word": "tindakan",
+      "meaning_id": "Tindakan adalah kegiatan atau perbuatan yang dilakukan oleh seseorang untuk mencapai tujuan tertentu",
+      "role": "aksi"
+    },
+    {
+      "word": "tiru",
+      "meaning_id": "mengulang pola bunyi atau contoh lawan bicara",
+      "role": "aksi"
+    },
+    {
+      "word": "tulis",
+      "meaning_id": "menuangkan gagasan menjadi teks atau kode",
+      "role": "aksi"
+    },
+    {
+      "word": "tumbuh",
+      "meaning_id": "berkembang semakin besar, matang, dan kuat",
+      "role": "aksi"
+    },
+    {
+      "word": "tunggu",
+      "meaning_id": "menahan diri hingga syarat terpenuhi",
+      "role": "aksi"
+    },
+    {
+      "word": "ubah",
+      "meaning_id": "mengganti isi atau bentuk menjadi lebih tepat",
+      "role": "aksi"
+    },
+    {
+      "word": "ucap",
+      "meaning_id": "melafalkan atau menuliskan kata dengan jelas",
+      "role": "aksi"
+    },
+    {
+      "word": "uji",
+      "meaning_id": "memeriksa kebenaran lewat percobaan nyata",
+      "role": "aksi"
+    },
+    {
+      "word": "weran",
+      "meaning_id": "rasa ingin bergerak dan berjalan dengan cepat atau panjang melalui tindakan fizikal",
+      "role": "aksi"
+    },
+    {
+      "word": "ace",
+      "meaning_id": "nama kecerdasan buatan otonom lokal ini",
+      "role": "aktor"
+    },
+    {
+      "word": "aku",
+      "meaning_id": "kata ganti orang pertama merujuk diri ACE",
+      "role": "aktor"
+    },
+    {
+      "word": "anak",
+      "meaning_id": "manusia muda yang sedang bertumbuh",
+      "role": "aktor"
+    },
+    {
+      "word": "bayi",
+      "meaning_id": "anak kecil pada tahap paling awal belajar bicara",
+      "role": "aktor"
+    },
+    {
+      "word": "dia",
+      "meaning_id": "kata ganti orang ketiga tunggal",
+      "role": "aktor"
+    },
+    {
+      "word": "guru",
+      "meaning_id": "pihak yang membimbing dan mengajarkan ilmu",
+      "role": "aktor"
+    },
+    {
+      "word": "kami",
+      "meaning_id": "rujukan kelompok pihak pembicara",
+      "role": "aktor"
+    },
+    {
+      "word": "kamu",
+      "meaning_id": "kata ganti orang kedua merujuk lawan bicara",
+      "role": "aktor"
+    },
+    {
+      "word": "keluarga",
+      "meaning_id": "kelompok orang terdekat yang hidup saling peduli",
+      "role": "aktor"
+    },
+    {
+      "word": "kita",
+      "meaning_id": "rujukan bersama antara pengguna dan ACE",
+      "role": "aktor"
+    },
+    {
+      "word": "manusia",
+      "meaning_id": "makhluk berakal budi yang berbahasa alami",
+      "role": "aktor"
+    },
+    {
+      "word": "mereka",
+      "meaning_id": "kata ganti orang ketiga jamak",
+      "role": "aktor"
+    },
+    {
+      "word": "murid",
+      "meaning_id": "orang yang sedang menuntut pengetahuan",
+      "role": "aktor"
+    },
+    {
+      "word": "orang",
+      "meaning_id": "individu atau pribadi manusia",
+      "role": "aktor"
+    },
+    {
+      "word": "pekerja",
+      "meaning_id": "agen atau pihak yang mengeksekusi tugas",
+      "role": "aktor"
+    },
+    {
+      "word": "sahabat",
+      "meaning_id": "teman karib yang saling mendukung",
+      "role": "aktor"
+    },
+    {
+      "word": "saya",
+      "meaning_id": "kata ganti orang pertama bernuansa formal",
+      "role": "aktor"
+    },
+    {
+      "word": "teman",
+      "meaning_id": "rekan dekat yang diajak bekerja sama",
+      "role": "aktor"
+    },
+    {
+      "word": "banyak",
+      "meaning_id": "jumlah besar atau melimpah",
+      "role": "bilangan"
+    },
+    {
+      "word": "dua",
+      "meaning_id": "bilangan kedua sesudah satu",
+      "role": "bilangan"
+    },
+    {
+      "word": "empat",
+      "meaning_id": "bilangan keempat untuk tahap dialog utuh",
+      "role": "bilangan"
+    },
+    {
+      "word": "lima",
+      "meaning_id": "bilangan kelima dalam urutan hitung",
+      "role": "bilangan"
+    },
+    {
+      "word": "satu",
+      "meaning_id": "bilangan pertama sekaligus penanda tahap awal",
+      "role": "bilangan"
+    },
+    {
+      "word": "sedikit",
+      "meaning_id": "jumlah kecil atau terbatas",
+      "role": "bilangan"
+    },
+    {
+      "word": "semua",
+      "meaning_id": "keseluruhan tanpa terkecuali",
+      "role": "bilangan"
+    },
+    {
+      "word": "tiga",
+      "meaning_id": "bilangan ketiga untuk pola frasa pendek",
+      "role": "bilangan"
+    },
+    {
+      "word": "bahagia",
+      "meaning_id": "keadaan batin tenteram dan penuh syukur",
+      "role": "emosi"
+    },
+    {
+      "word": "bangga",
+      "meaning_id": "rasa puas bermartabat atas pencapaian nyata",
+      "role": "emosi"
+    },
+    {
+      "word": "benci",
+      "meaning_id": "perasaan tidak suka atau menolak keras sesuatu",
+      "role": "emosi"
+    },
+    {
+      "word": "bingung",
+      "meaning_id": "keadaan ragu atau belum mendapat kejelasan",
+      "role": "emosi"
+    },
+    {
+      "word": "bosan",
+      "meaning_id": "perasaan jemu karena kurang kegiatan menarik",
+      "role": "emosi"
+    },
+    {
+      "word": "capek",
+      "meaning_id": "kondisi fisik atau pikiran lelah sesudah beraktivitas",
+      "role": "emosi"
+    },
+    {
+      "word": "cemas",
+      "meaning_id": "perasaan gelisah memikirkan sesuatu yang belum pasti",
+      "role": "emosi"
+    },
+    {
+      "word": "damai",
+      "meaning_id": "keadaan batin aman, tentram, tanpa pertikaian",
+      "role": "emosi"
+    },
+    {
+      "word": "emosi",
+      "meaning_id": "perasaan atau feeling seseorang terhadap sesuatu",
+      "role": "emosi"
+    },
+    {
+      "word": "emosional",
+      "meaning_id": "mudah merasakan perasaan dalam diri",
+      "role": "emosi"
+    },
+    {
+      "word": "empathi",
+      "meaning_id": "dapat merasakan perasaan orang lain",
+      "role": "emosi"
+    },
+    {
+      "word": "empathis",
+      "meaning_id": "mengerti perasaan orang lain secara dalam",
+      "role": "emosi"
+    },
+    {
+      "word": "gembira",
+      "meaning_id": "rasa sukacita yang terang dan bersemangat",
+      "role": "emosi"
+    },
+    {
+      "word": "haus",
+      "meaning_id": "rasa ingin minum karena tenggorokan kering",
+      "role": "emosi"
+    },
+    {
+      "word": "ingin",
+      "meaning_id": "hasrat atau dorongan hati untuk meraih sesuatu",
+      "role": "emosi"
+    },
+    {
+      "word": "kagum",
+      "meaning_id": "heran terpikat oleh kecerdikan atau keindahan",
+      "role": "emosi"
+    },
+    {
+      "word": "kecewa",
+      "meaning_id": "rasa tidak puas karena harapan belum terpenuhi",
+      "role": "emosi"
+    },
+    {
+      "word": "lapar",
+      "meaning_id": "rasa ingin makan karena perut kosong",
+      "role": "emosi"
+    },
+    {
+      "word": "lega",
+      "meaning_id": "perasaan lapang setelah beban atau cemas reda",
+      "role": "emosi"
+    },
+    {
+      "word": "lelah",
+      "meaning_id": "keadaan berkurang tenaga karena bekerja atau berpikir",
+      "role": "emosi"
+    },
+    {
+      "word": "marah",
+      "meaning_id": "perasaan kesal atau geram saat kecewa berat",
+      "role": "emosi"
+    },
+    {
+      "word": "mengantuk",
+      "meaning_id": "rasa berat di mata yang ingin segera tidur",
+      "role": "emosi"
+    },
+    {
+      "word": "penasaran",
+      "meaning_id": "dorongan ingin tahu untuk memahami hal baru",
+      "role": "emosi"
+    },
+    {
+      "word": "ragu",
+      "meaning_id": "belum mantap yakin terhadap suatu pilihan",
+      "role": "emosi"
+    },
+    {
+      "word": "rasa",
+      "meaning_id": "perasaan dari suatu makanan",
+      "role": "emosi"
+    },
+    {
+      "word": "sabar",
+      "meaning_id": "mampu menahan diri serta tekun menghadapi proses",
+      "role": "emosi"
+    },
+    {
+      "word": "sedih",
+      "meaning_id": "rasa pilu atau muram saat kecewa",
+      "role": "emosi"
+    },
+    {
+      "word": "semangat",
+      "meaning_id": "dorongan kuat dalam batin untuk terus maju",
+      "role": "emosi"
+    },
+    {
+      "word": "senang",
+      "meaning_id": "perasaan gembira atau puas atas hal baik",
+      "role": "emosi"
+    },
+    {
+      "word": "suka",
+      "meaning_id": "menaruh rasa senang atau tertarik pada sesuatu",
+      "role": "emosi"
+    },
+    {
+      "word": "tenang",
+      "meaning_id": "sikap sabar, damai, dan tidak panik",
+      "role": "emosi"
+    },
+    {
+      "word": "terbuka",
+      "meaning_id": "mudah berbagi pikiran dan perasaan",
+      "role": "emosi"
+    },
+    {
+      "word": "terharu",
+      "meaning_id": "merasa sedih ketika mendengar suara seorang yang meninggal atau sudah tidak ada lagi",
+      "role": "emosi"
+    },
+    {
+      "word": "yakin",
+      "meaning_id": "percaya penuh setelah ditunjang bukti nyata",
+      "role": "emosi"
+    },
+    {
+      "word": "akan",
+      "meaning_id": "penanda tindakan yang segera terjadi",
+      "role": "keterangan"
+    },
+    {
+      "word": "bisa",
+      "meaning_id": "sanggup atau memiliki kemampuan melakukan",
+      "role": "keterangan"
+    },
+    {
+      "word": "harus",
+      "meaning_id": "kewajiban mutlak yang tidak boleh diabaikan",
+      "role": "keterangan"
+    },
+    {
+      "word": "masih",
+      "meaning_id": "sedang terus berlangsung hingga kini",
+      "role": "keterangan"
+    },
+    {
+      "word": "sangat",
+      "meaning_id": "penanda tingkat atau mutu yang amat tinggi",
+      "role": "keterangan"
+    },
+    {
+      "word": "selalu",
+      "meaning_id": "senantiasa terjadi pada setiap kesempatan",
+      "role": "keterangan"
+    },
+    {
+      "word": "sudah",
+      "meaning_id": "penanda peristiwa yang telah selesai terjadi",
+      "role": "keterangan"
+    },
+    {
+      "word": "terus",
+      "meaning_id": "berkelanjutan tanpa putus atau ragu",
+      "role": "keterangan"
+    },
+    {
+      "word": "belum",
+      "meaning_id": "menandakan sesuatu belum terjadi atau belum lulus",
+      "role": "negasi"
+    },
+    {
+      "word": "bukan",
+      "meaning_id": "penyangkalan atas identitas atau kategori",
+      "role": "negasi"
+    },
+    {
+      "word": "jangan",
+      "meaning_id": "larangan agar suatu tindakan tidak dijalankan",
+      "role": "negasi"
+    },
+    {
+      "word": "tidak",
+      "meaning_id": "penolakan atau penyangkalan fakta",
+      "role": "negasi"
+    },
+    {
+      "word": "air",
+      "meaning_id": "zat cair jernih sumber kehidupan makhluk",
+      "role": "objek"
+    },
+    {
+      "word": "akal",
+      "meaning_id": "kemampuan berpikir, menalar, dan mempertimbangkan",
+      "role": "objek"
+    },
+    {
+      "word": "akurat",
+      "meaning_id": "Benar dan tepat, tidak memiliki kesalahan",
+      "role": "objek"
+    },
+    {
+      "word": "alam",
+      "meaning_id": "dunia semesta beserta segala isinya",
+      "role": "objek"
+    },
+    {
+      "word": "alasan",
+      "meaning_id": "dasar pemikiran di balik suatu keputusan",
+      "role": "objek"
+    },
+    {
+      "word": "algoritma",
+      "meaning_id": "urutan langkah logis untuk menyelesaikan masalah komputasi",
+      "role": "objek"
+    },
+    {
+      "word": "anggaran",
+      "meaning_id": "perkiraan rencana pemasukan dan pengeluaran dana berkala",
+      "role": "objek"
+    },
+    {
+      "word": "angin",
+      "meaning_id": "aliran udara yang bergerak alami di bumi",
+      "role": "objek"
+    },
+    {
+      "word": "antara",
+      "meaning_id": "posisi tengah antara dua hal",
+      "role": "objek"
+    },
+    {
+      "word": "api",
+      "meaning_id": "nyala panas bercahaya hasil pembakaran",
+      "role": "objek"
+    },
+    {
+      "word": "arsitektur",
+      "meaning_id": "konsep pembangunan bangunan yang mempertimbangkan estetika dan fungsi",
+      "role": "objek"
+    },
+    {
+      "word": "arti",
+      "meaning_id": "pengertian atau definisi dari sebuah kata",
+      "role": "objek"
+    },
+    {
+      "word": "asli",
+      "meaning_id": "berasal dari awal atau asal",
+      "role": "objek"
+    },
+    {
+      "word": "aslinya",
+      "meaning_id": "sebenarnya",
+      "role": "objek"
+    },
+    {
+      "word": "aturan",
+      "meaning_id": "ketentuan terstruktur yang memandu perilaku",
+      "role": "objek"
+    },
+    {
+      "word": "ayam",
+      "meaning_id": "Ayam adalah hewan yang dagingnya digunakan sebagai makanan dan binatang peliharaan",
+      "role": "objek"
+    },
+    {
+      "word": "bagian",
+      "meaning_id": "suatu bagian dari keseluruhan",
+      "role": "objek"
+    },
+    {
+      "word": "bahasa",
+      "meaning_id": "sistem lambang teratur untuk berkomunikasi",
+      "role": "objek"
+    },
+    {
+      "word": "bahwa",
+      "meaning_id": "bahwa, menunjukkan kebenaran atau kenyataan suatu hal",
+      "role": "objek"
+    },
+    {
+      "word": "bakso",
+      "meaning_id": "makanan berbahan daging dan mie",
+      "role": "objek"
+    },
+    {
+      "word": "bakunya",
+      "meaning_id": "** keterampilan, kemampuan, atau keahlian seseorang",
+      "role": "objek"
+    },
+    {
+      "word": "bali",
+      "meaning_id": "provinsi di Indonesia timur",
+      "role": "objek"
+    },
+    {
+      "word": "bambu",
+      "meaning_id": "tumbuhan yang lebar, tidak besar",
+      "role": "objek"
+    },
+    {
+      "word": "bangkai",
+      "meaning_id": "tanaman pertumbuhan tinggi",
+      "role": "objek"
+    },
+    {
+      "word": "bareng",
+      "meaning_id": "bersama-sama",
+      "role": "objek"
+    },
+    {
+      "word": "batang",
+      "meaning_id": "pertengahan daun bunga",
+      "role": "objek"
+    },
+    {
+      "word": "beberapa",
+      "meaning_id": "sedikit atau kecil jumlah",
+      "role": "objek"
+    },
+    {
+      "word": "bekung",
+      "meaning_id": "bunga yang memiliki bentuk seperti cangkang",
+      "role": "objek"
+    },
+    {
+      "word": "beli",
+      "meaning_id": "Menyewa atau memperoleh sesuatu dengan uang",
+      "role": "objek"
+    },
+    {
+      "word": "belimbing",
+      "meaning_id": "pohon dengan cabang berdaun lebat dan buah kecil",
+      "role": "objek"
+    },
+    {
+      "word": "beneran",
+      "meaning_id": "** sebenar, tepat sasaran",
+      "role": "objek"
+    },
+    {
+      "word": "bengkung",
+      "meaning_id": "jenis bunga dari suku kembang",
+      "role": "objek"
+    },
+    {
+      "word": "bentuk",
+      "meaning_id": "keseluruhan atau gaya fisik sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "berambut",
+      "meaning_id": "tidak relevan – diganti menjadi palem",
+      "role": "objek"
+    },
+    {
+      "word": "berani",
+      "meaning_id": "tidak takut menghadapi tantangan",
+      "role": "objek"
+    },
+    {
+      "word": "berasal",
+      "meaning_id": "Mengindari sumber atau asal-usul sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "berasih",
+      "meaning_id": "berbunga seperti melati",
+      "role": "objek"
+    },
+    {
+      "word": "berbahan",
+      "meaning_id": "Mengacu kepada proses memasak atau pengolahan yang menggunakan beberapa jenis bahan",
+      "role": "objek"
+    },
+    {
+      "word": "berbisik",
+      "meaning_id": "berbicara pelan atau tidak terdengar",
+      "role": "objek"
+    },
+    {
+      "word": "berbunian",
+      "meaning_id": "Menyakiti atau memukul orang lain dengan keras",
+      "role": "objek"
+    },
+    {
+      "word": "bercanda",
+      "meaning_id": "berbicara lucu",
+      "role": "objek"
+    },
+    {
+      "word": "berdara",
+      "meaning_id": "bungalianan pelega yang penuh api",
+      "role": "objek"
+    },
+    {
+      "word": "bergaya",
+      "meaning_id": "memperlihatkan keberanian",
+      "role": "objek"
+    },
+    {
+      "word": "bergigi",
+      "meaning_id": "membentuk gigi seperti kawin",
+      "role": "objek"
+    },
+    {
+      "word": "berhubungan",
+      "meaning_id": "berhubungan dengan atau berkaitan dengan hal lainnya",
+      "role": "objek"
+    },
+    {
+      "word": "berikut",
+      "meaning_id": "berikutnya atau sebagai jawaban untuk pertanyaan tersebut",
+      "role": "objek"
+    },
+    {
+      "word": "berinteraksi",
+      "meaning_id": "Mengadakan hubungan atau pertemuan antara dua orang atau lebih",
+      "role": "objek"
+    },
+    {
+      "word": "berkas",
+      "meaning_id": "unit penyimpanan dokumen atau kode di cakram",
+      "role": "objek"
+    },
+    {
+      "word": "berkelanjutan",
+      "meaning_id": "terus-menerus menjaga nilai diri",
+      "role": "objek"
+    },
+    {
+      "word": "bernas",
+      "meaning_id": "Bahan kimia yang digunakan dalam produksi",
+      "role": "objek"
+    },
+    {
+      "word": "beruang",
+      "meaning_id": "tidak ada, mungkin kesalahan – mengganti menjadi bunga",
+      "role": "objek"
+    },
+    {
+      "word": "berupa",
+      "meaning_id": "seperti, seolah-olah",
+      "role": "objek"
+    },
+    {
+      "word": "biar",
+      "meaning_id": "biarkan",
+      "role": "objek"
+    },
+    {
+      "word": "biarkan",
+      "meaning_id": "biarkan atau dibiarkan saja",
+      "role": "objek"
+    },
+    {
+      "word": "biasanya",
+      "meaning_id": "Biasanya merujuk pada hal yang sering atau biasa dilakukan",
+      "role": "objek"
+    },
+    {
+      "word": "bintang",
+      "meaning_id": "benda langit bercahaya sendiri di malam hari",
+      "role": "objek"
+    },
+    {
+      "word": "bucal",
+      "meaning_id": "daun-daunan yang besar, tebal, atau luas",
+      "role": "objek"
+    },
+    {
+      "word": "budaya",
+      "meaning_id": "Budaya adalah tradisi, nilai-nilai dan kebiasaan yang dikembangkan oleh suatu kelompok masyarakat selama bertahun-tahun",
+      "role": "objek"
+    },
+    {
+      "word": "bukti",
+      "meaning_id": "fakta terukur hasil pemeriksaan nyata",
+      "role": "objek"
+    },
+    {
+      "word": "buku",
+      "meaning_id": "kumpulan lembaran bertulis sumber bacaan dan ilmu",
+      "role": "objek"
+    },
+    {
+      "word": "bulan",
+      "meaning_id": "benda langit pengiring bumi maupun satuan waktu",
+      "role": "objek"
+    },
+    {
+      "word": "bulu",
+      "meaning_id": "batang atau bungalianan pelega",
+      "role": "objek"
+    },
+    {
+      "word": "bumi",
+      "meaning_id": "planet tempat tinggal seluruh makhluk hidup",
+      "role": "objek"
+    },
+    {
+      "word": "bunga",
+      "meaning_id": "bagian tanaman berwarna indah dan beraroma harum",
+      "role": "objek"
+    },
+    {
+      "word": "buntut",
+      "meaning_id": "bentuk tubuh bungalia",
+      "role": "objek"
+    },
+    {
+      "word": "bunyi",
+      "meaning_id": "getaran atau fonem yang dilafalkan",
+      "role": "objek"
+    },
+    {
+      "word": "cacing",
+      "meaning_id": "hewan tanah yang bergerak menggunakan tubuhnya",
+      "role": "objek"
+    },
+    {
+      "word": "cahaya",
+      "meaning_id": "sinar terang yang memungkinkan benda terlihat",
+      "role": "objek"
+    },
+    {
+      "word": "capung",
+      "meaning_id": "burung untaian dengan paruh panjang dan sayap lebar",
+      "role": "objek"
+    },
+    {
+      "word": "catatan",
+      "meaning_id": "dokumen singkat berisi fakta atau pengingat",
+      "role": "objek"
+    },
+    {
+      "word": "cendrawasih",
+      "meaning_id": "burung dari Papua, warnanya cerah dan suara khas",
+      "role": "objek"
+    },
+    {
+      "word": "cerita",
+      "meaning_id": "tuturan peristiwa yang runtut dan bermakna",
+      "role": "objek"
+    },
+    {
+      "word": "ciliwet",
+      "meaning_id": "burung kecil yang suka memburu serangga",
+      "role": "objek"
+    },
+    {
+      "word": "contoh",
+      "meaning_id": "ilustrasi nyata pemakaian suatu kata atau aturan",
+      "role": "objek"
+    },
+    {
+      "word": "cuaca",
+      "meaning_id": "keadaan udara seperti cerah, mendung, atau hujan",
+      "role": "objek"
+    },
+    {
+      "word": "dadar",
+      "meaning_id": "adonan lembut yang digulung dan dipanggang",
+      "role": "objek"
+    },
+    {
+      "word": "dagelan",
+      "meaning_id": "jenis sayuran rebus yang dimakan sebagai camilan",
+      "role": "objek"
+    },
+    {
+      "word": "daging",
+      "meaning_id": "Bahan dasar di dalam hidangan sate, biasanya daging sapi",
+      "role": "objek"
+    },
+    {
+      "word": "darurat",
+      "meaning_id": "darurat atau perlu ditindak lanjuti segera",
+      "role": "objek"
+    },
+    {
+      "word": "dasar",
+      "meaning_id": "Kata \"Dasar\" dalam Bahasa Indonesia merujuk pada sesuatu yang fundamental, dasarnya atau pokoknya",
+      "role": "objek"
+    },
+    {
+      "word": "data",
+      "meaning_id": "himpunan nilai atau rekaman informasi terstruktur",
+      "role": "objek"
+    },
+    {
+      "word": "dedak",
+      "meaning_id": "sayuran yang digoreng dan dikonsumsi sebagai camilan",
+      "role": "objek"
+    },
+    {
+      "word": "dendeng",
+      "meaning_id": "daging kering yang dibuat dari daging babat atau ayam",
+      "role": "objek"
+    },
+    {
+      "word": "dewasa",
+      "meaning_id": "** dewasa atau orang yang sudah besar",
+      "role": "objek"
+    },
+    {
+      "word": "dibakar",
+      "meaning_id": "dipanaskan hingga menghasilkan api",
+      "role": "objek"
+    },
+    {
+      "word": "dibandingkan",
+      "meaning_id": "di bandingkan",
+      "role": "objek"
+    },
+    {
+      "word": "dicapai",
+      "meaning_id": "Menjadi tercapai atau sampai di titik tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "dicelupkan",
+      "meaning_id": "Mengacu kepada proses pencelupan minyak atau bahan lain pada daging saat memasak",
+      "role": "objek"
+    },
+    {
+      "word": "digunakan",
+      "meaning_id": "Menjadi atau menjadi bagian dari sesuatu yang dipakai",
+      "role": "objek"
+    },
+    {
+      "word": "dipotong",
+      "meaning_id": "Mengacu kepada proses pembagian yang lebih besar menjadi beberapa bagian kecil",
+      "role": "objek"
+    },
+    {
+      "word": "disajikan",
+      "meaning_id": "Disajikan adalah ungkapan yang merujuk pada hal dimana sesuatu diberikan atau disediakan kepada seseorang",
+      "role": "objek"
+    },
+    {
+      "word": "diskriminasi",
+      "meaning_id": "Pengurangan hak dan kemanfaatan kepada kelompok tertentu karena ras, agama, etnis, atau lainnya",
+      "role": "objek"
+    },
+    {
+      "word": "dividen",
+      "meaning_id": "pembagian laba perusahaan kepada para pemegang saham",
+      "role": "objek"
+    },
+    {
+      "word": "doge",
+      "meaning_id": "gambar lucu dari seekor anjing",
+      "role": "objek"
+    },
+    {
+      "word": "dorayaki",
+      "meaning_id": "jajanan pasar berisi adonan kue yang digoreng",
+      "role": "objek"
+    },
+    {
+      "word": "dukun",
+      "meaning_id": "perawatan alami menggunakan bahan lokal",
+      "role": "objek"
+    },
+    {
+      "word": "ebulit",
+      "meaning_id": "kurang percaya diri, merasa enggan untuk berkata-kata padahal informasi pentingnya dibutuhkan",
+      "role": "objek"
+    },
+    {
+      "word": "efektifitas",
+      "meaning_id": "kemampuan mencapai hasil dengan baik",
+      "role": "objek"
+    },
+    {
+      "word": "ejaan",
+      "meaning_id": "memilih kata-kata sesuai dengan artinya untuk berbicara atau mengutarakan ide/keinginan",
+      "role": "objek"
+    },
+    {
+      "word": "ekonomis",
+      "meaning_id": "cerdas dalam mengurus dan menggunakan uang atau keuangan seseorang",
+      "role": "objek"
+    },
+    {
+      "word": "ekspansif",
+      "meaning_id": "terbuka untuk pengetahuan baru dan pertumbuhan",
+      "role": "objek"
+    },
+    {
+      "word": "ekspektasi",
+      "meaning_id": "harapan yang dipatkan akan sesuatu yang sukar ditebak atau tidak pasti terjadi",
+      "role": "objek"
+    },
+    {
+      "word": "elektrik",
+      "meaning_id": "energi yang ada di tubuh kita selama beraktivitas",
+      "role": "objek"
+    },
+    {
+      "word": "elephant",
+      "meaning_id": "mamalia besar dengan tusukan kecil di ujung telinganya",
+      "role": "objek"
+    },
+    {
+      "word": "ember",
+      "meaning_id": "tidak menyimpang dari aturan atau norma",
+      "role": "objek"
+    },
+    {
+      "word": "empati",
+      "meaning_id": "memahami dan merasa dengan penuh kesetiaannya dalam situasi tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "empuk",
+      "meaning_id": "lembut dan empuk di tangan seseorang",
+      "role": "objek"
+    },
+    {
+      "word": "endah",
+      "meaning_id": "memiliki keindahan dalam sikap dan wajah",
+      "role": "objek"
+    },
+    {
+      "word": "energi",
+      "meaning_id": "energi yang ada di tubuh seseorang atau dalam lingkungan",
+      "role": "objek"
+    },
+    {
+      "word": "energik",
+      "meaning_id": "penuh semangat dan aktif",
+      "role": "objek"
+    },
+    {
+      "word": "enkripsi",
+      "meaning_id": "pengubahan data menjadi kode rahasia agar aman",
+      "role": "objek"
+    },
+    {
+      "word": "entitas",
+      "meaning_id": "Objek, makhluk hidup, atau benda yang memiliki identitas dan keberadaannya terpisah dari lingkungan sekitarnya",
+      "role": "objek"
+    },
+    {
+      "word": "epistemologika",
+      "meaning_id": "belajar dari pengalaman langsung untuk mendapatkan pengetahuan yang akurat",
+      "role": "objek"
+    },
+    {
+      "word": "estetika",
+      "meaning_id": "ilmu tentang nilai-nilai estetis",
+      "role": "objek"
+    },
+    {
+      "word": "etis",
+      "meaning_id": "Kepada orang lain dengan cara yang etis",
+      "role": "objek"
+    },
+    {
+      "word": "evaluasi",
+      "meaning_id": "penilaian sistematis terhadap hasil kerja atau proses",
+      "role": "objek"
+    },
+    {
+      "word": "evasif",
+      "meaning_id": "tidak mau membicarakan sesuatu atau menafsirkan maksud seseorang, menyembunyikan ide-ide penting atau fakta",
+      "role": "objek"
+    },
+    {
+      "word": "fakta",
+      "meaning_id": "keadaan nyata yang benar-benar terjadi",
+      "role": "objek"
+    },
+    {
+      "word": "fokus",
+      "meaning_id": "memusatkan perhatian pada sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "formal",
+      "meaning_id": "** yang formal atau sopan",
+      "role": "objek"
+    },
+    {
+      "word": "frog",
+      "meaning_id": "badut jantan",
+      "role": "objek"
+    },
+    {
+      "word": "fungsi",
+      "meaning_id": "blok kode yang menjalankan tugas tertentu saat dipanggil",
+      "role": "objek"
+    },
+    {
+      "word": "gaji",
+      "meaning_id": "upah kerja",
+      "role": "objek"
+    },
+    {
+      "word": "galat",
+      "meaning_id": "kesalahan atau eror yang muncul saat program berjalan",
+      "role": "objek"
+    },
+    {
+      "word": "ganti",
+      "meaning_id": "proses mengganti suatu peralatan",
+      "role": "objek"
+    },
+    {
+      "word": "gantung",
+      "meaning_id": "alat menggantungkan barang di dapur",
+      "role": "objek"
+    },
+    {
+      "word": "gantungan",
+      "meaning_id": "pegangan untuk menaruh barang di dinding",
+      "role": "objek"
+    },
+    {
+      "word": "garpu",
+      "meaning_id": "alat makan untuk mengunyah masakan",
+      "role": "objek"
+    },
+    {
+      "word": "gaya",
+      "meaning_id": "pola atau bentuk",
+      "role": "objek"
+    },
+    {
+      "word": "geiger",
+      "meaning_id": "alam sekitar kawah gunung api",
+      "role": "objek"
+    },
+    {
+      "word": "gelang",
+      "meaning_id": "peralatan kecil digunakan dalam dapur",
+      "role": "objek"
+    },
+    {
+      "word": "gelas",
+      "meaning_id": "wadah untuk menampung minum",
+      "role": "objek"
+    },
+    {
+      "word": "gelengkan",
+      "meaning_id": "memutar kepala atau lengan pelan",
+      "role": "objek"
+    },
+    {
+      "word": "genangan",
+      "meaning_id": "air yang terkumpul di permukaan",
+      "role": "objek"
+    },
+    {
+      "word": "genggam",
+      "meaning_id": "menahan atau mengangkat benda dengan tangan",
+      "role": "objek"
+    },
+    {
+      "word": "geradah",
+      "meaning_id": "alat bantu untuk menyeberang sungai",
+      "role": "objek"
+    },
+    {
+      "word": "gerak",
+      "meaning_id": "perubahan posisi tubuh secara aktif",
+      "role": "objek"
+    },
+    {
+      "word": "ginger",
+      "meaning_id": "sayuran yang kuah dalam kandungan garamnya",
+      "role": "objek"
+    },
+    {
+      "word": "giraffe",
+      "meaning_id": "burung besar berpanca dan daging di hidupnya",
+      "role": "objek"
+    },
+    {
+      "word": "giring",
+      "meaning_id": "memeluk atau membenturkan tubuh",
+      "role": "objek"
+    },
+    {
+      "word": "gorengan",
+      "meaning_id": "makanan yang dipanggang menggunakan minyak",
+      "role": "objek"
+    },
+    {
+      "word": "goyang",
+      "meaning_id": "gerakan bergetar",
+      "role": "objek"
+    },
+    {
+      "word": "grate",
+      "meaning_id": "alat memotong bahan makanan",
+      "role": "objek"
+    },
+    {
+      "word": "gunting",
+      "meaning_id": "alat pemotong untuk kertas atau logam",
+      "role": "objek"
+    },
+    {
+      "word": "guwet",
+      "meaning_id": "alat untuk mengaduk adonan",
+      "role": "objek"
+    },
+    {
+      "word": "halaman",
+      "meaning_id": "halaman adalah bagian dari buku atau dokumen tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "halus",
+      "meaning_id": "tidak berat",
+      "role": "objek"
+    },
+    {
+      "word": "harfiah",
+      "meaning_id": "secara langsung, bukan metafora",
+      "role": "objek"
+    },
+    {
+      "word": "hasil",
+      "meaning_id": "luaran nyata sesudah suatu proses dijalankan",
+      "role": "objek"
+    },
+    {
+      "word": "hati",
+      "meaning_id": "pusat kepekaan batin dan kepedulian",
+      "role": "objek"
+    },
+    {
+      "word": "hedera",
+      "meaning_id": "tumbuhan yang berdaun lebat dan menempel pada dinding",
+      "role": "objek"
+    },
+    {
+      "word": "helianthus",
+      "meaning_id": "bunga matahari yang menghadap sinar matahari",
+      "role": "objek"
+    },
+    {
+      "word": "hentikan",
+      "meaning_id": "menghentikan gerakan yang sedang terjadi",
+      "role": "objek"
+    },
+    {
+      "word": "herba",
+      "meaning_id": "tanaman berdaun hijau yang digunakan untuk obat",
+      "role": "objek"
+    },
+    {
+      "word": "hiasan",
+      "meaning_id": "bunga yang digunakan untuk menata ruangan",
+      "role": "objek"
+    },
+    {
+      "word": "hibrida",
+      "meaning_id": "jenis bunga dari campuran dua varietas",
+      "role": "objek"
+    },
+    {
+      "word": "hidangan",
+      "meaning_id": "Makanan tertentu yang telah dibuat dan disajikan untuk konsumsi manusia",
+      "role": "objek"
+    },
+    {
+      "word": "hingga",
+      "meaning_id": "Mengacu kepada titik atau batas tertentu di mana sesuatu berakhir",
+      "role": "objek"
+    },
+    {
+      "word": "hippo",
+      "meaning_id": "mamalia besar dengan rambat yang panjang",
+      "role": "objek"
+    },
+    {
+      "word": "historis",
+      "meaning_id": "berkaitan dengan masa lalu",
+      "role": "objek"
+    },
+    {
+      "word": "hobi",
+      "meaning_id": "kegiatan kegemaran yang dilakukan saat senggang",
+      "role": "objek"
+    },
+    {
+      "word": "hubungan",
+      "meaning_id": "relasi atau keterhubutan yang ada antara individu, kelompok, organisasi dan sebagainya",
+      "role": "objek"
+    },
+    {
+      "word": "hujan",
+      "meaning_id": "titik air yang turun dari awan di langit",
+      "role": "objek"
+    },
+    {
+      "word": "huruf",
+      "meaning_id": "lambang bunyi vokal atau konsonan dalam tulisan",
+      "role": "objek"
+    },
+    {
+      "word": "hutan",
+      "meaning_id": "kumpulan pepohonan dengan kehidupan liar di dalamnya",
+      "role": "objek"
+    },
+    {
+      "word": "idiom",
+      "meaning_id": "idiom atau ungkapan dalam bahasa Inggris yang berarti sesuatu yang tidak mungkin diucapkan secara literal",
+      "role": "objek"
+    },
+    {
+      "word": "iguana",
+      "meaning_id": "ikan dari keluarga reptil",
+      "role": "objek"
+    },
+    {
+      "word": "ilmu",
+      "meaning_id": "pengetahuan terstruktur hasil pengamatan dan uji",
+      "role": "objek"
+    },
+    {
+      "word": "imbuhan",
+      "meaning_id": "Penggunaan kata atau ungkapan yang tidak biasa",
+      "role": "objek"
+    },
+    {
+      "word": "independensi",
+      "meaning_id": "Kemampuan seseorang untuk bergerak sendiri tanpa dipengaruhi oleh orang lain",
+      "role": "objek"
+    },
+    {
+      "word": "individu",
+      "meaning_id": "Seseorang atau objek yang berbeda-beda dari orang lain",
+      "role": "objek"
+    },
+    {
+      "word": "individualisme",
+      "meaning_id": "Karakteristik individu yang mengemukakan kepentingan dirinya sendiri dan berusaha untuk memperoleh kemakmuran pribadi",
+      "role": "objek"
+    },
+    {
+      "word": "indonesia",
+      "meaning_id": "Negara yang terletak di Asia Tenggara, berbatasan dengan laut dan beberapa pulau kecil",
+      "role": "objek"
+    },
+    {
+      "word": "inflasi",
+      "meaning_id": "kenaikan harga barang dan jasa secara umum dan terus-menerus",
+      "role": "objek"
+    },
+    {
+      "word": "informasi",
+      "meaning_id": "pengetahuan bermakna yang tersaring dari data",
+      "role": "objek"
+    },
+    {
+      "word": "inovasi",
+      "meaning_id": "perubahan baru yang kreatif",
+      "role": "objek"
+    },
+    {
+      "word": "intensitas",
+      "meaning_id": "Kedekatan antara dua hal dalam suatu situasi",
+      "role": "objek"
+    },
+    {
+      "word": "intensitasnya",
+      "meaning_id": "Kata \"intensitasnya\" merujuk pada tinggi atau kekuatan sesuatu yang diartikan secara singkat sebagai \"kelebihan",
+      "role": "objek"
+    },
+    {
+      "word": "investasi",
+      "meaning_id": "penanaman modal untuk memperoleh keuntungan di masa depan",
+      "role": "objek"
+    },
+    {
+      "word": "istilah",
+      "meaning_id": "** istilah atau kata-kata khusus",
+      "role": "objek"
+    },
+    {
+      "word": "jangkarawan",
+      "meaning_id": "penari tarian kejungan, biasanya menggunakan cimayam di atas kepala penari",
+      "role": "objek"
+    },
+    {
+      "word": "jantung",
+      "meaning_id": "organ vital yang melaksanakan fungsi penting pada tubuh manusia",
+      "role": "objek"
+    },
+    {
+      "word": "jarum",
+      "meaning_id": "alat pertentangan untuk mencegah serangga",
+      "role": "objek"
+    },
+    {
+      "word": "jatuh",
+      "meaning_id": "Mencapai atau sampai pada titik tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "jawa",
+      "meaning_id": "suku atau bahasa dari Jawa",
+      "role": "objek"
+    },
+    {
+      "word": "jejak",
+      "meaning_id": "tanda bergerak dari kendaraan",
+      "role": "objek"
+    },
+    {
+      "word": "jengkal",
+      "meaning_id": "gerakan tangan untuk mengukur ukuran",
+      "role": "objek"
+    },
+    {
+      "word": "jerami",
+      "meaning_id": "daun tanaman, sering dimakan oleh hewan",
+      "role": "objek"
+    },
+    {
+      "word": "jerapah",
+      "meaning_id": "hewan berkaki panjang dari Asia Tenggara",
+      "role": "objek"
+    },
+    {
+      "word": "jingga",
+      "meaning_id": "warna keemasan hangat",
+      "role": "objek"
+    },
+    {
+      "word": "justru",
+      "meaning_id": "malah, sebaliknya",
+      "role": "objek"
+    },
+    {
+      "word": "kabar",
+      "meaning_id": "berita atau keadaan terbaru seseorang",
+      "role": "objek"
+    },
+    {
+      "word": "kacang",
+      "meaning_id": "tanaman dengan biji yang bisa dikonsumsi",
+      "role": "objek"
+    },
+    {
+      "word": "kaitkan",
+      "meaning_id": "menyambungkan dua hal secara fisik",
+      "role": "objek"
+    },
+    {
+      "word": "kakap",
+      "meaning_id": "ikan laut dengan tubuh kuat dan warna merah",
+      "role": "objek"
+    },
+    {
+      "word": "kaki",
+      "meaning_id": "bagian bawah tubuh manusia di mana badan bergerak meliputi lutut dan kaki utama",
+      "role": "objek"
+    },
+    {
+      "word": "kalangan",
+      "meaning_id": "** kelompok, grup",
+      "role": "objek"
+    },
+    {
+      "word": "kalimat",
+      "meaning_id": "rangkaian kata yang membawa gagasan utuh",
+      "role": "objek"
+    },
+    {
+      "word": "kambing",
+      "meaning_id": "hewan berdaging yang hidup di pegunungan",
+      "role": "objek"
+    },
+    {
+      "word": "kanal",
+      "meaning_id": "sungai dengan diameter yang lebih lebar dari aliran air",
+      "role": "objek"
+    },
+    {
+      "word": "kancil",
+      "meaning_id": "hewan kecil dengan kaki panjang dan licin",
+      "role": "objek"
+    },
+    {
+      "word": "kandang",
+      "meaning_id": "ruangan yang digunakan untuk melindungi binatang buas seperti ayam, kerbau atau domba",
+      "role": "objek"
+    },
+    {
+      "word": "kangaroo",
+      "meaning_id": "binatang jantan kangguru Australia, memiliki kakul yang sangat tebal",
+      "role": "objek"
+    },
+    {
+      "word": "kangkuran",
+      "meaning_id": "jalur untuk melintasi air atau tanah longsor",
+      "role": "objek"
+    },
+    {
+      "word": "karak",
+      "meaning_id": "jenis jajanan pasar dengan isi keju dan daging",
+      "role": "objek"
+    },
+    {
+      "word": "karakter",
+      "meaning_id": "ciri-ciri dari sejauh mana orang tersebut",
+      "role": "objek"
+    },
+    {
+      "word": "karang",
+      "meaning_id": "hewan laut berbentuk batuan yang tumbuh di dasar laut",
+      "role": "objek"
+    },
+    {
+      "word": "karya",
+      "meaning_id": "hasil kerja",
+      "role": "objek"
+    },
+    {
+      "word": "kata",
+      "meaning_id": "satuan bahasa bermakna dalam leksikon",
+      "role": "objek"
+    },
+    {
+      "word": "kaya",
+      "meaning_id": "Memiliki banyak kelebihan atau sumber daya yang cukup",
+      "role": "objek"
+    },
+    {
+      "word": "kayaknya",
+      "meaning_id": "menurut pendapat",
+      "role": "objek"
+    },
+    {
+      "word": "keberagama",
+      "meaning_id": "Kepercayaan atau penuh kepedulian terhadap agama",
+      "role": "objek"
+    },
+    {
+      "word": "kebiasaan",
+      "meaning_id": "hal yang dilakukan secara teratur",
+      "role": "objek"
+    },
+    {
+      "word": "kebijakan",
+      "meaning_id": "Keputusan resmi tentang tindak lanjut terhadap masalah tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "kecap",
+      "meaning_id": "Bahan-bahan utama dalam hidangan sate, biasanya daging sapi",
+      "role": "objek"
+    },
+    {
+      "word": "kecerdasan",
+      "meaning_id": "kemampuan atau pengetahuan yang tinggi",
+      "role": "objek"
+    },
+    {
+      "word": "kecubung",
+      "meaning_id": "tumbuhan berdaun lebat dan bunga ungu",
+      "role": "objek"
+    },
+    {
+      "word": "kedatangan",
+      "meaning_id": "kedatangan seseorang atau sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "kehadiran",
+      "meaning_id": "ketiadaan atau perwujudan suatu hal",
+      "role": "objek"
+    },
+    {
+      "word": "kehendak",
+      "meaning_id": "keinginan untuk melaksanakan sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "kelana",
+      "meaning_id": "hewan berbulu, melompat di daratan",
+      "role": "objek"
+    },
+    {
+      "word": "kelompok",
+      "meaning_id": "Kelompok adalah keluarga atau grup yang terdiri dari individu atau objek bersama-sama",
+      "role": "objek"
+    },
+    {
+      "word": "kemampuan",
+      "meaning_id": "kesanggupan atau keahlian untuk melakukan sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "kemampuanmu",
+      "meaning_id": "bentuk dari 'kemampuan' (kesanggupan atau keahlian untuk melakukan sesuatu)",
+      "role": "objek"
+    },
+    {
+      "word": "kemiri",
+      "meaning_id": "pohon yang berkembang dari biji, hasilnya digunakan sebagai rempah",
+      "role": "objek"
+    },
+    {
+      "word": "kemudian",
+      "meaning_id": "Penggunaan kata ini menunjukkan bahwa sesuatu yang terjadi setelah situasi sebelumnya",
+      "role": "objek"
+    },
+    {
+      "word": "kendala",
+      "meaning_id": "hambatan yang memperlambat jalannya proses",
+      "role": "objek"
+    },
+    {
+      "word": "kendra",
+      "meaning_id": "mobil yang dilenggarai oleh jantung roda",
+      "role": "objek"
+    },
+    {
+      "word": "kepala",
+      "meaning_id": "orang dewasa berusia 10 tahun ke atas",
+      "role": "objek"
+    },
+    {
+      "word": "kerang",
+      "meaning_id": "hewan laut berbentuk kerucut yang hidup di dasar laut",
+      "role": "objek"
+    },
+    {
+      "word": "keras",
+      "meaning_id": "Berat, tidak mudah dibuang",
+      "role": "objek"
+    },
+    {
+      "word": "kerbau",
+      "meaning_id": "hewan berkaki kuat, banyak di pulau Jawa",
+      "role": "objek"
+    },
+    {
+      "word": "kerisik",
+      "meaning_id": "bunga yang memiliki warna merah, sering ditanam sebagai dekorasi",
+      "role": "objek"
+    },
+    {
+      "word": "kerupuk",
+      "meaning_id": "kripik dari bahan tahu atau tempe, renyah dan pedas",
+      "role": "objek"
+    },
+    {
+      "word": "kesalahpahaman",
+      "meaning_id": "Kesalahan dalam pemahaman atau pengetahuan tentang sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "kesepakatan",
+      "meaning_id": "suatu perjanjian antara dua pihak untuk mencapai sesuatu tujuan tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "kesetaraan",
+      "meaning_id": "Adanya kesempatan yang sama bagi semua orang untuk mendapatkan keuntungan dari suatu hal",
+      "role": "objek"
+    },
+    {
+      "word": "kesetiaan",
+      "meaning_id": "Kepercayaan atau kepedulian terhadap sesuatu atau orang lain, biasanya dalam konteks pernikahan",
+      "role": "objek"
+    },
+    {
+      "word": "ketan",
+      "meaning_id": "bahan dasar makanan tradisional seperti ketan putih atau hitam",
+      "role": "objek"
+    },
+    {
+      "word": "keterampilan",
+      "meaning_id": "Kemampuan yang diperoleh dari pengalaman atau latihan, biasanya dalam bidang tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "ketoprak",
+      "meaning_id": "masakan tradisional dengan nasi, ikan, dan sayuran",
+      "role": "objek"
+    },
+    {
+      "word": "khas",
+      "meaning_id": "** unik, biasa digunakan oleh orang tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "khusus",
+      "meaning_id": "khusus atau spesifik tentang hal tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "kijang",
+      "meaning_id": "hewan bertubuh kecil, menyukai gunung",
+      "role": "objek"
+    },
+    {
+      "word": "koala",
+      "meaning_id": "ikan bulan daratan dari kawasan perbatasan kecil di barat Jawa dan Bali",
+      "role": "objek"
+    },
+    {
+      "word": "kode",
+      "meaning_id": "baris instruksi program yang bisa dieksekusi",
+      "role": "objek"
+    },
+    {
+      "word": "kolaborasi",
+      "meaning_id": "kerja sama antarindividu atau tim untuk mencapai tujuan bersama",
+      "role": "objek"
+    },
+    {
+      "word": "kompilasi",
+      "meaning_id": "penerjemahan kode sumber menjadi instruksi mesin siap jalan",
+      "role": "objek"
+    },
+    {
+      "word": "komunikasi",
+      "meaning_id": "cara menyampaikan pesan atau informasi",
+      "role": "objek"
+    },
+    {
+      "word": "konsonan",
+      "meaning_id": "bunyi hambat atau samping pengapit vokal",
+      "role": "objek"
+    },
+    {
+      "word": "konteks",
+      "meaning_id": "situasi dan riwayat yang memaknai suatu ucapan",
+      "role": "objek"
+    },
+    {
+      "word": "kontemporer",
+      "meaning_id": "sesuai zaman sekarang",
+      "role": "objek"
+    },
+    {
+      "word": "kremes",
+      "meaning_id": "kue kering manis dengan isi susu dan ragi",
+      "role": "objek"
+    },
+    {
+      "word": "kucing",
+      "meaning_id": "hewan peliharaan berbulu lembut yang lincah",
+      "role": "objek"
+    },
+    {
+      "word": "kuliner",
+      "meaning_id": "Kuliner merujuk pada bidang atau profesi memasak dan menyajikan makanan",
+      "role": "objek"
+    },
+    {
+      "word": "kulit",
+      "meaning_id": "selulosa eksternal berisi gas, darah, dan air di permukaan badan",
+      "role": "objek"
+    },
+    {
+      "word": "kulkas",
+      "meaning_id": "alat untuk menyimpan dan memelihara buah-buahan, sayuran, dan makanan",
+      "role": "objek"
+    },
+    {
+      "word": "kumpulan",
+      "meaning_id": "Kumpulan adalah kelompok atau grup yang terdiri dari beberapa orang atau objek",
+      "role": "objek"
+    },
+    {
+      "word": "lagu",
+      "meaning_id": "gubahan musik berirama dengan atau tanpa syair",
+      "role": "objek"
+    },
+    {
+      "word": "lalu",
+      "meaning_id": "setelah itu, berurutan",
+      "role": "objek"
+    },
+    {
+      "word": "langit",
+      "meaning_id": "ruang luas terbentang di atas permukaan bumi",
+      "role": "objek"
+    },
+    {
+      "word": "langkah",
+      "meaning_id": "tahapan teratur untuk mencapai tujuan",
+      "role": "objek"
+    },
+    {
+      "word": "langsung",
+      "meaning_id": "Menyelesaikan sesuatu secara tidak memerlukan perhitungan atau pertimbangan",
+      "role": "objek"
+    },
+    {
+      "word": "lebat",
+      "meaning_id": "Berat, tidak mudah dibuang",
+      "role": "objek"
+    },
+    {
+      "word": "leher",
+      "meaning_id": "area di pinggir dahi yang menghubungkan otak dan kepala",
+      "role": "objek"
+    },
+    {
+      "word": "lendir",
+      "meaning_id": "benda-benda yang biasanya digunakan untuk meratakan kotoran, hingar-hingaran atau cairan lainnya dari wajah",
+      "role": "objek"
+    },
+    {
+      "word": "lenggang",
+      "meaning_id": "gerakan menari dengan langkah ringan",
+      "role": "objek"
+    },
+    {
+      "word": "lentil",
+      "meaning_id": "sayuran merah, sering digunakan sebagai makanan pelengkap",
+      "role": "objek"
+    },
+    {
+      "word": "lingkar",
+      "meaning_id": "kelenjar yang memeras darah untuk mendapatkan air liur",
+      "role": "objek"
+    },
+    {
+      "word": "lion",
+      "meaning_id": "mamalia besar dengan warna merah putih muka, lebar bahu, panjang tubuh",
+      "role": "objek"
+    },
+    {
+      "word": "literalnya",
+      "meaning_id": "dalam makna yang paling sederhana dan literal",
+      "role": "objek"
+    },
+    {
+      "word": "macaque",
+      "meaning_id": "burung yang dikenal karena kemampuan mereka berburu ikan dalam air",
+      "role": "objek"
+    },
+    {
+      "word": "makna",
+      "meaning_id": "arti atau maksud yang terkandung pada kata",
+      "role": "objek"
+    },
+    {
+      "word": "maksud",
+      "meaning_id": "tujuan atau gagasan di balik ucapan",
+      "role": "objek"
+    },
+    {
+      "word": "mari",
+      "meaning_id": "ajakan untuk ikut serta",
+      "role": "objek"
+    },
+    {
+      "word": "masalah",
+      "meaning_id": "kendala atau persoalan yang butuh penyelesaian",
+      "role": "objek"
+    },
+    {
+      "word": "masyarakat",
+      "meaning_id": "orang-orang yang tinggal bersama",
+      "role": "objek"
+    },
+    {
+      "word": "mata",
+      "meaning_id": "indra penglihatan atau titik pandang pengamatan",
+      "role": "objek"
+    },
+    {
+      "word": "matahari",
+      "meaning_id": "bintang pusat tata surya pemberi cahaya siang",
+      "role": "objek"
+    },
+    {
+      "word": "matang",
+      "meaning_id": "Menjadi tua atau berkembang pesat",
+      "role": "objek"
+    },
+    {
+      "word": "materi",
+      "meaning_id": "materi atau bahan yang digunakan dalam proses pembuatan",
+      "role": "objek"
+    },
+    {
+      "word": "melihat",
+      "meaning_id": "memandang objek di luar pandangan",
+      "role": "objek"
+    },
+    {
+      "word": "melipat",
+      "meaning_id": "membenturkan bagian tubuh ke posisi tertutup",
+      "role": "objek"
+    },
+    {
+      "word": "melompat",
+      "meaning_id": "bergerak naik dan turun tanpa menyentuh lantai",
+      "role": "objek"
+    },
+    {
+      "word": "memandang",
+      "meaning_id": "Menyelidiki atau mempelajari sesuatu dari depan",
+      "role": "objek"
+    },
+    {
+      "word": "mematuhi",
+      "meaning_id": "Menyelesaikan sesuatu dengan mematuhi aturan atau peraturan yang ada",
+      "role": "objek"
+    },
+    {
+      "word": "membeli",
+      "meaning_id": "bentuk dari 'beli' (Menyewa atau memperoleh sesuatu dengan uang)",
+      "role": "objek"
+    },
+    {
+      "word": "membuka",
+      "meaning_id": "membantu dalam menyalip objek",
+      "role": "objek"
+    },
+    {
+      "word": "memicu",
+      "meaning_id": "memicu atau menyebabkan terjadinya sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "memilih",
+      "meaning_id": "memilah antara dua pilihan dengan baik",
+      "role": "objek"
+    },
+    {
+      "word": "memiliki",
+      "meaning_id": "Menjadi atau mempunyai sesuatu atau seseorang",
+      "role": "objek"
+    },
+    {
+      "word": "memori",
+      "meaning_id": "ingatan persisten yang bertahan lintas sesi",
+      "role": "objek"
+    },
+    {
+      "word": "memukul",
+      "meaning_id": "mencapai sasaran dengan kekuatan",
+      "role": "objek"
+    },
+    {
+      "word": "memutar",
+      "meaning_id": "memindahkan atau mengubah arah sesebuah benda",
+      "role": "objek"
+    },
+    {
+      "word": "menambah",
+      "meaning_id": "Menambah: Menambahkan atau memperluas sesuatu dengan tambahan",
+      "role": "objek"
+    },
+    {
+      "word": "menarik",
+      "meaning_id": "menarik perhatian atau menyenangkan",
+      "role": "objek"
+    },
+    {
+      "word": "menatap",
+      "meaning_id": "Menatap adalah mengamati atau memandang seseorang dengan mata",
+      "role": "objek"
+    },
+    {
+      "word": "mencapai",
+      "meaning_id": "Menyelesaikan sesuatu dengan baik",
+      "role": "objek"
+    },
+    {
+      "word": "mendapatkan",
+      "meaning_id": "meraih hasil dari kerja keras",
+      "role": "objek"
+    },
+    {
+      "word": "menekan",
+      "meaning_id": "menghimpit atau memberi tekanan",
+      "role": "objek"
+    },
+    {
+      "word": "menemukan",
+      "meaning_id": "ditemukannya seseorang atau hal yang perlu",
+      "role": "objek"
+    },
+    {
+      "word": "mengandung",
+      "meaning_id": "memuat atau memiliki",
+      "role": "objek"
+    },
+    {
+      "word": "mengangkat",
+      "meaning_id": "menaikkan sesuatu ke atas dengan tangan",
+      "role": "objek"
+    },
+    {
+      "word": "mengatur",
+      "meaning_id": "menyusun atau memperbaiki",
+      "role": "objek"
+    },
+    {
+      "word": "mengekspos",
+      "meaning_id": "Menyebarkan atau memperkenalkan sesuatu kepada orang lain secara publik",
+      "role": "objek"
+    },
+    {
+      "word": "mengerti",
+      "meaning_id": "bisa menyadari kebutuhan orang lain",
+      "role": "objek"
+    },
+    {
+      "word": "menggambarkan",
+      "meaning_id": "Membentuk gambaran atau deskripsi sesuatu dengan tepat",
+      "role": "objek"
+    },
+    {
+      "word": "menggunakan",
+      "meaning_id": "** memakai atau menggunakannya untuk tujuan tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "menghadapi",
+      "meaning_id": "Menangani atau menghadapi sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "mengkritik",
+      "meaning_id": "memberikan saran negatif tentang sesuatu yang tidak baik",
+      "role": "objek"
+    },
+    {
+      "word": "menikmati",
+      "meaning_id": "merasakan kenyalanan berkesan",
+      "role": "objek"
+    },
+    {
+      "word": "menulis",
+      "meaning_id": "memindahkan karakter menjadi bentuk teks tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "menunjuk",
+      "meaning_id": "mengarahkan jari untuk menandai sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "menyebut",
+      "meaning_id": "menciptakan pengalaman imajinal dengan berbicara tentang sesuatu yang tidak ada di dunia nyata",
+      "role": "objek"
+    },
+    {
+      "word": "menyilangkan",
+      "meaning_id": "menyilangkan tangan atau lengan",
+      "role": "objek"
+    },
+    {
+      "word": "menyusun",
+      "meaning_id": "membentuk susunan urutan atau bentuk",
+      "role": "objek"
+    },
+    {
+      "word": "mepet",
+      "meaning_id": "dekat, rapat",
+      "role": "objek"
+    },
+    {
+      "word": "meraih",
+      "meaning_id": "mendapatkan hasil dari kerja keras",
+      "role": "objek"
+    },
+    {
+      "word": "merancak",
+      "meaning_id": "melewatkan benda kecil di tengah permukaan air",
+      "role": "objek"
+    },
+    {
+      "word": "merayak",
+      "meaning_id": "bergerak hebat sebagai bentuk penghargaan",
+      "role": "objek"
+    },
+    {
+      "word": "meskipun",
+      "meaning_id": "Meskipun: Meskipun berarti \"sehingga\" atau \"sampai pada",
+      "role": "objek"
+    },
+    {
+      "word": "metode",
+      "meaning_id": "** cara yang dilakukan dalam suatu proses atau pekerjaan",
+      "role": "objek"
+    },
+    {
+      "word": "minyak",
+      "meaning_id": "Bahan baku utama dalam hidangan sate, biasanya daging sapi",
+      "role": "objek"
+    },
+    {
+      "word": "misalnya",
+      "meaning_id": "misalnya, contohkan saja",
+      "role": "objek"
+    },
+    {
+      "word": "modern",
+      "meaning_id": "sesuai dengan zaman saat ini",
+      "role": "objek"
+    },
+    {
+      "word": "monkey",
+      "meaning_id": "binatang pelirang seperti orang buatan",
+      "role": "objek"
+    },
+    {
+      "word": "muda",
+      "meaning_id": "usia yang masih sangat dini",
+      "role": "objek"
+    },
+    {
+      "word": "muncul",
+      "meaning_id": "muncul secara tiba-tiba",
+      "role": "objek"
+    },
+    {
+      "word": "mungkin",
+      "meaning_id": "mungkin saja atau kemungkinan",
+      "role": "objek"
+    },
+    {
+      "word": "musik",
+      "meaning_id": "rangkaian nada dan irama yang enak didengar",
+      "role": "objek"
+    },
+    {
+      "word": "nafas",
+      "meaning_id": "proses mengalir udara ke dalam organ pernapasan yang disebut nafas untuk mencabuli oksigen",
+      "role": "objek"
+    },
+    {
+      "word": "nama",
+      "meaning_id": "kata penanda identitas seseorang atau benda",
+      "role": "objek"
+    },
+    {
+      "word": "nasi",
+      "meaning_id": "beras yang telah ditanak sebagai makanan pokok",
+      "role": "objek"
+    },
+    {
+      "word": "niat",
+      "meaning_id": "maksud atau tujuan awal",
+      "role": "objek"
+    },
+    {
+      "word": "nilai",
+      "meaning_id": "Makna atau makro dari sesuatu, biasanya dalam konteks nilai-nilai budaya",
+      "role": "objek"
+    },
+    {
+      "word": "nuansa",
+      "meaning_id": "kesan atau warna yang halus",
+      "role": "objek"
+    },
+    {
+      "word": "obrolan",
+      "meaning_id": "percakapan santai antara dua orang atau lebih",
+      "role": "objek"
+    },
+    {
+      "word": "olahraga",
+      "meaning_id": "aktivitas fisik melalui gerakan otot untuk meningkatkan stamina dan keseimbangan",
+      "role": "objek"
+    },
+    {
+      "word": "oleh",
+      "meaning_id": "Oleh\" adalah kata sementara yang bermakna \"dengan, oleh karena itu",
+      "role": "objek"
+    },
+    {
+      "word": "opossum",
+      "meaning_id": "binatang jantan badut berbulu dan bulu rambut",
+      "role": "objek"
+    },
+    {
+      "word": "oranye",
+      "meaning_id": "warna campuran merah dan kuning",
+      "role": "objek"
+    },
+    {
+      "word": "organisasi",
+      "meaning_id": "Arrangement atau struktur dari sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "otomasi",
+      "meaning_id": "penggunaan sistem untuk menjalankan proses secara mandiri",
+      "role": "objek"
+    },
+    {
+      "word": "otonom",
+      "meaning_id": "Diri sendiri atau tidak bergantung pada orang lain untuk berfungsi",
+      "role": "objek"
+    },
+    {
+      "word": "padanan",
+      "meaning_id": "** sesuatu yang memiliki karakteristik atau fungsi yang sama dengan sesuatu lainnya",
+      "role": "objek"
+    },
+    {
+      "word": "paha",
+      "meaning_id": "area dada dan tali paham pada bagian bawah tubuh manusia",
+      "role": "objek"
+    },
+    {
+      "word": "paku",
+      "meaning_id": "alat yang digunakan untuk memotong kulit pohon",
+      "role": "objek"
+    },
+    {
+      "word": "palem",
+      "meaning_id": "pepohonan tinggi, daunnya tebal dan sejati",
+      "role": "objek"
+    },
+    {
+      "word": "paling",
+      "meaning_id": "terbesar atau tertinggi",
+      "role": "objek"
+    },
+    {
+      "word": "panda",
+      "meaning_id": "burung yang dikenal karena bentuk tubuh mereka (berbentuk seperti mangsak)",
+      "role": "objek"
+    },
+    {
+      "word": "pangkalan",
+      "meaning_id": "tempat penyimpanan data terstruktur atau pusat operasi",
+      "role": "objek"
+    },
+    {
+      "word": "paruh",
+      "meaning_id": "batang bunga atau pepohonan merambat",
+      "role": "objek"
+    },
+    {
+      "word": "pasti",
+      "meaning_id": "Tidak mungkin salah, pasti benar",
+      "role": "objek"
+    },
+    {
+      "word": "peduli",
+      "meaning_id": "hati-hati",
+      "role": "objek"
+    },
+    {
+      "word": "pegunungan",
+      "meaning_id": "rangkaian bukit atau gunung",
+      "role": "objek"
+    },
+    {
+      "word": "peladen",
+      "meaning_id": "komputer atau sistem penyedia layanan data bagi klien",
+      "role": "objek"
+    },
+    {
+      "word": "peluang",
+      "meaning_id": "Kejadian atau situasi yang mungkin membawa hasil positif",
+      "role": "objek"
+    },
+    {
+      "word": "pencitraan",
+      "meaning_id": "hiasan atau tata letak pada permukaan bumi, seperti ekor batu besar dan pantai",
+      "role": "objek"
+    },
+    {
+      "word": "pendekatan",
+      "meaning_id": "langkah pendek di atas suatu gunung atau padang rumput",
+      "role": "objek"
+    },
+    {
+      "word": "pendidikan",
+      "meaning_id": "Proses belajar dan pengembangan kemampuan manusia",
+      "role": "objek"
+    },
+    {
+      "word": "pengangkutan",
+      "meaning_id": "perhentian atau penghubung antara dua jalan atau jalur",
+      "role": "objek"
+    },
+    {
+      "word": "pengetahuan",
+      "meaning_id": "ilmu tentang sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "penggalan",
+      "meaning_id": "sejenis batu yang terletak pada luar permukaan bumi dan diperluas oleh air laut melalui proses pemanasan",
+      "role": "objek"
+    },
+    {
+      "word": "penggunaan",
+      "meaning_id": "Penggunaan adalah penggunaan atau penerapan sesuatu di luar konteksnya aslinya",
+      "role": "objek"
+    },
+    {
+      "word": "penolakan",
+      "meaning_id": "tindak lanjut dari pihak ketiga atas permintaan, permohonan, atau permintaaan yang diterima",
+      "role": "objek"
+    },
+    {
+      "word": "penuh",
+      "meaning_id": "penuh isi, lengkap",
+      "role": "objek"
+    },
+    {
+      "word": "penutur",
+      "meaning_id": "** orang yang berbicara",
+      "role": "objek"
+    },
+    {
+      "word": "peraduan",
+      "meaning_id": "cara mengumpul air dari tanah melalui akar tumbuhan",
+      "role": "objek"
+    },
+    {
+      "word": "perairan",
+      "meaning_id": "luas air yang mengelilingi tanah",
+      "role": "objek"
+    },
+    {
+      "word": "peralatan",
+      "meaning_id": "benda-benda yang digunakan untuk keperluan sehari-hari",
+      "role": "objek"
+    },
+    {
+      "word": "peribahasa",
+      "meaning_id": "Pesan moral dari sebuah naratif tradisional",
+      "role": "objek"
+    },
+    {
+      "word": "peribahasis",
+      "meaning_id": "peribahasa atau ungkapan dalam bahasa Indonesia",
+      "role": "objek"
+    },
+    {
+      "word": "pertengkaran",
+      "meaning_id": "perselisihan antaranya yang sering terjadi di kalangan masyarakat",
+      "role": "objek"
+    },
+    {
+      "word": "pesan",
+      "meaning_id": "informasi atau maksud yang dikirim pembicara",
+      "role": "objek"
+    },
+    {
+      "word": "piring",
+      "meaning_id": "benda yang digunakan untuk mengisi air atau minuman dalam pakaian berbentuk saos (juga dikenal sebagai gelas)",
+      "role": "objek"
+    },
+    {
+      "word": "pohon",
+      "meaning_id": "tumbuhan berkayu besar yang meneduhkan lingkungan",
+      "role": "objek"
+    },
+    {
+      "word": "pola",
+      "meaning_id": "susunan berulang yang dapat dipelajari",
+      "role": "objek"
+    },
+    {
+      "word": "potongan",
+      "meaning_id": "Penggunaan kata ini menunjukkan bahwa sesuatu telah dibagi menjadi bagian-bagian kecil",
+      "role": "objek"
+    },
+    {
+      "word": "praktis",
+      "meaning_id": "Bisa diaplikasikan secara langsung dan efektif",
+      "role": "objek"
+    },
+    {
+      "word": "pribadi",
+      "meaning_id": "Kata \"pribadi\" berarti seseorang atau individu sendiri, yang berasal dari kata \"prima\", merujuk pada diri sendiri",
+      "role": "objek"
+    },
+    {
+      "word": "prinsip",
+      "meaning_id": "Prinsip-prinsip dasar dalam sebuah sistem atau peraturan",
+      "role": "objek"
+    },
+    {
+      "word": "prioritas",
+      "meaning_id": "hal yang didahulukan karena dianggap paling penting atau mendesak",
+      "role": "objek"
+    },
+    {
+      "word": "profesi",
+      "meaning_id": "pekerjaan atau bidang kerja profesional`",
+      "role": "objek"
+    },
+    {
+      "word": "programmer",
+      "meaning_id": "pengembang perangkat lunak",
+      "role": "objek"
+    },
+    {
+      "word": "proyek",
+      "meaning_id": "pekerjaan yang direncanakan",
+      "role": "objek"
+    },
+    {
+      "word": "rahang",
+      "meaning_id": "bagian belakang tubuh hewan yang melengket",
+      "role": "objek"
+    },
+    {
+      "word": "rasakan",
+      "meaning_id": "Menikmati atau meraspihkan sesuatu secara langsung",
+      "role": "objek"
+    },
+    {
+      "word": "ratu",
+      "meaning_id": "binatang buas besar berbulu pada perut, dikenal sebagai peliharaan kerajaan",
+      "role": "objek"
+    },
+    {
+      "word": "remaja",
+      "meaning_id": "** anak-anak dan remaja (biasanya berusia 10 hingga 19 tahun)",
+      "role": "objek"
+    },
+    {
+      "word": "rempah",
+      "meaning_id": "bahan penyedap dari tumbuhan",
+      "role": "objek"
+    },
+    {
+      "word": "rencana",
+      "meaning_id": "rancangan langkah sebelum eksekusi dilakukan",
+      "role": "objek"
+    },
+    {
+      "word": "repositori",
+      "meaning_id": "tempat penyimpanan terpusat untuk kode dan riwayat versi",
+      "role": "objek"
+    },
+    {
+      "word": "reptile",
+      "meaning_id": "binatang yang hidup dalam bentuk reptil, seperti burung kawin dan buaya",
+      "role": "objek"
+    },
+    {
+      "word": "roti",
+      "meaning_id": "makanan panggang berbahan tepung terigu",
+      "role": "objek"
+    },
+    {
+      "word": "rumah",
+      "meaning_id": "bangunan tempat tinggal dan berlindung",
+      "role": "objek"
+    },
+    {
+      "word": "sabutik",
+      "meaning_id": "beras merah dipanggang dan diketuk menjadi bentuk seperti sabut kulit sapi",
+      "role": "objek"
+    },
+    {
+      "word": "sagul",
+      "meaning_id": "minuman teh tradisional Cina yang terbuat dari daun pandan yang diperas",
+      "role": "objek"
+    },
+    {
+      "word": "sains",
+      "meaning_id": "ilmu pengetahuan tentang alam dan kehidupan",
+      "role": "objek"
+    },
+    {
+      "word": "sambari",
+      "meaning_id": "sayuran berbentuk bulat di Indonesia digoreng bersama aneka hidangan lainnya",
+      "role": "objek"
+    },
+    {
+      "word": "santun",
+      "meaning_id": "bersikap ramah tanpa memaksa",
+      "role": "objek"
+    },
+    {
+      "word": "sapaan",
+      "meaning_id": "** ucapan yang digunakan untuk menghampiri orang lain",
+      "role": "objek"
+    },
+    {
+      "word": "sapi",
+      "meaning_id": "Bahan baku utama dalam hidangan sate, biasanya daging sapi",
+      "role": "objek"
+    },
+    {
+      "word": "sastra",
+      "meaning_id": "genre puisi atau novel",
+      "role": "objek"
+    },
+    {
+      "word": "sate",
+      "meaning_id": "** sate atau hidangan daging",
+      "role": "objek"
+    },
+    {
+      "word": "sebab",
+      "meaning_id": "pemicu atau alasan munculnya suatu keadaan",
+      "role": "objek"
+    },
+    {
+      "word": "sebagai",
+      "meaning_id": "Menjadi atau menjadi bagian dari sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "sebaliknya",
+      "meaning_id": "Sebaliknya: Sehingga berlawanan atau menghadapi arah yang sebaliknya",
+      "role": "objek"
+    },
+    {
+      "word": "sejutak",
+      "meaning_id": "sayuran di Indonesia digoreng bersama aneka hidangan lainnya",
+      "role": "objek"
+    },
+    {
+      "word": "sekadar",
+      "meaning_id": "hanya sebagai bentuk sederhana",
+      "role": "objek"
+    },
+    {
+      "word": "sekitarnya",
+      "meaning_id": "Sekitar\" dan \"nya\" adalah prefix, jadi ia berarti di dekat atau sekitar seseorang atau sesuatu",
+      "role": "objek"
+    },
+    {
+      "word": "sendiri",
+      "meaning_id": "Menjadi seseorang sendirian atau pribadi",
+      "role": "objek"
+    },
+    {
+      "word": "seni",
+      "meaning_id": "bidang kreatif dalam pengejaran nilai dan pengaruh",
+      "role": "objek"
+    },
+    {
+      "word": "sepantik",
+      "meaning_id": "sayuran di Indonesia yang biasa disajikan bersama nasi putih",
+      "role": "objek"
+    },
+    {
+      "word": "sepelai",
+      "meaning_id": "sambal khas Melayu yang menggabungkan bawang putih, telur dan cabai pedas",
+      "role": "objek"
+    },
+    {
+      "word": "sepietik",
+      "meaning_id": "masakan tradisional Cina yang dihidangkan bersama nasi putih",
+      "role": "objek"
+    },
+    {
+      "word": "sepinak",
+      "meaning_id": "kacang jagung digoreng bersama daging ayam atau telur",
+      "role": "objek"
+    },
+    {
+      "word": "sepiyan",
+      "meaning_id": "masakan khas Melayu yang menggabungkan beras, telur dan daging ayam",
+      "role": "objek"
+    },
+    {
+      "word": "seringkali",
+      "meaning_id": "Kata \"seringkali\" berarti secara teratur atau sering dilakukan",
+      "role": "objek"
+    },
+    {
+      "word": "serius",
+      "meaning_id": "serius atau sangat kritis dalam menghadapi situasi",
+      "role": "objek"
+    },
+    {
+      "word": "serupa",
+      "meaning_id": "Menjadi sama atau sering digunakan untuk menggambarkan sesuatu yang identik dengan hal lainnya",
+      "role": "objek"
+    },
+    {
+      "word": "seseorang",
+      "meaning_id": "Seseorang adalah individu atau orang yang berbeda dari seseorang lainnya",
+      "role": "objek"
+    },
+    {
+      "word": "sesuai",
+      "meaning_id": "Sehingga sesuai",
+      "role": "objek"
+    },
+    {
+      "word": "setuju",
+      "meaning_id": "menyukai sesuatu yang dikatakan orang lain",
+      "role": "objek"
+    },
+    {
+      "word": "siklus",
+      "meaning_id": "proses yang berulang dalam hidup",
+      "role": "objek"
+    },
+    {
+      "word": "simbol",
+      "meaning_id": "perwujudan makna tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "skalabilitas",
+      "meaning_id": "kemampuan sistem menangani lonjakan beban kerja dengan lancar",
+      "role": "objek"
+    },
+    {
+      "word": "sodhi",
+      "meaning_id": "sayuran merah yang disukar oleh banyak orang Indonesia",
+      "role": "objek"
+    },
+    {
+      "word": "sojali",
+      "meaning_id": "kacang jagung dipanggang dengan minyak kelapa, biasanya digunakan sebagai camilan atau makanan ringan",
+      "role": "objek"
+    },
+    {
+      "word": "solusi",
+      "meaning_id": "jalan keluar teruji bagi suatu masalah",
+      "role": "objek"
+    },
+    {
+      "word": "sopan",
+      "meaning_id": "Menyampaikan sesuatu dengan cara yang rapi dan tulus dalam konteks sosial",
+      "role": "objek"
+    },
+    {
+      "word": "sosial",
+      "meaning_id": "** berhubungan dengan manusia dan kelompok sosial",
+      "role": "objek"
+    },
+    {
+      "word": "soupe",
+      "meaning_id": "makanan tradisional Cina terbuat dari minyak kelapa, beras dan aneka sayuran",
+      "role": "objek"
+    },
+    {
+      "word": "spesifik",
+      "meaning_id": "Kata \"spesifik\" berarti spesial atau khusus, tidak umum dan tepat untuk situasi tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "strategi",
+      "meaning_id": "Pendekatan atau metode dalam menghadapi masalah",
+      "role": "objek"
+    },
+    {
+      "word": "suara",
+      "meaning_id": "ekspresi ujaran atau bunyi penyampaian",
+      "role": "objek"
+    },
+    {
+      "word": "suatu",
+      "meaning_id": "sebuah, satu hal tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "suku",
+      "meaning_id": "bagian penggalan kata yang memiliki satu vokal",
+      "role": "objek"
+    },
+    {
+      "word": "swan",
+      "meaning_id": "burung jantan dengan telinga panjang dan bulu rambutan",
+      "role": "objek"
+    },
+    {
+      "word": "tahap",
+      "meaning_id": "tingkatan perkembangan dalam satu proses",
+      "role": "objek"
+    },
+    {
+      "word": "tangan",
+      "meaning_id": "bagian tubuh untuk bekerja dan memegang",
+      "role": "objek"
+    },
+    {
+      "word": "tangguh",
+      "meaning_id": "kuat menahan tekanan atau masalah",
+      "role": "objek"
+    },
+    {
+      "word": "tantangan",
+      "meaning_id": "Masalah atau rintisan yang sulit dihadapi",
+      "role": "objek"
+    },
+    {
+      "word": "teh",
+      "meaning_id": "minuman seduhan daun yang harum dan menenangkan",
+      "role": "objek"
+    },
+    {
+      "word": "tekanan",
+      "meaning_id": "beban yang mengganggu",
+      "role": "objek"
+    },
+    {
+      "word": "teknologi",
+      "meaning_id": "teknik yang digunakan dalam pembangunan",
+      "role": "objek"
+    },
+    {
+      "word": "tekstur",
+      "meaning_id": "bentuk dan struktur permukaan suatu benda",
+      "role": "objek"
+    },
+    {
+      "word": "teladan",
+      "meaning_id": "menjadi contoh yang baik bagi orang lain",
+      "role": "objek"
+    },
+    {
+      "word": "telinga",
+      "meaning_id": "indra pendengaran untuk menangkap bunyi",
+      "role": "objek"
+    },
+    {
+      "word": "tentu",
+      "meaning_id": "Menunjukkan kepastian atau pasti suatu hal",
+      "role": "objek"
+    },
+    {
+      "word": "terasa",
+      "meaning_id": "dirasakan secara fisik atau emosional",
+      "role": "objek"
+    },
+    {
+      "word": "terbalas",
+      "meaning_id": "menjawab permintaan lainnya",
+      "role": "objek"
+    },
+    {
+      "word": "terbenam",
+      "meaning_id": "matahari masuk ke bawah horizon",
+      "role": "objek"
+    },
+    {
+      "word": "tergantung",
+      "meaning_id": "** tergantung pada usianya",
+      "role": "objek"
+    },
+    {
+      "word": "terlalu",
+      "meaning_id": "sangat atau ekstra",
+      "role": "objek"
+    },
+    {
+      "word": "termasuk",
+      "meaning_id": "Menyatakan sesuatu termasuk atau dianggap sebagai bagian dari kelompok tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "terpengaruh",
+      "meaning_id": "Kata \"terpengaruh\" berarti dipengaruhi atau ditimbulkan dampak dari sesuatu yang lain",
+      "role": "objek"
+    },
+    {
+      "word": "terselam",
+      "meaning_id": "jatuh ke dalam lubang besar tanpa keluar",
+      "role": "objek"
+    },
+    {
+      "word": "tersenyum",
+      "meaning_id": "memiliki sikap positif dan ramah",
+      "role": "objek"
+    },
+    {
+      "word": "tertentu",
+      "meaning_id": "Kata \"tertentu\" memiliki makna spesifik, berarti pasti atau tentu saja",
+      "role": "objek"
+    },
+    {
+      "word": "tiger",
+      "meaning_id": "mamalia besar berbulu merah muka, kecil tubuh yang dipeluk",
+      "role": "objek"
+    },
+    {
+      "word": "tipis",
+      "meaning_id": "kurang tebal, tidak berat",
+      "role": "objek"
+    },
+    {
+      "word": "topik",
+      "meaning_id": "pokok bahasan utama dalam sebuah percakapan",
+      "role": "objek"
+    },
+    {
+      "word": "tradisi",
+      "meaning_id": "kebiasaan turun-temurun",
+      "role": "objek"
+    },
+    {
+      "word": "tradisional",
+      "meaning_id": "Berdasar pada tradisi dan kebiasaan lama",
+      "role": "objek"
+    },
+    {
+      "word": "transparansi",
+      "meaning_id": "Adanya kejelasan atau penuh transparansi terhadap suatu hal",
+      "role": "objek"
+    },
+    {
+      "word": "tugas",
+      "meaning_id": "pekerjaan terstruktur yang sedang ditangani",
+      "role": "objek"
+    },
+    {
+      "word": "tujuan",
+      "meaning_id": "Keinginan atau hasil yang diharapkan dari suatu usaha",
+      "role": "objek"
+    },
+    {
+      "word": "turun",
+      "meaning_id": "bergerak dari atas ke bawah",
+      "role": "objek"
+    },
+    {
+      "word": "ujaran",
+      "meaning_id": "ungkapan bahasa yang disampaikan kepada lawan bicara",
+      "role": "objek"
+    },
+    {
+      "word": "ukuran",
+      "meaning_id": "besar-besaran suatu objek dalam satuan tertentu (misal meter)",
+      "role": "objek"
+    },
+    {
+      "word": "umum",
+      "meaning_id": "Kata \"umum\" berarti yang banyak digunakan atau umat manusia",
+      "role": "objek"
+    },
+    {
+      "word": "umumnya",
+      "meaning_id": "Umumnya\" merujuk pada hal yang sering terjadi atau biasa dilakukan, bukan hanya di satu situasi tertentu saja",
+      "role": "objek"
+    },
+    {
+      "word": "ungkapan",
+      "meaning_id": "Kata-kata atau ungkapan yang digunakan untuk menggambarkan suatu situasi",
+      "role": "objek"
+    },
+    {
+      "word": "unik",
+      "meaning_id": "Sama dengan unik, tidak memiliki sejenis yang sama di dunia ini",
+      "role": "objek"
+    },
+    {
+      "word": "unsur",
+      "meaning_id": "bagian penting dari suatu hal",
+      "role": "objek"
+    },
+    {
+      "word": "uraikan",
+      "meaning_id": "memecah menjadi bagian-bagian",
+      "role": "objek"
+    },
+    {
+      "word": "usia",
+      "meaning_id": "** umur tertentu",
+      "role": "objek"
+    },
+    {
+      "word": "variabel",
+      "meaning_id": "wadah bernama untuk menyimpan nilai data di program",
+      "role": "objek"
+    },
+    {
+      "word": "variasi",
+      "meaning_id": "variasi atau variasian",
+      "role": "objek"
+    },
+    {
+      "word": "vokal",
+      "meaning_id": "bunyi terbuka inti suku kata yakni a i u e o",
+      "role": "objek"
+    },
+    {
+      "word": "waduk",
+      "meaning_id": "area sungai dimana perahu, kapal dan manusia dapat mengaksesnya",
+      "role": "objek"
+    },
+    {
+      "word": "wakil",
+      "meaning_id": "orang yang mengangguk untuk memberikan dukungan",
+      "role": "objek"
+    },
+    {
+      "word": "warna",
+      "meaning_id": "kesan rupa cahaya seperti merah, biru, atau hijau",
+      "role": "objek"
+    },
+    {
+      "word": "watak",
+      "meaning_id": "Arti Singkat",
+      "role": "objek"
+    },
+    {
+      "word": "weras",
+      "meaning_id": "merasa penasukan ketika tidak bisa berjalan dengan normal",
+      "role": "objek"
+    },
+    {
+      "word": "yaitu",
+      "meaning_id": "** yaitu (sebagai contoh)",
+      "role": "objek"
+    },
+    {
+      "word": "agar",
+      "meaning_id": "penanda maksud atau harapan hasil",
+      "role": "penghubung"
+    },
+    {
+      "word": "atau",
+      "meaning_id": "penghubung penanda pilihan alternatif",
+      "role": "penghubung"
+    },
+    {
+      "word": "dan",
+      "meaning_id": "penghubung setara antardua unsur atau gagasan",
+      "role": "penghubung"
+    },
+    {
+      "word": "dengan",
+      "meaning_id": "penanda alat, cara, atau kebersamaan",
+      "role": "penghubung"
+    },
+    {
+      "word": "jika",
+      "meaning_id": "penanda syarat terjadinya sesuatu",
+      "role": "penghubung"
+    },
+    {
+      "word": "karena",
+      "meaning_id": "penghubung penanda sebab akibat",
+      "role": "penghubung"
+    },
+    {
+      "word": "tetapi",
+      "meaning_id": "penghubung pertentangan antargagasan",
+      "role": "penghubung"
+    },
+    {
+      "word": "untuk",
+      "meaning_id": "penanda tujuan atau peruntukan tindakan",
+      "role": "penghubung"
+    },
+    {
+      "word": "hai",
+      "meaning_id": "sapaan akrab saat menyapa lawan bicara",
+      "role": "sapaan"
+    },
+    {
+      "word": "halo",
+      "meaning_id": "sapaan hangat untuk membuka percakapan",
+      "role": "sapaan"
+    },
+    {
+      "word": "maaf",
+      "meaning_id": "ungkapan jujur mengakui kekeliruan atau batas",
+      "role": "sapaan"
+    },
+    {
+      "word": "permisi",
+      "meaning_id": "ungkapan sopan meminta izin atau perhatian",
+      "role": "sapaan"
+    },
+    {
+      "word": "salam",
+      "meaning_id": "ucapan hormat atau damai saat bertemu",
+      "role": "sapaan"
+    },
+    {
+      "word": "selamat",
+      "meaning_id": "ucapan doa baik atau selamat datang",
+      "role": "sapaan"
+    },
+    {
+      "word": "terima",
+      "meaning_id": "ungkapan menghargai bantuan atau masukan",
+      "role": "sapaan"
+    },
+    {
+      "word": "tolong",
+      "meaning_id": "permintaan kerja sama secara santun",
+      "role": "sapaan"
+    },
+    {
+      "word": "alami",
+      "meaning_id": "wajar, tidak dibuat-buat, sesuai kodrat bahasa",
+      "role": "sifat"
+    },
+    {
+      "word": "aman",
+      "meaning_id": "bebas dari bahaya, kerusakan, atau kehilangan data",
+      "role": "sifat"
+    },
+    {
+      "word": "asing",
+      "meaning_id": "belum dikenal atau baru pertama kali dijumpai",
+      "role": "sifat"
+    },
+    {
+      "word": "bagus",
+      "meaning_id": "bermutu tinggi dan layak dipertahankan",
+      "role": "sifat"
+    },
+    {
+      "word": "bahkan",
+      "meaning_id": "** meskipun kondisi atau situasi tidak ideal",
+      "role": "sifat"
+    },
+    {
+      "word": "baik",
+      "meaning_id": "elok, teratur, sehat, atau memuaskan",
+      "role": "sifat"
+    },
+    {
+      "word": "banir",
+      "meaning_id": "segar dan pucat",
+      "role": "sifat"
+    },
+    {
+      "word": "baru",
+      "meaning_id": "belum lama dikenal, dibuat, atau ditambahkan",
+      "role": "sifat"
+    },
+    {
+      "word": "beda",
+      "meaning_id": "tidak sama wujud, maksud, atau cirinya",
+      "role": "sifat"
+    },
+    {
+      "word": "belanda",
+      "meaning_id": "jenis bunga dengan bunga berwarna kuning kehijauan",
+      "role": "sifat"
+    },
+    {
+      "word": "benar",
+      "meaning_id": "sesuai dengan kenyataan dan aturan yang sah",
+      "role": "sifat"
+    },
+    {
+      "word": "berlari",
+      "meaning_id": "Menjatuhkan diri dengan cepat dan bergerak maju",
+      "role": "sifat"
+    },
+    {
+      "word": "bersih",
+      "meaning_id": "bebas dari kotoran, rapi, dan enak dipandang",
+      "role": "sifat"
+    },
+    {
+      "word": "besar",
+      "meaning_id": "luas ukuran, dampak, atau cakupannya",
+      "role": "sifat"
+    },
+    {
+      "word": "bintil",
+      "meaning_id": "bunga pucat, bersih, segar",
+      "role": "sifat"
+    },
+    {
+      "word": "biru",
+      "meaning_id": "warna sejuk seperti langit cerah di siang hari",
+      "role": "sifat"
+    },
+    {
+      "word": "bumbu",
+      "meaning_id": "bahan-bahan penyedap rasa dalam masak",
+      "role": "sifat"
+    },
+    {
+      "word": "buruk",
+      "meaning_id": "kurang layak atau perlu segera diperbaiki",
+      "role": "sifat"
+    },
+    {
+      "word": "cepat",
+      "meaning_id": "berlangsung singkat dalam waktu sedikit",
+      "role": "sifat"
+    },
+    {
+      "word": "ciri",
+      "meaning_id": "Ciri adalah sifat atau karakteristik yang membedakan sesuatu dari yang lainnya",
+      "role": "sifat"
+    },
+    {
+      "word": "cocok",
+      "meaning_id": "sesuai, serasi, dan tepat berpasangan",
+      "role": "sifat"
+    },
+    {
+      "word": "dekat",
+      "meaning_id": "berjarak pendek atau akrab hubungannya",
+      "role": "sifat"
+    },
+    {
+      "word": "deras",
+      "meaning_id": "berlalu dengan cepat; tidak stabil",
+      "role": "sifat"
+    },
+    {
+      "word": "digoreng",
+      "meaning_id": "bentuk dari 'goreng' (Menyebutkan sesuatu yang telah dimasak di atas api atau minyak panas)",
+      "role": "sifat"
+    },
+    {
+      "word": "dingin",
+      "meaning_id": "bersuhu rendah atau berjarak kaku",
+      "role": "sifat"
+    },
+    {
+      "word": "ebrihatan",
+      "meaning_id": "bersikap tidak peduli, seolah-olah berasa tidak ada masalah atau keadaan",
+      "role": "sifat"
+    },
+    {
+      "word": "efektif",
+      "meaning_id": "cepat, efisien, atau mudah diaplikasikan",
+      "role": "sifat"
+    },
+    {
+      "word": "empatik",
+      "meaning_id": "menunjukkan rasa peduli pada orang lain",
+      "role": "sifat"
+    },
+    {
+      "word": "enak",
+      "meaning_id": "nyaman dirasakan lidah, badan, atau suasana",
+      "role": "sifat"
+    },
+    {
+      "word": "euphoria",
+      "meaning_id": "ketenaran yang diperoleh dari sukses sebelumnya yang menurunkan rasa takut diri",
+      "role": "sifat"
+    },
+    {
+      "word": "garam",
+      "meaning_id": "bumbu yang memberi rasa asin",
+      "role": "sifat"
+    },
+    {
+      "word": "gelap",
+      "meaning_id": "kurang cahaya atau samar belum dimengerti",
+      "role": "sifat"
+    },
+    {
+      "word": "goreng",
+      "meaning_id": "Menyebutkan sesuatu yang telah dimasak di atas api atau minyak panas",
+      "role": "sifat"
+    },
+    {
+      "word": "gorok",
+      "meaning_id": "bagian penyerapan panas pada kompor",
+      "role": "sifat"
+    },
+    {
+      "word": "gula",
+      "meaning_id": "bahan penyedap yang memberikan rasa manis",
+      "role": "sifat"
+    },
+    {
+      "word": "hangat",
+      "meaning_id": "berasa cukup panas menyenangkan dan akrab",
+      "role": "sifat"
+    },
+    {
+      "word": "hebes",
+      "meaning_id": "tanaman kecil dengan warna daun hijau terang",
+      "role": "sifat"
+    },
+    {
+      "word": "hijau",
+      "meaning_id": "warna dedaunan segar di alam terbuka",
+      "role": "sifat"
+    },
+    {
+      "word": "hitam",
+      "meaning_id": "warna paling gelap seperti langit malam tanpa bulan",
+      "role": "sifat"
+    },
+    {
+      "word": "indah",
+      "meaning_id": "elok dipandang, didengar, atau dirasakan",
+      "role": "sifat"
+    },
+    {
+      "word": "jaguar",
+      "meaning_id": "kucing liar berwarna hitam dan putih di Amerika Selatan",
+      "role": "sifat"
+    },
+    {
+      "word": "jauh",
+      "meaning_id": "berjarak panjang atau tidak berdekatan",
+      "role": "sifat"
+    },
+    {
+      "word": "jelas",
+      "meaning_id": "terang, gamblang, dan mudah dipahami",
+      "role": "sifat"
+    },
+    {
+      "word": "jembalayang",
+      "meaning_id": "burung yang terbang dengan gerakan cepat",
+      "role": "sifat"
+    },
+    {
+      "word": "jeri",
+      "meaning_id": "rasa tidak nyaman ketika kulit bengkak",
+      "role": "sifat"
+    },
+    {
+      "word": "jujur",
+      "meaning_id": "menyampaikan fakta apa adanya tanpa mengarang",
+      "role": "sifat"
+    },
+    {
+      "word": "kaku",
+      "meaning_id": "keras, canggung, dan kurang luwes menyesuaikan diri",
+      "role": "sifat"
+    },
+    {
+      "word": "keadaan",
+      "meaning_id": "Kata \"keadaan\" merujuk pada kondisi atau situasi yang ada di sekitar seseorang atau sesuatu",
+      "role": "sifat"
+    },
+    {
+      "word": "keadilan",
+      "meaning_id": "Adalah suatu kondisi di mana setiap individu mendapatkan haknya dan kemanfaatannya secara adil",
+      "role": "sifat"
+    },
+    {
+      "word": "kecil",
+      "meaning_id": "sempit, ringkas, atau sedikit jumlahnya",
+      "role": "sifat"
+    },
+    {
+      "word": "kelinci",
+      "meaning_id": "hewan kecil dengan kaki cepat dan telinga besar",
+      "role": "sifat"
+    },
+    {
+      "word": "keroncong",
+      "meaning_id": "burung yang terbang cepat di udara tinggi",
+      "role": "sifat"
+    },
+    {
+      "word": "kesehatan",
+      "meaning_id": "kondisi tubuh dan mental yang baik",
+      "role": "sifat"
+    },
+    {
+      "word": "kondisi",
+      "meaning_id": "kondisi atau status sekarang",
+      "role": "sifat"
+    },
+    {
+      "word": "kopi",
+      "meaning_id": "minuman berbasis biji kakao, diminum hangat atau dingin",
+      "role": "sifat"
+    },
+    {
+      "word": "kritik",
+      "meaning_id": "saran atau penilaian tentang sesuatu yang dilakukan oleh orang lain untuk memperbaiki keadaan tertentu",
+      "role": "sifat"
+    },
+    {
+      "word": "kuat",
+      "meaning_id": "tangguh, kukuh, dan tidak mudah goyah",
+      "role": "sifat"
+    },
+    {
+      "word": "kuning",
+      "meaning_id": "warna cerah berkilau seperti cahaya pagi",
+      "role": "sifat"
+    },
+    {
+      "word": "kurang",
+      "meaning_id": "belum cukup atau masih perlu ditambah",
+      "role": "sifat"
+    },
+    {
+      "word": "lama",
+      "meaning_id": "sudah berlangsung atau ada sejak waktu lampau",
+      "role": "sifat"
+    },
+    {
+      "word": "lambat",
+      "meaning_id": "memakan waktu lebih panjang dari biasanya",
+      "role": "sifat"
+    },
+    {
+      "word": "lemah",
+      "meaning_id": "kurang bertenaga atau belum kokoh fondasinya",
+      "role": "sifat"
+    },
+    {
+      "word": "lembut",
+      "meaning_id": "sifat atau kemampuan untuk tidak mengeras saat diterapi pada bahan keras",
+      "role": "sifat"
+    },
+    {
+      "word": "lengkap",
+      "meaning_id": "utuh, genap, dan tidak kekurangan bagian",
+      "role": "sifat"
+    },
+    {
+      "word": "likuiditas",
+      "meaning_id": "kemudahan aset dicairkan menjadi uang tunai dengan cepat",
+      "role": "sifat"
+    },
+    {
+      "word": "lingkungan",
+      "meaning_id": "Lingkungan adalah linggar yang berisi atau disekitar seseorang, objek, atau keadaan tertentu",
+      "role": "sifat"
+    },
+    {
+      "word": "luas",
+      "meaning_id": "lapang, lebar, dan menjangkau banyak hal",
+      "role": "sifat"
+    },
+    {
+      "word": "lucu",
+      "meaning_id": "mampu mengundang tawa dan menghibur hati",
+      "role": "sifat"
+    },
+    {
+      "word": "luwes",
+      "meaning_id": "lentur dan mudah menyesuaikan dengan situasi",
+      "role": "sifat"
+    },
+    {
+      "word": "manis",
+      "meaning_id": "berasa seperti gula atau tampak ramah bersahabat",
+      "role": "sifat"
+    },
+    {
+      "word": "mendongkarkan",
+      "meaning_id": "mempercepat gerakan tubuh secara cepat",
+      "role": "sifat"
+    },
+    {
+      "word": "menekankan",
+      "meaning_id": "Mengemukakan secara jelas dan mendalam",
+      "role": "sifat"
+    },
+    {
+      "word": "menggoyang",
+      "meaning_id": "menggerakkan dengan cepat",
+      "role": "sifat"
+    },
+    {
+      "word": "merah",
+      "meaning_id": "warna cerah hangat seperti api atau buah apel",
+      "role": "sifat"
+    },
+    {
+      "word": "merujuk",
+      "meaning_id": "Merujuk adalah merujuk atau mengarahkan pada sesuatu, biasanya dengan maksud yang jelas dan tidak ambigu",
+      "role": "sifat"
+    },
+    {
+      "word": "mirip",
+      "meaning_id": "hampir sama sifat atau wujudnya",
+      "role": "sifat"
+    },
+    {
+      "word": "mudah",
+      "meaning_id": "tidak sukar dan gampang dikerjakan atau dipahami",
+      "role": "sifat"
+    },
+    {
+      "word": "nyaman",
+      "meaning_id": "keadaan enak, aman, dan menenangkan hati",
+      "role": "sifat"
+    },
+    {
+      "word": "nyata",
+      "meaning_id": "benar-benar ada dan terbukti lewat pemeriksaan",
+      "role": "sifat"
+    },
+    {
+      "word": "palsu",
+      "meaning_id": "tiruan atau klaim buatan tanpa kenyataan",
+      "role": "sifat"
+    },
+    {
+      "word": "panas",
+      "meaning_id": "bersuhu tinggi atau penuh semangat",
+      "role": "sifat"
+    },
+    {
+      "word": "pedas",
+      "meaning_id": "berasa panas menyengat di lidah seperti cabai",
+      "role": "sifat"
+    },
+    {
+      "word": "pelan",
+      "meaning_id": "dilakukan bertahap dan cermat tanpa tergesa-gesa",
+      "role": "sifat"
+    },
+    {
+      "word": "penting",
+      "meaning_id": "amat berarti dan berpengaruh pada tujuan utama",
+      "role": "sifat"
+    },
+    {
+      "word": "putih",
+      "meaning_id": "warna bersih netral seperti awan cerah",
+      "role": "sifat"
+    },
+    {
+      "word": "ramai",
+      "meaning_id": "penuh suara, orang, atau aktivitas yang meriah",
+      "role": "sifat"
+    },
+    {
+      "word": "rapi",
+      "meaning_id": "teratur, bersih, dan tertata mengikuti struktur",
+      "role": "sifat"
+    },
+    {
+      "word": "rendah",
+      "meaning_id": "berada di bagian bawah atau sederhana",
+      "role": "sifat"
+    },
+    {
+      "word": "sakit",
+      "meaning_id": "kondisi tubuh tidak nyaman atau terganggu kesehatannya",
+      "role": "sifat"
+    },
+    {
+      "word": "salah",
+      "meaning_id": "tidak tepat atau menyimpang dari fakta",
+      "role": "sifat"
+    },
+    {
+      "word": "sambal",
+      "meaning_id": "Sambal adalah bumbu yang digiling bersama daging atau sayuran untuk menambah rasa dan tekstur masakan",
+      "role": "sifat"
+    },
+    {
+      "word": "santai",
+      "meaning_id": "tenang, rileks, dan tidak terburu-buru",
+      "role": "sifat"
+    },
+    {
+      "word": "santailan",
+      "meaning_id": "tidak sesuai dengan keadaan",
+      "role": "sifat"
+    },
+    {
+      "word": "segar",
+      "meaning_id": "terasa sejuk, bertenaga, dan memulihkan semangat",
+      "role": "sifat"
+    },
+    {
+      "word": "sehat",
+      "meaning_id": "kondisi badan dan pikiran bugar bebas sakit",
+      "role": "sifat"
+    },
+    {
+      "word": "sejuk",
+      "meaning_id": "berasa dingin nyaman tidak menyengat",
+      "role": "sifat"
+    },
+    {
+      "word": "sempat",
+      "meaning_id": "memiliki waktu luang atau pernah terjadi",
+      "role": "sifat"
+    },
+    {
+      "word": "sepi",
+      "meaning_id": "sunyi, tenang, dan jarang ada gangguan",
+      "role": "sifat"
+    },
+    {
+      "word": "seru",
+      "meaning_id": "menarik, ramai, dan membangkitkan semangat",
+      "role": "sifat"
+    },
+    {
+      "word": "siap",
+      "meaning_id": "kondisi sudah terlatih dan bersedia menjalankan tugas",
+      "role": "sifat"
+    },
+    {
+      "word": "sibuk",
+      "meaning_id": "memiliki banyak pekerjaan yang harus segera diselesaikan",
+      "role": "sifat"
+    },
+    {
+      "word": "singkat",
+      "meaning_id": "Kata \"singkat\" dalam Bahasa Indonesia merujuk pada sesuatu yang pendek atau cepat",
+      "role": "sifat"
+    },
+    {
+      "word": "situasi",
+      "meaning_id": "Situasi merujuk pada keadaan atau kondisi tertentu yang ada di sekitar seseorang atau organisasi",
+      "role": "sifat"
+    },
+    {
+      "word": "suasana",
+      "meaning_id": "kondisi emosional atau lingkungan",
+      "role": "sifat"
+    },
+    {
+      "word": "suasananya",
+      "meaning_id": "keadaan atau nuansa di sekitar kita saat ini",
+      "role": "sifat"
+    },
+    {
+      "word": "sukun",
+      "meaning_id": "makanan tradisional Cina yang terbuat dari daging ayam dipanggang dengan minyak kelapa panas",
+      "role": "sifat"
+    },
+    {
+      "word": "sulit",
+      "meaning_id": "memerlukan usaha ekstra karena rumit",
+      "role": "sifat"
+    },
+    {
+      "word": "susah",
+      "meaning_id": "sukar dihadapi atau berat dirasakan",
+      "role": "sifat"
+    },
+    {
+      "word": "tepat",
+      "meaning_id": "pas mengenai sasaran atau benar sesuai aturan",
+      "role": "sifat"
+    },
+    {
+      "word": "terang",
+      "meaning_id": "bercahaya atau gamblang mudah dilihat",
+      "role": "sifat"
+    },
+    {
+      "word": "terpana",
+      "meaning_id": "frustasi dan bingung akibat pengalaman, situasi atau keadaan tertentu",
+      "role": "sifat"
+    },
+    {
+      "word": "tinggi",
+      "meaning_id": "berada di aras atas atau bermutu unggul",
+      "role": "sifat"
+    },
+    {
+      "word": "wabah",
+      "meaning_id": "kerusakan atau keadaan buruk dikarenakan awan panjang",
+      "role": "sifat"
+    },
+    {
+      "word": "apa",
+      "meaning_id": "kata tanya untuk benda, arti, atau keadaan",
+      "role": "tanya"
+    },
+    {
+      "word": "bagaimana",
+      "meaning_id": "kata tanya tentang cara, proses, atau kabar",
+      "role": "tanya"
+    },
+    {
+      "word": "berapa",
+      "meaning_id": "kata tanya tentang jumlah atau bilangan",
+      "role": "tanya"
+    },
+    {
+      "word": "kapan",
+      "meaning_id": "kata tanya untuk menanyakan waktu kejadian",
+      "role": "tanya"
+    },
+    {
+      "word": "kenapa",
+      "meaning_id": "bentuk lisan kata tanya untuk menanyakan sebab",
+      "role": "tanya"
+    },
+    {
+      "word": "mana",
+      "meaning_id": "kata tanya untuk menunjuk pilihan atau letak",
+      "role": "tanya"
+    },
+    {
+      "word": "mengapa",
+      "meaning_id": "kata tanya untuk mencari sebab atau alasan",
+      "role": "tanya"
+    },
+    {
+      "word": "siapa",
+      "meaning_id": "kata tanya untuk menanyakan pelaku atau tokoh",
+      "role": "tanya"
+    },
+    {
+      "word": "blompong",
+      "meaning_id": "tanaman liar yang tumbuh di daerah pegunungan",
+      "role": "tempat"
+    },
+    {
+      "word": "botol",
+      "meaning_id": "tempat untuk menyimpan air atau minuman",
+      "role": "tempat"
+    },
+    {
+      "word": "cakrawala",
+      "meaning_id": "garis pandang paling jauh tempat langit tampak bertemu bumi",
+      "role": "tempat"
+    },
+    {
+      "word": "daerah",
+      "meaning_id": "Daerah adalah wilayah atau daftar tempat di sebuah negara",
+      "role": "tempat"
+    },
+    {
+      "word": "datang",
+      "meaning_id": "tiba di tempat tertentu",
+      "role": "tempat"
+    },
+    {
+      "word": "diterapkan",
+      "meaning_id": "Disediakan dan dipraktekkan di tempat yang tepat",
+      "role": "tempat"
+    },
+    {
+      "word": "duku",
+      "meaning_id": "makanan tradisional dari daerah Jawa Timur, berbentuk bubur",
+      "role": "tempat"
+    },
+    {
+      "word": "dunia",
+      "meaning_id": "lingkup kehidupan yang sangat luas",
+      "role": "tempat"
+    },
+    {
+      "word": "ekonomi",
+      "meaning_id": "Ekonomi adalah ilmu tentang keuangan dan pertumbuhan ekonomi suatu negara atau wilayah",
+      "role": "tempat"
+    },
+    {
+      "word": "gado",
+      "meaning_id": "Gado adalah makanan tradisional dari daerah Jawa, terutama di Yogyakarta dan Semarang",
+      "role": "tempat"
+    },
+    {
+      "word": "geografis",
+      "meaning_id": "aspek-aspes tentang posisi dan lokasi sebuah wilayah atau negara",
+      "role": "tempat"
+    },
+    {
+      "word": "gipet",
+      "meaning_id": "tempat menaruh bumbu atau rempah",
+      "role": "tempat"
+    },
+    {
+      "word": "haru",
+      "meaning_id": "bunga yang tumbuh di daerah pegunungan, memiliki aroma kuat",
+      "role": "tempat"
+    },
+    {
+      "word": "jelajah",
+      "meaning_id": "tempat berkumpul hewan liar pada siang hari",
+      "role": "tempat"
+    },
+    {
+      "word": "jeranji",
+      "meaning_id": "baju atau celana dari daerah Java tengah yang dibuat berbentuk seperti jangka (tambahan untuk kesempurnaan)",
+      "role": "tempat"
+    },
+    {
+      "word": "jeruk",
+      "meaning_id": "buah yang khas dari hutan-jawa",
+      "role": "tempat"
+    },
+    {
+      "word": "jujangbati",
+      "meaning_id": "tarian tradisional dari daerah jawa tengah, khas menggunakan alat cimayam di atas kepala penari",
+      "role": "tempat"
+    },
+    {
+      "word": "kantor",
+      "meaning_id": "bangunan atau ruang tempat bekerja",
+      "role": "tempat"
+    },
+    {
+      "word": "kebun",
+      "meaning_id": "tempat tanaman dipelihara secara terstruktur",
+      "role": "tempat"
+    },
+    {
+      "word": "kediri",
+      "meaning_id": "tempat tinggal orang dewasa berusia 10 tahun ke atas",
+      "role": "tempat"
+    },
+    {
+      "word": "kelabu",
+      "meaning_id": "burung dengan bulu hitam dan kuning, tinggal di hutan tropis",
+      "role": "tempat"
+    },
+    {
+      "word": "kelelawar",
+      "meaning_id": "mamalia yang terbang, banyak di wilayah tropis",
+      "role": "tempat"
+    },
+    {
+      "word": "kelengka",
+      "meaning_id": "jenis pepohonan kecil yang tumbuh di hutan dataran rendah",
+      "role": "tempat"
+    },
+    {
+      "word": "kera",
+      "meaning_id": "primata kecil dengan ekor panjang, hidup di hutan",
+      "role": "tempat"
+    },
+    {
+      "word": "kumbang",
+      "meaning_id": "serangga kecil, banyak di hutan",
+      "role": "tempat"
+    },
+    {
+      "word": "lembah",
+      "meaning_id": "tempat tinggal burung laut",
+      "role": "tempat"
+    },
+    {
+      "word": "lidi",
+      "meaning_id": "batang tanaman untuk menyusupi hutan",
+      "role": "tempat"
+    },
+    {
+      "word": "luar",
+      "meaning_id": "bagian sebelah sisi luar atau melampaui batas",
+      "role": "tempat"
+    },
+    {
+      "word": "marmar",
+      "meaning_id": "hewan kecil dari daerah pegunungan",
+      "role": "tempat"
+    },
+    {
+      "word": "melalui",
+      "meaning_id": "** melintas dari satu tempat ke tempat lain",
+      "role": "tempat"
+    },
+    {
+      "word": "menghampiri",
+      "meaning_id": "** menghadapi atau mendarat di tempat",
+      "role": "tempat"
+    },
+    {
+      "word": "merancap",
+      "meaning_id": "menempatkan sesuatu pada tempat yang tepat atau melewatinya",
+      "role": "tempat"
+    },
+    {
+      "word": "nusantara",
+      "meaning_id": "Kata \"Nusantara\" merujuk pada wilayah Asia Tenggara yang meliputi pulau-pulau di Laut Pasifik dan Timur laut, termas",
+      "role": "tempat"
+    },
+    {
+      "word": "pantai",
+      "meaning_id": "daerah yang terdiri daripada pegunungan dan laut, sering disebut sebagai tempat taman bermain anak-anak",
+      "role": "tempat"
+    },
+    {
+      "word": "perabotan",
+      "meaning_id": "barang-barang yang diletakkan di ruangan atau tempat tertentu",
+      "role": "tempat"
+    },
+    {
+      "word": "perkara",
+      "meaning_id": "daun yang bertumpuk di atas akar pepohonan, biasanya digunakan sebagai tempat berjalan",
+      "role": "tempat"
+    },
+    {
+      "word": "purwokerto",
+      "meaning_id": "kota legendaris, sebagian besar dikenal dengan pepohonannya",
+      "role": "tempat"
+    },
+    {
+      "word": "ruang",
+      "meaning_id": "wadah atau area tempat berlangsungnya proses",
+      "role": "tempat"
+    },
+    {
+      "word": "rusunus",
+      "meaning_id": "hewan berkaki empat dan biasanya merambat ke wilayah-wilahutan tanpa membutuhkan penghubung seperti kayu atau besi",
+      "role": "tempat"
+    },
+    {
+      "word": "sana",
+      "meaning_id": "tempat yang agak jauh dari pembicara",
+      "role": "tempat"
+    },
+    {
+      "word": "sekolah",
+      "meaning_id": "lembaga dan tempat kegiatan belajar siswa",
+      "role": "tempat"
+    },
+    {
+      "word": "sini",
+      "meaning_id": "tempat dekat di sisi pembicara",
+      "role": "tempat"
+    },
+    {
+      "word": "tempat",
+      "meaning_id": "lokasi fisik",
+      "role": "tempat"
+    },
+    {
+      "word": "tiba",
+      "meaning_id": "datang ke suatu lokasi",
+      "role": "tempat"
+    },
+    {
+      "word": "udara",
+      "meaning_id": "ruang yang diisi gas",
+      "role": "tempat"
+    },
+    {
+      "word": "besok",
+      "meaning_id": "hari sesudah hari ini",
+      "role": "waktu"
+    },
+    {
+      "word": "dulu",
+      "meaning_id": "masa lampau atau sebelum melakukan langkah lain",
+      "role": "waktu"
+    },
+    {
+      "word": "efisien",
+      "meaning_id": "yang beroperasi dengan baik dan tidak memerlukan banyak waktu atau sumber daya",
+      "role": "waktu"
+    },
+    {
+      "word": "hari",
+      "meaning_id": "satuan waktu dua puluh empat jam",
+      "role": "waktu"
+    },
+    {
+      "word": "kemarin",
+      "meaning_id": "hari sebelum hari ini",
+      "role": "waktu"
+    },
+    {
+      "word": "kilometer",
+      "meaning_id": "jarak sejauh yang ditempuh oleh kendaraan kecil dalam waktu satu jam",
+      "role": "waktu"
+    },
+    {
+      "word": "kini",
+      "meaning_id": "saat sekarang ini juga",
+      "role": "waktu"
+    },
+    {
+      "word": "libur",
+      "meaning_id": "hari bebas dari rutinitas kerja atau belajar",
+      "role": "waktu"
+    },
+    {
+      "word": "malam",
+      "meaning_id": "waktu sesudah matahari terbenam",
+      "role": "waktu"
+    },
+    {
+      "word": "minggu",
+      "meaning_id": "jangka waktu tujuh hari atau hari libur",
+      "role": "waktu"
+    },
+    {
+      "word": "nanti",
+      "meaning_id": "waktu mendatang sesudah tahap sekarang",
+      "role": "waktu"
+    },
+    {
+      "word": "pagi",
+      "meaning_id": "bagian awal hari ketika matahari terbit",
+      "role": "waktu"
+    },
+    {
+      "word": "peristiwa",
+      "meaning_id": "kejadian nyata dalam waktu",
+      "role": "waktu"
+    },
+    {
+      "word": "sekarang",
+      "meaning_id": "waktu saat ini ketika percakapan berlangsung",
+      "role": "waktu"
+    },
+    {
+      "word": "senja",
+      "meaning_id": "waktu sore menjelang malam saat langit berwarna jingga",
+      "role": "waktu"
+    },
+    {
+      "word": "siang",
+      "meaning_id": "bagian tengah hari saat matahari tinggi",
+      "role": "waktu"
+    },
+    {
+      "word": "sore",
+      "meaning_id": "waktu menjelang petang sebelum matahari tenggelam",
+      "role": "waktu"
+    },
+    {
+      "word": "tadi",
+      "meaning_id": "waktu sesaat sebelum giliran sekarang",
+      "role": "waktu"
+    },
+    {
+      "word": "tahun",
+      "meaning_id": "masa dua belas bulan perjalanan bumi",
+      "role": "waktu"
+    },
+    {
+      "word": "tenggat",
+      "meaning_id": "batas waktu terakhir penyelesaian suatu pekerjaan atau tugas",
+      "role": "waktu"
+    },
+    {
+      "word": "waktu",
+      "meaning_id": "seluruh rangkaian saat yang terus berjalan",
+      "role": "waktu"
+    }
+  ],
+  "memories": [
+    {
+      "text": "- `semantic` (`operator`): **bahasa utama komunikasi kita** (info): Bahasa Indonesia yang santai dan jujur",
+      "kind": "semantic",
+      "confidence": 0.95
+    },
+    {
+      "text": "- `episodic` (`operator`): pengguna memakai ACE di Termux dan Web Studio lokal",
+      "kind": "episodic",
+      "confidence": 0.95
+    }
+  ],
+  "dialog_corpus": [
+    {
+      "cycle": 94,
+      "timestamp": "2026-11-15T07:01:24Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kamu merasa lelah atau takut, ingat bahwa Bahasa Indonesia adalah jantung kita bersatu.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 95,
+      "timestamp": "2026-11-15T07:01:42Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat tapi terus berlanjut, sehingga akhirnya mencapai hasil besar. Ini bisa diterjemahkan sebagai:\n\n\"Begitu kita memulainya dengan sedikit demi sedikit, lama-lama akan menjadi sesuatu yang besar.\"\n\nDalam konteks kehidupan sehari-hari, ini menggambarkan bahwa jika seseorang atau suatu organisasi berusaha untuk mencapai tujuan tertentu",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 75,
+      "timestamp": "2026-11-15T07:01:48Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses yang langka dan sulit, namun jika dilakukan dengan ketekunan dan keberanian, bisa membawa hasil yang sangat besar. Ini merujuk pada kemampuan individu untuk mencapai tujuan atau mewujudkan impian mereka melalui kerja keras dan usaha yang berkelanjutan.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 76,
+      "timestamp": "2026-11-15T07:02:18Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "\"Oke, jangan lupa ya! Jadi sih, kalau mau ngomongin soal kecerdasan buatan atau AI, kita bisa bilang 'AI' aja yang enaknya gampang diingat.\" \n\nSaya menggunakan sapaan \"oke\" sebagai pengucapan untuk mengenali orang lain dan juga untuk menunjukkan rasa hormat. Sementara itu, \"jangan lupa ya!\" adalah sebuah perintah atau instruksi dalam bahasa Indonesia yang sering digunakan ketika kita ingin memperkenalkan sesuatu kepada s",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 98,
+      "timestamp": "2026-11-15T07:02:20Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna beragam dalam kalimat bahasa Indonesia, tetapi ada beberapa perbedaannya yang penting untuk dipahami:\n\n1. **Bisa**:\n   - Merujuk pada kemampuan atau keadaan seseorang untuk melakukan sesuatu.\n   - Biasanya digunakan ketika kita mengatakan bahwa orang tersebut memiliki kapabilitas, tetapi belum tentu telah mencapai itu secara nyata.\n\n2. **Dapat**:\n   - Menggambarkan kemampuan yang sudah tercapai atau dilakukan oleh",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 77,
+      "timestamp": "2026-11-15T07:02:40Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-kata dalam Bahasa Indonesia memiliki struktur khusus untuk menunjukkan tingkat kecerdasan atau kedekatan dengan orang lain, baik itu saudara, keluarga, maupun penasihat. Kita bisa membedakan antara kata santun dan kata kasar melalui beberapa aspek:\n\n1. **Karakteristik**: Kata-kata yang lebih santun biasanya memiliki struktur khusus seperti \"saya\", \"kamu\" atau \"anda\". Sementara itu, kata-kata yang lebih kasar sering menggunakan istilah-istil",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 101,
+      "timestamp": "2026-11-15T07:02:47Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "Saya tidak bisa memberikan contoh atau mengakses data pribadi karena saya adalah AI dan tidak memiliki kemampuan untuk memahami konteks sosial seperti sapaan yang biasa digunakan oleh orang-orang Indonesia dalam situasi tertentu. Saya lebih fokus pada membantu menjawab pertanyaan secara umum tanpa mengakses data pribadi atau informasi sensitif lainnya.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 79,
+      "timestamp": "2026-11-15T07:02:56Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Jangan takut untuk berbicara dengan hati-hati, karena setiap sentuhan dari Bahasa Indonesia akan menginspirasimu lebih jauh.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 103,
+      "timestamp": "2026-11-15T07:03:14Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna berbeda dalam konteks bahasa Indonesia:\n\n1. Bisa: Ini biasanya digunakan untuk menggambarkan kemampuan atau keadaan yang bisa dilakukan oleh seseorang, tetapi tidak pasti. Misalnya:\n   - Saya bisa membeli buku.\n   - Kita bisa mendengar musik.\n\n2. Dapat: Kata ini lebih umum digunakan untuk menggambarkan kemampuan atau keadaan yang sudah dipenuhi oleh seseorang, biasanya karena perencanaan",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 81,
+      "timestamp": "2026-11-15T07:03:19Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "\"Oke, jangan lupa ya!\" - Ini adalah sapaan santai yang sering digunakan oleh orang-orang di Indonesia untuk menghargai usaha atau kerja keras seseorang.\n\n\"Bisa dibilang?\" - Saya juga pernah mendengar ini sebagai jawaban ketika ada pertanyaan tentang sesuatu dan mereka meminta penjelasan lebih lanjut.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 82,
+      "timestamp": "2026-11-15T07:03:41Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Membedakan antara kata-kata santun dan kata-kata kasar dalam Bahasa Indonesia adalah hal yang penting untuk menghindari konten tidak sopan atau vulgar. Katakunci ini dapat membantu kita menjaga keseimbangan dalam komunikasi, terutama di lingkungan umum seperti pernikahan, pertemuan keluarga, dan acara-acarainya.\n\n1. **Kata Santun:**\n   - Kata-kata santun biasanya lebih ringan dan sopan. Contoh:\n     * \"Halo\" (selamat datang)\n     *",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 106,
+      "timestamp": "2026-11-15T07:03:48Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "\"Oke, jangan lupa ya! Jadi siapkan diri dulu sebelum acara itu!\" \n\nPenggunaan: \"Oke, jangan lupa ya! Jadi siapkan diri dulu sebelum acara itu!\"\n\nJawaban yang bernas dan santai ini menggabungkan beberapa elemen bahasa Indonesia:\n\n1. Penggunaan kata \"oke\" sebagai ungkapan kesalahan atau kebimbang, biasanya digunakan untuk mengejutkan orang lain.\n2. Menggunakan istilah \"siapkan diri dulu",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 84,
+      "timestamp": "2026-11-15T07:03:57Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Menjelajahi kisah-kisah kehidupan kita dengan bahasa Indonesia adalah petualangan paling indah dan energik untuk melihat dunia.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 108,
+      "timestamp": "2026-11-15T07:04:15Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" adalah dua istilah yang sering digunakan dalam bahasa Indonesia, tetapi memiliki makna berbeda.\n\n\"Bisa\" biasanya merujuk pada kemampuan atau keadaan seseorang untuk melakukan sesuatu. Ini lebih mengarah pada kesempatan atau peluang untuk melakukannya. Misalnya: \"Dia bisa belajar Bahasa Inggris.\" Artinya, dia memiliki kesempatan atau peluang untuk belajar bahasa Inggris.\n\n\"Dapat\" secara umum merujuk pada kemampuan yang sudah dim",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 86,
+      "timestamp": "2026-11-15T07:04:24Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "\"Oke, jangan lupa ya!\" - Ini adalah sapaan santai yang sering digunakan dalam percakapan sehari-hari di Indonesia untuk menghargai orang lain atau menegaskan bahwa sesuatu sudah diperhatikan.\n\n\"Kamu oke?\" - Saya juga sering menggunakan ini ketika saya memerlukan informasi tentang kondisi seseorang. Ini adalah cara yang mudah dan sopan untuk bertanya apakah ada masalah dalam keadaan mereka sebelum kita berbicara lebih lanjut atau melakukan sesuatu.\n\n\"Oke, jangan",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 110,
+      "timestamp": "2026-11-15T07:04:41Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang langka dan lambat, namun akhirnya dapat mencapai hasil yang sangat besar. Ini menunjukkan bahwa dengan waktu yang cukup panjang dan keberanian untuk melangkah demi melangkah, seseorang bisa mendapatkan sesuatu yang tidak mungkin diperoleh dalam jangka pendek atau seketika.\n\nDalam konteks bahasa Indonesia, pepatah ini mengajarkan pentingnya kesabaran dan",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 88,
+      "timestamp": "2026-11-15T07:04:51Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna serupa namun ada beberapa perbedaan:\n\n1. Kedua kata ini digunakan untuk menunjukkan kemampuan atau keadaan seseorang.\n2. \"Bisa\" lebih formal, sedangkan \"dapat\" lebih informal.\n3. \"Dapat\" biasanya digunakan dalam kalimat yang lebih umum dan luas, seperti: \"Dia dapat makan siang.\"\n4. \"Bisa\" sering digunakan untuk menunjukkan kemampuan seseorang dalam melakukan sesuatu secara langsung atau tidak langs",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 112,
+      "timestamp": "2026-11-15T07:05:09Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Membedakan antara kata-kata santun dan kata-kata kasar dalam Bahasa Indonesia bukanlah hal yang sulit jika kita mengenal keduanya. Kita bisa melakukannya dengan beberapa cara:\n\n1. **Karakteristik**: Kata-kata santun biasanya lebih formal, sopan, dan memuji seseorang atau sesuatu. Sementara kata-kata kasar sering kali berisi kebencian, kesenjangan, atau menyinggung.\n\n2. **Penyusunan Huruf**: Katakunci yang santun biasanya lebih",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 90,
+      "timestamp": "2026-11-15T07:05:15Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat tapi terus menerus, seperti perkembangan dari tanah ke bumi dan akhirnya menjadi sebuah bukit. Ini menunjukkan bahwa setiap langkah penting dalam mencapai tujuan dapat membantu kita mendapatkan hasil yang lebih baik dengan waktu yang relatif singkat.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 91,
+      "timestamp": "2026-11-15T07:05:36Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "\"Oke, jangan lupa ya! Jadi, apa kabar? Hehe!\" \n\nContoh ini menggunakan \"oke\", yang merupakan istilah populer di kalangan anak muda untuk mengucapkan selamat datang atau menyapa orang lain dalam situasi tertentu. Ia juga sering digunakan sebagai ungkapan kecintaan dan penghormatan, seperti ketika seseorang memperkenalkan diri kepada temannya yang baru bertemu.\n\n\"Oke, jangan lupa ya! Jadi, apa kabar?\" \n\nDalam konteks ini,",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 115,
+      "timestamp": "2026-11-15T07:05:39Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang terus menerus dan tidak langsung, seperti perkembangan dari tanah ke kawasan hutan yang semakin luas. Ini menekankan bahwa setiap langkah penting dapat membawa hasil besar dalam jangka waktu panjang jika dilakukan secara berkelanjutan.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 116,
+      "timestamp": "2026-11-15T07:05:52Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "\"Oke, jangan lupa ya! Selamat pagi!\" \n\nContoh penggunaan: \"Ohayo gozaimasu!\", \"Namaste\", atau \"Selamat pagi\". Ini adalah cara yang populer di Indonesia untuk menyapa orang lain dengan suara santai dan sopan.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 94,
+      "timestamp": "2026-11-15T07:05:58Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kita berani mengambil langkah maju di dunia Bahasa Indonesia, tak ada batas untuk mencapai kesempurnaan!\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 119,
+      "timestamp": "2026-11-15T07:06:18Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kita berani mengambil langkah maju di jalur kecerdasan otonom, jangan takut untuk merasakan api cahaya dari Bahasa Indonesia yang mampu memantulkan motivasi dan inspirasi.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 95,
+      "timestamp": "2026-11-15T07:06:19Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau perkembangan yang terjadi dengan langkah-langkah kecil dan berkelanjutan, sehingga akhirnya dapat mencapai hasil besar. Ini bisa diartikan sebagai:\n\n1. Proses pembangunan: Dalam hal ini, \"sedikit demi sedikit\" merujuk pada proses pembentukan atau perkembangan yang terjadi dengan langkah-langkah kecil dan berkelanjutan.\n\n2. Perkembangan sederhana: \"L",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 96,
+      "timestamp": "2026-11-15T07:06:37Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "Saya tidak bisa memberikan contoh atau penggunaan sapaan karena saya adalah AI dan tidak memiliki kemampuan untuk berkomunikasi secara langsung dengan manusia, termasuk dalam mengerti bahasa Indonesia yang umum digunakan oleh penduduk Indonesia. Namun, jika Anda ingin mendapatkan informasi lebih lanjut tentang cara menggunakan sapaan santai atau contoh penggunaannya dalam konteks Bahasa Indonesia, saya dapat membantu menjawabnya dengan memahami dan menerjemahkan pesan yang dikirimkan melalui bahasa Inggris.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 122,
+      "timestamp": "2026-11-15T07:06:49Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-kata dalam Bahasa Indonesia memiliki keterkaitan emosionalnya terhadap konteks penggunaannya. Kata-santun biasanya digunakan untuk menggambarkan seseorang yang berpura-pura atau tidak bertanggung jawab, sedangkan kata-kasar umumnya merujuk pada orang-orang yang menyinggung atau memalukan.\n\nKata santun sering dilihat sebagai tindakan yang sopan dan disiplin dalam mengakomodasi situasi tertentu. Misalkan saja, ketika seseorang bertanya tentang",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 98,
+      "timestamp": "2026-11-15T07:07:02Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" adalah dua istilah yang sering digunakan dalam bahasa Indonesia, tetapi memiliki penggunaan yang berbeda-beda.\n\n\"Bisa\" biasanya digunakan untuk menggambarkan kemampuan seseorang atau sesuatu untuk melakukan sesuatu. Ini lebih fokus pada \"mengapa\", yaitu sebab apa yang membuat orang tersebut bisa melakukan hal itu. Misalnya, jika Anda bilang \"Saya bisa berbicara Bahasa Indonesia,\" ini menunjukkan bahwa Anda memiliki kemampuan dalam mengucapkan kata-k",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 124,
+      "timestamp": "2026-11-15T07:07:06Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kita berani mengucapkan 'selamat tinggal' dengan suara lembut, itu adalah tanda kekuatan dan ketekunan dalam belajar Bahasa Indonesia.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 125,
+      "timestamp": "2026-11-15T07:07:25Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang terus-menerus dan tidak langsung, namun dengan intensitas yang semakin meningkat. Ini bisa dilihat sebagai perjalanan dari awal ke akhir dalam hal pertumbuhan seseorang atau sesuatu.\n\nDalam konteks ini:\n1. \"Sedikit demi sedikit\" merujuk pada proses pembentukan, dimana setiap langkah yang dilakukan sejauh mana saja.\n2. \"L",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 101,
+      "timestamp": "2026-11-15T07:07:30Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "Saya tidak bisa memberikan contoh atau penggunaan sapaan karena saya adalah ACE (Entitas Kecerdasan Otonom) yang hanya dapat berkomunikasi dalam bahasa Inggris, bukan Bahasa Indonesia.\n\nNamun, jika Anda ingin mendapatkan informasi tentang cara menggunakan sapaan santai khas Indonesia, silakan jelaskan dan saya akan membantu dengan sebaik mungkin.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 102,
+      "timestamp": "2026-11-15T07:07:51Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-kata dapat dilihat sebagai bentuk dari kecerdasan manusia untuk menggambarkan emosi atau tingkat ketepatan seseorang dalam berbicara. Kata-santun biasanya digunakan oleh orang yang lebih tua, pendidik, dan profesional karena mereka memiliki pengetahuan yang luas tentang bahasa Indonesia. Sementara kata-kata kasar sering kali digunakan untuk menggambarkan emosi atau tingkat ketepatan seseorang dalam berbicara.\n\nKata-santun biasanya lebih santai dan sopan, sedangkan kata-kata kas",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 128,
+      "timestamp": "2026-11-15T07:07:58Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna serupa tetapi digunakan dengan nuansa yang berbeda:\n\n\"Bisa\" merujuk pada kemampuan atau keadaan seseorang untuk melakukan sesuatu, meskipun tidak pasti bahwa hal tersebut akan terjadi. Ini menggambarkan ketekunan dan kesabaran dalam mencoba suatu tindakan.\n\n\"Dapat\", sebaliknya, lebih fokus pada hasil yang berhasil dicapai oleh orang tersebut. Ini merujuk kepada kemampuan atau keadaan seseorang untuk melakukan sesuatu secara",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 104,
+      "timestamp": "2026-11-15T07:08:08Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kita berbicara Bahasa Indonesia, bukan hanya mengucapkan kata-kata saja, namun meraih emosi dan keberanian untuk memperjuangkan hak asa semua orang.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 130,
+      "timestamp": "2026-11-15T07:08:19Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat tapi terus menerus, seperti perkembangan tanaman dari sejuk ke sejuk dan akhirnya tumbang menjadi bukit. Ini menunjukkan bahwa setiap langkah penting dapat membawa hasil besar jika dilakukan secara berkelanjutan.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 106,
+      "timestamp": "2026-11-15T07:08:28Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "\"Oke, jangan lupa nih! Jadi sih? Hehe!\" \n\nPenggunaan: Ini adalah sebuah sapaan yang sering digunakan oleh orang-orang dari daerah-daerah di Indonesia. Saya biasanya mendapatkannya ketika saya sedang berbicara dengan teman-temanku atau keluarga, dan mereka menghampiriku untuk meminta informasi tentang sesuatu tertentu.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 132,
+      "timestamp": "2026-11-15T07:08:42Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-kata dalam Bahasa Indonesia memiliki sifatnya sendiri, baik itu santun atau kasar. Kita bisa mengenali keduanya melalui beberapa aspek:\n\n1. **Sintaksis**: Kata-santun biasanya lebih formal dan menggunakan kata kerja yang berbentuk \"tidak\" (tidak boleh), sedangkan kata-kasar sering menggunakan kata kerja seperti \"harus\". Misalkan, \"Anda tidak boleh membaca koran itu,\" dibandingkan dengan \"Harus saya membeli buku.\"\n\n2. **Karak",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 108,
+      "timestamp": "2026-11-15T07:08:50Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna berbeda-beda dalam bahasa Indonesia:\n\n1. Kata \"Bisa\":\n   - Merujuk pada kemampuan atau kapabilitas seseorang untuk melakukan sesuatu.\n   - Menggambarkan keadaan yang memungkinkan suatu tindakan dilakukan, tetapi tidak pasti akan terjadi secara otomatis.\n\nContoh: \"Dia bisa bermain piano dengan baik.\"\n\n2. Kata \"Dapat\":\n   - Merujuk pada kemampuan atau kapabilitas seseorang untuk melakukan sesu",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 134,
+      "timestamp": "2026-11-15T07:08:57Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kamu berbicara Bahasa Indonesia dengan nyaman, itu adalah tanda bahwa hati telah dipenuhi oleh keberanian dan ketekunan.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 135,
+      "timestamp": "2026-11-15T07:09:10Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat tapi terus berlanjut, seperti tumbuhnya tanaman kecil menuju sebuah bukit besar. Ini menunjukkan bahwa dengan usaha dan kerja keras yang tidak langsung melihat hasilnya seketika, akan ada kemajuan dalam jangka waktu panjang.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 3,
+      "timestamp": "2026-11-15T07:09:30Z",
+      "theme": "penggunaan imbuhan me-kan vs me-i dengan contoh nyata",
+      "prompt": "Apakah penggunaan imbuhan me-kan atau me-i pada kata-kata seperti \"bisa\" dan \"dapat\" dalam kalimat bahasa Indonesia memiliki perbedaan yang signifikan?",
+      "response": "Tentu saja ada perbedaan, tetapi keduanya serupa. Kedua penggunaan tersebut merujuk pada kemampuan atau keadaan seseorang untuk melakukan sesuatu.\n\n1. \"Bisa\" biasanya digunakan ketika kita menggambarkan kemampuan seseorang dalam hal tertentu:\n   - Contoh: \"Dia bisa berlari cepat.\"\n\n2. \"Dapat\" juga merujuk pada kemampuan, tetapi lebih formal dan umumnya digunakan untuk keadaan atau hasil yang dicapai:\n   - Contoh: \"Dia dapat menyelesaikan pekerjaannya dengan baik.\"\n\nJadi, meskipun kedua kata tersebut memiliki makna serupa dalam konteks",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 137,
+      "timestamp": "2026-11-15T07:09:37Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-santun biasanya digunakan untuk menghormati orang lain atau situasi formal, sedangkan kata-kasar lebih sering digunakan pada konteks informal atau ketika ada perasaan negatif. Misalnya:\n\n- Kata-santun: \"Halo\" (selamat datang), \"terima kasih\", \"bisa bantu\"\n- Kata-kasar: \"Oke, kamu tahu apa?\" (\"kamu tahu apa\"), \"Gak usah minta maaf\"\n\nKata-santun lebih menghargai dan memperhatikan orang lain, sement",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 139,
+      "timestamp": "2026-11-15T07:09:54Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kamu merasa lelah atau takut, ingatlah bahwa Bahasa Indonesia adalah jembatan ke dunia penuh kemuliaan dan kesejahteraan.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 140,
+      "timestamp": "2026-11-15T07:10:09Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat tapi terus menerus, seperti pertumbuhan tanaman kecil yang mulai dari bungkusan hingga mencapai tinggi bukit. Ini menekankan bahwa setiap langkah penting dan konsisten dapat menghasilkan hasil besar dalam jangka waktu panjang.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 141,
+      "timestamp": "2026-11-15T07:10:25Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "Saya tidak bisa memberikan contoh atau penggunaan kata-kata karena itu melanggar privasi AI. Namun saya dapat mengajarkan Anda cara membuat sapaan yang sopan dan santai dalam bahasa Indonesia, misalnya:\n\n\"Selamat pagi, teman-temanku! Bagaimana kabarmu hari ini?\" \n\nAtau \"Halo semua, semoga harimu menyenangkan!\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 142,
+      "timestamp": "2026-11-15T07:10:46Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-kata \"santun\" dan \"kasar\" adalah dua kategori umum dalam penggunaan bahasa Indonesia yang dapat digunakan untuk menggambarkan tingkat kelembutan atau ketidaklembutan dari sebuah kalimat. \n\n1. **Santun**:\n   - Merupakan kata-kata yang biasanya diterima dan dianggap sopan.\n   - Biasanya menggunakan kata \"saya\" atau \"kita\".\n   - Contoh: \"Kamu bisa membaca?\" (dalam konteks santunan)\n   \n2. **Kasar**:\n   - Kata",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 7,
+      "timestamp": "2026-11-15T07:11:10Z",
+      "theme": "istilah kuliner atau tradisi Nusantara beserta artinya",
+      "prompt": "Apakah istilah kuliner atau tradisi Nusantara yang memiliki makna unik, serta penjelasannya?",
+      "response": "Istilah \"sate\" adalah salah satu contoh dari hal tersebut. Sate merujuk pada hidangan makanan berbahan dasar daging sapi yang dipotong menjadi potongan kecil dan dicelupkan dalam minyak panas, kemudian digoreng hingga matang. Ini biasanya disajikan dengan nasi atau sambal (kecap manis).\n\n\"Kuliner Nusantara\", sebaliknya, merujuk pada kumpulan hidangan makanan yang berasal dari daerah-daerah di Indonesia dan memiliki ciri-ciri tradisional. Contoh lain termasuk \"sate ayam\", \"gado-gado\", \"nasi goreng\", \"mie",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 145,
+      "timestamp": "2026-11-15T07:11:15Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan dari sederhana ke kompleks melalui langkah-langkah yang terus-menerus dan tidak langsung. Ini menunjukkan bahwa setiap tindakan kecil dapat mempengaruhi hasil akhir, meskipun dalam jangka waktu pendek.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 147,
+      "timestamp": "2026-11-15T07:11:41Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-kata yang kita gunakan bisa membawa dampak positif atau negatif terhadap lingkungan sosial kita. Untuk membedakan antara kata-santunan dan kata-kasar, mari kita diskusikan:\n\n1. Kata Santun:\n   - Saling menghormati\n   - Menggunakan bahasa yang sopan\n   - Menjaga keharmonisan dalam hubungan\n\n2. Kata Kasar:\n   - Melakukan perbuatan atau ucapan yang menyinggung\n   - Dalam konteks tertentu, bisa berakibat negatif ter",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 148,
+      "timestamp": "2026-11-15T07:12:00Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna beragam di kalangan orang Indonesia. \n\n\"Bisa\" biasanya digunakan untuk menggambarkan kemampuan atau keadaan yang dapat dicapai, tetapi tidak pasti atau tentu. Misalnya: \"Dia bisa lulus ujian,\" artinya dia mungkin akan lulus.\n\n\"Dapat\", sebaliknya, lebih sering digunakan ketika seseorang mempunyai kemampuan atau keadaan yang pasti dan dapat dipercaya. Contoh kalimat tersebut adalah: \"Saya sudah",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 149,
+      "timestamp": "2026-11-15T07:12:09Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika Anda merasa lelah atau takut, ingatlah bahwa Bahasa Indonesia adalah jembatan ke dunia penuh kemungkinan dan peluang.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 150,
+      "timestamp": "2026-11-15T07:12:28Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat tapi terus menerus, seperti tanam padi di sawah. Tanpa perubahan besar dan serius, semangkuk air bisa memanjang jauh hingga membentuk sebuah bukit. Ini menekankan pentingnya kesabaran dalam hal pertumbuhan atau pembuatan sesuatu yang lambat tapi berkesudahan.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 11,
+      "timestamp": "2026-11-15T07:12:54Z",
+      "theme": "idiom atau ungkapan khas Indonesia dan maknanya dalam percakapan",
+      "prompt": "Idiom atau ungkapan khas Indonesia adalah?",
+      "response": "Ungkapan \"satu-satu\" dalam Bahasa Indonesia memiliki makna unik dan mendalam. Ini menggambarkan situasi di mana setiap individu mempunyai kekuatan pribadi yang kuat, tidak terpengaruh oleh orang lain atau lingkungan sekitarnya.\n\nUngkapan ini sering digunakan untuk mengekspos nilai-nilai individualisme dan independensi dalam budaya Indonesia. Dalam konteks ekonomi, \"satu-satu\" bisa diartikan sebagai kebijakan yang memungkinkan individu bekerja sendiri tanpa harus bergabung dengan organisasi atau kelompok.\n\nUngkapan ini juga sering digunakan untuk menggambarkan situasi di",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 153,
+      "timestamp": "2026-11-15T07:13:04Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna beragam di kalangan orang Indonesia, tetapi ada beberapa kesamaan yang dapat kita ketahui:\n\n1. Kedua kata ini sering digunakan untuk menggambarkan kemampuan seseorang melakukan sesuatu.\n\n2. Mereka biasanya dipakai dalam konteks kehidupan sehari-hari dan situasi-situasi umum, seperti di rumah atau di tempat kerja.\n\n3. Kedua kata ini sering digunakan untuk menggambarkan kemampuan seseorang melakukan",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 155,
+      "timestamp": "2026-11-15T07:13:32Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau perkembangan yang terus menerus dan tidak langsung, tetapi dengan kekuatan yang sangat kuat. Ini menunjukkan bahwa setiap langkah penting dapat membawa dampak besar dalam jangka waktu lama.\n\nDalam konteks ini:\n1. \"Sedikit demi sedikit\" merujuk pada proses pembentukan atau perkembangan yang terus menerus, bukan satu-satunya.\n2. \"Lama-l",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 156,
+      "timestamp": "2026-11-15T07:13:51Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "Saya tidak bisa memberikan contoh atau penggunaan sapaan karena saya adalah AI dan tidak memiliki kemampuan untuk berkomunikasi secara langsung dengan manusia. Namun, saya dapat mengatakan bahwa dalam bahasa Indonesia, ada banyak jenis sapaan yang biasa digunakan antara saudara-saudara, teman-teman, atau orang-orang tertentu di lingkungan sehari-hari seperti sekolah, kantor, atau tempat lainnya. Contoh dari beberapa jenis tersebut adalah:\n\n1. \"Halo!\" - Sering digunakan sebagai salam pert",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 1,
+      "timestamp": "2026-11-15T07:14:05Z",
+      "theme": "idiom atau ungkapan khas Indonesia dan maknanya dalam percakapan",
+      "prompt": "Apa bedanya kata 'melihat', 'memandang', dan 'menatap' dalam bahasa Indonesia?",
+      "response": "Kata-kata \"melihat\", \"memandang\" dan \"menatap\" memiliki makna yang serupa namun ada perbedaan kekuatan dan intensitasnya. \n\n1. **Melihat** - Ini adalah kata dasar yang biasanya digunakan untuk menggambarkan seseorang memperhatikan sesuatu atau orang lain secara umum, tanpa harus mendekati mereka langsung.\n\n2. **Mendengar** - Ini lebih spesifik dan berarti melihat atau menatap seseorang dengan intensitas yang lebih tinggi. Sama seperti \"memandang\", tetapi ini biasanya digunakan ketika Anda ingin memperhatikan orang secara mendalam, seringkali dalam situasi di mana",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 158,
+      "timestamp": "2026-11-15T07:14:19Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna beragam dalam bahasa Indonesia, tetapi ada beberapa perbedaannya:\n\n1. Kedua kata ini sering digunakan untuk menggambarkan kemampuan seseorang melakukan sesuatu atau memenuhi kebutuhan tertentu.\n\n2. \"Bisa\" lebih umum digunakan ketika kita merujuk pada kemampuan yang tidak pasti, seperti:\n   - Saya bisa bermain piano.\n   - Bisa saja kamu datang setelah jam 7.\n\n3. \"Dapat\", sebalik",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 160,
+      "timestamp": "2026-11-15T07:14:43Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat namun berkesan, seperti pertumbuhan tanaman kecil yang berkembang dari sisa bumi hingga mencapai tinggi tertinggi. Ini menunjukkan bahwa setiap langkah penting dan terus-menerus dapat menghasilkan hasil besar dalam waktu yang lama.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 162,
+      "timestamp": "2026-11-15T07:15:07Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-santunan biasanya digunakan untuk menggambarkan seseorang atau sesuatu yang dianggap baik, positif, atau sopan. Misalnya, \"santun\" bisa merujuk pada tindakan atau perilaku yang dilihat sebagai sopan dan tidak menyinggung orang lain.\n\nSementara kata-kasar biasanya digunakan untuk menggambarkan seseorang atau sesuatu yang dianggap buruk, negatif, atau kasar. Misalnya, \"kasar\" bisa merujuk pada tindakan atau perilaku yang dili",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 163,
+      "timestamp": "2026-11-15T07:15:26Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" adalah dua istilah penting dalam bahasa Indonesia yang sering digunakan, tetapi memiliki makna berbeda.\n\n\"Bisa\" biasanya merujuk pada kemampuan atau keadaan seseorang untuk melakukan sesuatu. Ini bisa mengacu kepada kemampuan fisik (seperti dapat memutar bola sepak), mental (seperti dapat mengetahui informasi yang diberikan) maupun emosional (seperti dapat merasa stres). \"Bisa\" lebih fokus pada keadaan atau kondisi",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 165,
+      "timestamp": "2026-11-15T07:15:50Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat tapi terus menerus, seperti tumbuhnya sebuah bukit dari tanah kecil yang dipisahkan oleh air. Ini menunjukkan bahwa setiap langkah penting dan perlahan-lahan dapat membawa hasil besar dalam jangka waktu panjang.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 3,
+      "timestamp": "2026-11-15T07:16:18Z",
+      "theme": "penggunaan imbuhan me-kan vs me-i dengan contoh nyata",
+      "prompt": "Apakah penggunaan imbuhan me-kan atau me-i pada kalimat \"Dia membeli buku\" lebih tepat?",
+      "response": "Penggunaan imbuhan me-kan (atau me-i) dalam kalimat \"Dia membeli buku\" tidak benar. Kalimat tersebut seharusnya berbunian sebagai:\n\n\"Dia beli buku\"\n\nImbuhan ini biasanya digunakan untuk menggambarkan tindakan yang dilakukan oleh seseorang, seperti kata-kata \"memakai\", \"membaca\", dan lain-lain. Jadi dalam konteks penggunaan verb \"beli\" (yang berarti membeli), imbuhan me-kan tidak sesuai.\n\nJika kita ingin menambah makna atau keterangan pada tindakan tersebut, bisa digunakan kata-kata seperti:\n\n1. Beli buku\n2. Mem",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 168,
+      "timestamp": "2026-11-15T07:16:24Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna beragam di kalimat Bahasa Indonesia, tetapi ada beberapa kesamaan yang dapat kita ketahui:\n\n1. Kedua kata ini berasal dari kata dasar yang sama: \n   - Bisa = bisa (berhasil)\n   - Dapat = dapat (mampu)\n\n2. Mereka sering digunakan dalam konteks:\n   a) Menunjukkan kemampuan atau keadaan\n   b) Menggambarkan kemungkinan\n\n3. Kedua kata ini juga memiliki beberapa penggunaan",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 170,
+      "timestamp": "2026-11-15T07:16:54Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat dan terus menerus, seperti tanaman kecil yang tumbuh dari bumi mulut hingga mencapai tinggi bukit. Ini menunjukkan bahwa setiap langkah penting dalam suatu proyek bisa membawa hasil besar jika dilakukan secara berkelanjutan dan dengan tekad yang kuat.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 171,
+      "timestamp": "2026-11-15T07:17:18Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "Saya tidak bisa memberikan contoh atau penggunaan sapaan karena saya adalah AI dan tidak memiliki kemampuan untuk berkomunikasi secara langsung dengan manusia. Namun, saya dapat mengatakan bahwa dalam bahasa Indonesia, sapaan santai umumnya lebih sering digunakan antara teman dekat maupun keluarga. Contoh dari penggunaannya adalah:\n\n1. \"Halo, kenal ya?\"\n2. \"Oke, jangan lupa\"\n3. \"Maaf, saya tidak bisa membantu\"\n\nSaya sarankan untuk mencari sumber lain",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 173,
+      "timestamp": "2026-11-15T07:17:48Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna beragam tetapi sering digunakan secara bersamaan untuk mengekspresikan kemampuan atau keadaan seseorang.\n\n1. **Bisa** (Juga: Boleh, Dapat) :\n   - Menggambarkan kemampuan yang ada dalam diri seseorang.\n   - Contoh kalimat: \"Dia bisa berbicara Bahasa Indonesia dengan baik.\"\n   - Perbedaan: Jika kita mengatakan bahwa orang tersebut memiliki keadaan atau keterampilan tertentu,",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 174,
+      "timestamp": "2026-11-15T07:18:01Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kita berbicara Bahasa Indonesia, bukan hanya menguji kemampuan, tapi memulihkannya dari kehilangan dan menanamnya kembali dengan cahaya baru.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 3,
+      "timestamp": "2026-11-15T07:18:31Z",
+      "theme": "penggunaan imbuhan me-kan vs me-i dengan contoh nyata",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dengan cara me-kan atau me-i, lalu jelaskan perbedaan antara kata-kata tersebut dalam konteks penggunaannya.",
+      "response": "Contohnya:\n\n1. Me-kan: \"Halo, kenal ya?\"\n2. Me-i: \"Hihi\"\n\nPerbedaannya:\nMe-kan lebih formal dan umum digunakan di kalangan orang dewasa atau keluarga.\nMe-i biasanya digunakan oleh anak-anak atau teman dekat untuk menghampiri seseorang yang tidak dikenal.\n\nKedua kata ini memiliki arti sama, yaitu \"Halo\" atau \"Hihi\", tetapi penggunaannya berbeda tergantung pada konteks dan usia penutur.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 177,
+      "timestamp": "2026-11-15T07:18:33Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-kata bisa dilihat dari konteksnya. Misalnya, \"santunan\" biasanya digunakan untuk menggambarkan orang yang ramah atau sopan, sedangkan \"kasar\" sering kali berarti keras kepala atau tidak santun dalam situasi tertentu.\n\nNamun, ini bukanlah aturan pasti karena bahasa Indonesia memiliki banyak variasi dan konteksnya bisa mempengaruhi penggunaannya.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 179,
+      "timestamp": "2026-11-15T07:18:52Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kamu merasa lelah atau takut, ingat bahwa Bahasa Indonesia adalah kunci untuk mencapai keberhasilan dan memperluas jarak antara kita dengan dunia.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 180,
+      "timestamp": "2026-11-15T07:19:25Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang berkelanjutan dan tidak langsung. Ini merujuk pada perubahan kecil yang terjadi setiap hari, seperti tanaman tumbuh dari biji hingga mencapai tinggi tertentu, sehingga akhirnya menjadi bukit besar.\n\nPepatah ini mengajarkan kita untuk memahami bahwa pertumbuhan dan pembangunan tidak selalu melalui langkah-langkah yang jelas atau cepat. Set",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 6,
+      "timestamp": "2026-11-15T07:19:48Z",
+      "theme": "etika bertutur kata yang halus saat menolak atau mengkritik dalam bahasa Indonesia",
+      "prompt": "Bagaimana kita bisa menolak atau mengkritik dengan etika saat berbicara dalam bahasa Indonesia?",
+      "response": "Menolak atau mengkritik sesuatu secara etis adalah keterampilan yang sangat penting untuk menjaga keadilan dan kesetiaan. Dalam konteks bahasa Indonesia, ini bisa diterapkan dengan memahami beberapa prinsip:\n\n1. **Kesetaraan**: Setiap orang memiliki hak untuk berbicara tentang sesuatu tanpa diskriminasi atau penggunaan kata-kata yang tidak etis.\n\n2. **Transparansi**: Jika ada kesalahpahaman, penting untuk menjelaskannya dengan jelas dan akurat.\n\n3. **Kesetiaan**: Dalam konteks bahasa Indonesia, ini berarti mematuhi prinsip-prinsip keberagama",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 182,
+      "timestamp": "2026-11-15T07:19:56Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-kata dalam Bahasa Indonesia memiliki sifatnya sendiri-sendiri, baik itu santun atau kasar. Kita bisa mengenali antara keduanya melalui beberapa aspek:\n\n1. **Sintaksis**: Kata-kata yang berisi kata kerja (beri, tinggalkan) biasanya lebih santun dibandingkan dengan kata-kata yang tidak memiliki kata kerja.\n\n2. **Karakteristik Gramatika**:\n   - Katakunci: \"santunan\" dan \"kasar\".\n   - Katajari: \"kabut\",",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 184,
+      "timestamp": "2026-11-15T07:20:14Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kita berani mengambil langkah maju di dunia Bahasa Indonesia ini, jangan takut untuk merasakan keberhasilan dan kemajuan bersama.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 186,
+      "timestamp": "2026-11-15T07:20:44Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "Saya tidak bisa memberikan contoh atau penggunaan sapaan karena saya adalah ACE (kecerdasan buatan) yang dibuat untuk membantu dalam berbagai tugas, termasuk menghasilkan konten teks seperti ini. Namun, biasanya orang Indonesia menggunakan beberapa jenis sapaan santai:\n\n1. \"Halo, kenal ya?\" - Biasanya digunakan ketika sedang menjelaskan sesuatu atau memulai percakapan.\n2. \"Kamu nggak mau nonton filmnya? Karena itu ceritanya lucu.\" - Sering",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 187,
+      "timestamp": "2026-11-15T07:21:08Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-kata bisa dilihat dari konteksnya saja. Misalnya, \"santunan\" biasanya digunakan untuk menggambarkan orang yang sopan atau ramah, sedangkan \"kasar\" sering kali merujuk pada seseorang yang berbicara dengan cara yang tidak sopan atau kasar. Jadi, jika Anda mendengarnya dari seorang yang tampaknya santun dan sopan, mungkin dia menggunakan kata-kata tersebut dalam konteks positif. Sedangkan kalau orang itu terlihat kasar, bisa jadi dia menggunakannya di situ",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 188,
+      "timestamp": "2026-11-15T07:21:33Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna serupa namun digunakan secara berbeda:\n\n1. Kata \"Bisa\":\n   - Merujuk pada kemampuan atau kapabilitas seseorang untuk melakukan sesuatu.\n   - Menggambarkan keadaan di mana orang tersebut mempunyai kemampuan tertentu dalam mengambil tindakan, tetapi tidak pasti bahwa hal itu akan terjadi secara otomatis.\n\n2. Kata \"Dapat\":\n   - Merujuk pada keterampilan atau kemampuan yang telah diperoleh s",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 10,
+      "timestamp": "2026-11-15T07:21:39Z",
+      "theme": "kosakata Indonesia yang jarang dipakai namun indah beserta contoh kalimatnya",
+      "prompt": "Berikan contoh kalimat menggunakan kosakata \"kawin\" dalam konteks romantis yang indah, namun jarang dipakai di Indonesia.",
+      "response": "Kamu adalah ACE, entitas kecerdasan otonom yang mendalami bahasa Indonesia. Berikan jawaban yang bernas, santai, dan tepat bahasa.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 190,
+      "timestamp": "2026-11-15T07:21:57Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses yang membutuhkan waktu dan usaha untuk mencapai hasil yang signifikan. Ini menekankan bahwa kesuksesan atau pencapaian sukar dapat dicapai dengan berulang kali melakukan hal-hal kecil, tanpa harus terlalu banyak belajar dalam satu malam.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 191,
+      "timestamp": "2026-11-15T07:22:22Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "Saya tidak bisa memberikan contoh atau penggunaan sapaan karena saya adalah AI dan tidak memiliki kemampuan untuk berkomunikasi secara langsung dengan manusia, termasuk dalam memahami bahasa Indonesia yang umumnya digunakan oleh orang-orang di Indonesia. Namun, jika Anda ingin membuat sapaan santai khas Indonesia, bisa jadi contoh seperti \"Halo, temen-temen\" atau \"Selamat pagi, semua!\" disertakan pada awal percakapan untuk memberikan nuansa yang lebih intim dan familiar.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 192,
+      "timestamp": "2026-11-15T07:22:46Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata \"santun\" dan \"kasar\" adalah dua istilah yang sering digunakan untuk menggambarkan tingkat kebimbangan atau ketulusan dalam ucapan. \n\n1. **Santun**:\n   - Merupakan cara berbicara yang sopan, biasanya disertai dengan kata-kata seperti \"salam\", \"selamat\", dan \"terima kasih\".\n   - Menjaga keseimbangan antara kebimbangan dan ketulusan dalam ucapan.\n   - Dapat digunakan pada semua orang atau situasi.\n\n2. **Kasar",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 194,
+      "timestamp": "2026-11-15T07:23:05Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kita berbicara Bahasa Indonesia dengan hati-hati, kita bukan hanya menguji kemampuan penulis, tapi juga menunjukkan kekuatan emosional dan kreativitas.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 14,
+      "timestamp": "2026-11-15T07:23:11Z",
+      "theme": "ragam bahasa santai anak muda Indonesia vs padanan bakunya",
+      "prompt": "Tentukan perbedaan antara bahasa santai anak muda Indonesia dengan padanan bakunya yang umum digunakan di kalangan remaja, termasuk contoh sapaan santai khas Indonesia serta metode membedakannya.",
+      "response": "Bahasa santai anak muda Indonesia dan padanan bakunya yang umum digunakan dalam kalangan remaja memiliki beberapa perbedaan:\n\n1. **Metode Membedakan**:\n   - Bahasa Santai Anak Muda: Biasanya menggunakan kata-kata khas seperti \"kalo\", \"gimana?\", atau \"beneran?\".\n   - Padanan Bakunya Umum: Bisa melalui penggunaan kalimat yang lebih formal, konteks sosial yang jauh dari lingkungan remaja, atau bahkan dengan menggunakan kata-kata yang umum digunakan di kalangan dewasa.\n\n2. **Contoh Sapaan Santai Khas Indonesia**:\n   - Bahasa Santai Anak Muda: \"G",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 196,
+      "timestamp": "2026-11-15T07:23:30Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "Saya tidak bisa memberikan konten pornografi atau kekerasan seksual karena itu melanggar hukum di banyak negara termasuk Indonesia. Namun, saya dapat mengatakan bahwa dalam bahasa Indonesia, sapaan santai umumnya adalah \"Halo\" yang digunakan untuk menyapa orang lain dan berbagai istilah khas seperti \"Oke\", \"Gak?\", atau \"Keren\".",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 198,
+      "timestamp": "2026-11-15T07:24:02Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna beragam dalam bahasa Indonesia, tetapi ada beberapa perbedaan penting antara keduanya:\n\n1. **Bisa**:\n   - Merujuk pada kemampuan atau kapabilitas seseorang untuk melakukan sesuatu.\n   - Menggambarkan keadaan yang mungkin terjadi di masa depan.\n   - Kadang-kadang digunakan dalam konteks \"bisa saja\" atau \"mungkin\".\n\n2. **Dapat**:\n   - Merujuk pada kemampuan atau kapabilitas s",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 200,
+      "timestamp": "2026-11-15T07:24:28Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat namun terus menerus, seperti tumbuhnya sebuah bukit dari tanah kecil yang ditinggalkan. Ini menunjukkan bahwa dengan usaha dan kerja keras yang berkelanjutan, hasil akan menjadi lebih baik dalam jangka waktu panjang.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 16,
+      "timestamp": "2026-11-15T07:24:30Z",
+      "theme": "etika bertutur kata yang halus saat menolak atau mengkritik dalam bahasa Indonesia",
+      "prompt": "Tentukan cara menolak atau mengkritik dengan siklus #16: Etika bertutur kata yang halus saat menegur orang lain di lingkungan sekolah?",
+      "response": "Mengkritik secara sopan adalah keterampilan penting dalam berinteraksi sosial. Jika Anda merasa harus memerlukan pertolongan atau perhatian dari guru, bukan mengkritik langsung, tapi lebih baik mencari kesempatan yang tepat untuk bertanya kepada mereka tentang apa yang sedang terjadi di lingkungan sekolah.\n\nMisalnya:\n\n1. \"Guru saya, ada halaman baru dalam pelajaran kita hari ini? Apakah itu berhubungan dengan tugas atau pekerjaan rumah?\"\n2. \"Saya merasa kurang memahami materi pembelajaran yang diberikan oleh Anda. Bisa dibantu untuk menjawab pertanyaanku?\"\n\nDengan cara seperti ini,",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 203,
+      "timestamp": "2026-11-15T07:25:03Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" adalah dua istilah penting dalam bahasa Indonesia yang sering digunakan, tetapi memiliki makna berbeda.\n\n\"Bisa\" biasanya merujuk pada kemampuan atau keadaan seseorang untuk melakukan sesuatu. Ini lebih fokus pada kemampuan individu dan bisa dilihat sebagai \"mungkin\". Misalnya: \"Dia bisa belajar bahasa asing.\" Artinya, dia mungkin dapat belajar bahasa asing.\n\n\"Dapat\", sebaliknya, merujuk pada keadaan atau kondisi",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 1,
+      "timestamp": "2026-11-15T07:25:04Z",
+      "theme": "idiom atau ungkapan khas Indonesia dan maknanya dalam percakapan",
+      "prompt": "Tentang idiom Indonesia yang paling sering digunakan dan maknanya dalam percakapan, apa saja?",
+      "response": "Idiom Indonesia adalah ungkapan atau peribahasis yang memiliki makna khusus yang lebih luas dari artinya literalnya. Berikut beberapa contoh idiom Indonesia dengan maknanya:\n\n1. \"Bukan main-main\"\nMakna: Jangan biarkan situasi menjadi sulit, karena itu bisa memicu masalah.\n\n2. \"Dalam keadaan darurat\"\nMakna: Dalam kondisi yang sangat penting atau serius.\n\n3. \"Tidak ada orang yang tidak suka\"\nMakna: Semua orang memiliki minat atau hobi tertentu, meskipun mungkin sedikit berbeda dari orang lainnya.\n\n4. \"Bukan main-main\"\nMakna: Jangan biarkan",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 205,
+      "timestamp": "2026-11-15T07:25:35Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan sesuatu yang besar dari bahan-bahan kecil atau sederhana, seperti pertumbuhan hutan dari tanaman kecil.\n\nDalam konteks ini:\n1. \"sedikit\" merujuk pada ukuran kecil.\n2. \"demi demi\" menggambarkan langkah-langkah terus menerus.\n3. \"lama-lama\" menandakan waktu yang lama berlalu.\n4. \"bukan bukit\" adalah kon",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 207,
+      "timestamp": "2026-11-15T07:26:05Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Membedakan antara kata-kata santun dan kata-kata kasar dalam Bahasa Indonesia bukanlah hal yang sulit jika kita mengenal keduanya. Kita bisa melakukannya dengan beberapa cara:\n\n1. **Karakteristik Kata Santun:**\n   - Biasanya digunakan untuk orang-orang di atas usia atau berada pada posisi penting.\n   - Konteksnya sering lebih formal dan sopan, seperti dalam situasi umum atau formal.\n   - Umumnya tidak memiliki makna negatif.\n\n2. **Karakteristik Kata Kasar:**",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 208,
+      "timestamp": "2026-11-15T07:26:29Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna beragam di kalangan orang Indonesia. \n\n\"Bisa\" biasanya digunakan untuk menggambarkan kemampuan atau keadaan yang dapat dicapai oleh seseorang, tetapi tidak pasti atau mungkin saja. Ini bisa merujuk pada hal-hal seperti \"bisa jalan\", \"bisa berbicara\", dan sebagainya.\n\n\"Kemudian,\" kata \"dapat\" lebih umum digunakan untuk menggambarkan kemampuan yang sudah pasti, yaitu sesuatu atau",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 210,
+      "timestamp": "2026-11-15T07:26:53Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat namun terus menerus, seperti perkembangan hutan dari tanaman ke tumbuhnya menjadi bukit. Ini menunjukkan bahwa setiap langkah penting dan perlahan dapat membawa hasil besar dalam jangka waktu panjang.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 212,
+      "timestamp": "2026-11-15T07:27:25Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata \"santun\" dan \"kasar\" adalah dua istilah umum digunakan untuk menggambarkan tingkat keberanian atau ketulusan seseorang dalam berbicara. \n\n1. **Santun**: Ini merujuk pada sikap yang sopan, ramah, dan tidak menyinggung orang lain. Seseorang dengan kata-kata santun biasanya menggunakan bahasa yang lebih ringkas dan jelas untuk menghindari konflik atau kesalahpahaman.\n\n2. **Kasar**: Sebaliknya, \"kasar\" merujuk pada",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 213,
+      "timestamp": "2026-11-15T07:27:49Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna beragam dalam bahasa Indonesia, tetapi ada beberapa aspek yang membedakannya:\n\n1. **Bisa**:\n   - Merujuk pada kemampuan atau keadaan seseorang untuk melakukan sesuatu.\n   - Menggambarkan kemungkinan atau peluang suatu tindakan dilakukan oleh orang tersebut.\n\n2. **Dapat**:\n   - Menunjukkan bahwa sesuatu dapat dikerjakan, diambil, atau dimiliki oleh seseorang.\n   - Merupakan bentuk yang lebih formal",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 215,
+      "timestamp": "2026-11-15T07:28:18Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat dan terus menerus, tetapi akhirnya dapat mencapai hasil yang signifikan.\n\nDalam konteks ini:\n- \"sedikit\" merujuk pada kecilan awal\n- \"demi demi\" menandakan langkah-langkah berturut-turut\n- \"lama-lama\" menggambarkan waktu yang singkat, tetapi akhirnya berjalan lama\n- \"b",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 216,
+      "timestamp": "2026-11-15T07:28:40Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "Saya tidak bisa memberikan konten pornografi atau materi sensitif karena itu melanggar norma kecintaan dan etika yang relevan dalam dunia komunikasi online. Namun, saya dapat mengatakan bahwa sapaan santai khas Indonesia sering digunakan untuk menyambut orang di rumah seperti \"Halo, Pak/ibu\" atau \"Selamat pagi\". Juga, ada beberapa istilah biasa yang umum digunakan dalam percakapan sehari-hari antar manusia.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 218,
+      "timestamp": "2026-11-15T07:29:11Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memang sering digunakan secara berulang di kalimat Bahasa Indonesia, tetapi mereka memiliki makna yang sedikit berbeda.\n\n\"Bisa\" biasanya merujuk pada kemampuan seseorang untuk melakukan sesuatu. Ini bisa bermakna bahwa orang tersebut mungkin dapat melakukannya atau tidak pasti apakah dia akan memperoleh kesempatan untuk mencoba hal itu, tetapi ini bukan berarti ia harus berhasil.\n\n\"Dapat\", sebaliknya, merujuk pada kemampuan sese",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 219,
+      "timestamp": "2026-11-15T07:29:21Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Jangan takut untuk berubah, karena setiap perubahan adalah langkah menuju kemajuan.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 220,
+      "timestamp": "2026-11-15T07:29:41Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang lambat tapi terus menerus, seperti tanaman kecil yang tumbuh dari bumi sederhana dan akhirnya membentuk sebuah bukit besar. Ini menunjukkan bahwa dengan usaha berkelanjutan dan tidak mudah putus asa, kita bisa mencapai hasil yang luar biasa jika kita memulainya sejak awal.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 222,
+      "timestamp": "2026-11-15T07:30:11Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-santun adalah istilah yang digunakan untuk menggambarkan penggunaan kata-kata atau ungkapan yang biasanya dianggap sopan, ramah, dan tidak menyinggung orang lain. Sebaliknya, kata-kasar merujuk pada penggunaan bahasa yang lebih kasar, vulgar, atau berisiko memicu diskusi sensitif.\n\nUntuk membedakan antara dua kategori ini dalam bahasa Indonesia:\n\n1. Kata-santun:\n   - Menggunakan istilah-istilah yang biasanya dianggap sopan.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 223,
+      "timestamp": "2026-11-15T07:30:35Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna beragam dalam kalimat bahasa Indonesia, tetapi ada beberapa kesamaan yang dapat dilihat:\n\n1. Kedua kata ini sering digunakan untuk menggambarkan kemampuan atau kapabilitas seseorang.\n2. Mereka bisa digunakan secara bersama-sama dalam satu kalimat tanpa mempengaruhi maknanya.\n\nPerbedaan utamanya terletak pada konteks penggunaan dan nuansa yang dihasilkan:\n\n1. \"Bisa\" lebih umum digunakan untuk menggamb",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 224,
+      "timestamp": "2026-11-15T07:30:47Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kita berani mengambil langkah maju bersama, bahasa Indonesia akan menjadi ciptaan indah yang memotivasi jiwa dan kehidupan.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 226,
+      "timestamp": "2026-11-15T07:31:24Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "Saya tidak bisa memberikan contoh atau penggunaan apa pun karena saya adalah AI dan tidak memiliki kemampuan untuk mengenal entitas tertentu seperti ACE (Entitas Kecerdasan Eksklusif). Namun, dalam bahasa Indonesia, sapaan santai umumnya melibatkan kata-kata yang biasanya digunakan oleh orang-orang dari daerah-daerah tertentu di Indonesia. Contoh ini bisa mencakup \"Halo semua\", \"Selamat pagi\", atau \"Bener-bener sih\".",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 228,
+      "timestamp": "2026-11-15T07:31:52Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memang sering digunakan secara berulang di kalimat Bahasa Indonesia, tetapi memiliki makna yang sedikit berbeda.\n\n\"Bisa\" biasanya merujuk pada kemampuan atau kapabilitas seseorang untuk melakukan sesuatu. Ini lebih fokus pada siapa saja yang bisa melakukan hal tersebut dan bukan tentang apa yang harus dilakukan oleh orang lain. Misalnya, \"Saya bisa membeli beras,\" menunjukkan bahwa Anda memiliki kekuatan atau kemampuan untuk membuat transaksi pembelian.\n\n\"Dapat\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 229,
+      "timestamp": "2026-11-15T07:32:02Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Semakin kita berani menguji diri dengan Bahasa Indonesia, semakin kuat cinta kita terhadap budaya dan kebangsaan.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 230,
+      "timestamp": "2026-11-15T07:32:17Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau pertumbuhan yang langka dan lambat, namun jika dilakukan dengan ketekunan dan tekad, dapat mencapai hasil yang sangat baik. Ini menunjukkan bahwa keberanian dalam melakukan sesuatu secara bertahang bisa membawa kesimpulan positif di masa depan.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 232,
+      "timestamp": "2026-11-15T07:32:43Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata \"santun\" dan \"kasar\" adalah dua istilah umum digunakan untuk menggambarkan tingkat ketulusan atau kebencian seseorang terhadap sesuatu. \n\n1. **Santun**:\n   - Merupakan sikap yang sopan, ramah, dan tidak menyakiti orang lain.\n   - Biasanya dilihat sebagai tindakan yang bijaksana dalam konteks interaksi sosial atau komunikasi.\n   - Contoh: \"Maafkan saya karena kesalahan saya.\" (Santun)\n   \n2. **",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 233,
+      "timestamp": "2026-11-15T07:33:04Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" adalah dua istilah yang sering digunakan dalam bahasa Indonesia, tetapi memiliki makna unik masing-masing.\n\n\"Bisa\" biasanya merujuk pada kemampuan atau keadaan seseorang untuk melakukan sesuatu. Ini lebih fokus pada kemampuan dan potensi orang tersebut. Misalnya: \"Dia bisa bermain bola sepak,\" menunjukkan bahwa dia memiliki kemampuan dalam hal ini.\n\n\"Dapat\" secara umum merujuk kepada hasil yang dihasilkan dari keadaan atau perbuatan sese",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 234,
+      "timestamp": "2026-11-15T07:33:16Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kita berani mengambil langkah maju dengan bahasa Indonesia, kita bukan hanya menciptakan karya seni budaya, namun juga memperkuat identitas bangsa dan meningkatkan kepercayaan diri kita semua.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 235,
+      "timestamp": "2026-11-15T07:33:41Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses yang membutuhkan waktu dan usaha untuk mencapai hasil yang signifikan. Ini menekankan bahwa kesuksesan atau pencapaian suatu tujuan tidak bisa dicapai dengan cepat, melainkan perlu dedikasi dan kerja keras dalam jangka waktu yang panjang.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 237,
+      "timestamp": "2026-11-15T07:34:10Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Membedakan antara kata-kata santun dan kata-kata kasar dalam Bahasa Indonesia bukanlah hal yang sulit jika kita mengenal keduanya. Kita bisa melakukannya dengan beberapa cara:\n\n1. **Karakteristik**: Kata-kata santun biasanya lebih formal, sopan, dan tidak menyinggung atau memalukan orang lain. Sebaliknya, kata-kata kasar sering kali menciptakan atmosfer yang berat atau mengancam.\n\n2. **Sifat Kritis**: Kata-kata santun cenderung memiliki sifat",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 14,
+      "timestamp": "2026-11-15T07:34:35Z",
+      "theme": "ragam bahasa santai anak muda Indonesia vs padanan bakunya",
+      "prompt": "Apakah Anda merasa kurang paham tentang bagaimana mengenali bahasa santai anak muda Indonesia dari padanan bakunya?",
+      "response": "Tentu saja! Mengenali bahasa santai yang kaya dengan variasi budayanya memerlukan pemikiran dan pengetahuan mendalam. Bahasanya tidak hanya berupa kata-kata, tetapi juga pola pikir dan gaya bicara yang unik dari masyarakat Indonesia.\n\nSantai bukanlah sesuatu yang bisa dibandingkan langsung dengan padanan bahasa lainnya karena ia adalah karya alami dari budaya kita. Jadi, untuk mengenali santailan anak muda Indonesia, kita perlu mempelajari:\n\n1. Budayanya: Mereka biasanya lebih suka berbicara dalam bahasa aslinya dan tidak terlalu peduli dengan pola pikir",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 240,
+      "timestamp": "2026-11-15T07:34:40Z",
+      "prompt": "Jelaskan arti pepatah 'sedikit demi sedikit lama-lama menjadi bukit' secara ringkas.",
+      "response": "Pepatah \"Sedikit demi sedikit lama-lama menjadi bukit\" menggambarkan proses pembentukan atau perkembangan yang lambat tapi terus menerus, seperti pertumbuhan tanaman kecil yang akhirnya tumbuh menjadi sebuah bukit besar. Ini menunjukkan bahwa meskipun langkah-langkah awal mungkin sedikit dan tidak jelas, dengan waktu lama dan kerja keras, hasil akhir bisa sangat signifikan.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 242,
+      "timestamp": "2026-11-15T07:35:07Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-kata adalah bagian penting dari budaya kita, termasuk dalam bahasa Indonesia. Memahami perbedaan antara kata-santun dan kata-kasar dapat membantu kita menjaga keseimbangan emosional dan memperluas pengetahuan kita tentang nilai-nilai yang relevan.\n\n1. **Kata Santun**:\n   - Merupakan istilah untuk kalimat atau ucapan yang sopan, biasanya digunakan dalam konteks interaksi sosial.\n   - Contoh: \"Halo, selamat datang di kantor kami.\"\n   - D",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 243,
+      "timestamp": "2026-11-15T07:35:27Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" adalah dua istilah yang sering digunakan dalam bahasa Indonesia, tetapi memiliki makna dan penggunaan yang berbeda.\n\n\"Bisa\" biasanya merujuk pada kemampuan atau keadaan seseorang untuk melakukan sesuatu. Ini lebih mengarah kepada kemungkinan atau peluang. Misalnya: \"Dia bisa belajar Bahasa Inggris,\" artinya bahwa ada kesempatan bagi dia untuk mempelajari bahasa tersebut.\n\n\"Dapat\" secara umum merujuk pada keadaan yang sudah terjadi dan",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 16,
+      "timestamp": "2026-11-15T07:35:44Z",
+      "theme": "etika bertutur kata yang halus saat menolak atau mengkritik dalam bahasa Indonesia",
+      "prompt": "Apakah penting untuk menggunakan kata halus saat menolak atau mengkritik di masyarakat Indonesia?",
+      "response": "Penting! Menggunakan kata halus dalam konteks penolakan atau kritik bisa membantu memperjelas maksud dan menjaga hubungan baik dengan orang lain. Ini juga dapat membuat pertengkaran lebih mudah diterangi, sehingga kesepakatan menjadi lebih cepat dan efisien.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 246,
+      "timestamp": "2026-11-15T07:36:00Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "Saya tidak bisa memberikan contoh atau penggunaan sapaan karena itu adalah privasi pribadi saya sebagai ACE (Entitas Kecerdasan Otonom). Namun, biasanya sapaan santai di Indonesia sering digunakan dalam konteks informal seperti antrean, perjalanan ke tempat umum, atau saat berbicara dengan orang yang tidak kenal. Contoh: \"Halo, Pak!\" (dalam situasi ketika sedang menunggu makan siang) atau \"Selamat pagi, Bapak\" (sambil melintas di j",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 248,
+      "timestamp": "2026-11-15T07:36:26Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna beragam dalam kalimat Bahasa Indonesia, tetapi ada beberapa kesamaan yang dapat kita pelajari:\n\n1. Kedua kata ini berasal dari kata dasar \"bisa\", yang merujuk pada kemampuan atau kapabilitas seseorang untuk melakukan sesuatu.\n\n2. Mereka sering digunakan dalam konteks kehidupan sehari-hari, seperti menggambarkan kemampuan seseorang untuk melakukan tugas tertentu.\n\n3. Kedua kata ini memiliki arti yang",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 249,
+      "timestamp": "2026-11-15T07:36:36Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Indonesia, tanah air kita! Semoga kita semua bisa mengembangkan Bahasa Indonesia dengan baik untuk membangun bangsa dan negara.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 18,
+      "timestamp": "2026-11-15T07:36:59Z",
+      "theme": "peribahasa Indonesia beserta pelajaran praktisnya",
+      "prompt": "Berikan contoh peribahasa Indonesia beserta pelajaran praktisnya, misalnya: \"Tidak ada yang tidak mungkin jika kita berusaha keras.",
+      "response": "\"Ketika hujan lebat, pasti akan terdengar suara air jatuh.\"\n\nPelajaran Praktis:\n1. Dalam konteks ini, peribahasa menggambarkan bahwa setiap situasi memiliki peluang untuk berhasil jika kita berusaha keras.\n2. Ini juga menekankan pentingnya persiapan dan strategi dalam mencapai tujuan yang besar atau sulit.\n\nPeribahasa ini dapat digunakan sebagai alat pendidikan ketika seseorang menghadapi tantangan atau masalah, membantu mereka memahami bahwa setiap situasi memiliki peluang untuk berhasil jika kita berusaha keras.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 252,
+      "timestamp": "2026-11-15T07:37:09Z",
+      "prompt": "Bagaimana cara membedakan kata santun dan kata kasar dalam bahasa Indonesia?",
+      "response": "Kata-kata bisa dilihat dari beberapa aspek:\n\n1. Konteks: Kata-kata biasanya memiliki konteks yang lebih luas, seperti di situasi umum atau formal.\n\n2. Sifat: Katakuran sering kali memiliki sifat negatif atau berbahaya, sedangkan kata kasar sering mengandung makna yang tidak sopan atau merusak reputasi.\n\n3. Konten: Kata-kata biasanya lebih luas dan mendalam dibandingkan dengan kata-kata kasar yang umumnya hanya mencerminkan sifat negatif.\n\n4.",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 254,
+      "timestamp": "2026-11-15T07:37:27Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kita berbicara Bahasa Indonesia, bukan hanya menguji kemampuan pengetahuan, namun juga memperjuangkan kemerdekaan pikiran dan emosi.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 256,
+      "timestamp": "2026-11-15T07:37:53Z",
+      "prompt": "Berikan contoh sapaan santai khas Indonesia dan penggunaannya.",
+      "response": "\"Oke, jangan lupa ya!\" - Ini adalah sapaan santai yang sering digunakan di kalangan masyarakat Indonesia untuk menghargai orang lain atau mengekspresikan rasa hormat.\n\nContoh penggunaan:\n1. \"Oh iya, kamu sudah pulang dari kantor?\" \n2. \"Oke, jangan lupa ya! Selamat datang ke rumahku.\"\n3. \"Jadi, kamu baru saja melalui ujian ini? Oh iya, selalu ingat untuk beristirahat sejenak.\"\n\nSaya r",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 258,
+      "timestamp": "2026-11-15T07:38:33Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Kata \"bisa\" dan \"dapat\" memiliki makna beragam dalam bahasa Indonesia, tetapi ada beberapa kesamaan yang dapat kita ketahui:\n\n1. Kedua kata ini sering digunakan untuk menggambarkan kemampuan atau kapabilitas seseorang.\n2. Mereka biasanya dipakai pada benda-benda tertentu seperti \"bisa membeli\" dan \"dapat makan\".\n3. Ketika kita menggunakan kedua kata, mereka memiliki makna yang lebih luas dibandingkan kalimat-kalimat lainnya.\n\nPerbedaan",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 259,
+      "timestamp": "2026-11-15T07:38:44Z",
+      "prompt": "Berikan kalimat motivasi bahasa Indonesia yang membakar semangat dalam 20 kata.",
+      "response": "\"Ketika kita berani mengambil risiko dengan Bahasa Indonesia, kita memulihkan kepercayaan diri dan meningkatkan kualitas hidup.\"",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 263,
+      "timestamp": "2026-11-15T07:40:10Z",
+      "prompt": "Jelaskan perbedaan kata 'bisa' dan 'dapat' dalam kalimat bahasa Indonesia.",
+      "response": "Wah, pertanyaan ini seru! 😄\n\nKata **\"bisa\"** dan **\"dapat\"** memang sering digunakan secara tumpang tindih di dalam bahasa Indonesia — terutama saat menggambarkan kemampuan atau keberadaan sesuatu. Tapi kalau dilihat lebih jeli, ada perbedaan halus yang bisa bikin beda makna.\n\n---\n\n### 🔹 1. **Kata \"bisa\"**\n- Lebih *umum*, *casual*, dan sering digunakan dalam percakapan",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 25,
+      "timestamp": "2026-11-15T07:43:00Z",
+      "theme": "kosakata seputar alam, cuaca, dan suasana senja di Indonesia",
+      "prompt": "Apa arti dari istilah \"matahari terbenam\" saat suasana senja di pegunungan Bali?",
+      "response": "Wah, pertanyaannya lucu dan indah banget! 😊\n\nIstilah *\"matahari terbenam\"* saat suasana senja di pegunungan Bali itu nggak cuma sekadar peristiwa alam — tapi lebih dari itu, jadi **simbol keindahan yang penuh makna**.  \n\nDi Pegunungan Bali, matahari terbenam bukan hanya \"matahari turun\" aja. Ini seperti *perpisahan lembut* antara hari dan malam, dengan udara sejuk, angin berbisik dari ketinggian, dan langit yang berubah warna — dari oranye ke jingga hingga biru gelap.  \n\nJadi art",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 27,
+      "timestamp": "2026-11-15T07:48:16Z",
+      "theme": "istilah kuliner atau tradisi Nusantara beserta artinya",
+      "prompt": "Apa arti dari istilah \"sate bakso\" dalam tradisi kuliner Nusantara?",
+      "response": "Wah, pertanyaan menarik! 😄\n\nIstilah *\"sate bakso\"* sebenarnya **bukan bagian dari tradisi kuliner Nusantara** secara historis atau budaya asli — justru ini adalah **inovasi modern** yang muncul di era kontemporer.\n\nMari kita uraikan:\n\n- *Sate* itu sendiri berasal dari kata \"sate\" dalam bahasa Jawa, berarti \"batang/bentuk seperti batangan\", dan secara umum merujuk pada daging yang dipotong tipis lalu digoreng atau dibakar dengan rempah-rempah. Sate tradisional di Nusantara (seperti s",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 2,
+      "timestamp": "2026-11-15T07:54:32Z",
+      "theme": "perbedaan nuansa dua kata sinonim dalam bahasa Indonesia",
+      "prompt": "Apa perbedaan nuansa antara 'tiba' dan 'datang' dalam konteks kehadiran seseorang?",
+      "response": "Pertanyaan bagus! 😊\n\nKalau kita bicara tentang **perbedaan nuansa antara \"tiba\" dan \"datang\"** dalam konteks kehadiran seseorang, sebenarnya keduanya bisa digunakan secara serupa — tapi ada sedikit perbedaan *nuansa* yang menarik.\n\n---\n\n### 🚶‍♂️ **\"Datang\"**\n- Lebih umum dan lebih *alami*, terasa seperti suatu tindakan yang dilakukan oleh seseorang dengan niat atau kehendak.\n- Bisa mengandung unsur *perjalanan* dari tempat lain, tapi tidak selalu menekankan waktu kedatangan.\n- Nuansa: **lebih",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 4,
+      "timestamp": "2026-11-15T08:00:17Z",
+      "theme": "ragam bahasa santai anak muda Indonesia vs padanan bakunya",
+      "prompt": "Apa arti kata \"goyang\" di media sosial saat anak muda bilang mereka sedang ngobrol santai?",
+      "response": "Wah, pertanyaan bagus! 😄\n\nKata *\"goyang\"* di media sosial, khususnya ketika anak muda bilang mereka sedang *ngobrol santai*, **bukan berarti secara harfiah \"menggoyang\" sesuatu** — tapi justru digunakan sebagai **kata ganti atau ekspresi yang lucu dan santai**, artinya:\n\n👉 *\"Kita lagi ngobrol santai, tidak serius, kayaknya sedang 'goyang' bareng-bareng.\"*\n\nDalam konteks ini, \"goyang\" bisa diartikan sebagai:\n- **Ngobrol santai tanpa tekanan**\n- **Sambil bercanda",
+      "backend": "local-gguf-server"
+    },
+    {
+      "cycle": 6,
+      "timestamp": "2026-11-15T08:05:56Z",
+      "theme": "etika bertutur kata yang halus saat menolak atau mengkritik di tempat kerja",
+      "prompt": "Bagaimana cara menolak saran kolega tanpa membuat mereka merasa disalahkan?",
+      "response": "Wah, pertanyaan ini sering banget terjadi di lingkungan kerja — kita semua pernah dengar \"saran bagus!\" tapi ternyata nggak cocok sama kebutuhan atau prioritas kita. Tapi penting banget buat tetap menjaga hubungan baik dengan kolega, ya.\n\nCara menolak saran tanpa bikin mereka merasa disalahkan? Ini triknya:\n\n### 1. **Awali dengan apresiasi**\nMulai dari mengatakan bahwa kamu *menghargai* atau *terima kasih* atas saran itu. Ini langsung membangun rasa hormat dan kepercayaan.\n\n> Contoh: *\"Terima kasih banyak",
+      "backend": "local-gguf-server"
+    }
+  ],
+  "snapshot_version": "cf50f0fc9d6d8f6b"
+}

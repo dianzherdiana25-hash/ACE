@@ -407,6 +407,13 @@ class ConversationalEngine:
         self.autonomy = AutonomyOrchestrator(store)
         self.speech = SpeechDevelopmentEngine(store)
         self.memory = ConversationalMemoryManager(store)
+        try:
+            import sys
+            if "unittest" not in sys.modules and "pytest" not in sys.modules:
+                from .memory_snapshot import import_snapshot_if_needed
+                import_snapshot_if_needed(store)
+        except Exception:
+            pass
 
     def _build_capabilities_reply(self, mode_label: str) -> str:
         active_skills = self.store.list_skills(active_only=True)

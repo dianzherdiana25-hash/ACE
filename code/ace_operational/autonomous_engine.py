@@ -300,6 +300,13 @@ class ContinuousAutonomousEngine:
         self.workspace = workspace or (Path.home() / ".local" / "share" / "ace" / "workspace")
         self.workspace.mkdir(parents=True, exist_ok=True)
         self.store = store or OperationalStore(workspace=self.workspace)
+        try:
+            from .memory_snapshot import import_snapshot_if_needed
+            seed_res = import_snapshot_if_needed(self.store)
+            if seed_res.get("applied"):
+                logger.info(f"[SeedSnapshot] Restored {seed_res.get('words_added', 0)} words & {seed_res.get('memories_added', 0)} memories from Git snapshot")
+        except Exception as exc:
+            logger.debug(f"Seed snapshot check skipped: {exc}")
         self.orchestrator = AutonomyOrchestrator(self.store)
         self.models = ModelRouter(self.store)
         self.tick_interval_seconds = tick_interval_seconds
