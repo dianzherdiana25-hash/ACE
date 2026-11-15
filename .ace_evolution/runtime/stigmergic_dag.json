@@ -75,8 +75,41 @@
       },
       "prev_chain_hash": "8968cdc3c6a2ca1f8dcd4caffc42baefc6a2032b16e1fe510c41ad0c71f59477",
       "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "7aab82c686647ae096b991bf5a09e4580af5dbc62ec16fb4ecdbb273dc59adfd",
+      "node_id": "proof_ratify_mission_mission-0002-memori-jangka-panjang",
+      "parent_ids": [
+        "proof_ratify_mission_mission-0001b-dialog-alami"
+      ],
+      "payload": {
+        "birth_sha256": "cb1a50a20800beae1f5c8d6b292a05408636594b05743eabaf0a7be945fc25aa",
+        "changed_files": [
+          "code/ace_operational/language.py",
+          "code/ace_operational/memory_bridge.py",
+          "code/ace_operational/story_projector.py",
+          "code/ace_operational/test_memory_bridge.py",
+          "code/ace_operational/web_server.py"
+        ],
+        "mission_type": "user_mission",
+        "order_id": "mission-0002-memori-jangka-panjang",
+        "post_hashes": {
+          "code/ace_operational/language.py": "213b9aaaa7440ba8a142a94af26534fc3407efc8e40412095a9e71970a622b62",
+          "code/ace_operational/memory_bridge.py": "11f730cad86168261a717398ede604766dfe056cc3dd7e1e1df656789fde9b5b",
+          "code/ace_operational/story_projector.py": "00f2da7339d5cb2bfce7fdb27d9cdf7ffb87138b7426c1fb44304d96deb1e097",
+          "code/ace_operational/test_memory_bridge.py": "5e90939ab0d66c9ec8447d8ee879f3876b5308f3bf72cd6be726fd11c7ab06b4",
+          "code/ace_operational/web_server.py": "13a0c55ee198df36dedcf0934469aebb1f780b12a58c996b3e142fbe0717de82"
+        },
+        "task_id": "ratify_mission_mission-0002-memori-jangka-panjang",
+        "title": "Memori Jangka Panjang ACE (Episodik, Semantik, Prosedural & Lupa Terukur)",
+        "verified": true
+      },
+      "prev_chain_hash": "90a7e61795ca760f3b90dd470651efc0032f3f79c8d3dbbe839181cfbe1c3609",
+      "weight": 1.0
     }
   ],
   "schema": "ace.stigmergic_dag.v1",
-  "tail_hash": "90a7e61795ca760f3b90dd470651efc0032f3f79c8d3dbbe839181cfbe1c3609"
+  "tail_hash": "7aab82c686647ae096b991bf5a09e4580af5dbc62ec16fb4ecdbb273dc59adfd"
 }

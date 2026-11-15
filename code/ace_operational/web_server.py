@@ -22,6 +22,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 
 from .autonomy_loop import AutonomyOrchestrator
 from .coding_loop import CodingAgentLoop
+from .cognitive_memory import NotFoundError
 from .language import ConversationalEngine
 from .models_backend import ModelRouter
 from .store import OperationalStore
@@ -615,6 +616,43 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
       font-size: 13px;
     }
 
+    .memory-card-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      border-radius: 12px;
+      background: var(--bg-primary);
+      border: 1px solid rgba(112, 221, 209, 0.22);
+      font-size: 12.5px;
+    }
+
+    .memory-kind-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(112, 221, 209, 0.16);
+      color: var(--accent-secondary);
+      font-weight: 700;
+      font-size: 11px;
+      margin-right: 6px;
+    }
+
+    .memory-forget-btn {
+      min-height: 36px;
+      padding: 4px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(248, 113, 113, 0.45);
+      background: rgba(248, 113, 113, 0.12);
+      color: #FCA5A5;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
     /* Reduced Motion Accessibility (WEB20) */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after, .avatar-svg, .chip-btn {
@@ -643,6 +681,9 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
       <span class="status-pill" id="badge-model">Model: lokal</span>
       <button type="button" class="status-pill speech-badge-btn" id="badge-speech" onclick="toggleSpeechDrawer()" aria-expanded="false">
         Bicara: Tahap 0/4
+      </button>
+      <button type="button" class="status-pill speech-badge-btn" id="badge-memory" onclick="toggleMemoryDrawer()" aria-expanded="false">
+        Memori: 0 aktif
       </button>
     </div>
   </header>
@@ -685,6 +726,52 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
     </form>
   </section>
 
+  <section class="speech-drawer hidden" id="memory-drawer" aria-label="Memori Jangka Panjang ACE">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <div>
+        <strong style="font-size:14px;">Memori Jangka Panjang ACE (Episodik, Semantik &amp; Prosedural)</strong>
+        <span id="memory-summary-meta" style="margin-left:8px;font-size:12px;color:var(--text-secondary);">Memuat audit rantai hash...</span>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button type="button" class="control-btn" onclick="sendQuickPrompt('Cek status memori')">Audit Rantai</button>
+        <button type="button" class="control-btn" onclick="toggleMemoryDrawer()">Tutup</button>
+      </div>
+    </div>
+    <form class="speech-teach-form" id="memory-filter-form" onsubmit="event.preventDefault(); refreshMemoryDrawer();">
+      <input type="text" id="memory-search-input" placeholder="Cari ingatan (mis. jadwal, nama, proyek)..." style="flex:1;min-width:200px;" />
+      <select id="memory-kind-filter" aria-label="Filter jenis memori" onchange="refreshMemoryDrawer()">
+        <option value="">Semua Jenis</option>
+        <option value="semantic">Semantik (Fakta)</option>
+        <option value="episodic">Episodik (Peristiwa)</option>
+        <option value="procedural">Prosedural (Langkah)</option>
+      </select>
+      <label style="font-size:12.5px;display:inline-flex;align-items:center;gap:4px;">
+        <input type="checkbox" id="memory-include-private" onchange="refreshMemoryDrawer()" /> Privat
+      </label>
+      <label style="font-size:12.5px;display:inline-flex;align-items:center;gap:4px;">
+        <input type="checkbox" id="memory-include-superseded" checked onchange="refreshMemoryDrawer()" /> Riwayat Ralat
+      </label>
+      <button type="submit" class="control-btn">Cari Memori</button>
+    </form>
+    <form class="speech-teach-form" id="memory-add-form" onsubmit="submitAddMemoryForm(event)">
+      <input type="text" id="memory-fact-input" placeholder="Tambah fakta baru (mis. Jadwal belanjaku tiap Minggu)" required style="flex:1;min-width:240px;" />
+      <label style="font-size:12.5px;display:inline-flex;align-items:center;gap:4px;">
+        <input type="checkbox" id="memory-private-checkbox" /> Simpan Privat
+      </label>
+      <button type="submit" class="control-btn">Simpan Memori</button>
+    </form>
+    <div class="speech-vocab-row">
+      <div class="speech-vocab-box">
+        <strong>Memori Aktif Terindeks</strong>
+        <div id="memory-active-list" style="margin-top:6px;color:var(--text-secondary);">Belum ada ingatan tersimpan.</div>
+      </div>
+      <div class="speech-vocab-box">
+        <strong>Riwayat Digantikan (`superseded`) &amp; Tombstone Lupa</strong>
+        <div id="memory-audit-list" style="margin-top:6px;color:var(--text-secondary);">Belum ada riwayat ralat atau tombstone.</div>
+      </div>
+    </div>
+  </section>
+
   <nav class="mobile-tabs" aria-label="Navigasi Ruang Kerja">
     <button type="button" class="tab-btn active" id="tab-ngobrol" onclick="switchMobileTab('ngobrol')">
       Ngobrol dengan ACE
@@ -723,6 +810,12 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
         </button>
         <button type="button" class="chip-btn" onclick="sendQuickPrompt('Latih skill berbicara bertahap')">
           Latih skill berbicara
+        </button>
+        <button type="button" class="chip-btn" onclick="sendQuickPrompt('Apa yang kamu ingat tentang aku?')">
+          Apa yang kamu ingat?
+        </button>
+        <button type="button" class="chip-btn" onclick="sendQuickPrompt('Cek status memori')">
+          Audit memori
         </button>
       </div>
 
@@ -1039,6 +1132,12 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
             document.getElementById("badge-speech").textContent =
               "Bicara: Tahap " + st.speech_profile.current_stage + "/4 (" + st.speech_profile.vocab_count + " kata)";
           }
+          if (st.memory_summary) {
+            const ms = st.memory_summary;
+            document.getElementById("badge-memory").textContent =
+              "Memori: " + ms.active_records + " aktif" +
+              (ms.superseded_records ? " • " + ms.superseded_records + " ralat" : "");
+          }
           if (st.active_task) {
             STATE.activeTaskId = st.active_task.task_id;
             document.getElementById("active-task-badge").textContent =
@@ -1241,6 +1340,189 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
       await refreshSpeechStudio();
     }
 
+    function toggleMemoryDrawer() {
+      const drawer = document.getElementById("memory-drawer");
+      const badge = document.getElementById("badge-memory");
+      const opening = drawer.classList.contains("hidden");
+      drawer.classList.toggle("hidden", !opening);
+      if (badge) badge.setAttribute("aria-expanded", opening ? "true" : "false");
+      if (opening) refreshMemoryDrawer();
+    }
+
+    function formatMemoryBodyText(rec) {
+      const c = rec.content || {};
+      if (rec.kind === "semantic") {
+        return (c.subject || "") + " (" + (c.predicate || "") + "): " + (c.object || "");
+      }
+      if (rec.kind === "procedural") {
+        return (c.name || "prosedur") + " [domain " + (c.domain || "-") + "]";
+      }
+      return c.event || ((c.task || "") + " -> " + (c.outcome || ""));
+    }
+
+    function renderMemoryActiveList(list) {
+      const box = document.getElementById("memory-active-list");
+      if (!box) return;
+      box.textContent = "";
+      if (!list || list.length === 0) {
+        box.textContent = "Belum ada ingatan aktif yang cocok.";
+        return;
+      }
+      list.slice(0, 20).forEach((rec) => {
+        const row = document.createElement("div");
+        row.className = "memory-card-item";
+        const left = document.createElement("div");
+        const tag = document.createElement("span");
+        tag.className = "memory-kind-tag";
+        tag.textContent = (rec.kind || "memori") + " • " + ((rec.source && rec.source.kind) || "operator");
+        left.appendChild(tag);
+        if (rec.sensitivity === "private") {
+          const priv = document.createElement("span");
+          priv.className = "memory-kind-tag";
+          priv.textContent = "PRIVAT";
+          left.appendChild(priv);
+        }
+        if (rec.negative_transfer_risk) {
+          const risk = document.createElement("span");
+          risk.className = "memory-kind-tag";
+          risk.textContent = "RISIKO TRANSFER NEGATIF";
+          left.appendChild(risk);
+        }
+        if (rec.stale) {
+          const stale = document.createElement("span");
+          stale.className = "memory-kind-tag";
+          stale.textContent = "USANG";
+          left.appendChild(stale);
+        }
+        const body = document.createElement("div");
+        body.style.color = "var(--text-primary)";
+        body.style.marginTop = "4px";
+        body.textContent = formatMemoryBodyText(rec);
+        left.appendChild(body);
+        row.appendChild(left);
+
+        const fBtn = document.createElement("button");
+        fBtn.type = "button";
+        fBtn.className = "memory-forget-btn";
+        fBtn.textContent = "Lupakan";
+        fBtn.onclick = () => forgetMemoryRecord(rec.id);
+        row.appendChild(fBtn);
+        box.appendChild(row);
+      });
+    }
+
+    function renderMemoryAuditList(snap) {
+      const box = document.getElementById("memory-audit-list");
+      if (!box) return;
+      box.textContent = "";
+      const sup = snap.superseded_records || [];
+      const tombs = snap.tombstones || [];
+      if (sup.length === 0 && tombs.length === 0) {
+        box.textContent = "Belum ada riwayat ralat atau tombstone.";
+        return;
+      }
+      sup.slice(0, 10).forEach((rec) => {
+        const row = document.createElement("div");
+        row.className = "memory-card-item";
+        const info = document.createElement("div");
+        info.textContent = "[DIGANTIKAN] " + formatMemoryBodyText(rec);
+        row.appendChild(info);
+        box.appendChild(row);
+      });
+      tombs.slice(0, 10).forEach((tb) => {
+        const row = document.createElement("div");
+        row.className = "memory-card-item";
+        const info = document.createElement("div");
+        info.textContent = "[TOMBSTONE] " + tb.record_id + " • alasan: " + (tb.reason || "-");
+        row.appendChild(info);
+        box.appendChild(row);
+      });
+    }
+
+    async function refreshMemoryDrawer() {
+      try {
+        const q = (document.getElementById("memory-search-input") || {}).value || "";
+        const kindVal = (document.getElementById("memory-kind-filter") || {}).value || "";
+        const incPriv = Boolean((document.getElementById("memory-include-private") || {}).checked);
+        const incSup = Boolean((document.getElementById("memory-include-superseded") || {}).checked);
+        const qs = "?include_private=" + (incPriv ? "1" : "0") + "&include_superseded=" + (incSup ? "1" : "0");
+        const [snapRes, recRes] = await Promise.all([
+          fetch("/api/memory" + qs),
+          fetch("/api/memory/recall", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              query: q.trim(),
+              kinds: kindVal ? [kindVal] : null,
+              include_private: incPriv,
+              include_superseded: false,
+              limit: 25,
+            }),
+          }),
+        ]);
+        if (!snapRes.ok) return;
+        const snap = await snapRes.json();
+        const recallData = recRes.ok ? await recRes.json() : { results: snap.active_records || [] };
+        const a = snap.audit || {};
+        const meta = document.getElementById("memory-summary-meta");
+        if (meta) {
+          meta.textContent =
+            "Rantai: " + (a.chain_ok ? "VALID" : "RUSAK") +
+            " • " + (a.active_records || 0) + " aktif" +
+            " • " + (a.superseded_records || 0) + " digantikan" +
+            " • " + ((a.tombstones && a.tombstones.length) || 0) + " tombstone" +
+            " • " + (a.anchored_evidence || 0) + " bukti";
+        }
+        renderMemoryActiveList(recallData.results || []);
+        renderMemoryAuditList(snap);
+      } catch (err) {
+        console.warn("Gagal memuat /api/memory:", err);
+      }
+    }
+
+    async function submitAddMemoryForm(e) {
+      e.preventDefault();
+      const fInput = document.getElementById("memory-fact-input");
+      const pBox = document.getElementById("memory-private-checkbox");
+      const text = fInput.value.trim();
+      if (!text) return;
+      const res = await fetch("/api/memory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: text,
+          sensitivity: pBox && pBox.checked ? "private" : "internal",
+        }),
+      });
+      if (res.ok) {
+        fInput.value = "";
+        if (pBox) pBox.checked = false;
+        await refreshMemoryDrawer();
+        await refreshStatusAndHistory();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        appendSystemNotice("Gagal menyimpan memori: " + (err.error || "HTTP " + res.status), true);
+      }
+    }
+
+    async function forgetMemoryRecord(recordId) {
+      const res = await fetch("/api/memory/forget", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          record_id: recordId,
+          reason: "dihapus pengguna lewat Web Studio",
+        }),
+      });
+      if (res.ok) {
+        await refreshMemoryDrawer();
+        await refreshStatusAndHistory();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        appendSystemNotice("Gagal melupakan memori: " + (err.error || "HTTP " + res.status), true);
+      }
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
       const chatInput = document.getElementById("chat-input");
       if (chatInput) {
@@ -1257,6 +1539,10 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
         const drawer = document.getElementById("speech-drawer");
         if (drawer && !drawer.classList.contains("hidden")) {
           refreshSpeechStudio();
+        }
+        const memDrawer = document.getElementById("memory-drawer");
+        if (memDrawer && !memDrawer.classList.contains("hidden")) {
+          refreshMemoryDrawer();
         }
       }, 4000);
     });
@@ -1328,9 +1614,15 @@ class ACEWebCore:
             "gaps_open": len(self.store.list_gaps(status="OPEN")),
             "skills_active": len(self.store.list_skills(active_only=True)),
             "speech_profile": self.chat_engine.speech.get_profile(),
+            "memory_summary": self.chat_engine.memory.get_summary(),
         }
 
-    def dispatch_readonly_get(self, path: str) -> dict[str, Any] | None:
+    def dispatch_readonly_get(
+        self,
+        path: str,
+        qs: dict[str, list[str]] | None = None,
+    ) -> dict[str, Any] | None:
+        query_params = qs or {}
         if path == "/api/gaps":
             return {"gaps": self.store.list_gaps(), "frontier": self.store.list_frontier()}
         if path == "/api/skills":
@@ -1341,6 +1633,15 @@ class ACEWebCore:
             return {"experiments": self.store.list_experiments()}
         if path == "/api/speech":
             return self.chat_engine.speech.get_profile(include_vocab=True)
+        if path == "/api/memory":
+            inc_priv = (query_params.get("include_private") or ["0"])[0] in ("1", "true", "yes")
+            inc_sup = (query_params.get("include_superseded") or ["1"])[0] in ("1", "true", "yes")
+            return self.chat_engine.memory.list_snapshot(
+                include_private=inc_priv,
+                include_superseded=inc_sup,
+            )
+        if path == "/api/memory/audit":
+            return self.chat_engine.memory.audit_report()
         return None
 
     def control_task(self, task_id: str, action: str) -> dict[str, Any]:
@@ -1427,6 +1728,89 @@ class ACEWebCore:
         res["story_cards"] = [e for e in reversed(events) if e.get("story_text")]
         res["avatar_state"] = self.get_status_payload()["avatar_state"]
         return int(HTTPStatus.OK), res
+
+    def dispatch_memory_post(self, path: str, body: dict[str, Any]) -> tuple[int, dict[str, Any]] | None:
+        """Handle persistent CognitiveMemory REST endpoints safely."""
+        if path == "/api/memory":
+            text = str(body.get("text", "")).strip()
+            if not text:
+                return int(HTTPStatus.BAD_REQUEST), {"error": "Teks memori tidak boleh kosong"}
+            sensitivity = str(body.get("sensitivity") or "internal").strip().lower()
+            if sensitivity not in ("internal", "private"):
+                return int(HTTPStatus.BAD_REQUEST), {"error": "Nilai sensitivity harus 'internal' atau 'private'"}
+            res = self.chat_engine.memory.remember_statement(
+                text,
+                source_kind="operator",
+                sensitivity=sensitivity,
+            )
+            if not res.get("stored"):
+                return int(HTTPStatus.BAD_REQUEST), {"error": res.get("reason", "gagal menyimpan memori")}
+            return int(HTTPStatus.OK), {**res, "summary": self.chat_engine.memory.get_summary()}
+
+        if path == "/api/memory/recall":
+            kinds = body.get("kinds")
+            if kinds is not None and not isinstance(kinds, list):
+                kinds = [str(kinds)]
+            try:
+                limit = max(1, min(100, int(body.get("limit", 10) or 10)))
+                budget = max(50, min(20000, int(body.get("token_budget", 2000) or 2000)))
+            except (TypeError, ValueError):
+                return int(HTTPStatus.BAD_REQUEST), {"error": "Parameter limit/token_budget harus berupa angka"}
+            res = self.chat_engine.memory.recall_memories(
+                str(body.get("query", "")),
+                kinds=kinds,
+                context=body.get("context"),
+                limit=limit,
+                token_budget=budget,
+                include_private=bool(body.get("include_private", False)),
+                include_superseded=bool(body.get("include_superseded", False)),
+            )
+            return int(HTTPStatus.OK), res
+
+        if path == "/api/memory/forget":
+            record_id = str(body.get("record_id") or "").strip()
+            query = str(body.get("query") or "").strip()
+            reason = str(body.get("reason") or "diminta pengguna lewat API").strip()
+            if record_id:
+                try:
+                    return int(HTTPStatus.OK), self.chat_engine.memory.forget_by_id(record_id, reason=reason)
+                except NotFoundError:
+                    return int(HTTPStatus.NOT_FOUND), {"error": f"Memori tidak ditemukan: {record_id}"}
+            if query:
+                return int(HTTPStatus.OK), self.chat_engine.memory.forget_by_query(query, reason=reason)
+            return int(HTTPStatus.BAD_REQUEST), {"error": "Sertakan 'record_id' atau 'query' untuk melupakan memori"}
+
+        return None
+
+    def dispatch_post(self, path: str, body: dict[str, Any]) -> tuple[int, dict[str, Any]]:
+        """Route POST JSON requests cleanly across chat, task control, heartbeat, and memory."""
+        if path == "/api/chat":
+            return self.handle_chat_post(body)
+
+        if path.startswith("/api/tasks/") and path.endswith("/control"):
+            mid = path[len("/api/tasks/") : -len("/control")].strip("/")
+            action = str(body.get("action", "")).strip()
+            try:
+                return int(HTTPStatus.OK), self.control_task(mid, action)
+            except KeyError as exc:
+                return int(HTTPStatus.NOT_FOUND), {"error": str(exc)}
+            except ValueError as exc:
+                return int(HTTPStatus.BAD_REQUEST), {"error": str(exc)}
+
+        if path == "/api/heartbeat":
+            ev = self.store.emit_event(
+                kind="heartbeat",
+                status="ACTIVE",
+                summary_code="daemon_heartbeat",
+                technical_detail={"note": "detak jantung rutin"},
+            )
+            return int(HTTPStatus.OK), {"heartbeat": ev}
+
+        mem_res = self.dispatch_memory_post(path, body)
+        if mem_res is not None:
+            return mem_res
+
+        return int(HTTPStatus.NOT_FOUND), {"error": f"Route POST tidak ditemukan: {path}"}
 
 
 def create_http_handler(core: ACEWebCore):
@@ -1554,7 +1938,7 @@ def create_http_handler(core: ACEWebCore):
                 self.wfile.write(raw)
                 return
 
-            extra = core.dispatch_readonly_get(path)
+            extra = core.dispatch_readonly_get(path, qs)
             if extra is not None:
                 self._send_json(extra)
                 return
@@ -1570,34 +1954,8 @@ def create_http_handler(core: ACEWebCore):
                 self._send_json({"error": f"JSON tidak valid: {exc}"}, status=HTTPStatus.BAD_REQUEST)
                 return
 
-            if path == "/api/chat":
-                status_code, payload = core.handle_chat_post(body)
-                self._send_json(payload, status=status_code)
-                return
-
-            if path.startswith("/api/tasks/") and path.endswith("/control"):
-                mid = path[len("/api/tasks/") : -len("/control")].strip("/")
-                action = str(body.get("action", "")).strip()
-                try:
-                    res = core.control_task(mid, action)
-                    self._send_json(res)
-                except KeyError as exc:
-                    self._send_json({"error": str(exc)}, status=HTTPStatus.NOT_FOUND)
-                except ValueError as exc:
-                    self._send_json({"error": str(exc)}, status=HTTPStatus.BAD_REQUEST)
-                return
-
-            if path == "/api/heartbeat":
-                ev = core.store.emit_event(
-                    kind="heartbeat",
-                    status="ACTIVE",
-                    summary_code="daemon_heartbeat",
-                    technical_detail={"note": "detak jantung rutin"},
-                )
-                self._send_json({"heartbeat": ev})
-                return
-
-            self._send_json({"error": f"Route POST tidak ditemukan: {path}"}, status=HTTPStatus.NOT_FOUND)
+            status_code, payload = core.dispatch_post(path, body)
+            self._send_json(payload, status=status_code)
 
     return ACEHTTPRequestHandler
 

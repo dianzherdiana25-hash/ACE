@@ -14,11 +14,12 @@
         "skill_id": "core_stage2_guard"
       }
     ],
-    "cycle_count": 2,
-    "health_score": 0.7,
+    "cycle_count": 3,
+    "health_score": 0.8,
     "processed_task_ids": [
       "ratify_mission_mission-0001-skill-berbicara",
-      "ratify_mission_mission-0001b-dialog-alami"
+      "ratify_mission_mission-0001b-dialog-alami",
+      "ratify_mission_mission-0002-memori-jangka-panjang"
     ],
     "quarantined_faults": 0,
     "unhandled_crashes": 0
@@ -99,9 +100,42 @@
       },
       "prev_chain_hash": "8968cdc3c6a2ca1f8dcd4caffc42baefc6a2032b16e1fe510c41ad0c71f59477",
       "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "7aab82c686647ae096b991bf5a09e4580af5dbc62ec16fb4ecdbb273dc59adfd",
+      "node_id": "proof_ratify_mission_mission-0002-memori-jangka-panjang",
+      "parent_ids": [
+        "proof_ratify_mission_mission-0001b-dialog-alami"
+      ],
+      "payload": {
+        "birth_sha256": "cb1a50a20800beae1f5c8d6b292a05408636594b05743eabaf0a7be945fc25aa",
+        "changed_files": [
+          "code/ace_operational/language.py",
+          "code/ace_operational/memory_bridge.py",
+          "code/ace_operational/story_projector.py",
+          "code/ace_operational/test_memory_bridge.py",
+          "code/ace_operational/web_server.py"
+        ],
+        "mission_type": "user_mission",
+        "order_id": "mission-0002-memori-jangka-panjang",
+        "post_hashes": {
+          "code/ace_operational/language.py": "213b9aaaa7440ba8a142a94af26534fc3407efc8e40412095a9e71970a622b62",
+          "code/ace_operational/memory_bridge.py": "11f730cad86168261a717398ede604766dfe056cc3dd7e1e1df656789fde9b5b",
+          "code/ace_operational/story_projector.py": "00f2da7339d5cb2bfce7fdb27d9cdf7ffb87138b7426c1fb44304d96deb1e097",
+          "code/ace_operational/test_memory_bridge.py": "5e90939ab0d66c9ec8447d8ee879f3876b5308f3bf72cd6be726fd11c7ab06b4",
+          "code/ace_operational/web_server.py": "13a0c55ee198df36dedcf0934469aebb1f780b12a58c996b3e142fbe0717de82"
+        },
+        "task_id": "ratify_mission_mission-0002-memori-jangka-panjang",
+        "title": "Memori Jangka Panjang ACE (Episodik, Semantik, Prosedural & Lupa Terukur)",
+        "verified": true
+      },
+      "prev_chain_hash": "90a7e61795ca760f3b90dd470651efc0032f3f79c8d3dbbe839181cfbe1c3609",
+      "weight": 1.0
     }
   ],
-  "dag_tail_hash": "90a7e61795ca760f3b90dd470651efc0032f3f79c8d3dbbe839181cfbe1c3609",
+  "dag_tail_hash": "7aab82c686647ae096b991bf5a09e4580af5dbc62ec16fb4ecdbb273dc59adfd",
   "ratification": {
     "audience": [
       "kernel"
@@ -109,5 +143,5 @@
     "type": "internal_ratification"
   },
   "schema": "ace.substrate_spore.v1",
-  "spore_sha256": "75916b9a03e08532399ae6a2bc64d152393777d37222ede26713b8d8410f8c05"
+  "spore_sha256": "1856026714dfd9d4517c3523937ca98efacd035be49f0be8346ee5755f88208a"
 }

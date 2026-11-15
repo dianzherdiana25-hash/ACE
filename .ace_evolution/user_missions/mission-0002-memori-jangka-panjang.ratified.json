@@ -1,0 +1,59 @@
+{
+  "accepted": true,
+  "changed_files": [
+    "code/ace_operational/language.py",
+    "code/ace_operational/memory_bridge.py",
+    "code/ace_operational/story_projector.py",
+    "code/ace_operational/test_memory_bridge.py",
+    "code/ace_operational/web_server.py"
+  ],
+  "check_results": [
+    {
+      "command": "PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_memory_bridge -v",
+      "output_tail": "mory) ... ok\ntest_privacy_bounds_and_audited_tombstone_forgetting (ace_operational.test_memory_bridge.MemoryBridgeTests.test_privacy_bounds_and_audited_tombstone_forgetting) ... ok\ntest_task_episode_evidence_procedural_and_negative_transfer (ace_operational.test_memory_bridge.MemoryBridgeTests.test_task_episode_evidence_procedural_and_negative_transfer) ... ok\ntest_web_studio_memory_rest_api_and_ui (ace_operational.test_memory_bridge.MemoryBridgeTests.test_web_studio_memory_rest_api_and_ui) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 2.084s\n\nOK",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_cognitive_memory -v",
+      "output_tail": "_restart_task_recall) ... ok\ntest_kinds_are_recallable_separately (ace_operational.test_cognitive_memory.RecallTests.test_kinds_are_recallable_separately) ... ok\ntest_expired_records_leave_recall_but_stay_in_audit (ace_operational.test_cognitive_memory.RetentionTests.test_expired_records_leave_recall_but_stay_in_audit) ... ok\ntest_forgetting_destroys_content_and_leaves_a_tombstone (ace_operational.test_cognitive_memory.RetentionTests.test_forgetting_destroys_content_and_leaves_a_tombstone) ... ok\n\n----------------------------------------------------------------------\nRan 14 tests in 0.108s\n\nOK",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_speech_acquisition -v",
+      "output_tail": "chema_migration_and_web_speech_drawer (ace_operational.test_speech_acquisition.SpeechAcquisitionTests.test_v3_legacy_schema_migration_and_web_speech_drawer) ... ok\ntest_v4_natural_casual_conversation_stage0_and_stage4 (ace_operational.test_speech_acquisition.SpeechAcquisitionTests.test_v4_natural_casual_conversation_stage0_and_stage4) ... ok\ntest_v4_web_studio_natural_ui_and_chat_api (ace_operational.test_speech_acquisition.SpeechAcquisitionTests.test_v4_web_studio_natural_ui_and_chat_api) ... ok\n\n----------------------------------------------------------------------\nRan 13 tests in 6.180s\n\nOK",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_edition4_acceptance -v",
+      "output_tail": "ce.Edition4IntegratedAcceptanceTests.test_g08_cold_subprocess_crash_recovery_and_execution) ... ok\ntest_inst01_to_inst24_installer_profiles_idempotency_rollback_and_cli (ace_operational.test_edition4_acceptance.Edition4IntegratedAcceptanceTests.test_inst01_to_inst24_installer_profiles_idempotency_rollback_and_cli) ... ok\ntest_web01_to_web24_anime_localhost_ui_and_api (ace_operational.test_edition4_acceptance.Edition4IntegratedAcceptanceTests.test_web01_to_web24_anime_localhost_ui_and_api) ... ok\n\n----------------------------------------------------------------------\nRan 21 tests in 10.307s\n\nOK",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "command": "/usr/bin/python3 tools/verify_sources.py",
+      "output_tail": "PASS: 25 imported files match their recorded Git blob IDs (offline)",
+      "passed": true,
+      "returncode": 0
+    }
+  ],
+  "dag_chain_valid": true,
+  "dag_tick_status": "tactical_verified",
+  "forgetting_count": 0,
+  "order_id": "mission-0002-memori-jangka-panjang",
+  "parent_ids": [
+    "proof_ratify_mission_mission-0001b-dialog-alami"
+  ],
+  "post_hashes": {
+    "code/ace_operational/language.py": "213b9aaaa7440ba8a142a94af26534fc3407efc8e40412095a9e71970a622b62",
+    "code/ace_operational/memory_bridge.py": "11f730cad86168261a717398ede604766dfe056cc3dd7e1e1df656789fde9b5b",
+    "code/ace_operational/story_projector.py": "00f2da7339d5cb2bfce7fdb27d9cdf7ffb87138b7426c1fb44304d96deb1e097",
+    "code/ace_operational/test_memory_bridge.py": "5e90939ab0d66c9ec8447d8ee879f3876b5308f3bf72cd6be726fd11c7ab06b4",
+    "code/ace_operational/web_server.py": "13a0c55ee198df36dedcf0934469aebb1f780b12a58c996b3e142fbe0717de82"
+  },
+  "schema": "ace.user_mission_verify.v1",
+  "spore_sha256": "1856026714dfd9d4517c3523937ca98efacd035be49f0be8346ee5755f88208a",
+  "status": "VERIFIED_AND_RATIFIED"
+}

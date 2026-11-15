@@ -1,7 +1,7 @@
 {
   "completed_finding_keys": {},
   "generation_seq": 1,
-  "ratified_count": 4,
+  "ratified_count": 5,
   "ratified_history": [
     {
       "changed_files": [
@@ -71,6 +71,19 @@
       "order_id": "mission-0001b-dialog-alami",
       "resolution_note": "user_mission_verified",
       "spore_sha256": "75916b9a03e08532399ae6a2bc64d152393777d37222ede26713b8d8410f8c05"
+    },
+    {
+      "changed_files": [
+        "code/ace_operational/language.py",
+        "code/ace_operational/memory_bridge.py",
+        "code/ace_operational/story_projector.py",
+        "code/ace_operational/test_memory_bridge.py",
+        "code/ace_operational/web_server.py"
+      ],
+      "mission_type": "user_mission",
+      "order_id": "mission-0002-memori-jangka-panjang",
+      "resolution_note": "user_mission_verified",
+      "spore_sha256": "1856026714dfd9d4517c3523937ca98efacd035be49f0be8346ee5755f88208a"
     }
   ],
   "ratified_user_missions": [
@@ -191,9 +204,30 @@
       },
       "spore_sha256": "75916b9a03e08532399ae6a2bc64d152393777d37222ede26713b8d8410f8c05",
       "title": "Dialog Alami & Perbaikan Obrolan Web/Termux (Misi 0001b)"
+    },
+    {
+      "changed_files": [
+        "code/ace_operational/language.py",
+        "code/ace_operational/memory_bridge.py",
+        "code/ace_operational/story_projector.py",
+        "code/ace_operational/test_memory_bridge.py",
+        "code/ace_operational/web_server.py"
+      ],
+      "forgetting_count": 0,
+      "mission_seq": 3,
+      "order_id": "mission-0002-memori-jangka-panjang",
+      "post_hashes": {
+        "code/ace_operational/language.py": "213b9aaaa7440ba8a142a94af26534fc3407efc8e40412095a9e71970a622b62",
+        "code/ace_operational/memory_bridge.py": "11f730cad86168261a717398ede604766dfe056cc3dd7e1e1df656789fde9b5b",
+        "code/ace_operational/story_projector.py": "00f2da7339d5cb2bfce7fdb27d9cdf7ffb87138b7426c1fb44304d96deb1e097",
+        "code/ace_operational/test_memory_bridge.py": "5e90939ab0d66c9ec8447d8ee879f3876b5308f3bf72cd6be726fd11c7ab06b4",
+        "code/ace_operational/web_server.py": "13a0c55ee198df36dedcf0934469aebb1f780b12a58c996b3e142fbe0717de82"
+      },
+      "spore_sha256": "1856026714dfd9d4517c3523937ca98efacd035be49f0be8346ee5755f88208a",
+      "title": "Memori Jangka Panjang ACE (Episodik, Semantik, Prosedural & Lupa Terukur)"
     }
   ],
   "rejected_count": 0,
   "schema": "ace.passive_evolution_state.v1",
-  "user_mission_seq": 2
+  "user_mission_seq": 3
 }

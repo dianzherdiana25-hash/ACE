@@ -21,6 +21,7 @@ from typing import Any
 
 from .autonomy_loop import AutonomyOrchestrator
 from .coding_loop import CodingAgentLoop
+from .memory_bridge import ConversationalMemoryManager, classify_memory_intent
 from .models_backend import ModelRouter
 from .speech_acquisition import (
     SpeechDevelopmentEngine,
@@ -42,6 +43,10 @@ class Intent(str, Enum):
     SELECT_OPTION = "SELECT_OPTION"
     MODIFY_PREVIOUS_ARTIFACT = "MODIFY_PREVIOUS_ARTIFACT"
     LEARN_AND_SOLVE = "LEARN_AND_SOLVE"
+    MEMORY_STORE = "MEMORY_STORE"
+    MEMORY_RECALL = "MEMORY_RECALL"
+    MEMORY_FORGET = "MEMORY_FORGET"
+    MEMORY_AUDIT = "MEMORY_AUDIT"
     LEARN_LANGUAGE = "LEARN_LANGUAGE"
     TRAIN_SPEECH = "TRAIN_SPEECH"
     TEACH_WORD = "TEACH_WORD"
@@ -212,6 +217,70 @@ def _classify_greeting_or_capability(
     return None
 
 
+def _make_base_frame(
+    intent: str | Intent,
+    norm: str,
+    constraints: list[str],
+    offline_requested: bool,
+    *,
+    side_effects: bool,
+    **extra: Any,
+) -> dict[str, Any]:
+    return {
+        "intent": intent,
+        "normalized_text": norm,
+        "constraints": constraints,
+        "offline_requested": offline_requested,
+        "side_effects_allowed": side_effects,
+        **extra,
+    }
+
+
+def _classify_task_control_intent(
+    lower: str,
+    norm: str,
+    constraints: list[str],
+    offline_requested: bool,
+) -> dict[str, Any] | None:
+    if any(p in lower for p in ("apakah kamu sudah sadar", "punya kesadaran", "apakah ace sadar", "apakah kamu hidup")):
+        return _make_base_frame("CONSCIOUSNESS_INQUIRY", norm, constraints, offline_requested, side_effects=False)
+
+    if (
+        any(p in lower for p in ("jelaskan dulu", "rencananya dulu", "jelaskan saja"))
+        and any(p in lower for p in ("jangan kerjakan", "jangan ubah", "jangan buat dulu", "jangan jalankan"))
+    ) or "jangan kerjakan dulu" in lower:
+        return _make_base_frame("EXPLAIN_ONLY", norm, constraints, offline_requested, side_effects=False)
+
+    if any(p in lower for p in ("sekarang kerjakan", "oke kerjakan", "jalankan rencana tadi", "kerjakan rencana tadi", "langsung kerjakan")):
+        return _make_base_frame("EXECUTE_PREVIOUS_PLAN", norm, constraints, offline_requested, side_effects=True)
+
+    if any(p in lower for p in ("hentikan dulu", "hentikan tugas", "stop dulu", "jeda dulu", "batalkan tugas")):
+        return _make_base_frame("STOP_OR_PAUSE", norm, constraints, offline_requested, side_effects=False)
+
+    if lower in ("lanjutkan", "lanjut", "lanjutkan tugas", "lanjutkan yang tadi") or any(
+        p in lower for p in ("lanjutkan tugas", "lanjutkan dari checkpoint", "terusin yang tadi")
+    ):
+        return _make_base_frame("RESUME_TASK", norm, constraints, offline_requested, side_effects=True)
+
+    if _is_status_check_query(lower):
+        return _make_base_frame("STATUS_CHECK", norm, constraints, offline_requested, side_effects=False)
+
+    if any(p in lower for p in ("yang kedua", "opsi kedua", "pilihan kedua", "opsi 2", "nomor 2", "yang pertama", "opsi 1")):
+        choice_idx = 2 if any(k in lower for k in ("kedua", "2")) else 1
+        return _make_base_frame("SELECT_OPTION", norm, constraints, offline_requested, side_effects=True, choice_index=choice_idx)
+
+    if any(p in lower for p in ("yang tadi", "bukan mingguan", "maksudku bulanan", "tambah kategorinya", "tambahkan kategori", "ubah jadi bulanan", "ganti jadi bulanan")):
+        return _make_base_frame(
+            "MODIFY_PREVIOUS_ARTIFACT", norm, constraints, offline_requested, side_effects=True,
+            add_categories="kategori" in lower,
+            period_override="bulanan" if "bulanan" in lower else ("mingguan" if "mingguan" in lower else ""),
+        )
+
+    if any(p in lower for p in ("pelajari dulu", "belajar dulu", "kalau belum bisa")):
+        return _make_base_frame("LEARN_AND_SOLVE", norm, constraints, offline_requested, side_effects=True)
+    return None
+
+
 def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | None = None) -> dict[str, Any]:
     """Classify a user message into a structured Indonesian intent frame."""
     ctx = conversation_context or {}
@@ -229,146 +298,27 @@ def classify_intent_frame(raw_text: str, conversation_context: dict[str, Any] | 
     if any(p in lower for p in ("tanpa ubah perilaku", "jangan ubah perilaku", "perilaku tetap sama")):
         constraints.append("preserve_behavior")
 
-    # 1. Consciousness / Self-Model Inquiry (`A63`)
-    if any(p in lower for p in ("apakah kamu sudah sadar", "punya kesadaran", "apakah ace sadar", "apakah kamu hidup")):
-        return {
-            "intent": "CONSCIOUSNESS_INQUIRY",
-            "normalized_text": norm,
-            "constraints": constraints,
-            "offline_requested": offline_requested,
-            "side_effects_allowed": False,
-        }
+    ctrl_hit = _classify_task_control_intent(lower, norm, constraints, offline_requested)
+    if ctrl_hit is not None:
+        return ctrl_hit
 
-    # 2. Explain-only negation (`A08`: "jelaskan dulu, jangan kerjakan")
-    if (
-        any(p in lower for p in ("jelaskan dulu", "rencananya dulu", "jelaskan saja"))
-        and any(p in lower for p in ("jangan kerjakan", "jangan ubah", "jangan buat dulu", "jangan jalankan"))
-    ) or "jangan kerjakan dulu" in lower:
-        return {
-            "intent": "EXPLAIN_ONLY",
-            "normalized_text": norm,
-            "constraints": constraints,
-            "offline_requested": offline_requested,
-            "side_effects_allowed": False,
-        }
+    mem_hit = classify_memory_intent(raw_text, norm, constraints, offline_requested, conversation_context=ctx)
+    if mem_hit is not None:
+        return mem_hit
 
-    # 3. Execute prior explained plan (`A09`: "sekarang kerjakan")
-    if any(
-        p in lower
-        for p in ("sekarang kerjakan", "oke kerjakan", "jalankan rencana tadi", "kerjakan rencana tadi", "langsung kerjakan")
-    ):
-        return {
-            "intent": "EXECUTE_PREVIOUS_PLAN",
-            "normalized_text": norm,
-            "constraints": constraints,
-            "offline_requested": offline_requested,
-            "side_effects_allowed": True,
-        }
-
-    # 4. Stop / Pause (`A11`: "hentikan dulu")
-    if any(p in lower for p in ("hentikan dulu", "hentikan tugas", "stop dulu", "jeda dulu", "batalkan tugas")):
-        return {
-            "intent": "STOP_OR_PAUSE",
-            "normalized_text": norm,
-            "constraints": constraints,
-            "offline_requested": offline_requested,
-            "side_effects_allowed": False,
-        }
-
-    # 5. Resume (`A12`: "lanjutkan")
-    if lower in ("lanjutkan", "lanjut", "lanjutkan tugas", "lanjutkan yang tadi") or any(
-        p in lower for p in ("lanjutkan tugas", "lanjutkan dari checkpoint", "terusin yang tadi")
-    ):
-        return {
-            "intent": "RESUME_TASK",
-            "normalized_text": norm,
-            "constraints": constraints,
-            "offline_requested": offline_requested,
-            "side_effects_allowed": True,
-        }
-
-    # 6. Status check (`A10`: "udah sampai mana?")
-    if _is_status_check_query(lower):
-        return {
-            "intent": "STATUS_CHECK",
-            "normalized_text": norm,
-            "constraints": constraints,
-            "offline_requested": offline_requested,
-            "side_effects_allowed": False,
-        }
-
-    # 7. Option selection (`A14`: "yang kedua saja", "pilih opsi 2")
-    if any(p in lower for p in ("yang kedua", "opsi kedua", "pilihan kedua", "opsi 2", "nomor 2", "yang pertama", "opsi 1")):
-        choice_idx = 2 if any(k in lower for k in ("kedua", "2")) else 1
-        return {
-            "intent": "SELECT_OPTION",
-            "choice_index": choice_idx,
-            "normalized_text": norm,
-            "constraints": constraints,
-            "offline_requested": offline_requested,
-            "side_effects_allowed": True,
-        }
-
-    # 8. Reference / Correction to prior artifact (`A05`, `A06`)
-    if any(
-        p in lower
-        for p in (
-            "yang tadi",
-            "bukan mingguan",
-            "maksudku bulanan",
-            "tambah kategorinya",
-            "tambahkan kategori",
-            "ubah jadi bulanan",
-            "ganti jadi bulanan",
-        )
-    ):
-        return {
-            "intent": "MODIFY_PREVIOUS_ARTIFACT",
-            "normalized_text": norm,
-            "constraints": constraints,
-            "offline_requested": offline_requested,
-            "add_categories": "kategori" in lower,
-            "period_override": "bulanan" if "bulanan" in lower else ("mingguan" if "mingguan" in lower else ""),
-            "side_effects_allowed": True,
-        }
-
-    # 9. Learning request (`A27`: "kalau belum bisa, pelajari dulu")
-    if any(p in lower for p in ("pelajari dulu", "belajar dulu", "kalau belum bisa")):
-        return {
-            "intent": "LEARN_AND_SOLVE",
-            "normalized_text": norm,
-            "constraints": constraints,
-            "offline_requested": offline_requested,
-            "side_effects_allowed": True,
-        }
-
-    # 9b. Speech training, vocabulary teaching, and language learning directives
     speech_hit = classify_speech_intent(raw_text, norm, constraints, offline_requested, conversation_context=ctx)
     if speech_hit is not None:
         return speech_hit
     if any(p in lower for p in (
-        "belajar bahasa",
-        "pelajari bahasa",
-        "fokus belajar bahasa",
-        "belajar bahasa dulu",
-        "tingkatkan kemampuan bahasa",
-        "pahami bahasa",
-        "belajar ngobrol",
+        "belajar bahasa", "pelajari bahasa", "fokus belajar bahasa",
+        "belajar bahasa dulu", "tingkatkan kemampuan bahasa", "pahami bahasa", "belajar ngobrol",
     )):
-        return {
-            "intent": Intent.LEARN_LANGUAGE,
-            "normalized_text": norm,
-            "constraints": constraints,
-            "offline_requested": offline_requested,
-            "side_effects_allowed": False,
-        }
+        return _make_base_frame(Intent.LEARN_LANGUAGE, norm, constraints, offline_requested, side_effects=False)
 
-    # 10. Greeting / General Conversation / Capability question (`A01`, `A02`)
     greet_hit = _classify_greeting_or_capability(lower, norm, constraints, offline_requested)
     if greet_hit is not None:
         return greet_hit
 
-    # 11-13. Bug fix, refactoring, coding, or general fallback
     return _classify_coding_or_fallback(lower, raw_lower, norm, constraints, offline_requested)
 
 
@@ -415,7 +365,7 @@ def _classify_coding_or_fallback(
         )
     ):
         domain, domain_confidence = "multi_file", 0.95
-    elif any(k in lower for k in ("pengeluaran", "catatan", "keuangan", "dompet", "belanja")):
+    elif any(k in lower for k in ("pengeluaran", "catatan", "keuangan", "dompet", "catat belanja", "catatan belanja", "daftar belanja", "keranjang belanja")):
         domain, domain_confidence = "expense_tracker", 0.95
     else:
         coding_words = (
@@ -456,12 +406,14 @@ class ConversationalEngine:
         self.coding = CodingAgentLoop(store)
         self.autonomy = AutonomyOrchestrator(store)
         self.speech = SpeechDevelopmentEngine(store)
+        self.memory = ConversationalMemoryManager(store)
 
     def _build_capabilities_reply(self, mode_label: str) -> str:
         active_skills = self.store.list_skills(active_only=True)
         skill_names = ", ".join(f"`{s['name']}`" for s in active_skills) if active_skills else "belum ada skill tambahan"
         tested_caps = [f for f in self.store.list_frontier() if f.get("status") == "KNOWN_AND_TESTED"]
         sp = self.speech.get_profile()
+        mem = self.memory.get_summary()
         return (
             f"Halo! Aku **ACE** (berjalan dalam mode **{mode_label}**). Saat ini kemampuanku yang sudah terverifikasi meliputi:\n"
             "- Membuat dan menguji aplikasi Python lokal (seperti catatan pengeluaran CLI, pengolah CSV, dan utilitas harian).\n"
@@ -469,6 +421,7 @@ class ConversationalEngine:
             "- Mencatat celah kemampuan (*gap*), mempelajari sub-keterampilan baru, dan mendelegasikan tugas ke worker AI jika tersedia.\n"
             "- Berjalan 100% lokal/offline tanpa bergantung pada internet saat mode offline aktif.\n"
             f"- **Perkembangan berbicara (`4 tahap`)**: Tahap `{sp['current_stage']}/4` ({sp['current_stage_title']}), {sp['vocab_count']} kosakata persisten.\n"
+            f"- **Memori Jangka Panjang (`OMEGA-07`)**: {mem['active_records']} ingatan aktif (rantai hash `{'VALID' if mem['chain_ok'] else 'PERLU CEK'}`).\n"
             f"- **Skill hasil belajar aktif ({len(active_skills)})**: {skill_names}\n"
             f"- **Frontier terverifikasi**: {len(tested_caps)} kapabilitas berstatus `KNOWN_AND_TESTED`."
         )
@@ -490,6 +443,8 @@ class ConversationalEngine:
             latest_task=latest_task,
             mode_label=mode_label,
         )
+        mem_ctx = self.memory.build_prompt_context(text)
+        sys_ctx = f"{sys_ctx}\nMemori jangka panjang relevan: {mem_ctx}."
         try:
             resp = self.router.generate_text(
                 [{"role": "system", "content": sys_ctx}, {"role": "user", "content": text}],
@@ -542,6 +497,9 @@ class ConversationalEngine:
         stage_id = int(self.speech.get_profile()["current_stage"])
         ctx = conv.get("context") or {}
         cues = self.speech._extract_conversational_cues(text, pending_word=str(ctx.get("pending_curiosity_word", "")))
+
+        if not cues.get("lexicon_qa_target"):
+            self.memory.observe_conversational_turn(text, conversation_id=conv["conversation_id"])
 
         observed_already = False
         if (
@@ -666,6 +624,130 @@ class ConversationalEngine:
             "Semua tugas sebelumnya sudah selesai (`COMPLETED`). Beri tahu aku jika ada tugas baru yang ingin dikerjakan."
         ), None
 
+    def _record_task_memory(
+        self,
+        intent: Any,
+        frame: dict[str, Any],
+        task_obj: dict[str, Any] | None,
+        conversation_id: str,
+    ) -> None:
+        if not task_obj:
+            return
+        terminal = ("COMPLETED", "FAILED", "FAILED_WITH_RECOVERY_STATE", "WAITING_FOR_DEPENDENCY")
+        if task_obj.get("status") not in terminal:
+            return
+        if intent in ("STATUS_CHECK", "STOP_OR_PAUSE"):
+            return
+        ir = self.store.get_problem_ir(task_obj["task_id"]) or {}
+        domain_map = {
+            "DIAGNOSE_OR_FIX_BUG": "bug_fix",
+            "REFACTOR_CODE": "refactor",
+            "MODIFY_PREVIOUS_ARTIFACT": "expense_tracker",
+            "LEARN_AND_SOLVE": "learning",
+            "LEARN_LANGUAGE": "language_understanding",
+            "TRAIN_SPEECH": "speech_training",
+        }
+        dom = str(
+            ir.get("domain")
+            or frame.get("domain")
+            or domain_map.get(str(intent), "general")
+        )
+        self.memory.record_task_episode(task_obj, domain=dom, conversation_id=conversation_id)
+
+    def _handle_create_or_modify_code(
+        self,
+        *,
+        intent: Any,
+        frame: dict[str, Any],
+        text: str,
+        conversation_id: str,
+        hc: dict[str, Any],
+        mode_label: str,
+        opts: dict[str, Any],
+    ) -> tuple[str, dict[str, Any]]:
+        domain = frame.get("domain", "general")
+        title_map = {
+            "expense_tracker": "Aplikasi CLI Catatan Pengeluaran Lokal",
+            "csv_reader": "Utilitas CLI Pembaca & Rekap CSV",
+            "tebak_angka": "Game CLI Tebak Angka Bahasa Indonesia",
+            "multi_file": "Paket Aplikasi Python Multi-Modul",
+        }
+        task_title = (
+            f"Solusi Python: {frame['normalized_text'][:50].strip()}"
+            if domain == "general"
+            else title_map.get(domain, "Pembuatan Skrip Python Lokal")
+        )
+        task_obj = self.store.create_task(
+            conversation_id=conversation_id,
+            title_id=task_title,
+            user_request=text,
+            normalized_goal=frame["normalized_text"],
+            constraints=frame["constraints"],
+            model_backend=hc["active_backend"],
+        )
+        self.store.save_problem_ir(
+            task_obj["task_id"],
+            {
+                "user_intent": intent,
+                "domain": domain,
+                "domain_confidence": frame.get("domain_confidence", 0.85),
+                "normalized_goal": frame["normalized_text"],
+                "constraints": frame["constraints"],
+                "offline_mode": self.store.is_offline(),
+            },
+        )
+        if domain == "general":
+            if hasattr(self.coding, "execute_general_task"):
+                gen_res = self.coding.execute_general_task(
+                    title=task_title, goal=frame["normalized_text"],
+                    task_id=task_obj["task_id"], conversation_id=conversation_id, options=opts,
+                )
+                task_obj = gen_res.get("task") or self.store.get_task(task_obj["task_id"])
+                script_path = gen_res.get("file_path") or gen_res.get("script_path", "")
+                output_text = gen_res.get("output", "")
+            else:
+                exec_res = self.coding.execute_coding_task(task_obj["task_id"], domain="general", options=opts)
+                task_obj = exec_res["task"]
+                script_path = exec_res.get("script_path", "")
+                output_text = exec_res.get("verification", {}).get("sample_output", "")
+            self.store.update_conversation_context(
+                conversation_id,
+                {"last_task_id": task_obj["task_id"], "last_domain": domain, "last_script_path": script_path},
+            )
+            art_list = ", ".join(f"[`{a['id']}`](file://{a['path']})" for a in task_obj.get("artifacts", []))
+            if not art_list and script_path:
+                art_list = f"[`{Path(script_path).name}`](file://{script_path})"
+            sample_out = output_text.splitlines() if output_text else []
+            first_line = sample_out[0] if sample_out else (
+                task_obj.get("verification_summary", {}).get("sample_output", "").splitlines() or ["Verifikasi lulus"]
+            )[0]
+            return (
+                f"Aku sudah membuat dan memverifikasi **{task_obj['title_id']}** dalam mode **{mode_label}**.\n"
+                f"- Berkas yang dibuat: {art_list}\n- Hasil uji otomatis: `{first_line}`\n- Status: `{task_obj['status']}`\n\n"
+                "Kamu bisa meminta pengujian lebih lanjut, optimasi logika, atau penambahan fitur baru.",
+                task_obj,
+            )
+
+        default_period = "mingguan" if "mingguan" in frame["normalized_text"].lower() else "bulanan"
+        exec_res = self.coding.execute_coding_task(
+            task_obj["task_id"], domain=domain,
+            options={**opts, "default_period": default_period, "include_categories": True},
+        )
+        task_obj = exec_res["task"]
+        self.store.update_conversation_context(
+            conversation_id,
+            {"last_task_id": task_obj["task_id"], "last_domain": domain, "default_period": default_period, "include_categories": True},
+        )
+        art_list = ", ".join(f"[`{a['id']}`](file://{a['path']})" for a in task_obj["artifacts"])
+        sample_out = task_obj.get("verification_summary", {}).get("sample_output", "").splitlines()
+        first_line = sample_out[0] if sample_out else "Verifikasi lulus"
+        return (
+            f"Aku sudah membuat dan menguji **{task_obj['title_id']}** dalam mode **{mode_label}**.\n"
+            f"- Berkas yang dibuat: {art_list}\n- Hasil uji otomatis: `{first_line}`\n- Status: `{task_obj['status']}`\n\n"
+            "Kamu bisa meminta perubahan lanjutan (misalnya *\"yang tadi tambah kategorinya\"* atau *\"bukan mingguan, maksudku bulanan\"*).",
+            task_obj,
+        )
+
     def handle_user_message(
         self,
         text: str,
@@ -722,6 +804,9 @@ class ConversationalEngine:
                 "mengenali batas kemampuanku lewat daftar *gap*, mendeteksi jika aku berputar di masalah yang sama (*anti-stagnation*), "
                 "dan memverifikasi setiap kode yang kutulis dengan bukti pengujian nyata."
             )
+
+        elif intent in ("MEMORY_STORE", "MEMORY_RECALL", "MEMORY_FORGET", "MEMORY_AUDIT"):
+            reply_text, task_obj = self.memory.handle_chat_intent(frame, text, conversation_id)
 
         elif intent in (
             "LEARN_LANGUAGE",
@@ -1005,112 +1090,17 @@ class ConversationalEngine:
                 )
 
         else:
-            # CREATE_OR_MODIFY_CODE
-            domain = frame.get("domain", "general")
-            title_map = {
-                "expense_tracker": "Aplikasi CLI Catatan Pengeluaran Lokal",
-                "csv_reader": "Utilitas CLI Pembaca & Rekap CSV",
-                "tebak_angka": "Game CLI Tebak Angka Bahasa Indonesia",
-                "multi_file": "Paket Aplikasi Python Multi-Modul",
-            }
-            if domain == "general":
-                clean_goal = frame["normalized_text"][:50].strip()
-                task_title = f"Solusi Python: {clean_goal}"
-            else:
-                task_title = title_map.get(domain, "Pembuatan Skrip Python Lokal")
-
-            task_obj = self.store.create_task(
+            reply_text, task_obj = self._handle_create_or_modify_code(
+                intent=intent,
+                frame=frame,
+                text=text,
                 conversation_id=conversation_id,
-                title_id=task_title,
-                user_request=text,
-                normalized_goal=frame["normalized_text"],
-                constraints=frame["constraints"],
-                model_backend=hc["active_backend"],
-            )
-            self.store.save_problem_ir(
-                task_obj["task_id"],
-                {
-                    "user_intent": intent,
-                    "domain": domain,
-                    "domain_confidence": frame.get("domain_confidence", 0.85),
-                    "normalized_goal": frame["normalized_text"],
-                    "constraints": frame["constraints"],
-                    "offline_mode": self.store.is_offline(),
-                },
+                hc=hc,
+                mode_label=mode_label,
+                opts=opts,
             )
 
-            if domain == "general":
-                # G04: Route novel coding requests to execute_general_task
-                if hasattr(self.coding, "execute_general_task"):
-                    gen_res = self.coding.execute_general_task(
-                        title=task_title,
-                        goal=frame["normalized_text"],
-                        task_id=task_obj["task_id"],
-                        conversation_id=conversation_id,
-                        options=opts,
-                    )
-                    task_obj = gen_res.get("task") or self.store.get_task(task_obj["task_id"])
-                    script_path = gen_res.get("file_path") or gen_res.get("script_path", "")
-                    output_text = gen_res.get("output", "")
-                else:
-                    exec_res = self.coding.execute_coding_task(
-                        task_obj["task_id"],
-                        domain="general",
-                        options=opts,
-                    )
-                    task_obj = exec_res["task"]
-                    script_path = exec_res.get("script_path", "")
-                    output_text = exec_res.get("verification", {}).get("sample_output", "")
-
-                self.store.update_conversation_context(
-                    conversation_id,
-                    {
-                        "last_task_id": task_obj["task_id"],
-                        "last_domain": domain,
-                        "last_script_path": script_path,
-                    },
-                )
-                art_list = ", ".join(f"[`{a['id']}`](file://{a['path']})" for a in task_obj.get("artifacts", []))
-                if not art_list and script_path:
-                    art_list = f"[`{Path(script_path).name}`](file://{script_path})"
-                sample_out = output_text.splitlines() if output_text else []
-                first_line = sample_out[0] if sample_out else (
-                    task_obj.get("verification_summary", {}).get("sample_output", "").splitlines() or ["Verifikasi lulus"]
-                )[0]
-                reply_text = (
-                    f"Aku sudah membuat dan memverifikasi **{task_obj['title_id']}** dalam mode **{mode_label}**.\n"
-                    f"- Berkas yang dibuat: {art_list}\n"
-                    f"- Hasil uji otomatis: `{first_line}`\n"
-                    f"- Status: `{task_obj['status']}`\n\n"
-                    "Kamu bisa meminta pengujian lebih lanjut, optimasi logika, atau penambahan fitur baru."
-                )
-            else:
-                default_period = "mingguan" if "mingguan" in frame["normalized_text"].lower() else "bulanan"
-                exec_res = self.coding.execute_coding_task(
-                    task_obj["task_id"],
-                    domain=domain,
-                    options={**opts, "default_period": default_period, "include_categories": True},
-                )
-                task_obj = exec_res["task"]
-                self.store.update_conversation_context(
-                    conversation_id,
-                    {
-                        "last_task_id": task_obj["task_id"],
-                        "last_domain": domain,
-                        "default_period": default_period,
-                        "include_categories": True,
-                    },
-                )
-                art_list = ", ".join(f"[`{a['id']}`](file://{a['path']})" for a in task_obj["artifacts"])
-                sample_out = task_obj.get("verification_summary", {}).get("sample_output", "").splitlines()
-                first_line = sample_out[0] if sample_out else "Verifikasi lulus"
-                reply_text = (
-                    f"Aku sudah membuat dan menguji **{task_obj['title_id']}** dalam mode **{mode_label}**.\n"
-                    f"- Berkas yang dibuat: {art_list}\n"
-                    f"- Hasil uji otomatis: `{first_line}`\n"
-                    f"- Status: `{task_obj['status']}`\n\n"
-                    "Kamu bisa meminta perubahan lanjutan (misalnya *\"yang tadi tambah kategorinya\"* atau *\"bukan mingguan, maksudku bulanan\"*)."
-                )
+        self._record_task_memory(intent, frame, task_obj, conversation_id)
 
         assistant_msg, _ = self.store.add_message(
             conversation_id,

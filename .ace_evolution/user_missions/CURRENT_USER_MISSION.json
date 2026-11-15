@@ -1,55 +1,24 @@
 {
   "acceptance_checks": [
-    "PYTHONPATH=code /usr/bin/python3 -m unittest discover -s code/ace_indo_nlp -p test_*.py -v",
+    "PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_memory_bridge -v",
+    "PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_cognitive_memory -v",
     "PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_speech_acquisition -v",
-    "PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_edition4_acceptance -v"
+    "PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_edition4_acceptance -v",
+    "/usr/bin/python3 tools/verify_sources.py"
   ],
   "before_hashes": {
-    "code/ace_indo_nlp/discourse.py": "f1dd26c2793cd3b5134edc0bd22c8041531bdf583d135e9f45c0a5ec82e82833",
-    "code/ace_indo_nlp/lexicon_kb.py": "48ca566d0f772e96078d9e80f305f8ea9337492ac599731675268f81dee0003d",
-    "code/ace_indo_nlp/morphology.py": "51a9a18fac6db4f3db998804d3c94fb31c27f5b393a1c9552fec76a0b8c82c1d",
-    "code/ace_indo_nlp/test_discourse.py": "a37cb15d5b1cdab034b2b46d8b9c13d0f439baaa44713cc06d9b8416e1948784",
-    "code/ace_indo_nlp/test_lexicon_kb.py": "18a58a198938d942a3dfa25f067325316c982c474648697fd0a5c3be4fbdc7be",
-    "code/ace_indo_nlp/test_morphology.py": "6bd3d6429bd1c4d2d9911c07b4c6b273fd8332763969b5f37a609e24f8ecd4a1",
-    "code/ace_operational/language.py": "f48e7a13be224092e12b6be9e3added20736ef19622dde5d54bd40622f610983",
-    "code/ace_operational/speech_acquisition.py": "4dc42d8b5142a2a686197afd4e6200923c36c6e8f1b063bc897d9b4b6704b25f",
-    "code/ace_operational/test_speech_acquisition.py": "24b68c0190d04a5fc10b09d11950fba2b8fa28419ca5c783473ce65a14482c44",
-    "code/ace_operational/web_server.py": "b8d94f6493e161b73af6d466a450aa46d281ef8bdc91a46eb173f10d1c08f689"
+    "code/ace_operational/language.py": "d88cc96d5e11698a218e5d5bad6cd25c419e3922bb28a208bb80e3f8f2d21b90",
+    "code/ace_operational/memory_bridge.py": "",
+    "code/ace_operational/story_projector.py": "a846ac9690c9aedffde9305e48b44b1bea61e7fb212c7c9c20f201f00749fa91",
+    "code/ace_operational/test_memory_bridge.py": "",
+    "code/ace_operational/web_server.py": "479c2b968ce9e01324ec0bb86aeba20be833420e2297cb1f5a23605f6c742623"
   },
   "before_target_ast_counts": {
-    "code/ace_indo_nlp/discourse.py": {
-      "silent_except_count": 0,
-      "unguarded_verified_true_count": 0
-    },
-    "code/ace_indo_nlp/lexicon_kb.py": {
-      "silent_except_count": 0,
-      "unguarded_verified_true_count": 0
-    },
-    "code/ace_indo_nlp/morphology.py": {
-      "silent_except_count": 0,
-      "unguarded_verified_true_count": 0
-    },
-    "code/ace_indo_nlp/test_discourse.py": {
-      "silent_except_count": 0,
-      "unguarded_verified_true_count": 0
-    },
-    "code/ace_indo_nlp/test_lexicon_kb.py": {
-      "silent_except_count": 0,
-      "unguarded_verified_true_count": 0
-    },
-    "code/ace_indo_nlp/test_morphology.py": {
-      "silent_except_count": 0,
-      "unguarded_verified_true_count": 0
-    },
     "code/ace_operational/language.py": {
       "silent_except_count": 0,
       "unguarded_verified_true_count": 0
     },
-    "code/ace_operational/speech_acquisition.py": {
-      "silent_except_count": 0,
-      "unguarded_verified_true_count": 0
-    },
-    "code/ace_operational/test_speech_acquisition.py": {
+    "code/ace_operational/story_projector.py": {
       "silent_except_count": 0,
       "unguarded_verified_true_count": 0
     },
@@ -1148,12 +1117,12 @@
       "complex_symbols": {
         "classify_intent_frame": {
           "branches": 15,
-          "loc": 161,
+          "loc": 158,
           "max_nesting": 1
         },
         "handle_user_message": {
-          "branches": 30,
-          "loc": 484,
+          "branches": 28,
+          "loc": 465,
           "max_nesting": 3
         }
       },
@@ -1884,8 +1853,8 @@
     "code/ace_operational/web_server.py": {
       "complex_symbols": {
         "create_http_handler": {
-          "branches": 24,
-          "loc": 184,
+          "branches": 23,
+          "loc": 171,
           "max_nesting": 0
         }
       },
@@ -3102,7 +3071,13 @@
       }
     }
   },
-  "criteria": [],
+  "criteria": [
+    "Integrasi nyata CognitiveMemory append-only hash-chained di OperationalStore workspace (episodic, semantic, procedural) yang bertahan lintas restart.",
+    "Perintah Bahasa Indonesia eksplisit & tangkapan percakapan alami: simpan memori, tanya ingatan (bounded recall), koreksi/konflik (supersede), lupa jujur (tombstone), dan audit integritas memori.",
+    "Pencatatan episodik & prosedural tugas dengan provenance evidence terjangkar dan deteksi negative_transfer_risk.",
+    "Panel & API Memori Jangka Panjang di Web Studio (/api/memory, /api/memory/recall, /api/memory/forget) dengan perlindungan record privat.",
+    "Zero regresi seluruh tes bahasa, acceptance Edition 4, OMEGA-07 memory, dan AST RealRepoAuditor."
+  ],
   "forbidden_paths": [
     "code/ace_autonomy/",
     "code/ace_host_controller/",
@@ -3112,10 +3087,10 @@
     "evidence/",
     "tools/"
   ],
-  "goal": "Menjadikan ACE benar-benar mampu mengobrol alami dalam Bahasa Indonesia di Web Studio & CLI (Stage 0-4), menghilangkan balasan kaku/berulang, salah cocok fuzzy, pembajakan intent santai, dan merapikan tampilan chat browser.",
-  "mission_seq": 2,
-  "order_id": "mission-0001b-dialog-alami",
-  "order_sha256": "f56a3a347d7dd5e33d1b39dcdf626784ad41c4bbe18366b1d4494024922bd30b",
+  "goal": "Menghubungkan CognitiveMemory (OMEGA-07) secara penuh ke ConversationalEngine, CodingAgentLoop/task episodes, Story Projector, dan Web Studio (CLI & HTTP) agar ACE mengingat fakta pengguna, preferensi, peristiwa tugas berbasis bukti terjangkar, menangani konflik/ralat (supersede), melindungi data privat, serta melupakan ingatan secara jujur melalui tombstone teraudit.",
+  "mission_seq": 3,
+  "order_id": "mission-0002-memori-jangka-panjang",
+  "order_sha256": "b51c5720365476c0be253c1764c05773fca9b3ac7105ba78af0507707ae020a5",
   "repo_root": ".",
   "scan_subpath": "code",
   "schema": "ace.user_mission_order.v1",
@@ -3266,13 +3241,13 @@
     "code/ace_ilp/relational_miner.py": "6efb355b96238692e9d8a5672bee00238f5a0f3f60c0be42341b5fdd9eb92e32",
     "code/ace_ilp/test_relational_miner.py": "9e3c3917fab85c409bfed7607035a050804bc09abad50c26fe17ca3493cab499",
     "code/ace_indo_nlp/__init__.py": "39084c6ab7b1f24a6a6fe61b0bd4af8e9bc5db402062897d93c82fec90e8642f",
-    "code/ace_indo_nlp/discourse.py": "f1dd26c2793cd3b5134edc0bd22c8041531bdf583d135e9f45c0a5ec82e82833",
-    "code/ace_indo_nlp/lexicon_kb.py": "48ca566d0f772e96078d9e80f305f8ea9337492ac599731675268f81dee0003d",
-    "code/ace_indo_nlp/morphology.py": "51a9a18fac6db4f3db998804d3c94fb31c27f5b393a1c9552fec76a0b8c82c1d",
+    "code/ace_indo_nlp/discourse.py": "8c729d5e4ef476b18102c995cec4559e6a88e0cbfb4053ac44e8727209c0c975",
+    "code/ace_indo_nlp/lexicon_kb.py": "1eaa00a6c38ff6e0045407d4b829511a0b10324bac2943fe02a3351b141b3110",
+    "code/ace_indo_nlp/morphology.py": "6f46020b8d2e82318a723ac22542b3493690f9e1993dac623edc11689cd68eb7",
     "code/ace_indo_nlp/phonotactics.py": "495ce31d3caaf30296dc99ec7b22f1566ca7867a8f2bf7412dece9b404792d51",
-    "code/ace_indo_nlp/test_discourse.py": "a37cb15d5b1cdab034b2b46d8b9c13d0f439baaa44713cc06d9b8416e1948784",
-    "code/ace_indo_nlp/test_lexicon_kb.py": "18a58a198938d942a3dfa25f067325316c982c474648697fd0a5c3be4fbdc7be",
-    "code/ace_indo_nlp/test_morphology.py": "6bd3d6429bd1c4d2d9911c07b4c6b273fd8332763969b5f37a609e24f8ecd4a1",
+    "code/ace_indo_nlp/test_discourse.py": "17ede3656978bc3d4702c2ff34601014db74588e821124bc1eabde69e057f367",
+    "code/ace_indo_nlp/test_lexicon_kb.py": "649c30c98eb343d4e05ddef0b7f9235216c3050506d654b7b7ba4c36e7485ab0",
+    "code/ace_indo_nlp/test_morphology.py": "c2f6c22a9c5726b1f2d8604fbf3edf4fc774a529936e3fc3d2bb0626492529ba",
     "code/ace_indo_nlp/test_phonotactics.py": "7b4d57eef0e6f5794f1b9812765c7c783c63d1091834fa76c990f0a9729c24ca",
     "code/ace_integration_redteam/__init__.py": "692c87e5ee1282bc027459a16da6d149d539b14eea5617ab50815f53ea04aadb",
     "code/ace_integration_redteam/redteam_suite.py": "c349617d81dbe73ecfd9ebf9ecc4553197f11de70d7ebce5bc2efbe8325e4c35",
@@ -3346,7 +3321,7 @@
     "code/ace_operational/grid_adapter.py": "d7803d0c6bac99deed50a063fa304e41acf455062ec4a7cf123e333dd38802f7",
     "code/ace_operational/grid_generalization.py": "b4f28baa701759537f7c7783c87000c2b91e87b54c100bdeb0585dd19665fdf3",
     "code/ace_operational/grid_substrate.py": "56fcafbd2afcbe00bed86aa4b6f4126dab8936f4408060fb5953fbebdf28ccb6",
-    "code/ace_operational/language.py": "f48e7a13be224092e12b6be9e3added20736ef19622dde5d54bd40622f610983",
+    "code/ace_operational/language.py": "d88cc96d5e11698a218e5d5bad6cd25c419e3922bb28a208bb80e3f8f2d21b90",
     "code/ace_operational/lexical_ops.py": "5ef53144bdcf3dedbb98cc5086b599c0140916da3f59874577dd3b32bc0a0123",
     "code/ace_operational/local_repo_workflow.py": "5ff82ef0d1f87dafe010e8375bc24ad40f33e76048c900dcdc0ed75fe435d6cb",
     "code/ace_operational/local_sandbox.py": "6f047da8bfa347ae1803ca416a2c2daadb32a9cebbe12fe12c5fcd6c9f489ddd",
@@ -3387,7 +3362,7 @@
     "code/ace_operational/self_evolution_engine.py": "62cec2b1825214db1b7084d5af10569e7065f0b2be1142a6fe2e85555d38b3eb",
     "code/ace_operational/software_factory.py": "c273a8bc874a31f84b7e67addbdfe50e4f5e14049cf88fab8a2df6af1fb7fe85",
     "code/ace_operational/sovereign_runtime.py": "97f308a9c0f4932cf6d356e9e2a6c8992746ddc4589eea1acc209b2f80fe008e",
-    "code/ace_operational/speech_acquisition.py": "4dc42d8b5142a2a686197afd4e6200923c36c6e8f1b063bc897d9b4b6704b25f",
+    "code/ace_operational/speech_acquisition.py": "7a88cea1a3d899c01aab62b373b655bad78615f9105d3c22e7d1e2f3a5192c7c",
     "code/ace_operational/statement_ops.py": "950531472551753156340a3f5ffc101032304e507abb514c226828425b9e69fe",
     "code/ace_operational/statement_ops_prototype.py": "98633c5eafd746d63a6f48ff99c2898ed8971999ca7ceabab23da8a6549c402b",
     "code/ace_operational/store.py": "21023faab0c75deffd14fd58d5cd5e7afd04604272f70c646150243fac5af3e2",
@@ -3462,13 +3437,13 @@
     "code/ace_operational/test_software_factory.py": "1c928e5b4cf0561643f4f8a3e4452f43e400b5df5b5cc85359163f497b164d6c",
     "code/ace_operational/test_solve_task.py": "8781bd049d88e37fdaa789d09d91b2f3836792c07f131a8bed7237100879d03c",
     "code/ace_operational/test_sovereign_runtime.py": "cf05ebc0dee63982d5cb019fe5569d25405a0304a7dcd8f7beda82bd754780d1",
-    "code/ace_operational/test_speech_acquisition.py": "24b68c0190d04a5fc10b09d11950fba2b8fa28419ca5c783473ce65a14482c44",
+    "code/ace_operational/test_speech_acquisition.py": "c0c6059656d4f4d2945b992057dc85fad3d13485056299c1d600e5aea4f78d2f",
     "code/ace_operational/test_statement_ops.py": "978c0c34c715ff4d7ec338cce26620a6432d32bb1a67b5938bbc1c339b052953",
     "code/ace_operational/test_statement_ops_prototype.py": "0a3286ac3cb44e93fabab38787693300ff0440e87daaca366083ea8baa6fdb42",
     "code/ace_operational/test_terminal_chart_visualizer.py": "e777ee547b58121c4f657a45e3aa53bf4ee81d3f0a3d66d1c234a396476d4adf",
     "code/ace_operational/test_truthful_inference.py": "053a15818b0beaf398acaf010c2e4a9a35b86e580fcdd497712b49a19234f8f5",
     "code/ace_operational/test_visual_bridge_contract.py": "a0ec4156f196f4d23a8f38127e39e3cb02ae5d0cf584cdd233087ae611870374",
-    "code/ace_operational/web_server.py": "b8d94f6493e161b73af6d466a450aa46d281ef8bdc91a46eb173f10d1c08f689",
+    "code/ace_operational/web_server.py": "479c2b968ce9e01324ec0bb86aeba20be833420e2297cb1f5a23605f6c742623",
     "code/ace_pac_bayes/__init__.py": "0db142adffd398fa364baa134df6c893396f1a935b58b8b513c0c7ded4e84237",
     "code/ace_pac_bayes/pac_bounds.py": "49767f2711d6b07f2e977d43955a63d8f3b01e6071443739b866bbb91d235d4b",
     "code/ace_pac_bayes/test_pac_bounds.py": "8417be399bd4450adcdfcc42a6df8f861e3078680edc275e3d461e5e028c28c2",
@@ -4326,9 +4301,9 @@
     "code/ace_host_controller/test_resilient_watchdog.py": 82,
     "code/ace_host_exchange/test_contracts.py": 19,
     "code/ace_ilp/test_relational_miner.py": 37,
-    "code/ace_indo_nlp/test_discourse.py": 26,
-    "code/ace_indo_nlp/test_lexicon_kb.py": 21,
-    "code/ace_indo_nlp/test_morphology.py": 14,
+    "code/ace_indo_nlp/test_discourse.py": 38,
+    "code/ace_indo_nlp/test_lexicon_kb.py": 25,
+    "code/ace_indo_nlp/test_morphology.py": 19,
     "code/ace_indo_nlp/test_phonotactics.py": 14,
     "code/ace_integration_redteam/test_integration_redteam.py": 32,
     "code/ace_interpolation/test_craig_interpolator.py": 42,
@@ -4413,7 +4388,7 @@
     "code/ace_operational/test_software_factory.py": 13,
     "code/ace_operational/test_solve_task.py": 15,
     "code/ace_operational/test_sovereign_runtime.py": 14,
-    "code/ace_operational/test_speech_acquisition.py": 144,
+    "code/ace_operational/test_speech_acquisition.py": 177,
     "code/ace_operational/test_statement_ops.py": 41,
     "code/ace_operational/test_statement_ops_prototype.py": 18,
     "code/ace_operational/test_terminal_chart_visualizer.py": 23,
@@ -4618,17 +4593,12 @@
     "code/ace_synthesis/test_cegis.py": 0
   },
   "target_files": [
-    "code/ace_indo_nlp/morphology.py",
-    "code/ace_indo_nlp/lexicon_kb.py",
-    "code/ace_indo_nlp/discourse.py",
-    "code/ace_indo_nlp/test_morphology.py",
-    "code/ace_indo_nlp/test_lexicon_kb.py",
-    "code/ace_indo_nlp/test_discourse.py",
-    "code/ace_operational/speech_acquisition.py",
+    "code/ace_operational/memory_bridge.py",
+    "code/ace_operational/test_memory_bridge.py",
     "code/ace_operational/language.py",
-    "code/ace_operational/web_server.py",
-    "code/ace_operational/test_speech_acquisition.py"
+    "code/ace_operational/story_projector.py",
+    "code/ace_operational/web_server.py"
   ],
-  "title": "Dialog Alami & Perbaikan Obrolan Web/Termux (Misi 0001b)",
+  "title": "Memori Jangka Panjang ACE (Episodik, Semantik, Prosedural & Lupa Terukur)",
   "workspace": ".ace_evolution"
 }

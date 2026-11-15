@@ -59,6 +59,96 @@ def _project_skill_learned(detail: dict[str, Any], passed: Any, status: str) -> 
     return {"story_text": story, "avatar_state": "belajar", "is_story_card": True}
 
 
+def _project_memory_event(kind: str, detail: dict[str, Any]) -> dict[str, Any] | None:
+    if kind == "memory_saved":
+        label = str(detail.get("label") or "informasi baru").strip()
+        priv_note = "dengan perlindungan privat" if detail.get("sensitivity") == "private" else "secara permanen"
+        story = (
+            f"Aku baru mencatat ingatan baru ({label}) {priv_note} ke Memori Jangka Panjang berantai hash. "
+            f"Catatan ini tetap terjaga lintas restart agar percakapan dan tugas kita terus nyambung."
+        )
+        return {"story_text": story, "avatar_state": "belajar", "is_story_card": True}
+
+    if kind == "memory_superseded":
+        label = str(detail.get("label") or "fakta terbaru").strip()
+        story = (
+            f"Aku memperbarui ingatan ({label}) dan menandai fakta lamanya sebagai digantikan (superseded). "
+            f"Jejak riwayat konflik tetap kusimpan secara jujur agar setiap perubahan konteks bisa diaudit."
+        )
+        return {"story_text": story, "avatar_state": "belajar", "is_story_card": True}
+
+    if kind == "memory_forgotten":
+        cnt = int(detail.get("count") or 1)
+        story = (
+            f"Sesuai permintaanmu, aku menghapus isi {cnt} ingatan dari memori aktif dan menulis tombstone teraudit. "
+            f"Rantai hash memori diverifikasi ulang agar proses lupa tercatat secara jujur."
+        )
+        return {"story_text": story, "avatar_state": "selesai", "is_story_card": True}
+
+    return None
+
+
+def _project_worker_and_closing_event(
+    kind: str,
+    detail: dict[str, Any],
+    target_file: str,
+    goal: str,
+    passed: Any,
+) -> dict[str, Any] | None:
+    if kind == "worker_requested":
+        worker_kind = str(detail.get("worker_kind") or "worker AI pendamping").replace("_", " ")
+        obj = str(detail.get("objective") or "menyusun kandidat solusi terfokus").strip()
+        story = (
+            f"Aku mengirim paket tugas terfokus ke {worker_kind} untuk membantu {obj}. "
+            f"Setiap hasil dari worker tetap akan kuuji ulang secara independen sebelum dipakai."
+        )
+        return {"story_text": story, "avatar_state": "menunggu", "is_story_card": True}
+
+    if kind == "worker_completed":
+        if passed is False:
+            story = (
+                f"Worker pendamping sudah mengirim kandidat hasil untuk {target_file}, tetapi gagal saat kuuji ulang di ruang verifikasi. "
+                f"Aku menolak kandidat tersebut dan beralih ke perbaikan lokal yang lebih aman."
+            )
+            return {"story_text": story, "avatar_state": "bekerja", "is_story_card": True}
+        story = (
+            f"Worker pendamping sudah mengembalikan hasil untuk {target_file} dan verifikasi independenku menyatakan hasilnya valid. "
+            f"Sekarang aku menggabungkan hasil tersebut ke dalam penyelesaian tugas utama."
+        )
+        return {"story_text": story, "avatar_state": "bekerja", "is_story_card": True}
+
+    if kind == "task_paused":
+        reason = str(detail.get("reason") or "menunggu instruksi atau syarat lanjutan darimu").strip()
+        story = (
+            f"Aku menjeda pengerjaan tugas ini dengan aman karena {reason}. "
+            f"Seluruh progres terakhir sudah tersimpan di checkpoint dan siap dilanjutkan kapan saja."
+        )
+        return {"story_text": story, "avatar_state": "menunggu", "is_story_card": True}
+
+    if kind == "task_completed":
+        if passed is False:
+            story = (
+                f"Pengerjaan pada {target_file} sudah mencapai batas langkah, namun masih ada pemeriksaan yang belum terverifikasi penuh. "
+                f"Silakan tinjau ringkasan bukti untuk menentukan langkah lanjutan."
+            )
+            return {"story_text": story, "avatar_state": "menunggu", "is_story_card": True}
+        story = (
+            f"Tugas untuk {goal} sudah selesai kukerjakan dan semua pemeriksaan pada {target_file} berhasil lulus. "
+            f"Kamu bisa langsung mencoba hasilnya atau meminta perubahan tambahan lewat chat."
+        )
+        return {"story_text": story, "avatar_state": "selesai", "is_story_card": True}
+
+    if kind == "task_failed":
+        err_reason = str(detail.get("reason") or "terjadi kendala saat verifikasi akhir").strip()
+        story = (
+            f"Aku belum berhasil menuntaskan tugas ini karena {err_reason}. "
+            f"Aku sudah menyimpan kondisi terakhir beserta langkah pemulihan supaya kita bisa memperbaikinya tanpa mengulang dari awal."
+        )
+        return {"story_text": story, "avatar_state": "menunggu", "is_story_card": True}
+
+    return None
+
+
 def project_event_to_story(event: dict[str, Any]) -> dict[str, Any]:
     """Project an `ace.activity.v1` event into a human-friendly Indonesian story and avatar state."""
     kind = str(event.get("kind", "")).strip()
@@ -71,11 +161,11 @@ def project_event_to_story(event: dict[str, Any]) -> dict[str, Any]:
 
     # Rule WEB13: Heartbeat NEVER generates a new story card or claims fake work.
     if kind == "heartbeat":
-        return {
-            "story_text": "",
-            "avatar_state": "mendengar",
-            "is_story_card": False,
-        }
+        return {"story_text": "", "avatar_state": "mendengar", "is_story_card": False}
+
+    mem_proj = _project_memory_event(kind, detail)
+    if mem_proj is not None:
+        return mem_proj
 
     if kind == "task_started":
         story = (
@@ -141,61 +231,13 @@ def project_event_to_story(event: dict[str, Any]) -> dict[str, Any]:
         )
         return {"story_text": story, "avatar_state": "belajar", "is_story_card": True}
 
-    if kind == "worker_requested":
-        worker_kind = str(detail.get("worker_kind") or "worker AI pendamping").replace("_", " ")
-        obj = str(detail.get("objective") or "menyusun kandidat solusi terfokus").strip()
-        story = (
-            f"Aku mengirim paket tugas terfokus ke {worker_kind} untuk membantu {obj}. "
-            f"Setiap hasil dari worker tetap akan kuuji ulang secara independen sebelum dipakai."
-        )
-        return {"story_text": story, "avatar_state": "menunggu", "is_story_card": True}
-
-    if kind == "worker_completed":
-        if passed is False:
-            story = (
-                f"Worker pendamping sudah mengirim kandidat hasil untuk {target_file}, tetapi gagal saat kuuji ulang di ruang verifikasi. "
-                f"Aku menolak kandidat tersebut dan beralih ke perbaikan lokal yang lebih aman."
-            )
-            return {"story_text": story, "avatar_state": "bekerja", "is_story_card": True}
-        story = (
-            f"Worker pendamping sudah mengembalikan hasil untuk {target_file} dan verifikasi independenku menyatakan hasilnya valid. "
-            f"Sekarang aku menggabungkan hasil tersebut ke dalam penyelesaian tugas utama."
-        )
-        return {"story_text": story, "avatar_state": "bekerja", "is_story_card": True}
-
     if kind == "skill_learned":
         return _project_skill_learned(detail, passed, status)
 
-    if kind == "task_paused":
-        reason = str(detail.get("reason") or "menunggu instruksi atau syarat lanjutan darimu").strip()
-        story = (
-            f"Aku menjeda pengerjaan tugas ini dengan aman karena {reason}. "
-            f"Seluruh progres terakhir sudah tersimpan di checkpoint dan siap dilanjutkan kapan saja."
-        )
-        return {"story_text": story, "avatar_state": "menunggu", "is_story_card": True}
+    tail_proj = _project_worker_and_closing_event(kind, detail, target_file, goal, passed)
+    if tail_proj is not None:
+        return tail_proj
 
-    if kind == "task_completed":
-        if passed is False:
-            story = (
-                f"Pengerjaan pada {target_file} sudah mencapai batas langkah, namun masih ada pemeriksaan yang belum terverifikasi penuh. "
-                f"Silakan tinjau ringkasan bukti untuk menentukan langkah lanjutan."
-            )
-            return {"story_text": story, "avatar_state": "menunggu", "is_story_card": True}
-        story = (
-            f"Tugas untuk {goal} sudah selesai kukerjakan dan semua pemeriksaan pada {target_file} berhasil lulus. "
-            f"Kamu bisa langsung mencoba hasilnya atau meminta perubahan tambahan lewat chat."
-        )
-        return {"story_text": story, "avatar_state": "selesai", "is_story_card": True}
-
-    if kind == "task_failed":
-        err_reason = str(detail.get("reason") or "terjadi kendala saat verifikasi akhir").strip()
-        story = (
-            f"Aku belum berhasil menuntaskan tugas ini karena {err_reason}. "
-            f"Aku sudah menyimpan kondisi terakhir beserta langkah pemulihan supaya kita bisa memperbaikinya tanpa mengulang dari awal."
-        )
-        return {"story_text": story, "avatar_state": "menunggu", "is_story_card": True}
-
-    # Default fallback for custom events
     story = (
         f"Aku sedang memproses langkah kerja pada {target_file} untuk menyelesaikan {goal}. "
         f"Setiap perubahan dicatat secara berurutan agar kemajuannya bisa kamu pantau dengan jelas."
