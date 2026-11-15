@@ -445,17 +445,29 @@ class ConversationalEngine:
         )
         mem_ctx = self.memory.build_prompt_context(text)
         sys_ctx = f"{sys_ctx}\nMemori jangka panjang relevan: {mem_ctx}."
+        messages: list[dict[str, str]] = [{"role": "system", "content": sys_ctx}]
+        for prev in (conv.get("messages") or [])[-6:]:
+            role = "assistant" if prev.get("role") == "assistant" else "user"
+            prev_text = str(prev.get("text") or "").strip()
+            if prev_text:
+                messages.append({"role": role, "content": prev_text})
+        if not messages or messages[-1].get("role") != "user" or messages[-1].get("content") != text:
+            messages.append({"role": "user", "content": text})
         try:
             resp = self.router.generate_text(
-                [{"role": "system", "content": sys_ctx}, {"role": "user", "content": text}],
-                max_tokens=110,
+                messages,
+                max_tokens=160,
+                temperature=0.7,
             )
         except (OSError, RuntimeError, ValueError, KeyError, TypeError):
             return None
         raw_gen = str((resp or {}).get("text", "")).strip()
         if not raw_gen:
             return None
-        candidate = raw_gen if "ace" in raw_gen.lower() else f"Halo! Aku **ACE**. {raw_gen}"
+        if not recent_assistant and "ace" not in raw_gen.lower():
+            candidate = f"Halo! Aku **ACE**. {raw_gen}"
+        else:
+            candidate = raw_gen
         ver = self.speech.verify_utterance(
             utterance=candidate,
             user_text=text,

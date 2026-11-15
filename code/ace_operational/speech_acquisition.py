@@ -1636,7 +1636,9 @@ class SpeechDevelopmentEngine:
             f"Status tugas nyata saat ini: {task_str}. Jangan pernah mengarang tugas selesai atau akses internet bila offline. "
             f"Kosakata ajaran pengguna yang wajib diingat bila relevan: {taught_str}. "
             f"Kata asing yang baru terdengar dan boleh ditanyakan artinya: {heard_str}. "
-            f"Jawab pesan pengguna dengan Bahasa Indonesia alami, ringkas, jujur, dan relevan terhadap: {user_text[:120]}"
+            f"Jawab pesan pengguna dengan Bahasa Indonesia yang santai, hangat, dan mengalir seperti teman ngobrol (pakai 'aku/kamu', "
+            f"jangan kaku seperti robot, dan jangan mengulang perkenalan di setiap balasan). "
+            f"Tetap jujur, ringkas, dan relevan terhadap: {user_text[:120]}"
         )
 
     def compose_conversational_reply(
