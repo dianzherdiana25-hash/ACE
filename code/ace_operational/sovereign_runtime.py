@@ -514,7 +514,16 @@ class SovereignRuntimeSupervisor:
             if executor_fn is not None:
                 exec_out = executor_fn(task)
             else:
-                exec_out = {"verified": True, "skill_id": f"skill_{task_id}"}
+                # Fail closed (absorption audit PR #231, items
+                # #5/#6 — the engine's own HIGH backlog finding
+                # and its unexecuted work order): without an
+                # executor nothing was executed, so nothing may
+                # be recorded as verified. Raising routes the
+                # task through the quarantine/antibody path
+                # below instead of fabricating a proof.
+                raise RuntimeError(
+                    f"No executor supplied for {task_id}: "
+                    "refusing to treat unexecuted work as verified")
 
             if not bool(exec_out.get("verified", False)):
                 raise RuntimeError(str(exec_out.get("failure_reason") or f"Verification failed for {task_id}"))
