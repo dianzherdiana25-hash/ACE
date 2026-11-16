@@ -1,0 +1,65 @@
+{
+ "block": "EVO0005",
+ "n_train": 8,
+ "n_acc": 8,
+ "correction": "R_before corrected per hub decision 2026-11-16 ~20:00: the four BEFORE language rows in before.jsonl are outage rows (ace-front OOM-killed 19:32:18, systemd journal; one mid-death 900 s row, one cut connection, two BrainUnavailable wall-0). They are PRESERVED in before.jsonl and marked invalid_by_outage here; the valid language rows are before_lang_remeasure.jsonl (healthy front, NRestarts unchanged at 5).",
+ "invalid_by_outage": [
+  "ho-lang-001",
+  "ho-lang-002",
+  "ho-lang-003",
+  "ho-lang-004"
+ ],
+ "before_corrected": {
+  "per_kind": {
+   "code": {
+    "n": 4,
+    "ratified": 3,
+    "rate": 0.75
+   },
+   "language": {
+    "n": 4,
+    "ratified": 4,
+    "rate": 1.0
+   }
+  },
+  "n": 8,
+  "ratified": 7,
+  "rate": 0.875
+ },
+ "after_acc": {
+  "per_kind": {
+   "code": {
+    "n": 4,
+    "ratified": 3,
+    "rate": 0.75
+   },
+   "language": {
+    "n": 4,
+    "ratified": 4,
+    "rate": 1.0
+   }
+  },
+  "n": 8,
+  "ratified": 7,
+  "rate": 0.875
+ },
+ "after_sham": {
+  "per_kind": {
+   "code": {
+    "n": 4,
+    "ratified": 3,
+    "rate": 0.75
+   },
+   "language": {
+    "n": 4,
+    "ratified": 4,
+    "rate": 1.0
+   }
+  },
+  "n": 8,
+  "ratified": 7,
+  "rate": 0.875
+ },
+ "verdict": "NOL",
+ "reading": "All three valid arms land at 7/8 = 0.875 (code 3/4 in every arm \u2014 ho-code-001 fails everywhere, an episode property; language 4/4 in every valid arm). Neither preregistered clause holds: R_after_acc > R_before fails by equality, R_after_acc > R_after_sham fails by equality. The ratification loop as machinery worked end-to-end (accumulation 8/8 ratified, 8 verdict_sealed records written); the measured claim \u2014 that verdict-summary context lifts held-out ratification \u2014 is NOT supported at N=8 on this family."
+}

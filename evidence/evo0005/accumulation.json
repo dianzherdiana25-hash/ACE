@@ -1,0 +1,70 @@
+{
+ "steps": [
+  {
+   "status": "measured",
+   "cursor": 0,
+   "episode_id": "tr-code-001",
+   "ratified": true,
+   "writeback_id": "mem_50dd44651a7e4edaeb2d",
+   "wall_s": 608.9
+  },
+  {
+   "status": "measured",
+   "cursor": 1,
+   "episode_id": "tr-code-002",
+   "ratified": true,
+   "writeback_id": "mem_9801713890d24e290860",
+   "wall_s": 476.1
+  },
+  {
+   "status": "measured",
+   "cursor": 2,
+   "episode_id": "tr-code-003",
+   "ratified": true,
+   "writeback_id": "mem_e84c3a04e0eb33111438",
+   "wall_s": 329.4
+  },
+  {
+   "status": "measured",
+   "cursor": 3,
+   "episode_id": "tr-code-004",
+   "ratified": true,
+   "writeback_id": "mem_438e04aa45f067ff008a",
+   "wall_s": 685.5
+  },
+  {
+   "status": "measured",
+   "cursor": 4,
+   "episode_id": "tr-lang-001",
+   "ratified": true,
+   "writeback_id": "mem_09abbb00217fedcca995",
+   "wall_s": 144.4
+  },
+  {
+   "status": "measured",
+   "cursor": 5,
+   "episode_id": "tr-lang-002",
+   "ratified": true,
+   "writeback_id": "mem_378c659d9adc46500496",
+   "wall_s": 83.1
+  },
+  {
+   "status": "measured",
+   "cursor": 6,
+   "episode_id": "tr-lang-003",
+   "ratified": true,
+   "writeback_id": "mem_642874c6bd9876760bec",
+   "wall_s": 122.5
+  },
+  {
+   "status": "measured",
+   "cursor": 7,
+   "episode_id": "tr-lang-004",
+   "ratified": true,
+   "writeback_id": "mem_f10825c0ebbf818059d0",
+   "wall_s": 89.9
+  }
+ ],
+ "n_acc": 8,
+ "memory_root": "/workspace/evo0003-stage/evo0005-stage/out/accum_ws/cognitive_memory"
+}
