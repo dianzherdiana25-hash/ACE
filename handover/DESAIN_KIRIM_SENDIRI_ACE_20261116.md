@@ -124,3 +124,39 @@ JSONL lokal + ter-commit), mengikuti pola verifikasi otoritatif
 manajer. Berkas penanda tetap ABSEN; kiriman live pertama tetap
 kiriman uji terawasi yang menunggu penyediaan gh auth operator
 di sandbox.
+
+## 8. Perkerasan pasca-telaah (Ian, 2026-11-16)
+
+Telaah statik eksternal atas PR #241 menilai amplop v1 belum
+aman sebagai pembatas. Lima titiknya diperbaiki berurutan;
+non-force + draft-only dipertahankan; tes kini 29 (hijau):
+
+1. **Kunci repo + basis aktual:** send() memverifikasi URL
+   origin terkonfigurasi == dianzherdiana25-hash/ACE sebelum
+   efek apa pun; branch dibuat DARI ref lokal `main`
+   terverifikasi (bukan HEAD aktif); index/worktree kotor
+   menolak send; commit dibatasi pathspec allowlist — di-stage
+   eksplisit lalu himpunan staged diverifikasi nama-per-nama.
+2. **Symlink tertutup:** setiap tujuan tulis (payload + audit)
+   wajib ter-resolve di dalam root repo; jalur yang keluar
+   lewat symlink ditolak sebelum penulisan.
+3. **Marker + audit lengkap:** marker dicek sebelum staging
+   apa pun (flush tanpa marker tidak mengekspor apa pun);
+   audit lokal mencatat juga flush kosong dan
+   exception/timeout; audit ter-commit kini dua fase — baris
+   `prepared` di commit isi, baris FINAL (outcome + nomor PR)
+   di commit susulan pada branch yang sama, jadi catatan repo
+   tidak pernah berhenti di status pending.
+4. **Batas batch:** ekspor mengecualikan id yang sudah ter-ack
+   persisten (ack hanya bila nomor PR ada); flush kedua di
+   hari yang sama mengambil slug bersufiks (-2, -3, …) anti
+   benturan.
+5. **Tes sungguhan:** kelas TestRealGit menjalankan git nyata
+   di repo sementara (remote bare lokal via insteadOf; hanya
+   gh yang di-stub): end-to-end + basis main dari HEAD
+   non-main, origin salah, worktree kotor, symlink, flush
+   tanpa marker, dedup + slug — 7 tes, semuanya hijau bersama
+   22 tes gerbang/fake yang disesuaikan.
+
+Penanda tetap ABSEN; kiriman uji terawasi menunggu verifikasi
+ulang telaah + penyediaan gh auth operator.

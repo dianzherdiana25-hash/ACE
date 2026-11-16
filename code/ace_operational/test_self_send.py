@@ -5,8 +5,16 @@ path allowlist/denylist, non-force push, draft-only PRs,
 duplicate refusal, fail-closed audit. A scripted fake runner
 stands in for git/gh so every argv is inspectable; no network,
 no real remote, no credentials anywhere near these tests.
+
+TestRealGit goes further (the hardening review's point 5):
+a REAL git index in a temp repo — only `gh` is stubbed, and
+the remote is a local bare repo reached through an insteadOf
+rewrite, so origin identity reads as the ACE GitHub URL while
+transport stays on disk.
 """
 import json
+import os
+import subprocess
 import tempfile
 import unittest
 from datetime import date
@@ -19,13 +27,24 @@ PR_URL = "https://github.com/dianzherdiana25-hash/ACE/pull/999"
 
 
 class FakeRunner:
+    """Scripted git/gh stand-in for the gate tests. Stateful
+    in exactly one place: it remembers the paths of the last
+    `git add` so `git diff --cached --name-only` can answer
+    like a real index (the module verifies the staged set)."""
+
     def __init__(self, *, auth_ok=True, branch_local=False,
-                 branch_remote=False, fail_at=None):
+                 branch_remote=False, fail_at=None,
+                 origin="https://github.com/"
+                        "dianzherdiana25-hash/ACE.git",
+                 dirty=False):
         self.calls = []
         self.auth_ok = auth_ok
         self.branch_local = branch_local
         self.branch_remote = branch_remote
         self.fail_at = fail_at
+        self.origin = origin
+        self.dirty = dirty
+        self.staged = []
 
     def __call__(self, argv, cwd):
         self.calls.append(list(argv))
@@ -34,8 +53,21 @@ class FakeRunner:
             return 1, "", f"injected failure at {self.fail_at}"
         if argv[:3] == ["gh", "auth", "status"]:
             return (0, "", "") if self.auth_ok else (1, "", "no auth")
+        if argv[:4] == ["git", "config", "--get",
+                        "remote.origin.url"]:
+            return 0, self.origin + "\n", ""
+        if argv[:3] == ["git", "status", "--porcelain"]:
+            return 0, (" M junk.txt\n" if self.dirty else ""), ""
+        if argv[:2] == ["git", "add"]:
+            self.staged = sorted(argv[argv.index("--") + 1:])
+            return 0, "", ""
+        if argv[:4] == ["git", "diff", "--cached", "--name-only"]:
+            return 0, "".join(p + "\n" for p in self.staged), ""
         if argv[:2] == ["git", "rev-parse"]:
-            return (0, "abc\n", "") if self.branch_local else (1, "", "")
+            if "refs/heads/main" in joined:
+                return 0, "abc\n", ""
+            return (0, "abc\n", "") if self.branch_local \
+                else (1, "", "")
         if argv[:2] == ["git", "ls-remote"]:
             if self.branch_remote:
                 return 0, f"abc\trefs/heads/{argv[-1]}\n", ""
@@ -128,6 +160,33 @@ class TestGates(SelfSendCase):
         result = self.send(FakeRunner(), slug="Bad Slug!")
         self.assertTrue(result.reason.startswith("governance:"))
 
+    def test_wrong_origin_refuses(self):
+        self.arm_marker()
+        runner = FakeRunner(
+            origin="https://github.com/someone/else.git")
+        result = self.send(runner)
+        self.assertEqual(result.reason, "origin_mismatch")
+        self.assertFalse((self.repo / "handover/NOTE.md").exists())
+
+    def test_dirty_worktree_refuses(self):
+        self.arm_marker()
+        result = self.send(FakeRunner(dirty=True))
+        self.assertEqual(result.reason, "worktree_dirty")
+
+    def test_runner_exception_is_audited(self):
+        self.arm_marker()
+
+        def boom(argv, cwd):
+            if argv[:2] == ["git", "config"]:
+                raise TimeoutError("simulated timeout")
+            return FakeRunner()(argv, cwd)
+
+        result = self.send(boom)
+        self.assertFalse(result.sent)
+        self.assertTrue(result.reason.startswith("error:"))
+        self.assertEqual(self.audit_rows()[-1]["outcome"],
+                         "error:TimeoutError")
+
 
 class TestHappyPath(SelfSendCase):
     def test_send_creates_draft_pr_without_force(self):
@@ -203,7 +262,7 @@ class TestPathsAndNames(unittest.TestCase):
 class TestRatificationBatch(SelfSendCase):
     def write_store(self, records):
         root = Path(self.tmp.name) / "memory"
-        root.mkdir()
+        root.mkdir(exist_ok=True)
         (root / "memory.jsonl").write_text(
             "".join(json.dumps(r) + "\n" for r in records))
         return root
@@ -222,10 +281,11 @@ class TestRatificationBatch(SelfSendCase):
         ])
         out1 = Path(self.tmp.name) / "o1.jsonl"
         out2 = Path(self.tmp.name) / "o2.jsonl"
-        n1, d1 = ss.export_ratification_batch(root, out1)
-        n2, d2 = ss.export_ratification_batch(root, out2)
+        n1, d1, ids1 = ss.export_ratification_batch(root, out1)
+        n2, d2, _ids2 = ss.export_ratification_batch(root, out2)
         self.assertEqual(n1, 3)
         self.assertEqual((n1, d1), (n2, d2))
+        self.assertEqual(ids1, ["r1", "r2", "r4"])
         ids = [json.loads(l)["id"]
                for l in out1.read_text().splitlines()]
         self.assertEqual(ids, ["r1", "r2", "r4"])
@@ -252,6 +312,229 @@ class TestRatificationBatch(SelfSendCase):
             ["handover/memory_writeback/"
              "20261116-ratification-batch.jsonl"])
         self.assertIn("--draft", runner.argv_text())
+
+    def test_flush_without_marker_writes_no_staging(self):
+        root = self.write_store([self.rec("r1", "verdict_sealed")])
+        runner = FakeRunner()
+        result = ss.flush(root, self.repo, self.home, today=TODAY,
+                          runner=runner)
+        self.assertEqual(result.reason, "marker_absent")
+        self.assertEqual(runner.calls, [])
+        self.assertFalse((self.home / "self_send_staging").exists())
+        self.assertEqual(self.audit_rows()[-1]["outcome"],
+                         "refused:marker_absent")
+
+    def test_flush_dedups_acked_records(self):
+        root = self.write_store([self.rec("r1", "verdict_sealed")])
+        self.arm_marker()
+        first = ss.flush(root, self.repo, self.home, today=TODAY,
+                         runner=FakeRunner())
+        self.assertTrue(first.sent, first.reason)
+        acked = json.loads(
+            (self.home / ss.ACK_NAME).read_text())
+        self.assertIn("r1", acked)
+        second = ss.flush(root, self.repo, self.home, today=TODAY,
+                          runner=FakeRunner())
+        self.assertEqual(second.reason, "no_ratification_records")
+
+    def test_flush_second_batch_same_day_takes_suffix(self):
+        root = self.write_store([self.rec("r1", "verdict_sealed")])
+        self.arm_marker()
+        first = ss.flush(root, self.repo, self.home, today=TODAY,
+                         runner=FakeRunner())
+        self.assertTrue(first.sent, first.reason)
+        self.assertTrue(first.branch.endswith("memory-writeback"))
+        root = self.write_store([self.rec("r1", "verdict_sealed"),
+                                 self.rec("r2", "skill_verified")])
+        second = ss.flush(root, self.repo, self.home, today=TODAY,
+                          runner=FakeRunner())
+        self.assertTrue(second.sent, second.reason)
+        self.assertTrue(
+            second.branch.endswith("memory-writeback-2"),
+            second.branch)
+        self.assertEqual(
+            second.files,
+            ["handover/memory_writeback/"
+             "20261116-ratification-batch.jsonl"])
+
+
+def _git(cwd, *args):
+    proc = subprocess.run(["git", *args], cwd=str(cwd),
+                          capture_output=True, text=True)
+    if proc.returncode != 0:
+        raise AssertionError(
+            f"git {args} failed: {proc.stderr.strip()}")
+    return proc.stdout
+
+
+class HybridRunner:
+    """Real git via the module's own runner; stubbed gh."""
+
+    def __call__(self, argv, cwd):
+        if argv[0] == "gh":
+            if argv[:3] == ["gh", "auth", "status"]:
+                return 0, "", ""
+            if argv[:3] == ["gh", "pr", "create"]:
+                return 0, PR_URL + "\n", ""
+            if argv[:3] == ["gh", "pr", "view"]:
+                return 0, json.dumps({
+                    "number": 999, "url": PR_URL,
+                    "state": "OPEN", "isDraft": True}), ""
+            return 0, "", ""
+        return ss._default_runner(argv, cwd)
+
+
+class TestRealGit(unittest.TestCase):
+    ACE_URL = "https://github.com/dianzherdiana25-hash/ACE.git"
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        root = Path(self.tmp.name)
+        self.home = root / "home"
+        self.home.mkdir()
+        (self.home / ss.MARKER_NAME).write_text("enabled\n")
+        self.bare = root / "origin.git"
+        _git(root, "init", "--bare", "-b", "main", str(self.bare))
+        self.repo = root / "repo"
+        _git(root, "init", "-b", "main", str(self.repo))
+        _git(self.repo, "config", "user.name", "Test")
+        _git(self.repo, "config", "user.email", "test@local")
+        (self.repo / "README.md").write_text("base\n")
+        _git(self.repo, "add", "README.md")
+        _git(self.repo, "commit", "-m", "base")
+        _git(self.repo, "remote", "add", "origin", self.ACE_URL)
+        _git(self.repo, "config",
+             f"url.{self.bare}.insteadOf", self.ACE_URL)
+        _git(self.repo, "push", "-u", "origin", "main")
+        self.runner = HybridRunner()
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def send(self, **kw):
+        kw.setdefault("slug", "real")
+        kw.setdefault("trigger", "manual_cli")
+        kw.setdefault("today", TODAY)
+        kw.setdefault("runner", self.runner)
+        kw.setdefault("files", {"handover/NOTE.md": b"# note\n"})
+        return ss.send(self.repo, self.home, **kw)
+
+    def tree(self, ref):
+        return _git(self.repo, "ls-tree", "-r", "--name-only",
+                    ref).splitlines()
+
+    def test_real_send_end_to_end(self):
+        result = self.send()
+        self.assertTrue(result.sent, result.reason)
+        branch = "ace-auto/20261116-real"
+        self.assertEqual(result.branch, branch)
+        main_tip = _git(self.repo, "rev-parse", "main").strip()
+        base = _git(self.repo, "merge-base", "main",
+                    branch).strip()
+        self.assertEqual(base, main_tip)
+        names = self.tree(branch)
+        self.assertIn("handover/NOTE.md", names)
+        self.assertIn(ss.AUDIT_REPO_PATH, names)
+        audit = _git(self.repo, "show",
+                     f"{branch}:{ss.AUDIT_REPO_PATH}")
+        rows = [json.loads(l) for l in audit.splitlines()]
+        self.assertEqual(rows[0]["outcome"], "prepared")
+        self.assertEqual(rows[-1]["outcome"], "sent")
+        self.assertEqual(rows[-1]["pr_number"], 999)
+        self.assertEqual(
+            _git(self.repo, "branch", "--show-current").strip(),
+            "main")
+        self.assertEqual(
+            _git(self.repo, "status", "--porcelain"), "")
+
+    def test_real_head_non_main_still_bases_on_main(self):
+        _git(self.repo, "checkout", "-b", "feature")
+        (self.repo / "feature.txt").write_text("f\n")
+        _git(self.repo, "add", "feature.txt")
+        _git(self.repo, "commit", "-m", "feature work")
+        result = self.send()
+        self.assertTrue(result.sent, result.reason)
+        self.assertNotIn("feature.txt", self.tree(result.branch))
+        main_tip = _git(self.repo, "rev-parse", "main").strip()
+        base = _git(self.repo, "merge-base", "main",
+                    result.branch).strip()
+        self.assertEqual(base, main_tip)
+        self.assertEqual(
+            _git(self.repo, "branch", "--show-current").strip(),
+            "feature")
+
+    def test_real_wrong_origin_refused(self):
+        _git(self.repo, "remote", "set-url", "origin",
+             "https://github.com/someone/else.git")
+        result = self.send()
+        self.assertEqual(result.reason, "origin_mismatch")
+        self.assertFalse((self.repo / "handover/NOTE.md").exists())
+        self.assertEqual(
+            _git(self.repo, "branch", "--list", "ace-auto/*"), "")
+
+    def test_real_dirty_worktree_refused(self):
+        (self.repo / "junk.txt").write_text("x\n")
+        result = self.send()
+        self.assertEqual(result.reason, "worktree_dirty")
+        self.assertEqual(
+            _git(self.repo, "branch", "--list", "ace-auto/*"), "")
+
+    def test_real_symlink_escape_refused(self):
+        outside = Path(self.tmp.name) / "outside"
+        outside.mkdir()
+        (self.repo / "handover").mkdir()
+        os.symlink(outside, self.repo / "handover" / "link")
+        result = self.send(files={"handover/link/evil.md": b"x"})
+        self.assertFalse(result.sent)
+        self.assertTrue(result.reason.startswith("governance:"),
+                        result.reason)
+        self.assertFalse((outside / "evil.md").exists())
+
+    def write_store(self, records):
+        root = Path(self.tmp.name) / "memory"
+        root.mkdir(exist_ok=True)
+        (root / "memory.jsonl").write_text(
+            "".join(json.dumps(r) + "\n" for r in records))
+        return root
+
+    def rec(self, rid, cls):
+        return {"id": rid, "kind": "semantic",
+                "content": {"event": f"e-{rid}", "class": cls},
+                "source": {"kind": "evidence", "ref": "d" * 8}}
+
+    def test_real_flush_marker_absent_writes_no_staging(self):
+        (self.home / ss.MARKER_NAME).unlink()
+        root = self.write_store([self.rec("r1", "verdict_sealed")])
+        result = ss.flush(root, self.repo, self.home, today=TODAY,
+                          runner=self.runner)
+        self.assertEqual(result.reason, "marker_absent")
+        self.assertFalse((self.home / "self_send_staging").exists())
+
+    def test_real_flush_dedup_and_suffix(self):
+        root = self.write_store([self.rec("r1", "verdict_sealed")])
+        first = ss.flush(root, self.repo, self.home, today=TODAY,
+                         runner=self.runner)
+        self.assertTrue(first.sent, first.reason)
+        self.assertTrue(first.branch.endswith("memory-writeback"))
+        acked = json.loads((self.home / ss.ACK_NAME).read_text())
+        self.assertEqual(acked["r1"]["pr_number"], 999)
+        second = ss.flush(root, self.repo, self.home, today=TODAY,
+                          runner=self.runner)
+        self.assertEqual(second.reason, "no_ratification_records")
+        root = self.write_store([self.rec("r1", "verdict_sealed"),
+                                 self.rec("r2", "skill_verified")])
+        third = ss.flush(root, self.repo, self.home, today=TODAY,
+                         runner=self.runner)
+        self.assertTrue(third.sent, third.reason)
+        self.assertTrue(
+            third.branch.endswith("memory-writeback-2"),
+            third.branch)
+        payload = _git(self.repo, "show",
+                       f"{third.branch}:handover/memory_writeback/"
+                       "20261116-ratification-batch.jsonl")
+        ids = [json.loads(l)["id"]
+               for l in payload.splitlines() if l.strip()]
+        self.assertEqual(ids, ["r2"])
 
 
 if __name__ == "__main__":
