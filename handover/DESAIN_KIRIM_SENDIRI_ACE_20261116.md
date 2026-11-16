@@ -200,3 +200,57 @@ penuh.
 Yang dipertahankan utuh: non-force, draft-only, marker
 mendahului staging, dedup + sufiks slug. Penanda tetap
 ABSEN; gh auth tetap parkir menunggu verifikasi putaran ini.
+
+## 10. Putaran 4 — vonis akhir atas head d792a666 (Ian, 2026-11-16)
+
+Vonis akhir: BELUM LULUS — dua bypass target yang sudah
+terbukti DITAMBAH dua bukti Git nyata baru dan satu perluasan
+target. Semua menjadi tes regresi dulu (mekanisme real-git
+merah pada modul putaran 3), baru diperbaiki. Tes kini 42.
+
+Koreksi harness lebih dulu: pelari real-git putaran 3
+menulis-ulang kata kerja fetch itu sendiri (seam refspec
+paksa) — seam itulah yang menyembunyikan peracunan basis.
+Harness putaran 4 hanya men-stub PIPA transport
+(GIT_SSH_COMMAND ke bare lokal; origin mempertahankan
+identitas ACE aslinya dan get-url berkata jujur) dan gh.
+Tidak ada mekanisme yang diuji yang di-stub.
+
+1. **Berhenti emulasi semantik Git.** effective_push_urls()
+   dan seluruh mesin rewrite-nya DIHAPUS. Modul kini bertanya
+   ke git sendiri: `git remote get-url --all origin` dan
+   `git remote get-url --push --all origin`, dan SETIAP URL
+   hasil wajib mengidentifikasi
+   dianzherdiana25-hash/ACE. Target FETCH ikut digerbang
+   (insteadOf dapat membelokkan sumber fetch sementara
+   --push tetap ACE).
+2. **Basis dari fetch yang dikontrol modul:** `git fetch
+   origin +refs/heads/main:refs/ace-self-send/base` —
+   refspec eksplisit ke ref milik modul; basis = OID ref
+   itu. Probe peracunan (tracking ref berisi private.txt +
+   refspec fetch terkonfigurasi tak memetakan main) kini
+   menjadi tes: private.txt tidak terkirim dan ref
+   teracun tidak pernah dikonsultasikan (nilainya utuh
+   sesudah send).
+3. **Setiap push** (isi, audit final, jalur gagal):
+   `--no-follow-tags` + refspec penuh
+   refs/heads/<branch>:refs/heads/<branch>. Tes real:
+   push.followTags=true + tag teranotasi ber-canary rahasia
+   — tag tidak meninggalkan mesin.
+4. **Residual ditimbang, bukan disembunyikan:** penulisan
+   payload/audit kini memakai O_NOFOLLOW (komponen akhir
+   tak bisa ditukar symlink sesudah validasi). Penukaran
+   komponen induk di antara cek dan buka tetap terbuka
+   secara teoretis dan DITERIMA dengan alasannya: send
+   berjalan di worktree terkontrol tanpa penulis konkuren
+   dalam model ancaman. Allowlist nama berkas bukan
+   pemindai rahasia isi — di luar cakupan amplop, dicatat.
+   Pembungkus aplikasi tetap bukan pengganti scope token /
+   ruleset sisi server; keputusan proteksi repo tetap di
+   pemilik.
+
+Yang terbukti membaik di putaran 3 tidak digeser (symlink
+statis/terkomit tertolak sebelum tulis; finalisasi gagal ≠
+sent; ack atomik, korup ditolak, hanya sesudah terverifikasi).
+Penanda tetap ABSEN; gh auth tetap parkir menunggu
+verifikasi putaran ini.

@@ -73,6 +73,41 @@ first, in test_self_send.py):
    refusal (never silently read as empty), and records are
    acked only after a fully verified send.
 
+Hardening round 4 (2026-11-16, the reviewer's final verdict
+on round 3 — again, regression tests first):
+
+1. NO emulation of git's URL semantics. Round 3 computed
+   effective push URLs itself and got them wrong twice
+   (multi-valued origin.url sliced to the first value;
+   pushurl makes git IGNORE pushInsteadOf, the emulator
+   preferred it). The module now asks git itself —
+   `git remote get-url --all origin` and
+   `git remote get-url --push --all origin` — and requires
+   EVERY returned URL to identify EXPECTED_REPO. The FETCH
+   target is gated too (a rewrite can move the fetch source
+   while the push target stays honest).
+2. The basis comes from a fetch the module controls:
+   `git fetch origin +refs/heads/main:refs/ace-self-send/base`
+   — an explicit refspec into a module-owned ref — and the
+   basis is that ref's OID. Round 3 read
+   refs/remotes/origin/main, which a plain fetch does not
+   guarantee to update (the configured fetch refspec may
+   not map main): the reviewer's probe poisoned the
+   tracking ref with a synthetic commit and the poison
+   shipped, invisible to the basis..branch diff.
+3. EVERY push (content, final audit, failure path) carries
+   --no-follow-tags and a full
+   refs/heads/<branch>:refs/heads/<branch> refspec: with
+   push.followTags=true a bare branch push used to carry
+   reachable annotated tags out of the namespace.
+4. Residual, weighed and recorded (design doc section 10):
+   payload/audit files are opened with O_NOFOLLOW so the
+   final path component cannot be swapped for a symlink
+   after validation; a parent-component swap between the
+   check and the open remains theoretically open and is
+   accepted — the send runs in a controlled worktree with
+   no concurrent writer in the threat model.
+
 Why this module does not call AutonomousPRManager's pipeline:
 on current main the manager's commit step is evaluation-gated
 shut (it returns BLOCKED: candidate-bound independent
@@ -96,6 +131,12 @@ from typing import Callable, Iterable, Mapping, Optional
 MARKER_NAME = "ACE_SELF_SEND_ENABLED"
 EXPECTED_REPO = "dianzherdiana25-hash/ACE"
 BASE_BRANCH = "main"
+# Round 4: the basis ref is module-owned and written ONLY by
+# the module's own explicit fetch refspec below — never by
+# the repo's configured fetch refspecs, whose mapping (or a
+# poisoned tracking ref) the send cannot trust.
+BASIS_REF = "refs/ace-self-send/base"
+FETCH_REFSPEC = f"+refs/heads/{BASE_BRANCH}:{BASIS_REF}"
 BRANCH_PREFIX = "ace-auto/"
 ALLOWED_PATH_PREFIXES = ("handover/", "evidence/")
 AUDIT_REPO_PATH = "handover/self_send_audit.jsonl"
@@ -271,63 +312,40 @@ def _branch_exists(repo: Path, branch: str, runner: Runner) -> bool:
     return rc == 0 and branch in out
 
 
-def _config_get_all(repo: Path, runner: Runner, key: str) -> list:
-    rc, out, _e = runner(["git", "config", "--get-all", key], repo)
+def _remote_urls(repo: Path, runner: Runner, *,
+                 push: bool) -> Optional[list]:
+    """Git's OWN answer for where a fetch (or push) to
+    origin would actually go: `git remote get-url [--push]
+    --all origin`. Round 4: the module never computes
+    effective URLs itself (its round-3 emulation of
+    insteadOf/pushInsteadOf semantics was wrong twice).
+    Returns None when git cannot answer."""
+    argv = ["git", "remote", "get-url"]
+    if push:
+        argv.append("--push")
+    argv += ["--all", "origin"]
+    rc, out, _e = runner(argv, repo)
     if rc != 0:
-        return []
-    return [line.strip() for line in out.splitlines() if line.strip()]
+        return None
+    return [line.strip() for line in out.splitlines()
+            if line.strip()]
 
 
-def _rewrite_rules(repo: Path, runner: Runner) -> tuple:
-    """(insteadOf, pushInsteadOf) rewrite rules as
-    (replacement_base, url_prefix) pairs, from url.* config."""
-    rc, out, _e = runner(
-        ["git", "config", "--get-regexp", r"^url\."], repo)
-    plain: list = []
-    push: list = []
-    if rc != 0:
-        return plain, push
-    for line in out.splitlines():
-        if " " not in line:
-            continue
-        key, value = line.split(" ", 1)
-        lowered = key.lower()
-        if not lowered.startswith("url."):
-            continue
-        for suffix, target in ((".pushinsteadof", push),
-                               (".insteadof", plain)):
-            if lowered.endswith(suffix):
-                base = key[len("url."):len(key) - len(suffix)]
-                target.append((base, value.strip()))
-                break
-    return plain, push
+def _urls_identify_ace(urls: Optional[list]) -> bool:
+    """True iff git named at least one target and EVERY
+    target identifies EXPECTED_REPO."""
+    return bool(urls) and all(
+        parse_origin_repo(u) == EXPECTED_REPO for u in urls)
 
 
-def _apply_rewrites(url: str, plain: list, push: list) -> str:
-    """Git's rewrite semantics: a matching pushInsteadOf rule
-    (longest prefix) wins; insteadOf applies only when no
-    pushInsteadOf rule matches."""
-    for rules in (push, plain):
-        best = None
-        for base, prefix in rules:
-            if url.startswith(prefix) and (
-                    best is None or len(prefix) > len(best[1])):
-                best = (base, prefix)
-        if best is not None:
-            return best[0] + url[len(best[1]):]
-    return url
-
-
-def effective_push_urls(repo: Path, runner: Runner) -> list:
-    """Every URL a push to origin could actually reach: the
-    pushurl set when configured, else the fetch URL — each
-    with the configured rewrites applied."""
-    urls = _config_get_all(repo, runner, "remote.origin.url")
-    pushurls = _config_get_all(repo, runner,
-                                "remote.origin.pushurl")
-    sources = pushurls if pushurls else urls[:1]
-    plain, push = _rewrite_rules(repo, runner)
-    return [_apply_rewrites(u, plain, push) for u in sources]
+def _push_argv(branch: str) -> list:
+    """Every push the module makes has this exact shape:
+    --no-follow-tags (a bare branch push otherwise carries
+    reachable annotated tags when push.followTags is set)
+    and a full branch-to-branch refspec (nothing else can
+    ride along)."""
+    refspec = f"refs/heads/{branch}:refs/heads/{branch}"
+    return ["git", "push", "--no-follow-tags", "origin", refspec]
 
 
 def _audit_row(*, when: str, trigger: str, branch: str,
@@ -345,6 +363,25 @@ def _append_local_audit(home: Path, row: dict) -> None:
         fh.write(json.dumps(row, sort_keys=True) + "\n")
 
 
+def _write_file_nofollow(dest: Path, data: bytes, *,
+                         append: bool = False) -> None:
+    """Write `data` refusing a symlinked final component
+    (O_NOFOLLOW): the check-then-open window for the final
+    component is closed — a symlink swapped in after path
+    validation makes the open fail instead of following it.
+    (A parent-component swap remains a recorded residual;
+    see the module docstring, round 4 point 4.)"""
+    flags = os.O_WRONLY | os.O_CREAT | os.O_NOFOLLOW
+    flags |= os.O_APPEND if append else os.O_TRUNC
+    try:
+        fd = os.open(dest, flags, 0o644)
+    except OSError as exc:
+        raise SelfSendRefused(
+            f"refused to open {dest.name}: {exc}") from exc
+    with os.fdopen(fd, "ab" if append else "wb") as fh:
+        fh.write(data)
+
+
 def _append_repo_audit(repo: Path, row: dict) -> None:
     if symlink_components(repo, AUDIT_REPO_PATH):
         raise SelfSendRefused("symlink in audit path components")
@@ -354,8 +391,9 @@ def _append_repo_audit(repo: Path, row: dict) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
     if symlink_components(repo, AUDIT_REPO_PATH):
         raise SelfSendRefused("symlink in audit path components")
-    with dest.open("a", encoding="utf-8") as fh:
-        fh.write(json.dumps(row, sort_keys=True) + "\n")
+    _write_file_nofollow(
+        dest, (json.dumps(row, sort_keys=True) + "\n").encode(
+            "utf-8"), append=True)
 
 
 def _write_payload_file(repo: Path, rel: str, data: bytes) -> None:
@@ -372,7 +410,7 @@ def _write_payload_file(repo: Path, rel: str, data: bytes) -> None:
     dest = resolve_within_root(repo, rel)
     if dest is None:
         raise SelfSendRefused(f"path escapes repo root: {rel}")
-    dest.write_bytes(data)
+    _write_file_nofollow(dest, data)
 
 
 def _staged_names(repo: Path, runner: Runner) -> list:
@@ -465,22 +503,28 @@ def send(repo_root: Path, home: Path, *,
     created_branch = False
     pushed = False
     try:
-        rc, out, _e = run(["git", "config", "--get",
-                           "remote.origin.url"])
-        if rc != 0 or parse_origin_repo(out) != EXPECTED_REPO:
-            return refuse("origin_mismatch")
-        targets = effective_push_urls(repo, runner)
-        if not targets or any(
-                parse_origin_repo(u) != EXPECTED_REPO
-                for u in targets):
+        # Round 4: git itself names the targets. EVERY fetch
+        # URL and EVERY push URL must identify EXPECTED_REPO —
+        # a multi-valued origin.url, a pushurl, or a rewrite
+        # that moves any one of them refuses the send before
+        # any transport happens.
+        if not _urls_identify_ace(
+                _remote_urls(repo, runner, push=False)):
+            return refuse("fetch_target_mismatch")
+        if not _urls_identify_ace(
+                _remote_urls(repo, runner, push=True)):
             return refuse("push_target_mismatch")
         if not check_gh_auth(repo, runner):
             return refuse("gh_auth_unhealthy")
-        rc, _o, err = run(["git", "fetch", "origin", BASE_BRANCH])
+        # The basis comes from the module's OWN fetch: an
+        # explicit refspec into the module-owned BASIS_REF.
+        # The configured fetch refspecs (and any poisoned
+        # tracking ref) play no part in it.
+        rc, _o, err = run(["git", "fetch", "origin", FETCH_REFSPEC])
         if rc != 0:
             return refuse(f"fetch_failed:{err.strip()[:120]}")
         rc, out, _e = run(["git", "rev-parse", "--verify", "--quiet",
-                           f"refs/remotes/origin/{BASE_BRANCH}"])
+                           BASIS_REF])
         if rc != 0 or not out.strip():
             return refuse("base_main_missing")
         basis = out.strip()
@@ -520,7 +564,7 @@ def send(repo_root: Path, home: Path, *,
             return refuse(f"commit_failed:{err.strip()[:120]}")
         if not _validate_outgoing(repo, runner, basis, branch):
             return refuse("outgoing_validation_failed")
-        rc, _o, err = run(["git", "push", "-u", "origin", branch])
+        rc, _o, err = run(_push_argv(branch))
         if rc != 0:
             return refuse(f"push_failed:{err.strip()[:120]}")
         pushed = True
@@ -542,7 +586,7 @@ def send(repo_root: Path, home: Path, *,
                 _append_repo_audit(repo, final)
                 _commit_staged(repo, runner, [AUDIT_REPO_PATH],
                                f"ACE self-send audit: {branch}")
-                run(["git", "push", "origin", branch])
+                run(_push_argv(branch))
             except Exception:
                 pass
             _append_local_audit(home, final)
@@ -581,7 +625,7 @@ def send(repo_root: Path, home: Path, *,
             if rc != 0:
                 finalize_ok = False
             else:
-                rc, _o, err = run(["git", "push", "origin", branch])
+                rc, _o, err = run(_push_argv(branch))
                 finalize_ok = rc == 0
         except Exception:
             finalize_ok = False
