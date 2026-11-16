@@ -47,6 +47,13 @@ EVENT_CLASSES: dict[str, tuple[str, float]] = {
     "mission_ratified": ("episodic", 0.95),
     "finding_high_opened": ("episodic", 0.90),
     "finding_high_closed": ("episodic", 0.90),
+    # EVO 0004 Blok B (preregistration PR #243): a dedicated
+    # class for write-path audit probes, registered openly
+    # after EVO 0003's B4 probe was refused for using an
+    # unregistered class ('evo0003_blast_b4_probe'). Audit
+    # probes are episodic records of a verification act, not
+    # ratifications — they never reuse a ratification class.
+    "writepath_audit_probe": ("episodic", 0.90),
 }
 
 

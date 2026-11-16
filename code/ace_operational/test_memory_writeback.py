@@ -208,5 +208,50 @@ class VerifierWiringTests(unittest.TestCase):
             self.assertEqual(records[0]["source"]["kind"], "evidence")
 
 
+class AuditProbeClassTests(unittest.TestCase):
+    """EVO 0004 Blok B: the dedicated write-path audit probe
+    class is registered, round-trips, replays idempotently,
+    and the fail-closed boundary for unregistered classes is
+    unchanged."""
+
+    def test_probe_class_registered_with_episodic_mapping(self):
+        from ace_operational.memory_writeback import EVENT_CLASSES
+        self.assertEqual(EVENT_CLASSES["writepath_audit_probe"],
+                         ("episodic", 0.90))
+
+    def test_probe_write_read_back_and_replay(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d) / "mem"
+            rid = record_verified_event(
+                root, event="writepath_audit_probe",
+                summary="writepath audit probe (test)",
+                evidence_bytes=EVIDENCE,
+                content_extra={"probe": "test"})
+            self.assertIsNotNone(rid)
+            again = record_verified_event(
+                root, event="writepath_audit_probe",
+                summary="writepath audit probe (test)",
+                evidence_bytes=EVIDENCE,
+                content_extra={"probe": "test"})
+            self.assertEqual(again, rid)
+            records = _records(root)
+            self.assertEqual(len(records), 1)
+            rec = records[0]
+            self.assertEqual(rec["id"], rid)
+            self.assertEqual(rec["kind"], "episodic")
+            self.assertEqual(rec["content"]["class"],
+                             "writepath_audit_probe")
+            self.assertEqual(rec["source"]["ref"], _digest(EVIDENCE))
+
+    def test_unregistered_class_still_raises(self):
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaises(ValueError):
+                record_verified_event(
+                    Path(d) / "mem",
+                    event="evo0003_blast_b4_probe",
+                    summary="the B4 probe class stays unregistered",
+                    evidence_bytes=EVIDENCE)
+
+
 if __name__ == "__main__":
     unittest.main()
