@@ -1,0 +1,19 @@
+{
+ "arm": "cold20262001",
+ "seed": 20262001,
+ "discovery_score_calls": 23507,
+ "discovery_wall_s": 1569.4,
+ "coverage": {
+  "catalog_keys": 6,
+  "catalog_chains": 2,
+  "catalog_digest": "561d272b947c731728d39e6804ac2f3eb416b5e9e4fd3036bd4d4e1f1efd8371",
+  "evaluation_solved": [
+   29,
+   29
+  ],
+  "control_solved": [
+   34,
+   34
+  ]
+ }
+}

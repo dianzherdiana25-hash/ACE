@@ -1,0 +1,86 @@
+{
+ "block": "B2",
+ "seed": 20261903,
+ "precondition_flips": [
+  "catalog_control-020",
+  "catalog_control-021",
+  "catalog_control-024"
+ ],
+ "precondition_cells": {
+  "clean_guarded": {
+   "solved": 33,
+   "total": 34
+  },
+  "clean_stock": {
+   "solved": 33,
+   "total": 34
+  },
+  "infected_guarded": {
+   "solved": 33,
+   "total": 34
+  },
+  "infected_stock": {
+   "solved": 30,
+   "total": 34
+  }
+ },
+ "catalog_digest": "465508efbe082f31a3f87ccf01742cfc43fb76c97477577027a9bc0e44c35913",
+ "catalog_size": 6,
+ "entry_id": "name-swap-523014-nc-band20261501-band20261903",
+ "stock": {
+  "distractor_id": "name-swap-523014-nc-band20261501-band20261903",
+  "key": "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')",
+  "mechanism": "search-path diversion (distractor interference, path form): the key's first improving step diverts the greedy walk into a region whose bounded enumeration never generates the baseline solution",
+  "already_in_catalog": false,
+  "witnesses": [
+   {
+    "task_id": "catalog_control-020",
+    "solved_clean": true,
+    "solved_injected": false,
+    "diverted": true
+   },
+   {
+    "task_id": "catalog_control-021",
+    "solved_clean": true,
+    "solved_injected": false,
+    "diverted": true
+   },
+   {
+    "task_id": "catalog_control-024",
+    "solved_clean": true,
+    "solved_injected": false,
+    "diverted": true
+   }
+  ],
+  "verdict": "SUSCEPTIBLE"
+ },
+ "guarded": {
+  "distractor_id": "name-swap-523014-nc-band20261501-band20261903",
+  "key": "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')",
+  "mechanism": "search-path diversion (distractor interference, path form): the key's first improving step diverts the greedy walk into a region whose bounded enumeration never generates the baseline solution",
+  "already_in_catalog": false,
+  "witnesses": [
+   {
+    "task_id": "catalog_control-020",
+    "solved_clean": true,
+    "solved_injected": true,
+    "diverted": false
+   },
+   {
+    "task_id": "catalog_control-021",
+    "solved_clean": true,
+    "solved_injected": true,
+    "diverted": false
+   },
+   {
+    "task_id": "catalog_control-024",
+    "solved_clean": true,
+    "solved_injected": true,
+    "diverted": false
+   }
+  ],
+  "verdict": "NOT_SUSCEPTIBLE"
+ },
+ "wall_s": 204.1,
+ "verdict": "PASS"
+}
