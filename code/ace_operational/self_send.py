@@ -20,9 +20,9 @@ Governance added over the raw mechanics:
 - branch namespace is hard: `ace-auto/<yyyymmdd>-<slug>` only,
   always a NEW branch (non-force push; an existing branch —
   local or remote — refuses the send as a duplicate);
-- pull requests are created `--draft` only; this module has
-  no merge code at all (merging is never the machine's
-  authority);
+- pull requests are created `--draft` only, pinned with an
+  explicit `--repo`; this module has no merge code at all
+  (merging is never the machine's authority);
 - a path allowlist (handover/, evidence/, and the audit file)
   plus an explicit denylist (private ledger, secrets) is
   enforced before anything is written or committed;
@@ -35,30 +35,43 @@ Governance added over the raw mechanics:
   a pushed branch whose PR step failed is reported by name
   for operator cleanup, never force-touched.
 
-Hardening (2026-11-16, after an external static review of the
-first version; the review's points, in the order fixed):
+Hardening round 2 (2026-11-16, external static review):
+origin lock, branch from verified local main, dirty-tree
+refusal, staged-set verification, resolved-path (symlink
+escape) checks, marker before any staging, audited empty
+flushes and exceptions, persistent ack/dedup, same-day slug
+suffixes. See the design doc section 8.
 
-1. repo + basis lock: the configured origin must be exactly
-   EXPECTED_REPO; the branch is created FROM the verified
-   local `main` ref, never from whatever HEAD is active; a
-   non-clean index/worktree refuses the send; the commit is
-   restricted to the allowlisted paths — staged, then the
-   staged set is verified name-for-name before committing.
-2. symlink closure: every destination (payload files and the
-   audit file) must RESOLVE inside the repo root; a path that
-   escapes through a symlink is refused before any write.
-3. marker + audit completeness: the marker is checked before
-   ANY staging is written (flush exports nothing while the
-   marker is absent); the local audit also records empty
-   flushes and exceptions/timeouts; the committed audit ends
-   at a final status (see the two-phase note above).
-4. batch bounds: ratification exports exclude record ids a
-   persistent ack file marks as already sent (acked only
-   once a PR number exists); a second flush on the same day
-   takes a suffixed slug instead of colliding.
-5. real-git tests cover the index, a non-main HEAD, a wrong
-   origin, symlinks, and a markerless flush — see
-   test_self_send.py (TestRealGit).
+Hardening round 3 (2026-11-16, the same reviewer's real-git
+probes against round 2 — each point is a regression test
+first, in test_self_send.py):
+
+1. the push TARGET is pinned, not just the fetch URL: every
+   effective push URL (remote.origin.pushurl when present,
+   with url.*.insteadOf / pushInsteadOf rewrites applied)
+   must identify EXPECTED_REPO, and every gh call carries an
+   explicit --repo (a GH_REPO env redirect cannot move it);
+2. the basis is the FETCHED origin/main commit, never the
+   local main (a synthetic local commit carrying an
+   outside-allowlist file used to ride along); before the
+   push, the ENTIRE outgoing diff (basis..branch) is
+   validated against the allowlist and the branch's
+   merge-base must be exactly the pinned basis;
+3. symlinks are refused in EVERY component of every
+   destination path (payload + audit) — an in-repo symlink
+   used to pass the resolved-path check and clobber its
+   target before the staged-set check could refuse — and
+   the validation runs again AFTER checkout, on the basis
+   tree, before any write;
+4. flush()'s export lives inside the same audited path as
+   send(): a corrupt memory store is an audited error, not
+   an escaping exception;
+5. partial success is explicit: if the final audit commit
+   or its push fails, the result is NOT sent (reason
+   audit_finalize_failed, PR number still reported); the
+   ack file is written atomically, a corrupt ack file is a
+   refusal (never silently read as empty), and records are
+   acked only after a fully verified send.
 
 Why this module does not call AutonomousPRManager's pipeline:
 on current main the manager's commit step is evaluation-gated
@@ -72,6 +85,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import subprocess
 from dataclasses import dataclass, field
@@ -133,6 +147,10 @@ class SelfSendRefused(Exception):
     """A governance gate refused the send before any effect."""
 
 
+class AckStoreCorrupt(Exception):
+    """The persistent ack file exists but cannot be trusted."""
+
+
 def marker_present(home: Path) -> bool:
     return (Path(home) / MARKER_NAME).is_file()
 
@@ -162,8 +180,9 @@ def path_allowed(rel: str) -> bool:
 
     Deny wins: a denied fragment anywhere in the lowered path
     refuses it even under an allowed prefix. This check is
-    lexical; the resolved-path check is separate
-    (resolve_within_root) and both must pass.
+    lexical; the resolved-path and symlink checks are separate
+    (resolve_within_root, symlink_components) and all must
+    pass.
     """
     if not rel or rel.startswith("/") or ".." in Path(rel).parts:
         return False
@@ -187,6 +206,21 @@ def resolve_within_root(repo: Path, rel: str) -> Optional[Path]:
     return None
 
 
+def symlink_components(repo: Path, rel: str) -> list:
+    """Components of `rel` (walking from the repo root) that
+    ARE symlinks in the current worktree. Any one of them —
+    directory or final component — makes the path unsafe to
+    write through, wherever the link points."""
+    bad = []
+    current = Path(repo)
+    for part in Path(rel).parts:
+        current = current / part
+        if current.is_symlink():
+            bad.append(part)
+            break
+    return bad
+
+
 def validate_paths(paths: Iterable[str]) -> list:
     paths = list(paths)
     if not paths:
@@ -198,12 +232,17 @@ def validate_paths(paths: Iterable[str]) -> list:
 
 
 def validate_resolved_paths(repo: Path, paths: Iterable[str]) -> list:
-    """Every path must also resolve inside the repo root."""
+    """Every path must resolve inside the repo root AND have
+    no symlink in any of its components."""
+    paths = list(paths)
     bad = [p for p in paths
            if resolve_within_root(repo, p) is None]
     if bad:
         raise SelfSendRefused(f"paths escape repo root: {bad}")
-    return list(paths)
+    linked = [p for p in paths if symlink_components(repo, p)]
+    if linked:
+        raise SelfSendRefused(f"symlink in path components: {linked}")
+    return paths
 
 
 def content_digest(files: Mapping[str, bytes]) -> str:
@@ -232,12 +271,72 @@ def _branch_exists(repo: Path, branch: str, runner: Runner) -> bool:
     return rc == 0 and branch in out
 
 
+def _config_get_all(repo: Path, runner: Runner, key: str) -> list:
+    rc, out, _e = runner(["git", "config", "--get-all", key], repo)
+    if rc != 0:
+        return []
+    return [line.strip() for line in out.splitlines() if line.strip()]
+
+
+def _rewrite_rules(repo: Path, runner: Runner) -> tuple:
+    """(insteadOf, pushInsteadOf) rewrite rules as
+    (replacement_base, url_prefix) pairs, from url.* config."""
+    rc, out, _e = runner(
+        ["git", "config", "--get-regexp", r"^url\."], repo)
+    plain: list = []
+    push: list = []
+    if rc != 0:
+        return plain, push
+    for line in out.splitlines():
+        if " " not in line:
+            continue
+        key, value = line.split(" ", 1)
+        lowered = key.lower()
+        if not lowered.startswith("url."):
+            continue
+        for suffix, target in ((".pushinsteadof", push),
+                               (".insteadof", plain)):
+            if lowered.endswith(suffix):
+                base = key[len("url."):len(key) - len(suffix)]
+                target.append((base, value.strip()))
+                break
+    return plain, push
+
+
+def _apply_rewrites(url: str, plain: list, push: list) -> str:
+    """Git's rewrite semantics: a matching pushInsteadOf rule
+    (longest prefix) wins; insteadOf applies only when no
+    pushInsteadOf rule matches."""
+    for rules in (push, plain):
+        best = None
+        for base, prefix in rules:
+            if url.startswith(prefix) and (
+                    best is None or len(prefix) > len(best[1])):
+                best = (base, prefix)
+        if best is not None:
+            return best[0] + url[len(best[1]):]
+    return url
+
+
+def effective_push_urls(repo: Path, runner: Runner) -> list:
+    """Every URL a push to origin could actually reach: the
+    pushurl set when configured, else the fetch URL — each
+    with the configured rewrites applied."""
+    urls = _config_get_all(repo, runner, "remote.origin.url")
+    pushurls = _config_get_all(repo, runner,
+                                "remote.origin.pushurl")
+    sources = pushurls if pushurls else urls[:1]
+    plain, push = _rewrite_rules(repo, runner)
+    return [_apply_rewrites(u, plain, push) for u in sources]
+
+
 def _audit_row(*, when: str, trigger: str, branch: str,
                digest: str, files: list, pr_number,
-               outcome: str) -> dict:
+               outcome: str, basis: str = "") -> dict:
     return {"ts": when, "trigger": trigger, "branch": branch,
-            "content_digest": digest, "files": files,
-            "pr_number": pr_number, "outcome": outcome}
+            "basis": basis, "content_digest": digest,
+            "files": files, "pr_number": pr_number,
+            "outcome": outcome}
 
 
 def _append_local_audit(home: Path, row: dict) -> None:
@@ -247,21 +346,29 @@ def _append_local_audit(home: Path, row: dict) -> None:
 
 
 def _append_repo_audit(repo: Path, row: dict) -> None:
+    if symlink_components(repo, AUDIT_REPO_PATH):
+        raise SelfSendRefused("symlink in audit path components")
     dest = resolve_within_root(repo, AUDIT_REPO_PATH)
     if dest is None:
         raise SelfSendRefused("audit path escapes repo root")
     dest.parent.mkdir(parents=True, exist_ok=True)
+    if symlink_components(repo, AUDIT_REPO_PATH):
+        raise SelfSendRefused("symlink in audit path components")
     with dest.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, sort_keys=True) + "\n")
 
 
 def _write_payload_file(repo: Path, rel: str, data: bytes) -> None:
+    if symlink_components(repo, rel):
+        raise SelfSendRefused(f"symlink in path components: {rel}")
     dest = resolve_within_root(repo, rel)
     if dest is None:
         raise SelfSendRefused(f"path escapes repo root: {rel}")
     dest.parent.mkdir(parents=True, exist_ok=True)
-    # Re-resolve after mkdir: a parent created through a
-    # symlinked directory must not smuggle the write outside.
+    # Re-validate after mkdir: nothing about the path may have
+    # become a symlink or an escape in between.
+    if symlink_components(repo, rel):
+        raise SelfSendRefused(f"symlink in path components: {rel}")
     dest = resolve_within_root(repo, rel)
     if dest is None:
         raise SelfSendRefused(f"path escapes repo root: {rel}")
@@ -292,6 +399,22 @@ def _commit_staged(repo: Path, runner: Runner, paths: list,
     return rc, err
 
 
+def _validate_outgoing(repo: Path, runner: Runner, basis: str,
+                       branch: str) -> bool:
+    """The whole outgoing history must be exactly: the pinned
+    basis, plus commits whose combined diff touches only
+    allowlisted paths."""
+    rc, out, _e = runner(["git", "merge-base", basis, branch], repo)
+    if rc != 0 or out.strip() != basis:
+        return False
+    rc, out, _e = runner(
+        ["git", "diff", "--name-only", f"{basis}..{branch}"], repo)
+    if rc != 0:
+        return False
+    names = [l.strip() for l in out.splitlines() if l.strip()]
+    return all(path_allowed(n) for n in names)
+
+
 def send(repo_root: Path, home: Path, *,
          files: Mapping[str, bytes], slug: str, trigger: str,
          today: Optional[date] = None,
@@ -302,21 +425,25 @@ def send(repo_root: Path, home: Path, *,
     Fail-closed at every gate; the refusal reasons are stable
     strings the caller can record. The marker is checked
     before the runner is invoked at all; nothing is written
-    to the repo before the marker, origin, auth, basis,
-    cleanliness, allowlist (lexical + resolved), and
-    duplicate gates have all passed.
+    to the repo before the marker, origin, push-target, auth,
+    fetched-basis, cleanliness, allowlist (lexical + resolved
+    + symlink), and duplicate gates have all passed — and the
+    path validation runs once more on the basis tree after
+    checkout, before the first write.
     """
     repo = Path(repo_root)
     home = Path(home)
     today = today or date.today()
     files = dict(files)
     digest = content_digest(files)
+    basis = ""
+    branch = ""
 
-    def refuse(reason: str, branch: str = "") -> SendResult:
+    def refuse(reason: str) -> SendResult:
         row = _audit_row(when=today.isoformat(), trigger=trigger,
                          branch=branch, digest=digest,
                          files=sorted(files), pr_number=None,
-                         outcome=f"refused:{reason}")
+                         outcome=f"refused:{reason}", basis=basis)
         _append_local_audit(home, row)
         return SendResult(False, reason, branch=branch,
                           content_digest=digest,
@@ -335,49 +462,71 @@ def send(repo_root: Path, home: Path, *,
         return runner(argv, repo)
 
     restore_branch = BASE_BRANCH
+    created_branch = False
+    pushed = False
     try:
         rc, out, _e = run(["git", "config", "--get",
                            "remote.origin.url"])
         if rc != 0 or parse_origin_repo(out) != EXPECTED_REPO:
-            return refuse("origin_mismatch", branch)
+            return refuse("origin_mismatch")
+        targets = effective_push_urls(repo, runner)
+        if not targets or any(
+                parse_origin_repo(u) != EXPECTED_REPO
+                for u in targets):
+            return refuse("push_target_mismatch")
         if not check_gh_auth(repo, runner):
-            return refuse("gh_auth_unhealthy", branch)
-        rc, _o, _e = run(["git", "rev-parse", "--verify", "--quiet",
-                          f"refs/heads/{BASE_BRANCH}"])
+            return refuse("gh_auth_unhealthy")
+        rc, _o, err = run(["git", "fetch", "origin", BASE_BRANCH])
         if rc != 0:
-            return refuse("base_main_missing", branch)
+            return refuse(f"fetch_failed:{err.strip()[:120]}")
+        rc, out, _e = run(["git", "rev-parse", "--verify", "--quiet",
+                           f"refs/remotes/origin/{BASE_BRANCH}"])
+        if rc != 0 or not out.strip():
+            return refuse("base_main_missing")
+        basis = out.strip()
         rc, out, _e = run(["git", "status", "--porcelain"])
         if rc != 0 or out.strip():
-            return refuse("worktree_dirty", branch)
+            return refuse("worktree_dirty")
         if _branch_exists(repo, branch, runner):
-            return refuse("duplicate_branch", branch)
+            return refuse("duplicate_branch")
         rc, current, _e = run(["git", "branch", "--show-current"])
         if rc == 0 and current.strip():
             restore_branch = current.strip()
 
-        rc, _o, err = run(["git", "checkout", "-b", branch,
-                           BASE_BRANCH])
+        rc, _o, err = run(["git", "checkout", "-b", branch, basis])
         if rc != 0:
-            return refuse(f"branch_create_failed:{err.strip()[:120]}",
-                          branch)
+            return refuse(f"branch_create_failed:{err.strip()[:120]}")
+        created_branch = True
+        # Binding re-validation on the basis tree itself: a
+        # symlink planted in the fetched history is visible
+        # only now, and no write may precede this check.
+        try:
+            validate_resolved_paths(
+                repo, list(files) + [AUDIT_REPO_PATH])
+        except SelfSendRefused as exc:
+            return refuse(f"governance:{exc}")
         commit_title = title or f"ACE self-send: {slug}"
         for rel, data in files.items():
             _write_payload_file(repo, rel, data)
         prepared = _audit_row(
             when=today.isoformat(), trigger=trigger, branch=branch,
             digest=digest, files=sorted(files), pr_number=None,
-            outcome="prepared")
+            outcome="prepared", basis=basis)
         _append_repo_audit(repo, prepared)
         rc, err = _commit_staged(
             repo, runner, sorted(files) + [AUDIT_REPO_PATH],
             commit_title)
         if rc != 0:
-            return refuse(f"commit_failed:{err.strip()[:120]}", branch)
+            return refuse(f"commit_failed:{err.strip()[:120]}")
+        if not _validate_outgoing(repo, runner, basis, branch):
+            return refuse("outgoing_validation_failed")
         rc, _o, err = run(["git", "push", "-u", "origin", branch])
         if rc != 0:
-            return refuse(f"push_failed:{err.strip()[:120]}", branch)
+            return refuse(f"push_failed:{err.strip()[:120]}")
+        pushed = True
         rc, out, err = run(
-            ["gh", "pr", "create", "--draft", "--base", BASE_BRANCH,
+            ["gh", "pr", "create", "--repo", EXPECTED_REPO,
+             "--draft", "--base", BASE_BRANCH,
              "--head", branch, "--title", commit_title,
              "--body", body or commit_title])
         if rc != 0:
@@ -387,7 +536,8 @@ def send(repo_root: Path, home: Path, *,
             final = _audit_row(
                 when=today.isoformat(), trigger=trigger,
                 branch=branch, digest=digest, files=sorted(files),
-                pr_number=None, outcome="pushed_pr_failed")
+                pr_number=None, outcome="pushed_pr_failed",
+                basis=basis)
             try:
                 _append_repo_audit(repo, final)
                 _commit_staged(repo, runner, [AUDIT_REPO_PATH],
@@ -405,8 +555,8 @@ def send(repo_root: Path, home: Path, *,
         pr_number = int(match.group(1)) if match else None
         verified = False
         rc, out, _e = run(
-            ["gh", "pr", "view", branch, "--json",
-             "number,url,state,isDraft"])
+            ["gh", "pr", "view", branch, "--repo", EXPECTED_REPO,
+             "--json", "number,url,state,isDraft"])
         if rc == 0 and out.strip():
             try:
                 data = json.loads(out.strip())
@@ -420,7 +570,8 @@ def send(repo_root: Path, home: Path, *,
             when=today.isoformat(), trigger=trigger, branch=branch,
             digest=digest, files=sorted(files),
             pr_number=pr_number,
-            outcome="sent" if verified else "sent_unverified")
+            outcome="sent" if verified else "sent_unverified",
+            basis=basis)
         finalize_ok = True
         try:
             _append_repo_audit(repo, final)
@@ -434,26 +585,43 @@ def send(repo_root: Path, home: Path, *,
                 finalize_ok = rc == 0
         except Exception:
             finalize_ok = False
+        if not finalize_ok:
+            final["outcome"] = "sent_audit_finalize_failed"
         _append_local_audit(home, final)
+        if not finalize_ok:
+            # Partial success gets its own explicit status:
+            # the PR exists, the committed audit chain does
+            # not — this is not a sent send.
+            return SendResult(
+                False, "audit_finalize_failed",
+                branch=branch, pr_number=pr_number, pr_url=url,
+                content_digest=digest, files=sorted(files))
         return SendResult(
             verified,
-            "sent" if (verified and finalize_ok) else
-            "sent_unverified" if not verified else
-            "sent_audit_finalize_failed",
+            "sent" if verified else "sent_unverified",
             branch=branch, pr_number=pr_number, pr_url=url,
             content_digest=digest, files=sorted(files))
     except Exception as exc:  # incl. runner timeouts: audited
         row = _audit_row(when=today.isoformat(), trigger=trigger,
                          branch=branch, digest=digest,
                          files=sorted(files), pr_number=None,
-                         outcome=f"error:{type(exc).__name__}")
+                         outcome=f"error:{type(exc).__name__}",
+                         basis=basis)
         _append_local_audit(home, row)
         return SendResult(
             False, f"error:{type(exc).__name__}:{str(exc)[:120]}",
             branch=branch, content_digest=digest,
             files=sorted(files))
     finally:
+        if created_branch and not pushed:
+            # Our own unpushed branch: leave the home exactly
+            # as we found it — discard the send's writes, go
+            # back, drop the branch. A pushed branch is never
+            # touched here.
+            runner(["git", "reset", "--hard"], repo)
         runner(["git", "checkout", restore_branch], repo)
+        if created_branch and not pushed:
+            runner(["git", "branch", "-D", branch], repo)
 
 
 def _load_acked(home: Path) -> dict:
@@ -462,15 +630,19 @@ def _load_acked(home: Path) -> dict:
         return {}
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-        return data if isinstance(data, dict) else {}
-    except Exception:
-        return {}
+    except Exception as exc:
+        raise AckStoreCorrupt(f"ack file unreadable: {exc}")
+    if not isinstance(data, dict):
+        raise AckStoreCorrupt("ack file is not a JSON object")
+    return data
 
 
 def _save_acked(home: Path, acked: dict) -> None:
     path = Path(home) / ACK_NAME
-    path.write_text(json.dumps(acked, indent=1, sort_keys=True),
-                    encoding="utf-8")
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(json.dumps(acked, indent=1, sort_keys=True),
+                   encoding="utf-8")
+    os.replace(tmp, path)
 
 
 def export_ratification_batch(memory_root: Path,
@@ -535,7 +707,10 @@ def flush(memory_root: Path, repo_root: Path, home: Path, *,
     batch (minus already-acked records) and send it as one
     draft PR. The marker gates EVERYTHING: while it is absent,
     no staging is written and the refusal is audited. An empty
-    batch is an audited no-op, never an empty send."""
+    batch is an audited no-op, never an empty send. The whole
+    post-marker path — ack load, export, send, ack save —
+    lives inside one audited envelope: any exception becomes
+    an audited error result, never an escaping raise."""
     today = today or date.today()
     home = Path(home)
     repo = Path(repo_root)
@@ -547,40 +722,54 @@ def flush(memory_root: Path, repo_root: Path, home: Path, *,
                          outcome="refused:marker_absent")
         _append_local_audit(home, row)
         return SendResult(False, "marker_absent")
-    acked = _load_acked(home)
-    rel = (f"handover/memory_writeback/"
-           f"{today.strftime('%Y%m%d')}-ratification-batch.jsonl")
-    staging = home / "self_send_staging" / Path(rel).name
-    count, digest, ids = export_ratification_batch(
-        memory_root, staging, exclude_ids=acked.keys())
-    if count == 0:
+    try:
+        acked = _load_acked(home)
+        rel = (f"handover/memory_writeback/"
+               f"{today.strftime('%Y%m%d')}-ratification-batch.jsonl")
+        staging = home / "self_send_staging" / Path(rel).name
+        count, digest, ids = export_ratification_batch(
+            memory_root, staging, exclude_ids=acked.keys())
+        if count == 0:
+            row = _audit_row(when=today.isoformat(),
+                             trigger="ratification_batch_flush",
+                             branch="", digest=digest, files=[],
+                             pr_number=None,
+                             outcome="no_ratification_records")
+            _append_local_audit(home, row)
+            return SendResult(False, "no_ratification_records")
+        slug = _next_flush_slug(repo, home, today, runner)
+        result = send(
+            repo, home,
+            files={rel: staging.read_bytes()},
+            slug=slug,
+            trigger="ratification_batch_flush",
+            today=today, runner=runner,
+            title="ACE self-send: memory write-back ratification batch",
+            body=("Ratification-class memory records "
+                  "(verdict_sealed / mission_ratified / "
+                  "skill_verified) exported from the cognitive "
+                  "memory store and shipped by "
+                  "ace_operational.self_send under the ratified "
+                  "governance (draft only, marker-gated)."))
+        if result.sent:
+            # Ack only a fully verified send (PR verified AND
+            # the final audit row landed); anything less is
+            # retried by a later flush, never silently dropped.
+            for rid in ids:
+                acked[rid] = {"branch": result.branch,
+                              "pr_number": result.pr_number,
+                              "ts": today.isoformat()}
+            _save_acked(home, acked)
+        return result
+    except Exception as exc:
         row = _audit_row(when=today.isoformat(),
                          trigger="ratification_batch_flush",
-                         branch="", digest=digest, files=[],
+                         branch="", digest="", files=[],
                          pr_number=None,
-                         outcome="no_ratification_records")
+                         outcome=f"error:{type(exc).__name__}")
         _append_local_audit(home, row)
-        return SendResult(False, "no_ratification_records")
-    slug = _next_flush_slug(repo, home, today, runner)
-    result = send(
-        repo, home,
-        files={rel: staging.read_bytes()},
-        slug=slug,
-        trigger="ratification_batch_flush",
-        today=today, runner=runner,
-        title="ACE self-send: memory write-back ratification batch",
-        body=("Ratification-class memory records "
-              "(verdict_sealed / mission_ratified / skill_verified) "
-              "exported from the cognitive memory store and shipped "
-              "by ace_operational.self_send under the ratified "
-              "governance (draft only, marker-gated)."))
-    if result.pr_number is not None:
-        for rid in ids:
-            acked[rid] = {"branch": result.branch,
-                          "pr_number": result.pr_number,
-                          "ts": today.isoformat()}
-        _save_acked(home, acked)
-    return result
+        return SendResult(
+            False, f"error:{type(exc).__name__}:{str(exc)[:120]}")
 
 
 def _main(argv: Optional[list] = None) -> int:

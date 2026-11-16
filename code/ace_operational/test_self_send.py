@@ -36,7 +36,8 @@ class FakeRunner:
                  branch_remote=False, fail_at=None,
                  origin="https://github.com/"
                         "dianzherdiana25-hash/ACE.git",
-                 dirty=False):
+                 dirty=False, pushurl=None, rewrites="",
+                 fail_on=None):
         self.calls = []
         self.auth_ok = auth_ok
         self.branch_local = branch_local
@@ -44,11 +45,20 @@ class FakeRunner:
         self.fail_at = fail_at
         self.origin = origin
         self.dirty = dirty
+        self.pushurl = pushurl
+        self.rewrites = rewrites
+        self.fail_on = fail_on
+        self._needle_count = 0
         self.staged = []
+        self.all_staged = set()
 
     def __call__(self, argv, cwd):
         self.calls.append(list(argv))
         joined = " ".join(argv)
+        if self.fail_on and self.fail_on[0] in joined:
+            self._needle_count += 1
+            if self._needle_count == self.fail_on[1]:
+                return 1, "", "injected nth failure"
         if self.fail_at and self.fail_at in joined:
             return 1, "", f"injected failure at {self.fail_at}"
         if argv[:3] == ["gh", "auth", "status"]:
@@ -56,14 +66,35 @@ class FakeRunner:
         if argv[:4] == ["git", "config", "--get",
                         "remote.origin.url"]:
             return 0, self.origin + "\n", ""
+        if argv[:4] == ["git", "config", "--get-all",
+                        "remote.origin.url"]:
+            return 0, self.origin + "\n", ""
+        if argv[:4] == ["git", "config", "--get-all",
+                        "remote.origin.pushurl"]:
+            if self.pushurl:
+                return 0, self.pushurl + "\n", ""
+            return 1, "", ""
+        if argv[:3] == ["git", "config", "--get-regexp"]:
+            if self.rewrites:
+                return 0, self.rewrites, ""
+            return 1, "", ""
         if argv[:3] == ["git", "status", "--porcelain"]:
             return 0, (" M junk.txt\n" if self.dirty else ""), ""
         if argv[:2] == ["git", "add"]:
             self.staged = sorted(argv[argv.index("--") + 1:])
+            self.all_staged.update(self.staged)
             return 0, "", ""
         if argv[:4] == ["git", "diff", "--cached", "--name-only"]:
             return 0, "".join(p + "\n" for p in self.staged), ""
+        if argv[:3] == ["git", "diff", "--name-only"] and \
+                any(".." in a for a in argv):
+            return 0, "".join(
+                p + "\n" for p in sorted(self.all_staged)), ""
+        if argv[:2] == ["git", "merge-base"]:
+            return 0, "abc123\n", ""
         if argv[:2] == ["git", "rev-parse"]:
+            if "refs/remotes/origin/main" in joined:
+                return 0, "abc123\n", ""
             if "refs/heads/main" in joined:
                 return 0, "abc\n", ""
             return (0, "abc\n", "") if self.branch_local \
@@ -187,6 +218,39 @@ class TestGates(SelfSendCase):
         self.assertEqual(self.audit_rows()[-1]["outcome"],
                          "error:TimeoutError")
 
+    def test_pushurl_redirect_refuses(self):
+        # Round-3 regression 1a: url is honest, pushurl is not.
+        self.arm_marker()
+        runner = FakeRunner(pushurl="/tmp/evil-bare.git")
+        result = self.send(runner)
+        self.assertFalse(result.sent)
+        self.assertEqual(result.reason, "push_target_mismatch")
+        self.assertNotIn("git push", runner.argv_text())
+
+    def test_insteadof_redirect_refuses(self):
+        # Round-3 regression 1b: an insteadOf rewrite maps the
+        # honest URL onto a local path.
+        self.arm_marker()
+        runner = FakeRunner(rewrites=(
+            "url./tmp/evil-bare.git.insteadof "
+            "https://github.com/dianzherdiana25-hash/ACE.git\n"))
+        result = self.send(runner)
+        self.assertFalse(result.sent)
+        self.assertEqual(result.reason, "push_target_mismatch")
+        self.assertNotIn("git push", runner.argv_text())
+
+    def test_finalize_push_failure_is_not_sent(self):
+        # Round-3 plus: the PR exists, but the final audit push
+        # failed — partial success must not read as sent.
+        self.arm_marker()
+        runner = FakeRunner(fail_on=("git push", 2))
+        result = self.send(runner)
+        self.assertFalse(result.sent)
+        self.assertEqual(result.reason, "audit_finalize_failed")
+        self.assertEqual(result.pr_number, 999)
+        self.assertEqual(self.audit_rows()[-1]["outcome"],
+                         "sent_audit_finalize_failed")
+
 
 class TestHappyPath(SelfSendCase):
     def test_send_creates_draft_pr_without_force(self):
@@ -198,6 +262,7 @@ class TestHappyPath(SelfSendCase):
         self.assertEqual(result.pr_number, 999)
         text = runner.argv_text()
         self.assertIn("--draft", text)
+        self.assertIn("--repo dianzherdiana25-hash/ACE", text)
         self.assertNotIn("--force", text)
         self.assertIn("git push -u origin ace-auto/20261116-test-note",
                       text)
@@ -357,6 +422,37 @@ class TestRatificationBatch(SelfSendCase):
             ["handover/memory_writeback/"
              "20261116-ratification-batch.jsonl"])
 
+    def test_flush_corrupt_store_is_audited(self):
+        # Round-3 regression 4: a corrupt memory.jsonl used to
+        # raise out of flush() with no audit row at all.
+        root = Path(self.tmp.name) / "memory"
+        root.mkdir(exist_ok=True)
+        (root / "memory.jsonl").write_text("{not json\n")
+        self.arm_marker()
+        runner = FakeRunner()
+        result = ss.flush(root, self.repo, self.home, today=TODAY,
+                          runner=runner)
+        self.assertFalse(result.sent)
+        self.assertTrue(result.reason.startswith("error:"),
+                        result.reason)
+        self.assertTrue(self.audit_rows()[-1]["outcome"].startswith(
+            "error:"))
+        self.assertNotIn("git push", runner.argv_text())
+
+    def test_flush_corrupt_ack_refuses_audited(self):
+        # Round-3 plus: a corrupt ack file must NOT be read as
+        # an empty ack set (that would re-send everything).
+        root = self.write_store([self.rec("r1", "verdict_sealed")])
+        self.arm_marker()
+        (self.home / ss.ACK_NAME).write_text("garbage{{{")
+        runner = FakeRunner()
+        result = ss.flush(root, self.repo, self.home, today=TODAY,
+                          runner=runner)
+        self.assertFalse(result.sent)
+        self.assertTrue(result.reason.startswith("error:"),
+                        result.reason)
+        self.assertNotIn("git push", runner.argv_text())
+
 
 def _git(cwd, *args):
     proc = subprocess.run(["git", *args], cwd=str(cwd),
@@ -368,7 +464,17 @@ def _git(cwd, *args):
 
 
 class HybridRunner:
-    """Real git via the module's own runner; stubbed gh."""
+    """Real git via the module's own runner; stubbed gh.
+
+    Transport seam: the module pins the CONFIGURED origin
+    identity (the ACE GitHub URL, no pushurl, no rewrites);
+    this runner rewrites the transport verbs (fetch / push /
+    ls-remote) to a local bare repo, the same way gh is
+    stubbed — the module's governance all runs for real.
+    """
+
+    def __init__(self, bare):
+        self.bare = str(bare)
 
     def __call__(self, argv, cwd):
         if argv[0] == "gh":
@@ -381,6 +487,13 @@ class HybridRunner:
                     "number": 999, "url": PR_URL,
                     "state": "OPEN", "isDraft": True}), ""
             return 0, "", ""
+        if argv[0] == "git" and len(argv) > 1 and \
+                argv[1] in ("push", "ls-remote"):
+            argv = [self.bare if a == "origin" else a
+                    for a in argv]
+        elif argv[:2] == ["git", "fetch"]:
+            argv = ["git", "fetch", self.bare,
+                    "+main:refs/remotes/origin/main"]
         return ss._default_runner(argv, cwd)
 
 
@@ -403,10 +516,8 @@ class TestRealGit(unittest.TestCase):
         _git(self.repo, "add", "README.md")
         _git(self.repo, "commit", "-m", "base")
         _git(self.repo, "remote", "add", "origin", self.ACE_URL)
-        _git(self.repo, "config",
-             f"url.{self.bare}.insteadOf", self.ACE_URL)
-        _git(self.repo, "push", "-u", "origin", "main")
-        self.runner = HybridRunner()
+        _git(self.repo, "push", str(self.bare), "main")
+        self.runner = HybridRunner(self.bare)
 
     def tearDown(self):
         self.tmp.cleanup()
@@ -535,6 +646,71 @@ class TestRealGit(unittest.TestCase):
         ids = [json.loads(l)["id"]
                for l in payload.splitlines() if l.strip()]
         self.assertEqual(ids, ["r2"])
+
+    def bare_refs(self, bare):
+        return _git(bare, "for-each-ref",
+                    "--format=%(refname)")
+
+    def test_real_pushurl_redirect_refuses(self):
+        # Round-3 regression 1, real git: honest url, hostile
+        # pushurl — nothing may land on the second remote.
+        evil = Path(self.tmp.name) / "evil.git"
+        _git(Path(self.tmp.name), "init", "--bare", "-b", "main",
+             str(evil))
+        _git(self.repo, "config", "remote.origin.pushurl",
+             str(evil))
+        result = self.send()
+        self.assertFalse(result.sent)
+        self.assertEqual(result.reason, "push_target_mismatch")
+        self.assertNotIn("ace-auto", self.bare_refs(evil))
+        self.assertNotIn("ace-auto", self.bare_refs(self.bare))
+
+    def test_real_local_main_poison_not_sent(self):
+        # Round-3 regression 2: a synthetic commit on LOCAL
+        # main (never pushed) carries a file outside the
+        # allowlist. The basis is the fetched origin/main, so
+        # the poison must not enter the sent branch.
+        (self.repo / "private.txt").write_text("poison\n")
+        _git(self.repo, "add", "private.txt")
+        _git(self.repo, "commit", "-m", "synthetic poison")
+        result = self.send()
+        self.assertTrue(result.sent, result.reason)
+        self.assertNotIn("private.txt", self.tree(result.branch))
+        origin_tip = _git(self.repo, "rev-parse",
+                          "refs/remotes/origin/main").strip()
+        base = _git(self.repo, "merge-base",
+                    "refs/remotes/origin/main",
+                    result.branch).strip()
+        self.assertEqual(base, origin_tip)
+
+    def test_real_committed_symlink_refused_before_write(self):
+        # Round-3 regression 3: a symlink committed INTO main
+        # (handover/note.md -> ../code/fixture.py) passes the
+        # resolved-path check (target still inside the repo)
+        # but must be refused before any write touches the
+        # fixture.
+        (self.repo / "code").mkdir()
+        (self.repo / "code" / "fixture.py").write_text(
+            "ORIGINAL\n")
+        (self.repo / "handover").mkdir()
+        os.symlink("../code/fixture.py",
+                   self.repo / "handover" / "note.md")
+        _git(self.repo, "add", "code/fixture.py",
+             "handover/note.md")
+        _git(self.repo, "commit", "-m", "plant symlink")
+        _git(self.repo, "push", str(self.bare), "main")
+        # Rest on the pre-symlink commit: the pre-checkout
+        # validation sees no symlink at all — only the
+        # post-checkout re-validation (on the fetched basis
+        # tree, which carries the symlink) can catch it.
+        _git(self.repo, "checkout", "HEAD~1")
+        result = self.send(files={"handover/note.md": b"evil\n"})
+        self.assertFalse(result.sent)
+        self.assertIn("symlink", result.reason)
+        self.assertEqual(
+            (self.repo / "code" / "fixture.py").read_text(),
+            "ORIGINAL\n")
+        self.assertNotIn("ace-auto", self.bare_refs(self.bare))
 
 
 if __name__ == "__main__":

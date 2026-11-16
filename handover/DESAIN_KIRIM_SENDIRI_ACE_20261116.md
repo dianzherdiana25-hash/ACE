@@ -160,3 +160,43 @@ non-force + draft-only dipertahankan; tes kini 29 (hijau):
 
 Penanda tetap ABSEN; kiriman uji terawasi menunggu verifikasi
 ulang telaah + penyediaan gh auth operator.
+
+## 9. Putaran 3 — telaah ulang atas head 519be922 (Ian, 2026-11-16)
+
+Telaah ulang menilai perbaikan putaran 2 nyata tetapi amplop
+belum lulus: empat bukti regresi dari probe Git sungguhan.
+Keempatnya menjadi tes regresi DULU (terbukti gagal pada modul
+lama: 9 tes merah), baru diperbaiki. Tes kini 37, hijau.
+
+1. **Target push dipatok penuh:** bukan hanya
+   remote.origin.url — seluruh URL push efektif (pushurl bila
+   ada, dengan rewrite url.*.insteadOf/pushInsteadOf diterapkan
+   sesuai semantik git) wajib mengidentifikasi
+   dianzherdiana25-hash/ACE, dan semua panggilan gh membawa
+   `--repo` eksplisit (GH_REPO tak bisa mengalihkan).
+2. **Basis = origin/main hasil fetch:** branch dibuat dari
+   commit basis ter-pin itu (sha-nya tercatat di baris audit),
+   tidak pernah dari main lokal — commit sintetis lokal
+   berberkas luar-allowlist tidak lagi bisa ikut terkirim.
+   Sebelum push, SELURUH diff keluar (basis..branch)
+   divalidasi terhadap allowlist dan merge-base wajib persis
+   basis ter-pin.
+3. **Symlink ditolak di semua komponen:** payload + audit,
+   sebelum DAN sesudah checkout (pohon basis hasil fetch),
+   sebelum penulisan apa pun; penjaga yang sama di dalam
+   fungsi tulis. Symlink di dalam repo yang dulu menimpa
+   targetnya kini menolak send tanpa menyentuh berkas.
+4. **Flush dalam amplop teraudit yang sama:** ekspor batch
+   (dan muat/simpan ack) berada di dalam try yang sama dengan
+   send — store rusak = baris audit error, bukan exception
+   lolos.
+Plus: kegagalan commit/push audit final menghasilkan
+sent=False dengan status eksplisit `audit_finalize_failed`
+(nomor PR tetap dilaporkan); penulisan ack atomik
+(tmp + rename), ack rusak = refusal AckStoreCorrupt (tidak
+dibaca sebagai {}), dan ack hanya sesudah send terverifikasi
+penuh.
+
+Yang dipertahankan utuh: non-force, draft-only, marker
+mendahului staging, dedup + sufiks slug. Penanda tetap
+ABSEN; gh auth tetap parkir menunggu verifikasi putaran ini.
