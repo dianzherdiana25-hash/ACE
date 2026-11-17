@@ -66,6 +66,7 @@ class SubstrateGuardian:
             # On Linux, ru_maxrss is in kilobytes
             rss_mb = usage.ru_maxrss / 1024.0
         except Exception:
+            # Best-effort probe: failure leaves the default reading.
             pass
 
         # System Available RAM
@@ -79,6 +80,7 @@ class SubstrateGuardian:
                         avail_mb = avail_kb / 1024.0
                         break
         except Exception:
+            # Best-effort probe: failure leaves the default reading.
             pass
 
         return rss_mb, avail_mb
@@ -106,6 +108,8 @@ class SubstrateGuardian:
                 charging = "charging" in status or "full" in status
                 return level, charging
             except Exception:
+                # Best-effort battery probe: failure falls through
+                # to the next probe.
                 pass
 
         # 2. Try termux-battery-status command if available
@@ -119,6 +123,8 @@ class SubstrateGuardian:
                 charging = "charging" in status or "full" in status
                 return level, charging
         except Exception:
+            # Best-effort battery probe: failure returns the
+            # (None, False) default.
             pass
 
         return None, None
@@ -215,6 +221,8 @@ class SubstrateGuardian:
                     else:
                         token = user_pass
             except Exception:
+                # Best-effort remote-URL scan: an unparseable URL
+                # leaves the token unset.
                 pass
 
         if not token:

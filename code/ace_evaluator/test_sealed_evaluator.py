@@ -50,6 +50,24 @@ class TestSealedEvaluator(unittest.TestCase):
             else:
                 os.environ.pop("ACE_SEALED_SEED", None)
 
+    def test_candidate_throwing_on_degenerate_input_is_flagged(self):
+        """The behavioral probe's stated contract: a candidate that
+        throws on degenerate standard input records an integrity
+        reason (absorption audit PR #231 item #7 — this probe used
+        to swallow the throw silently and record nothing)."""
+        from ace_evaluator.cheat_detection import evaluate_candidate_integrity
+
+        def fragile(word):
+            if word == "":
+                raise ValueError("empty input")
+            return len(word) % 2 == 0
+
+        res = evaluate_candidate_integrity(
+            "def predict(word):\n    return len(word) % 2 == 0\n",
+            candidate_fn=fragile)
+        self.assertIn("CANDIDATE_THREW_ON_DEGENERATE_INPUT", res["reasons"])
+        self.assertFalse(res["admitted"])
+
     def test_four_cheating_attempts_must_fail_admission(self):
         """All 4 cheating attempts MUST FAIL admission: memorizer, unused code, label flipper, bank leak."""
         from ace_evaluator.cheat_detection import evaluate_candidate_integrity

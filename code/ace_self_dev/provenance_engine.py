@@ -45,6 +45,8 @@ def _resolve_git_sha() -> str:
                         return ref_path.read_text(encoding="utf-8").strip()
                 return content
         except Exception:
+            # Best-effort git probe: failure falls through to
+            # the caller's fallback.
             pass
         return "UNKNOWN_COMMIT_SHA"
 

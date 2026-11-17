@@ -1059,6 +1059,8 @@ def _evaluate_arm_on_task(
                     if _strict_equal(out, expected):
                         passed += 1
                 except Exception:
+                    # Holdout scoring semantics: a candidate that
+                    # raises does not pass the case.
                     pass
             return {
                 "task_id": task.task_id,

@@ -64,6 +64,8 @@ def file_lock_guard(lock_path: Path, timeout_sec: float = 10.0):
             try:
                 fcntl.flock(fd.fileno(), fcntl.LOCK_UN)
             except Exception:
+                # Finally-block cleanup: an unlock failure must
+                # not mask the real error.
                 pass
     finally:
         fd.close()
@@ -134,6 +136,8 @@ def atomic_write_verified(
             try:
                 tmp_path.unlink()
             except Exception:
+                # Finally-block cleanup: a leftover staging file
+                # is harmless.
                 pass
 
 
@@ -1577,8 +1581,12 @@ if __name__ == "__main__":
                     reproduction_ref=str(script_path),
                     resolution_strategy="synthesize_skill_or_tool",
                 )
-            except Exception:
-                pass
+            except Exception as exc:
+                # The gap record is this failure's only trace; if
+                # recording itself fails, surface it instead of
+                # letting the failure vanish silently.
+                print(f"[coding_loop] record_gap failed: {exc}",
+                      file=sys.stderr)
             if opts.get("allow_deterministic_fallback", True):
                 deterministic_code = self._synthesize_deterministic_general_solution(title, goal)
                 atomic_write_verified(
@@ -1608,8 +1616,12 @@ if __name__ == "__main__":
                             reproduction_ref=str(script_path),
                             resolution_strategy="micro_experiment",
                         )
-                    except Exception:
-                        pass
+                    except Exception as exc:
+                        # Same rule as the repair-exhausted record
+                        # above: a failed gap record is surfaced,
+                        # never silently swallowed.
+                        print(f"[coding_loop] record_gap failed: {exc}",
+                              file=sys.stderr)
 
         artifacts = [{"id": script_path.name, "path": str(script_path), "kind": "python_cli"}]
         ver_summary = {

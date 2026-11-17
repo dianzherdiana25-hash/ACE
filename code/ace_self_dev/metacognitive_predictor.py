@@ -22,6 +22,7 @@ import ast
 from dataclasses import dataclass, field
 from enum import Enum
 import json
+import logging
 import math
 from pathlib import Path
 import time
@@ -610,6 +611,8 @@ class MetacognitivePredictor:
             try:
                 self.storage_path.unlink()
             except OSError:
+                # Best-effort cleanup: a leftover state file is
+                # replaced on the next save.
                 pass
 
     # --- Internal Mechanics ---
@@ -805,8 +808,9 @@ class MetacognitivePredictor:
                 "history": self._history_by_candidate,
             }
             self.storage_path.write_text(json.dumps(payload, indent=2))
-        except Exception:
-            pass
+        except Exception as exc:
+            logging.getLogger(__name__).warning(
+                "metacognitive state save failed: %s", exc)
 
     def _load(self) -> None:
         if not self.storage_path or not self.storage_path.exists():

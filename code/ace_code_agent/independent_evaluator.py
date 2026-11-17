@@ -53,6 +53,7 @@ class IndependentEvaluator:
                 if pred == expected:
                     hits += 1
             except Exception:
+                # Scoring semantics: a candidate that raises does not score this case.
                 pass
 
         score = hits / total if total > 0 else 0.0
@@ -73,6 +74,10 @@ class IndependentEvaluator:
                 if int(predicate_fn(l, d, s)) != 1:
                     all_ones = False
             except Exception:
+                # Deliberately conservative: a raise leaves
+                # all_ones unchanged, so a candidate that raises
+                # on every adversarial sample FAILS this control
+                # instead of passing it by crashing.
                 pass
 
         # If it blindly returns 1 on everything, negative control fails!

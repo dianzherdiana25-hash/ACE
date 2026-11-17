@@ -1074,5 +1074,6 @@ class RedTeamAdversarialEngine:
                 if pred == expected:
                     correct += 1
             except Exception:
+                # Scoring semantics: a candidate that raises does not score this case.
                 pass
         return correct / len(test_data)

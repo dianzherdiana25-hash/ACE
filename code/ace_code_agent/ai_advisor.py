@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import ast
 import json
+import logging
 import os
 import re
 import shutil
@@ -40,13 +41,16 @@ class MultiAIFleetAdvisor:
                 try:
                     history = json.loads(self.dialogue_file.read_text(encoding="utf-8"))
                 except Exception:
+                    # Corrupt history file: start fresh rather
+                    # than lose the new consultation record.
                     history = []
             history.append(record)
             # Retain last 30 dialogues
             history = history[-30:]
             self.dialogue_file.write_text(json.dumps(history, indent=2), encoding="utf-8")
-        except Exception:
-            pass
+        except Exception as exc:
+            logging.getLogger(__name__).warning(
+                "consultation log persistence failed: %s", exc)
 
     def is_available(self) -> bool:
         """Checks if the unified AI fleet coordinator binary is present and executable."""

@@ -131,6 +131,7 @@ def _rss_kb() -> int | None:
             if line.startswith("VmRSS:"):
                 return int(line.split()[1])
     except Exception:
+        # Best-effort metric probe: failure returns None.
         pass
     return None
 

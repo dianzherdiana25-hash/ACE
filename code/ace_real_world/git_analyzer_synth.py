@@ -116,6 +116,8 @@ class GitAnalyzerSynthesizer:
                 rel = str(p.relative_to(self.repo_root))
                 file_locs.append((rel, lines))
             except Exception:
+                # Best-effort scan: unreadable files are skipped,
+                # not fatal.
                 pass
 
         file_locs.sort(key=lambda x: x[1], reverse=True)

@@ -100,6 +100,8 @@ class ProcessSentinel:
                 parts = load_path.read_text().strip().split()
                 load_avg = [float(parts[0]), float(parts[1]), float(parts[2])]
             except Exception:
+                # Best-effort metric probe: failure keeps the
+                # zero default.
                 pass
 
         py_procs = self.scan_active_python_processes()
