@@ -151,6 +151,8 @@ def render_markdown_table(summary: dict[str, Any], *, precision: int = 2) -> str
             stat = row["metrics"].get(metric)
             if stat is None:
                 cells.append("-")
+            elif stat["n"] == 1:
+                cells.append(f"{fmt.format(stat['mean'])} (n=1)")
             else:
                 cells.append(f"{fmt.format(stat['mean'])} ± {fmt.format(stat['stdev'])}")
         lines.append("| " + " | ".join(cells) + " |")

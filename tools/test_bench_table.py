@@ -49,7 +49,7 @@ class BenchTableTests(unittest.TestCase):
             self.assertIn("| label | n | latency_ms | score |", md)
             self.assertIn("| A | 3 | 100.00 ± 0.00 | 20.00 ± 10.00 |", md)
             self.assertIn("| B | 2 | 60.00 ± 14.14 | 6.00 ± 1.41 |", md)
-            self.assertIn("| C | 1 | - | 42.00 ± 0.00 |", md)
+            self.assertIn("| C | 1 | - | 42.00 (n=1) |", md)
 
             proc = subprocess.run(
                 [sys.executable, str(SCRIPT), str(jsonl_path), "--precision", "2"],
@@ -120,6 +120,14 @@ class BenchTableTests(unittest.TestCase):
             p3.write_text('{"label": "a", "m": ' + ("9" * 5000) + "}\n", encoding="utf-8")
             with self.assertRaises(BenchTableError):
                 summarize_bench(p3)
+
+    def test_single_sample_display_omits_misleading_stdev(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "single.jsonl"
+            p.write_text('{"label": "solo", "score": 12.5}\n', encoding="utf-8")
+            md = render_markdown_table(summarize_bench(p), precision=2)
+            self.assertIn("| solo | 1 | 12.50 (n=1) |", md)
+            self.assertNotIn("±", md)
 
 
 if __name__ == "__main__":
