@@ -288,7 +288,6 @@ class AceReasoningEdgeTests(unittest.TestCase):
     # Bug suspicion: tools/ace_reasoning.py line 34 catches (ValueError, OSError, TypeError),
     # which does NOT catch sqlite3.DatabaseError (subclass of sqlite3.Error -> Exception) when
     # workspace contains a corrupted selfmodel_memory.sqlite3 file.
-    @unittest.expectedFailure
     def test_22_corrupt_workspace_sqlite_should_return_exit_2_json(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             t = Path(tmp)
