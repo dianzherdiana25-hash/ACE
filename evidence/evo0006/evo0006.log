@@ -1,0 +1,77 @@
+23:54:33 SCREEN code A cd-code-001 ratified=True wall=778s
+00:05:11 SCREEN code A cd-code-002 ratified=True wall=638s
+00:21:15 SCREEN code A cd-code-003 ratified=False wall=965s
+00:33:54 SCREEN code A cd-code-004 ratified=True wall=759s
+00:46:17 SCREEN code A cd-code-005 ratified=True wall=743s
+00:59:33 SCREEN code A cd-code-006 ratified=False wall=796s
+01:10:52 SCREEN code A cd-code-007 ratified=True wall=679s
+01:23:01 SCREEN code A cd-code-008 ratified=True wall=729s
+01:31:33 SCREEN code A cd-code-009 ratified=False wall=512s
+01:42:54 SCREEN code A cd-code-010 ratified=True wall=681s
+01:54:15 SCREEN code A cd-code-011 ratified=True wall=681s
+02:02:10 SCREEN code A cd-code-012 ratified=True wall=475s
+02:13:04 SCREEN code B cd-code-001 ratified=True wall=654s
+02:23:33 SCREEN code B cd-code-002 ratified=True wall=629s
+02:39:18 SCREEN code B cd-code-003 ratified=False wall=944s
+02:50:54 SCREEN code B cd-code-004 ratified=True wall=696s
+03:01:40 SCREEN code B cd-code-005 ratified=True wall=647s
+03:16:56 SCREEN code B cd-code-006 ratified=True wall=915s
+03:29:13 SCREEN code B cd-code-007 ratified=True wall=737s
+03:40:59 SCREEN code B cd-code-008 ratified=True wall=706s
+03:51:13 SCREEN code B cd-code-009 ratified=False wall=613s
+04:03:17 SCREEN code B cd-code-010 ratified=False wall=725s
+04:14:55 SCREEN code B cd-code-011 ratified=True wall=698s
+04:24:39 SCREEN code B cd-code-012 ratified=True wall=584s
+04:24:39 SCREEN_DONE code in_band=2/12 ['cd-code-006', 'cd-code-010']
+04:31:14 SCREEN language A cd-lang-001 ratified=True wall=198s
+04:35:56 SCREEN language A cd-lang-002 ratified=True wall=282s
+04:42:20 SCREEN language A cd-lang-003 ratified=True wall=384s
+04:49:07 SCREEN language A cd-lang-004 ratified=True wall=407s
+04:49:19 SCREEN language A cd-lang-005 ratified=False wall=12s
+04:49:19 SCREEN language A cd-lang-006 ratified=False wall=0s
+04:49:19 SCREEN language A cd-lang-007 ratified=False wall=0s
+04:49:19 SCREEN language A cd-lang-008 ratified=False wall=0s
+04:49:19 SCREEN language A cd-lang-009 ratified=False wall=0s
+04:49:19 SCREEN language A cd-lang-010 ratified=False wall=0s
+04:49:19 SCREEN language A cd-lang-011 ratified=False wall=0s
+04:49:19 SCREEN language A cd-lang-012 ratified=False wall=0s
+04:49:19 SCREEN language B cd-lang-001 ratified=False wall=0s
+04:49:19 SCREEN language B cd-lang-002 ratified=False wall=0s
+04:49:19 SCREEN language B cd-lang-003 ratified=False wall=0s
+04:49:19 SCREEN language B cd-lang-004 ratified=False wall=0s
+04:49:19 SCREEN language B cd-lang-005 ratified=False wall=0s
+04:49:19 SCREEN language B cd-lang-006 ratified=False wall=0s
+04:49:19 SCREEN language B cd-lang-007 ratified=False wall=0s
+04:49:19 SCREEN language B cd-lang-008 ratified=False wall=0s
+04:49:19 SCREEN language B cd-lang-009 ratified=False wall=0s
+04:49:19 SCREEN language B cd-lang-010 ratified=False wall=0s
+04:49:19 SCREEN language B cd-lang-011 ratified=False wall=0s
+04:49:19 SCREEN language B cd-lang-012 ratified=False wall=0s
+04:49:19 SCREEN_DONE language in_band=4/12 ['cd-lang-001', 'cd-lang-002', 'cd-lang-003', 'cd-lang-004']
+04:58:05 QUARANTINE code: 1 error rows moved to invalid file; 23 genuine
+05:12:28 SCREEN code A cd-code-006 ratified=True wall=863s
+05:12:28 SCREEN_DONE code in_band=1/12 ['cd-code-010']
+05:20:33 QUARANTINE language: 20 error rows moved to invalid file; 4 genuine
+05:24:36 SCREEN language A cd-lang-005 ratified=True wall=243s
+05:26:25 SCREEN language A cd-lang-006 ratified=True wall=109s
+05:28:31 SCREEN language A cd-lang-007 ratified=True wall=125s
+05:32:30 SCREEN language A cd-lang-008 ratified=True wall=239s
+05:35:51 SCREEN language A cd-lang-009 ratified=True wall=201s
+05:38:08 SCREEN language A cd-lang-010 ratified=True wall=137s
+05:40:24 SCREEN language A cd-lang-011 ratified=True wall=136s
+05:42:46 SCREEN language A cd-lang-012 ratified=True wall=142s
+05:44:38 SCREEN language B cd-lang-001 ratified=True wall=113s
+05:47:12 SCREEN language B cd-lang-002 ratified=True wall=154s
+05:50:21 SCREEN language B cd-lang-003 ratified=True wall=189s
+05:54:33 SCREEN language B cd-lang-004 ratified=True wall=252s
+06:01:23 SCREEN language B cd-lang-005 ratified=True wall=410s
+06:03:18 SCREEN language B cd-lang-006 ratified=True wall=115s
+06:06:12 SCREEN language B cd-lang-007 ratified=True wall=173s
+06:11:57 SCREEN language B cd-lang-008 ratified=True wall=346s
+06:16:47 SCREEN language B cd-lang-009 ratified=True wall=289s
+06:20:19 SCREEN language B cd-lang-010 ratified=True wall=212s
+06:24:47 SCREEN language B cd-lang-011 ratified=True wall=268s
+06:28:14 SCREEN language B cd-lang-012 ratified=True wall=207s
+06:28:14 SCREEN_DONE language in_band=0/12 []
+06:37:45 PROBE_SET n=1 ['cd-code-010']
+06:37:45 EVO0006_DONE INSTRUMEN_TIDAK_CUKUP
