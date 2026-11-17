@@ -19,7 +19,7 @@ KBM_SPLIT_SCHEMA = "ace.kbm-split.v1"
 DEFAULT_MIN_WORDS = 800
 
 _CHAPTER_HEADING_RE = re.compile(
-    r"^\s*#{1,3}\s+(?:Bab|Chapter)\s+(\d+)\b(?:\s*[:.\-—–]\s*(.+?)|\s+(.+?))?\s*$",
+    r"^\s*(?:#{1,3}\s+)?(?:Bab|Chapter)\s+(\d+)\b(?:\s*[:.\-—–]\s*(.+?)|\s+(.+?))?\s*$",
     re.IGNORECASE,
 )
 _WORD_RE = re.compile(r"[^\W_]+(?:['-][^\W_]+)*", re.UNICODE)
