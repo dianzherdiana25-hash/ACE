@@ -56,7 +56,8 @@ def fake_pair(task_kind):
     return FakePair(task_kind)
 
 
-def make_chat(*, accept=True, proposer_text=None, raise_unavailable=False):
+def make_chat(*, accept=True, proposer_text=None, raise_unavailable=False,
+              score="absent", judge_raw=None):
     def chat(organ, messages, max_tokens=None):
         if raise_unavailable:
             raise be.BrainUnavailable("organ down (fake)")
@@ -64,7 +65,12 @@ def make_chat(*, accept=True, proposer_text=None, raise_unavailable=False):
                        and "validator" in m.get("content", "")
                        for m in messages)
         if is_judge:
+            if judge_raw is not None:
+                return be.ChatResult(judge_raw, "", None,
+                                     None, 10, False)
             body = {"accept": accept, "reasons": ["fake"]}
+            if score != "absent":
+                body["score"] = score
             return be.ChatResult(json.dumps(body), "", None,
                                  None, 10, False)
         text = proposer_text
@@ -161,6 +167,184 @@ class RatificationLoopTests(unittest.TestCase):
         self.assertEqual(first["role"], "system")
         self.assertIn("Ringkasan terverifikasi A",
                       first["content"])
+
+
+class ScoredJudgeTests(unittest.TestCase):
+    """Judge v3 (scored=True): the score is recorded, never
+    decides ratification, and a missing/invalid score is a
+    failed measurement — error set, nothing written back."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name) / "memory"
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_scored_accept_records_score_and_writes_back(self):
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root, scored=True,
+            chat_fn=make_chat(score=62), pair_fn=fake_pair)
+        self.assertTrue(result["ratified"])
+        self.assertEqual(result["judge_score"], 62)
+        self.assertNotIn("error", result)
+        self.assertEqual(len(sealed_records(self.root)), 1)
+
+    def test_scored_reject_records_score_without_error(self):
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root, scored=True,
+            chat_fn=make_chat(accept=False, score=35),
+            pair_fn=fake_pair)
+        self.assertFalse(result["ratified"])
+        self.assertEqual(result["judge_score"], 35)
+        self.assertNotIn("error", result)
+        self.assertEqual(sealed_records(self.root), [])
+
+    def test_missing_score_is_failed_measurement(self):
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root, scored=True,
+            chat_fn=make_chat(), pair_fn=fake_pair)
+        self.assertFalse(result["ratified"])
+        self.assertIsNone(result["judge_score"])
+        self.assertIn("JudgeScoreInvalid", result["error"])
+        self.assertEqual(sealed_records(self.root), [])
+
+    def test_out_of_range_score_is_failed_measurement(self):
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root, scored=True,
+            chat_fn=make_chat(score=140), pair_fn=fake_pair)
+        self.assertFalse(result["ratified"])
+        self.assertIn("JudgeScoreInvalid", result["error"])
+        self.assertEqual(sealed_records(self.root), [])
+
+    def test_string_score_is_failed_measurement(self):
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root, scored=True,
+            chat_fn=make_chat(score="70"), pair_fn=fake_pair)
+        self.assertFalse(result["ratified"])
+        self.assertIn("JudgeScoreInvalid", result["error"])
+
+    def test_integral_float_score_is_accepted(self):
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root, scored=True,
+            chat_fn=make_chat(score=70.0), pair_fn=fake_pair)
+        self.assertTrue(result["ratified"])
+        self.assertEqual(result["judge_score"], 70)
+
+    def test_unscored_run_has_no_score_and_no_error(self):
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root,
+            chat_fn=make_chat(), pair_fn=fake_pair)
+        self.assertTrue(result["ratified"])
+        self.assertIsNone(result["judge_score"])
+        self.assertNotIn("error", result)
+
+    def test_scored_judge_gets_the_raised_token_budget(self):
+        seen = {}
+
+        def chat(organ, messages, max_tokens=None):
+            is_judge = any(m.get("role") == "system"
+                           and "validator" in m.get("content", "")
+                           for m in messages)
+            if is_judge:
+                seen["judge_max_tokens"] = max_tokens
+            return make_chat(score=62)(organ, messages,
+                                       max_tokens=max_tokens)
+
+        rl.run_ratification_episode(
+            CODE_EP, memory_root=None, scored=True,
+            chat_fn=chat, pair_fn=fake_pair)
+        self.assertEqual(seen["judge_max_tokens"],
+                         rl.JUDGE_MAX_TOKENS_SCORED)
+        self.assertEqual(rl.JUDGE_MAX_TOKENS_SCORED, 800)
+
+    def test_unscored_judge_keeps_the_v2_token_budget(self):
+        seen = {}
+
+        def chat(organ, messages, max_tokens=None):
+            is_judge = any(m.get("role") == "system"
+                           and "validator" in m.get("content", "")
+                           for m in messages)
+            if is_judge:
+                seen["judge_max_tokens"] = max_tokens
+            return make_chat()(organ, messages,
+                               max_tokens=max_tokens)
+
+        rl.run_ratification_episode(
+            CODE_EP, memory_root=None,
+            chat_fn=chat, pair_fn=fake_pair)
+        self.assertEqual(seen["judge_max_tokens"],
+                         rl.JUDGE_MAX_TOKENS)
+        self.assertEqual(rl.JUDGE_MAX_TOKENS, 300)
+
+    def test_long_reasons_payload_parses_with_score(self):
+        # The wave-1 failure shape: a verbose judge whose
+        # reasons run long. A COMPLETE payload of that size
+        # must parse and yield its score.
+        long_reason = ("Penjelasan panjang tentang cacat "
+                       "pada penanganan tanda baca dan huruf "
+                       "kapital yang berulang-ulang. " * 40)
+        body = {"accept": False, "score": 45,
+                "reasons": [long_reason]}
+        parsed = rl.parse_json_object(json.dumps(body))
+        self.assertIsNotNone(parsed)
+        self.assertEqual(rl.parse_judge_score(parsed), 45)
+
+    TRUNCATED_REJECT = (
+        '{"accept": false, "score": 45, "reasons": '
+        '["Fungsi tidak mengembalikan kata yang benar-benar '
+        'unik, hanya kata dengan panjang sama dengan jumlah '
+        'huruf uniknya. Masalah utama ada pada penanganan '
+        'tanda baca yang terlalu agresif dan penjelasan ini '
+        'tidak pernah selesai karena terpotong di tengah')
+
+    def test_truncated_judge_salvages_score_on_reject(self):
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root, scored=True,
+            chat_fn=make_chat(judge_raw=self.TRUNCATED_REJECT),
+            pair_fn=fake_pair)
+        self.assertFalse(result["ratified"])
+        self.assertEqual(result["judge_score"], 45)
+        self.assertTrue(result["judge_truncated"])
+        self.assertNotIn("error", result)
+        self.assertEqual(sealed_records(self.root), [])
+
+    def test_truncated_judge_salvages_score_on_accept(self):
+        raw = ('{"accept": true, "score": 88, "reasons": '
+               '["Solusi benar dan bersih, hanya saja '
+               'penjelasan tambahannya mengalir terus dan '
+               'terpotong sebelum selesai')
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root, scored=True,
+            chat_fn=make_chat(judge_raw=raw),
+            pair_fn=fake_pair)
+        self.assertTrue(result["ratified"])
+        self.assertEqual(result["judge_score"], 88)
+        self.assertTrue(result["judge_truncated"])
+        self.assertEqual(len(sealed_records(self.root)), 1)
+
+    def test_score_cut_mid_digits_stays_an_error(self):
+        raw = '{"accept": false, "score": 4'
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root, scored=True,
+            chat_fn=make_chat(judge_raw=raw),
+            pair_fn=fake_pair)
+        self.assertFalse(result["ratified"])
+        self.assertIsNone(result["judge_score"])
+        self.assertFalse(result["judge_truncated"])
+        self.assertIn("JudgeScoreInvalid",
+                      result.get("error", ""))
+        self.assertEqual(sealed_records(self.root), [])
+
+    def test_salvage_never_applies_to_the_unscored_path(self):
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root,
+            chat_fn=make_chat(judge_raw=self.TRUNCATED_REJECT),
+            pair_fn=fake_pair)
+        self.assertFalse(result["ratified"])
+        self.assertIsNone(result["judge_score"])
+        self.assertFalse(result["judge_truncated"])
+        self.assertNotIn("error", result)
 
 
 class EngineStepTests(unittest.TestCase):
