@@ -152,7 +152,6 @@ class TestCoreRepairDoctorAndQuarantineEdgeCases(unittest.TestCase):
         self.assertEqual(status, "CONSISTENT")
         self.assertEqual(meta["discrepancy_rate"], 0.5)
 
-    @unittest.expectedFailure
     def test_20_suspected_float_boundary_bug_1_minus_0_95_exact_equal_triggers_abstain(self) -> None:
         # Suspected precision boundary bug in code/ace_core_repair/drift_quarantine.py:
         # `1 - 0.95 == 0.050000000000000044`, whereas with consistency_threshold=0.90,
