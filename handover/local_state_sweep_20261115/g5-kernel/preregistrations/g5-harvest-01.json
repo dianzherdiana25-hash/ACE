@@ -1,0 +1,35 @@
+{
+  "experiment_id": "g5-harvest-01",
+  "evaluator_id": "g5-instrument-v1",
+  "criteria_version": 1,
+  "evaluator_path": "code/ace_operational/g5_instrument.py",
+  "evaluator_digest": "82eba4d12bef3bfdc60c52fb8ada5c58edaeb9c2e0c113400c1f998a40c278ea",
+  "protocol_hash": "e5d12ff4e79a141c6d85d36a5fb7180f4b3f2bd885d8d95aed8395af028697e6",
+  "registration_text": "docs/research/ACE_G5_HARVEST_PREREGISTRATION_DRAFT_20261113.md",
+  "period_start": "2026-11-12T19:00:00+07:00",
+  "period_end": "2026-11-30T23:59:59+07:00",
+  "thresholds": {
+    "c1_threshold": 0.90,
+    "c2_threshold": 0.90,
+    "c3_min_events": 3,
+    "c3_min_domains": 2,
+    "c3_requires_correction": true
+  },
+  "harvester_id": "ops-post",
+  "scorers": [
+    "ops-post",
+    "ian"
+  ],
+  "checker": "antigravity-bench",
+  "assessor": "ila",
+  "pass_rule": {
+    "metric": "overall",
+    "equals": "ACCESS_DEMONSTRATED"
+  },
+  "lock": {
+    "act": "Misi 8, hub act via ace-queue-watchdog",
+    "date": "2026-11-15",
+    "base": "origin/main 055dd64",
+    "draft_pre_lock_sha256": "d3f2bb2515e6b10b0fcc4da35c51b038959d65984db615fe83c5ca91b885e78b"
+  }
+}
