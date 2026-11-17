@@ -1455,6 +1455,65 @@ class ContinuousAutonomousEngine:
             logger.warning(f"Periodic AST audit failed: {exc}")
             return None
 
+    def execute_ratification_step(
+        self,
+        *,
+        episodes_path: Path | None = None,
+        memory_root: Path | None = None,
+        chat_fn=None,
+        pair_fn=None,
+    ) -> dict[str, Any]:
+        """One ratification-loop episode (EVO 0005's machine).
+
+        Reads the next episode from the ratification source
+        (workspace/projects/ratification/episodes.jsonl),
+        advances the persisted cursor
+        (autonomous_ratification_cursor, the same store-meta
+        pattern as the other cursors), runs it through
+        ace_operational.ratification_loop, and emits a store
+        event. A ratified episode is written back into
+        cognitive memory by the loop itself. Missing source
+        and an exhausted source are clean no-ops, so the
+        cycle can call this step unconditionally once
+        enabled."""
+        from ace_operational import ratification_loop
+
+        source = episodes_path or (
+            self.workspace / "projects" / "ratification"
+            / "episodes.jsonl")
+        if not source.exists():
+            return {"status": "no_source", "source": str(source)}
+        episodes = ratification_loop.load_episodes(source)
+        cursor = self._load_int_meta(
+            "autonomous_ratification_cursor", 0)
+        if cursor >= len(episodes):
+            return {"status": "exhausted", "cursor": cursor,
+                    "episodes": len(episodes)}
+        episode = episodes[cursor]
+        result = ratification_loop.run_ratification_episode(
+            episode,
+            memory_root=memory_root
+            or (self.workspace / "cognitive_memory"),
+            chat_fn=chat_fn, pair_fn=pair_fn)
+        self.store.set_meta("autonomous_ratification_cursor",
+                            str(cursor + 1))
+        self.store.emit_event(
+            kind="ratification_episode",
+            status="COMPLETED" if result.get("ratified")
+            else "FAILED",
+            summary_code=f"Ratifikasi: {episode['id']}",
+            verification_passed=bool(result.get("ratified")),
+            technical_detail={
+                "episode_id": episode["id"],
+                "task_kind": episode["task_kind"],
+                "ratified": bool(result.get("ratified")),
+                "writeback_id": result.get("writeback_id"),
+                "error": result.get("error")})
+        return {"status": "measured", "cursor": cursor,
+                "episode_id": episode["id"],
+                "ratified": bool(result.get("ratified")),
+                "writeback_id": result.get("writeback_id")}
+
     def execute_cycle(self) -> dict[str, Any]:
         """Run a single autonomous mixed cycle (agenda, technical, language, self-audit)."""
         self.cycle_count += 1
@@ -1481,6 +1540,14 @@ class ContinuousAutonomousEngine:
                 vocab_learned = self._explore_vocabulary_batch()
         heard_learned = self._auto_teach_heard_words()
 
+        # Step 3b: Ratification loop (EVO 0005) — env-gated so
+        # this wiring changes no live behaviour until a
+        # measurement window enables it.
+        ratification_res: dict[str, Any] | None = None
+        if os.environ.get("ACE_RATIFICATION_LOOP") == "1":
+            self.update_status_file("ratification_loop")
+            ratification_res = self.execute_ratification_step()
+
         # Step 4: Periodic AST self-audit
         audit_summary: dict[str, Any] | None = None
         if self.cycle_count % 10 == 0:
@@ -1497,6 +1564,7 @@ class ContinuousAutonomousEngine:
             "learning_result": mixed_res,
             "vocab_added": len(vocab_learned),
             "heard_grounded": len(heard_learned),
+            "ratification": ratification_res,
             "self_audit": audit_summary,
         }
         self.update_status_file("idle_waiting_next_cycle", {
