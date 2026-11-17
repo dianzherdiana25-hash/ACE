@@ -143,7 +143,6 @@ class DashboardStateBuildEdgeTests(unittest.TestCase):
             self.assertEqual(res_present["kbm"]["published_titles"], ["Awal", "Kedua"])
             self.assertEqual(res_present["kbm"]["next_in_queue"], ["3", "4"])
 
-    @unittest.expectedFailure
     def test_bug_venues_kbm_without_queue_heading_leaks_published_into_queue(self) -> None:
         # Suspected bug: `text.split("## Queue", 1)[-1]` mengembalikan seluruh teks
         # jika heading `## Queue` tidak ada, sehingga bab terbit ikut terbaca di antrean.
@@ -312,7 +311,6 @@ class AceMobileDashboardEdgeTests(unittest.TestCase):
                 self.assertEqual(data["level"], 2)
                 self.assertEqual(data["level_progress"], 50)
 
-    @unittest.expectedFailure
     def test_bug_get_dashboard_data_crashes_when_heartbeat_json_is_list(self) -> None:
         # Suspected bug: load_json() mengembalikan list jika berkas berisi `[]`,
         # lalu get_dashboard_data() memanggil `heartbeat.get(...)` dan melempar AttributeError.
