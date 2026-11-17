@@ -127,6 +127,41 @@ def parse_judge_score(parsed: dict | None) -> int | None:
     return score if 0 <= score <= 100 else None
 
 
+_SALVAGE_ACCEPT = re.compile(r'"accept"\s*:\s*(true|false)\s*[,}]')
+_SALVAGE_SCORE = re.compile(r'"score"\s*:\s*(\d{1,3})\s*[,}]')
+
+
+def salvage_judge_fields(raw: str) -> dict | None:
+    """Recover accept + score from a truncated v3 reply.
+
+    Scored-path only (ratified amendment, hub 2026-11-17):
+    a verbose judge's reasons can outrun any sane token
+    budget, leaving the JSON object unclosed while the two
+    fields calibration actually consumes — accept and
+    score — sit complete and delimited at its head (EVO
+    0006 successor, wave 1: cd-code-007, accept=false and
+    score=45 intact across three measurements, reasons
+    never finished). Salvage applies ONLY when the strict
+    parse already failed, the text opens as a JSON object,
+    and BOTH fields are present, complete and followed by
+    a delimiter (a score cut mid-digits has no delimiter
+    and stays a failed measurement). The salvaged verdict
+    carries empty reasons and the caller marks the run
+    judge_truncated for audit.
+    """
+    if not raw or not raw.lstrip().startswith("{"):
+        return None
+    ma = _SALVAGE_ACCEPT.search(raw)
+    ms = _SALVAGE_SCORE.search(raw)
+    if ma is None or ms is None:
+        return None
+    score = int(ms.group(1))
+    if not 0 <= score <= 100:
+        return None
+    return {"accept": ma.group(1) == "true",
+            "score": score, "reasons": []}
+
+
 def structural_gate_code(instruction: str,
                          text: str) -> tuple[bool, str]:
     match = re.search(r"```(?:python)?\n(.*?)```", text, re.S)
@@ -196,7 +231,7 @@ def run_ratification_episode(
         "id": episode["id"], "kind": "episode",
         "task_kind": task_kind, "pair": pair.as_dict(),
         "ratified": False, "writeback_id": None,
-        "judge_score": None,
+        "judge_score": None, "judge_truncated": False,
     }
     judge_prompt = JUDGE_EPISODE_V3 if scored else JUDGE_EPISODE
     try:
@@ -220,6 +255,10 @@ def run_ratification_episode(
             max_tokens=JUDGE_MAX_TOKENS_SCORED if scored
             else JUDGE_MAX_TOKENS)
         parsed = parse_json_object(judged.content)
+        judge_truncated = False
+        if parsed is None and scored:
+            parsed = salvage_judge_fields(judged.content)
+            judge_truncated = parsed is not None
         ratified = bool(structural) and bool(parsed) \
             and parsed.get("accept") is True
         score = parse_judge_score(parsed) if scored else None
@@ -235,6 +274,7 @@ def run_ratification_episode(
                           "organ_woke": judged.organ_woke},
             "ratified": ratified,
             "judge_score": score,
+            "judge_truncated": judge_truncated,
             "episode_wall_s": round(time.monotonic() - t0, 2),
         })
         if scored and score is None:

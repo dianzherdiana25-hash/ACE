@@ -57,7 +57,7 @@ def fake_pair(task_kind):
 
 
 def make_chat(*, accept=True, proposer_text=None, raise_unavailable=False,
-              score="absent"):
+              score="absent", judge_raw=None):
     def chat(organ, messages, max_tokens=None):
         if raise_unavailable:
             raise be.BrainUnavailable("organ down (fake)")
@@ -65,6 +65,9 @@ def make_chat(*, accept=True, proposer_text=None, raise_unavailable=False,
                        and "validator" in m.get("content", "")
                        for m in messages)
         if is_judge:
+            if judge_raw is not None:
+                return be.ChatResult(judge_raw, "", None,
+                                     None, 10, False)
             body = {"accept": accept, "reasons": ["fake"]}
             if score != "absent":
                 body["score"] = score
@@ -286,6 +289,62 @@ class ScoredJudgeTests(unittest.TestCase):
         parsed = rl.parse_json_object(json.dumps(body))
         self.assertIsNotNone(parsed)
         self.assertEqual(rl.parse_judge_score(parsed), 45)
+
+    TRUNCATED_REJECT = (
+        '{"accept": false, "score": 45, "reasons": '
+        '["Fungsi tidak mengembalikan kata yang benar-benar '
+        'unik, hanya kata dengan panjang sama dengan jumlah '
+        'huruf uniknya. Masalah utama ada pada penanganan '
+        'tanda baca yang terlalu agresif dan penjelasan ini '
+        'tidak pernah selesai karena terpotong di tengah')
+
+    def test_truncated_judge_salvages_score_on_reject(self):
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root, scored=True,
+            chat_fn=make_chat(judge_raw=self.TRUNCATED_REJECT),
+            pair_fn=fake_pair)
+        self.assertFalse(result["ratified"])
+        self.assertEqual(result["judge_score"], 45)
+        self.assertTrue(result["judge_truncated"])
+        self.assertNotIn("error", result)
+        self.assertEqual(sealed_records(self.root), [])
+
+    def test_truncated_judge_salvages_score_on_accept(self):
+        raw = ('{"accept": true, "score": 88, "reasons": '
+               '["Solusi benar dan bersih, hanya saja '
+               'penjelasan tambahannya mengalir terus dan '
+               'terpotong sebelum selesai')
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root, scored=True,
+            chat_fn=make_chat(judge_raw=raw),
+            pair_fn=fake_pair)
+        self.assertTrue(result["ratified"])
+        self.assertEqual(result["judge_score"], 88)
+        self.assertTrue(result["judge_truncated"])
+        self.assertEqual(len(sealed_records(self.root)), 1)
+
+    def test_score_cut_mid_digits_stays_an_error(self):
+        raw = '{"accept": false, "score": 4'
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root, scored=True,
+            chat_fn=make_chat(judge_raw=raw),
+            pair_fn=fake_pair)
+        self.assertFalse(result["ratified"])
+        self.assertIsNone(result["judge_score"])
+        self.assertFalse(result["judge_truncated"])
+        self.assertIn("JudgeScoreInvalid",
+                      result.get("error", ""))
+        self.assertEqual(sealed_records(self.root), [])
+
+    def test_salvage_never_applies_to_the_unscored_path(self):
+        result = rl.run_ratification_episode(
+            CODE_EP, memory_root=self.root,
+            chat_fn=make_chat(judge_raw=self.TRUNCATED_REJECT),
+            pair_fn=fake_pair)
+        self.assertFalse(result["ratified"])
+        self.assertIsNone(result["judge_score"])
+        self.assertFalse(result["judge_truncated"])
+        self.assertNotIn("error", result)
 
 
 class EngineStepTests(unittest.TestCase):
