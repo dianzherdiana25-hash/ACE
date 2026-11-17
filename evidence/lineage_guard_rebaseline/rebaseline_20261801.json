@@ -1,0 +1,25 @@
+{
+ "band": 20261801,
+ "seconds": 1527.68,
+ "n_pool": 12,
+ "n_evaluation": 29,
+ "n_control": 34,
+ "n_pair_pool": 6,
+ "n_keys": 6,
+ "n_chains": 2,
+ "keys": [
+  "('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult')",
+  "('binop_unwrap', (5, 2, 3, 0, 1, 4), 'left')",
+  "('int_constant', (5, 2, 3, 0, 1, 4, 2), 0)",
+  "('int_constant', (5, 2, 3, 1, 1, 2), 1)",
+  "('return_indices', (6,), ('gr', 'gc'))",
+  "('string_literal', (5, 2, 3, 0, 4, 2), '#')"
+ ],
+ "chains": [
+  "(('int_constant', (5, 2, 3, 1, 1, 2), 1), ('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult'))",
+  "(('return_indices', (6,), ('gr', 'sr')), ('binop_swap', (5, 2, 3, 0, 1, 4), 'Mult'), ('return_indices', (6,), ('gr', 'gc')))"
+ ],
+ "catalog_digest": "a9ddf613eda090d88897866444f7db274aeb89b3f50cf3e375363fa0d056e711",
+ "code_base": "origin/main 7541782 (wt-m9main)",
+ "driver": "misi10 discover_bands.py (pola probe R5)"
+}
