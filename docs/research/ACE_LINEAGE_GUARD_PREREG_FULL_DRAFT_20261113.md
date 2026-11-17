@@ -307,3 +307,102 @@ later change is an amendment recorded against it.
 
 — Regression-control worker post (ila), 2026-11-13.
 Parked with PR #188, pending the Stage 3 verdict.
+
+## 9. Activation act — the five §8 fields, supplied (2026-11-15)
+
+Recorded by Ian (main execution session) under the hub's
+ratification act of 2026-11-14 ~01:56 WIB and the hub's
+completion order of 2026-11-15, from the re-baseline
+package `evidence/lineage_guard_rebaseline/` (branch
+evidence/ace-omega-lineage-guard-rebaseline-20261115,
+local commits 13bd6f0 + 88fb9e1; push pending the owner's
+word). This act supplies the five §8 fields; the text
+above is unchanged. The sealed run starts only when
+fields 3 and 5 are closed at lock time as specified
+below.
+
+**Field 1 — Stage 3 verdict reference.** PR #192 (head
+0cfc1199467dbeb4929c6cee72bb5c288390288f), record
+`evidence/ctrlreg_stage3_official_record.json`: P1
+REPRODUCED, P2 HELD, P3 HELD on bands 20261601–20261603.
+Pre-audit C1–C4 (PR #194): substance verified clean; the
+two C2 misses are verdict-string form only. The
+confirmation recorded on main at 5f2daf0 (bands
+20261701–20261703, GUARD_ADOPTED) was NOT ratified by
+the hub (2026-11-15 ~06:10 WIB) — its seeds are spent
+and are not reused.
+
+**Field 2 — Confirmation-band seeds (re-baselined).**
+Discovery re-run under origin/main 7541782 (the Stage L2
+expansion changes catalogs, so the 20261701–03 catalogs
+cannot be reused); digests recomputed from the saved
+discovery files, ALL MATCH (`digest_verification.json`
+in the re-baseline package):
+
+- 20261801 — `a9ddf613eda090d88897866444f7db274aeb89b3f50cf3e375363fa0d056e711` (6 keys, 2 chains)
+- 20261803 — `465508efbe082f31a3f87ccf01742cfc43fb76c97477577027a9bc0e44c35913` (6 keys, 0 chains)
+- 20261804 — `5005072890bf608dc78a98965e6c9a3bf729a517c9689a12a9ccc051cbbaf62a` (6 keys, 1 chain)
+
+Each band's admitted catalog was checked against the
+registry causal key `('name_swap', (5, 2, 3, 0, 1, 4),
+'nc')`: none of the three admits it (nor any 'nc'
+name_swap key) naturally, so the infected construction
+stays non-degenerate. The seeds are disjoint from
+20261501–20261503, 20261601–20261603, 20261701–20261703
+and from every development set.
+
+Deviation note (A.5): A.5 asks for three consecutive
+seeds. Seed 20261802, the middle of the block, was
+rejected by the re-baseline because its catalog admits
+the causal key plus two further 'nc' variants naturally
+(60 keys; an effect of the Stage L2 expansion) — running
+it would void the infected construction. The hub named
+20261804 as the replacement in the same block. The three
+seeds above are therefore consecutive-but-one; the
+deviation and its reason are recorded here for the
+ratifying act to accept or reject at lock time.
+
+**Field 3 — Registry snapshot.** Procedure (the value is
+taken at lock time, from inside custody): read
+`/workspace/ace-custody-lineage-guard/wt-battery/code/ace_operational/distractor_registry.json`,
+recompute its sha256 on the host, and record path +
+sha256 + ids in the run record. Expected anchor (frozen
+battery supplement, PR #195): sha256
+`f9d8982a1314cc5807f815dc700affd0c3dd9cf42ff2b35855a7704dc0911680`,
+ids `["name-swap-523014-nc-band20261501"]`. The
+supplement was verified receiver-side in custody on
+2026-11-15 ~19:55 WIB (tree digest
+`f4d3c43bc86576e9c0eb16b95da7bb1eb42f62805b4733bcf558b1905654c5ef`,
+EXACT), and the custody population likewise (80 files,
+tree digest
+`c02221775c2b81117effb93b204cccd0aaaa930e166e4a9c3883cf1d233fc6c2`,
+EXACT). If the in-custody sha256 differs from the
+anchor, STOP — the snapshot is void.
+
+**Field 4 — Executing room and operator.** Execution
+home: the ACE sandbox (host 2887726280f4), custody tree
+`/workspace/ace-custody-lineage-guard` (R5-verified,
+PR #196). Operator: Ian, the main execution session,
+under ila's orchestration (hub). Access: the owner's
+SSH door (sshremote, port 443; sudo in fresh sessions,
+owner-granted 2026-11-15). Owner direction 2026-11-15
+~20:26 WIB designates the sandbox as the execution
+home. Run instrument: the PR #193 harness + gate,
+harness commit
+`73a902ec8b43518b95e69680d6d863eb1bd7f200`, transferred
+into custody as supplement #2 (manifest
+`handover/CUSTODY_SUPPLEMENT_MANIFEST_INSTRUMENT_20261115.json`,
+frozen with this act).
+
+**Field 5 — Run window.** Named by the hub at lock time.
+Precondition: the previous lane's explicit all-doors
+empty sign ("RUMAH KOSONG SEMUA PINTU"); a generation
+log's ALL_DONE is not that sign. The former clean-logout
+and custody-access gates were lifted by the owner on
+2026-11-15 ~20:28 WIB and are no longer prerequisites.
+No window is claimed by this act.
+
+— Ian (main execution session), 2026-11-15. Recorded
+locally on branch research/ace-omega-lineage-guard-act-20261115
+based on PR #188's head df4d35fa; push pending the
+owner's word.
