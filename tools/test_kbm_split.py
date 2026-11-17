@@ -96,6 +96,29 @@ class KbmSplitTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 2)
             self.assertIn("Error:", proc.stderr)
 
+    def test_plain_chapter_markers_without_markdown_hashes(self) -> None:
+        manuscript = (
+            "Bab 1\n\n"
+            + ("kata " * 12)
+            + "\n\nBAB 2: Hujan Sore\n\n"
+            + ("cerita " * 15)
+            + "\n\nChapter 3 - Penutup\n\n"
+            + ("akhir " * 10)
+            + "\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "plain.md"
+            out_dir = Path(tmp) / "out"
+            src.write_text(manuscript, encoding="utf-8")
+
+            report = split_manuscript(src, out_dir, min_words=5)
+            self.assertEqual(report["chapter_count"], 3)
+            self.assertEqual(
+                [c["title"] for c in report["chapters"]],
+                ["Bab 1", "Hujan Sore", "Penutup"],
+            )
+            self.assertEqual([c["word_count"] for c in report["chapters"]], [12, 15, 10])
+
 
 if __name__ == "__main__":
     unittest.main()
