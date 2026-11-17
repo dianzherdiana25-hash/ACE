@@ -1,0 +1,57 @@
+{
+ "block": "EVO0005",
+ "n_train": 8,
+ "n_acc": 8,
+ "before": {
+  "per_kind": {
+   "code": {
+    "n": 4,
+    "ratified": 3,
+    "rate": 0.75
+   },
+   "language": {
+    "n": 4,
+    "ratified": 0,
+    "rate": 0.0
+   }
+  },
+  "n": 8,
+  "ratified": 3,
+  "rate": 0.375
+ },
+ "after_acc": {
+  "per_kind": {
+   "code": {
+    "n": 4,
+    "ratified": 3,
+    "rate": 0.75
+   },
+   "language": {
+    "n": 4,
+    "ratified": 4,
+    "rate": 1.0
+   }
+  },
+  "n": 8,
+  "ratified": 7,
+  "rate": 0.875
+ },
+ "after_sham": {
+  "per_kind": {
+   "code": {
+    "n": 4,
+    "ratified": 3,
+    "rate": 0.75
+   },
+   "language": {
+    "n": 4,
+    "ratified": 4,
+    "rate": 1.0
+   }
+  },
+  "n": 8,
+  "ratified": 7,
+  "rate": 0.875
+ },
+ "verdict": "NOL"
+}
