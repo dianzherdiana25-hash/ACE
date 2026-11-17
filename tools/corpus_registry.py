@@ -52,8 +52,9 @@ def _inspect_corpus(path: Path, root: Path) -> dict[str, Any]:
             raise RegistryError(f"Baris kosong ditemukan pada '{path}' baris {line_no}.")
         try:
             obj = json.loads(raw_line)
-        except json.JSONDecodeError as exc:
-            raise RegistryError(f"JSON tidak sah pada '{path}' baris {line_no}: {exc.msg}") from exc
+        except (json.JSONDecodeError, ValueError) as exc:
+            detail = exc.msg if isinstance(exc, json.JSONDecodeError) else str(exc)
+            raise RegistryError(f"JSON tidak sah pada '{path}' baris {line_no}: {detail}") from exc
         if not isinstance(obj, dict):
             raise RegistryError(f"Baris '{path}' baris {line_no} wajib berupa objek JSON.")
         tk = obj.get("task_kind")
@@ -104,7 +105,7 @@ def check_drift(handover_dir: Path, index_path: Path) -> dict[str, Any]:
         raise RegistryError(f"Berkas indeks tidak ditemukan: {index_path}")
     try:
         saved = json.loads(index_path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
         raise RegistryError(f"Gagal membaca indeks '{index_path}': {exc}") from exc
 
     if not isinstance(saved, dict) or saved.get("schema") != REGISTRY_SCHEMA:

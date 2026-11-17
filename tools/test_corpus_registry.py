@@ -120,6 +120,26 @@ class CorpusRegistryTests(unittest.TestCase):
         self.assertEqual(proc.returncode, 2)
         self.assertIn("Error:", proc.stderr)
 
+    def test_fuzz_hardening_huge_int_digit_limit_raises_registry_error(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            handover = Path(tmp) / "handover"
+            handover.mkdir()
+            c_bad = handover / "HUGE_CORPUS.jsonl"
+            c_bad.write_text('{"id": "1", "val": ' + ("9" * 5000) + "}\n", encoding="utf-8")
+            with self.assertRaises(RegistryError):
+                scan_corpora(handover)
+
+            c_bad.write_text('{"id": "1", "task_kind": "code"}\n', encoding="utf-8")
+            bad_idx = Path(tmp) / "bad_idx.json"
+            bad_idx.write_text(
+                '{"schema": "ace.frozen-corpus-registry.v1", "corpora": [{"name": "HUGE_CORPUS.jsonl", "line_count": '
+                + ("9" * 5000)
+                + "}]}",
+                encoding="utf-8",
+            )
+            with self.assertRaises(RegistryError):
+                check_drift(handover, bad_idx)
+
 
 if __name__ == "__main__":
     unittest.main()
