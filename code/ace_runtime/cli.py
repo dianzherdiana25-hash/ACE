@@ -231,6 +231,11 @@ def _remote_json(base_url: str, path: str, body: dict | None = None, timeout: fl
     origin = f"{parts.scheme}://{parts.netloc}"
     url = f"{origin}{path}"
     headers = {"Accept": "application/json", "User-Agent": "ACE-CLI/4"}
+    # WEB25: the Web Studio API is token-gated (X-ACE-Token). Present the
+    # same credential the server resolves: env ACE_WEB_TOKEN.
+    web_token = os.environ.get("ACE_WEB_TOKEN", "").strip()
+    if web_token:
+        headers["X-ACE-Token"] = web_token
     data = None
     if body is not None:
         headers["Content-Type"] = "application/json; charset=utf-8"

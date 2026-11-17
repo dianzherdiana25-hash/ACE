@@ -33,7 +33,12 @@ class _FakeHTTPResponse:
 
 class RemoteCLITest(unittest.TestCase):
     def test_remote_status_chat_and_offline_guard(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
+        # WEB25: the server gates /api/* behind X-ACE-Token. The fixture
+        # provides the credential explicitly via ACE_WEB_TOKEN, which both
+        # the server (resolve_web_auth_token) and the remote CLI honor.
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(
+            os.environ, {"ACE_WEB_TOKEN": "test-token-remote-cli"}
+        ):
             ws = Path(tmp) / "ws"
             with OperationalStore(ws) as store:
                 server = ACEWebServer(store, host="127.0.0.1", port=0)
