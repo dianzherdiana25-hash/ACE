@@ -257,6 +257,39 @@ class CorpusLintTests(unittest.TestCase):
         self.assertTrue(report["valid"])
         self.assertEqual(report["violation_count"], 0)
 
+    def test_17_regression_non_string_unhashable_fields_from_fuzz(self) -> None:
+        cases = [
+            (
+                {"id": {"nested": 1}, "kind": "episode", "task_kind": "code", "instruction": "Buat fungsi. Sertakan docstring Bahasa Indonesia."},
+                ["invalid_id"],
+            ),
+            (
+                {"id": ["w4-code-001"], "kind": "episode", "task_kind": "code", "instruction": "Buat fungsi. Sertakan docstring Bahasa Indonesia."},
+                ["invalid_id"],
+            ),
+            (
+                {"id": "w4-code-001", "kind": "episode", "task_kind": ["code"], "instruction": "Buat fungsi. Sertakan docstring Bahasa Indonesia."},
+                ["invalid_task_kind"],
+            ),
+            (
+                {"id": "w4-code-002", "kind": "episode", "task_kind": {"v": "language"}, "instruction": "Tulis satu paragraf."},
+                ["invalid_task_kind"],
+            ),
+            (
+                {"id": "w4-lang-001", "kind": {"k": "episode"}, "task_kind": "language", "instruction": ["list"]},
+                ["invalid_kind", "invalid_instruction"],
+            ),
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            for idx, (payload, expected_codes) in enumerate(cases, start=1):
+                path = Path(tmp) / f"fuzz_case_{idx}.jsonl"
+                path.write_text(json.dumps(payload, ensure_ascii=False) + "\n", encoding="utf-8")
+                report = lint_file(path, prefixes=["w4-code-", "w4-lang-"])
+                self.assertFalse(report["valid"])
+                actual_codes = [v["code"] for v in report["violations"]]
+                for code in expected_codes:
+                    self.assertIn(code, actual_codes)
+
 
 if __name__ == "__main__":
     unittest.main()

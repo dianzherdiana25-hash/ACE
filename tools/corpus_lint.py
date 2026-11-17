@@ -201,21 +201,21 @@ def lint_lines(
 
         # Validasi kind == "episode".
         kind_val = obj.get("kind")
-        if kind_val != "episode":
+        if not isinstance(kind_val, str) or kind_val != "episode":
             add_violation(
                 line_no,
                 "invalid_kind",
-                f"Field 'kind' wajib bernilai 'episode', aktual {kind_val!r}.",
+                f"Field 'kind' wajib berupa string 'episode', aktual {kind_val!r}.",
                 item_id=item_id_label,
             )
 
         # Validasi task_kind ∈ {"code", "language"}.
         task_kind = obj.get("task_kind")
-        if task_kind not in ALLOWED_TASK_KINDS:
+        if not isinstance(task_kind, str) or task_kind not in ALLOWED_TASK_KINDS:
             add_violation(
                 line_no,
                 "invalid_task_kind",
-                f"Field 'task_kind' wajib 'code' atau 'language', aktual {task_kind!r}.",
+                f"Field 'task_kind' wajib berupa string 'code' atau 'language', aktual {task_kind!r}.",
                 item_id=item_id_label,
             )
         else:
