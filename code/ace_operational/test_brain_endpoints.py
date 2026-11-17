@@ -196,5 +196,152 @@ class WakeTests(unittest.TestCase):
         start.assert_not_called()
 
 
+class MalformedShapeTests(unittest.TestCase):
+    """A 200 with a broken body is an organ fault: BrainUnavailable,
+    never a raw KeyError/IndexError/TypeError escaping the wrapper."""
+
+    def test_parse_rejects_broken_shapes(self):
+        broken = [
+            {},
+            {"error": "bad_payload"},
+            {"choices": []},
+            {"choices": [{"nope": 1}]},
+            {"choices": "nope"},
+            {"choices": [{"message": "not-a-dict"}]},
+            [],
+            "just a string",
+        ]
+        for payload in broken:
+            with self.assertRaises(be.BrainUnavailable, msg=repr(payload)):
+                be.parse_chat_response(payload)
+
+
+class _CapturingStubHandler(_StubHandler):
+    last_bodies = {}
+
+    def do_POST(self):
+        length = int(self.headers.get("Content-Length", 0))
+        raw = self.rfile.read(length)
+        try:
+            type(self).last_bodies[self.path] = json.loads(raw)
+        except ValueError:
+            type(self).last_bodies[self.path] = None
+        if self.path == "/v1/chat/completions":
+            payload = {"choices": [{"message": {
+                "content": "halo", "reasoning_content": "hm"}}],
+                "timings": {"predicted_per_second": 2.0, "predicted_n": 4}}
+        elif self.path == "/embedding":
+            payload = [{"embedding": [[0.1, 0.2, 0.3]]}]
+        else:
+            self.send_response(404)
+            self.end_headers()
+            return
+        body = json.dumps(payload).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+
+class _MalformedStubHandler(_StubHandler):
+    def do_POST(self):
+        length = int(self.headers.get("Content-Length", 0))
+        self.rfile.read(length)
+        if self.path == "/v1/chat/completions":
+            payload = {"unexpected": "shape"}
+        elif self.path == "/embedding":
+            payload = [{"no_embedding_here": 1}]
+        else:
+            self.send_response(404)
+            self.end_headers()
+            return
+        body = json.dumps(payload).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+
+class _StubServerMixin:
+    handler = _StubHandler
+
+    @classmethod
+    def setUpClass(cls):
+        cls.server = HTTPServer(("127.0.0.1", 0), cls.handler)
+        cls.port = cls.server.server_address[1]
+        cls.thread = threading.Thread(target=cls.server.serve_forever,
+                                      daemon=True)
+        cls.thread.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.shutdown()
+
+    def _env(self):
+        return mock.patch.dict(os.environ, {
+            "ACE_BRAIN_FRONT_URL": f"http://127.0.0.1:{self.port}",
+            "ACE_BRAIN_EMBEDDING_URL": f"http://127.0.0.1:{self.port}",
+        })
+
+
+class StructuredKwargsTests(_StubServerMixin, unittest.TestCase):
+    handler = _CapturingStubHandler
+
+    def test_structured_kwargs_are_sent(self):
+        with self._env():
+            be.chat_structured("front", [{"role": "user", "content": "hai"}],
+                               max_tokens=8)
+        sent = _CapturingStubHandler.last_bodies["/v1/chat/completions"]
+        self.assertEqual(sent["chat_template_kwargs"],
+                         {"enable_thinking": False})
+
+    def test_plain_chat_sends_no_template_kwargs(self):
+        with self._env():
+            be.chat("front", [{"role": "user", "content": "hai"}],
+                    max_tokens=8)
+        sent = _CapturingStubHandler.last_bodies["/v1/chat/completions"]
+        self.assertNotIn("chat_template_kwargs", sent)
+
+    def test_explicit_kwargs_pass_through(self):
+        with self._env():
+            be.chat("front", [{"role": "user", "content": "hai"}],
+                    max_tokens=8, template_kwargs={"enable_thinking": True})
+        sent = _CapturingStubHandler.last_bodies["/v1/chat/completions"]
+        self.assertEqual(sent["chat_template_kwargs"],
+                         {"enable_thinking": True})
+
+
+class MalformedEndToEndTests(_StubServerMixin, unittest.TestCase):
+    handler = _MalformedStubHandler
+
+    def test_chat_200_broken_shape_is_unavailable(self):
+        with self._env():
+            with self.assertRaises(be.BrainUnavailable):
+                be.chat("front", [{"role": "user", "content": "hai"}],
+                        max_tokens=8)
+
+    def test_embed_200_broken_shape_is_unavailable(self):
+        with self._env():
+            with self.assertRaises(be.BrainUnavailable):
+                be.embed(["satu kalimat"])
+
+
+class EmbedEmptyInputTests(_StubServerMixin, unittest.TestCase):
+    handler = _CapturingStubHandler
+
+    def test_embed_empty_list_returns_empty_without_a_request(self):
+        # Found by gravity fuzz review (PR #262): embed([])
+        # used to reach texts[0] and raise a raw IndexError.
+        # An empty input is a vacuous request: no organ call,
+        # no wake, an empty result.
+        _CapturingStubHandler.last_bodies = {}
+        with self._env():
+            self.assertEqual(be.embed([]), [])
+        self.assertNotIn("/embedding",
+                         _CapturingStubHandler.last_bodies)
+
+
 if __name__ == "__main__":
     unittest.main()
