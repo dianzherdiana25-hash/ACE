@@ -119,7 +119,7 @@ def verify_evidence(run_dir: Path, manifest_path: Path | None = None) -> dict[st
 
     try:
         manifest = json.loads(source_manifest.read_text(encoding="utf-8"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
         raise EvidencePackError(f"Gagal membaca manifest '{source_manifest}': {exc}") from exc
 
     if not isinstance(manifest, dict) or manifest.get("schema") != BUNDLE_SCHEMA:
@@ -142,18 +142,26 @@ def verify_evidence(run_dir: Path, manifest_path: Path | None = None) -> dict[st
         if (
             not isinstance(rel, str)
             or not rel
+            or "\x00" in rel
             or isinstance(exp_size, bool)
             or not isinstance(exp_size, int)
             or not isinstance(exp_sha, str)
         ):
             raise EvidencePackError(f"Entri manifest index {idx} memiliki field tidak sah.")
 
-        candidate = (root_resolved / rel).resolve()
+        try:
+            candidate = (root_resolved / rel).resolve()
+        except (OSError, ValueError) as exc:
+            raise EvidencePackError(f"Path manifest tidak valid '{rel}': {exc}") from exc
         if not candidate.is_relative_to(root_resolved):
             raise EvidencePackError(f"Path manifest keluar dari direktori run: {rel}")
 
         expected_paths.add(rel)
-        if not candidate.is_file():
+        try:
+            is_file = candidate.is_file()
+        except (OSError, ValueError) as exc:
+            raise EvidencePackError(f"Path manifest tidak valid '{rel}': {exc}") from exc
+        if not is_file:
             missing.append(rel)
             continue
 

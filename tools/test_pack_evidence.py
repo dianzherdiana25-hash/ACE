@@ -96,6 +96,36 @@ class PackEvidenceTests(unittest.TestCase):
             self.assertEqual(pack_res2["file_count"], 3)
             self.assertTrue(verify_evidence(run_dir)["valid"])
 
+    def test_fuzz_hardening_null_byte_path_and_huge_int_manifest_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            run_dir = Path(tmp) / "run_05"
+            run_dir.mkdir()
+            (run_dir / "a.txt").write_text("ok", encoding="utf-8")
+            manifest = Path(tmp) / "bad_manifest.json"
+
+            manifest.write_text(
+                json.dumps(
+                    {
+                        "schema": "ace.evidence-bundle.v1",
+                        "files": [{"path": "bad\x00path.txt", "size_bytes": 2, "sha256": "0" * 64}],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(EvidencePackError):
+                verify_evidence(run_dir, manifest_path=manifest)
+
+            manifest.write_text(
+                '{"schema": "ace.evidence-bundle.v1", "files": [{"path": "a.txt", "size_bytes": '
+                + ("9" * 5000)
+                + ', "sha256": "'
+                + ("0" * 64)
+                + '"}]}',
+                encoding="utf-8",
+            )
+            with self.assertRaises(EvidencePackError):
+                verify_evidence(run_dir, manifest_path=manifest)
+
 
 if __name__ == "__main__":
     unittest.main()
