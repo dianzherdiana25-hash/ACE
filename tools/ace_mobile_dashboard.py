@@ -201,8 +201,10 @@ def parse_logs_to_stories(raw_lines: list[str]) -> list[dict]:
 
 
 def get_dashboard_data() -> dict:
-    heartbeat = load_json(REPO_ROOT / "checkpoints" / "self_dev" / "daemon_heartbeat.json")
-    research_state = load_json(REPO_ROOT / "checkpoints" / "self_dev" / "v03_researcher_state.json")
+    raw_heartbeat = load_json(REPO_ROOT / "checkpoints" / "self_dev" / "daemon_heartbeat.json")
+    heartbeat = raw_heartbeat if isinstance(raw_heartbeat, dict) else {}
+    raw_research_state = load_json(REPO_ROOT / "checkpoints" / "self_dev" / "v03_researcher_state.json")
+    research_state = raw_research_state if isinstance(raw_research_state, dict) else {}
     
     log_file = REPO_ROOT / "checkpoints" / "self_dev" / "daemon.log"
     log_lines = []

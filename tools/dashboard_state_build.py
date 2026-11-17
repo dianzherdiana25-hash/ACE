@@ -120,12 +120,13 @@ def venues() -> dict:
     kbm = {"source": str(KBM_STATE.relative_to(ROOT)), "source_stamp": mtime_stamp(KBM_STATE)}
     if KBM_STATE.exists():
         text = KBM_STATE.read_text(encoding="utf-8")
-        published_section = text.split("## Published", 1)[-1].split("## Queue", 1)[0]
+        published_section = text.split("## Published", 1)[1].split("## Queue", 1)[0] if "## Published" in text else ""
+        queue_section = text.split("## Queue", 1)[1] if "## Queue" in text else ""
         chapters = re.findall(r"^- Bab (\d+) ", published_section, flags=re.M)
         titles = re.findall(r"^- Bab \d+ \"([^\"]+)\"", published_section, flags=re.M)
         kbm["published_count"] = len(chapters)
         kbm["published_titles"] = titles
-        kbm["next_in_queue"] = re.findall(r"^- Bab (\d+) ", text.split("## Queue", 1)[-1], flags=re.M)[:2]
+        kbm["next_in_queue"] = re.findall(r"^- Bab (\d+) ", queue_section, flags=re.M)[:2]
         kbm["cadence"] = "2 bab/hari (cron kbm-serial-harian); Bab 8 = ambang monetisasi"
     else:
         kbm["published_count"] = None

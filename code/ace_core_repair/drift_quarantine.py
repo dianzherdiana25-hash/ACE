@@ -1,6 +1,7 @@
 """Semantic drift quarantine and budgeted active query allocation (W3 e14aa)."""
 from __future__ import annotations
 
+from decimal import Decimal
 from typing import Any, Dict, List, Tuple
 
 
@@ -28,8 +29,10 @@ class SemanticDriftQuarantine:
 
         # Check for flip discrepancy
         discrepancy_rate = conflicts / max(1, overlap) if overlap > 0 else 0.0
+        discrepancy_exact = (Decimal(conflicts) / Decimal(overlap)) if overlap > 0 else Decimal("0")
+        threshold_margin = Decimal("1") - Decimal(str(self.consistency_threshold))
 
-        if overlap > 0 and discrepancy_rate > (1.0 - self.consistency_threshold):
+        if overlap > 0 and discrepancy_exact > threshold_margin:
             # Semantic late-flip detected! Trigger fail-closed ABSTAIN
             return "ABSTAIN", {
                 "quarantined": True,

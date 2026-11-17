@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sqlite3
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "code"))
@@ -31,7 +32,7 @@ def main():
             result = solve(problem, memory=memory, advice=advice)
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0
-    except (ValueError, OSError, TypeError) as exc:
+    except (ValueError, OSError, TypeError, sqlite3.Error) as exc:
         print(json.dumps({"status": "INVALID_INPUT_OR_WORKSPACE", "reason": str(exc)}))
         return 2
 
