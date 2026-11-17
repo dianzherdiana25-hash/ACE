@@ -178,7 +178,6 @@ class TestProblemSelectorEdgeCases(unittest.TestCase):
         with self.assertRaises(AttributeError):
             self.selector.select_next_problem(None)  # type: ignore[arg-type]
 
-    @unittest.expectedFailure
     def test_22_suspected_bug_missing_Tuple_import_in_type_hints(self) -> None:
         # Suspected bug in code/ace_code_agent/problem_selector.py:
         # `select_next_problem` return annotation uses `Tuple[...]` without importing `Tuple` from `typing`,
