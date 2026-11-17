@@ -236,6 +236,57 @@ class ScoredJudgeTests(unittest.TestCase):
         self.assertIsNone(result["judge_score"])
         self.assertNotIn("error", result)
 
+    def test_scored_judge_gets_the_raised_token_budget(self):
+        seen = {}
+
+        def chat(organ, messages, max_tokens=None):
+            is_judge = any(m.get("role") == "system"
+                           and "validator" in m.get("content", "")
+                           for m in messages)
+            if is_judge:
+                seen["judge_max_tokens"] = max_tokens
+            return make_chat(score=62)(organ, messages,
+                                       max_tokens=max_tokens)
+
+        rl.run_ratification_episode(
+            CODE_EP, memory_root=None, scored=True,
+            chat_fn=chat, pair_fn=fake_pair)
+        self.assertEqual(seen["judge_max_tokens"],
+                         rl.JUDGE_MAX_TOKENS_SCORED)
+        self.assertEqual(rl.JUDGE_MAX_TOKENS_SCORED, 800)
+
+    def test_unscored_judge_keeps_the_v2_token_budget(self):
+        seen = {}
+
+        def chat(organ, messages, max_tokens=None):
+            is_judge = any(m.get("role") == "system"
+                           and "validator" in m.get("content", "")
+                           for m in messages)
+            if is_judge:
+                seen["judge_max_tokens"] = max_tokens
+            return make_chat()(organ, messages,
+                               max_tokens=max_tokens)
+
+        rl.run_ratification_episode(
+            CODE_EP, memory_root=None,
+            chat_fn=chat, pair_fn=fake_pair)
+        self.assertEqual(seen["judge_max_tokens"],
+                         rl.JUDGE_MAX_TOKENS)
+        self.assertEqual(rl.JUDGE_MAX_TOKENS, 300)
+
+    def test_long_reasons_payload_parses_with_score(self):
+        # The wave-1 failure shape: a verbose judge whose
+        # reasons run long. A COMPLETE payload of that size
+        # must parse and yield its score.
+        long_reason = ("Penjelasan panjang tentang cacat "
+                       "pada penanganan tanda baca dan huruf "
+                       "kapital yang berulang-ulang. " * 40)
+        body = {"accept": False, "score": 45,
+                "reasons": [long_reason]}
+        parsed = rl.parse_json_object(json.dumps(body))
+        self.assertIsNotNone(parsed)
+        self.assertEqual(rl.parse_judge_score(parsed), 45)
+
 
 class EngineStepTests(unittest.TestCase):
     def test_step_advances_cursor_and_stops_at_end(self):

@@ -80,6 +80,16 @@ CONTEXT_HEADER = (
     "(hasil yang sudah lolos ratifikasi):"
 )
 WRITEBACK_EVENT = "verdict_sealed"
+JUDGE_MAX_TOKENS = 300
+# Scored (v3) judges write longer responses — the score plus
+# reasons — and band episodes are exactly the ones whose
+# judges write longest. At the v2 budget their JSON was cut
+# mid-reasons and never closed (EVO 0006 successor, wave 1:
+# cd-code-007, score present but unparseable). The budget is
+# a ceiling, not a setting: responses that complete under
+# 300 tokens are identical under either budget, so raising
+# it does not invalidate completed measurements.
+JUDGE_MAX_TOKENS_SCORED = 800
 
 
 def parse_json_object(text: str) -> dict | None:
@@ -207,7 +217,8 @@ def run_ratification_episode(
              {"role": "user", "content":
               f"PROMPT/INSTRUCTION:\n{instruction}\n\n"
               f"CANDIDATE:\n{prop.content}"}],
-            max_tokens=300)
+            max_tokens=JUDGE_MAX_TOKENS_SCORED if scored
+            else JUDGE_MAX_TOKENS)
         parsed = parse_json_object(judged.content)
         ratified = bool(structural) and bool(parsed) \
             and parsed.get("accept") is True
