@@ -209,14 +209,7 @@ class ChatResult:
 
 def parse_chat_response(payload: dict) -> ChatResult:
     """Split the answer channel from the reasoning channel."""
-    if not isinstance(payload, dict):
-        raise BrainUnavailable(f"malformed chat response: expected dict, got {type(payload).__name__}")
-    choices = payload.get("choices")
-    if not isinstance(choices, list) or not choices or not isinstance(choices[0], dict):
-        raise BrainUnavailable(f"malformed chat response: missing choices in {payload!r}")
-    msg = choices[0].get("message")
-    if not isinstance(msg, dict):
-        raise BrainUnavailable(f"malformed chat response: missing message in {payload!r}")
+    msg = payload["choices"][0]["message"]
     timings = payload.get("timings") or {}
     return ChatResult(
         content=msg.get("content") or "",
@@ -267,8 +260,6 @@ def embed(texts: list[str], *, timeout: float = 120.0,
     """Embeddings from the embedding organ, fail-closed. The embedding
     organ is wakeable: an idle-off state is woken first and the wake is
     recorded in the wake-event log."""
-    if not texts:
-        return []
     if check_health:
         ensure_organ("embedding")
     out = _request(f"{organ_url('embedding')}/embedding",

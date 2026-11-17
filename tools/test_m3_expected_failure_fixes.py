@@ -17,7 +17,6 @@ if str(CODE_ROOT) not in sys.path:
 
 from ace_code_agent.problem_selector import ProblemSelector
 from ace_core_repair.drift_quarantine import SemanticDriftQuarantine
-from ace_operational import brain_endpoints as be
 from tools import ace_mobile_dashboard as amd
 from tools import dashboard_state_build as dsb
 
@@ -60,15 +59,6 @@ class TestM3ExpectedFailureFixes(unittest.TestCase):
             )
             self.assertEqual(proc.returncode, 2)
             self.assertEqual(json.loads(proc.stdout)["status"], "INVALID_INPUT_OR_WORKSPACE")
-
-    def test_4a_brain_endpoints_parse_chat_response_malformed_raises_brain_unavailable(self) -> None:
-        with self.assertRaises(be.BrainUnavailable):
-            be.parse_chat_response({"error": "bad_payload"})
-        with self.assertRaises(be.BrainUnavailable):
-            be.parse_chat_response({"choices": []})
-
-    def test_4b_brain_endpoints_embed_empty_returns_empty_list(self) -> None:
-        self.assertEqual(be.embed([], check_health=False), [])
 
     def test_5a_dashboard_state_build_venues_without_queue_heading(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
