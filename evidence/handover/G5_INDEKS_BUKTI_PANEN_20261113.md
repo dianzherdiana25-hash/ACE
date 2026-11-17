@@ -4,11 +4,11 @@ Ian, 2026-11-13. Indeks ini HANYA mengumpulkan penunjuk ke
 catatan yang SUDAH terekam secara alami. Tidak ada bukti
 yang dibuat, dipancing, atau digelar untuk indeks ini;
 tidak ada penilaian, tidak ada skor, tidak ada penarikan
-periode. Cutoff periode tetap keputusan hub/pemilik
-(⟨TBD-GATE⟩ di draf praregistrasi PR #156) — indeks ini
+periode. Cutoff periode sudah TERKUNCI (30 Nov 2026) di
+praregistrasi G5 (experiment g5-harvest-01) — indeks ini
 tidak menyentuhnya dan tidak membatasi apa pun pada
 tanggal mana pun. Pemanen kelak bekerja dari penunjuk ini
-sesuai draf praregistrasi (experiment g5-harvest-01).
+sesuai praregistrasi yang terkunci itu.
 
 Kelas mengikuti instrumen G5 (PR #156): C1 kelengkapan
 laporan (unit = ringkasan konsolidasi ruang diskusi,
