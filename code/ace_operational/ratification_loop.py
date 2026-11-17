@@ -90,6 +90,19 @@ JUDGE_MAX_TOKENS = 300
 # 300 tokens are identical under either budget, so raising
 # it does not invalidate completed measurements.
 JUDGE_MAX_TOKENS_SCORED = 800
+# Amendment 3 (hub-ratified, EVO 0006 successor wave 2):
+# brain_endpoints.chat's default client timeout is 900 s,
+# sized for ordinary generations. At the scored ceiling of
+# 800 tokens a judge whose generation rate collapses (front
+# observed at ~0.45 t/s during wave 2) needs ~1,778 s of
+# wall — so two wave-2 episodes died as client timeouts
+# while the judge was still generating normally, and the
+# phase aborted on the error row. Scored runs therefore
+# pass an extended client timeout on both chat calls. The
+# generative conditions are unchanged (same prompts, same
+# token ceilings, same salvage rule); only the client's
+# patience moves, and only on the scored path.
+SCORED_CHAT_TIMEOUT_S = 2400.0
 
 
 def parse_json_object(text: str) -> dict | None:
@@ -234,6 +247,10 @@ def run_ratification_episode(
         "judge_score": None, "judge_truncated": False,
     }
     judge_prompt = JUDGE_EPISODE_V3 if scored else JUDGE_EPISODE
+    # Amendment 3: scored runs carry the extended client
+    # timeout; unscored calls keep the chat default exactly.
+    timeout_kw = ({"timeout": SCORED_CHAT_TIMEOUT_S}
+                  if scored else {})
     try:
         messages: list[dict] = []
         if context:
@@ -242,7 +259,8 @@ def run_ratification_episode(
                 "content": CONTEXT_HEADER + "\n"
                            + "\n---\n".join(context)})
         messages.append({"role": "user", "content": instruction})
-        prop = chat(pair.proposer, messages, max_tokens=1024)
+        prop = chat(pair.proposer, messages, max_tokens=1024,
+                    **timeout_kw)
         structural, why = structural_gate(task_kind, instruction,
                                           prop.content)
         judge_t0 = time.monotonic()
@@ -253,7 +271,7 @@ def run_ratification_episode(
               f"PROMPT/INSTRUCTION:\n{instruction}\n\n"
               f"CANDIDATE:\n{prop.content}"}],
             max_tokens=JUDGE_MAX_TOKENS_SCORED if scored
-            else JUDGE_MAX_TOKENS)
+            else JUDGE_MAX_TOKENS, **timeout_kw)
         parsed = parse_json_object(judged.content)
         judge_truncated = False
         if parsed is None and scored:
