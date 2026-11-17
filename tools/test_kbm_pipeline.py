@@ -1,6 +1,7 @@
 """Uji unit untuk pipeline terpadu tools/kbm_pipeline.py."""
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 import sys
@@ -9,7 +10,12 @@ import unittest
 from pathlib import Path
 
 from tools.kbm_pack_check import PNG_MAGIC
-from tools.kbm_pipeline import KBM_PIPELINE_SCHEMA, KbmPipelineError, run_pipeline
+from tools.kbm_pipeline import (
+    KBM_PIPELINE_SCHEMA,
+    KBM_UPLOAD_MANIFEST_SCHEMA,
+    KbmPipelineError,
+    run_pipeline,
+)
 from tools.kbm_split import KbmSplitError
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -156,6 +162,9 @@ class KbmPipelineTests(unittest.TestCase):
             with self.assertRaises(KbmPipelineError):
                 run_pipeline(manuscript, tmp_dir / "out", cover_source=tmp_dir / "no_cover.png")
 
+            with self.assertRaises(KbmPipelineError):
+                run_pipeline(manuscript, tmp_dir / "out", bundle_dir=tmp_dir / "out")
+
             proc = subprocess.run(
                 [sys.executable, str(SCRIPT), str(tmp_dir / "tidak_ada.md"), "--output-dir", str(tmp_dir / "out")],
                 capture_output=True,
@@ -163,6 +172,82 @@ class KbmPipelineTests(unittest.TestCase):
             )
             self.assertEqual(proc.returncode, 2)
             self.assertIn("Error:", proc.stderr)
+
+    def test_bundle_dir_stages_upload_manifest_and_blocks_on_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_dir = Path(tmp)
+            manuscript = tmp_dir / "naskah.md"
+            pkg_dir = tmp_dir / "paket"
+            bundle_dir = tmp_dir / "unggah"
+            cover_src = tmp_dir / "sampul.png"
+            cover_bytes = PNG_MAGIC + b"\x00" * 40
+            cover_src.write_bytes(cover_bytes)
+
+            manuscript.write_text(
+                "\n".join(
+                    [
+                        "# Bab 1: Kabut Pelabuhan",
+                        _words(110, "pelabuhan"),
+                        "",
+                        "# Bab 2: Mercusuar Senja",
+                        _words(115, "mercusuar"),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    str(manuscript),
+                    "--output-dir",
+                    str(pkg_dir),
+                    "--cover-file",
+                    str(cover_src),
+                    "--bundle-dir",
+                    str(bundle_dir),
+                    "--min-words",
+                    "100",
+                    "--min-bytes",
+                    "300",
+                ],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            report = json.loads(proc.stdout)
+            self.assertTrue(report["bundle"]["staged"])
+            manifest_path = bundle_dir / "upload_manifest.json"
+            self.assertTrue(manifest_path.is_file())
+
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(manifest["schema"], KBM_UPLOAD_MANIFEST_SCHEMA)
+            self.assertEqual(manifest["chapter_count"], 2)
+            self.assertEqual(manifest["total_words"], 225)
+            self.assertEqual(
+                manifest["cover"]["sha256"],
+                hashlib.sha256(cover_bytes).hexdigest(),
+            )
+            self.assertTrue((bundle_dir / manifest["cover"]["file"]).is_file())
+            self.assertEqual(manifest["chapters"][0]["order"], 1)
+            self.assertEqual(manifest["chapters"][0]["bundle_file"], "ch_001_kabut-pelabuhan.md")
+            ch1_bytes = (bundle_dir / manifest["chapters"][0]["bundle_file"]).read_bytes()
+            self.assertEqual(manifest["chapters"][0]["sha256"], hashlib.sha256(ch1_bytes).hexdigest())
+
+            # Jika paket gagal validasi (tanpa sampul), bundle tidak di-stage.
+            bad_bundle = tmp_dir / "gagal_unggah"
+            fail_report = run_pipeline(
+                manuscript,
+                tmp_dir / "paket_tanpa_cover",
+                min_words=100,
+                min_bytes=300,
+                bundle_dir=bad_bundle,
+            )
+            self.assertFalse(fail_report["passed"])
+            self.assertFalse(fail_report["bundle"]["staged"])
+            self.assertFalse((bad_bundle / "upload_manifest.json").exists())
 
 
 if __name__ == "__main__":
