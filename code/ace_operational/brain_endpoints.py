@@ -270,6 +270,8 @@ def embed(texts: list[str], *, timeout: float = 120.0,
     """Embeddings from the embedding organ, fail-closed. The embedding
     organ is wakeable: an idle-off state is woken first and the wake is
     recorded in the wake-event log."""
+    if not texts:
+        return []
     if check_health:
         ensure_organ("embedding")
     out = _request(f"{organ_url('embedding')}/embedding",

@@ -203,6 +203,7 @@ class MalformedShapeTests(unittest.TestCase):
     def test_parse_rejects_broken_shapes(self):
         broken = [
             {},
+            {"error": "bad_payload"},
             {"choices": []},
             {"choices": [{"nope": 1}]},
             {"choices": "nope"},
@@ -325,6 +326,21 @@ class MalformedEndToEndTests(_StubServerMixin, unittest.TestCase):
         with self._env():
             with self.assertRaises(be.BrainUnavailable):
                 be.embed(["satu kalimat"])
+
+
+class EmbedEmptyInputTests(_StubServerMixin, unittest.TestCase):
+    handler = _CapturingStubHandler
+
+    def test_embed_empty_list_returns_empty_without_a_request(self):
+        # Found by gravity fuzz review (PR #262): embed([])
+        # used to reach texts[0] and raise a raw IndexError.
+        # An empty input is a vacuous request: no organ call,
+        # no wake, an empty result.
+        _CapturingStubHandler.last_bodies = {}
+        with self._env():
+            self.assertEqual(be.embed([]), [])
+        self.assertNotIn("/embedding",
+                         _CapturingStubHandler.last_bodies)
 
 
 if __name__ == "__main__":
