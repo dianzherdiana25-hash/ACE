@@ -1,0 +1,84 @@
+{
+ "schema": "ace.lineage_anchor.v1",
+ "scope": "DEVELOPMENT witnesses under stock (guard OFF, anchor attached), arm B",
+ "verdict": "PASS",
+ "rule": "BASE membership zero from round 2 and death round == 2, both tasks",
+ "tasks": {
+  "catalog_control-020": {
+   "rounds": [
+    {
+     "round": 1,
+     "frontier_in_base": 1,
+     "frontier_out_base": 0,
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "frontier_in_base": 0,
+     "frontier_out_base": 0,
+     "lineage_alive_in": false
+    },
+    {
+     "round": 3,
+     "frontier_in_base": 0,
+     "frontier_out_base": 0,
+     "lineage_alive_in": false
+    },
+    {
+     "round": 4,
+     "frontier_in_base": 0,
+     "frontier_out_base": 0,
+     "lineage_alive_in": false
+    },
+    {
+     "round": 5,
+     "frontier_in_base": 0,
+     "frontier_out_base": 0,
+     "lineage_alive_in": false
+    },
+    {
+     "round": 6,
+     "frontier_in_base": 0,
+     "frontier_out_base": 0,
+     "lineage_alive_in": false
+    }
+   ],
+   "death_round": 2,
+   "base_membership_zero_from_round_2": true,
+   "l1_l2_reproduced": true,
+   "l3_true_path": {
+    "classification": "never_generated",
+    "death_round": 2
+   }
+  },
+  "catalog_control-021": {
+   "rounds": [
+    {
+     "round": 1,
+     "frontier_in_base": 1,
+     "frontier_out_base": 0,
+     "lineage_alive_in": true
+    },
+    {
+     "round": 2,
+     "frontier_in_base": 0,
+     "frontier_out_base": 0,
+     "lineage_alive_in": false
+    },
+    {
+     "round": 3,
+     "frontier_in_base": 0,
+     "frontier_out_base": 0,
+     "lineage_alive_in": false
+    }
+   ],
+   "death_round": 2,
+   "base_membership_zero_from_round_2": true,
+   "l1_l2_reproduced": true,
+   "l3_true_path": {
+    "classification": "never_generated",
+    "death_round": 2
+   }
+  }
+ }
+}

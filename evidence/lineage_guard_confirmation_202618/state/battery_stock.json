@@ -1,0 +1,28 @@
+{
+ "schema": "ace.distractor_inoculation.v1",
+ "catalog_size": 59,
+ "distractors": [
+  {
+   "distractor_id": "name-swap-523014-nc-band20261501",
+   "key": "('name_swap', (5, 2, 3, 0, 1, 4), 'nc')",
+   "mechanism": "search-path diversion (distractor interference, path form): the key's first improving step diverts the greedy walk into a region whose bounded enumeration never generates the baseline solution",
+   "already_in_catalog": false,
+   "witnesses": [
+    {
+     "task_id": "catalog_control-020",
+     "solved_clean": true,
+     "solved_injected": false,
+     "diverted": true
+    },
+    {
+     "task_id": "catalog_control-021",
+     "solved_clean": true,
+     "solved_injected": false,
+     "diverted": true
+    }
+   ],
+   "verdict": "SUSCEPTIBLE"
+  }
+ ],
+ "overall": "SUSCEPTIBLE"
+}

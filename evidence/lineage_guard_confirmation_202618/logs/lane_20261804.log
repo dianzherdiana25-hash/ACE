@@ -1,0 +1,10 @@
+[lane 20261804] digest=5005072890bf608dc78a98965e6c9a3bf729a517c9689a12a9ccc051cbbaf62a
+[lg] cell 20261804 stock clean: 34/34 wall=485.5s
+[lg] cell 20261804 guarded clean: 34/34 wall=464.8s
+[lg] cell 20261804 stock infected_name-swap-523014-nc-band20261501: 32/34 wall=498.7s
+[lg] cell 20261804 guarded infected_name-swap-523014-nc-band20261501: 34/34 wall=790.7s
+[lane 20261804] guarded clean: 34/34
+[lane 20261804] guarded infected_name-swap-523014-nc-band20261501: 34/34
+[lane 20261804] stock clean: 34/34
+[lane 20261804] stock infected_name-swap-523014-nc-band20261501: 32/34
+[lane 20261804] DONE

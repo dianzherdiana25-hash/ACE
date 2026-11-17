@@ -1,0 +1,7 @@
+[lg] L4 catalog_control-020 arm A: identical=True anchor=True
+[lg] L4 catalog_control-020 arm B: identical=True anchor=True
+[lg] L4 catalog_control-021 arm A: identical=True anchor=True
+[lg] L4 catalog_control-021 arm B: identical=True anchor=True
+[lg] L1/L2 verdict=PASS
+distractor_inoculation.py (PR #175) not found in any of: ['/workspace/ace-custody-lineage-guard/wt-battery', '/workspace/ace-custody-lineage-guard/code/ace_operational'] — pass --battery-dir <dir containing it>
+[lg] STOP — step 4 gate stop — verdict VOID

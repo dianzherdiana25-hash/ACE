@@ -1,0 +1,21 @@
+DETERMINISM SPOT-CHECKS (execution-amendment guard)
+Run 2026-11-15 ~21:50 WIB inside the custody home, one fresh
+process per band, recomputing one stock-clean task record and
+comparing canonical JSON byte-for-byte with the lane's record:
+
+SPOTCHECK seed=20261803 task=catalog_control-001 score_calls=3 identical=True
+SPOTCHECK seed=20261804 task=catalog_control-001 score_calls=3 identical=True
+SPOTCHECK seed=20261805 task=catalog_control-001 score_calls=3 identical=True
+
+DUPLICATE-COMPUTATION AGREEMENT (cells computed independently
+twice — once by a band lane, once in-process by the official
+run; solved counts):
+  20261803 stock infected:   lane 33/34 == run 33/34
+  20261803 guarded infected: lane 34/34 == run 34/34
+  20261804 guarded infected: lane 34/34 == run 34/34
+All verdict-relevant per-task fields (solved, score_calls,
+returned_sha256, holdout passes, termination, timeout,
+l5_violations, frontier_in label sequences) are identical
+between the two computations of these cells. The only
+divergence is the diagnostic true_path_classification field —
+see README.md, "Known divergence".

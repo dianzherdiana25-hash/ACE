@@ -1,0 +1,6 @@
+[lg] L4 catalog_control-020 arm A: identical=True anchor=True
+[lg] L4 catalog_control-020 arm B: identical=True anchor=True
+[lg] L4 catalog_control-021 arm A: identical=True anchor=True
+[lg] L4 catalog_control-021 arm B: identical=True anchor=True
+[lg] L1/L2 verdict=PASS
+[lg] DEV GATES — L4=PASS L1/L2=PASS

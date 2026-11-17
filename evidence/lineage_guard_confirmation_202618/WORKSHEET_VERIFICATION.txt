@@ -1,0 +1,16 @@
+Worksheet reproduction check (verify_worksheet.py, run
+2026-11-15 ~22:30 WIB against this package's sealed files):
+the frozen harness's own worksheet()/death_round_of() source
+(extracted by AST from lineage_guard_harness.py, PR #193,
+unmodified) was applied to the 12 cell files in state/ and
+compared with lineage_guard_run.json:
+
+PASS verdict
+PASS W
+PASS R
+PASS H
+PASS cost_ratios
+PASS median_cost_ratio
+PASS death_rounds
+PASS l5_violations
+WORKSHEET_REPRODUCED
