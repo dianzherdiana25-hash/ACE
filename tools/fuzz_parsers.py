@@ -211,7 +211,17 @@ def _make_optional_screen_census_fuzzer():
         crashes: list[dict[str, Any]] = []
         target = tmp / "fuzz_screen.jsonl"
         for i in range(iterations):
-            target.write_text(_random_jsonl_payload(rng), encoding="utf-8")
+            if i % 10 == 0:
+                adv = "\n".join(
+                    [
+                        json.dumps({"id": _random_json_value(rng), "score": 10**400}),
+                        '{"id": "x", "score": ' + ("9" * 5000) + "}",
+                        json.dumps({"id": "x", "ratified": rng.choice([True, False]), "error": _random_json_value(rng)}),
+                    ]
+                )
+                target.write_text(adv, encoding="utf-8")
+            else:
+                target.write_text(_random_jsonl_payload(rng), encoding="utf-8")
             try:
                 mod.compute_census([target])
             except (mod.CensusInputError, OSError):
@@ -236,7 +246,10 @@ def _make_optional_corpus_registry_fuzzer():
         corpus_file = handover / "FUZZ_CORPUS_V1.jsonl"
         idx_file = tmp / "registry_fuzz.json"
         for i in range(iterations):
-            corpus_file.write_text(_random_jsonl_payload(rng), encoding="utf-8")
+            if i % 10 == 0:
+                corpus_file.write_text('{"id":"1","val":' + ("9" * 5000) + "}\n", encoding="utf-8")
+            else:
+                corpus_file.write_text(_random_jsonl_payload(rng), encoding="utf-8")
             try:
                 reg = mod.scan_corpora(handover)
                 idx_file.write_text(json.dumps(reg, ensure_ascii=False), encoding="utf-8")
@@ -247,7 +260,14 @@ def _make_optional_corpus_registry_fuzzer():
                 crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
 
             # Juga uji file indeks korup / sembarang JSON
-            idx_file.write_text(_random_jsonl_payload(rng), encoding="utf-8")
+            idx_file.write_text(
+                '{"schema":"ace.frozen-corpus-registry.v1","corpora":[{"name":"FUZZ_CORPUS_V1.jsonl","line_count":'
+                + ("9" * 5000)
+                + "}]}"
+                if i % 10 == 0
+                else _random_jsonl_payload(rng),
+                encoding="utf-8",
+            )
             corpus_file.write_text('{"id":"1","kind":"episode","task_kind":"code","instruction":"x"}\n', encoding="utf-8")
             try:
                 mod.check_drift(handover, idx_file)
@@ -273,7 +293,20 @@ def _make_optional_stage_verify_fuzzer():
         (stage / "a.txt").write_text("ok", encoding="utf-8")
         manifest = tmp / "stage_manifest.json"
         for i in range(iterations):
-            raw = _random_text(rng, 100) if rng.random() < 0.3 else json.dumps(_random_json_value(rng))
+            if i % 10 == 0:
+                raw = json.dumps(
+                    {
+                        "files": [
+                            {
+                                "path": rng.choice(["a\x00b.txt", "../escape", "a.txt", _random_json_value(rng)]),
+                                "sha256": rng.choice(["0" * 64, _random_json_value(rng)]),
+                                "size": rng.choice([2, -1, True, 10**400, _random_json_value(rng)]),
+                            }
+                        ]
+                    }
+                )
+            else:
+                raw = _random_text(rng, 100) if rng.random() < 0.3 else json.dumps(_random_json_value(rng))
             manifest.write_text(raw, encoding="utf-8")
             try:
                 mod.verify_stage(stage, manifest)
@@ -296,11 +329,67 @@ def _make_optional_bench_table_fuzzer():
         crashes: list[dict[str, Any]] = []
         target = tmp / "bench_fuzz.jsonl"
         for i in range(iterations):
-            target.write_text(_random_jsonl_payload(rng), encoding="utf-8")
+            if i % 10 == 0:
+                raw = "\n".join(
+                    [
+                        json.dumps({"label": "a", "m": rng.choice([1e308, 10**400, _random_json_value(rng)])}),
+                        json.dumps({"label": "a", "m": 1e308}),
+                    ]
+                )
+                target.write_text(raw, encoding="utf-8")
+            else:
+                target.write_text(_random_jsonl_payload(rng), encoding="utf-8")
             try:
                 summary = mod.summarize_bench(target)
                 mod.render_markdown_table(summary)
             except (mod.BenchTableError, OSError):
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
+def _make_optional_pack_evidence_fuzzer():
+    try:
+        mod = importlib.import_module("tools.pack_evidence")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        bundle = tmp / "pack_fuzz"
+        bundle.mkdir(exist_ok=True)
+        (bundle / "sample.txt").write_text("evidence", encoding="utf-8")
+        manifest = tmp / "pack_manifest.json"
+        for i in range(iterations):
+            if rng.random() < 0.25:
+                try:
+                    mod.pack_evidence(bundle, manifest_path=manifest)
+                except (mod.EvidencePackError, OSError):
+                    pass
+                except Exception as exc:
+                    crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+            if i % 10 == 0:
+                raw = json.dumps(
+                    {
+                        "schema": "ace.evidence-bundle.v1",
+                        "files": [
+                            {
+                                "path": rng.choice(["bad\x00file.txt", "../x", "sample.txt", _random_json_value(rng)]),
+                                "size_bytes": rng.choice([8, True, 10**400, _random_json_value(rng)]),
+                                "sha256": rng.choice(["0" * 64, _random_json_value(rng)]),
+                            }
+                        ],
+                    }
+                )
+            else:
+                raw = _random_text(rng, 100) if rng.random() < 0.3 else json.dumps(_random_json_value(rng))
+            manifest.write_text(raw, encoding="utf-8")
+            try:
+                mod.verify_evidence(bundle, manifest_path=manifest)
+            except (mod.EvidencePackError, OSError):
                 pass
             except Exception as exc:
                 crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
@@ -322,6 +411,7 @@ def collect_targets() -> dict[str, Callable[[random.Random, int, Path], list[dic
         "corpus_registry": _make_optional_corpus_registry_fuzzer(),
         "stage_verify.verify_stage": _make_optional_stage_verify_fuzzer(),
         "bench_table.summarize_bench": _make_optional_bench_table_fuzzer(),
+        "pack_evidence.verify_evidence": _make_optional_pack_evidence_fuzzer(),
     }
     for name, fn in optionals.items():
         if fn is not None:
