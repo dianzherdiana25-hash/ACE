@@ -189,7 +189,7 @@ def verify_evidence(run_dir: Path, manifest_path: Path | None = None) -> dict[st
         if p.relative_to(root_resolved).as_posix() not in expected_paths
     ]
 
-    valid = len(missing) == 0 and len(modified) == 0
+    valid = len(missing) == 0 and len(modified) == 0 and len(extra_files) == 0
     return {
         "action": "verify",
         "manifest": str(source_manifest),

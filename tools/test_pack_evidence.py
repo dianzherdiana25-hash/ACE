@@ -126,6 +126,26 @@ class PackEvidenceTests(unittest.TestCase):
             with self.assertRaises(EvidencePackError):
                 verify_evidence(run_dir, manifest_path=manifest)
 
+    def test_extra_file_invalidates_bundle_and_exits_2(self) -> None:
+        script = REPO_ROOT / "tools" / "pack_evidence.py"
+        with tempfile.TemporaryDirectory() as tmp:
+            run_dir = Path(tmp) / "run_06"
+            run_dir.mkdir()
+            self._make_sample_run(run_dir)
+            pack_evidence(run_dir)
+
+            (run_dir / "unlisted_extra.txt").write_text("tamper", encoding="utf-8")
+
+            proc = subprocess.run(
+                [sys.executable, str(script), str(run_dir), "--verify"],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(proc.returncode, 2)
+            out = json.loads(proc.stdout)
+            self.assertFalse(out["valid"])
+            self.assertEqual(out["extra_files"], ["unlisted_extra.txt"])
+
 
 if __name__ == "__main__":
     unittest.main()
