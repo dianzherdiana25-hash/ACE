@@ -159,6 +159,24 @@ class StageVerifyTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 2)
             self.assertIn("Error:", proc.stderr)
 
+    def test_fuzz_hardening_null_byte_path_and_huge_int_rejected_with_stage_verify_error(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            stage = Path(tmp) / "stage"
+            stage.mkdir()
+            (stage / "a.txt").write_bytes(b"ok")
+            m = Path(tmp) / "m.json"
+
+            m.write_text(json.dumps({"files": [{"path": "a\x00b.txt", "sha256": "0" * 64}]}), encoding="utf-8")
+            with self.assertRaises(StageVerifyError):
+                verify_stage(stage, m)
+
+            m.write_text(
+                '{"files": [{"path": "a.txt", "sha256": "' + ("0" * 64) + '", "size": ' + ("9" * 5000) + "}]}",
+                encoding="utf-8",
+            )
+            with self.assertRaises(StageVerifyError):
+                verify_stage(stage, m)
+
 
 if __name__ == "__main__":
     unittest.main()

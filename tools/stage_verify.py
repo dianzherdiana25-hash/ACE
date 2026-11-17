@@ -41,8 +41,8 @@ def _sha256_file(path: Path, chunk_size: int = 65536) -> str:
 
 
 def _normalize_rel_path(raw: str) -> str:
-    if not isinstance(raw, str) or not raw.strip():
-        raise StageVerifyError("Path entri manifest harus berupa string tidak kosong.")
+    if not isinstance(raw, str) or not raw.strip() or "\x00" in raw:
+        raise StageVerifyError("Path entri manifest harus berupa string tidak kosong yang sah.")
     cleaned = raw.replace("\\", "/").strip()
     if cleaned.startswith("/") or (len(cleaned) >= 2 and cleaned[1] == ":"):
         raise StageVerifyError(f"Path manifest tidak boleh absolut: {raw!r}")
@@ -57,7 +57,7 @@ def _parse_manifest(manifest_path: Path) -> list[ManifestEntry]:
         raise StageVerifyError(f"Berkas manifest tidak ditemukan: {manifest_path}")
     try:
         payload = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
         raise StageVerifyError(f"Gagal membaca manifest '{manifest_path}': {exc}") from exc
 
     if not isinstance(payload, dict):
