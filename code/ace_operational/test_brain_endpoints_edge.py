@@ -190,7 +190,6 @@ class BrainEndpointsEdgeTests(unittest.TestCase):
         with self._env_all_stub(), self.assertRaises(be.BrainUnavailable):
             be.chat("front", [{"role": "user", "content": "hi"}], check_health=False)
 
-    @unittest.expectedFailure
     def test_bug_chat_malformed_200_json_missing_choices_not_fail_closed(self) -> None:
         # Suspected bug: _request() succeeds for HTTP 200 valid JSON {"error": ...},
         # lalu parse_chat_response() melempar KeyError alih-alih BrainUnavailable.
@@ -318,7 +317,6 @@ class BrainEndpointsEdgeTests(unittest.TestCase):
                 [[1.0, 0.0], [0.0, 1.0], [0.5, 0.5]],
             )
 
-    @unittest.expectedFailure
     def test_bug_embed_empty_texts_list_raises_index_error(self) -> None:
         # Suspected bug: texts=[] memenuhi `len(texts) <= 1`, lalu mengakses texts[0]
         # sehingga melempar IndexError alih-alih mengembalikan [] atau ValueError.
