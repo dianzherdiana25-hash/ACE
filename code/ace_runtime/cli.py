@@ -3,8 +3,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 import sys
+from urllib.parse import urlsplit
+from urllib.request import Request, urlopen
 
 
 def read_json(path: Path):
@@ -61,6 +64,7 @@ def parser():
             command.add_argument("--workspace", default=None, type=Path)
             command.add_argument("--operational", action="store_true", help="show unified Edition 4 operational status")
             command.add_argument("--offline", action="store_true", help="enforce offline mode")
+            command.add_argument("--remote", default=None, help="URL server ACE jarak jauh (mis. http://100.x.y.z:8080)")
         else:
             command.add_argument("--workspace", required=True, type=Path)
         if name == "enqueue":
@@ -111,11 +115,13 @@ def parser():
     chat_p.add_argument("--once", default="", help="kirim satu pesan lalu keluar")
     chat_p.add_argument("--client-id", default="", help="ID pesan klien untuk idempotensi")
     chat_p.add_argument("--offline", action="store_true", help="jalankan tanpa akses internet")
+    chat_p.add_argument("--remote", default=None, help="URL server ACE jarak jauh (atau set ACE_REMOTE_URL)")
 
     do_p = commands.add_parser("do", help="kerjakan tugas rekayasa secara langsung dalam Bahasa Indonesia")
     do_p.add_argument("request", nargs="+", help="deskripsi tugas")
     do_p.add_argument("--workspace", default=None, type=Path)
     do_p.add_argument("--offline", action="store_true", help="jalankan tanpa akses internet")
+    do_p.add_argument("--remote", default=None, help="URL server ACE jarak jauh (atau set ACE_REMOTE_URL)")
 
     web_p = commands.add_parser("web", help="jalankan aplikasi web anime localhost ACE")
     web_p.add_argument("--workspace", default=None, type=Path)
@@ -216,6 +222,66 @@ def demo(runtime):
                   for name in task_ids}
     return {"task_ids": task_ids, "outcomes": outcomes,
             "evaluation": evaluation, "status": runtime.status()}
+
+
+def _remote_json(base_url: str, path: str, body: dict | None = None, timeout: float = 120.0) -> dict:
+    parts = urlsplit(base_url.strip())
+    if parts.scheme not in ("http", "https") or not parts.netloc:
+        raise ValueError(f"URL remote tidak valid: {base_url!r} (harus http:// atau https://)")
+    origin = f"{parts.scheme}://{parts.netloc}"
+    url = f"{origin}{path}"
+    headers = {"Accept": "application/json", "User-Agent": "ACE-CLI/4"}
+    data = None
+    if body is not None:
+        headers["Content-Type"] = "application/json; charset=utf-8"
+        data = json.dumps(body, ensure_ascii=False).encode("utf-8")
+    req = Request(url, headers=headers, data=data)
+    with urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def _handle_remote_command(args, remote_url: str) -> int:
+    if args.command == "status":
+        payload = _remote_json(remote_url, "/api/status", timeout=15.0)
+        print(json.dumps(payload, sort_keys=True, ensure_ascii=False))
+        return 0
+
+    if args.command in ("chat", "do"):
+        if args.command == "do":
+            text = " ".join(args.request).strip()
+        else:
+            text = (args.once or " ".join(args.message)).strip()
+
+        if text:
+            body = {"text": text}
+            if getattr(args, "client_id", ""):
+                body["client_message_id"] = args.client_id
+            res = _remote_json(remote_url, "/api/chat", body=body)
+            task = res.get("task")
+            intent_frame = res.get("intent_frame") or {}
+            print(json.dumps({
+                "reply": res.get("reply", ""),
+                "duplicate": res.get("duplicate", False),
+                "task_id": task.get("task_id") if isinstance(task, dict) else None,
+                "task_status": task.get("status") if isinstance(task, dict) else None,
+                "intent": intent_frame.get("intent"),
+                "remote": remote_url,
+            }, sort_keys=True, ensure_ascii=False))
+            return 0
+
+        print(f"ACE Studio Remote Chat ({remote_url}) — ketik 'keluar' untuk berhenti")
+        while True:
+            try:
+                line = input("Kamu > ").strip()
+            except EOFError:
+                break
+            if not line or line.lower() in ("keluar", "exit", "quit"):
+                break
+            res = _remote_json(remote_url, "/api/chat", body={"text": line})
+            print(f"ACE  > {res.get('reply', '')}\n")
+        return 0
+
+    raise ValueError(f"Perintah '{args.command}' belum mendukung mode --remote")
 
 
 def _handle_operational_command(args) -> int:
@@ -439,6 +505,12 @@ def _handle_operational_command(args) -> int:
 def main(argv=None):
     args = parser().parse_args(argv)
     try:
+        remote_url = (getattr(args, "remote", None) or os.environ.get("ACE_REMOTE_URL", "")).strip()
+        if remote_url and args.command in ("chat", "do", "status"):
+            if getattr(args, "offline", False):
+                raise ValueError("Mode --offline memblokir koneksi --remote / ACE_REMOTE_URL")
+            return _handle_remote_command(args, remote_url)
+
         # Operational commands handled by ace_operational
         operational_cmds = {
             "chat", "do", "web", "start", "stop", "resume",
