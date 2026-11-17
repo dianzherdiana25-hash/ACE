@@ -104,6 +104,23 @@ class BenchTableTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 2)
             self.assertIn("Error:", proc.stderr)
 
+    def test_fuzz_hardening_float_overflow_and_huge_int_raise_bench_table_error(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            p1 = Path(tmp) / "fsum_overflow.jsonl"
+            p1.write_text('{"label": "a", "m": 1e308}\n{"label": "a", "m": 1e308}\n', encoding="utf-8")
+            with self.assertRaises(BenchTableError):
+                summarize_bench(p1)
+
+            p2 = Path(tmp) / "int_overflow.jsonl"
+            p2.write_text(json.dumps({"label": "a", "m": 10**400}) + "\n", encoding="utf-8")
+            with self.assertRaises(BenchTableError):
+                summarize_bench(p2)
+
+            p3 = Path(tmp) / "digit_limit.jsonl"
+            p3.write_text('{"label": "a", "m": ' + ("9" * 5000) + "}\n", encoding="utf-8")
+            with self.assertRaises(BenchTableError):
+                summarize_bench(p3)
+
 
 if __name__ == "__main__":
     unittest.main()

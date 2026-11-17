@@ -54,8 +54,9 @@ def summarize_bench(
             continue
         try:
             obj = json.loads(stripped)
-        except json.JSONDecodeError as exc:
-            raise BenchTableError(f"JSON tidak sah pada baris {line_no}: {exc.msg}") from exc
+        except (json.JSONDecodeError, ValueError) as exc:
+            detail = exc.msg if isinstance(exc, json.JSONDecodeError) else str(exc)
+            raise BenchTableError(f"JSON tidak sah pada baris {line_no}: {detail}") from exc
         if not isinstance(obj, dict):
             raise BenchTableError(f"Baris {line_no} wajib berupa objek JSON.")
 
@@ -72,12 +73,18 @@ def summarize_bench(
             if key == label_key:
                 continue
             if isinstance(value, (int, float)) and not isinstance(value, bool):
-                if not math.isfinite(float(value)):
+                try:
+                    numeric = float(value)
+                except OverflowError as exc:
+                    raise BenchTableError(
+                        f"Nilai metrik terlalu besar (overflow) pada baris {line_no} metrik '{key}'."
+                    ) from exc
+                if not math.isfinite(numeric):
                     raise BenchTableError(
                         f"Nilai non-finit pada baris {line_no} metrik '{key}': {value!r}"
                     )
                 metrics_seen.add(key)
-                grouped[label][key].append(float(value))
+                grouped[label][key].append(numeric)
 
     if total_rows == 0:
         raise BenchTableError(f"Berkas benchmark kosong: {jsonl_path}")
@@ -91,8 +98,17 @@ def summarize_bench(
             vals = grouped[label].get(metric, [])
             if not vals:
                 continue
-            mean_val = statistics.fmean(vals)
-            stdev_val = statistics.stdev(vals) if len(vals) >= 2 else 0.0
+            try:
+                mean_val = statistics.fmean(vals)
+                stdev_val = statistics.stdev(vals) if len(vals) >= 2 else 0.0
+            except (OverflowError, ValueError) as exc:
+                raise BenchTableError(
+                    f"Overflow statistik pada label '{label}' metrik '{metric}': {exc}"
+                ) from exc
+            if not (math.isfinite(mean_val) and math.isfinite(stdev_val)):
+                raise BenchTableError(
+                    f"Statistik non-finit pada label '{label}' metrik '{metric}'."
+                )
             metric_stats[metric] = {
                 "n": len(vals),
                 "mean": mean_val,
