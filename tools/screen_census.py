@@ -149,8 +149,11 @@ def compute_census(paths: list[Path]) -> dict[str, Any]:
                 mark_invalid(f"error_row: {err_val}")
                 continue
 
+            raw_score = obj.get("score")
+            if raw_score is None and "judge_score" in obj:
+                raw_score = obj.get("judge_score")
             has_ratified = "ratified" in obj and obj["ratified"] is not None
-            has_score = "score" in obj and obj["score"] is not None
+            has_score = raw_score is not None
             if not has_ratified and not has_score:
                 mark_invalid("tanpa_ratified_atau_score")
                 continue
@@ -159,7 +162,7 @@ def compute_census(paths: list[Path]) -> dict[str, Any]:
                 mark_invalid("ratified_bukan_boolean")
                 continue
 
-            if has_score and not _is_valid_score(obj["score"]):
+            if has_score and not _is_valid_score(raw_score):
                 mark_invalid("score_di_luar_rentang_0_100")
                 continue
 
@@ -171,7 +174,7 @@ def compute_census(paths: list[Path]) -> dict[str, Any]:
                 paired_obs[(task_kind, item_id)].append(bool(obj["ratified"]))
 
             if has_score:
-                band = _score_band(float(obj["score"]))
+                band = _score_band(float(raw_score))
                 overall["score_bands"][band] += 1
                 overall["scored_rows"] += 1
                 per_kind[task_kind]["score_bands"][band] += 1

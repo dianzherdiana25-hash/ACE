@@ -165,6 +165,24 @@ class ScreenCensusTests(unittest.TestCase):
             self.assertEqual(census["overall"]["valid_rows"], 1)
             self.assertEqual(census["overall"]["invalid_rows"], 2)
 
+    def test_judge_score_alias_supported_and_validated(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "judge_alias.jsonl"
+            _write_jsonl(
+                p,
+                [
+                    {"id": "j-001", "task_kind": "code", "judge_score": 55},
+                    {"id": "j-002", "task_kind": "language", "judge_score": 82, "ratified": True},
+                    {"id": "j-003", "task_kind": "code", "judge_score": 150},
+                ],
+            )
+            census = compute_census([p])
+            self.assertEqual(census["overall"]["valid_rows"], 2)
+            self.assertEqual(census["overall"]["invalid_rows"], 1)
+            self.assertEqual(census["overall"]["scored_rows"], 2)
+            self.assertEqual(census["overall"]["score_bands"]["45-75"], 1)
+            self.assertEqual(census["overall"]["score_bands"]["76-100"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()
