@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0",
-  "completed_cycles": 123,
+  "completed_cycles": 124,
   "history": [
     {
       "cycle": 1,
@@ -1994,6 +1994,27 @@
       "pr_number": null,
       "pr_url": null,
       "timestamp": "2026-11-16T03:54:17Z"
+    },
+    {
+      "cycle": 124,
+      "problem_id": "prob_rep_saturation_124",
+      "hypothesis_id": "hyp_expand_dispatch_124",
+      "patch_sha": "669a1f924d65d3a1d4ed5efe6a6e80c29fc9c7602cf3b6982746a4696a61d61b",
+      "decision": "INCONCLUSIVE",
+      "rejection_reason": "STAGED_ONLY_NOT_EXECUTED: UNSUPPORTED_OR_INCOMPLETE_CANDIDATE; public synthetic scores are not independent evidence, and candidate is not wired into active ACE behavior.",
+      "diagnostic_metrics": {
+        "candidate_python_executed": 0.0,
+        "independent_confirmation": 0.0,
+        "connected_to_active_algorithm": 0.0
+      },
+      "scientific_status": "NOT_ASSESSED",
+      "candidate_connected_to_runtime": false,
+      "receipt_signature": "3ec41c1b1e67fd92e8ba38dd1d8b53ddf2fa9df96d72d59bc788bcf86eac87dd",
+      "pr_created": false,
+      "commit_sha": "",
+      "pr_number": null,
+      "pr_url": null,
+      "timestamp": "2026-11-17T03:42:24Z"
     }
   ],
   "tested_patches": {
@@ -2734,6 +2755,12 @@
       "decision": "INCONCLUSIVE",
       "hypothesis_id": "hyp_expand_dispatch_123",
       "timestamp": "2026-11-16T03:54:17Z"
+    },
+    "669a1f924d65d3a1d4ed5efe6a6e80c29fc9c7602cf3b6982746a4696a61d61b": {
+      "cycle": 124,
+      "decision": "INCONCLUSIVE",
+      "hypothesis_id": "hyp_expand_dispatch_124",
+      "timestamp": "2026-11-17T03:42:24Z"
     }
   },
   "active_problems": [],
