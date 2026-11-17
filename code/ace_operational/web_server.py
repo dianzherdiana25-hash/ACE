@@ -3,6 +3,7 @@
 Implements:
 - Loopback binding (`127.0.0.1`) with automatic free-port fallback (`WEB01`, `WEB02`, `WEB18`)
 - Shared SQLite + FencedStore state with CLI (`WEB24`)
+- Loopback token gate for the whole REST API (`WEB25`): every `/api/*` route requires an `X-ACE-Token` header matching a local token (env `ACE_WEB_TOKEN` or `<workspace>/.ace-web-auth.json`, auto-generated with mode `0600`); the static UI shell (`/`) stays open
 - Two main blocks: 'Ngobrol dengan ACE' and 'Cerita ACE' (`WEB03`-`WEB15`)
 - Cursor-based `/api/events?after=<seq>` & SSE stream without duplicate cards (`WEB16`)
 - Offline-ready inline SVG Anime Companion with 5 data-driven states (`mendengar`, `bekerja`, `belajar`, `menunggu`, `selesai`) (`WEB12`, `WEB19`)
@@ -12,9 +13,11 @@ from __future__ import annotations
 
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import hmac
 import json
 import os
 from pathlib import Path
+import secrets
 import socket
 import threading
 from typing import Any
@@ -889,6 +892,32 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
   </main>
 
   <script>
+    // WEB25: seluruh endpoint /api/* memakai token lokal (header X-ACE-Token).
+    // Token diminta sekali lewat prompt, lalu disimpan di localStorage browser ini.
+    (function () {
+      const _origFetch = window.fetch.bind(window);
+      window.fetch = async function (input, init) {
+        const url = typeof input === "string" ? input : (input && input.url) || "";
+        if (!url.includes("/api/")) return _origFetch(input, init);
+        const send = (tok) => {
+          const opts = Object.assign({}, init || {});
+          const headers = Object.assign({}, (init && init.headers) || {});
+          if (tok) headers["X-ACE-Token"] = tok;
+          opts.headers = headers;
+          return _origFetch(input, opts);
+        };
+        let res = await send(localStorage.getItem("aceWebToken") || "");
+        if (res.status === 401) {
+          const tok = window.prompt("API Web Studio terkunci. Masukkan token akses (ada di berkas .ace-web-auth.json di workspace):", "");
+          if (tok) {
+            localStorage.setItem("aceWebToken", tok);
+            res = await send(tok);
+          }
+        }
+        return res;
+      };
+    })();
+
     const STATE = {
       conversationId: "conv_utama",
       lastSequence: 0,
@@ -1813,7 +1842,54 @@ class ACEWebCore:
         return int(HTTPStatus.NOT_FOUND), {"error": f"Route POST tidak ditemukan: {path}"}
 
 
-def create_http_handler(core: ACEWebCore):
+# --- WEB25: loopback token gate for the whole REST API -----------------------
+# The API surface exposes private memory records (list/recall with
+# `include_private`), destructive tombstoning (forget), engine-driving chat
+# and task control, so every `/api/*` route requires a local bearer token —
+# the same pattern as the sandbox's `.ace-proxy-auth`: a credential file
+# that lives only in the workspace and is read by the server itself.
+# Resolution order: env `ACE_WEB_TOKEN`, then
+# `<workspace>/.ace-web-auth.json` ({"token": "..."}); otherwise a fresh
+# token is generated and persisted with mode 0600. The gate lives in the
+# HTTP handler because ACEWebCore is also driven in-process by trusted
+# local harnesses; the static UI shell (`/`) stays open.
+WEB_AUTH_ENV_VAR = "ACE_WEB_TOKEN"
+WEB_AUTH_FILENAME = ".ace-web-auth.json"
+WEB_AUTH_HEADER = "X-ACE-Token"
+
+
+def resolve_web_auth_token(workspace: Path) -> str:
+    """Return the Web Studio loopback token, generating and persisting one if needed."""
+    env_token = (os.environ.get(WEB_AUTH_ENV_VAR) or "").strip()
+    if env_token:
+        return env_token
+    auth_path = Path(workspace) / WEB_AUTH_FILENAME
+    if auth_path.is_file():
+        try:
+            data = json.loads(auth_path.read_text(encoding="utf-8"))
+            file_token = str(data.get("token") or "").strip()
+            if file_token:
+                return file_token
+        except (OSError, ValueError):
+            pass
+    token = secrets.token_urlsafe(32)
+    auth_path.parent.mkdir(parents=True, exist_ok=True)
+    auth_path.write_text(json.dumps({"token": token}, indent=2) + "\n", encoding="utf-8")
+    try:
+        os.chmod(auth_path, 0o600)
+    except OSError:
+        pass
+    return token
+
+
+def web_auth_authorized(expected: str | None, provided: str | None) -> bool:
+    """Constant-time token check; a handler without a token fails closed."""
+    if not expected or not provided:
+        return False
+    return hmac.compare_digest(expected, provided)
+
+
+def create_http_handler(core: ACEWebCore, auth_token: str | None = None):
     class ACEHTTPRequestHandler(BaseHTTPRequestHandler):
         protocol_version = "HTTP/1.1"
 
@@ -1845,10 +1921,23 @@ def create_http_handler(core: ACEWebCore):
             raw = self.rfile.read(length).decode("utf-8")
             return json.loads(raw) if raw.strip() else {}
 
+        def _api_authorized(self) -> bool:
+            return web_auth_authorized(auth_token, self.headers.get(WEB_AUTH_HEADER))
+
+        def _send_auth_required(self) -> None:
+            self._send_json(
+                {"error": "Endpoint API memerlukan header X-ACE-Token yang valid (WEB25)"},
+                status=HTTPStatus.UNAUTHORIZED,
+            )
+
         def do_GET(self) -> None:
             parsed = urlparse(self.path)
             path = parsed.path.rstrip("/") or "/"
             qs = parse_qs(parsed.query)
+
+            if path.startswith("/api/") and not self._api_authorized():
+                self._send_auth_required()
+                return
 
             if path == "/":
                 self._send_html(ANIME_WEB_HTML)
@@ -1948,6 +2037,9 @@ def create_http_handler(core: ACEWebCore):
         def do_POST(self) -> None:
             parsed = urlparse(self.path)
             path = parsed.path.rstrip("/") or "/"
+            if path.startswith("/api/") and not self._api_authorized():
+                self._send_auth_required()
+                return
             try:
                 body = self._read_json_body()
             except Exception as exc:
@@ -1978,11 +2070,13 @@ class ACEWebServer:
             )
         self.store = store
         self.core = ACEWebCore(store)
+        self.auth_file = Path(store.workspace) / WEB_AUTH_FILENAME
+        self.auth_token = resolve_web_auth_token(Path(store.workspace))
         self.host = "127.0.0.1" if host == "localhost" else host
         self.requested_port = int(port)
         self.actual_port = find_available_port(self.host, self.requested_port)
         self.port_fallback_used = self.actual_port != self.requested_port
-        handler_cls = create_http_handler(self.core)
+        handler_cls = create_http_handler(self.core, auth_token=self.auth_token)
         self.httpd = ThreadingHTTPServer((self.host, self.actual_port), handler_cls)
         self._thread: threading.Thread | None = None
 
