@@ -1,0 +1,27 @@
+{
+ "arm": "seeded20262001",
+ "seed": 20262001,
+ "donor_seed": 20261904,
+ "donor_catalog_digest": "5005072890bf608dc78a98965e6c9a3bf729a517c9689a12a9ccc051cbbaf62a",
+ "pool_total": 12,
+ "pool_solved_by_donor": 12,
+ "pool_remaining": 0,
+ "donor_phase_score_calls": 42,
+ "donor_phase_wall_s": 46.0,
+ "discovery_score_calls": 14706,
+ "discovery_wall_s": 327.0,
+ "total_score_calls": 14748,
+ "coverage": {
+  "catalog_keys": 6,
+  "catalog_chains": 1,
+  "catalog_digest": "5005072890bf608dc78a98965e6c9a3bf729a517c9689a12a9ccc051cbbaf62a",
+  "evaluation_solved": [
+   29,
+   29
+  ],
+  "control_solved": [
+   34,
+   34
+  ]
+ }
+}

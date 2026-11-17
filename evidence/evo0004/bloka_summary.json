@@ -1,0 +1,25 @@
+{
+ "block": "A",
+ "per_kind": {
+  "code": {
+   "n": 4,
+   "ratified": 3,
+   "rate": 0.75,
+   "errors": 0
+  },
+  "language": {
+   "n": 4,
+   "ratified": 4,
+   "rate": 1.0,
+   "errors": 0
+  }
+ },
+ "claim_section1_full_scope": "TERDUKUNG",
+ "wake_events": [
+  {
+   "organ": "coder",
+   "unit": "ace-coder",
+   "woke": true
+  }
+ ]
+}

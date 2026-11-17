@@ -1,0 +1,14 @@
+{
+ "block": "B",
+ "probe_class": "writepath_audit_probe",
+ "records_before": 2,
+ "record_id": "mem_6f68e996487f8dbc298f",
+ "records_after_first_write": 3,
+ "replay_id": "mem_6f68e996487f8dbc298f",
+ "replay_same_id": true,
+ "records_after_replay": 3,
+ "readback_ok": true,
+ "evidence_sha256": "4a67ff8dc24d47bbb48b5d6ca0a6a8e120e55032e7e67213f16f5e849f2706bd",
+ "unregistered_class_refused": true,
+ "verdict": "PASS"
+}
