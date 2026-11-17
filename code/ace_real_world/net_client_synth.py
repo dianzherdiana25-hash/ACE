@@ -34,11 +34,15 @@ class NetClientSynthesizer:
         """Synthesize pure-Python resilient JSON client with exponential backoff."""
         keys_check = ""
         if expected_keys:
+            # The block is emitted inside the generated client's
+            # `with`/`try` nesting (16 spaces); emitting it at 4 spaces
+            # produced a SyntaxError in every synthesized client that
+            # used expected_keys.
             keys_check = (
-                f"    # Verify schema keys\n"
-                f"    missing = [k for k in {repr(expected_keys)} if k not in data]\n"
-                f"    if missing:\n"
-                f"        raise ValueError(f'Malformed API payload: missing keys {{missing}}')\n"
+                f"                # Verify schema keys\n"
+                f"                missing = [k for k in {repr(expected_keys)} if k not in data]\n"
+                f"                if missing:\n"
+                f"                    raise ValueError(f'Malformed API payload: missing keys {{missing}}')\n"
             )
 
         code = (
