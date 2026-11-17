@@ -122,7 +122,6 @@ class TestRealWorldEdge(unittest.TestCase):
         self.assertIn("uptime", rule.client_code)
         self.assertIn("timeout=10.0", rule.client_code)
 
-    @unittest.expectedFailure
     def test_15_net_client_synthesized_code_with_expected_keys_is_valid_python(self) -> None:
         # Suspected bug in code/ace_real_world/net_client_synth.py:
         # When expected_keys is provided, the `# Verify schema keys` block is emitted at
