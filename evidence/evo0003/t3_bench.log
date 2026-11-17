@@ -1,0 +1,51 @@
+=== T3 BENCH START 2026-11-16T13:06:40+07:00 ===
+MemAvailable:   14471184 kB
+358183 /workspace/tools/llama.cpp/llama-b12316/llama-server -m /workspace/ace-omega/models/qwen2.5-coder-7b-instruct-q4_k_m.gguf
+365892 /workspace/tools/llama.cpp/llama-b12316/llama-server -m /workspace/ace-omega/models/Qwen3.5-4B-MTP-Q4_K_M.gguf
+--- sahabat llama-bench -t 1 ---
+/workspace/evo0003-stage/t3_bench.sh: line 20: /workspace/tools/llama.cpp/llama-b12316/llama-bench: Permission denied
+--- sahabat llama-bench -t 8 (contrast) ---
+/workspace/evo0003-stage/t3_bench.sh: line 22: /workspace/tools/llama.cpp/llama-b12316/llama-bench: Permission denied
+--- ik_llama binary probe ---
+IK_BINARY_ABSENT — no built ik_llama binary; bench not run.
+MemAvailable:   14469764 kB
+=== T3 BENCH DONE 2026-11-16T13:06:40+07:00 ===
+=== T3 BENCH START 2026-11-16T13:17:53+07:00 ===
+MemAvailable:   13887664 kB
+358183 /workspace/tools/llama.cpp/llama-b12316/llama-server -m /workspace/ace-omega/models/qwen2.5-coder-7b-instruct-q4_k_m.gguf
+365892 /workspace/tools/llama.cpp/llama-b12316/llama-server -m /workspace/ace-omega/models/Qwen3.5-4B-MTP-Q4_K_M.gguf
+--- sahabat llama-bench -t 1 ---
+=== T3 BENCH START 2026-11-16T13:23:28+07:00 ===
+MemAvailable:   13664944 kB
+358183 /workspace/tools/llama.cpp/llama-b12316/llama-server -m /workspace/ace-omega/models/qwen2.5-coder-7b-instruct-q4_k_m.gguf
+365892 /workspace/tools/llama.cpp/llama-b12316/llama-server -m /workspace/ace-omega/models/Qwen3.5-4B-MTP-Q4_K_M.gguf
+--- sahabat llama-bench -t 1 ---
+load_backend: loaded RPC backend from /workspace/tools/llama.cpp/llama-b12316/libggml-rpc.so
+load_backend: loaded CPU backend from /workspace/tools/llama.cpp/llama-b12316/libggml-cpu-cascadelake.so
+| model                          |       size |     params | backend    | threads |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | --------------: | -------------------: |
+| gemma2 9B Q4_K - Medium        |   5.36 GiB |     9.24 B | CPU        |       1 |           pp512 |          6.03 ± 0.18 |
+| gemma2 9B Q4_K - Medium        |   5.36 GiB |     9.24 B | CPU        |       1 |           tg128 |          0.99 ± 0.09 |
+
+build: 5d4c8eeb2 (12316)
+--- sahabat llama-bench -t 8 (contrast) ---
+load_backend: loaded RPC backend from /workspace/tools/llama.cpp/llama-b12316/libggml-rpc.so
+load_backend: loaded CPU backend from /workspace/tools/llama.cpp/llama-b12316/libggml-cpu-cascadelake.so
+| model                          |       size |     params | backend    | threads |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | --------------: | -------------------: |
+| gemma2 9B Q4_K - Medium        |   5.36 GiB |     9.24 B | CPU        |       8 |           pp512 |         31.79 ± 0.97 |
+| gemma2 9B Q4_K - Medium        |   5.36 GiB |     9.24 B | CPU        |       8 |           tg128 |          0.70 ± 0.07 |
+
+build: 5d4c8eeb2 (12316)
+--- ik_llama binary probe ---
+/workspace/tools/ik-llama/src/build/bin/llama-bench
+/workspace/tools/ik-llama/src/build/bin/llama-server
+--- ik llama-bench -t 1 on sahabat ---
+| model                          |       size |     params | backend    | threads |          test |              t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | ------------: | ---------------: |
+| gemma2 9B Q4_K - Medium        |   6.06 GiB |    10.16 B | CPU        |       1 |         pp512 |     10.19 ± 0.39 |
+| gemma2 9B Q4_K - Medium        |   6.06 GiB |    10.16 B | CPU        |       1 |         tg128 |      0.90 ± 0.02 |
+
+build: unknown (0)
+MemAvailable:   16406252 kB
+=== T3 BENCH DONE 2026-11-16T13:56:18+07:00 ===

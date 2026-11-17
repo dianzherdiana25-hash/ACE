@@ -1,0 +1,30 @@
+{
+ "form": "OWNER_CUT_10MIN_BOX",
+ "box": "lanes started ~12:54 WIB, harvested 13:04 WIB (owner cut order via hub 12:53)",
+ "unique_episodes_measured": [
+  "ep-code-001",
+  "ep-code-002"
+ ],
+ "coverage": "2/8 unique episodes (both code; 0 language)",
+ "runs": {
+  "ep-code-001": 2,
+  "ep-code-002": 2
+ },
+ "ep_code_001": "ratified in 0/2 runs (one substantive accept=false: docstring nonconformity; one unparseable judge verdict)",
+ "ep_code_002": "ratified in 2/2 runs (clean JSON accepts)",
+ "not_measured": [
+  "ep-code-003",
+  "ep-code-004",
+  "ep-lang-001",
+  "ep-lang-002",
+  "ep-lang-003",
+  "ep-lang-004"
+ ],
+ "claim_section1_reduced_coverage": "TERDUKUNG",
+ "claim_basis": "ratified >= 1 among measured episodes (ep-code-002, 2/2 runs, heterogeneous pair coder->front, provenance recorded)",
+ "defects_disclosed": [
+  "lang lane filter mismatch: EVO_LANE=lang matched no corpus rows (corpus task_kind spells 'language'); the language lane exited LANE_DONE with zero items — language episodes are NOT_MEASURED, not failed",
+  "the sequential v2 runner (PID 366032) survived the kill issued before the lane launch and raced the code lane, double-measuring ep-code-001/002 concurrently; duplicate verdicts agree in direction (001 rejected twice, 002 accepted twice)"
+ ],
+ "note": "Reduced-coverage verdict under the owner's cut order; the preregistered full block is superseded by that order, not failed. NOT_MEASURED = not failed, not passed."
+}

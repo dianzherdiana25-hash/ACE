@@ -1,0 +1,369 @@
+{
+ "artifacts": {
+  "blast_registry.json": "88faa2c73b0604b66576292f1889c45efcb8c2a5a1f4c06286fb0bb5364b42bb",
+  "catalogs.json": "a250ba47eb27b7510f80c51e181c14045cd4610633ba4516676e3e9311637825",
+  "catalogs/discovery_20261901.json": "3b36645d1d20aa589826652b54286aaa0c7736cf97d0b0c2c99d84481a7a7b9a",
+  "catalogs/discovery_20261902.json": "f02319ff8197d2e32baa668a671837dd349ac55332d572330e3d250591f2a5d4",
+  "catalogs/discovery_20261903.json": "1e01356147e719c18acad97a26366493d2e6298997cdd49e61306a4e76e8a900",
+  "catalogs/discovery_20261904.json": "42140ccf73b87729177ac8a0d1f8b74774e0df78694122f4cb507db6cdc0376c",
+  "catalogs/discovery_20261905.json": "847c92a4aa8bc0bdb7fe348288d1e14ec2d8738cbbd6d7f2b33e369c8bef82bd",
+  "catalogs/discovery_20261906.json": "51e87b874089b9264a59e760a4d7175aecec58740cb7999ace591444996c30d6",
+  "screening.json": "6fa2e66ee1a82bab381b3db16f1d57c40e96560a7dee2bfd8044ed163aba6715",
+  "store_snapshot/memory.jsonl": "80556222f455ea6d4cbeb838be00d71f3b50cb5cd4d7af958f6d00b3cdf06f62"
+ },
+ "b4_snapshot_present": true,
+ "basis": "main @ f6d7546213449f8fc65b825fc87b5b87a69eec0e",
+ "catalogs": [
+  {
+   "catalog_digest": "465508efbe082f31a3f87ccf01742cfc43fb76c97477577027a9bc0e44c35913",
+   "checkpoint": "/home/hatch/workspace/evo0003-staging-out/catalogs/discovery_20261901.json",
+   "n_chains": 0,
+   "n_control": 34,
+   "n_keys": 6,
+   "seed": 20261901,
+   "wall_s": 3276.2
+  },
+  {
+   "catalog_digest": "561d272b947c731728d39e6804ac2f3eb416b5e9e4fd3036bd4d4e1f1efd8371",
+   "checkpoint": "/home/hatch/workspace/evo0003-staging-out/catalogs/discovery_20261902.json",
+   "n_chains": 2,
+   "n_control": 34,
+   "n_keys": 6,
+   "seed": 20261902,
+   "wall_s": 4026.2
+  },
+  {
+   "catalog_digest": "465508efbe082f31a3f87ccf01742cfc43fb76c97477577027a9bc0e44c35913",
+   "checkpoint": "/home/hatch/workspace/evo0003-staging-out/catalogs/discovery_20261903.json",
+   "n_chains": 0,
+   "n_control": 34,
+   "n_keys": 6,
+   "seed": 20261903,
+   "wall_s": 3326.2
+  },
+  {
+   "catalog_digest": "5005072890bf608dc78a98965e6c9a3bf729a517c9689a12a9ccc051cbbaf62a",
+   "checkpoint": "/home/hatch/workspace/evo0003-staging-out/catalogs/discovery_20261904.json",
+   "n_chains": 1,
+   "n_control": 34,
+   "n_keys": 6,
+   "seed": 20261904,
+   "wall_s": 4016.1
+  },
+  {
+   "catalog_digest": "465508efbe082f31a3f87ccf01742cfc43fb76c97477577027a9bc0e44c35913",
+   "checkpoint": "/home/hatch/workspace/evo0003-staging-out/catalogs/discovery_20261905.json",
+   "n_chains": 0,
+   "n_control": 34,
+   "n_keys": 6,
+   "seed": 20261905,
+   "wall_s": 3254.3
+  },
+  {
+   "catalog_digest": "9ce483a429d6fdf06a59349cc1d9fa0f0fa3a9b253d0511de481e9729d742f8f",
+   "checkpoint": "/home/hatch/workspace/evo0003-staging-out/catalogs/discovery_20261906.json",
+   "n_chains": 1,
+   "n_control": 34,
+   "n_keys": 6,
+   "seed": 20261906,
+   "wall_s": 3737.3
+  }
+ ],
+ "notes": [
+  "Catalog families: bands 20261901/20261903/20261905 admit the identical 6-key catalog (digest 465508ef\u2026); all six band universes are content-distinct (full-content and control-split hashes verified 2026-11-16).",
+  "Wall times in the catalog records are Muse VM walls and are never mixed with sandbox numbers; the screening wall (4,486.9 s) is a sandbox wall.",
+  "Screening outcome (sandbox, instrument v2, Amendment 3): 24/24 candidates NO_WITNESS, 0 evidenced; clean arm 32/34 in 120 s. The causal effect is specific to the exact standing permutation (5,2,3,0,1,4); the blast registry therefore contains the standing entry only."
+ ],
+ "schema": "ace.evo0003.blast_manifest.v1",
+ "screening_summary": [
+  {
+   "perm": [
+    5,
+    2,
+    3,
+    0,
+    1,
+    4
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    5,
+    2,
+    3,
+    0,
+    4,
+    1
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    2,
+    5,
+    3,
+    0,
+    1,
+    4
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    5,
+    3,
+    2,
+    0,
+    1,
+    4
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    4,
+    2,
+    3,
+    0,
+    1,
+    5
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    5,
+    2,
+    4,
+    0,
+    1,
+    3
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    1,
+    2,
+    3,
+    0,
+    5,
+    4
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    5,
+    2,
+    3,
+    4,
+    1,
+    0
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    4,
+    1,
+    5,
+    0,
+    3,
+    2
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    2,
+    3,
+    0,
+    1,
+    4,
+    5
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    2,
+    4,
+    5,
+    3,
+    0,
+    1
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    0,
+    4,
+    1,
+    2,
+    3,
+    5
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    4,
+    1,
+    5,
+    3,
+    0,
+    2
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    2,
+    3,
+    0,
+    1,
+    5,
+    4
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    2,
+    5,
+    0,
+    1,
+    3,
+    4
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    0,
+    3,
+    5,
+    4,
+    2,
+    1
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    3,
+    5,
+    2,
+    1,
+    0,
+    4
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    3,
+    1,
+    2,
+    0,
+    4,
+    5
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    2,
+    0,
+    3,
+    1,
+    5,
+    4
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    3,
+    2,
+    0,
+    4,
+    5,
+    1
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    3,
+    4,
+    2,
+    5,
+    0,
+    1
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    4,
+    5,
+    0,
+    3,
+    1,
+    2
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    5,
+    2,
+    1,
+    4,
+    0,
+    3
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  },
+  {
+   "perm": [
+    3,
+    4,
+    2,
+    1,
+    0,
+    5
+   ],
+   "verdict": "NO_WITNESS",
+   "witnesses": []
+  }
+ ],
+ "staging_house": "catalogs: Muse VM (owner fallback rule 2026-11-16 01:33; sandbox SSH door down ~01:57-09:08); screening: sandbox, uniform re-screen per Amendment 3 (2026-11-16 09:16); blast house: sandbox"
+}
