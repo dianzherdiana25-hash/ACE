@@ -147,6 +147,24 @@ class ScreenCensusTests(unittest.TestCase):
         self.assertEqual(proc.returncode, 2)
         self.assertIn("Error:", proc.stderr)
 
+    def test_fuzz_hardening_huge_integer_score_and_digit_limit_rejected_safely(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "huge.jsonl"
+            p.write_text(
+                "\n".join(
+                    [
+                        json.dumps({"id": "h-001", "task_kind": "code", "score": 10**400}),
+                        '{"id": "h-002", "score": ' + ("9" * 5000) + "}",
+                        json.dumps({"id": "h-003", "task_kind": "code", "score": 60}),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            census = compute_census([p])
+            self.assertEqual(census["overall"]["valid_rows"], 1)
+            self.assertEqual(census["overall"]["invalid_rows"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()

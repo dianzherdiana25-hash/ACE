@@ -32,9 +32,13 @@ class CensusInputError(ValueError):
 def _is_valid_score(value: Any) -> bool:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         return False
-    if not math.isfinite(float(value)):
+    try:
+        numeric = float(value)
+    except (OverflowError, TypeError, ValueError):
         return False
-    return 0.0 <= float(value) <= 100.0
+    if not math.isfinite(numeric):
+        return False
+    return 0.0 <= numeric <= 100.0
 
 
 def _score_band(score: float) -> str:
@@ -96,7 +100,8 @@ def compute_census(paths: list[Path]) -> dict[str, Any]:
 
             try:
                 obj = json.loads(raw_line)
-            except json.JSONDecodeError as exc:
+            except (json.JSONDecodeError, ValueError) as exc:
+                reason = exc.msg if isinstance(exc, json.JSONDecodeError) else str(exc)
                 overall["invalid_rows"] += 1
                 per_kind["unknown"]["invalid_rows"] += 1
                 invalid_details.append(
@@ -104,7 +109,7 @@ def compute_census(paths: list[Path]) -> dict[str, Any]:
                         "file": str(path),
                         "line": line_no,
                         "id": "",
-                        "reason": f"json_tidak_sah: {exc.msg}",
+                        "reason": f"json_tidak_sah: {reason}",
                     }
                 )
                 continue
