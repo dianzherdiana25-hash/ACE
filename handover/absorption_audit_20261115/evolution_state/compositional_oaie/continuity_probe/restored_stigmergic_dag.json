@@ -1,0 +1,394 @@
+{
+  "nodes": [
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "38092b4b033070ec278cd6bce1194f52ecd71337b4381a1ed52f291415b9bdf7",
+      "node_id": "proof_g1_bounded_margin",
+      "parent_ids": [],
+      "payload": {
+        "birth_sha256": "293816b575174650ffaa55cb8fc7eb46b95e05f8f4a018e7e6763be22e4f891a",
+        "candidates_generated": 6300,
+        "cold_fresh_candidates": 6300,
+        "cold_fresh_verified": true,
+        "deps": [],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 3,
+        "holdout_total": 3,
+        "task_id": "g1_bounded_margin",
+        "verified": true
+      },
+      "prev_chain_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "7686c753dcb48db16f6519f9fd01b9c802acb379ea4e90a4cd3b61abd8d6b171",
+      "node_id": "proof_g1_positive_delta",
+      "parent_ids": [
+        "proof_g1_bounded_margin"
+      ],
+      "payload": {
+        "birth_sha256": "f4e28c32f6f3bd6d3809a20ae0b874fec999ff08f2974adf4c9f07f7fcff3e9f",
+        "candidates_generated": 244,
+        "cold_fresh_candidates": 6688,
+        "cold_fresh_verified": true,
+        "deps": [
+          "skill_bounded_margin"
+        ],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 2,
+        "holdout_total": 2,
+        "task_id": "g1_positive_delta",
+        "verified": true
+      },
+      "prev_chain_hash": "38092b4b033070ec278cd6bce1194f52ecd71337b4381a1ed52f291415b9bdf7",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "6ad6ad743d61b6ede68fb010b79e4c337bb9549a2b1b613aa787ee0a8cafcc07",
+      "node_id": "proof_g1_abs_diff",
+      "parent_ids": [
+        "proof_g1_bounded_margin"
+      ],
+      "payload": {
+        "birth_sha256": "a2f0c91cd4a6d03982a96157f613dd0fc5955c9b70a91d9bbcf3063535306099",
+        "candidates_generated": 944,
+        "cold_fresh_candidates": 8498,
+        "cold_fresh_verified": true,
+        "deps": [
+          "skill_bounded_margin"
+        ],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 3,
+        "holdout_total": 3,
+        "task_id": "g1_abs_diff",
+        "verified": true
+      },
+      "prev_chain_hash": "7686c753dcb48db16f6519f9fd01b9c802acb379ea4e90a4cd3b61abd8d6b171",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "5ccf370b677fea240654b00f5fb56f49ff72ad10f6d0699dd35c56f64c57a9ca",
+      "node_id": "proof_g1_is_framed",
+      "parent_ids": [],
+      "payload": {
+        "birth_sha256": "262c80624a2a98f944e387e0eeb6d3e3dfc828ae9e8a3789bf303635c26641d6",
+        "candidates_generated": 1452,
+        "cold_fresh_candidates": 1425,
+        "cold_fresh_verified": true,
+        "deps": [],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 5,
+        "holdout_total": 5,
+        "task_id": "g1_is_framed",
+        "verified": true
+      },
+      "prev_chain_hash": "6ad6ad743d61b6ede68fb010b79e4c337bb9549a2b1b613aa787ee0a8cafcc07",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "acb9f296953c4fcb78d55d523ccc25f8e642ff47ba6c97ebbf829a8aa4f55928",
+      "node_id": "proof_g2_sla_excess",
+      "parent_ids": [
+        "proof_g1_bounded_margin",
+        "proof_g1_abs_diff"
+      ],
+      "payload": {
+        "birth_sha256": "5f185381cfdca727abf3db6b2aba94b9bef601ac94cce06f7a069625ce7ae369",
+        "candidates_generated": 26682,
+        "cold_fresh_candidates": 77122,
+        "cold_fresh_verified": false,
+        "deps": [
+          "skill_bounded_margin",
+          "skill_abs_diff"
+        ],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 2,
+        "holdout_total": 2,
+        "task_id": "g2_sla_excess",
+        "verified": true
+      },
+      "prev_chain_hash": "5ccf370b677fea240654b00f5fb56f49ff72ad10f6d0699dd35c56f64c57a9ca",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "d5dd784608c58c7a0405d016c2ef3842a2e81971b48fb2add80a956352b51fb8",
+      "node_id": "proof_g2_quota_overage_fee",
+      "parent_ids": [
+        "proof_g1_bounded_margin"
+      ],
+      "payload": {
+        "birth_sha256": "130350c2552afb9530c632cb89ff257dd2ac604323ee48501030d3cf1868b9be",
+        "candidates_generated": 23841,
+        "cold_fresh_candidates": 57842,
+        "cold_fresh_verified": false,
+        "deps": [
+          "skill_bounded_margin"
+        ],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 3,
+        "holdout_total": 3,
+        "task_id": "g2_quota_overage_fee",
+        "verified": true
+      },
+      "prev_chain_hash": "acb9f296953c4fcb78d55d523ccc25f8e642ff47ba6c97ebbf829a8aa4f55928",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "7cc02aef51201c9e8eef855fe3355cb73d1d15cbd2a9a13a9c52caca698fb688",
+      "node_id": "proof_g2_safe_framed_len",
+      "parent_ids": [
+        "proof_g1_is_framed"
+      ],
+      "payload": {
+        "birth_sha256": "ec60118c679f6773ece95ef13ca6b4cbe1c0ddbbccb0db885758a8ec442ed406",
+        "candidates_generated": 2959,
+        "cold_fresh_candidates": 5528,
+        "cold_fresh_verified": false,
+        "deps": [
+          "skill_is_framed"
+        ],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 4,
+        "holdout_total": 4,
+        "task_id": "g2_safe_framed_len",
+        "verified": true
+      },
+      "prev_chain_hash": "d5dd784608c58c7a0405d016c2ef3842a2e81971b48fb2add80a956352b51fb8",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "d716b84708846ef1420bb24cf417794427863f648686f49a68d76a862f713802",
+      "node_id": "proof_g2_band_breach",
+      "parent_ids": [
+        "proof_g1_abs_diff"
+      ],
+      "payload": {
+        "birth_sha256": "d8c5c08627e8b44fc43ef358a5b1257d49ae355f935e6be2f8988503996d5d93",
+        "candidates_generated": 31451,
+        "cold_fresh_candidates": 35408,
+        "cold_fresh_verified": false,
+        "deps": [
+          "skill_abs_diff"
+        ],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 4,
+        "holdout_total": 4,
+        "task_id": "g2_band_breach",
+        "verified": true
+      },
+      "prev_chain_hash": "7cc02aef51201c9e8eef855fe3355cb73d1d15cbd2a9a13a9c52caca698fb688",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "e42c6f33ba852284158fa1ba5bcf66e302573d06ed811913e0ff8fcb1f1e7d8b",
+      "node_id": "proof_g3_framed_band_breach",
+      "parent_ids": [
+        "proof_g1_is_framed",
+        "proof_g2_band_breach"
+      ],
+      "payload": {
+        "birth_sha256": "a9a3c75ed2743a6912302e480927d08b17f63d307369a696c3e9d860305509c3",
+        "candidates_generated": 2713,
+        "cold_fresh_candidates": 88652,
+        "cold_fresh_verified": false,
+        "deps": [
+          "skill_is_framed",
+          "skill_band_breach"
+        ],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 5,
+        "holdout_total": 5,
+        "task_id": "g3_framed_band_breach",
+        "verified": true
+      },
+      "prev_chain_hash": "d716b84708846ef1420bb24cf417794427863f648686f49a68d76a862f713802",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "8ee9dbd3ac34c96c85f08d2ac72d2bd25c9d6a55590dd111d0f18e312e1fe8f7",
+      "node_id": "proof_g3_net_settled_after_gap",
+      "parent_ids": [
+        "proof_g1_bounded_margin",
+        "proof_g1_abs_diff"
+      ],
+      "payload": {
+        "birth_sha256": "2879b34467777a75951949d926ea61efdce393bae5336ebf651eaa1332a72e61",
+        "candidates_generated": 90080,
+        "cold_fresh_candidates": 47338,
+        "cold_fresh_verified": false,
+        "deps": [
+          "skill_bounded_margin",
+          "skill_abs_diff"
+        ],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 2,
+        "holdout_total": 2,
+        "task_id": "g3_net_settled_after_gap",
+        "verified": true
+      },
+      "prev_chain_hash": "e42c6f33ba852284158fa1ba5bcf66e302573d06ed811913e0ff8fcb1f1e7d8b",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "13e51310ec2bae11913179e64f3e5950c60973dce395837d1744949f0d43c196",
+      "node_id": "proof_g3_framed_square",
+      "parent_ids": [
+        "proof_g1_is_framed"
+      ],
+      "payload": {
+        "birth_sha256": "3fc66fb1d4f767a840bbd5ed5b10845727af435bfcfa5e40e27526262d7d4752",
+        "candidates_generated": 18006,
+        "cold_fresh_candidates": 16296,
+        "cold_fresh_verified": false,
+        "deps": [
+          "skill_is_framed"
+        ],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 3,
+        "holdout_total": 3,
+        "task_id": "g3_framed_square",
+        "verified": true
+      },
+      "prev_chain_hash": "8ee9dbd3ac34c96c85f08d2ac72d2bd25c9d6a55590dd111d0f18e312e1fe8f7",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "4dc342f3a114c6e2bb1301129a80ee6867df3839645d9592e1ab76c94547b71f",
+      "node_id": "proof_g3_framed_margin",
+      "parent_ids": [
+        "proof_g1_is_framed",
+        "proof_g1_bounded_margin"
+      ],
+      "payload": {
+        "birth_sha256": "665a3a0c5ea509ae271b6eb32ce0bb758590541fc89316d4a2f522ba3b17f777",
+        "candidates_generated": 59744,
+        "cold_fresh_candidates": 38337,
+        "cold_fresh_verified": false,
+        "deps": [
+          "skill_is_framed",
+          "skill_bounded_margin"
+        ],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 2,
+        "holdout_total": 2,
+        "task_id": "g3_framed_margin",
+        "verified": true
+      },
+      "prev_chain_hash": "13e51310ec2bae11913179e64f3e5950c60973dce395837d1744949f0d43c196",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "0ac57c8b8e89c8ed0c14d7270078d07d9f46b493085378b9f4bc80e5ca152d0c",
+      "node_id": "proof_macro_ast_43a65c76",
+      "parent_ids": [
+        "proof_g1_is_framed"
+      ],
+      "payload": {
+        "birth_sha256": "bb17d150b597e60a1fd0872d8957c99e02f44b58eebf0cd4ac67bd56baba4c74",
+        "failure_reason": "",
+        "kind": "wake_sleep_macro",
+        "mdl_gain_nodes": 1,
+        "pattern_code": "(_p1 if skill_is_framed(_p0) else 1)",
+        "task_id": "macro_ast_43a65c76",
+        "verified": true
+      },
+      "prev_chain_hash": "4dc342f3a114c6e2bb1301129a80ee6867df3839645d9592e1ab76c94547b71f",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "ddab0be02e321ccfa9bd13945102fb76dad232fa312d6c9cf541c06aea2aca1a",
+      "node_id": "proof_g4_safe_settled_after_gap",
+      "parent_ids": [
+        "proof_macro_ast_43a65c76",
+        "proof_g3_net_settled_after_gap"
+      ],
+      "payload": {
+        "birth_sha256": "f222ab1e51bcef925548fce3520d23566787780680540b80c4f32625e29df777",
+        "candidates_generated": 34888,
+        "cold_fresh_candidates": 80442,
+        "cold_fresh_verified": false,
+        "deps": [
+          "macro_ast_43a65c76",
+          "skill_net_settled_after_gap"
+        ],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 3,
+        "holdout_total": 3,
+        "task_id": "g4_safe_settled_after_gap",
+        "verified": true
+      },
+      "prev_chain_hash": "0ac57c8b8e89c8ed0c14d7270078d07d9f46b493085378b9f4bc80e5ca152d0c",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "08777501e8ddd99b952a631a4e2d3acff95c1a7fef090ae3d2c5e3baee8b02f3",
+      "node_id": "proof_g4_framed_overage_charge",
+      "parent_ids": [
+        "proof_macro_ast_43a65c76",
+        "proof_g2_quota_overage_fee"
+      ],
+      "payload": {
+        "birth_sha256": "1d7e1543ad2aa3dea27df10d41f14075f14e4d9ad09adc3a3320ab4672e91ecb",
+        "candidates_generated": 56682,
+        "cold_fresh_candidates": 91400,
+        "cold_fresh_verified": false,
+        "deps": [
+          "macro_ast_43a65c76",
+          "skill_quota_overage_fee"
+        ],
+        "failure_reason": "",
+        "forgetting_count": 0,
+        "holdout_passed": 3,
+        "holdout_total": 3,
+        "task_id": "g4_framed_overage_charge",
+        "verified": true
+      },
+      "prev_chain_hash": "ddab0be02e321ccfa9bd13945102fb76dad232fa312d6c9cf541c06aea2aca1a",
+      "weight": 1.0
+    }
+  ],
+  "schema": "ace.stigmergic_dag.v1",
+  "tail_hash": "08777501e8ddd99b952a631a4e2d3acff95c1a7fef090ae3d2c5e3baee8b02f3"
+}

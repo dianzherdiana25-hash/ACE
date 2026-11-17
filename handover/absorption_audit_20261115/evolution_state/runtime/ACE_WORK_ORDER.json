@@ -1,0 +1,28 @@
+{
+  "acceptance_checks": [
+    "PYTHONPATH=code /usr/bin/python3 -m unittest ace_operational.test_sovereign_runtime -v",
+    "/usr/bin/python3 tools/verify_sources.py"
+  ],
+  "forbidden_paths": [
+    "code/ace_autonomy/",
+    "code/ace_host_controller/",
+    "code/ace_mission/",
+    "code/ace_runtime/",
+    "docs/UPSTREAM_SOURCES.json",
+    "evidence/",
+    "tools/"
+  ],
+  "goal": "[HIGH] Unguarded hardcoded `'verified': True` found at line(s) [517] in code/ace_operational/sovereign_runtime.py.",
+  "order_id": "evo-0001-97a2a8bf",
+  "order_sha256": "04f043eb187900af43480cbf87fa4da5d86d1da884d109edccf576b1d0664794",
+  "ratification": {
+    "audience": [
+      "kernel"
+    ],
+    "type": "internal_ratification"
+  },
+  "schema": "ace.work_order.v1",
+  "target_files": [
+    "code/ace_operational/sovereign_runtime.py"
+  ]
+}

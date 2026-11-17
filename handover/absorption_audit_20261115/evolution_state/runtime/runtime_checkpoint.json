@@ -1,0 +1,19 @@
+{
+  "antibodies_compiled": 0,
+  "austerity_ticks": 0,
+  "certified_skills": [
+    {
+      "birth_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "skill_id": "core_stage2_guard"
+    }
+  ],
+  "cycle_count": 3,
+  "health_score": 0.8,
+  "processed_task_ids": [
+    "ratify_mission_mission-0001-skill-berbicara",
+    "ratify_mission_mission-0001b-dialog-alami",
+    "ratify_mission_mission-0002-memori-jangka-panjang"
+  ],
+  "quarantined_faults": 0,
+  "unhandled_crashes": 0
+}

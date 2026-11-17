@@ -1,0 +1,147 @@
+{
+  "certified_skills": [
+    {
+      "birth_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "skill_id": "core_stage2_guard"
+    }
+  ],
+  "checkpoint_state": {
+    "antibodies_compiled": 0,
+    "austerity_ticks": 0,
+    "certified_skills": [
+      {
+        "birth_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "skill_id": "core_stage2_guard"
+      }
+    ],
+    "cycle_count": 3,
+    "health_score": 0.8,
+    "processed_task_ids": [
+      "ratify_mission_mission-0001-skill-berbicara",
+      "ratify_mission_mission-0001b-dialog-alami",
+      "ratify_mission_mission-0002-memori-jangka-panjang"
+    ],
+    "quarantined_faults": 0,
+    "unhandled_crashes": 0
+  },
+  "dag_nodes": [
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "8968cdc3c6a2ca1f8dcd4caffc42baefc6a2032b16e1fe510c41ad0c71f59477",
+      "node_id": "proof_ratify_mission_mission-0001-skill-berbicara",
+      "parent_ids": [],
+      "payload": {
+        "birth_sha256": "db47cf1031aa4805c89c22ba0fcf7d35ef958cbfeed50e891724dd450c725912",
+        "changed_files": [
+          "code/ace_operational/autonomous_engine.py",
+          "code/ace_operational/language.py",
+          "code/ace_operational/speech_acquisition.py",
+          "code/ace_operational/story_projector.py",
+          "code/ace_operational/test_speech_acquisition.py",
+          "code/ace_operational/web_server.py"
+        ],
+        "mission_type": "user_mission",
+        "order_id": "mission-0001-skill-berbicara",
+        "post_hashes": {
+          "code/ace_operational/autonomous_engine.py": "b5bf70c02db2490706a8aeba5044c4e040e0ac98298c0e6776330183dcc13789",
+          "code/ace_operational/language.py": "987ba1ea38ba4cfbd111f0feef00c002d5a6eaba131402379a8c167467408b84",
+          "code/ace_operational/speech_acquisition.py": "56d1be22daf06e5725d8c2c6a0b11deabeefdee22085064065bea88dec6898b2",
+          "code/ace_operational/story_projector.py": "5b6762d5e07d29e922d68b59bbabffb6861a836302b2b5df8c472efac8ccfda3",
+          "code/ace_operational/test_speech_acquisition.py": "302b8e750de246e5b4865a0eeb1cc41dd9e66beffa3f0d06a94238ba06a26336",
+          "code/ace_operational/web_server.py": "9f021a8ef11e36f0d729c2d885933ae0811e47f68d0503122e16d1566cd41e62"
+        },
+        "task_id": "ratify_mission_mission-0001-skill-berbicara",
+        "title": "Misi Pengguna 0001: Skill Berbicara Bertahap 4 Tahap (Teks & Memori)",
+        "verified": true
+      },
+      "prev_chain_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "90a7e61795ca760f3b90dd470651efc0032f3f79c8d3dbbe839181cfbe1c3609",
+      "node_id": "proof_ratify_mission_mission-0001b-dialog-alami",
+      "parent_ids": [
+        "proof_ratify_mission_mission-0001-skill-berbicara"
+      ],
+      "payload": {
+        "birth_sha256": "494cf5cc4963f859e993e71af358fbba87684ca2f13cb6e2fcb4521aba56d63a",
+        "changed_files": [
+          "code/ace_indo_nlp/discourse.py",
+          "code/ace_indo_nlp/lexicon_kb.py",
+          "code/ace_indo_nlp/morphology.py",
+          "code/ace_indo_nlp/test_discourse.py",
+          "code/ace_indo_nlp/test_lexicon_kb.py",
+          "code/ace_indo_nlp/test_morphology.py",
+          "code/ace_operational/language.py",
+          "code/ace_operational/speech_acquisition.py",
+          "code/ace_operational/test_speech_acquisition.py",
+          "code/ace_operational/web_server.py"
+        ],
+        "mission_type": "user_mission",
+        "order_id": "mission-0001b-dialog-alami",
+        "post_hashes": {
+          "code/ace_indo_nlp/discourse.py": "8c729d5e4ef476b18102c995cec4559e6a88e0cbfb4053ac44e8727209c0c975",
+          "code/ace_indo_nlp/lexicon_kb.py": "1eaa00a6c38ff6e0045407d4b829511a0b10324bac2943fe02a3351b141b3110",
+          "code/ace_indo_nlp/morphology.py": "6f46020b8d2e82318a723ac22542b3493690f9e1993dac623edc11689cd68eb7",
+          "code/ace_indo_nlp/test_discourse.py": "17ede3656978bc3d4702c2ff34601014db74588e821124bc1eabde69e057f367",
+          "code/ace_indo_nlp/test_lexicon_kb.py": "649c30c98eb343d4e05ddef0b7f9235216c3050506d654b7b7ba4c36e7485ab0",
+          "code/ace_indo_nlp/test_morphology.py": "c2f6c22a9c5726b1f2d8604fbf3edf4fc774a529936e3fc3d2bb0626492529ba",
+          "code/ace_operational/language.py": "d88cc96d5e11698a218e5d5bad6cd25c419e3922bb28a208bb80e3f8f2d21b90",
+          "code/ace_operational/speech_acquisition.py": "7a88cea1a3d899c01aab62b373b655bad78615f9105d3c22e7d1e2f3a5192c7c",
+          "code/ace_operational/test_speech_acquisition.py": "c0c6059656d4f4d2945b992057dc85fad3d13485056299c1d600e5aea4f78d2f",
+          "code/ace_operational/web_server.py": "479c2b968ce9e01324ec0bb86aeba20be833420e2297cb1f5a23605f6c742623"
+        },
+        "task_id": "ratify_mission_mission-0001b-dialog-alami",
+        "title": "Dialog Alami & Perbaikan Obrolan Web/Termux (Misi 0001b)",
+        "verified": true
+      },
+      "prev_chain_hash": "8968cdc3c6a2ca1f8dcd4caffc42baefc6a2032b16e1fe510c41ad0c71f59477",
+      "weight": 1.0
+    },
+    {
+      "immutable": true,
+      "kind": "proof_pheromone",
+      "node_hash": "7aab82c686647ae096b991bf5a09e4580af5dbc62ec16fb4ecdbb273dc59adfd",
+      "node_id": "proof_ratify_mission_mission-0002-memori-jangka-panjang",
+      "parent_ids": [
+        "proof_ratify_mission_mission-0001b-dialog-alami"
+      ],
+      "payload": {
+        "birth_sha256": "cb1a50a20800beae1f5c8d6b292a05408636594b05743eabaf0a7be945fc25aa",
+        "changed_files": [
+          "code/ace_operational/language.py",
+          "code/ace_operational/memory_bridge.py",
+          "code/ace_operational/story_projector.py",
+          "code/ace_operational/test_memory_bridge.py",
+          "code/ace_operational/web_server.py"
+        ],
+        "mission_type": "user_mission",
+        "order_id": "mission-0002-memori-jangka-panjang",
+        "post_hashes": {
+          "code/ace_operational/language.py": "213b9aaaa7440ba8a142a94af26534fc3407efc8e40412095a9e71970a622b62",
+          "code/ace_operational/memory_bridge.py": "11f730cad86168261a717398ede604766dfe056cc3dd7e1e1df656789fde9b5b",
+          "code/ace_operational/story_projector.py": "00f2da7339d5cb2bfce7fdb27d9cdf7ffb87138b7426c1fb44304d96deb1e097",
+          "code/ace_operational/test_memory_bridge.py": "5e90939ab0d66c9ec8447d8ee879f3876b5308f3bf72cd6be726fd11c7ab06b4",
+          "code/ace_operational/web_server.py": "13a0c55ee198df36dedcf0934469aebb1f780b12a58c996b3e142fbe0717de82"
+        },
+        "task_id": "ratify_mission_mission-0002-memori-jangka-panjang",
+        "title": "Memori Jangka Panjang ACE (Episodik, Semantik, Prosedural & Lupa Terukur)",
+        "verified": true
+      },
+      "prev_chain_hash": "90a7e61795ca760f3b90dd470651efc0032f3f79c8d3dbbe839181cfbe1c3609",
+      "weight": 1.0
+    }
+  ],
+  "dag_tail_hash": "7aab82c686647ae096b991bf5a09e4580af5dbc62ec16fb4ecdbb273dc59adfd",
+  "ratification": {
+    "audience": [
+      "kernel"
+    ],
+    "type": "internal_ratification"
+  },
+  "schema": "ace.substrate_spore.v1",
+  "spore_sha256": "1856026714dfd9d4517c3523937ca98efacd035be49f0be8346ee5755f88208a"
+}

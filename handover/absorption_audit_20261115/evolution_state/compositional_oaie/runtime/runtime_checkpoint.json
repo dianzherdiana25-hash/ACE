@@ -1,0 +1,563 @@
+{
+  "antibodies_compiled": 1,
+  "austerity_ticks": 0,
+  "certified_skills": [
+    {
+      "birth_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "skill_id": "core_stage2_guard"
+    },
+    {
+      "birth_sha256": "453e979e2ba48e721b250c35bab635b96195b45eef7a2f12c374f3376e009e07",
+      "deps": [],
+      "entrypoint": "bounded_margin",
+      "generation_id": "G1",
+      "skill_id": "g1_bounded_margin",
+      "source_code": "def bounded_margin(gross, fee):\n    return ((gross - fee) if (gross > fee) else 0)\n",
+      "source_sha256": "453e979e2ba48e721b250c35bab635b96195b45eef7a2f12c374f3376e009e07",
+      "verification_cases": [
+        [
+          {
+            "fee": 120,
+            "gross": 500
+          },
+          380
+        ],
+        [
+          {
+            "fee": 45,
+            "gross": 15
+          },
+          0
+        ],
+        [
+          {
+            "fee": 7,
+            "gross": 7
+          },
+          0
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "e954c767effe264c6383b98378a7e87cf6808446c7357f7686dc428b6a35ba65",
+      "deps": [
+        "skill_bounded_margin"
+      ],
+      "entrypoint": "positive_delta",
+      "generation_id": "G1",
+      "skill_id": "g1_positive_delta",
+      "source_code": "def skill_bounded_margin(gross, fee):\n    return ((gross - fee) if (gross > fee) else 0)\n\ndef positive_delta(val, base):\n    return skill_bounded_margin(val, base)\n",
+      "source_sha256": "e954c767effe264c6383b98378a7e87cf6808446c7357f7686dc428b6a35ba65",
+      "verification_cases": [
+        [
+          {
+            "base": 33,
+            "val": 100
+          },
+          67
+        ],
+        [
+          {
+            "base": 19,
+            "val": 3
+          },
+          0
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "cf9b3606ec807ef1f4daa59fd57c90e6422d390366bc91e07a7da805a329651d",
+      "deps": [
+        "skill_bounded_margin"
+      ],
+      "entrypoint": "abs_diff",
+      "generation_id": "G1",
+      "skill_id": "g1_abs_diff",
+      "source_code": "def skill_bounded_margin(gross, fee):\n    return ((gross - fee) if (gross > fee) else 0)\n\ndef abs_diff(a, b):\n    return (skill_bounded_margin(a, b) + skill_bounded_margin(b, a))\n",
+      "source_sha256": "cf9b3606ec807ef1f4daa59fd57c90e6422d390366bc91e07a7da805a329651d",
+      "verification_cases": [
+        [
+          {
+            "a": 35,
+            "b": 12
+          },
+          23
+        ],
+        [
+          {
+            "a": 9,
+            "b": 29
+          },
+          20
+        ],
+        [
+          {
+            "a": -4,
+            "b": 3
+          },
+          7
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "039dba2c13148b94960c4a8ae6cddc109d17f135d6711f657dfc1d4e1fe6403b",
+      "deps": [],
+      "entrypoint": "is_framed",
+      "generation_id": "G1",
+      "skill_id": "g1_is_framed",
+      "source_code": "def is_framed(tok):\n    return (tok.endswith(']') and tok.startswith('['))\n",
+      "source_sha256": "039dba2c13148b94960c4a8ae6cddc109d17f135d6711f657dfc1d4e1fe6403b",
+      "verification_cases": [
+        [
+          {
+            "tok": "[payload]"
+          },
+          true
+        ],
+        [
+          {
+            "tok": "]] [["
+          },
+          false
+        ],
+        [
+          {
+            "tok": "hdr[ok]"
+          },
+          false
+        ],
+        [
+          {
+            "tok": "[ok]tail"
+          },
+          false
+        ],
+        [
+          {
+            "tok": "[unclosed"
+          },
+          false
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "2fb1c1cc9910aec20d7c6109647b3813fe04cbdc79c23fa8a6e26b48c535c91b",
+      "deps": [
+        "skill_bounded_margin",
+        "skill_abs_diff"
+      ],
+      "entrypoint": "sla_excess",
+      "generation_id": "G2",
+      "skill_id": "g2_sla_excess",
+      "source_code": "def skill_bounded_margin(gross, fee):\n    return ((gross - fee) if (gross > fee) else 0)\n\ndef skill_abs_diff(a, b):\n    return (skill_bounded_margin(a, b) + skill_bounded_margin(b, a))\n\ndef sla_excess(a, b, tol):\n    return skill_bounded_margin(skill_abs_diff(a, b), tol)\n",
+      "source_sha256": "2fb1c1cc9910aec20d7c6109647b3813fe04cbdc79c23fa8a6e26b48c535c91b",
+      "verification_cases": [
+        [
+          {
+            "a": 50,
+            "b": 10,
+            "tol": 15
+          },
+          25
+        ],
+        [
+          {
+            "a": 12,
+            "b": 30,
+            "tol": 25
+          },
+          0
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "1615a2a8b098cd7c618e816e5a00958e8f08ad9009389f5940da2aab019c138a",
+      "deps": [
+        "skill_bounded_margin"
+      ],
+      "entrypoint": "quota_overage_fee",
+      "generation_id": "G2",
+      "skill_id": "g2_quota_overage_fee",
+      "source_code": "def skill_bounded_margin(gross, fee):\n    return ((gross - fee) if (gross > fee) else 0)\n\ndef quota_overage_fee(used, cap, rate):\n    return (skill_bounded_margin(used, cap) * rate)\n",
+      "source_sha256": "1615a2a8b098cd7c618e816e5a00958e8f08ad9009389f5940da2aab019c138a",
+      "verification_cases": [
+        [
+          {
+            "cap": 1,
+            "rate": 15,
+            "used": 3
+          },
+          30
+        ],
+        [
+          {
+            "cap": 20,
+            "rate": 6,
+            "used": 25
+          },
+          30
+        ],
+        [
+          {
+            "cap": 12,
+            "rate": 100,
+            "used": 7
+          },
+          0
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "e1056bcb4bd60489860675c28e3874ed292bd6910afed1fd2842cf0704142e25",
+      "deps": [
+        "skill_is_framed"
+      ],
+      "entrypoint": "safe_framed_len",
+      "generation_id": "G2",
+      "skill_id": "g2_safe_framed_len",
+      "source_code": "def skill_is_framed(tok):\n    return (tok.endswith(']') and tok.startswith('['))\n\ndef safe_framed_len(tok):\n    return (len(tok) if skill_is_framed(tok) else 1)\n",
+      "source_sha256": "e1056bcb4bd60489860675c28e3874ed292bd6910afed1fd2842cf0704142e25",
+      "verification_cases": [
+        [
+          {
+            "tok": "[header]"
+          },
+          8
+        ],
+        [
+          {
+            "tok": "]bad["
+          },
+          1
+        ],
+        [
+          {
+            "tok": "bad[ok]"
+          },
+          1
+        ],
+        [
+          {
+            "tok": "[ok]bad"
+          },
+          1
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "a8e7cceb062f748924dd0b8e0fd2005d9e5f89fbbf02c9dfceae94b051e19344",
+      "deps": [
+        "skill_abs_diff"
+      ],
+      "entrypoint": "band_breach",
+      "generation_id": "G2",
+      "skill_id": "g2_band_breach",
+      "source_code": "def skill_bounded_margin(gross, fee):\n    return ((gross - fee) if (gross > fee) else 0)\n\ndef skill_abs_diff(a, b):\n    return (skill_bounded_margin(a, b) + skill_bounded_margin(b, a))\n\ndef band_breach(a, b, tol):\n    return (skill_abs_diff(a, b) > tol)\n",
+      "source_sha256": "a8e7cceb062f748924dd0b8e0fd2005d9e5f89fbbf02c9dfceae94b051e19344",
+      "verification_cases": [
+        [
+          {
+            "a": 2,
+            "b": 12,
+            "tol": 9
+          },
+          true
+        ],
+        [
+          {
+            "a": 18,
+            "b": 10,
+            "tol": 8
+          },
+          false
+        ],
+        [
+          {
+            "a": 100,
+            "b": 70,
+            "tol": 29
+          },
+          true
+        ],
+        [
+          {
+            "a": 70,
+            "b": 100,
+            "tol": 30
+          },
+          false
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "1edbc09918aa250775f54a212b574ad7e14bc00eb66a77b8aff2874bc5a25e75",
+      "deps": [
+        "skill_is_framed",
+        "skill_band_breach"
+      ],
+      "entrypoint": "framed_band_breach",
+      "generation_id": "G3",
+      "skill_id": "g3_framed_band_breach",
+      "source_code": "def skill_is_framed(tok):\n    return (tok.endswith(']') and tok.startswith('['))\n\ndef skill_bounded_margin(gross, fee):\n    return ((gross - fee) if (gross > fee) else 0)\n\ndef skill_abs_diff(a, b):\n    return (skill_bounded_margin(a, b) + skill_bounded_margin(b, a))\n\ndef skill_band_breach(a, b, tol):\n    return (skill_abs_diff(a, b) > tol)\n\ndef framed_band_breach(tok, a, b, tol):\n    return (skill_is_framed(tok) and skill_band_breach(a, b, tol))\n",
+      "source_sha256": "1edbc09918aa250775f54a212b574ad7e14bc00eb66a77b8aff2874bc5a25e75",
+      "verification_cases": [
+        [
+          {
+            "a": 2,
+            "b": 15,
+            "tok": "[pkt]",
+            "tol": 10
+          },
+          true
+        ],
+        [
+          {
+            "a": 2,
+            "b": 15,
+            "tok": "[pkt",
+            "tol": 10
+          },
+          false
+        ],
+        [
+          {
+            "a": 8,
+            "b": 8,
+            "tok": "[pkt]",
+            "tol": 0
+          },
+          false
+        ],
+        [
+          {
+            "a": 2,
+            "b": 15,
+            "tok": "p[pkt]",
+            "tol": 10
+          },
+          false
+        ],
+        [
+          {
+            "a": 2,
+            "b": 15,
+            "tok": "[pkt]q",
+            "tol": 10
+          },
+          false
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "a04b89560e5f87c9bc43828d58a90498462b71543dcdb3a455c5e4979923a851",
+      "deps": [
+        "skill_bounded_margin",
+        "skill_abs_diff"
+      ],
+      "entrypoint": "net_settled_after_gap",
+      "generation_id": "G3",
+      "skill_id": "g3_net_settled_after_gap",
+      "source_code": "def skill_bounded_margin(gross, fee):\n    return ((gross - fee) if (gross > fee) else 0)\n\ndef skill_abs_diff(a, b):\n    return (skill_bounded_margin(a, b) + skill_bounded_margin(b, a))\n\ndef net_settled_after_gap(gross, a, b):\n    return skill_bounded_margin(gross, skill_abs_diff(a, b))\n",
+      "source_sha256": "a04b89560e5f87c9bc43828d58a90498462b71543dcdb3a455c5e4979923a851",
+      "verification_cases": [
+        [
+          {
+            "a": 15,
+            "b": 40,
+            "gross": 100
+          },
+          75
+        ],
+        [
+          {
+            "a": 1,
+            "b": 11,
+            "gross": 4
+          },
+          0
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "11250842578a655ee5ca338296e10d52c14590963a1a52f0d55b7d35ad729920",
+      "deps": [
+        "skill_is_framed"
+      ],
+      "entrypoint": "framed_square",
+      "generation_id": "G3",
+      "skill_id": "g3_framed_square",
+      "source_code": "def skill_is_framed(tok):\n    return (tok.endswith(']') and tok.startswith('['))\n\ndef framed_square(tok, x):\n    return ((x * x) if skill_is_framed(tok) else 1)\n",
+      "source_sha256": "11250842578a655ee5ca338296e10d52c14590963a1a52f0d55b7d35ad729920",
+      "verification_cases": [
+        [
+          {
+            "tok": "[hdr]",
+            "x": 11
+          },
+          121
+        ],
+        [
+          {
+            "tok": "[hdr",
+            "x": 11
+          },
+          1
+        ],
+        [
+          {
+            "tok": "bad[hdr]",
+            "x": 6
+          },
+          1
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "d300afc2dce03659175c3a5e39eafed5c5d26139a1ab4775e5c99b22900a32db",
+      "deps": [
+        "skill_is_framed",
+        "skill_bounded_margin"
+      ],
+      "entrypoint": "framed_margin",
+      "generation_id": "G3",
+      "skill_id": "g3_framed_margin",
+      "source_code": "def skill_is_framed(tok):\n    return (tok.endswith(']') and tok.startswith('['))\n\ndef skill_bounded_margin(gross, fee):\n    return ((gross - fee) if (gross > fee) else 0)\n\ndef framed_margin(tok, gross, fee):\n    return (skill_bounded_margin(gross, fee) if skill_is_framed(tok) else 1)\n",
+      "source_sha256": "d300afc2dce03659175c3a5e39eafed5c5d26139a1ab4775e5c99b22900a32db",
+      "verification_cases": [
+        [
+          {
+            "fee": 20,
+            "gross": 85,
+            "tok": "[tx]"
+          },
+          65
+        ],
+        [
+          {
+            "fee": 20,
+            "gross": 85,
+            "tok": "[tx"
+          },
+          1
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "bb17d150b597e60a1fd0872d8957c99e02f44b58eebf0cd4ac67bd56baba4c74",
+      "deps": [
+        "skill_is_framed"
+      ],
+      "entrypoint": "macro_ast_43a65c76",
+      "generation_id": "G3",
+      "kind": "wake_sleep_macro",
+      "skill_id": "macro_ast_43a65c76",
+      "source_code": "def skill_is_framed(tok):\n    return (tok.endswith(']') and tok.startswith('['))\n\ndef macro_ast_43a65c76(_p0, _p1):\n    return (_p1 if skill_is_framed(_p0) else 1)\n",
+      "source_sha256": "bb17d150b597e60a1fd0872d8957c99e02f44b58eebf0cd4ac67bd56baba4c74",
+      "verification_cases": []
+    },
+    {
+      "birth_sha256": "8ca642d062bf9b7cde4ffd23b7217fa391965b186f7c88076b0869a0312fca3d",
+      "deps": [
+        "macro_ast_43a65c76",
+        "skill_net_settled_after_gap"
+      ],
+      "entrypoint": "safe_settled_after_gap",
+      "generation_id": "G4",
+      "skill_id": "g4_safe_settled_after_gap",
+      "source_code": "def skill_is_framed(tok):\n    return (tok.endswith(']') and tok.startswith('['))\n\ndef macro_ast_43a65c76(_p0, _p1):\n    return (_p1 if skill_is_framed(_p0) else 1)\n\ndef skill_bounded_margin(gross, fee):\n    return ((gross - fee) if (gross > fee) else 0)\n\ndef skill_abs_diff(a, b):\n    return (skill_bounded_margin(a, b) + skill_bounded_margin(b, a))\n\ndef skill_net_settled_after_gap(gross, a, b):\n    return skill_bounded_margin(gross, skill_abs_diff(a, b))\n\ndef safe_settled_after_gap(tok, gross, a, b):\n    return macro_ast_43a65c76(tok, skill_net_settled_after_gap(gross, a, b))\n",
+      "source_sha256": "8ca642d062bf9b7cde4ffd23b7217fa391965b186f7c88076b0869a0312fca3d",
+      "verification_cases": [
+        [
+          {
+            "a": 20,
+            "b": 50,
+            "gross": 120,
+            "tok": "[settle]"
+          },
+          90
+        ],
+        [
+          {
+            "a": 20,
+            "b": 50,
+            "gross": 120,
+            "tok": "settle]"
+          },
+          1
+        ],
+        [
+          {
+            "a": 1,
+            "b": 15,
+            "gross": 10,
+            "tok": "[settle]"
+          },
+          0
+        ]
+      ]
+    },
+    {
+      "birth_sha256": "c0a03baf46686303326dd3bc8fc40182702a9db0362155a9af245b2a57cd92e5",
+      "deps": [
+        "macro_ast_43a65c76",
+        "skill_quota_overage_fee"
+      ],
+      "entrypoint": "framed_overage_charge",
+      "generation_id": "G4",
+      "skill_id": "g4_framed_overage_charge",
+      "source_code": "def skill_is_framed(tok):\n    return (tok.endswith(']') and tok.startswith('['))\n\ndef macro_ast_43a65c76(_p0, _p1):\n    return (_p1 if skill_is_framed(_p0) else 1)\n\ndef skill_bounded_margin(gross, fee):\n    return ((gross - fee) if (gross > fee) else 0)\n\ndef skill_quota_overage_fee(used, cap, rate):\n    return (skill_bounded_margin(used, cap) * rate)\n\ndef framed_overage_charge(tok, used, cap, rate):\n    return macro_ast_43a65c76(tok, skill_quota_overage_fee(used, cap, rate))\n",
+      "source_sha256": "c0a03baf46686303326dd3bc8fc40182702a9db0362155a9af245b2a57cd92e5",
+      "verification_cases": [
+        [
+          {
+            "cap": 20,
+            "rate": 6,
+            "tok": "[inv]",
+            "used": 25
+          },
+          30
+        ],
+        [
+          {
+            "cap": 20,
+            "rate": 6,
+            "tok": "[inv",
+            "used": 25
+          },
+          1
+        ],
+        [
+          {
+            "cap": 12,
+            "rate": 100,
+            "tok": "[inv]",
+            "used": 7
+          },
+          0
+        ]
+      ]
+    }
+  ],
+  "cycle_count": 16,
+  "health_score": 1.0,
+  "processed_task_ids": [
+    "g1_bounded_margin",
+    "g1_positive_delta",
+    "g1_abs_diff",
+    "g1_is_framed",
+    "g2_sla_excess",
+    "g2_quota_overage_fee",
+    "g2_safe_framed_len",
+    "g2_band_breach",
+    "g3_framed_band_breach",
+    "g3_net_settled_after_gap",
+    "g3_framed_square",
+    "g3_framed_margin",
+    "macro_ast_43a65c76",
+    "g4_safe_settled_after_gap",
+    "g4_framed_overage_charge",
+    "probe_overfit_trap"
+  ],
+  "quarantined_faults": 1,
+  "unhandled_crashes": 0
+}
