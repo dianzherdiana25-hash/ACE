@@ -131,6 +131,7 @@ def run_pipeline(
     cover_name: str | None = None,
     cover_source: Path | None = None,
     bundle_dir: Path | None = None,
+    strict_cover: bool = False,
 ) -> dict[str, Any]:
     """Jalankan `kbm_split` diikuti `kbm_pack_check` dan opsional staging bundel unggah."""
     if min_words < 0:
@@ -163,6 +164,7 @@ def run_pipeline(
         output_dir,
         min_bytes=min_bytes,
         cover_name=effective_cover,
+        strict_cover=strict_cover,
     )
 
     split_clean = split_report["below_threshold_count"] == 0
