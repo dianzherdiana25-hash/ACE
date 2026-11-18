@@ -187,3 +187,25 @@ aturan main hub mulai sekarang: penamaan organ hanya dari
 katalog yang terbaca di akun, bukan dari ingatan katalog
 publik - kekeliruan penamaan semula adalah milik hub dan
 koreksinya berdiri di catatan, tidak ditulis ulang diam-diam.
+
+## 9. Amendemen pemulihan - distiller kembali ke organ asli (hub, 2026-11-18)
+
+Ratifikasi gpt-oss-20b di S7 TERSUPERSEDE oleh delta bernama
+ini: hidupnya kunci Gemini kedua (dan ketiga) mengubah
+himpunan opsi. Distiller KEMBALI ke organ asli teratifikasi,
+**gemini/gemini-3-flash-preview**, lewat rute kuota S8
+(kunci-2 dinamai pertama). Alasan hub, tercatat: (1) aneks
+kembali persis seperti basis beku meratifikasinya - satu
+origin, satu distiller - sehingga limitasi S7 gugur
+seluruhnya, bukan dikelola; (2) pajaknya kecil: 7 panggilan
+batch dari ember kunci-2 pada fase yang membentang
+berhari-hari; (3) seluruh riwayat S7 (model salah nama,
+404-nya, ratifikasi 20b) tetap di catatan sebagai sejarah
+fase, tidak dihapus.
+
+Fakta pelaksanaan yang menyertai: di bawah ratifikasi 20b
+yang saat itu sah, 24 record sempat terdistilasi di Groq;
+record-record itu DIARSIPKAN sebagai sejarah fase
+(out/patterns_groq_phase.jsonl di stage) dan TIDAK masuk
+aneks; 42 sumber sisa terdistilasi ulang di organ asli,
+sehingga aneks final 72/72 satu origin.
