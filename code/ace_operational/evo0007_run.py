@@ -110,6 +110,25 @@ def parse_judge_output(text: str) -> dict:
             "reasons": obj["reasons"]}
 
 
+JUDGE_TEMPLATE = (
+    'Judge the candidate answer to this task. Reply with one '
+    'JSON object: {"accept": bool, "score": 0-100, '
+    '"reasons": str}. Accept only if the answer satisfies '
+    'every stated constraint.\n\nTask: ')
+
+
+def adapt_candidate(row: dict) -> dict:
+    """Adapt a frozen successor-corpus row ({id, instruction,
+    kind, task_kind}) to the package candidate shape. The
+    task_shape of a probe episode is NOT a corpus field: it is
+    assigned at pattern-freeze time by the distiller pass (see
+    the freeze record), so it is deliberately absent here."""
+    prompt = row["instruction"]
+    return {"id": row["id"], "task_kind": row["task_kind"],
+            "prompt": prompt,
+            "judge_prompt": JUDGE_TEMPLATE + prompt}
+
+
 # ------------------------------------------------------------------
 # Calibration wave (preregistration S3)
 # ------------------------------------------------------------------
@@ -192,7 +211,7 @@ def build_context(arm: str, episode: dict,
         return "", [], True
     if arm == "POLA":
         hits = [p for p in patterns
-                if p["task_shape"] == episode["task_shape"]]
+                if p["task_shape"] == episode.get("task_shape")]
         if not hits:
             return "", [], False
         text = "\n".join(

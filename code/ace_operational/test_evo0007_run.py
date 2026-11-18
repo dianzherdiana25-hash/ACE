@@ -175,3 +175,21 @@ class EpisodeAndVerdictTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AdapterTests(unittest.TestCase):
+    def test_adapt_frozen_corpus_row(self):
+        from ace_operational.evo0007_run import adapt_candidate
+        row = {"id": "w2-code-001", "kind": "episode",
+               "task_kind": "code", "instruction": "Write f(x)."}
+        out = adapt_candidate(row)
+        self.assertEqual(out["prompt"], "Write f(x).")
+        self.assertTrue(out["judge_prompt"].endswith("Write f(x)."))
+        self.assertNotIn("task_shape", out)
+
+    def test_unlabelled_episode_is_pola_undelivered(self):
+        ep = {"id": "epX", "task_kind": "code",
+              "prompt": "do it"}
+        row = run_episode("POLA", ep, EpisodeAndVerdictTests.PATTERNS,
+                          EpisodeAndVerdictTests().transport)
+        self.assertFalse(row["delivered"])
