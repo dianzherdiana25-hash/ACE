@@ -13,18 +13,34 @@ from ace_operational.evo0007_run import (
     parse_judge_output, run_episode)
 
 
-def judge_returning(scores):
-    """Fake judge transport yielding the given scores in order."""
-    it = iter(scores)
+def judge_returning(score_map):
+    """Fake judge transport keyed by candidate id (thread-safe:
+    calibration screens concurrently, so a shared iterator
+    would assign scores nondeterministically). The prompt ends
+    with the candidate id; each candidate is judged twice and
+    gets its (a, b) pair in order."""
+    import threading
+    lock = threading.Lock()
+    calls = {}
 
     def _t(provider, model, prompt, max_tokens):
+        cid = prompt.rsplit(" ", 1)[-1]
+        with lock:
+            n = calls.get(cid, 0)
+            calls[cid] = n + 1
+        score = score_map[cid][n]
         return ('{"accept": true, "score": %s, "reasons": "fake"}'
-                % next(it))
+                % score)
     return _t
 
 
 def candidate(cid, kind="code"):
-    return {"id": cid, "task_kind": kind, "judge_prompt": "judge me"}
+    return {"id": cid, "task_kind": kind,
+            "judge_prompt": f"judge me {cid}"}
+
+
+def uniform_scores(cands, pair):
+    return {c["id"]: pair for c in cands}
 
 
 class JudgeParsingTests(unittest.TestCase):
@@ -52,9 +68,8 @@ class JudgeParsingTests(unittest.TestCase):
 class CalibrationTests(unittest.TestCase):
     def test_in_band_selection_by_mean(self):
         cands = [candidate(f"c{i}") for i in range(12)]
-        scores = []
-        for i in range(12):  # 8 in-band at 60, 4 at ceiling 95
-            scores += [60, 60] if i < 8 else [95, 95]
+        scores = {c["id"]: ((60, 60) if i < 8 else (95, 95))
+                  for i, c in enumerate(cands)}
         result = calibrate(cands, judge_returning(scores))
         self.assertTrue(result["sufficient"])
         self.assertEqual(result["probe_n"], 8)
@@ -68,9 +83,8 @@ class CalibrationTests(unittest.TestCase):
         # and membership is unchanged. The flag records that
         # the rule fired, not that the band moved.
         cands = [candidate(f"c{i}") for i in range(10)]
-        scores = []
-        for i in range(10):
-            scores += [60, 60] if i < 8 else [95, 95]
+        scores = {c["id"]: ((60, 60) if i < 8 else (95, 95))
+                  for i, c in enumerate(cands)}
         result = calibrate(cands, judge_returning(scores))
         self.assertTrue(result["band_rederived"])
         self.assertEqual(result["band"], list(DEFAULT_BAND))
@@ -78,17 +92,17 @@ class CalibrationTests(unittest.TestCase):
 
     def test_one_shot_band_rederivation_on_saturation(self):
         cands = [candidate(f"c{i}") for i in range(10)]
-        scores = []
-        for _ in range(10):  # everything at 90: band discriminates not
-            scores += [90, 90]
-        result = calibrate(cands, judge_returning(scores))
+        # everything at 90: the band does not discriminate
+        result = calibrate(cands, judge_returning(
+            uniform_scores(cands, (90, 90))))
         self.assertTrue(result["band_rederived"])
         self.assertEqual(result["band"], [75.0, 105.0])
         self.assertEqual(result["probe_n"], 10)
 
     def test_insufficient_pool_reports_instrument_verdict(self):
         cands = [candidate(f"c{i}") for i in range(4)]
-        result = calibrate(cands, judge_returning([50, 50] * 4))
+        result = calibrate(cands, judge_returning(
+            uniform_scores(cands, (50, 50))))
         self.assertFalse(result["sufficient"])
         self.assertEqual(result["verdict_if_stopped_here"],
                          "INSTRUMEN_TIDAK_CUKUP")
@@ -96,13 +110,15 @@ class CalibrationTests(unittest.TestCase):
     def test_language_composition_scope(self):
         cands = ([candidate(f"cd{i}") for i in range(6)]
                  + [candidate(f"lg{i}", "language") for i in range(4)])
-        result = calibrate(cands, judge_returning([60, 60] * 10))
+        result = calibrate(cands, judge_returning(
+            uniform_scores(cands, (60, 60))))
         self.assertEqual(result["language_n"], 4)
         self.assertEqual(result["scope"], "mixed")
 
     def test_spread_flag_recorded(self):
         cands = [candidate(f"c{i}") for i in range(8)]
-        scores = [35, 95] + [60, 60] * 7  # c0 spread 60, mean 65
+        scores = uniform_scores(cands, (60, 60))
+        scores["c0"] = (35, 95)  # spread 60, mean 65 (in-band)
         result = calibrate(cands, judge_returning(scores))
         first = result["screened"][0]
         self.assertEqual(first["spread"], 60.0)
@@ -211,3 +227,55 @@ class AdapterTests(unittest.TestCase):
         out = compute_verdict(arms, probe)
         self.assertEqual(out["judge_skipped_per_arm"]["POLA"], 2)
         self.assertEqual(out["judge_skipped_per_arm"]["KOSONG"], 0)
+
+
+class ConcurrencyTests(unittest.TestCase):
+    """Hub tempo amendment (2026-11-18): calibration screens at
+    most 4 candidates concurrently; the first error stops new
+    launches globally while in-flight rows finish."""
+
+    def test_concurrency_bounded_and_parallel(self):
+        import threading, time
+        lock = threading.Lock()
+        state = {"in_flight": 0, "max_seen": 0}
+
+        def slow_judge(provider, model, prompt, max_tokens):
+            with lock:
+                state["in_flight"] += 1
+                state["max_seen"] = max(state["max_seen"],
+                                        state["in_flight"])
+            time.sleep(0.05)
+            with lock:
+                state["in_flight"] -= 1
+            return '{"accept": true, "score": 60, "reasons": "x"}'
+
+        cands = [candidate(f"c{i}") for i in range(8)]
+        result = calibrate(cands, slow_judge)
+        self.assertEqual(result["probe_n"], 8)
+        self.assertLessEqual(state["max_seen"], 4)
+        self.assertGreaterEqual(state["max_seen"], 2)
+
+    def test_first_error_stops_new_launches_globally(self):
+        import threading, time
+        from ace_operational.evo0007_run import ScreeningError
+        lock = threading.Lock()
+        judged = []
+
+        def flaky(provider, model, prompt, max_tokens):
+            cid = prompt.rsplit(" ", 1)[-1]
+            with lock:
+                judged.append(cid)
+            if cid == "c0":
+                raise RuntimeError("judge down")
+            time.sleep(0.2)
+            return '{"accept": true, "score": 60, "reasons": "x"}'
+
+        cands = [candidate(f"c{i}") for i in range(8)]
+        with self.assertRaises(ScreeningError) as ctx:
+            calibrate(cands, flaky)
+        self.assertEqual(ctx.exception.failed_id, "c0")
+        # only the first window (4 candidates) was ever launched
+        self.assertLessEqual(set(judged), {"c0", "c1", "c2", "c3"})
+        # in-flight rows that finished are carried for the caller
+        done_ids = {r["id"] for r in ctx.exception.completed}
+        self.assertTrue(done_ids <= {"c1", "c2", "c3"})

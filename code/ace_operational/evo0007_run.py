@@ -20,6 +20,7 @@ import random
 import statistics
 import subprocess
 import tempfile
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from pathlib import Path
 from typing import Callable
 
@@ -148,6 +149,71 @@ def screen_candidate(judge: Transport, candidate: dict) -> dict:
             "spread_flag": abs(a["score"] - b["score"]) > SPREAD_FLAG}
 
 
+MAX_CALIB_CONCURRENCY = 4
+
+
+class ScreeningError(RuntimeError):
+    """Stop-on-first-error, global across the calibration pool:
+    the first judge failure stops new candidate launches;
+    candidates already in flight finish and their rows are
+    carried here as `completed` so the caller can keep them,
+    while the failed row goes to the phase's invalid file
+    (preregistration S7 quarantine discipline)."""
+
+    def __init__(self, failed_id: str, cause: Exception,
+                 completed: list[dict]):
+        super().__init__(f"screening stopped at {failed_id}: {cause}")
+        self.failed_id = failed_id
+        self.cause = cause
+        self.completed = completed
+
+
+def screen_pool(candidates: list[dict], judge: Transport,
+                max_workers: int = MAX_CALIB_CONCURRENCY
+                ) -> list[dict]:
+    """Screen candidates with bounded concurrency (hub tempo
+    amendment, 2026-11-18). Screening is per-candidate
+    independent - no shared state - so concurrency changes
+    nothing about any candidate's condition; result order is
+    the candidate order, never the completion order. The arms
+    are NOT screened here and stay sequential."""
+    completed: dict[int, dict] = {}
+    in_flight: dict = {}
+    idx = 0
+    error: tuple[str, Exception] | None = None
+
+    def submit_next(ex) -> None:
+        nonlocal idx
+        if idx < len(candidates):
+            fut = ex.submit(screen_candidate, judge, candidates[idx])
+            in_flight[fut] = idx
+            idx += 1
+
+    with ThreadPoolExecutor(max_workers=max_workers) as ex:
+        for _ in range(min(max_workers, len(candidates))):
+            submit_next(ex)
+        while in_flight:
+            done, _ = wait(list(in_flight),
+                           return_when=FIRST_COMPLETED)
+            for fut in done:
+                i = in_flight.pop(fut)
+                exc = fut.exception()
+                if exc is None:
+                    completed[i] = fut.result()
+                elif error is None:
+                    error = (candidates[i]["id"], exc)
+            if error is None:
+                for _ in range(len(done)):
+                    submit_next(ex)
+            # on error: launch nothing new; the loop drains
+            # what is already in flight into `completed`.
+    if error is not None:
+        raise ScreeningError(
+            error[0], error[1],
+            [completed[i] for i in sorted(completed)])
+    return [completed[i] for i in sorted(completed)]
+
+
 def calibrate(candidates: list[dict], judge: Transport) -> dict:
     """Screen the pool and select the probe set.
 
@@ -161,7 +227,7 @@ def calibrate(candidates: list[dict], judge: Transport) -> dict:
     """
     if len(candidates) > SCREEN_BUDGET_FROZEN:
         raise ValueError("frozen pool exceeds the screening budget")
-    screened = [screen_candidate(judge, c) for c in candidates]
+    screened = screen_pool(candidates, judge)
     means = [s["mean"] for s in screened]
 
     def select(band):
