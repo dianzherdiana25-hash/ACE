@@ -312,9 +312,14 @@ def compute_verdict(arm_rows: dict[str, list[dict]],
         verdict = "TERDUKUNG"
     else:
         verdict = "NOL"
+    # Hub ratification condition (2026-11-18): judge_skipped
+    # counts per arm are a required consolidation readout.
+    skipped = {arm: sum(1 for r in rows if r.get("judge_skipped"))
+               for arm, rows in arm_rows.items()}
     return {"verdict": verdict, "accept_rates": rates,
             "delivery_rates": gates,
             "sensitivity_accept_rates": sens_rates,
+            "judge_skipped_per_arm": skipped,
             "flagged_episodes": sorted(flagged)}
 
 

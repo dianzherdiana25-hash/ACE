@@ -193,3 +193,21 @@ class AdapterTests(unittest.TestCase):
         row = run_episode("POLA", ep, EpisodeAndVerdictTests.PATTERNS,
                           EpisodeAndVerdictTests().transport)
         self.assertFalse(row["delivered"])
+
+    def test_judge_skipped_counts_reported_per_arm(self):
+        def rows(arm, accepted, skipped=0):
+            out = [{"episode_id": f"e{i}", "arm": arm,
+                    "delivered": True, "accepted": accepted}
+                   for i in range(4)]
+            for r in out[:skipped]:
+                r["judge_skipped"] = "validator_rejected"
+            return out
+        probe = [{"id": f"e{i}", "spread_flag": False}
+                 for i in range(4)]
+        arms = {"POLA": rows("POLA", True, skipped=2),
+                "RECEIPT": rows("RECEIPT", False),
+                "SHAM": rows("SHAM", False),
+                "KOSONG": rows("KOSONG", False)}
+        out = compute_verdict(arms, probe)
+        self.assertEqual(out["judge_skipped_per_arm"]["POLA"], 2)
+        self.assertEqual(out["judge_skipped_per_arm"]["KOSONG"], 0)
