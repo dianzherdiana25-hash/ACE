@@ -27,6 +27,19 @@ after 20 idle minutes (ace-idle-watchdog) and must be WOKEN by the client:
 wake is organ-dead. Wake events are recorded for run evidence
 (:func:`drain_wake_events`). The front organ is always-on and the A3B
 organ is explicit-start only — neither is woken from here.
+
+Bridge transport (EVO 0009, hub-ratified 2026-11-18): when the
+environment sets ``ACE_BRAIN_BRIDGE_URL``, every organ routes through
+the brain bridge instead of the local slate. The bridge speaks
+ROLES, not organs: front/coder keep their names, the pair's
+validator becomes the bridge's cross-validator role (a different
+provider's organ by construction, so the heterogeneity rule holds
+by role rather than by unit), and embedding goes to the bridge's
+embedding role. There are no systemd units behind the bridge, so
+wake semantics do not apply: an unhealthy bridge is organ-dead,
+fail-closed as everywhere else in this module. The bridge reports
+the serving organ as ``brain_of_origin`` on every answer; it is
+carried on :class:`ChatResult` as provenance.
 """
 
 from __future__ import annotations
@@ -61,12 +74,39 @@ STRUCTURED_TEMPLATE_KWARGS: dict = {"enable_thinking": False}
 
 TASK_KINDS = ("code", "language")
 
+# --- Bridge transport (EVO 0009) -------------------------------------------
+
+BRIDGE_ENV_VAR = "ACE_BRAIN_BRIDGE_URL"
+
+# Organs that exist only as bridge roles. In bridge mode the pair's
+# validator resolves to the "validator" role; outside bridge mode the
+# name is not an organ at all.
+BRIDGE_ONLY_ORGANS = ("validator",)
+
+
+def bridge_url() -> str | None:
+    """The configured bridge base URL, or None in local-slate mode."""
+    url = os.environ.get(BRIDGE_ENV_VAR, "").strip()
+    return url.rstrip("/") or None
+
+
+def bridge_mode() -> bool:
+    return bridge_url() is not None
+
 
 class BrainUnavailable(RuntimeError):
     """An organ is unreachable or unhealthy. Fail-closed: never faked."""
 
 
 def organ_url(organ: str) -> str:
+    if bridge_mode():
+        if organ in DEFAULT_URLS or organ in BRIDGE_ONLY_ORGANS:
+            return bridge_url()
+        raise ValueError(f"unknown organ: {organ!r}")
+    if organ in BRIDGE_ONLY_ORGANS:
+        raise ValueError(
+            f"organ {organ!r} exists only in bridge mode "
+            f"({BRIDGE_ENV_VAR} unset)")
     if organ not in DEFAULT_URLS:
         raise ValueError(f"unknown organ: {organ!r}")
     return os.environ.get(ENV_VARS[organ], DEFAULT_URLS[organ]).rstrip("/")
@@ -81,20 +121,33 @@ class OrganPair:
     validator: str
 
     def as_dict(self) -> dict:
-        return {
+        record = {
             "task_kind": self.task_kind,
             "proposer": self.proposer,
             "validator": self.validator,
             "proposer_url": organ_url(self.proposer),
             "validator_url": organ_url(self.validator),
         }
+        if bridge_mode():
+            record["transport"] = "bridge"
+            record["bridge_roles"] = {
+                "proposer": self.proposer,
+                "validator": "validator",
+            }
+        return record
 
 
 def proposer_validator_pair(task_kind: str) -> OrganPair:
     """Crossed heterogeneous pair: code tasks propose with the coder and
-    validate with the front brain; language tasks the reverse."""
+    validate with the front brain; language tasks the reverse. In
+    bridge mode the proposers keep their roles and the validator is
+    the bridge's cross-validator role for both kinds."""
     if task_kind not in TASK_KINDS:
         raise ValueError(f"unknown task_kind: {task_kind!r}")
+    if bridge_mode():
+        proposer = "coder" if task_kind == "code" else "front"
+        return OrganPair(task_kind, proposer=proposer,
+                         validator="validator")
     if task_kind == "code":
         return OrganPair(task_kind, proposer="coder", validator="front")
     return OrganPair(task_kind, proposer="front", validator="coder")
@@ -174,7 +227,16 @@ def ensure_organ(organ: str, *, wake: bool = True,
     them an unhealthy state is simply organ-dead. For wakeable organs a
     failed wake raises BrainUnavailable — idle-off is not death, but a
     wake that does not complete is.
+
+    In bridge mode there are no units to wake: a healthy bridge means
+    the organ serves (returns False — nothing was woken), an unhealthy
+    bridge is organ-dead.
     """
+    if bridge_mode():
+        if health(organ):
+            return False
+        raise BrainUnavailable(
+            f"brain bridge is not healthy (organ {organ!r})")
     if health(organ):
         return False
     unit = WAKEABLE_UNITS.get(organ)
@@ -205,6 +267,7 @@ class ChatResult:
     predicted_per_second: float | None
     predicted_tokens: int | None
     organ_woke: bool = False
+    brain_of_origin: str = ""
 
 
 def parse_chat_response(payload: dict) -> ChatResult:
@@ -227,6 +290,7 @@ def parse_chat_response(payload: dict) -> ChatResult:
         prompt_per_second=timings.get("prompt_per_second"),
         predicted_per_second=timings.get("predicted_per_second"),
         predicted_tokens=timings.get("predicted_n"),
+        brain_of_origin=payload.get("brain_of_origin") or "",
     )
 
 
@@ -238,6 +302,19 @@ def chat(organ: str, messages: list[dict], *, max_tokens: int = 512,
     (coder) are woken from idle-off first; the wake is reported on the
     result and in the wake-event log."""
     woke = ensure_organ(organ) if check_health else False
+    if bridge_mode():
+        if organ == "a3b":
+            raise BrainUnavailable(
+                "the on-demand deep organ has no bridge role")
+        bridge_payload: dict = {
+            "role": organ,
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+        }
+        return parse_chat_response(_request(
+            f"{bridge_url()}/v1/chat/completions",
+            bridge_payload, timeout))
     payload: dict = {
         "messages": messages,
         "temperature": temperature,
@@ -272,6 +349,21 @@ def embed(texts: list[str], *, timeout: float = 120.0,
     recorded in the wake-event log."""
     if not texts:
         return []
+    if bridge_mode():
+        if check_health:
+            ensure_organ("embedding")
+        vectors = []
+        for text in texts:
+            out = _request(f"{bridge_url()}/v1/embeddings",
+                           {"role": "embedding", "input": text},
+                           timeout)
+            try:
+                vectors.append(out["data"][0]["embedding"])
+            except (KeyError, IndexError, TypeError) as exc:
+                raise BrainUnavailable(
+                    f"malformed bridge embedding shape: {exc!r}"
+                ) from exc
+        return vectors
     if check_health:
         ensure_organ("embedding")
     out = _request(f"{organ_url('embedding')}/embedding",
