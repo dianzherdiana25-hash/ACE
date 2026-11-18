@@ -14,17 +14,23 @@ from ace_operational.evo0007_run import (
 
 
 def judge_returning(score_map):
-    """Fake judge transport keyed by candidate id (thread-safe:
+    """Fake transport keyed by candidate id (thread-safe:
     calibration screens concurrently, so a shared iterator
-    would assign scores nondeterministically). The prompt ends
-    with the candidate id; each candidate is judged twice and
-    gets its (a, b) pair in order."""
+    would assign scores nondeterministically). Screening calls
+    the proposer first (prompt = the task body) and then the
+    judge twice (prompt = judge prompt + the answer); proposer
+    calls get a canned answer, judge calls get their (a, b)
+    score pair in order."""
     import threading
     lock = threading.Lock()
     calls = {}
 
     def _t(provider, model, prompt, max_tokens):
-        cid = prompt.rsplit(" ", 1)[-1]
+        if "Candidate answer:" not in prompt:
+            cid = prompt.rsplit(" ", 1)[-1]
+            return f"answer for {cid}"
+        head = prompt.split("\n\nCandidate answer:")[0]
+        cid = head.rsplit(" ", 1)[-1]
         with lock:
             n = calls.get(cid, 0)
             calls[cid] = n + 1
@@ -36,6 +42,7 @@ def judge_returning(score_map):
 
 def candidate(cid, kind="code"):
     return {"id": cid, "task_kind": kind,
+            "prompt": f"task body {cid}",
             "judge_prompt": f"judge me {cid}"}
 
 
@@ -229,6 +236,57 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(out["judge_skipped_per_arm"]["KOSONG"], 0)
 
 
+class ScreeningSemanticsTests(unittest.TestCase):
+    """Ratified amendment (2026-11-18): screening answers the
+    candidate with its kind's proposer organ BEFORE judging;
+    the judge scores (task + answer) twice; the validator is
+    not part of screening."""
+
+    def test_proposer_answers_then_judge_scores_the_answer(self):
+        from ace_operational.evo0007_run import (
+            JUDGE_ORGAN, ORGAN_ROLES, screen_candidate)
+        calls = []
+
+        def transport(provider, model, prompt, max_tokens):
+            calls.append((provider, model, prompt))
+            if (provider, model) == ORGAN_ROLES["code"]["proposer"]:
+                return "the proposed answer"
+            # judge: 0 without an answer in the prompt
+            if "Candidate answer:" not in prompt:
+                return ('{"accept": false, "score": 0, '
+                        '"reasons": "answer missing"}')
+            return ('{"accept": true, "score": 60, '
+                    '"reasons": "answered"}')
+
+        row = screen_candidate(transport, candidate("s1"))
+        organs = [(p, m) for p, m, _ in calls]
+        proposer = ORGAN_ROLES["code"]["proposer"]
+        self.assertEqual(organs, [proposer, JUDGE_ORGAN, JUDGE_ORGAN])
+        # the validator organ never appears in screening
+        self.assertNotIn(ORGAN_ROLES["code"]["validator"], organs)
+        for _, _, prompt in calls[1:]:
+            self.assertIn("the proposed answer", prompt)
+        self.assertEqual(row["mean"], 60.0)
+        self.assertEqual(row["answer"], "the proposed answer")
+        self.assertEqual(row["brain_proposer"],
+                         "groq/qwen/qwen3.8-27b")
+
+    def test_unanswered_task_scores_zero_control(self):
+        # The defect the amendment repairs: judging the bare
+        # task (no answer) can only score 0.
+        from ace_operational.evo0007_run import parse_judge_output
+
+        def judge_only(prompt):
+            if "Candidate answer:" not in prompt:
+                return ('{"accept": false, "score": 0, '
+                        '"reasons": "answer missing"}')
+            return ('{"accept": true, "score": 60, '
+                    '"reasons": "answered"}')
+
+        bare = parse_judge_output(judge_only("judge me s1"))
+        self.assertEqual(bare["score"], 0)
+
+
 class ConcurrencyTests(unittest.TestCase):
     """Hub tempo amendment (2026-11-18): calibration screens at
     most 4 candidates concurrently; the first error stops new
@@ -262,7 +320,10 @@ class ConcurrencyTests(unittest.TestCase):
         judged = []
 
         def flaky(provider, model, prompt, max_tokens):
-            cid = prompt.rsplit(" ", 1)[-1]
+            if "Candidate answer:" not in prompt:
+                return "ans text"
+            head = prompt.split("\n\nCandidate answer:")[0]
+            cid = head.rsplit(" ", 1)[-1]
             with lock:
                 judged.append(cid)
             if cid == "c0":

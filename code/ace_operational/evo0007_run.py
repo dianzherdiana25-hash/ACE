@@ -134,19 +134,35 @@ def adapt_candidate(row: dict) -> dict:
 # Calibration wave (preregistration S3)
 # ------------------------------------------------------------------
 
-def screen_candidate(judge: Transport, candidate: dict) -> dict:
-    """Two judge runs over one candidate; membership is by the
-    mean, the A/B spread is recorded first-class (S3 variance
-    rule). A judge failure raises (stop-on-first-error)."""
-    prompt = candidate["judge_prompt"]
+def screen_candidate(transport: Transport, candidate: dict) -> dict:
+    """Screening (ratified amendment, 2026-11-18): the candidate
+    is first ANSWERED by its kind's proposer organ (S2 roles);
+    the judge then scores (task + answer) twice. Screening an
+    unanswered task is meaningless - a judge with no answer can
+    only score 0, which would fill the probe set with garbage;
+    the successor instrument this package inherits screened
+    answered episodes. The validator is NOT part of screening:
+    screening's currency is judge scores, the validator enters
+    at arm episodes, where accept is the currency. Membership
+    is by the mean, the A/B spread is recorded first-class
+    (S3 variance rule). Any organ failure raises
+    (stop-on-first-error)."""
+    roles = ORGAN_ROLES[candidate["task_kind"]]
+    p_provider, p_model = roles["proposer"]
+    answer = transport(p_provider, p_model, candidate["prompt"], 1024)
+    prompt = (candidate["judge_prompt"]
+              + "\n\nCandidate answer:\n" + answer)
     provider, model = JUDGE_ORGAN
-    a = parse_judge_output(judge(provider, model, prompt, 512))
-    b = parse_judge_output(judge(provider, model, prompt, 512))
+    a = parse_judge_output(transport(provider, model, prompt, 1024))
+    b = parse_judge_output(transport(provider, model, prompt, 1024))
     mean = (a["score"] + b["score"]) / 2.0
     return {"id": candidate["id"], "task_kind": candidate["task_kind"],
             "score_a": a["score"], "score_b": b["score"],
             "mean": mean, "spread": abs(a["score"] - b["score"]),
-            "spread_flag": abs(a["score"] - b["score"]) > SPREAD_FLAG}
+            "spread_flag": abs(a["score"] - b["score"]) > SPREAD_FLAG,
+            "brain_proposer": f"{p_provider}/{p_model}",
+            "brain_judge": f"{provider}/{model}",
+            "answer": answer}
 
 
 MAX_CALIB_CONCURRENCY = 4
