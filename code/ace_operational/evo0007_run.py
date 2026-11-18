@@ -132,6 +132,19 @@ def parse_judge_output(text: str) -> dict:
             "reasons": obj["reasons"]}
 
 
+def parse_validator_output(text: str) -> bool:
+    """Honor a leading RATIFY, otherwise use the last verdict in the second half."""
+    import re
+
+    if text.strip().upper().startswith("RATIFY"):
+        return True
+    ratified = False
+    for match in re.finditer(r"\b(?:(RATIFY)|REJECT)\b", text, re.IGNORECASE):
+        if 2 * match.start() >= len(text):
+            ratified = match.group(1) is not None
+    return ratified
+
+
 JUDGE_TEMPLATE = (
     'Judge the candidate answer to this task. Reply with one '
     'JSON object: {"accept": bool, "score": 0-100, '
@@ -353,7 +366,7 @@ def run_episode(arm: str, episode: dict, patterns: list[dict],
         "Validate this proposal for the task. Reply RATIFY or "
         f"REJECT with one line of reason.\n\nTask: "
         f"{episode['prompt']}\n\nProposal: {proposal}", 256)
-    ratified = validation.strip().upper().startswith("RATIFY")
+    ratified = parse_validator_output(validation)
     row = {"episode_id": episode["id"], "arm": arm,
            "task_kind": episode["task_kind"],
            "context_ids": context_ids, "delivered": delivered,
