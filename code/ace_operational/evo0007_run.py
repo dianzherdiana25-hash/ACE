@@ -47,7 +47,7 @@ ORGAN_ROLES = {
     },
 }
 JUDGE_ORGAN = ("cloudflare", "@cf/meta/llama-3.3-70b-instruct-fp8-fast")
-DISTILLER_ORGAN = ("groq", "llama-3.3-70b-versatile")
+DISTILLER_ORGAN = ("groq", "openai/gpt-oss-20b")
 
 DEFAULT_BAND = (45.0, 75.0)
 MIN_PROBE = 8

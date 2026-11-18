@@ -162,3 +162,14 @@ sama): pemilik memasukkan kunci Gemini KETIGA (custom.gemini3)
 kedudukan tidak berubah (rute kuota, bukan organ baru).
 Keadaan saat perluasan: kunci-1 habis (napas besok), kunci-2
 dan kunci-3 segar - 40 permintaan flash tersedia hari ini.
+
+Koreksi model tercatat (Ian, 2026-11-18): model yang dinamai
+di atas, llama-3.3-70b-versatile, TIDAK ADA di katalog akun
+Groq ini (HTTP 404 model_not_found pada panggilan pertama;
+katalog hidup 11 model terverifikasi). Pengganti yang
+dipakai, atas ketetapan hub "distiller Groq" dan saringan
+heterogenitas Ian: **groq/openai/gpt-oss-20b** - tidak
+memegang peran lain apa pun di instrumen ini (proposer kode
+qwen, validator bahasa gpt-oss-120b adalah model yang
+berbeda; judge Cloudflare). Selain baris ini, §7 berdiri
+apa adanya.
