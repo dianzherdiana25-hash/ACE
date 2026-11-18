@@ -110,7 +110,33 @@ bernama, mengikuti disiplin paket 0007 (katalog provider berputar;
 - Pencatatan brain-of-origin per siklus tetap wajib (asal-usul
   adalah provenans, bukan dekorasi).
 
-### 2.4 Urutan penyalaan (sesudah ratifikasi)
+### 2.4 Kuota = sumber daya bernama; rotasi antar-rute
+(Aturan kontingensi pemilik 18 Nov 13:00, dibukukan hub untuk
+rancangan ini.) Kuota tiap rute gratis adalah sumber daya bernama
+dengan saldo terukur, bukan asumsi tak terbatas:
+- Governor memegang buku anggaran per RUTE (bukan hanya per
+  peran): jatah harian Groq/Gemini dan saldo bulanan Gonka dibaca
+  sebagai angka, dan sisa anggaran adalah input keputusan routing.
+- **Rotasi**: peran front dan validator silang bergantian antar
+  dua rute teks (Groq ↔ Gemini) mengikuti jendela anggaran —
+  rute yang jendela hariannya lebih longgar mengambil giliran;
+  tidak ada satu jatah gratis pun yang menjadi titik gagal
+  tunggal bagi engine yang menyala terus-menerus. Peran coder
+  berumah di Groq dengan urutan cadangan bernama (Gemini flash)
+  yang hanya aktif bila jatah Groq benar-benar habis — kehabisan
+  adalah pemicunya, bukan selera.
+- Kehabisan nyata di tengah jalan memicu aturan kontingensi
+  pemilik: kandidat terverifikasi berikutnya dari daftar
+  terdokumentasi (NVIDIA → Cloudflare → Z.ai → CometAPI)
+  didaftarkan pada hari yang sama supaya engine tidak mati
+  kelaparan; pendaftarannya adalah peristiwa terlog dengan
+  brain-of-origin yang berubah secara eksplisit, bukan penukaran
+  diam-diam. (Untuk paket ukur beku seperti 0007 pagarnya lain:
+  judge habis = jeda + amendemen — kontingensi menyiapkan organ,
+  bukan mengizinkan tukar liar. Engine bukan paket ukur; rotasinya
+  adalah operasi normal yang terlog.)
+
+### 2.5 Urutan penyalaan (sesudah ratifikasi)
 1. Verb embedding + smoke semua peran dari jembatan (satu panggilan
    per peran, tercatat).
 2. Jembatan naik di VM ila; engine diberi konfigurasi transport
