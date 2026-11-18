@@ -14,8 +14,9 @@ yang tercatat di aneks pembekuan polanya.*
 - Fondasi: PR #310, head **e4de068b**.
 - Prasyarat bangun §9, head remote terverifikasi dari respons
   push: kelas event pattern_distilled PR #312 head **a68dde7b**;
-  runner paket PR #313 head **9bab252d** (termasuk amandemen
-  adapter korpus beku; 16/16 tes).
+  runner paket PR #313 head **48bdbf17** (termasuk amandemen
+  adapter korpus beku dan bacaan konsolidasi judge_skipped per
+  lengan — syarat ratifikasi hub atas tafsir §5; 17/17 tes).
 - Cadangan pabrik §3 (keputusan hub 18 Nov: set digenerate di
   meja hub, ditapis Ian, dibekukan dengan sha): PR #317 head
   **fc37c2bf**, berkas `handover/KANDIDAT_PABRIK_0007_BEKU.jsonl`,
