@@ -34,16 +34,29 @@ HELPERS = Path.home() / "workspace" / "custom-connectors"
 PORT = 8931
 
 ROLE_MAP = {
-    "front": ("gemini", "gemini-3-flash-preview"),
+    "front": ("groq", "openai/gpt-oss-120b"),
     "coder": ("groq", "qwen/qwen3.8-27b"),
     "validator": ("groq", "openai/gpt-oss-120b"),
     "judge": ("gonka", "deepseek-ai/DeepSeek-V4-Flash-0731"),
     "embedding": ("gemini", "gemini-embedding-001"),
 }
+# Rotation fallbacks (design S2.4; hub decision 2026-11-18 on
+# the owner's "use another API" direction): front's primary
+# moved to Groq gpt-oss-120b because the Gemini daily bucket
+# starves the engine; the Gemini organ remains front's
+# rotation fallback when its bucket breathes. A fallback is
+# tried once, only on a primary organ failure, and the log
+# records the organ that actually served.
+FALLBACKS = {
+    "front": ("gemini", "gemini-3-flash-preview"),
+}
 BUDGETS = {"front": 200, "coder": 200, "validator": 100,
            "embedding": 200, "judge": 20}
 
 _lock = threading.Lock()
+LAST_KEY = None
+"""Which gemini bucket served the most recent gemini call
+(custom.gemini / custom.gemini2 / custom.gemini3); quota accounting only."""
 
 
 def _today():
@@ -71,14 +84,38 @@ def _log(record):
             fh.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
+def _is_quota(text):
+    low = text.lower()
+    return "429" in text or "resource_exhausted" in low \
+        or "quota" in low
+
+
 def call_helper(provider, model, prompt, max_tokens):
     helper = (HELPERS / f"custom.{provider}" / "bin"
               / f"{provider}_call.py")
     if provider == "gemini":
-        out = subprocess.run(
-            ["python3", str(helper), "generate", model, prompt,
-             str(max_tokens)], capture_output=True, text=True,
-            timeout=600)
+        # Two quota buckets, one organ (hub, 2026-11-18):
+        # custom.gemini, custom.gemini2, custom.gemini3, failing over on
+        # quota-class errors only. The module-level
+        # LAST_KEY records which bucket served.
+        global LAST_KEY
+        last_err = None
+        for key in ("gemini", "gemini2", "gemini3"):
+            khelper = (HELPERS / f"custom.{key}" / "bin"
+                       / f"{key}_call.py")
+            out = subprocess.run(
+                ["python3", str(khelper), "generate", model,
+                 prompt, str(max_tokens)], capture_output=True,
+                text=True, timeout=600)
+            if out.returncode == 0:
+                LAST_KEY = key
+                return json.loads(out.stdout)
+            tail = (out.stderr.strip().splitlines() or ["?"])[-1]
+            last_err = RuntimeError(
+                f"gemini helper ({key}) failed: {tail}"[:300])
+            if not _is_quota(out.stderr):
+                raise last_err
+        raise last_err
     else:
         with tempfile.NamedTemporaryFile(
                 "w", suffix=".txt", delete=False,
@@ -99,14 +136,55 @@ def call_helper(provider, model, prompt, max_tokens):
 
 
 def embed_helper(model, text):
-    helper = HELPERS / "custom.gemini" / "bin" / "gemini_call.py"
-    out = subprocess.run(
-        ["python3", str(helper), "embed", model, text],
-        capture_output=True, text=True, timeout=300)
-    if out.returncode != 0:
+    # Same two-bucket route as generate (embeddings draw on
+    # their own metric, but the second key is headroom all
+    # the same when the first is refused).
+    global LAST_KEY
+    last_err = None
+    for key in ("gemini", "gemini2", "gemini3"):
+        helper = (HELPERS / f"custom.{key}" / "bin"
+                  / f"{key}_call.py")
+        out = subprocess.run(
+            ["python3", str(helper), "embed", model, text],
+            capture_output=True, text=True, timeout=300)
+        if out.returncode == 0:
+            LAST_KEY = key
+            return json.loads(out.stdout)
         tail = (out.stderr.strip().splitlines() or ["?"])[-1]
-        raise RuntimeError(f"gemini embed failed: {tail}"[:300])
-    return json.loads(out.stdout)
+        last_err = RuntimeError(
+            f"gemini embed ({key}) failed: {tail}"[:300])
+        if not _is_quota(out.stderr):
+            raise last_err
+    raise last_err
+
+
+def serve_chat(role, prompt, max_tokens):
+    """Execute one chat call for a role, with the rotation
+    fallback tried once on a primary organ failure. Returns
+    (envelope, served_provider, served_model, fell_back).
+    Raises RuntimeError naming both organs when all fail.
+    Shared by the HTTP handler and the relay pump so every
+    door serves the same rotation."""
+    global LAST_KEY
+    LAST_KEY = None
+    provider, model = ROLE_MAP[role]
+    try:
+        env = call_helper(provider, model, prompt, max_tokens)
+        return env, provider, model, False
+    except Exception as primary_err:
+        if role not in FALLBACKS:
+            raise
+        fb_provider, fb_model = FALLBACKS[role]
+        try:
+            env = call_helper(fb_provider, fb_model, prompt,
+                              max_tokens)
+        except Exception as fb_err:
+            raise RuntimeError(
+                f"primary {provider}/{model} failed "
+                f"({primary_err}); fallback "
+                f"{fb_provider}/{fb_model} failed "
+                f"({fb_err})") from fb_err
+        return env, fb_provider, fb_model, True
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -175,16 +253,19 @@ class Handler(BaseHTTPRequestHandler):
                 m.get("content", "") for m in messages) \
                 or req.get("prompt", "")
             max_tokens = int(req.get("max_tokens", 1024))
-            env = call_helper(provider, model, prompt, max_tokens)
+            env, sp, sm, fell_back = serve_chat(
+                role, prompt, max_tokens)
+            served = (sp, sm)
             _log({"ts": t0, "role": role,
-                  "brain": f"{provider}/{model}", "result": "ok",
-                  "used_today": used,
+                  "brain": f"{served[0]}/{served[1]}",
+                  "result": "ok", "used_today": used,
+                  "key": LAST_KEY, "fallback": fell_back,
                   "wall_s": round(time.time() - t0, 2)})
             return self._send(200, {
                 "id": f"bridge-{int(t0 * 1000)}",
                 "object": "chat.completion",
-                "model": model,
-                "brain_of_origin": f"{provider}/{model}",
+                "model": served[1],
+                "brain_of_origin": f"{served[0]}/{served[1]}",
                 "choices": [{
                     "index": 0,
                     "message": {"role": "assistant",

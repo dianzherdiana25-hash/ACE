@@ -787,11 +787,16 @@ class PassiveEvolutionPlanner:
         repo_root: str | Path,
         *,
         scan_subpath: str = "code",
+        memory_root: str | Path | None = None,
     ) -> None:
         self.workspace = Path(workspace).resolve()
         self.workspace.mkdir(parents=True, exist_ok=True)
         self.repo_root = Path(repo_root).resolve()
         self.scan_subpath = scan_subpath.strip("/")
+        # Cognitive-memory write-back (EVO 0009 milestone 5):
+        # active only when a memory root is configured; None
+        # keeps every existing caller byte-identical.
+        self.memory_root = Path(memory_root) if memory_root else None
         self.auditor = RealRepoAuditor(self.repo_root, scan_subpath=self.scan_subpath)
         self.supervisor = SovereignRuntimeSupervisor(self.workspace / "runtime")
         self.state_path = self.workspace / "evolution_state.json"
@@ -886,6 +891,7 @@ class PassiveEvolutionPlanner:
                 comp_sha = _sha256_file(crp)
         completed = state.get("completed_finding_keys", {})
         open_findings: list[dict[str, Any]] = []
+        sha_by_key: dict[str, str] = {}
         for f in audit["findings"]:
             if str(f.get("kind", "")).startswith("oaie_"):
                 cur_sha = comp_sha
@@ -895,6 +901,40 @@ class PassiveEvolutionPlanner:
             if completed.get(f["finding_key"]) == cur_sha and cur_sha:
                 continue
             open_findings.append(f)
+            sha_by_key[f["finding_key"]] = cur_sha
+
+        # Memory write-back (write-path design S3-S4, EVO 0009
+        # milestone 5): a HIGH backlog finding surfacing as
+        # open is a verified event, written at the event point.
+        # The evidence anchor is the finding's own state
+        # (key + kind + file digest), so replaying the same
+        # audit writes nothing new (record_verified_event is
+        # idempotent on content + anchor); a changed file is a
+        # changed finding state and anchors a new record.
+        self._last_opened_record_ids: dict[str, str | None] = {}
+        if self.memory_root is not None:
+            for f in open_findings:
+                if f.get("severity") != "HIGH":
+                    continue
+                anchor = _canonical_json({
+                    "finding_key": f["finding_key"],
+                    "kind": f.get("kind", ""),
+                    "severity": f.get("severity", ""),
+                    "file_path": f.get("file_path", ""),
+                    "file_sha256": sha_by_key.get(f["finding_key"], ""),
+                }).encode("utf-8")
+                self._last_opened_record_ids[f["finding_key"]] = \
+                    record_verified_event(
+                        self.memory_root,
+                        event="finding_high_opened",
+                        summary=(f"HIGH finding opened: "
+                                 f"{f['finding_key']} "
+                                 f"({f.get('kind', '')}) in "
+                                 f"{f.get('file_path', '')}"),
+                        evidence_bytes=anchor,
+                        content_extra={
+                            "finding_key": f["finding_key"]},
+                    )
 
         if not open_findings:
             return {
@@ -952,7 +992,7 @@ class PassiveEvolutionPlanner:
             forbidden_paths=forbidden_paths,
         )
 
-        return {
+        result_plan: dict[str, Any] = {
             "schema": "ace.passive_evolution_plan.v1",
             "status": "MISSION_EMITTED",
             "order_id": order_id,
@@ -965,6 +1005,10 @@ class PassiveEvolutionPlanner:
             "work_order_md_path": str(self.work_order_md_path),
             "backlog_path": str(self.backlog_path),
         }
+        if self.memory_root is not None:
+            result_plan["memory_writeback_opened"] = dict(
+                self._last_opened_record_ids)
+        return result_plan
 
 
 class EvolutionPatchVerifier:
@@ -1413,6 +1457,7 @@ class EvolutionPatchVerifier:
         atomic_write_verified(self.state_path, json.dumps(state, indent=2, sort_keys=True))
         accepted = all_passed and exam["forgetting_count"] == 0
         memory_record_id: str | None = None
+        closed_record_id: str | None = None
         if self.memory_root is not None:
             # Memory write-back (design §3–§4): a ratification
             # is a verified event; the spore file is its
@@ -1430,6 +1475,21 @@ class EvolutionPatchVerifier:
                              f"spore {spore['spore_sha256'][:16]}"),
                     evidence_bytes=self.spore_path.read_bytes(),
                 )
+                # Memory write-back (write-path design S3,
+                # EVO 0009 milestone 5): ratifying the fix for
+                # a HIGH finding closes that finding - the same
+                # verified event point, the same spore evidence.
+                if order["finding"].get("severity") == "HIGH":
+                    closed_record_id = record_verified_event(
+                        self.memory_root,
+                        event="finding_high_closed",
+                        summary=(f"HIGH finding closed: {fkey} "
+                                 f"by ratified mission {order_id}; "
+                                 f"spore "
+                                 f"{spore['spore_sha256'][:16]}"),
+                        evidence_bytes=self.spore_path.read_bytes(),
+                        content_extra={"finding_key": fkey},
+                    )
         result = {
             "schema": "ace.passive_evolution_verify.v1",
             "order_id": order_id,
@@ -1449,6 +1509,7 @@ class EvolutionPatchVerifier:
             result["memory_writeback"] = {
                 "recalled": len(self._recalled_memory),
                 "record_id": memory_record_id,
+                "closed_record_id": closed_record_id,
             }
         return result
 

@@ -96,15 +96,16 @@ def execute(path, req):
         messages = req.get("messages") or []
         prompt = "\n".join(m.get("content", "") for m in messages) \
             or req.get("prompt", "")
-        env = bridge.call_helper(provider, model, prompt,
-                                 int(req.get("max_tokens", 1024)))
+        env, sp, sm, fell_back = bridge.serve_chat(
+            role, prompt, int(req.get("max_tokens", 1024)))
         bridge._log({"ts": t0, "role": role,
-                     "brain": f"{provider}/{model}", "result": "ok",
+                     "brain": f"{sp}/{sm}", "result": "ok",
                      "used_today": used, "via": "relay",
+                     "key": bridge.LAST_KEY, "fallback": fell_back,
                      "wall_s": round(time.time() - t0, 2)})
         return 200, {"id": f"bridge-{int(t0 * 1000)}",
-                     "object": "chat.completion", "model": model,
-                     "brain_of_origin": f"{provider}/{model}",
+                     "object": "chat.completion", "model": sm,
+                     "brain_of_origin": f"{sp}/{sm}",
                      "choices": [{
                          "index": 0,
                          "message": {"role": "assistant",

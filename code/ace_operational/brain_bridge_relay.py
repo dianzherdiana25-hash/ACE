@@ -28,8 +28,8 @@ TIMEOUT_S = 240
 # cache starts as the bridge's role-model list and refreshes in
 # the background through the spool.
 _STATIC_MODELS = {"object": "list", "data": [
-    {"id": "front:gemini-3-flash-preview", "object": "model",
-     "owned_by": "gemini"},
+    {"id": "front:openai/gpt-oss-120b", "object": "model",
+     "owned_by": "groq"},
     {"id": "coder:qwen/qwen3.8-27b", "object": "model",
      "owned_by": "groq"},
     {"id": "validator:openai/gpt-oss-120b", "object": "model",

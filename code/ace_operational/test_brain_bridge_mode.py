@@ -138,6 +138,19 @@ class BridgeEmbedTests(unittest.TestCase):
             with self.assertRaises(be.BrainUnavailable):
                 be.embed(["one"])
 
+    def test_bridge_front_rotation_map(self):
+        # Named config (hub, 2026-11-18, S2.4 rotation): front's
+        # primary is Groq gpt-oss-120b; Gemini flash is the
+        # rotation fallback, tried once on primary failure.
+        from pathlib import Path
+        src = (Path(__file__).with_name(
+            "brain_bridge.py").read_text(encoding="utf-8"))
+        self.assertIn(
+            '"front": ("groq", "openai/gpt-oss-120b")', src)
+        self.assertIn(
+            '"front": ("gemini", "gemini-3-flash-preview")', src)
+        self.assertIn("FALLBACKS", src)
+
     def test_relay_models_backend_contract(self):
         # models_backend discovery (measured live, milestone 4):
         # /health must carry {"status": "ok"} and /v1/models is
