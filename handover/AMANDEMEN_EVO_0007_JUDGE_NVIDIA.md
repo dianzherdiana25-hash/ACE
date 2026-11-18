@@ -209,3 +209,13 @@ record-record itu DIARSIPKAN sebagai sejarah fase
 (out/patterns_groq_phase.jsonl di stage) dan TIDAK masuk
 aneks; 42 sumber sisa terdistilasi ulang di organ asli,
 sehingga aneks final 72/72 satu origin.
+
+Catatan perbaikan transport (Ian, 2026-11-18, lari lengan
+pertama): deteksi kuota S8 semula berjalan atas stderr yang
+terpotong 300 char; helper yang mati dengan traceback urllib
+membawa status HTTP jauh di dalam trace sehingga gagal-alih
+tidak menyala dan lari berhenti di panggilan gemini pertama.
+Perbaikan: deteksi berjalan atas stderr PENUH dan galat
+bertanda [quota] sejak titik angkatnya. Satu baris lengan
+sempat tersegel sebelum berhenti; driver lengan resume-safe
+melanjutkan dari baris itu.

@@ -444,8 +444,12 @@ def _gemini_generate(key: str, model: str, prompt: str,
          str(max_tokens)], capture_output=True, text=True,
         timeout=600)
     if out.returncode != 0:
+        # Quota detection runs over the FULL stderr: a helper
+        # that dies with a urllib traceback carries the HTTP
+        # status deep in the trace, past any truncation.
+        tag = " [quota]" if _is_quota_error(out.stderr) else ""
         raise RuntimeError(
-            f"gemini helper ({key}) failed: "
+            f"gemini helper ({key}) failed{tag}: "
             f"{out.stderr.strip()[:300]}")
     result = json.loads(out.stdout)
     if isinstance(result.get("content"), str):
