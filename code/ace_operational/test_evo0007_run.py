@@ -1,0 +1,177 @@
+"""Tests for the EVO 0007 package runner (PR #311 S9.2).
+
+All transports are fakes: no live organ is ever called here.
+The behaviours pinned are the preregistration's own rules -
+judge parsing (incl. the Gonka double-object quirk), the
+one-shot band re-derivation, the composition/scope readout,
+context delivery per arm, and the verdict gate.
+"""
+import unittest
+
+from ace_operational.evo0007_run import (
+    DEFAULT_BAND, calibrate, compute_verdict, first_json_object,
+    parse_judge_output, run_episode)
+
+
+def judge_returning(scores):
+    """Fake judge transport yielding the given scores in order."""
+    it = iter(scores)
+
+    def _t(provider, model, prompt, max_tokens):
+        return ('{"accept": true, "score": %s, "reasons": "fake"}'
+                % next(it))
+    return _t
+
+
+def candidate(cid, kind="code"):
+    return {"id": cid, "task_kind": kind, "judge_prompt": "judge me"}
+
+
+class JudgeParsingTests(unittest.TestCase):
+    def test_double_object_reads_first_only(self):
+        text = ('{"accept": true, "score": 85, "reasons": "ok"}'
+                '{"accept": false, "score": 3, "reasons": "dupe"}')
+        obj = first_json_object(text)
+        self.assertEqual(obj["score"], 85)
+
+    def test_parse_validates_shape(self):
+        out = parse_judge_output(
+            '{"accept": false, "score": 41.5, "reasons": "thin"}')
+        self.assertEqual(out, {"accept": False, "score": 41.5,
+                               "reasons": "thin"})
+
+    def test_unscored_output_fails_closed(self):
+        for bad in ('{"accept": true, "reasons": "no score"}',
+                    '{"score": 50, "reasons": "no accept"}',
+                    '{"accept": true, "score": 140, "reasons": "x"}',
+                    'no json at all'):
+            with self.assertRaises(ValueError, msg=bad):
+                parse_judge_output(bad)
+
+
+class CalibrationTests(unittest.TestCase):
+    def test_in_band_selection_by_mean(self):
+        cands = [candidate(f"c{i}") for i in range(12)]
+        scores = []
+        for i in range(12):  # 8 in-band at 60, 4 at ceiling 95
+            scores += [60, 60] if i < 8 else [95, 95]
+        result = calibrate(cands, judge_returning(scores))
+        self.assertTrue(result["sufficient"])
+        self.assertEqual(result["probe_n"], 8)
+        self.assertEqual(result["band"], list(DEFAULT_BAND))
+        self.assertFalse(result["band_rederived"])
+
+    def test_fraction_trigger_fires_and_rederives_to_same_band(self):
+        # 8/10 in-band = fraction 0.80 > 0.70: the ratified S3
+        # rule fires even on a clean split; the median sits
+        # mid-band, so the re-derived band equals the default
+        # and membership is unchanged. The flag records that
+        # the rule fired, not that the band moved.
+        cands = [candidate(f"c{i}") for i in range(10)]
+        scores = []
+        for i in range(10):
+            scores += [60, 60] if i < 8 else [95, 95]
+        result = calibrate(cands, judge_returning(scores))
+        self.assertTrue(result["band_rederived"])
+        self.assertEqual(result["band"], list(DEFAULT_BAND))
+        self.assertEqual(result["probe_n"], 8)
+
+    def test_one_shot_band_rederivation_on_saturation(self):
+        cands = [candidate(f"c{i}") for i in range(10)]
+        scores = []
+        for _ in range(10):  # everything at 90: band discriminates not
+            scores += [90, 90]
+        result = calibrate(cands, judge_returning(scores))
+        self.assertTrue(result["band_rederived"])
+        self.assertEqual(result["band"], [75.0, 105.0])
+        self.assertEqual(result["probe_n"], 10)
+
+    def test_insufficient_pool_reports_instrument_verdict(self):
+        cands = [candidate(f"c{i}") for i in range(4)]
+        result = calibrate(cands, judge_returning([50, 50] * 4))
+        self.assertFalse(result["sufficient"])
+        self.assertEqual(result["verdict_if_stopped_here"],
+                         "INSTRUMEN_TIDAK_CUKUP")
+
+    def test_language_composition_scope(self):
+        cands = ([candidate(f"cd{i}") for i in range(6)]
+                 + [candidate(f"lg{i}", "language") for i in range(4)])
+        result = calibrate(cands, judge_returning([60, 60] * 10))
+        self.assertEqual(result["language_n"], 4)
+        self.assertEqual(result["scope"], "mixed")
+
+    def test_spread_flag_recorded(self):
+        cands = [candidate(f"c{i}") for i in range(8)]
+        scores = [35, 95] + [60, 60] * 7  # c0 spread 60, mean 65
+        result = calibrate(cands, judge_returning(scores))
+        first = result["screened"][0]
+        self.assertEqual(first["spread"], 60.0)
+        self.assertTrue(first["spread_flag"])
+        self.assertIn(first, result["probe_set"])  # mean is in-band
+
+
+class EpisodeAndVerdictTests(unittest.TestCase):
+    EP = {"id": "ep1", "task_kind": "code", "task_shape": "code:x",
+          "prompt": "do the task", "receipt_text": "receipt body",
+          "sham_text": "sham body"}
+    PATTERNS = [{"task_shape": "code:x", "approach": "do it well",
+                 "pitfalls": ["trap"], "source_episode": "src1"}]
+
+    def transport(self, provider, model, prompt, max_tokens):
+        if provider == "gonka":
+            return '{"accept": true, "score": 70, "reasons": "ok"}'
+        if "Validate this proposal" in prompt:
+            return "RATIFY"
+        return "a proposal"
+
+    def test_pola_episode_delivers_pattern_context(self):
+        row = run_episode("POLA", self.EP, self.PATTERNS,
+                          self.transport)
+        self.assertTrue(row["delivered"])
+        self.assertEqual(row["context_ids"], ["src1"])
+        self.assertTrue(row["accepted"])
+        self.assertEqual(row["brain_judge"],
+                         "gonka/deepseek-ai/DeepSeek-V4-Flash-0731")
+
+    def test_pola_without_match_is_undelivered_not_error(self):
+        row = run_episode("POLA", self.EP, [], self.transport)
+        self.assertFalse(row["delivered"])
+        self.assertEqual(row["context_ids"], [])
+
+    def test_validator_rejection_skips_judge(self):
+        def rejecting(provider, model, prompt, max_tokens):
+            if "Validate this proposal" in prompt:
+                return "REJECT: off task"
+            return "a proposal"
+        row = run_episode("KOSONG", self.EP, [], rejecting)
+        self.assertFalse(row["accepted"])
+        self.assertEqual(row["judge_skipped"], "validator_rejected")
+
+    def _rows(self, arm, delivered, accepted, n=4):
+        return [{"episode_id": f"e{i}", "arm": arm,
+                 "delivered": delivered, "accepted": accepted}
+                for i in range(n)]
+
+    def test_verdict_supported(self):
+        probe = [{"id": f"e{i}", "spread_flag": False}
+                 for i in range(4)]
+        rows = {"POLA": self._rows("POLA", True, True),
+                "RECEIPT": self._rows("RECEIPT", True, False),
+                "SHAM": self._rows("SHAM", True, False),
+                "KOSONG": self._rows("KOSONG", True, False)}
+        out = compute_verdict(rows, probe)
+        self.assertEqual(out["verdict"], "TERDUKUNG")
+
+    def test_delivery_gate_blocks_verdict(self):
+        probe = [{"id": f"e{i}", "spread_flag": False}
+                 for i in range(4)]
+        rows = {"POLA": self._rows("POLA", False, True),
+                "RECEIPT": self._rows("RECEIPT", True, False),
+                "SHAM": self._rows("SHAM", True, False),
+                "KOSONG": self._rows("KOSONG", True, False)}
+        out = compute_verdict(rows, probe)
+        self.assertEqual(out["verdict"], "TIDAK_TERANTAR")
+
+
+if __name__ == "__main__":
+    unittest.main()
