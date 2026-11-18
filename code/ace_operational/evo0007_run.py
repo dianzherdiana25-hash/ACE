@@ -47,7 +47,7 @@ ORGAN_ROLES = {
     },
 }
 JUDGE_ORGAN = ("cloudflare", "@cf/meta/llama-3.3-70b-instruct-fp8-fast")
-DISTILLER_ORGAN = ("gemini", "gemini-3-flash-preview")
+DISTILLER_ORGAN = ("groq", "llama-3.3-70b-versatile")
 
 DEFAULT_BAND = (45.0, 75.0)
 MIN_PROBE = 8

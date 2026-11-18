@@ -110,3 +110,27 @@ alokasi. Limitasi lintas-judge yang dinyatakan di §3 tetap
 berlaku utuh; statistik jembatan §4 kini mengukur kesepakatan
 Gonka ↔ Cloudflare. JUDGE_ORGAN di runner berubah lewat
 komit amendemen ini — tidak ada suntikan diam-diam.
+
+## 7. Amendemen bernama — distiller aneks → Groq Llama (hub, 2026-11-18)
+
+Atas arahan pemilik ("pake api lain aja" untuk peran-peran
+Gemini) dan pilah hub mana yang sah ditukar: distiller aneks
+bukan organ pembangkit data pengukuran — ia meringkas episode
+yang sudah tersegel — jadi penukarannya sekelas penukaran
+judge, bukan sekelas proposer/validator (yang SENGAJA tidak
+ditukar: keduanya membangkitkan data yang kalibrasi dan
+seleksi probe turunkan; menukarnya mengubah yang diukur).
+
+Distiller sisa 42 sumber (dari 72) menjadi
+**groq/llama-3.3-70b-versatile** — model yang tidak memegang
+peran lain apa pun di instrumen (bukan proposer, bukan
+validator, bukan judge). Konsekuensi yang dinyatakan:
+- Aneks menjadi campuran dua origin: 30 baris
+  gemini/gemini-3-flash-preview + 42 baris
+  groq/llama-3.3-70b-versatile; setiap baris pola membawa
+  brain-of-origin distillernya (baris fase Gemini distempel
+  balik sesuai fakta larinya, tercatat di sini).
+- Prompt distilasi, mekanisme batch, dan cap P95 TIDAK
+  berubah; freeze + sha snapshot dihitung atas set campuran
+  apa adanya.
+- Kalibrasi, pita [85,115], dan set probe 40 TIDAK tersentuh.
