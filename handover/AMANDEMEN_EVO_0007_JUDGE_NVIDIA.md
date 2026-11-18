@@ -173,3 +173,17 @@ memegang peran lain apa pun di instrumen ini (proposer kode
 qwen, validator bahasa gpt-oss-120b adalah model yang
 berbeda; judge Cloudflare). Selain baris ini, §7 berdiri
 apa adanya.
+
+Melengkapi teks koreksi sesuai ratifikasi hub (2026-11-18):
+(3) catatan kejujuran keluarga dinyatakan apa adanya -
+gpt-oss-20b adalah adik sekeluarga validator bahasa
+gpt-oss-120b, dan itu DAPAT DITERIMA karena distiller
+memproduksi bahan perlakuan, bukan menilai atau
+memvalidasi; aturan identitas model tetap lolos karena
+keduanya model yang berbeda. (4) Kandidat lain di katalog,
+allam-2-7b (tanpa peran apa pun), GUGUR atas mutu untuk
+pola dwibahasa paket ini. Ratifikasi ini juga mencatat
+aturan main hub mulai sekarang: penamaan organ hanya dari
+katalog yang terbaca di akun, bukan dari ingatan katalog
+publik - kekeliruan penamaan semula adalah milik hub dan
+koreksinya berdiri di catatan, tidak ditulis ulang diam-diam.
