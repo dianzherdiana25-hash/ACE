@@ -36,13 +36,25 @@ from typing import Callable
 # class is weaker than pro, the calibration inside this package
 # absorbs it (the band derives from this amended instrument
 # set and every arm runs under the same instrument).
+# Amendment S10 (owner-directed 2026-11-18, handover/
+# AMANDEMEN_EVO_0007_GEMMA_PROPOSER.md): the LANGUAGE PROPOSER
+# moves to gemma-4-31b-it for the remaining arms - the flash
+# bucket (20 generate/day/model/key) is the package bottleneck
+# and the quota is per model, so the Gemma bucket is fresh.
+# The code validator does NOT move: measured on the runner's
+# exact validator prompt, both Gemma models open with analysis
+# instead of RATIFY, and the fail-closed startswith("RATIFY")
+# check would turn that into mass false rejections. Sealed
+# rows 1-65 stand; every row stamps its brain of origin, so
+# the consolidation reads the per-arm composition from the
+# rows themselves.
 ORGAN_ROLES = {
     "code": {
         "proposer": ("groq", "qwen/qwen3.8-27b"),
         "validator": ("gemini", "gemini-3-flash-preview"),
     },
     "language": {
-        "proposer": ("gemini", "gemini-3-flash-preview"),
+        "proposer": ("gemini", "gemma-4-31b-it"),
         "validator": ("groq", "openai/gpt-oss-120b"),
     },
 }
