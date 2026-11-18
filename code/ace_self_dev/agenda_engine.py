@@ -56,12 +56,14 @@ class AgendaEngine:
         cycle_id = state.cycle_count + 1
         state_digest = state.state_digest or "GENESIS"
         task_seed = self.derive_task_seed(cycle_id, state_digest)
+        if not tasks:
+            return "SEARCH_SPACE_EXHAUSTED", task_seed, 0
 
         # Ranked tasks by failure rate (highest failure rate first)
         task_scores = diagnosis.diagnostic_details.get("task_scores", {})
         ranked_tasks = sorted(tasks.keys(), key=lambda tid: task_scores.get(tid, 0.5))
 
-        initial_task = ranked_tasks[0] if ranked_tasks else "task_k2_modular_stride_shift"
+        initial_task = ranked_tasks[0]
         initial_strategy = "LINEAR_MUTATION"
         if state.next_agenda_priority:
             rec_tid = state.next_agenda_priority.get("priority_task_id")
