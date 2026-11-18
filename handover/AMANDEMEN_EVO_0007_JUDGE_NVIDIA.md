@@ -134,3 +134,24 @@ validator, bukan judge). Konsekuensi yang dinyatakan:
   berubah; freeze + sha snapshot dihitung atas set campuran
   apa adanya.
 - Kalibrasi, pita [85,115], dan set probe 40 TIDAK tersentuh.
+
+## 8. Amendemen bernama — rute kuota Gemini dua ember (hub, 2026-11-18)
+
+Pemilik memasukkan kunci Gemini kedua lewat vault (konektor
+custom.gemini2). Kedudukan yang diratifikasi hub: ini RUTE
+KUOTA, bukan organ baru — brain-of-origin tetap
+gemini/gemini-3-flash-preview; identitas instrumen tidak
+berubah; yang bertambah hanya ember harian peran Gemini
+(20 permintaan/hari/model per kunci, dua ember independen).
+
+Pelaksanaan di transport (helper_transport):
+- Jalur gemini memakai verb `generate` helper (prompt
+  inline) — bentuk yang memang dipakai semua driver
+  kalibrasi; jalur chatfile umum tidak pernah berlaku untuk
+  helper gemini.
+- Kegagalan kelas-kuota (429 / RESOURCE_EXHAUSTED) pada
+  kunci pertama gagal-alih ke kunci kedua; kegagalan lain
+  berhenti seketika (tidak menyamarkan galat instrumen).
+- Setiap panggilan gemini dicatat kunci pelayannya di
+  KEY_LEDGER untuk akuntansi kuota; baris hasil tetap
+  mencatat brain-of-origin organ yang sama.

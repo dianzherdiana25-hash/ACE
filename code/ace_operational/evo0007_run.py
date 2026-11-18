@@ -421,12 +421,67 @@ def compute_verdict(arm_rows: dict[str, list[dict]],
 HELPER_DIRS = Path.home() / "workspace" / "custom-connectors"
 
 
+KEY_LEDGER: list[dict] = []
+"""Per-call quota-route accounting: which key served each
+gemini call (amendment section 8). Brain-of-origin is
+unaffected - both keys are the same organ."""
+
+
+def _is_quota_error(text: str) -> bool:
+    low = text.lower()
+    return ("429" in text or "resource_exhausted" in low
+            or "quota" in low)
+
+
+def _gemini_generate(key: str, model: str, prompt: str,
+                     max_tokens: int) -> str:
+    """One generate call through one gemini key's helper
+    (verbs: generate <model> <prompt> <max_tokens>)."""
+    helper = (HELPER_DIRS / f"custom.{key}" / "bin"
+              / f"{key}_call.py")
+    out = subprocess.run(
+        ["python3", str(helper), "generate", model, prompt,
+         str(max_tokens)], capture_output=True, text=True,
+        timeout=600)
+    if out.returncode != 0:
+        raise RuntimeError(
+            f"gemini helper ({key}) failed: "
+            f"{out.stderr.strip()[:300]}")
+    result = json.loads(out.stdout)
+    if isinstance(result.get("content"), str):
+        return result["content"]
+    return result["choices"][0]["message"]["content"]
+
+
 def helper_transport(provider: str, model: str, prompt: str,
                      max_tokens: int) -> str:
     """Call one registered organ through its connector helper
     (`<provider>_call.py chatfile <model> <file> <max_tokens>`)
     and return the completion text. Credentials stay in the
-    vault: the helper's surrogate flow handles them."""
+    vault: the helper's surrogate flow handles them.
+
+    Gemini is the exception in shape and in routing: its
+    helpers take the prompt inline (`generate`), and since
+    amendment section 8 the gemini route holds TWO quota
+    buckets (custom.gemini, custom.gemini2) for the SAME
+    organ - a quota failure on the first key fails over to
+    the second; any other failure raises at once. The key
+    that served is appended to KEY_LEDGER."""
+    if provider == "gemini":
+        last_err: RuntimeError | None = None
+        for key in ("gemini", "gemini2"):
+            try:
+                text = _gemini_generate(key, model, prompt,
+                                        max_tokens)
+                KEY_LEDGER.append({"provider": provider,
+                                   "model": model, "key": key})
+                return text
+            except RuntimeError as err:
+                if not _is_quota_error(str(err)):
+                    raise
+                last_err = err
+        raise last_err if last_err is not None else RuntimeError(
+            "gemini route exhausted")
     helper = (HELPER_DIRS / f"custom.{provider}" / "bin"
               / f"{provider}_call.py")
     with tempfile.NamedTemporaryFile(
