@@ -255,3 +255,49 @@ class AuditProbeClassTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PatternDistilledClassTests(unittest.TestCase):
+    """EVO 0007 preregistration S9.1: the pattern_distilled
+    class is registered as semantic, round-trips with its
+    pattern fields, and replays idempotently."""
+
+    PATTERN = {"task_shape": "code:fix failing parser test",
+               "approach": "read the failing assertion first",
+               "pitfalls": ["patching the test instead of the code"],
+               "source_episode": "w2-code-003"}
+
+    def test_pattern_class_registered_semantic(self):
+        from ace_operational.memory_writeback import EVENT_CLASSES
+        self.assertEqual(EVENT_CLASSES["pattern_distilled"],
+                         ("semantic", 0.90))
+
+    def test_pattern_write_read_back_and_replay(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d) / "mem"
+            rid = record_verified_event(
+                root, event="pattern_distilled",
+                summary="pattern distilled from w2-code-003",
+                evidence_bytes=EVIDENCE,
+                content_extra=dict(self.PATTERN))
+            self.assertIsNotNone(rid)
+            again = record_verified_event(
+                root, event="pattern_distilled",
+                summary="pattern distilled from w2-code-003",
+                evidence_bytes=EVIDENCE,
+                content_extra=dict(self.PATTERN))
+            self.assertEqual(again, rid)
+            records = _records(root)
+            self.assertEqual(len(records), 1)
+            rec = records[0]
+            self.assertEqual(rec["id"], rid)
+            self.assertEqual(rec["kind"], "semantic")
+            self.assertEqual(rec["content"]["class"],
+                             "pattern_distilled")
+            self.assertEqual(rec["content"]["task_shape"],
+                             self.PATTERN["task_shape"])
+            self.assertEqual(rec["content"]["pitfalls"],
+                             self.PATTERN["pitfalls"])
+            self.assertEqual(rec["content"]["source_episode"],
+                             "w2-code-003")
+            self.assertEqual(rec["source"]["ref"], _digest(EVIDENCE))
