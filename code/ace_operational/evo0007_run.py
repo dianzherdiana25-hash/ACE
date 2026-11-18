@@ -463,13 +463,13 @@ def helper_transport(provider: str, model: str, prompt: str,
     Gemini is the exception in shape and in routing: its
     helpers take the prompt inline (`generate`), and since
     amendment section 8 the gemini route holds TWO quota
-    buckets (custom.gemini, custom.gemini2) for the SAME
+    buckets (custom.gemini, custom.gemini2, custom.gemini3) for the SAME
     organ - a quota failure on the first key fails over to
     the second; any other failure raises at once. The key
     that served is appended to KEY_LEDGER."""
     if provider == "gemini":
         last_err: RuntimeError | None = None
-        for key in ("gemini", "gemini2"):
+        for key in ("gemini", "gemini2", "gemini3"):
             try:
                 text = _gemini_generate(key, model, prompt,
                                         max_tokens)

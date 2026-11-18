@@ -155,3 +155,10 @@ Pelaksanaan di transport (helper_transport):
 - Setiap panggilan gemini dicatat kunci pelayannya di
   KEY_LEDGER untuk akuntansi kuota; baris hasil tetap
   mencatat brain-of-origin organ yang sama.
+
+Perluasan tercatat (hub, 2026-11-18, kemudian pada hari yang
+sama): pemilik memasukkan kunci Gemini KETIGA (custom.gemini3)
+- rute yang sama tumbuh menjadi tiga ember independen;
+kedudukan tidak berubah (rute kuota, bukan organ baru).
+Keadaan saat perluasan: kunci-1 habis (napas besok), kunci-2
+dan kunci-3 segar - 40 permintaan flash tersedia hari ini.
