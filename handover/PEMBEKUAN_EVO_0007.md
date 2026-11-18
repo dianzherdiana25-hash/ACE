@@ -15,8 +15,15 @@ yang tercatat di aneks pembekuan polanya.*
 - Prasyarat bangun §9, head remote terverifikasi dari respons
   push: kelas event pattern_distilled PR #312 head **a68dde7b**;
   runner paket PR #313 head **9bab252d** (termasuk amandemen
-  adapter korpus beku; 16/16 tes); kandidat pabrik siaga PR #314
-  head **4ab955f8**.
+  adapter korpus beku; 16/16 tes).
+- Cadangan pabrik §3 (keputusan hub 18 Nov: set digenerate di
+  meja hub, ditapis Ian, dibekukan dengan sha): PR #317 head
+  **fc37c2bf**, berkas `handover/KANDIDAT_PABRIK_0007_BEKU.jsonl`,
+  sha256 **addecb8bad78fedf8730f4d0d75acf09158b4def2bff66610d920fb266511d7a**
+  (24 baris; urutan berkas = gelombang A lalu B). Catatan tapis
+  lengkap di badan PR #317 (4 baris bahasa diganti, 1 koreksi
+  kata). PR #314 (set siaga Ian sebelumnya) TERGANTIKAN — tidak
+  dipakai.
 
 ## 2. Kolam kalibrasi (sha256 terverifikasi di sandbox, 18 Nov)
 
@@ -35,7 +42,7 @@ judge_prompt := templat judge paket). Urutan saring: cadangan
 bahasa lebih dulu (aturan komposisi §3 praregistrasi), lalu
 gelombang-2, lalu gelombang-1, sampai set probe cukup atau kolam
 habis; gelombang pabrik (#314) hanya sesudah itu, sesuai anggaran
-saring §3.
+saring §3 (gelombang pabrik = berkas beku PR #317 di atas).
 
 ## 3. Yang dilakukan di dalam paket, tercatat di aneks
 
