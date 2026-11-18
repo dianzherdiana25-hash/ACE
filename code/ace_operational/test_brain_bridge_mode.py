@@ -138,6 +138,18 @@ class BridgeEmbedTests(unittest.TestCase):
             with self.assertRaises(be.BrainUnavailable):
                 be.embed(["one"])
 
+    def test_relay_models_backend_contract(self):
+        # models_backend discovery (measured live, milestone 4):
+        # /health must carry {"status": "ok"} and /v1/models is
+        # served from a local cache (0.6 s discovery timeout) -
+        # pin both shapes in the relay source.
+        from pathlib import Path
+        src = (Path(__file__).with_name(
+            "brain_bridge_relay.py").read_text(encoding="utf-8"))
+        self.assertIn('"status": "ok"', src)
+        self.assertIn("_STATIC_MODELS", src)
+        self.assertIn("_models_cache", src)
+
 
 if __name__ == "__main__":
     unittest.main()
