@@ -27,18 +27,27 @@ from typing import Callable
 # Organ roles per preregistration S2. Proposer != validator,
 # crossed per task kind; the judge organ is fixed for the whole
 # package (judge identity = instrument identity).
+# Model amendment (hub-ratified 2026-11-18): the Gemini roles
+# named gemini-2.5-pro at freeze, but that model is retired for
+# this account (HTTP 404 "no longer available to new users",
+# measured live); all three Gemini roles (language proposer,
+# code validator, distiller) move to gemini-3-flash-preview -
+# the honest consequence is recorded in the amendment: flash
+# class is weaker than pro, the calibration inside this package
+# absorbs it (the band derives from this amended instrument
+# set and every arm runs under the same instrument).
 ORGAN_ROLES = {
     "code": {
         "proposer": ("groq", "qwen/qwen3.8-27b"),
-        "validator": ("gemini", "gemini-2.5-pro"),
+        "validator": ("gemini", "gemini-3-flash-preview"),
     },
     "language": {
-        "proposer": ("gemini", "gemini-2.5-pro"),
+        "proposer": ("gemini", "gemini-3-flash-preview"),
         "validator": ("groq", "openai/gpt-oss-120b"),
     },
 }
 JUDGE_ORGAN = ("gonka", "deepseek-ai/DeepSeek-V4-Flash-0731")
-DISTILLER_ORGAN = ("gemini", "gemini-2.5-pro")
+DISTILLER_ORGAN = ("gemini", "gemini-3-flash-preview")
 
 DEFAULT_BAND = (45.0, 75.0)
 MIN_PROBE = 8
