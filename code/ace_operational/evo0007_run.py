@@ -46,7 +46,7 @@ ORGAN_ROLES = {
         "validator": ("groq", "openai/gpt-oss-120b"),
     },
 }
-JUDGE_ORGAN = ("gonka", "deepseek-ai/DeepSeek-V4-Flash-0731")
+JUDGE_ORGAN = ("cloudflare", "@cf/meta/llama-3.3-70b-instruct-fp8-fast")
 DISTILLER_ORGAN = ("gemini", "gemini-3-flash-preview")
 
 DEFAULT_BAND = (45.0, 75.0)
@@ -445,4 +445,7 @@ def helper_transport(provider: str, model: str, prompt: str,
         raise RuntimeError(
             f"{provider} helper failed: {out.stderr.strip()[:300]}")
     result = json.loads(out.stdout)
+    if isinstance(result.get("content"), str):
+        # Flattened envelope (groq / gemini / cloudflare helpers).
+        return result["content"]
     return result["choices"][0]["message"]["content"]

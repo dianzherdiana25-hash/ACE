@@ -9,8 +9,8 @@ context delivery per arm, and the verdict gate.
 import unittest
 
 from ace_operational.evo0007_run import (
-    DEFAULT_BAND, calibrate, compute_verdict, first_json_object,
-    parse_judge_output, run_episode)
+    DEFAULT_BAND, JUDGE_ORGAN, calibrate, compute_verdict,
+    first_json_object, parse_judge_output, run_episode)
 
 
 def judge_returning(score_map):
@@ -141,7 +141,7 @@ class EpisodeAndVerdictTests(unittest.TestCase):
                  "pitfalls": ["trap"], "source_episode": "src1"}]
 
     def transport(self, provider, model, prompt, max_tokens):
-        if provider == "gonka":
+        if provider == JUDGE_ORGAN[0]:
             return '{"accept": true, "score": 70, "reasons": "ok"}'
         if "Validate this proposal" in prompt:
             return "RATIFY"
@@ -154,7 +154,7 @@ class EpisodeAndVerdictTests(unittest.TestCase):
         self.assertEqual(row["context_ids"], ["src1"])
         self.assertTrue(row["accepted"])
         self.assertEqual(row["brain_judge"],
-                         "gonka/deepseek-ai/DeepSeek-V4-Flash-0731")
+                         f"{JUDGE_ORGAN[0]}/{JUDGE_ORGAN[1]}")
 
     def test_pola_without_match_is_undelivered_not_error(self):
         row = run_episode("POLA", self.EP, [], self.transport)
