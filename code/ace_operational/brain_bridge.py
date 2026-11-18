@@ -6,11 +6,16 @@ ROLE to the ratified API organ map (EVO 0009 design S2.2, hub
 ratification 2026-11-18) and executing through the Secure Vault
 connector helpers - credentials never leave this VM.
 
-Transport shape: this VM accepts no inbound tailnet connections
-(client-only enrolment), so the engine reaches this service
-through a reverse tunnel that THIS side initiates and maintains
-to the sandbox (ssh -R). The engine calls a loopback port on its
-own host; requests travel the VM-initiated tunnel to here.
+Transport shape (as built; hub-ratified deviation from the
+design's reverse tunnel, which proved infeasible: this VM is
+Tailscale client-only and sandbox sshd refuses remote port
+forwarding): a store-and-forward relay. A loopback relay on
+the sandbox (brain_bridge_relay.py) serves the engine and
+spools requests to files; a pump on this VM
+(brain_bridge_pump.py) initiates ALL connections over the
+ordinary ssh door, executes spooled requests through this
+service, and spools the answers back. Credentials never
+leave this VM.
 
 Governor (ratified initial budgets, calls/day): front 200,
 coder 200, cross-validator 100, embedding 200, judge 20 - the
