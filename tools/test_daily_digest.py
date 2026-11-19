@@ -192,5 +192,81 @@ class TestOrganQuotaLedgerWiring(unittest.TestCase):
         self.assertIn("tools/daily_digest.py", by_path["tools/organ_quota_ledger.py"]["non_test_callers"])
 
 
+class TestWritebackDiagnoseWiring(unittest.TestCase):
+    """Uji keterhubungan tools/writeback_diagnose.py ke tools/daily_digest.py."""
+
+    def test_daily_digest_runs_writeback_diagnose_readonly_and_marks_wired(self) -> None:
+        import hashlib
+        import sys
+
+        repo_root = Path(__file__).resolve().parents[1]
+        code_dir = repo_root / "code"
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from ace_operational.memory_writeback import record_verified_event
+        from ace_operational.store import OperationalStore
+        from tools import wiring_audit
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            repo = tmp_path / "repo"
+            _init_sample_repo(repo)
+            ws = tmp_path / "ws"
+
+            with OperationalStore(ws) as store:
+                store.save_skill(
+                    name="skill-uji", domain="uji", preconditions=[],
+                    boundary_limitations=[], procedure_steps=[], verification_template={},
+                    source_task_ids=["t1"],
+                )
+                rec = record_verified_event(
+                    ws / "cognitive_memory",
+                    event="skill_verified",
+                    summary="Skill uji terverifikasi",
+                    evidence_bytes=b"bukti-uji",
+                )
+                self.assertIsNotNone(rec)
+
+            def snap_tree() -> dict[str, str]:
+                return {
+                    str(p.relative_to(ws)): hashlib.sha256(p.read_bytes()).hexdigest()
+                    for p in sorted(ws.rglob("*")) if p.is_file()
+                }
+
+            before = snap_tree()
+            out_json = tmp_path / "digest_wb.json"
+            out_md = tmp_path / "digest_wb.md"
+            rc = daily_digest.main([
+                "--repo-dir", str(repo),
+                "--date", "2026-11-19",
+                "--writeback-workspace", str(ws),
+                "--out-json", str(out_json),
+                "--out-md", str(out_md),
+                "--format", "md",
+            ])
+            self.assertEqual(rc, 0)
+            self.assertEqual(snap_tree(), before)
+
+            payload = json.loads(out_json.read_text(encoding="utf-8"))
+            wb = payload["signals"]["writeback"]
+            self.assertTrue(wb["available"])
+            self.assertTrue(wb["chain_ok"])
+            self.assertEqual(wb["anchored_evidence"], 1)
+            self.assertEqual(wb["skills_total"], 1)
+            self.assertIn("writeback", out_md.read_text(encoding="utf-8"))
+
+            rc_missing = daily_digest.main([
+                "--repo-dir", str(repo),
+                "--writeback-workspace", str(tmp_path / "missing_ws"),
+            ])
+            self.assertEqual(rc_missing, 2)
+
+        audit = wiring_audit.audit_wiring(repo_root)
+        by_path = {m["path"]: m for m in audit["modules"]}
+        self.assertEqual(by_path["tools/writeback_diagnose.py"]["status"], "WIRED")
+        self.assertIn("tools/daily_digest.py", by_path["tools/writeback_diagnose.py"]["non_test_callers"])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import datetime as _dt
 import json
+import sqlite3
 import subprocess
 import sys
 from pathlib import Path
@@ -35,6 +36,7 @@ from tools import (
     self_send_audit_view as _self_send_audit_view,
     stage_verify as _stage_verify,
     storage_debt as _storage_debt,
+    writeback_diagnose as _writeback_diagnose,
 )
 
 NON_AUTHORITATIVE_NOTICE = (
@@ -193,6 +195,7 @@ def _summarize_signals(
     ruleset_data: Optional[Dict[str, Any]] = None,
     audit_data: Optional[Dict[str, Any]] = None,
     quota_data: Optional[Dict[str, Any]] = None,
+    writeback_data: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     signals: Dict[str, Any] = {}
 
@@ -300,6 +303,21 @@ def _summarize_signals(
             "over_budget_events": quota_data.get("over_budget_events"),
         }
 
+    if writeback_data is not None:
+        cm = writeback_data.get("cognitive_memory") if isinstance(writeback_data.get("cognitive_memory"), dict) else {}
+        skills = writeback_data.get("skills") if isinstance(writeback_data.get("skills"), dict) else {}
+        frontier = writeback_data.get("frontier") if isinstance(writeback_data.get("frontier"), dict) else {}
+        gaps = writeback_data.get("top_open_gaps") if isinstance(writeback_data.get("top_open_gaps"), list) else []
+        signals["writeback"] = {
+            "available": cm.get("available"),
+            "chain_ok": cm.get("chain_ok"),
+            "events": cm.get("events"),
+            "anchored_evidence": cm.get("anchored_evidence"),
+            "skills_total": skills.get("total"),
+            "frontier_total": frontier.get("total"),
+            "open_gaps_count": len(gaps),
+        }
+
     return signals
 
 
@@ -332,6 +350,8 @@ def build_daily_digest(
     audit_files: Optional[Sequence[str]] = None,
     quota_file: Optional[str] = None,
     quota_bridge_log: Optional[str] = None,
+    writeback_file: Optional[str] = None,
+    writeback_workspace: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Susun payload digest harian (skema ace.daily-digest.v1)."""
     repo_root = _ensure_git_repo(Path(repo_dir))
@@ -435,6 +455,12 @@ def build_daily_digest(
             }
         except (OSError, ValueError) as exc:
             raise DailyDigestError(f"Rekonsiliasi kuota organ gagal: {exc}") from exc
+    writeback_data = _load_optional_json(writeback_file, "writeback", warnings)
+    if writeback_data is None and writeback_workspace:
+        try:
+            writeback_data = _writeback_diagnose.diagnose(Path(writeback_workspace))
+        except (OSError, ValueError, sqlite3.Error) as exc:
+            raise DailyDigestError(f"Diagnosis writeback gagal: {exc}") from exc
 
     signals = _summarize_signals(
         stage_data=stage_data,
@@ -447,6 +473,7 @@ def build_daily_digest(
         ruleset_data=ruleset_data,
         audit_data=audit_data,
         quota_data=quota_data,
+        writeback_data=writeback_data,
     )
 
     touched_files = sorted({f for c in commits for f in c["files"]})
@@ -566,6 +593,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--audit-file", action="append", default=None, help="Berkas JSONL self_send_audit_view opsional")
     parser.add_argument("--quota-file", default=None, help="Berkas JSON organ_quota_ledger opsional")
     parser.add_argument("--quota-bridge-log", default=None, help="Log JSONL bridge_calls untuk direkonsiliasi lewat organ_quota_ledger")
+    parser.add_argument("--writeback-file", default=None, help="Berkas JSON writeback_diagnose opsional")
+    parser.add_argument("--writeback-workspace", default=None, help="Direktori workspace untuk diagnosis read-only writeback_diagnose")
     parser.add_argument("--out-json", default=None, help="Tulis output JSON ke berkas ini")
     parser.add_argument("--out-md", default=None, help="Tulis output Markdown ke berkas ini")
     parser.add_argument(
@@ -605,6 +634,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             audit_files=args.audit_file,
             quota_file=args.quota_file,
             quota_bridge_log=args.quota_bridge_log,
+            writeback_file=args.writeback_file,
+            writeback_workspace=args.writeback_workspace,
         )
     except DailyDigestError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
