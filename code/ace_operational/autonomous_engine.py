@@ -864,6 +864,53 @@ class ContinuousAutonomousEngine:
         )
         return {"skill": skill_name, "receipt": receipt["receipt_id"], "passed": False}
 
+    def _writeback_verified_event(
+        self,
+        *,
+        skill_name: str,
+        title: str,
+        receipt: dict[str, Any],
+        learning_kind: str,
+    ) -> str | None:
+        """Write one externally verified event into cognitive memory.
+
+        The event qualifies for the closed write-set as
+        `skill_verified` because the receipt is external
+        verification: it records the executed artifact, its exit
+        code, the checked stdout and `verified_by`. The receipt
+        itself is the anchored evidence. Fail-soft by design (the
+        helper returns None on failure); a memory problem never
+        blocks or falsifies the cycle's own verdict.
+        """
+        try:
+            from ace_operational.memory_writeback import (
+                record_verified_event,
+            )
+
+            evidence = json.dumps(
+                receipt, sort_keys=True, ensure_ascii=False,
+            ).encode("utf-8")
+            return record_verified_event(
+                self.workspace / "cognitive_memory",
+                event="skill_verified",
+                summary=(
+                    f"skill_verified: {skill_name} "
+                    f"({title}) receipt {receipt['receipt_id']}"
+                ),
+                evidence_bytes=evidence,
+                content_extra={
+                    "skill_name": skill_name,
+                    "title_id": title,
+                    "learning_kind": learning_kind,
+                    "receipt_id": receipt["receipt_id"],
+                },
+            )
+        except Exception:
+            logger.warning(
+                "skill_verified write-back failed for %s",
+                skill_name, exc_info=True)
+            return None
+
     def _writeback_skill_verified(
         self,
         *,
@@ -879,42 +926,67 @@ class ContinuousAutonomousEngine:
         own verified curriculum passes never reached the store: the
         live store held only the two operator seed records while
         the engine accumulated verified receipts (diagnosis
-        2026-11-19). A passed item here carries external
-        verification — the receipt records the executed module,
-        its exit code, the checked stdout and `verified_by` — so
-        it qualifies as a `skill_verified` event with the receipt
-        itself as the anchored evidence. The helper is fail-soft
-        (returns None on failure); a memory problem never blocks
-        or falsifies the cycle's own verdict.
+        2026-11-19).
         """
-        try:
-            from ace_operational.memory_writeback import (
-                record_verified_event,
-            )
+        return self._writeback_verified_event(
+            skill_name=item["skill_name"],
+            title=item["title"],
+            receipt=receipt,
+            learning_kind=learning_kind,
+        )
 
-            evidence = json.dumps(
-                receipt, sort_keys=True, ensure_ascii=False,
-            ).encode("utf-8")
-            return record_verified_event(
-                self.workspace / "cognitive_memory",
-                event="skill_verified",
-                summary=(
-                    f"skill_verified: {item['skill_name']} "
-                    f"({item['title']}) receipt {receipt['receipt_id']}"
-                ),
-                evidence_bytes=evidence,
-                content_extra={
-                    "skill_name": item["skill_name"],
-                    "title_id": item["title"],
-                    "learning_kind": learning_kind,
-                    "receipt_id": receipt["receipt_id"],
-                },
-            )
-        except Exception:
-            logger.warning(
-                "skill_verified write-back failed for %s",
-                item.get("skill_name"), exc_info=True)
-            return None
+    def _practice_backend_ready(self, organ: str) -> bool:
+        """Whether a generative practice path may run this cycle.
+
+        Bridge mode (EVO 0009): the brain bridge replaces the
+        retired local GGUF slate, so readiness is the bridge's
+        health for the role's organ. Local mode keeps the original
+        rule: the local GGUF server must be healthy.
+        """
+        from ace_operational import brain_endpoints
+
+        if brain_endpoints.bridge_mode():
+            return brain_endpoints.health(organ)
+        hc = self.models.health_check()
+        return bool(hc.get("local_gguf", {}).get("server_healthy"))
+
+    def _gen_text(
+        self,
+        messages: list[dict[str, str]],
+        *,
+        max_tokens: int,
+        temperature: float,
+        organ: str,
+    ) -> dict[str, Any] | None:
+        """One generation for the dynamic practice paths.
+
+        Bridge mode routes through brain_endpoints.chat (the role
+        is the organ; the serving organ returns as
+        brain_of_origin). A bridge transport failure — unhealthy
+        bridge, governor budget exhausted, provider error —
+        returns None: the caller treats it as "no practice this
+        cycle", exactly like the local health gate, instead of
+        recording a false learning failure. Local mode delegates
+        to ModelRouter.generate_text unchanged.
+        """
+        from ace_operational import brain_endpoints
+
+        if brain_endpoints.bridge_mode():
+            try:
+                result = brain_endpoints.chat(
+                    organ, messages, max_tokens=max_tokens,
+                    temperature=temperature, timeout=180.0)
+            except brain_endpoints.BrainUnavailable as exc:
+                logger.debug(
+                    f"Bridge generation unavailable ({organ}): {exc}")
+                return None
+            return {
+                "text": result.content,
+                "backend_used": (
+                    f"bridge:{result.brain_of_origin or organ}"),
+            }
+        return self.models.generate_text(
+            messages, max_tokens=max_tokens, temperature=temperature)
 
     def execute_continuous_language_learning(self) -> dict[str, Any] | None:
         """Continuously learn Indonesian language modules, grammar, and dialogue."""
@@ -1003,9 +1075,14 @@ class ContinuousAutonomousEngine:
         return {"passed": passed, "exit_code": proc.returncode, "stdout": proc.stdout, "stderr": err_msg}
 
     def _generate_dynamic_technical_practice(self) -> dict[str, Any] | None:
-        """Generate, AST-check, compile, execute, and repair a Python challenge via local GGUF."""
-        hc = self.models.health_check()
-        if not hc.get("local_gguf", {}).get("server_healthy"):
+        """Generate, AST-check, compile, execute, and repair a Python challenge.
+
+        The generating brain is the local GGUF slate in local mode
+        or the brain bridge's coder role in bridge mode (EVO 0009);
+        with neither serving, the cycle idles (returns None) and
+        records nothing.
+        """
+        if not self._practice_backend_ready("coder"):
             return None
 
         cursor = self._tech_cursor
@@ -1015,12 +1092,6 @@ class ContinuousAutonomousEngine:
         self._tech_cursor += 1
         self._persist_cursors()
 
-        task = self.store.create_task(
-            title_id=f"Latihan Teknis #{self.cycle_count}: {challenge[:48]}",
-            user_request=challenge,
-            normalized_goal=challenge,
-        )
-        self.store.update_task(task["task_id"], status="ACTIVE")
         coding_loop = CodingAgentLoop(self.store)
         script_path = self.workspace / "projects" / "learning_lab" / "teknis" / f"practice_cycle_{self.cycle_count}.py"
         gen_prompt = (
@@ -1037,7 +1108,12 @@ class ContinuousAutonomousEngine:
         ver: dict[str, Any] = {"passed": False, "exit_code": -1, "stdout": "", "stderr": "Belum dijalankan"}
 
         for attempt in range(2):
-            gen_res = self.models.generate_text(history, max_tokens=512, temperature=0.15)
+            gen_res = self._gen_text(
+                history, max_tokens=512, temperature=0.15, organ="coder")
+            if gen_res is None:
+                # Bridge transport failure: idle without recording
+                # a practice task or a false learning failure.
+                return None
             raw_reply = str((gen_res or {}).get("text", ""))
             history.append({"role": "assistant", "content": raw_reply})
             code_text = self._extract_python_code(raw_reply)
@@ -1053,6 +1129,12 @@ class ContinuousAutonomousEngine:
                 ),
             })
 
+        task = self.store.create_task(
+            title_id=f"Latihan Teknis #{self.cycle_count}: {challenge[:48]}",
+            user_request=challenge,
+            normalized_goal=challenge,
+        )
+        self.store.update_task(task["task_id"], status="ACTIVE")
         receipt = self.store.record_receipt(
             task_id=task["task_id"],
             action_kind="execute_dynamic_technical_practice",
@@ -1095,7 +1177,13 @@ class ContinuousAutonomousEngine:
                     "stdout_preview": ver["stdout"].strip()[:80],
                 },
             )
-            return {"technical_practice": challenge, "script": str(script_path), "passed": True, "receipt": receipt["receipt_id"]}
+            writeback_id = self._writeback_verified_event(
+                skill_name=f"tech_practice::{theme[:48]}",
+                title=f"Latihan Teknis: {theme}",
+                receipt=receipt,
+                learning_kind="dynamic_technical_practice",
+            )
+            return {"technical_practice": challenge, "script": str(script_path), "passed": True, "receipt": receipt["receipt_id"], "writeback_id": writeback_id}
 
         self.store.update_task(
             task["task_id"],
@@ -1147,13 +1235,13 @@ class ContinuousAutonomousEngine:
                 if recent_challenges
                 else ""
             )
-            gen_q = self.models.generate_text([
+            gen_q = self._gen_text([
                 {
                     "role": "system",
                     "content": "Buat tepat SATU spesifikasi tantangan coding Python singkat (12-28 kata) tanpa kode atau penjelasan tambahan.",
                 },
                 {"role": "user", "content": f"Tema teknis #{cursor}: {theme}.{avoid_note}"},
-            ], max_tokens=80, temperature=0.7)
+            ], max_tokens=80, temperature=0.7, organ="coder")
             cand = str((gen_q or {}).get("text", "")).strip().strip("\"'")
             if 18 <= len(cand) <= 240 and cand not in recent_challenges:
                 return cand
@@ -1162,9 +1250,13 @@ class ContinuousAutonomousEngine:
         return fallback_challenges[cursor % len(fallback_challenges)]
 
     def _generate_dynamic_language_dialogue_practice(self) -> dict[str, Any] | None:
-        """Generate and evaluate real-time Indonesian dialogue interactions via local GGUF."""
-        hc = self.models.health_check()
-        if not hc.get("local_gguf", {}).get("server_healthy"):
+        """Generate and evaluate real-time Indonesian dialogue interactions.
+
+        The generating brain is the local GGUF slate in local mode
+        or the brain bridge's front role in bridge mode (EVO 0009);
+        with neither serving, the cycle idles (returns None).
+        """
+        if not self._practice_backend_ready("front"):
             return None
 
         themes = [
@@ -1200,7 +1292,7 @@ class ContinuousAutonomousEngine:
                 if recent_prompts
                 else ""
             )
-            gen_q = self.models.generate_text(
+            gen_q = self._gen_text(
                 [
                     {
                         "role": "system",
@@ -1213,6 +1305,7 @@ class ContinuousAutonomousEngine:
                 ],
                 max_tokens=70,
                 temperature=0.8,
+                organ="front",
             )
             candidate_q = str((gen_q or {}).get("text", "")).strip().strip("\"'")
             if 15 <= len(candidate_q) <= 220 and candidate_q not in recent_prompts:
@@ -1235,11 +1328,11 @@ class ContinuousAutonomousEngine:
         logger.info(f"[Continuous Language Learning] Exploring dynamic dialogue: '{prompt}'...")
 
         try:
-            resp = self.models.generate_text([
+            resp = self._gen_text([
                 {"role": "system", "content": "Kamu adalah ACE, entitas kecerdasan otonom yang mendalami bahasa Indonesia. Berikan jawaban yang bernas, santai, dan tepat bahasa."},
                 {"role": "user", "content": prompt},
-            ], max_tokens=200)
-            ans = resp.get("text", "").strip()
+            ], max_tokens=200, temperature=0.2, organ="front")
+            ans = (resp or {}).get("text", "").strip()
             if ans:
                 try:
                     SpeechDevelopmentEngine(self.store).observe_user_utterance(ans)
@@ -1304,24 +1397,33 @@ class ContinuousAutonomousEngine:
                     "auto_morphology",
                 )
 
-        hc = self.models.health_check()
-        if hc.get("local_gguf", {}).get("server_healthy"):
-            resp = self.models.generate_text(
+        if self._practice_backend_ready("front"):
+            resp = self._gen_text(
                 [
                     {"role": "system", "content": "Jawab hanya arti singkat kata Bahasa Indonesia dalam 3-8 kata tanpa tanda kutip."},
                     {"role": "user", "content": f"Apa arti kata '{word}' dalam Bahasa Indonesia?"},
                 ],
                 max_tokens=40,
+                temperature=0.2,
+                organ="front",
             )
             ans = str((resp or {}).get("text", "")).strip().strip(".\"' ")
             if 3 <= len(ans) <= 120:
-                return ans, "", "auto_gguf"
+                origin = (
+                    "auto_bridge"
+                    if str((resp or {}).get("backend_used", "")).startswith("bridge:")
+                    else "auto_gguf"
+                )
+                return ans, "", origin
         return None
 
     def _explore_vocabulary_batch(self, batch_size: int = 25) -> list[dict[str, Any]]:
-        """Actively harvest and ground a batch of new Indonesian vocabulary via local GGUF."""
-        hc = self.models.health_check()
-        if not hc.get("local_gguf", {}).get("server_healthy"):
+        """Actively harvest and ground a batch of new Indonesian vocabulary.
+
+        The generating brain is the local GGUF slate in local mode
+        or the brain bridge's front role in bridge mode (EVO 0009).
+        """
+        if not self._practice_backend_ready("front"):
             return []
 
         domains = [
@@ -1351,7 +1453,7 @@ class ContinuousAutonomousEngine:
         speech_engine = SpeechDevelopmentEngine(self.store)
         known_words = {str(w.get("word", "")).lower() for w in speech_engine.list_lexicon() if w.get("word")}
 
-        resp = self.models.generate_text(
+        resp = self._gen_text(
             [
                 {
                     "role": "system",
@@ -1374,6 +1476,12 @@ class ContinuousAutonomousEngine:
             ],
             max_tokens=560,
             temperature=0.85,
+            organ="front",
+        )
+        batch_source = (
+            "auto_bridge_batch"
+            if str((resp or {}).get("backend_used", "")).startswith("bridge:")
+            else "auto_gguf_batch"
         )
         raw_text = str((resp or {}).get("text", "")).strip()
         if not raw_text:
@@ -1395,7 +1503,7 @@ class ContinuousAutonomousEngine:
             res = speech_engine.teach_word(word, meaning_id, role="")
             if res.get("accepted"):
                 known_words.add(word)
-                learned.append({"word": word, "meaning_id": meaning_id, "source": "auto_gguf_batch"})
+                learned.append({"word": word, "meaning_id": meaning_id, "source": batch_source})
 
         if learned:
             samples = [item["word"] for item in learned[:6]]
@@ -1410,7 +1518,7 @@ class ContinuousAutonomousEngine:
                     "domain": domain,
                     "count": len(learned),
                     "sample_words": samples,
-                    "source": "auto_gguf_batch",
+                    "source": batch_source,
                 },
             )
             logger.info(
@@ -1461,9 +1569,8 @@ class ContinuousAutonomousEngine:
                 need_gguf.append(word)
 
         if need_gguf:
-            hc = self.models.health_check()
-            if hc.get("local_gguf", {}).get("server_healthy"):
-                resp = self.models.generate_text(
+            if self._practice_backend_ready("front"):
+                resp = self._gen_text(
                     [
                         {
                             "role": "system",
@@ -1475,6 +1582,13 @@ class ContinuousAutonomousEngine:
                         {"role": "user", "content": ", ".join(need_gguf)},
                     ],
                     max_tokens=max(120, len(need_gguf) * 24),
+                    temperature=0.2,
+                    organ="front",
+                )
+                gguf_origin = (
+                    "auto_bridge"
+                    if str((resp or {}).get("backend_used", "")).startswith("bridge:")
+                    else "auto_gguf"
                 )
                 for line in str((resp or {}).get("text", "")).splitlines():
                     cleaned = line.strip().lstrip("-*•0123456789. ")
@@ -1487,8 +1601,8 @@ class ContinuousAutonomousEngine:
                         res = speech_engine.teach_word(w_clean, m_clean, role="")
                         if res.get("accepted"):
                             known_roots.add(w_clean)
-                            learned.append({"word": w_clean, "meaning_id": m_clean, "source": "auto_gguf"})
-                            logger.info(f"[Auto-Teach] Grounded new word '{w_clean}' (auto_gguf): {m_clean}")
+                            learned.append({"word": w_clean, "meaning_id": m_clean, "source": gguf_origin})
+                            logger.info(f"[Auto-Teach] Grounded new word '{w_clean}' ({gguf_origin}): {m_clean}")
         return learned
 
     def _run_periodic_self_evolution_audit(self) -> dict[str, Any] | None:
