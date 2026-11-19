@@ -54,6 +54,15 @@ EVENT_CLASSES: dict[str, tuple[str, float]] = {
     # probes are episodic records of a verification act, not
     # ratifications — they never reuse a ratification class.
     "writepath_audit_probe": ("episodic", 0.90),
+    # EVO 0007 (preregistration PR #311, design #254 S4):
+    # distilled pattern records - the treatment material of
+    # the pattern-recall measurement. A pattern is knowledge
+    # distilled from ratified episodes (task_shape, approach,
+    # pitfalls, source_episode carried in content_extra),
+    # hence semantic; confidence below verdict_sealed because
+    # a distillation is one step removed from the ratified
+    # evidence it summarises.
+    "pattern_distilled": ("semantic", 0.90),
 }
 
 
