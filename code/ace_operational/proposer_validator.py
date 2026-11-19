@@ -9,6 +9,7 @@ Pure function, no I/O, no dispatch: validation never executes the
 proposed work (Stage 1 is simulation-first).
 """
 
+import math
 import re
 
 from .proposer_schema import (
@@ -27,7 +28,7 @@ _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
 def _is_number(x):
-    return isinstance(x, (int, float)) and not isinstance(x, bool)
+    return isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x)
 
 
 def _nonempty_str(x):
@@ -179,8 +180,12 @@ def validate_package(pkg):
                 "internal ratification, not owner approval" % term)
     if not isinstance(rat, dict) or rat.get("type") != RATIFICATION_TYPE:
         reasons.append("ratification.type must be %r" % RATIFICATION_TYPE)
-    elif sorted(rat.get("audience", [])) != sorted(RATIFICATION_AUDIENCE):
-        reasons.append(
-            "ratification.audience must be %s" % (list(RATIFICATION_AUDIENCE),))
+    else:
+        aud = rat.get("audience")
+        if (not isinstance(aud, (list, tuple))
+                or not all(isinstance(x, str) for x in aud)
+                or sorted(aud) != sorted(RATIFICATION_AUDIENCE)):
+            reasons.append(
+                "ratification.audience must be %s" % (list(RATIFICATION_AUDIENCE),))
 
     return (not reasons), reasons
