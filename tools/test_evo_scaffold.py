@@ -225,22 +225,18 @@ class TestEvoScaffold(unittest.TestCase):
                     if other != existing_name:
                         self.assertFalse((partial_dir / other).exists(), f"{other} should not be created")
 
-    @unittest.expectedFailure
     def test_expected_failure_rejects_out_of_range_evo_numbers_and_non_4digit_ids(self) -> None:
-        """Dugaan bug D3: `normalize_evo_id` memakai regex bebas `[A-Za-z0-9_-]{2,64}`
-        sehingga menerima nomor di luar rentang `0001..9999` (`EVO_0000`, `EVO_10000`)
-        dan format non-4-digit (`EVO_8`, `EVO_123`).
-
-        Sesuai aturan Gelombang D, logika `evo_scaffold.py` tidak diubah di PR ini.
+        """Bug D3 yang sudah diperbaiki (2026-11-20): `normalize_evo_id` dulu
+        memakai regex bebas sehingga menerima `EVO_0000`, `EVO_10000`,
+        `EVO_8`, dan `EVO_123`. Kini formatnya ketat EVO_NNNN, 0001..9999.
         """
         for invalid_evo in ("EVO_0000", "EVO_10000", "EVO_8", "EVO_123"):
             with self.assertRaises(evo_scaffold.EvoScaffoldError, msg=f"Harusnya ditolak: {invalid_evo}"):
                 evo_scaffold.normalize_evo_id(invalid_evo)
 
-    @unittest.expectedFailure
     def test_expected_failure_rejects_duplicate_arms(self) -> None:
-        """Dugaan bug D3: `scaffold_evo` tidak menolak daftar `--arms` duplikat
-        seperti `('SEEDED', 'SEEDED')`.
+        """Bug D3 yang sudah diperbaiki (2026-11-20): `scaffold_evo` kini
+        menolak daftar `--arms` duplikat seperti `('SEEDED', 'SEEDED')`.
         """
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(evo_scaffold.EvoScaffoldError):

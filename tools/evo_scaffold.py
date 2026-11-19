@@ -24,7 +24,7 @@ SCHEMA_VERSION = "ace.evo-scaffold.v1"
 STAGE_SCHEMA = "ace.stage-verify.v1"
 CENSUS_HOOK_SCHEMA = "ace.evo-census-hook.v1"
 
-_EVO_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{1,63}$")
+_EVO_ID_RE = re.compile(r"^EVO_(\d{4})$", re.IGNORECASE)
 
 
 class EvoScaffoldError(ValueError):
@@ -35,9 +35,11 @@ def normalize_evo_id(raw: str) -> str:
     if not isinstance(raw, str):
         raise EvoScaffoldError("evo_id harus berupa string.")
     cleaned = raw.strip()
-    if not _EVO_ID_RE.match(cleaned):
+    match = _EVO_ID_RE.match(cleaned)
+    if not match or not 1 <= int(match.group(1)) <= 9999:
         raise EvoScaffoldError(
-            f"evo_id tidak sah ({raw!r}); gunakan huruf/angka/'_'/'-' panjang 2..64."
+            f"evo_id tidak sah ({raw!r}); gunakan format EVO_NNNN "
+            "dengan nomor tepat 4 digit dalam rentang 0001..9999."
         )
     return cleaned
 
@@ -166,6 +168,8 @@ def scaffold_evo(
     clean_arms = [a.strip() for a in arms if isinstance(a, str) and a.strip()]
     if len(clean_arms) < 2:
         raise EvoScaffoldError("Minimal harus ada 2 lengan uji yang tidak kosong.")
+    if len(set(clean_arms)) != len(clean_arms):
+        raise EvoScaffoldError(f"Daftar lengan uji mengandung duplikat: {clean_arms}")
 
     resolved_date = date_str or _dt.date.today().isoformat()
     slug = norm_id.upper()
