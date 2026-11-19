@@ -131,5 +131,66 @@ class TestDailyDigest(unittest.TestCase):
             self.assertEqual(rc_err, 2)
 
 
+class TestOrganQuotaLedgerWiring(unittest.TestCase):
+    """Uji keterhubungan tools/organ_quota_ledger.py ke tools/daily_digest.py."""
+
+    def test_daily_digest_reconciles_quota_bridge_log_and_marks_module_wired(self) -> None:
+        from tools import organ_quota_ledger, wiring_audit
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            repo = tmp_path / "repo"
+            _init_sample_repo(repo)
+            bridge_log = tmp_path / "bridge_calls.jsonl"
+            bridge_log.write_text(
+                "\n".join(
+                    [
+                        json.dumps({"role": "front", "brain": "groq/openai/gpt-oss-120b", "result": "ok", "tokens": 50}),
+                        json.dumps({"role": "coder", "result": "over_budget"}),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            out_json = tmp_path / "digest_quota.json"
+            out_md = tmp_path / "digest_quota.md"
+
+            rc = daily_digest.main([
+                "--repo-dir", str(repo),
+                "--date", "2026-11-19",
+                "--quota-bridge-log", str(bridge_log),
+                "--out-json", str(out_json),
+                "--out-md", str(out_md),
+                "--format", "md",
+            ])
+            self.assertEqual(rc, 0)
+            payload = json.loads(out_json.read_text(encoding="utf-8"))
+            oq = payload["signals"]["organ_quota"]
+            self.assertEqual(oq["day"], "2026-11-19")
+            self.assertEqual(oq["applied_ok"], 1)
+            self.assertEqual(oq["over_budget_events"], 1)
+            self.assertIsInstance(oq["groq_remaining"], int)
+            self.assertIn("organ_quota", out_md.read_text(encoding="utf-8"))
+
+            ledger_json = tmp_path / "ledger.json"
+            ledger_json.write_text(
+                json.dumps(organ_quota_ledger.create_ledger(day="2026-11-19")),
+                encoding="utf-8",
+            )
+            rep_file = daily_digest.build_daily_digest(repo, digest_date="2026-11-19", quota_file=str(ledger_json))
+            self.assertEqual(rep_file["signals"]["organ_quota"]["day"], "2026-11-19")
+
+            rc_missing = daily_digest.main([
+                "--repo-dir", str(repo),
+                "--quota-bridge-log", str(tmp_path / "missing_calls.jsonl"),
+            ])
+            self.assertEqual(rc_missing, 2)
+
+        audit = wiring_audit.audit_wiring(Path(__file__).resolve().parents[1])
+        by_path = {m["path"]: m for m in audit["modules"]}
+        self.assertEqual(by_path["tools/organ_quota_ledger.py"]["status"], "WIRED")
+        self.assertIn("tools/daily_digest.py", by_path["tools/organ_quota_ledger.py"]["non_test_callers"])
+
+
 if __name__ == "__main__":
     unittest.main()
