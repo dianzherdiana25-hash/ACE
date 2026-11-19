@@ -41,11 +41,11 @@ def count_words(text: str) -> int:
 
 def split_manuscript(
     manuscript_path: Path,
-    output_dir: Path,
+    output_dir: Path | None,
     *,
     min_words: int = DEFAULT_MIN_WORDS,
 ) -> dict[str, Any]:
-    """Pecah `manuscript_path` menjadi berkas per-bab di `output_dir`."""
+    """Pecah naskah per bab atau periksa isinya tanpa menulis jika output_dir None."""
     if min_words < 0:
         raise KbmSplitError("Nilai --min-words tidak boleh negatif.")
     if not manuscript_path.is_file():
@@ -92,19 +92,20 @@ def split_manuscript(
             f"Tidak ditemukan penanda bab (mis. '# Bab 1 ...' atau '# Chapter 1 ...') pada '{manuscript_path}'."
         )
 
-    output_dir.mkdir(parents=True, exist_ok=True)
+    if output_dir is not None:
+        output_dir.mkdir(parents=True, exist_ok=True)
     chapters: list[dict[str, Any]] = []
     below_threshold_files: list[str] = []
 
     for idx, sec in enumerate(sections, start=1):
-        content = "\n".join(sec["body_lines"]).rstrip() + "\n"
-        # Hitung kata dari isi bab (tanpa baris heading penanda) maupun keseluruhan
+        # Judul pada baris penanda bukan bagian dari isi bab.
         body_only = "\n".join(sec["body_lines"][1:])
         word_count = count_words(body_only)
         is_short = word_count < min_words
         fname = f"bab_{sec['chapter_number']:02d}_{_slugify(sec['title'])}.md"
-        out_path = output_dir / fname
-        out_path.write_text(content, encoding="utf-8")
+        if output_dir is not None:
+            content = "\n".join(sec["body_lines"]).rstrip() + "\n"
+            (output_dir / fname).write_text(content, encoding="utf-8")
         if is_short:
             below_threshold_files.append(fname)
         chapters.append(
@@ -121,7 +122,7 @@ def split_manuscript(
     return {
         "schema": KBM_SPLIT_SCHEMA,
         "source": str(manuscript_path),
-        "output_dir": str(output_dir.resolve()),
+        "output_dir": str(output_dir.resolve()) if output_dir is not None else None,
         "min_words": min_words,
         "chapter_count": len(chapters),
         "below_threshold_count": len(below_threshold_files),

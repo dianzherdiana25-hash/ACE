@@ -7,6 +7,9 @@ per bab ke direktori paket tujuan melalui `tools.kbm_split.split_manuscript`
 `tools.kbm_pack_check.check_package` -> mencetak laporan JSON gabungan dan
 mengembalikan exit code gabungan (0 hanya bila pemecahan bersih dan paket
 lolos seluruh pemeriksaan).
+
+Mode `--pack` mewajibkan naskah utuh lolos aturan yang sama dengan
+`kbm_pack_check.py` sebelum bundel unggah dapat disiapkan.
 """
 from __future__ import annotations
 
@@ -32,6 +35,8 @@ from tools.cover_check import (
 from tools.kbm_pack_check import (
     DEFAULT_MIN_BYTES,
     KbmPackCheckError,
+    REQUIRED_CHAPTER_WORDS,
+    check_manuscript_chapters,
     check_package,
 )
 from tools.kbm_split import (
@@ -150,6 +155,7 @@ def run_pipeline(
     seal_bundle: bool = False,
     portable_bundle: Path | None = None,
     portable_force: bool = False,
+    pack: bool = False,
 ) -> dict[str, Any]:
     """Jalankan `kbm_split` diikuti `kbm_pack_check` dan opsional staging/sealing/bundel portabel."""
     if min_words < 0:
@@ -172,8 +178,10 @@ def run_pipeline(
     split_report = split_manuscript(
         manuscript_path,
         output_dir,
-        min_words=min_words,
+        min_words=max(min_words, REQUIRED_CHAPTER_WORDS) if pack else min_words,
     )
+    manuscript_report = check_manuscript_chapters(split_report["chapters"]) if pack else None
+    manuscript_valid = manuscript_report is None or manuscript_report["valid"]
 
     effective_cover = cover_name
     if cover_source is not None:
@@ -201,10 +209,12 @@ def run_pipeline(
 
     split_clean = split_report["below_threshold_count"] == 0
     pack_valid = bool(pack_report["valid"])
-    passed = split_clean and pack_valid and cover_valid
+    passed = manuscript_valid and split_clean and pack_valid and cover_valid
 
     if passed:
         failed_stage = None
+    elif not manuscript_valid:
+        failed_stage = "manuscript"
     elif not pack_valid:
         failed_stage = "check"
     elif not cover_valid:
@@ -265,6 +275,8 @@ def run_pipeline(
         "split": split_report,
         "pack_check": pack_report,
     }
+    if manuscript_report is not None:
+        result["manuscript_check"] = manuscript_report
     if cover_report is not None:
         result["cover_check"] = cover_report
     if bundle_result is not None:
@@ -281,6 +293,11 @@ def _build_parser() -> argparse.ArgumentParser:
         description="Pipeline terpadu pemecahan manuskrip KBM, pemeriksaan paket, dan staging bundel unggah."
     )
     parser.add_argument("manuscript", type=Path, help="Path berkas manuskrip Markdown.")
+    parser.add_argument(
+        "--pack",
+        action="store_true",
+        help="Wajibkan naskah lengkap dengan 30 bab berurutan dan minimal 1.000 kata isi per bab.",
+    )
     parser.add_argument(
         "--output-dir",
         type=Path,
@@ -364,6 +381,7 @@ def main(argv: list[str] | None = None) -> int:
             seal_bundle=args.seal_bundle,
             portable_bundle=args.portable_bundle,
             portable_force=args.portable_force,
+            pack=args.pack,
         )
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0 if report["passed"] else 1
