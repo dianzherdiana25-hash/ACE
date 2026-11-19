@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import datetime as _dt
 import json
+import sqlite3
 import subprocess
 import sys
 from pathlib import Path
@@ -34,6 +35,7 @@ from tools import (
     self_send_audit_view as _self_send_audit_view,
     stage_verify as _stage_verify,
     storage_debt as _storage_debt,
+    writeback_diagnose as _writeback_diagnose,
 )
 
 NON_AUTHORITATIVE_NOTICE = (
@@ -191,6 +193,7 @@ def _summarize_signals(
     repo_index_data: Optional[Dict[str, Any]] = None,
     ruleset_data: Optional[Dict[str, Any]] = None,
     audit_data: Optional[Dict[str, Any]] = None,
+    writeback_data: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     signals: Dict[str, Any] = {}
 
@@ -286,6 +289,21 @@ def _summarize_signals(
             "anomaly_count": aus.get("anomaly_count"),
         }
 
+    if writeback_data is not None:
+        cm = writeback_data.get("cognitive_memory") if isinstance(writeback_data.get("cognitive_memory"), dict) else {}
+        skills = writeback_data.get("skills") if isinstance(writeback_data.get("skills"), dict) else {}
+        frontier = writeback_data.get("frontier") if isinstance(writeback_data.get("frontier"), dict) else {}
+        gaps = writeback_data.get("top_open_gaps") if isinstance(writeback_data.get("top_open_gaps"), list) else []
+        signals["writeback"] = {
+            "available": cm.get("available"),
+            "chain_ok": cm.get("chain_ok"),
+            "events": cm.get("events"),
+            "anchored_evidence": cm.get("anchored_evidence"),
+            "skills_total": skills.get("total"),
+            "frontier_total": frontier.get("total"),
+            "open_gaps_count": len(gaps),
+        }
+
     return signals
 
 
@@ -316,6 +334,8 @@ def build_daily_digest(
     ruleset_repo: str = "dianzherdiana25-hash/ACE",
     ruleset_branch: str = "main",
     audit_files: Optional[Sequence[str]] = None,
+    writeback_file: Optional[str] = None,
+    writeback_workspace: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Susun payload digest harian (skema ace.daily-digest.v1)."""
     repo_root = _ensure_git_repo(Path(repo_dir))
@@ -398,6 +418,13 @@ def build_daily_digest(
         except _self_send_audit_view.AuditViewError as exc:
             raise DailyDigestError(f"Pembacaan audit self-send gagal: {exc}") from exc
 
+    writeback_data = _load_optional_json(writeback_file, "writeback", warnings)
+    if writeback_data is None and writeback_workspace:
+        try:
+            writeback_data = _writeback_diagnose.diagnose(Path(writeback_workspace))
+        except (OSError, ValueError, sqlite3.Error) as exc:
+            raise DailyDigestError(f"Diagnosis writeback gagal: {exc}") from exc
+
     signals = _summarize_signals(
         stage_data=stage_data,
         heartbeat_data=heartbeat_data,
@@ -408,6 +435,7 @@ def build_daily_digest(
         repo_index_data=repo_index_data,
         ruleset_data=ruleset_data,
         audit_data=audit_data,
+        writeback_data=writeback_data,
     )
 
     touched_files = sorted({f for c in commits for f in c["files"]})
@@ -525,6 +553,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--ruleset-repo", default="dianzherdiana25-hash/ACE", help="Nama owner/repo untuk --ruleset-snapshot")
     parser.add_argument("--ruleset-branch", default="main", help="Branch untuk --ruleset-snapshot")
     parser.add_argument("--audit-file", action="append", default=None, help="Berkas JSONL self_send_audit_view opsional")
+    parser.add_argument("--writeback-file", default=None, help="Berkas JSON writeback_diagnose opsional")
+    parser.add_argument("--writeback-workspace", default=None, help="Direktori workspace untuk diagnosis read-only writeback_diagnose")
     parser.add_argument("--out-json", default=None, help="Tulis output JSON ke berkas ini")
     parser.add_argument("--out-md", default=None, help="Tulis output Markdown ke berkas ini")
     parser.add_argument(
@@ -562,6 +592,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             ruleset_repo=args.ruleset_repo,
             ruleset_branch=args.ruleset_branch,
             audit_files=args.audit_file,
+            writeback_file=args.writeback_file,
+            writeback_workspace=args.writeback_workspace,
         )
     except DailyDigestError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
