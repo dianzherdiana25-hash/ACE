@@ -48,10 +48,20 @@ from typing import Callable
 # rows 1-65 stand; every row stamps its brain of origin, so
 # the consolidation reads the per-arm composition from the
 # rows themselves.
+# Amendment S11 (owner-directed 2026-11-18/19, handover/
+# AMANDEMEN_EVO_0007_VALIDATOR_GEMMA.md): the CODE VALIDATOR
+# also moves to gemma-4-31b-it, enabled by the flexible
+# validator parser (parse_validator_output, built by Codex
+# under the owner's prompt, screened by Ian: spec-exact,
+# fail-closed preserved, judge parsing untouched; live
+# validation set against Gemma itself 4/4 correct). The S10
+# blocker - Gemma never opens with RATIFY - is removed by
+# the parser, not by loosening the judge. Same boundary:
+# effective from sealed row 66, rows stamp their brains.
 ORGAN_ROLES = {
     "code": {
         "proposer": ("groq", "qwen/qwen3.8-27b"),
-        "validator": ("gemini", "gemini-3-flash-preview"),
+        "validator": ("gemini", "gemma-4-31b-it"),
     },
     "language": {
         "proposer": ("gemini", "gemma-4-31b-it"),
@@ -130,6 +140,19 @@ def parse_judge_output(text: str) -> dict:
         raise ValueError("judge reasons missing")
     return {"accept": accept, "score": float(score),
             "reasons": obj["reasons"]}
+
+
+def parse_validator_output(text: str) -> bool:
+    """Honor a leading RATIFY, otherwise use the last verdict in the second half."""
+    import re
+
+    if text.strip().upper().startswith("RATIFY"):
+        return True
+    ratified = False
+    for match in re.finditer(r"\b(?:(RATIFY)|REJECT)\b", text, re.IGNORECASE):
+        if 2 * match.start() >= len(text):
+            ratified = match.group(1) is not None
+    return ratified
 
 
 JUDGE_TEMPLATE = (
@@ -353,7 +376,7 @@ def run_episode(arm: str, episode: dict, patterns: list[dict],
         "Validate this proposal for the task. Reply RATIFY or "
         f"REJECT with one line of reason.\n\nTask: "
         f"{episode['prompt']}\n\nProposal: {proposal}", 256)
-    ratified = validation.strip().upper().startswith("RATIFY")
+    ratified = parse_validator_output(validation)
     row = {"episode_id": episode["id"], "arm": arm,
            "task_kind": episode["task_kind"],
            "context_ids": context_ids, "delivered": delivered,

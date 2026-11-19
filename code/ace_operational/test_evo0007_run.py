@@ -10,7 +10,19 @@ import unittest
 
 from ace_operational.evo0007_run import (
     DEFAULT_BAND, JUDGE_ORGAN, calibrate, compute_verdict,
-    first_json_object, parse_judge_output, run_episode)
+    first_json_object, parse_judge_output, parse_validator_output, run_episode)
+
+
+# The supplied transcripts omit the preceding analysis. Use a fixed lead-in
+# for that missing portion and preserve the verdict punctuation in each excerpt.
+VALIDATOR_EXCERPT_A = (
+    "The validator checks the proposal against each requirement. "
+    "The proposal perfectly matches the task requirements.RATIFY\n"
+    "The proposal correctly implements the required function logic and signature.")
+VALIDATOR_EXCERPT_B = (
+    "The validator checks the proposal against each requirement. "
+    "Selection: RATIFY.\n    *   Reason: the inputs are handled as requested."
+    "RATIFY: The function correctly implements the addition of two arguments as requested.")
 
 
 def judge_returning(score_map):
@@ -70,6 +82,49 @@ class JudgeParsingTests(unittest.TestCase):
                     'no json at all'):
             with self.assertRaises(ValueError, msg=bad):
                 parse_judge_output(bad)
+
+
+class ValidatorParsingTests(unittest.TestCase):
+    def test_clean_ratify(self):
+        self.assertTrue(parse_validator_output("RATIFY"))
+
+    def test_clean_reject(self):
+        self.assertFalse(parse_validator_output("REJECT"))
+
+    def test_gemma_verdict_after_requirements(self):
+        self.assertTrue(parse_validator_output(VALIDATOR_EXCERPT_A))
+
+    def test_gemma_verdict_after_requested(self):
+        self.assertTrue(parse_validator_output(VALIDATOR_EXCERPT_B))
+
+    def test_last_reject_overrides_quoted_instructions(self):
+        text = ("I compared the proposal with all the explicit requirements. "
+                'The prompt says "Reply RATIFY or REJECT". RATIFY was considered. '
+                "Final verdict: REJECT")
+        self.assertFalse(parse_validator_output(text))
+
+    def test_no_verdict_fails_closed(self):
+        self.assertFalse(parse_validator_output("The code appears to satisfy the request."))
+
+    def test_empty_fails_closed(self):
+        self.assertFalse(parse_validator_output(""))
+
+    def test_first_half_only_fails_closed(self):
+        self.assertFalse(parse_validator_output(
+            "Mention RATIFY before a long analysis that contains no final decision."))
+
+    def test_leading_ratify_preserves_legacy_precedence_and_prefix(self):
+        self.assertTrue(parse_validator_output(" \nratifying this proposal. REJECT"))
+
+    def test_fallback_requires_whole_words(self):
+        for token in ("UNRATIFY", "RATIFYING", "RATIFY_2"):
+            with self.subTest(token=token):
+                self.assertFalse(parse_validator_output(f"Assessment complete: {token}"))
+
+    def test_midpoint_is_inclusive_only_when_match_starts_there(self):
+        self.assertTrue(parse_validator_output("Check rAtIfY"))
+        self.assertFalse(parse_validator_output("Check rAtIfY."))
+        self.assertTrue(parse_validator_output(" Check rAtIfY."))
 
 
 class CalibrationTests(unittest.TestCase):
@@ -169,6 +224,28 @@ class EpisodeAndVerdictTests(unittest.TestCase):
         row = run_episode("KOSONG", self.EP, [], rejecting)
         self.assertFalse(row["accepted"])
         self.assertEqual(row["judge_skipped"], "validator_rejected")
+
+    def test_analysis_first_validation_routes_to_judge_only_when_ratified(self):
+        for verdict, reached_judge in ((VALIDATOR_EXCERPT_A, True),
+                                       (VALIDATOR_EXCERPT_A + "\nREJECT", False)):
+            with self.subTest(reached_judge=reached_judge):
+                replies = iter(("a proposal", verdict,
+                                '{"accept": true, "score": 70, "reasons": "ok"}'))
+                calls = []
+
+                def transport(provider, model, prompt, max_tokens):
+                    calls.append(prompt)
+                    return next(replies)
+
+                row = run_episode("KOSONG", self.EP, [], transport)
+                self.assertIs(row["validator_ratified"], reached_judge)
+                if reached_judge:
+                    self.assertEqual(len(calls), 3)
+                    self.assertTrue(calls[-1].startswith("Judge this episode."))
+                    self.assertEqual(row["score"], 70)
+                else:
+                    self.assertEqual(len(calls), 2)
+                    self.assertEqual(row["judge_skipped"], "validator_rejected")
 
     def _rows(self, arm, delivered, accepted, n=4):
         return [{"episode_id": f"e{i}", "arm": arm,
