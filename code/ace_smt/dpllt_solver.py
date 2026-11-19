@@ -721,11 +721,39 @@ class FormalProgramVerifier:
 
         raise ValueError(f"Unsupported expression: {expr}")
 
+    def _encode_equality(
+        self,
+        diff_coeffs: Dict[str, int],
+        diff_const: int,
+        theory_atoms: Dict[str, LinearConstraint],
+        clauses: List[Clause],
+    ) -> str:
+        """Tseitin-encode left == right as a fresh boolean b.
+
+        b <=> (left - right <= diff_const) /\\ (left - right >= diff_const).
+        The three definition clauses are unguarded: b's meaning is
+        context-free, so callers may use Literal(b) positively, negated,
+        or as a branch guard. Ne is then simply Literal(b, False).
+        """
+        atom_le = self._fresh_atom_id()
+        theory_atoms[atom_le] = LinearConstraint.from_le(
+            diff_coeffs, diff_const, atom_le)
+        atom_ge = self._fresh_atom_id()
+        theory_atoms[atom_ge] = LinearConstraint.from_ge(
+            diff_coeffs, diff_const, atom_ge)
+        b = self._fresh_bool_var()
+        clauses.append([Literal(b, False), Literal(atom_le, True)])
+        clauses.append([Literal(b, False), Literal(atom_ge, True)])
+        clauses.append([Literal(atom_le, False), Literal(atom_ge, False),
+                        Literal(b, True)])
+        return b
+
     def _encode_condition(
         self,
         cond: Any,
         env: Dict[str, str],
         theory_atoms: Dict[str, LinearConstraint],
+        clauses: List[Clause],
     ) -> Literal:
         """Translates condition into a boolean literal, registering theory atoms if needed."""
         if isinstance(cond, bool):
@@ -756,13 +784,18 @@ class FormalProgramVerifier:
                 theory_atoms[atom_id] = LinearConstraint.from_gt(diff_coeffs, diff_const, atom_id)
                 return Literal(atom_id, True)
             elif isinstance(cond, Eq):
-                # Eq is left <= right /\ left >= right
-                atom1 = self._fresh_atom_id()
-                theory_atoms[atom1] = LinearConstraint.from_le(diff_coeffs, diff_const, atom1)
-                return Literal(atom1, True)
+                # Eq is left <= right /\ left >= right (Tseitin boolean).
+                b = self._encode_equality(
+                    diff_coeffs, diff_const, theory_atoms, clauses)
+                return Literal(b, True)
+            elif isinstance(cond, Ne):
+                # Ne is the negation of Eq: ~(left <= right /\ left >= right).
+                b = self._encode_equality(
+                    diff_coeffs, diff_const, theory_atoms, clauses)
+                return Literal(b, False)
 
         if isinstance(cond, NotExpr):
-            lit = self._encode_condition(cond.expr, env, theory_atoms)
+            lit = self._encode_condition(cond.expr, env, theory_atoms, clauses)
             return lit.negate()
 
         raise ValueError(f"Unsupported condition: {cond}")
@@ -787,7 +820,7 @@ class FormalProgramVerifier:
 
         # 1. Encode Precondition
         if pre_cond is not None and pre_cond is not True:
-            pre_lit = self._encode_condition(pre_cond, env, theory_atoms)
+            pre_lit = self._encode_condition(pre_cond, env, theory_atoms, clauses)
             clauses.append([pre_lit])
 
         # 2. Encode Program AST
@@ -795,7 +828,7 @@ class FormalProgramVerifier:
 
         # 3. Encode Negation of Postcondition
         if post_cond is not None and post_cond is not True:
-            post_lit = self._encode_condition(post_cond, final_env, theory_atoms)
+            post_lit = self._encode_condition(post_cond, final_env, theory_atoms, clauses)
             clauses.append([post_lit.negate()])
 
         # 4. Invoke DPLL(T) Solver
@@ -870,7 +903,7 @@ class FormalProgramVerifier:
 
         if isinstance(stmt, IfThenElse):
             # Boolean selector for branch condition
-            cond_lit = self._encode_condition(stmt.cond, env, theory_atoms)
+            cond_lit = self._encode_condition(stmt.cond, env, theory_atoms, clauses)
 
             then_clauses: List[Clause] = []
             else_clauses: List[Clause] = []
@@ -931,12 +964,12 @@ class FormalProgramVerifier:
             return self._encode_ast(Seq(unrolled_stmts), env, clauses, theory_atoms)
 
         if isinstance(stmt, Assume):
-            cond_lit = self._encode_condition(stmt.cond, env, theory_atoms)
+            cond_lit = self._encode_condition(stmt.cond, env, theory_atoms, clauses)
             clauses.append([cond_lit])
             return dict(env)
 
         if isinstance(stmt, Assert):
-            cond_lit = self._encode_condition(stmt.cond, env, theory_atoms)
+            cond_lit = self._encode_condition(stmt.cond, env, theory_atoms, clauses)
             clauses.append([cond_lit])
             return dict(env)
 

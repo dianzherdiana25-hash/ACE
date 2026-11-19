@@ -247,10 +247,10 @@ class TestDPLLTSolverEdgeCases(unittest.TestCase):
         with self.assertRaises(ValueError):
             verify_program_satisfies_spec(prog_nonlin, pre_cond=None, post_cond=Ge(Var("y"), Const(0)))
 
-    @unittest.expectedFailure
     def test_10_bug_verifier_eq_missing_lower_bound(self):
         # BUG (dpllt_solver.py:758-762): Eq encodes ONLY left <= right, omitting left >= right.
         # x == 5 => y == x => y >= 5 is valid, yet solver finds counterexample x = 0.
+        # DIPERBAIKI (gelombang robustness 2026-11-20): Eq/Ne dienkode Tseitin (b <=> le /\ ge).
         prog = Assign("y", Var("x"))
         res = verify_program_satisfies_spec(
             prog,
@@ -259,10 +259,10 @@ class TestDPLLTSolverEdgeCases(unittest.TestCase):
         )
         self.assertTrue(res.is_valid)
 
-    @unittest.expectedFailure
     def test_11_bug_verifier_ne_condition_crashes_unsupported(self):
         # BUG (dpllt_solver.py:735-768): Ne is listed in tuple check at L735 but unhandled,
         # raising ValueError instead of encoding x != 0.
+        # DIPERBAIKI (gelombang robustness 2026-11-20): Ne = negasi literal Tseitin Eq.
         prog = Assign("y", Var("x"))
         res = verify_program_satisfies_spec(
             prog,
