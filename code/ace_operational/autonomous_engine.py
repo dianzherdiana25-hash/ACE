@@ -643,6 +643,9 @@ class ContinuousAutonomousEngine:
         self.cycle_count = self._load_int_meta("autonomous_cycle_count", 0)
         self._lang_cursor = self._load_int_meta("autonomous_lang_cursor", 0)
         self._tech_cursor = self._load_int_meta("autonomous_tech_cursor", 0)
+        self._last_cycle_duration_seconds: float | None = None
+        self._slowest_step: dict[str, str | float | None] = {"name": None, "seconds": None}
+        self._bridge_transport_failures = 0
         self.status_file = self.workspace / "autonomous_engine.status.json"
         self.corpus_file = self.workspace / "projects" / "bahasa" / "dialog_corpus.jsonl"
         self.corpus_file.parent.mkdir(parents=True, exist_ok=True)
@@ -672,6 +675,9 @@ class ContinuousAutonomousEngine:
             "pid": os.getpid(),
             "updated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "details": details or {},
+            "last_cycle_duration_seconds": self._last_cycle_duration_seconds,
+            "slowest_step": self._slowest_step,
+            "bridge_transport_failures": self._bridge_transport_failures,
         }
         try:
             tmp = self.status_file.with_suffix(".tmp")
@@ -980,6 +986,7 @@ class ContinuousAutonomousEngine:
                     organ, messages, max_tokens=max_tokens,
                     temperature=temperature, timeout=180.0)
             except brain_endpoints.BrainUnavailable as exc:
+                self._bridge_transport_failures += 1
                 logger.debug(
                     f"Bridge generation unavailable ({organ}): {exc}")
                 return None
@@ -1735,6 +1742,8 @@ class ContinuousAutonomousEngine:
 
     def execute_cycle(self) -> dict[str, Any]:
         """Run a single autonomous mixed cycle (agenda, technical, language, self-audit)."""
+        cycle_started_at = time.monotonic()
+        step_durations: list[tuple[str, float]] = []
         self.cycle_count += 1
         self._persist_cursors()
         logger.info(f"--- Starting Autonomous Cycle #{self.cycle_count} ---")
@@ -1746,17 +1755,21 @@ class ContinuousAutonomousEngine:
 
         # Step 2: Advance queued agenda items
         self.update_status_file("advancing_agenda")
+        step_started_at = time.monotonic()
         advanced_count = self.check_and_advance_agenda()
+        step_durations.append(("advancing_agenda", time.monotonic() - step_started_at))
 
         # Step 3: Interleaved Technical + Indonesian Language Learning
         mixed_res: dict[str, Any] = {}
         vocab_learned: list[dict[str, Any]] = []
         if advanced_count == 0:
             self.update_status_file("mixed_autonomous_learning")
+            step_started_at = time.monotonic()
             mixed_res = self.execute_continuous_mixed_learning() or {}
             track = str(mixed_res.get("track") or "")
             if track.startswith("language") and self._lang_cursor % 2 == 1:
                 vocab_learned = self._explore_vocabulary_batch()
+            step_durations.append(("mixed_autonomous_learning", time.monotonic() - step_started_at))
         heard_learned = self._auto_teach_heard_words()
 
         # Step 3b: Ratification loop (EVO 0005) — env-gated so
@@ -1765,7 +1778,9 @@ class ContinuousAutonomousEngine:
         ratification_res: dict[str, Any] | None = None
         if os.environ.get("ACE_RATIFICATION_LOOP") == "1":
             self.update_status_file("ratification_loop")
+            step_started_at = time.monotonic()
             ratification_res = self.execute_ratification_step()
+            step_durations.append(("ratification_loop", time.monotonic() - step_started_at))
 
         director_res = None
         if os.environ.get("ACE_DIRECTOR_LOOP") == "1":
@@ -1779,7 +1794,9 @@ class ContinuousAutonomousEngine:
         audit_summary: dict[str, Any] | None = None
         if self.cycle_count % 10 == 0:
             self.update_status_file("self_evolution_audit")
+            step_started_at = time.monotonic()
             audit_summary = self._run_periodic_self_evolution_audit()
+            step_durations.append(("self_evolution_audit", time.monotonic() - step_started_at))
 
         self._persist_cursors()
 
@@ -1796,6 +1813,9 @@ class ContinuousAutonomousEngine:
         }
         if director_res is not None:
             summary["director"] = director_res
+        slowest_name, slowest_seconds = max(step_durations, key=lambda step: step[1])
+        self._last_cycle_duration_seconds = time.monotonic() - cycle_started_at
+        self._slowest_step = {"name": slowest_name, "seconds": slowest_seconds}
         self.update_status_file("idle_waiting_next_cycle", {
             "last_cycle_completed": self.cycle_count,
             "track": summary["track"],
