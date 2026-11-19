@@ -1687,6 +1687,49 @@ class ContinuousAutonomousEngine:
                 "ratified": bool(result.get("ratified")),
                 "writeback_id": result.get("writeback_id")}
 
+    def execute_director_step(self) -> dict[str, Any]:
+        """Masukkan satu usulan berprovenance ke agenda untuk ditelaah."""
+        from ace_operational import brain_endpoints, director_loop, director_strong
+
+        if not brain_endpoints.bridge_mode():
+            raise brain_endpoints.BrainUnavailable("Jalur director memerlukan brain bridge.")
+        observation = director_loop.build_observation(
+            gates={},
+            gaps=[{"id": gap["gap_id"]} for gap in self.store.list_gaps(status="OPEN")[:20]],
+            results=[
+                {"id": item["deliverable_id"], "status": item["status"]}
+                for item in self.store.list_deliverables()
+            ],
+        )
+        origin = ""
+
+        def infer(prompt: str) -> str:
+            nonlocal origin
+            reply = brain_endpoints.chat_structured(
+                "front", [{"role": "user", "content": prompt}],
+                max_tokens=768, check_health=False,
+            )
+            provider, _, model = reply.brain_of_origin.partition("/")
+            origin = director_strong.brain_of_origin(provider, model)
+            return reply.content
+
+        proposal = director_loop.request_direction(observation, infer)
+        if not origin:
+            raise director_loop.ProposalRejected("Arahan tidak memiliki asal organ.")
+        task = self.store.create_task(
+            kind="director_proposal",
+            title_id=proposal["title"],
+            user_request=proposal["rationale"],
+            normalized_goal=proposal["title"],
+            model_backend=origin,
+            priority=proposal["score"],
+            checkpoint={"stage": "director_review", "cycle": self.cycle_count,
+                        "brain_of_origin": origin, "proposal": proposal},
+            hold_for_review=True,
+        )
+        return {"status": "proposed", "task_id": task["task_id"],
+                "title": proposal["title"], "brain_of_origin": origin}
+
     def execute_cycle(self) -> dict[str, Any]:
         """Run a single autonomous mixed cycle (agenda, technical, language, self-audit)."""
         self.cycle_count += 1
@@ -1721,6 +1764,14 @@ class ContinuousAutonomousEngine:
             self.update_status_file("ratification_loop")
             ratification_res = self.execute_ratification_step()
 
+        director_res = None
+        if os.environ.get("ACE_DIRECTOR_LOOP") == "1":
+            self.update_status_file("director_loop")
+            try:
+                director_res = self.execute_director_step()
+            except Exception as exc:
+                director_res = {"status": "error", "error": type(exc).__name__}
+
         # Step 4: Periodic AST self-audit
         audit_summary: dict[str, Any] | None = None
         if self.cycle_count % 10 == 0:
@@ -1740,6 +1791,8 @@ class ContinuousAutonomousEngine:
             "ratification": ratification_res,
             "self_audit": audit_summary,
         }
+        if director_res is not None:
+            summary["director"] = director_res
         self.update_status_file("idle_waiting_next_cycle", {
             "last_cycle_completed": self.cycle_count,
             "track": summary["track"],
