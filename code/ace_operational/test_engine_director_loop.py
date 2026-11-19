@@ -103,6 +103,42 @@ class EngineDirectorTests(unittest.TestCase):
         self.assertEqual(summary["director"]["status"], "error")
         self.assertEqual(self.store.list_tasks(), before)
 
+    def _reply_for(self, fact):
+        self.set_reply(json.dumps({"proposals": [{
+            "title": "Periksa bukti fixture",
+            "category": "measurement",
+            "rationale": "Tinjau bukti yang sudah tercatat.",
+            "value": 4, "effort": 2, "based_on": [fact],
+        }]}))
+
+    def test_second_cycle_same_fact_is_duplicate_skipped(self):
+        fact = self.store.list_deliverables()[0]["deliverable_id"]
+        self._reply_for(fact)
+        first = self.run_cycle("1")
+        self.assertEqual(first["director"]["status"], "proposed")
+        second = self.run_cycle("1")
+        self.assertEqual(second["director"]["status"], "duplicate_skipped")
+        self.assertEqual(second["director"]["task_id"],
+                         first["director"]["task_id"])
+        proposals = [t for t in self.store.list_tasks()
+                     if t["kind"] == "director_proposal"]
+        self.assertEqual(len(proposals), 1)
+
+    def test_different_fact_still_proposes(self):
+        fact = self.store.list_deliverables()[0]["deliverable_id"]
+        self._reply_for(fact)
+        self.run_cycle("1")
+        gap, _ = self.store.record_gap(
+            source_task_id="fixture", error_type="MissingTool",
+            missing_skill_or_tool="fixture_tool",
+            description_id="celah fixture kedua")
+        self._reply_for(gap["gap_id"])
+        summary = self.run_cycle("1")
+        self.assertEqual(summary["director"]["status"], "proposed")
+        proposals = [t for t in self.store.list_tasks()
+                     if t["kind"] == "director_proposal"]
+        self.assertEqual(len(proposals), 2)
+
 
 if __name__ == "__main__":
     unittest.main()

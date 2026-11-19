@@ -1726,6 +1726,24 @@ class ContinuousAutonomousEngine:
         proposal = director_loop.request_direction(observation, infer)
         if not origin:
             raise director_loop.ProposalRejected("Arahan tidak memiliki asal organ.")
+        # Dedupe (gelombang robustness 2026-11-20): director mengusulkan
+        # tiap siklus dari observasi yang sama, jadi tanpa pemeriksa ini
+        # agenda menumpuk duplikat WAITING untuk gap yang sama (38 tugas
+        # dalam ~80 menit pada malam aktivasi). Satu proposal terbuka per
+        # fakta based_on sudah cukup untuk ditelaah.
+        based_on = {str(b) for b in proposal.get("based_on") or []}
+        if based_on:
+            for existing in self.store.list_tasks(limit=200):
+                if existing.get("kind") != "director_proposal":
+                    continue
+                if existing.get("status") != "WAITING_FOR_DEPENDENCY":
+                    continue
+                other = (existing.get("checkpoint") or {}).get("proposal") or {}
+                if based_on & {str(b) for b in other.get("based_on") or []}:
+                    return {"status": "duplicate_skipped",
+                            "task_id": existing["task_id"],
+                            "title": proposal["title"],
+                            "brain_of_origin": origin}
         task = self.store.create_task(
             kind="director_proposal",
             title_id=proposal["title"],
