@@ -18,6 +18,9 @@ session:
   ``qwen/qwen3.8-27b``)
 - ``custom.gemini`` — helper ``custom.gemini/bin/gemini_call.py``
   (50 models verified, incl. ``gemini-2.5-pro``)
+- ``custom.gonka`` — helper ``custom.gonka/bin/gonka_call.py``
+  (added 2026-11-18 after the Stage-1 gate; third-party broker,
+  second-opinion role — see ``GONKA_NOTES`` in this module)
 
 Measured smoke (hub, 2026-11-18): a judge-equivalent generation via
 ``openai/gpt-oss-120b`` produced 309 completion tokens in 0.64 s
@@ -71,7 +74,52 @@ DIRECTOR_ORGANS = (
             "brain-of-origin gemini/<model>"
         ),
     },
+    {
+        "brain_id": "director-strong-gonka",
+        "kind": "external-director",
+        "descriptor": (
+            "gonka — Secure Vault connector custom.gonka, hub helper "
+            "gonka_call.py; third-party broker route, SECOND-OPINION "
+            "organ (real balance 100,000 raw tokens/month, not the "
+            "advertised 1M value-equivalent); NO private material "
+            "through this route; brain-of-origin gonka/<model>"
+        ),
+    },
 )
+
+#: Standing notes for the Gonka broker route (hub-verified 2026-11-18).
+#: (1) QUIRK: DeepSeek-V4-Flash through this route emits its JSON
+#: object TWICE, concatenated — consumers must parse only the first
+#: complete object. (2) BALANCE: the real dashboard balance is
+#: 100,000 raw tokens/month (≈24 full director cycles or ≈440 judge
+#: calls); the "1M tokens" on the vendor page is a value-equivalent
+#: framing against its most expensive model, not a balance. Treat
+#: Gonka as a second-opinion organ, never an unbounded pool.
+#: (3) PRIVACY: third-party broker — no private material on this route.
+GONKA_NOTES = (
+    "quirk: DeepSeek-V4-Flash emits its JSON object twice, "
+    "concatenated; parse only the first complete object",
+    "balance: 100,000 raw tokens/month real (≈24 director cycles "
+    "or ≈440 judge calls); advertised 1M is value-equivalent framing",
+    "role: second-opinion organ, not an unbounded pool",
+    "privacy: third-party broker route; no private material",
+)
+
+#: Hub-measured Gonka smoke (2026-11-18): judge call on
+#: DeepSeek-V4-Flash returned valid JSON (score 85).
+GONKA_SMOKE_RECORD = {
+    "brain_of_origin": "gonka/deepseek-ai/DeepSeek-V4-Flash-0731",
+    "total_tokens": 226,
+    "wall_s": 2.68,
+    "result": "valid JSON, score 85 (emitted twice — see GONKA_NOTES)",
+    "models_verified": [
+        "deepseek-ai/DeepSeek-V4-Flash-0731",
+        "MiniMaxAI/MiniMax-M2.7",
+        "zai-org/GLM-5.3-Flash",
+        "BAAI/bge-m3",
+    ],
+    "measured_by": "hub (ila) via custom.gonka, 2026-11-18",
+}
 
 #: Hub-measured smoke for the Stage-1 gate (2026-11-18).
 SMOKE_RECORD = {
@@ -85,15 +133,15 @@ SMOKE_RECORD = {
     "measured_by": "hub (ila), 2026-11-18",
 }
 
-_PROVIDERS = ("groq", "gemini")
+_PROVIDERS = ("groq", "gemini", "gonka")
 
 
 def brain_of_origin(provider: str, model: str) -> str:
     """The recorded origin of one director call: ``<provider>/<model>``.
 
-    Only the two registered vault-connector providers are valid
-    origins for director-strong work; anything else is refused so a
-    product can never be misattributed.
+    Only the registered vault-connector providers are valid origins
+    for director-strong work; anything else is refused so a product
+    can never be misattributed.
     """
     if provider not in _PROVIDERS:
         raise ValueError(f"unregistered director provider {provider!r}")
@@ -103,7 +151,7 @@ def brain_of_origin(provider: str, model: str) -> str:
 
 
 def register_director_strong(registry: BrainRegistry) -> list[dict]:
-    """Register both director-strong organs in ``registry``.
+    """Register the director-strong organs in ``registry``.
 
     Idempotent at the record level: re-registering replaces the
     record (the registry's append-only event log keeps every

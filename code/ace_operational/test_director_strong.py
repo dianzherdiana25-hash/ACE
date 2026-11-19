@@ -8,6 +8,8 @@ import unittest
 from ace_operational.brain_registry import BrainRegistry
 from ace_operational.director_strong import (
     DIRECTOR_CAPABILITIES,
+    GONKA_NOTES,
+    GONKA_SMOKE_RECORD,
     SMOKE_RECORD,
     brain_of_origin,
     register_director_strong,
@@ -24,7 +26,8 @@ class DirectorStrongTests(unittest.TestCase):
     def test_both_organs_registered_active_director_only(self):
         records = register_director_strong(self.registry)
         self.assertEqual([r["brain_id"] for r in records],
-                         ["director-strong-groq", "director-strong-gemini"])
+                         ["director-strong-groq", "director-strong-gemini",
+                          "director-strong-gonka"])
         for record in records:
             self.assertEqual(record["status"], "active")
             self.assertEqual(record["kind"], "external-director")
@@ -40,12 +43,12 @@ class DirectorStrongTests(unittest.TestCase):
         self.assertIsNotNone(reloaded.get("director-strong-groq"))
         self.assertIsNotNone(reloaded.get("director-strong-gemini"))
         kinds = [e["kind"] for e in reloaded.events()]
-        self.assertEqual(kinds, ["registered", "registered"])
+        self.assertEqual(kinds, ["registered", "registered", "registered"])
 
     def test_reregistration_keeps_two_brains(self):
         register_director_strong(self.registry)
         register_director_strong(self.registry)
-        self.assertEqual(len(self.registry.brains()), 2)
+        self.assertEqual(len(self.registry.brains()), 3)
 
     def test_dismissal_is_fail_closed_and_local_unaffected(self):
         self.registry.register("front-local", kind="local-gguf",
@@ -70,6 +73,24 @@ class DirectorStrongTests(unittest.TestCase):
             brain_of_origin("local", "Qwen3.5-4B")
         with self.assertRaises(ValueError):
             brain_of_origin("groq", "  ")
+
+    def test_gonka_origin_and_notes(self):
+        self.assertEqual(
+            brain_of_origin("gonka", "deepseek-ai/DeepSeek-V4-Flash-0731"),
+            "gonka/deepseek-ai/DeepSeek-V4-Flash-0731")
+        self.assertEqual(GONKA_SMOKE_RECORD["brain_of_origin"],
+                         "gonka/deepseek-ai/DeepSeek-V4-Flash-0731")
+        joined = " ".join(GONKA_NOTES)
+        # the double-JSON quirk and the real balance must stay written
+        self.assertIn("twice", joined)
+        self.assertIn("100,000", joined)
+        self.assertIn("no private material", joined)
+        record = self.registry.get("director-strong-gonka")
+        self.assertIsNone(record)  # nothing registered yet
+        register_director_strong(self.registry)
+        record = self.registry.get("director-strong-gonka")
+        self.assertIn("SECOND-OPINION", record["descriptor"])
+        self.assertIn("NO private material", record["descriptor"])
 
 
 if __name__ == "__main__":
