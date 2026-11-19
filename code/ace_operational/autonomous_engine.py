@@ -203,7 +203,11 @@ LANGUAGE_CURRICULUM: list[dict[str, Any]] = [
             "            w = w[len(p):]\n"
             "            break\n"
             "    for s in SUFIKS:\n"
-            "        if w.endswith(s) and len(w) > len(s) + 2:\n"
+            "        # Over-stemming guard: the remaining stem must keep\n"
+            "        # at least 4 characters, so a root that merely ends\n"
+            "        # in a suffix-like letter ('lari' -> 'lar') is not\n"
+            "        # truncated into a non-root.\n"
+            "        if w.endswith(s) and len(w) - len(s) >= 4:\n"
             "            suf_found = s\n"
             "            w = w[:-len(s)]\n"
             "            break\n"
@@ -829,8 +833,11 @@ class ContinuousAutonomousEngine:
                     "receipt_id": receipt["receipt_id"],
                 },
             )
+            writeback_id = self._writeback_skill_verified(
+                item=item, receipt=receipt, learning_kind=learning_kind)
             logger.info(f"Verified skill '{skill_name}' with receipt {receipt['receipt_id']}")
-            return {"skill": skill_name, "receipt": receipt["receipt_id"], "passed": True}
+            return {"skill": skill_name, "receipt": receipt["receipt_id"],
+                    "passed": True, "writeback_id": writeback_id}
 
         err_text = (proc.stderr or proc.stdout or "verification failed")[:220]
         self.store.update_task(
@@ -856,6 +863,58 @@ class ContinuousAutonomousEngine:
             technical_detail={"skill_name": skill_name, "learning_kind": learning_kind, "error": err_text},
         )
         return {"skill": skill_name, "receipt": receipt["receipt_id"], "passed": False}
+
+    def _writeback_skill_verified(
+        self,
+        *,
+        item: dict[str, Any],
+        receipt: dict[str, Any],
+        learning_kind: str,
+    ) -> str | None:
+        """Write a passed curriculum verification into cognitive memory.
+
+        The write path (ace_operational.memory_writeback) was wired
+        at ratification points and at the skills expander's receipt
+        issuance (EVO 0009 milestone 5), but the autonomous engine's
+        own verified curriculum passes never reached the store: the
+        live store held only the two operator seed records while
+        the engine accumulated verified receipts (diagnosis
+        2026-11-19). A passed item here carries external
+        verification — the receipt records the executed module,
+        its exit code, the checked stdout and `verified_by` — so
+        it qualifies as a `skill_verified` event with the receipt
+        itself as the anchored evidence. The helper is fail-soft
+        (returns None on failure); a memory problem never blocks
+        or falsifies the cycle's own verdict.
+        """
+        try:
+            from ace_operational.memory_writeback import (
+                record_verified_event,
+            )
+
+            evidence = json.dumps(
+                receipt, sort_keys=True, ensure_ascii=False,
+            ).encode("utf-8")
+            return record_verified_event(
+                self.workspace / "cognitive_memory",
+                event="skill_verified",
+                summary=(
+                    f"skill_verified: {item['skill_name']} "
+                    f"({item['title']}) receipt {receipt['receipt_id']}"
+                ),
+                evidence_bytes=evidence,
+                content_extra={
+                    "skill_name": item["skill_name"],
+                    "title_id": item["title"],
+                    "learning_kind": learning_kind,
+                    "receipt_id": receipt["receipt_id"],
+                },
+            )
+        except Exception:
+            logger.warning(
+                "skill_verified write-back failed for %s",
+                item.get("skill_name"), exc_info=True)
+            return None
 
     def execute_continuous_language_learning(self) -> dict[str, Any] | None:
         """Continuously learn Indonesian language modules, grammar, and dialogue."""
