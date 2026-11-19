@@ -6,7 +6,7 @@
 
 - Schema: `ace.repo-cartography.v1`
 - Total subsistem: **68** (termasuk `4` subsistem zona terlindung/beku)
-- Total berkas terpetakan: **2000**
+- Total berkas terpetakan: **2002**
 - Modul Python produksi: **535** | Modul tes: **298**
 - Tepi dependensi lintas subsistem (produksi): **117**
 - Siklus SCC lintas subsistem: **1**
@@ -152,7 +152,7 @@ flowchart LR
 | `handover` | `FROZEN_CORPUS_SPEC` | 140 | 23 | 0 | 0 | 1 | Corpus beku, preregistrasi, & custody spec (read-only) |
 | `projects` | `SAFE_WORKSPACE` | 12 | 3 | 2 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `root` | `SAFE_WORKSPACE` | 20 | 4 | 0 | 0 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
-| `secrets` | `SAFE_WORKSPACE` | 1 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
+| `secrets` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `tests` | `SAFE_WORKSPACE` | 19 | 0 | 19 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `tools` | `MIXED_PROTECTED` | 202 | 114 | 86 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 
