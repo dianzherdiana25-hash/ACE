@@ -94,10 +94,10 @@ class FencedStoreEdgeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.store.acquire("job-over", "owner1", ttl=86400.01, now=100.0)
 
-    @unittest.expectedFailure
     def test_07_nan_now_timestamp_must_not_bypass_expired_lease(self) -> None:
         # Bug terdokumentasi di code/ace_self_dev/fenced_store.py: _active() memakai `row[3] <= now`,
         # dan NaN membuat perbandingan IEEE-754 False sehingga lease expired lolos tulis.
+        # DIPERBAIKI (gelombang robustness 2026-11-20): _active menolak now tak-hingga/NaN.
         lease = self.store.acquire("job-nan", "owner1", ttl=5.0, now=100.0)
         with self.assertRaises((LeaseRejected, ValueError)):
             self.store.append_receipt(lease, "ev-nan", {"x": 1}, now=math.nan)

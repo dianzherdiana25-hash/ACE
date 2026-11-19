@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from contextlib import contextmanager
 import hashlib
 import json
+import math
 from pathlib import Path
 import secrets
 import sqlite3
@@ -90,6 +91,11 @@ class FencedStore:
 
     @staticmethod
     def _active(con: sqlite3.Connection, lease: Lease, now: float) -> None:
+        # NaN membuat setiap perbandingan IEEE-754 False, jadi `expires_at
+        # <= now` tidak akan pernah picu untuk now=NaN dan lease kedaluwarsa
+        # lolos tulis. Tolak cap waktu tak-hingga/NaN di titik sempit ini.
+        if not math.isfinite(now):
+            raise LeaseRejected("non-finite timestamp")
         row = con.execute(
             "SELECT owner,token,epoch,expires_at FROM leases WHERE job_id=?",
             (lease.job_id,)).fetchone()
