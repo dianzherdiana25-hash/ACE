@@ -1,0 +1,65 @@
+{
+ "package": "EVO 0007 pattern-recall",
+ "verdict_block": {
+  "verdict": "TERDUKUNG",
+  "accept_rates": {
+   "POLA": 0.5,
+   "RECEIPT": 0.3,
+   "SHAM": 0.25,
+   "KOSONG": 0.2
+  },
+  "delivery_rates": {
+   "POLA": 1.0,
+   "RECEIPT": 1.0,
+   "SHAM": 1.0,
+   "KOSONG": 1.0
+  },
+  "sensitivity_accept_rates": {
+   "POLA": 0.5,
+   "RECEIPT": 0.3,
+   "SHAM": 0.25,
+   "KOSONG": 0.2
+  },
+  "judge_skipped_per_arm": {
+   "POLA": 20,
+   "RECEIPT": 28,
+   "SHAM": 30,
+   "KOSONG": 31
+  },
+  "flagged_episodes": []
+ },
+ "rows_total": 160,
+ "rows_per_arm": {
+  "POLA": 40,
+  "RECEIPT": 40,
+  "SHAM": 40,
+  "KOSONG": 40
+ },
+ "calibration": {
+  "sealed_rows": 54,
+  "band": [
+   85,
+   115
+  ],
+  "probe_set": {
+   "n": 40,
+   "code": 22,
+   "language": 18
+  },
+  "rescreening_fact": "selection uses the final-instrument (amendment-1) rows; in-band membership shift between passes is recorded judge variance"
+ },
+ "judge_chain": "Gonka (calibration) -> Cloudflare llama-3.3-70b-instruct-fp8-fast (arms), named amendment; bridge statistic n=12: band agreement 8/12, mean delta -9.58, range -100..+65; judges not interchangeable on language items; no cross-phase mean comparison",
+ "annex": {
+  "patterns_n": 72,
+  "frozen_sha256": "179bcd2181df080bdaee40177434e84d5014e6e185119c85d86afaa34aa3c9a3",
+  "p95_cap_chars": 502,
+  "truncated": [
+   "cal:w3-lang-010",
+   "cal:cd-code-006",
+   "cal:cd-code-008"
+  ],
+  "distiller": "gemini/gemini-3-flash-preview",
+  "groq_phase_records_archived": 24
+ },
+ "bridge_rows": 12
+}
