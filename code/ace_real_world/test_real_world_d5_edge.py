@@ -198,12 +198,10 @@ class TestRealWorldD5Edge(unittest.TestCase):
         self.assertEqual(parsed["ev"], "gamma")
         self.assertEqual(parsed["msg"], "user charlie brown")
 
-    @unittest.expectedFailure
     def test_27_log_parser_trailing_multiword_empty_suffix_bug(self) -> None:
-        # Suspected bug in code/ace_real_world/log_parser_synth.py (lines 75-86):
-        # When the final captured field contains spaces, (?P<key>.+?) is emitted,
-        # and when suffix == "", the else branch appends r".*?" before "$",
-        # causing (?P<msg>.+?).*?$ to lazily capture only 1 character ("u").
+        # Bug yang sudah diperbaiki (2026-11-20): bidang terakhir multi-kata
+        # tanpa sufiks kini ditangkap rakus (?P<key>.+) sampai akhir baris;
+        # pola lama (?P<key>.+?).*?$ menelan semua kecuali 1 karakter.
         synth = LogParserSynthesizer()
         samples = [
             "alpha event: user alice logged in",

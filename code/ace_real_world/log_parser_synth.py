@@ -54,6 +54,7 @@ class LogParserSynthesizer:
         # If prefix between fields is purely whitespace or simple delimiter, use exact delimiter.
         # Otherwise, if text varies across samples, use generic wildcard (.*?)
         pattern_parts = ["^"]
+        last_lazy = False
         for idx, (pos, key, val) in enumerate(sorted_fields):
             prefix = first_sample[last_idx:pos]
             if prefix:
@@ -68,12 +69,16 @@ class LogParserSynthesizer:
             # Determine appropriate capture group with word boundaries
             if val.isdigit():
                 pattern_parts.append(f"\\b(?P<{key}>\\d+)\\b")
+                last_lazy = False
             elif re.match(r"^[\d\-\+:TZ]+$", val):
                 pattern_parts.append(f"(?P<{key}>[\\d\\-\\+:TZ]+)")
+                last_lazy = False
             elif " " not in val:
                 pattern_parts.append(f"(?P<{key}>\\S+)")
+                last_lazy = False
             else:
                 pattern_parts.append(f"(?P<{key}>.+?)")
+                last_lazy = True
             
             field_order.append(key)
             last_idx = pos + len(val)
@@ -81,6 +86,11 @@ class LogParserSynthesizer:
         suffix = first_sample[last_idx:]
         if suffix and all(suffix in s for s in sample_logs):
             pattern_parts.append(re.escape(suffix))
+        elif last_lazy:
+            # Bidang terakhir multi-kata tanpa sufiks tetap: tangkapannya
+            # harus rakus sampai akhir baris. Pola lazy + ".*?" di sini
+            # membuat grup lazy menelan 1 karakter saja dan sisanya hilang.
+            pattern_parts[-1] = pattern_parts[-1].replace(".+?)", ".+)")
         else:
             pattern_parts.append(r".*?")
         pattern_parts.append("$")
