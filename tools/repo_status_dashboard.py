@@ -32,6 +32,16 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from tools import (
+    kbm_schedule as _kbm_schedule,
+    repo_index as _repo_index,
+    royalty_track as _royalty_track,
+    ruleset_readiness as _ruleset_readiness,
+    self_send_audit_view as _self_send_audit_view,
+    stage_verify as _stage_verify,
+    storage_debt as _storage_debt,
+)
+
 _NATURAL_RE = re.compile(r"(\d+)")
 _STATUS_WORD = (
     r"(?:PASS|FAIL|MEASURED|DEMONSTRATED|NOT_DEMONSTRATED|SPECIALIZATION|"
@@ -219,10 +229,22 @@ def collect_repo_status(
     repo_root: Path,
     *,
     stage_file: Path | None = None,
+    stage_dir: Path | None = None,
+    stage_manifest: Path | None = None,
     heartbeat_file: Path | None = None,
     royalty_file: Path | None = None,
+    royalty_csvs: list[Path] | None = None,
+    royalty_map: Path | None = None,
     schedule_file: Path | None = None,
+    schedule_catalog: Path | None = None,
+    schedule_as_of: str | None = None,
     storage_debt_file: Path | None = None,
+    auto_storage_debt: bool = False,
+    auto_repo_index: bool = False,
+    ruleset_snapshot: Path | None = None,
+    ruleset_repo: str = "dianzherdiana25-hash/ACE",
+    ruleset_branch: str = "main",
+    audit_files: list[Path] | None = None,
 ) -> dict[str, Any]:
     """Kumpulkan seluruh status repositori + panel operasional v2 dari disk."""
     root = repo_root.resolve()
@@ -232,6 +254,59 @@ def collect_repo_status(
     corpora = extract_frozen_corpora(root)
     timeline = extract_evo_timeline(root)
 
+    if stage_file is not None and stage_dir is not None:
+        raise ValueError("Gunakan salah satu: --stage-file atau --stage-dir, bukan keduanya.")
+    stage_data = _load_json_dict(stage_file, "stage")
+    if stage_dir is not None:
+        stage_data = _stage_verify.verify_stage(stage_dir, manifest_path=stage_manifest)
+
+    if royalty_file is not None and royalty_csvs:
+        raise ValueError("Gunakan salah satu: --royalty-file atau --royalty-csv, bukan keduanya.")
+    royalty_data = _load_json_dict(royalty_file, "royalty")
+    if royalty_csvs:
+        col_map = _royalty_track.load_column_map(royalty_map)
+        royalty_data = _royalty_track.summarize_royalties(royalty_csvs, column_map=col_map)
+
+    if schedule_file is not None and schedule_catalog is not None:
+        raise ValueError("Gunakan salah satu: --schedule-file atau --schedule-catalog, bukan keduanya.")
+    schedule_data = _load_json_dict(schedule_file, "schedule")
+    if schedule_catalog is not None:
+        schedule_data = _kbm_schedule.build_schedule(schedule_catalog, as_of_date=schedule_as_of)
+
+    if storage_debt_file is not None and auto_storage_debt:
+        raise ValueError("Gunakan salah satu: --storage-debt-file atau --auto-storage-debt, bukan keduanya.")
+    storage_debt_data = _load_json_dict(storage_debt_file, "storage_debt")
+    if auto_storage_debt:
+        storage_debt_data = _storage_debt.scan_storage_debt(root)
+
+    repo_index_summary: dict[str, Any] | None = None
+    if auto_repo_index:
+        idx = _repo_index.build_repo_index(root)
+        repo_index_summary = {
+            "schema": idx["schema"],
+            "directory_count": idx["directory_count"],
+            "file_count": idx["file_count"],
+            "module_count": idx["module_count"],
+        }
+
+    ruleset_data: dict[str, Any] | None = None
+    if ruleset_snapshot is not None:
+        try:
+            ruleset_data = _ruleset_readiness.check_repo_readiness(
+                repo=ruleset_repo,
+                branch=ruleset_branch,
+                snapshot_path=ruleset_snapshot,
+            )
+        except _ruleset_readiness.RulesetReadinessError as exc:
+            raise ValueError(str(exc)) from exc
+
+    audit_data: dict[str, Any] | None = None
+    if audit_files:
+        try:
+            audit_data = _self_send_audit_view.inspect_audit_files(audit_files, allow_missing_extra=True)
+        except _self_send_audit_view.AuditViewError as exc:
+            raise ValueError(str(exc)) from exc
+
     return {
         "schema": DASHBOARD_SCHEMA,
         "repo_name": root.name,
@@ -240,11 +315,14 @@ def collect_repo_status(
         "frozen_corpora": corpora,
         "timeline_count": len(timeline),
         "timeline": timeline,
-        "stage": _load_json_dict(stage_file, "stage"),
+        "stage": stage_data,
         "heartbeat": _load_json_dict(heartbeat_file, "heartbeat"),
-        "royalty": _load_json_dict(royalty_file, "royalty"),
-        "schedule": _load_json_dict(schedule_file, "schedule"),
-        "storage_debt": _load_json_dict(storage_debt_file, "storage_debt"),
+        "royalty": royalty_data,
+        "schedule": schedule_data,
+        "storage_debt": storage_debt_data,
+        "repo_index": repo_index_summary,
+        "ruleset_readiness": ruleset_data,
+        "self_send_audit": audit_data,
     }
 
 
@@ -254,13 +332,28 @@ def _render_stage_section(stage: dict[str, Any] | None) -> str:
         return "<p class='empty'>Tidak ada berkas staging (`--stage-file`) dimuat.</p>"
     files = stage.get("files") if isinstance(stage.get("files"), list) else []
     status_label = stage.get("status")
-    if status_label is None and "passed" in stage:
-        status_label = "PASS" if stage["passed"] else "FAIL"
+    if status_label is None:
+        if "passed" in stage:
+            status_label = "PASS" if stage["passed"] else "FAIL"
+        elif "valid" in stage:
+            status_label = "VALID" if stage["valid"] else "INVALID"
+    file_count = int(stage.get("file_count", stage.get("actual_count", len(files))))
     meta_html = (
         f"<p class='meta'>Schema: <code>{esc(str(stage.get('schema', '-')))}</code> "
         f"| Status: <span class='badge'>{esc(str(status_label or 'LOADED'))}</span> "
-        f"| Berkas: <strong>{int(stage.get('file_count', len(files)))}</strong></p>"
+        f"| Berkas: <strong>{file_count}</strong></p>"
     )
+    if not files and "expected_count" in stage:
+        missing = stage.get("missing") or []
+        extra = stage.get("extra") or []
+        modified = stage.get("modified") or []
+        return (
+            meta_html
+            + f"<p class='meta'>Expected: <strong>{int(stage.get('expected_count', 0))}</strong> "
+            + f"| Missing: <strong>{len(missing)}</strong> "
+            + f"| Extra: <strong>{len(extra)}</strong> "
+            + f"| Modified: <strong>{len(modified)}</strong></p>"
+        )
     rows = "".join(
         "<tr>"
         f"<td><code>{esc(str(f.get('path', f.get('name', '-'))))}</code></td>"
@@ -505,6 +598,27 @@ def render_dashboard_html(status: dict[str, Any]) -> str:
     <h2>Utang Penyimpanan / Artefak Belum Ter-commit</h2>
     {_render_storage_debt_section(status.get('storage_debt'))}
   </section>
+
+  {''.join([
+      "<section id='sec-repo-index'><h2>Indeks Repositori</h2><p class='meta'>"
+      + f"Direktori: <strong>{int(status['repo_index'].get('directory_count', 0))}</strong>"
+      + f" | Berkas: <strong>{int(status['repo_index'].get('file_count', 0))}</strong>"
+      + f" | Modul Python: <strong>{int(status['repo_index'].get('module_count', 0))}</strong></p></section>"
+      if isinstance(status.get("repo_index"), dict)
+      else "",
+      "<section id='sec-ruleset'><h2>Kesiapan Ruleset Offline</h2><p class='meta'>"
+      + f"Repo: <code>{esc(str(status['ruleset_readiness'].get('repo', '-')))}</code>"
+      + f" ({esc(str(status['ruleset_readiness'].get('branch', '-')))} )"
+      + f" | Siap: <span class='badge'>{'SIAP' if status['ruleset_readiness'].get('ready') else 'BELUM_SIAP'}</span></p></section>"
+      if isinstance(status.get("ruleset_readiness"), dict)
+      else "",
+      "<section id='sec-self-send-audit'><h2>Audit Self-Send</h2><p class='meta'>"
+      + f"Total Baris: <strong>{int(status['self_send_audit'].get('summary', {}).get('total_rows', 0))}</strong>"
+      + f" | Terkirim: <strong>{int(status['self_send_audit'].get('summary', {}).get('delivered_count', 0))}</strong>"
+      + f" | Anomali: <strong>{int(status['self_send_audit'].get('summary', {}).get('anomaly_count', 0))}</strong></p></section>"
+      if isinstance(status.get("self_send_audit"), dict)
+      else "",
+  ])}
 </main>
 </body>
 </html>
@@ -522,10 +636,22 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Direktori akar repo target (default: akar repo ACE).",
     )
     parser.add_argument("--stage-file", type=Path, default=None, help="Opsional JSON manifest/status stage.")
+    parser.add_argument("--stage-dir", type=Path, default=None, help="Opsional direktori stage terisolasi untuk verifikasi langsung via stage_verify.")
+    parser.add_argument("--stage-manifest", type=Path, default=None, help="Opsional path manifest stage khusus untuk --stage-dir.")
     parser.add_argument("--heartbeat-file", type=Path, default=None, help="Opsional JSON heartbeat daemon.")
     parser.add_argument("--royalty-file", type=Path, default=None, help="Opsional JSON ringkasan royalti (`ace.royalty-summary.v1`).")
+    parser.add_argument("--royalty-csv", nargs="+", type=Path, default=None, help="Opsional CSV royalti untuk dihitung langsung lewat royalty_track.")
+    parser.add_argument("--royalty-map", type=Path, default=None, help="Opsional JSON pemetaan kolom untuk --royalty-csv.")
     parser.add_argument("--schedule-file", type=Path, default=None, help="Opsional JSON jadwal KBM (`ace.kbm-schedule.v1`).")
+    parser.add_argument("--schedule-catalog", type=Path, default=None, help="Opsional JSON katalog jadwal untuk dihitung langsung lewat kbm_schedule.")
+    parser.add_argument("--schedule-as-of", default=None, help="Tanggal acuan YYYY-MM-DD untuk --schedule-catalog.")
     parser.add_argument("--storage-debt-file", type=Path, default=None, help="Opsional JSON storage debt (`ace.storage-debt.v1`).")
+    parser.add_argument("--auto-storage-debt", action="store_true", help="Pindai storage debt langsung lewat storage_debt.scan_storage_debt.")
+    parser.add_argument("--auto-repo-index", action="store_true", help="Kumpulkan metrik direktori/berkas/modul langsung via repo_index.")
+    parser.add_argument("--ruleset-snapshot", type=Path, default=None, help="Opsional snapshot JSON offline untuk ruleset_readiness.")
+    parser.add_argument("--ruleset-repo", default="dianzherdiana25-hash/ACE", help="Nama owner/repo untuk --ruleset-snapshot.")
+    parser.add_argument("--ruleset-branch", default="main", help="Nama branch target untuk --ruleset-snapshot.")
+    parser.add_argument("--audit-file", action="append", type=Path, default=None, help="Opsional JSONL self-send audit untuk self_send_audit_view.")
     parser.add_argument(
         "--output",
         type=Path,
@@ -542,10 +668,22 @@ def main(argv: list[str] | None = None) -> int:
         status = collect_repo_status(
             args.root,
             stage_file=args.stage_file,
+            stage_dir=args.stage_dir,
+            stage_manifest=args.stage_manifest,
             heartbeat_file=args.heartbeat_file,
             royalty_file=args.royalty_file,
+            royalty_csvs=args.royalty_csv,
+            royalty_map=args.royalty_map,
             schedule_file=args.schedule_file,
+            schedule_catalog=args.schedule_catalog,
+            schedule_as_of=args.schedule_as_of,
             storage_debt_file=args.storage_debt_file,
+            auto_storage_debt=args.auto_storage_debt,
+            auto_repo_index=args.auto_repo_index,
+            ruleset_snapshot=args.ruleset_snapshot,
+            ruleset_repo=args.ruleset_repo,
+            ruleset_branch=args.ruleset_branch,
+            audit_files=args.audit_file,
         )
         html_doc = render_dashboard_html(status)
         if args.output is not None:
