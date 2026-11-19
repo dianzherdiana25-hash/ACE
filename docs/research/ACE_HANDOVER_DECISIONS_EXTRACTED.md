@@ -4,8 +4,8 @@
 
 ## 1. Ringkasan Pemindaian
 
-- Berkas `handover/` & `docs/` dipindai: **316**
-- Total baris dipindai: **37173**
+- Berkas `handover/` & `docs/` dipindai: **319**
+- Total baris dipindai: **37452**
 - Total butir tersitasi: **140**
 - Tag asal ringkasan: `gravity-proposal`
 
@@ -20,7 +20,7 @@
 
 ## Aturan Tata Kelola & Kontrak Tetap (`GOVERNANCE_RULE`)
 
-- Kecocokan total: **252** | Ditampilkan: **35**
+- Kecocokan total: **253** | Ditampilkan: **35**
 
 | Sumber & Baris | Aktor Sumber | Asal Ringkasan | Kutipan |
 | --- | --- | --- | --- |
@@ -62,7 +62,7 @@
 
 ## Keputusan Pemilik / Hub / Verdict (`OWNER_HUB_DECISION`)
 
-- Kecocokan total: **810** | Ditampilkan: **35**
+- Kecocokan total: **821** | Ditampilkan: **35**
 
 | Sumber & Baris | Aktor Sumber | Asal Ringkasan | Kutipan |
 | --- | --- | --- | --- |
@@ -146,7 +146,7 @@
 
 ## Usulan / Draf / Langkah Berikutnya (`OPEN_PROPOSAL`)
 
-- Kecocokan total: **341** | Ditampilkan: **35**
+- Kecocokan total: **343** | Ditampilkan: **35**
 
 | Sumber & Baris | Aktor Sumber | Asal Ringkasan | Kutipan |
 | --- | --- | --- | --- |

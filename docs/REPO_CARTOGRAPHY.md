@@ -1,4 +1,4 @@
-# Kartografi Repositori ACE — ACE
+# Kartografi Repositori ACE — merge-antigravity
 
 > Peta AST statis deterministik oleh `tools/repo_cartography.py` (`ace.repo-cartography.v1`; zero import/eksekusi `code/`).
 
@@ -6,8 +6,8 @@
 
 - Schema: `ace.repo-cartography.v1`
 - Total subsistem: **68** (termasuk `4` subsistem zona terlindung/beku)
-- Total berkas terpetakan: **2064**
-- Modul Python produksi: **548** | Modul tes: **316**
+- Total berkas terpetakan: **2106**
+- Modul Python produksi: **557** | Modul tes: **344**
 - Tepi dependensi lintas subsistem (produksi): **117**
 - Siklus SCC lintas subsistem: **1**
 
@@ -99,7 +99,7 @@ flowchart LR
 | `code/ace_capability_evolution` | `SAFE_WORKSPACE` | 11 | 6 | 3 | 6 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_causal` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_chat` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_code_agent` | `SAFE_WORKSPACE` | 22 | 14 | 8 | 4 | 3 | Wilayah kerja aman (read-only AST / build tooling) |
+| `code/ace_code_agent` | `SAFE_WORKSPACE` | 23 | 14 | 9 | 4 | 3 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_cognition` | `SAFE_WORKSPACE` | 9 | 6 | 3 | 3 | 3 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_component_synthesis` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 3 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_conformal` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
@@ -123,9 +123,9 @@ flowchart LR
 | `code/ace_mcts` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_mission` | `SAFE_WORKSPACE` | 9 | 6 | 3 | 5 | 3 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_neurosymbolic` | `SAFE_WORKSPACE` | 9 | 5 | 4 | 0 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_operational` | `MIXED_PROTECTED` | 194 | 93 | 97 | 5 | 14 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `code/ace_operational` | `MIXED_PROTECTED` | 198 | 93 | 101 | 5 | 14 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 | `code/ace_pac_bayes` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_real_world` | `SAFE_WORKSPACE` | 11 | 8 | 3 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
+| `code/ace_real_world` | `SAFE_WORKSPACE` | 12 | 8 | 4 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_red_team` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_report` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_research_agenda` | `SAFE_WORKSPACE` | 6 | 4 | 2 | 2 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
@@ -146,15 +146,15 @@ flowchart LR
 | `code/ace_visual_bridge` | `SAFE_WORKSPACE` | 4 | 3 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/checkpoints` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `data` | `SAFE_WORKSPACE` | 1 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `docs` | `SAFE_WORKSPACE` | 269 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
+| `docs` | `SAFE_WORKSPACE` | 273 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `evidence` | `SAFE_WORKSPACE` | 721 | 29 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `examples` | `SAFE_WORKSPACE` | 5 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `handover` | `FROZEN_CORPUS_SPEC` | 159 | 23 | 0 | 0 | 1 | Corpus beku, preregistrasi, & custody spec (read-only) |
 | `projects` | `SAFE_WORKSPACE` | 12 | 3 | 2 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
-| `root` | `SAFE_WORKSPACE` | 19 | 4 | 0 | 0 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
+| `root` | `SAFE_WORKSPACE` | 20 | 4 | 0 | 0 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
 | `secrets` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `tests` | `SAFE_WORKSPACE` | 19 | 0 | 19 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `tools` | `MIXED_PROTECTED` | 217 | 121 | 94 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `tools` | `MIXED_PROTECTED` | 248 | 130 | 116 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 
 ## 4. Tepi Ketergantungan Lintas Subsistem (Semua)
 

@@ -1,26 +1,26 @@
-# Indeks Handover & Dokumentasi ACE — ACE
+# Indeks Handover & Dokumentasi ACE — merge-antigravity
 
 > Dihasilkan deterministik oleh `tools/handover_index.py` (`ace.handover-index.v1`). Berkas target indeks sendiri (`docs/HANDOVER_INDEX.md`) dikecualikan agar idempoten 100%.
 
 ## 1. Ringkasan
 
 - Schema: `ace.handover-index.v1`
-- Total berkas terindeks: **428** (`handover/`: **159**, `docs/`: **269**)
-- Total baris teks UTF-8: **79823**
-- Total ukuran: **4668189** byte
+- Total berkas terindeks: **432** (`handover/`: **159**, `docs/`: **273**)
+- Total baris teks UTF-8: **80939**
+- Total ukuran: **4709514** byte
 - Symlink dilewati: **0**
 
 ### Distribusi Kategori
 
 | Kategori | Jumlah Berkas |
 | --- | ---: |
-| `audit_accounting` | 38 |
+| `audit_accounting` | 39 |
 | `consolidation_ops` | 18 |
 | `corpus_frozen` | 12 |
 | `helper_script` | 22 |
-| `manifest_json` | 45 |
+| `manifest_json` | 46 |
 | `preregistration` | 17 |
-| `reference_doc` | 66 |
+| `reference_doc` | 68 |
 | `research_report` | 143 |
 | `slate_serving` | 13 |
 | `spec_governance` | 46 |
@@ -190,7 +190,7 @@
 | `handover/sqlite-vec-trial/trial.py` | `helper_script` | 155 | 7400 | `9bbd2936d744` | sqlite-vec trial — ECOSYSTEM INTAKE #01 candidate #4 protocol. |
 | `handover/stack_intake/INTAKE_V2_20261116.json` | `consolidation_ops` | 1 | 1731 | `5809f86998c3` | status: INTAKEN_AND_VERIFIED — not loaded, not served; bench stage follows |
 
-## 3. Inventaris `docs/` (269 berkas)
+## 3. Inventaris `docs/` (273 berkas)
 
 | Berkas | Kategori | Baris | Byte | SHA-256 | Judul / Ringkasan |
 | --- | --- | ---: | ---: | --- | --- |
@@ -232,18 +232,21 @@
 | `docs/ACE_SELFMODEL_PRESCORE_V1.md` | `reference_doc` | 58 | 5888 | `0a9d1fdecfcd` | ACE Fase 4 — Functional Self-Model & Metacognition: PRE-REGISTRATION |
 | `docs/ACE_SELFMODEL_RESULTS_V1.md` | `reference_doc` | 40 | 4108 | `74cce49f7873` | ACE Fase 4 — Functional Self-Model & Metacognition: Results & Verification |
 | `docs/ACE_VISION_ALIGNMENT_CURRENT.md` | `reference_doc` | 122 | 22945 | `3e7934850d77` | ACE Vision Alignment, Historical Reconstruction, and Capability Matrix (2026-11-07) |
+| `docs/AKTIVASI_SELF_SEND.md` | `reference_doc` | 57 | 2599 | `5b4c53fcf022` | Aktivasi Self-Send ACE (khusus operator) |
 | `docs/ARSITEKTUR_ENGINE.md` | `reference_doc` | 145 | 12430 | `8a0c17b62b05` | Arsitektur engine ACE |
 | `docs/AUDIT_REMEDIATION_STATUS.md` | `audit_accounting` | 61 | 4154 | `d81457b60b88` | Audit remediation status |
-| `docs/BUILDER_ONBOARDING_PACK.md` | `reference_doc` | 66 | 3729 | `953a948a60c3` | Paket Onboarding Kontributor Builder ACE — ACE |
+| `docs/BUILDER_ONBOARDING_PACK.md` | `reference_doc` | 66 | 3743 | `11118c1f0bdd` | Paket Onboarding Kontributor Builder ACE — merge-antigravity |
 | `docs/COMPOSITION_PROTOCOL_V03.md` | `reference_doc` | 48 | 3244 | `1f880488514f` | ACE v0.3: counterexample-triggered representation composition |
 | `docs/COMPOSITION_PROTOCOL_V031.md` | `reference_doc` | 14 | 889 | `809ede373ab8` | Protocol feasibility amendment v0.3.1 |
 | `docs/COMPOSITION_RESULTS_V03.md` | `reference_doc` | 84 | 5178 | `808029e06d80` | ACE v0.3 — learned counter/guard composition |
 | `docs/DOCS_INDEX_MAINTENANCE_20261119.md` | `reference_doc` | 28 | 1980 | `bab2a8c0f519` | Pemeliharaan Indeks Dokumen — 2026-11-19 (E8) |
 | `docs/LAPORAN_HASIL_RISET_HP.md` | `reference_doc` | 63 | 5202 | `4e5fe567d704` | 📱 Laporan Hasil Riset ACE (Terbaca di Layar HP) |
 | `docs/PRD_ACE_v0.1.md` | `reference_doc` | 190 | 18816 | `03887aef928b` | PRODUCT REQUIREMENTS DOCUMENT (PRD) |
-| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54710 | `a08ab1607ca5` | Glosarium Istilah Teknis ACE — ACE |
-| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23831 | `8922febf16af` | Kartografi Repositori ACE — ACE |
+| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54702 | `ac73913f9fce` | Glosarium Istilah Teknis ACE — merge-antigravity |
+| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23847 | `894215be9914` | Kartografi Repositori ACE — merge-antigravity |
 | `docs/REPO_INDEX.md` | `reference_doc` | 2545 | 205836 | `f67ada15f27e` | Indeks Repositori — ACE |
+| `docs/SENSUS_KANDIDAT.json` | `manifest_json` | 837 | 23986 | `94922b9f71e0` | schema: ace.candidate-census.v1 |
+| `docs/SENSUS_KANDIDAT.md` | `reference_doc` | 50 | 2531 | `65e4889ef370` | Sensus Kandidat Corpus ACE |
 | `docs/UPSTREAM_SOURCES.json` | `manifest_json` | 106 | 4914 | `cf6ffc77386a` | schema: ace.source-integration.v1 |
 | `docs/architecture/ACE_INDEPENDENT_HOST_CONTROLLER_SPEC_20261107.md` | `spec_governance` | 145 | 8693 | `b24b7c2ff49b` | ACE Independent Host Controller & Evaluation Architecture Specification |
 | `docs/architecture/ACE_OAIE_UNLIMITED_DOCTRINE.md` | `spec_governance` | 95 | 12335 | `55c3c609e9dd` | Doktrin & Arsitektur OAIE-Unlimited (`OAIE-∞`): Kedaulatan Epistemik, Orkestrasi Multi-Model, dan E… |
@@ -310,7 +313,7 @@
 | `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md` | `audit_accounting` | 55 | 6356 | `af7459e3a353` | Akuntansi Penutup Garis H — Produksi & Rel Pendapatan Luring (Gravity) |
 | `docs/research/ACE_GRAVITY_GARIS_I_AKUNTANSI.md` | `audit_accounting` | 110 | 15716 | `0a3bee1369c5` | Akuntansi Penutup Garis I & Rekapitulasi Induk Final — Satu Runtime Jauh (Gravity) |
 | `docs/research/ACE_GRID_GENERALIZATION_RESULTS_20261112.md` | `research_report` | 68 | 3131 | `70a9be5c9a1c` | ACE Ω — Hasil Semesta Generalisasi Grid (Tahap F, 2026-11-12) |
-| `docs/research/ACE_HANDOVER_DECISIONS_EXTRACTED.md` | `research_report` | 187 | 28025 | `36864a61b6e8` | Ekstraksi Keputusan Pemilik/Hub, Verdit, & Usulan Terbuka |
+| `docs/research/ACE_HANDOVER_DECISIONS_EXTRACTED.md` | `research_report` | 187 | 28025 | `9b9c1494dc4b` | Ekstraksi Keputusan Pemilik/Hub, Verdit, & Usulan Terbuka |
 | `docs/research/ACE_HOST_FOUNDATION_CHECKPOINT_20261109.md` | `research_report` | 43 | 2769 | `d4140a16e2e7` | Host-assisted ACE foundation checkpoint — 2026-11-09 |
 | `docs/research/ACE_INTERNAL_REASONING_PROTOCOL_20261110.md` | `research_report` | 72 | 4282 | `f9af4818bfae` | ACE internal reasoning integration — protocol v1 |
 | `docs/research/ACE_KBM_PILOT_DESIGN_20261113.md` | `spec_governance` | 142 | 6398 | `361026c6c074` | ACE KBM Pilot — Design Package (business study ladder, rung 2) |
@@ -394,7 +397,7 @@
 | `docs/research/ACE_PHASE2_RESIDUAL_DIAGNOSIS_20261112.md` | `research_report` | 50 | 2276 | `f646f6dc23f8` | ACE Fase 2 — Probe Residu Pilot: Bukan Pencarian, Melainkan Identifiabilitas Sinyal (2026-11-12) |
 | `docs/research/ACE_PHASE2_SHIPPING_MEASUREMENT_20261112.md` | `research_report` | 53 | 2602 | `113476d2a226` | ACE Fase 2 — Pengukuran Kelemahan Keluarga Shipping (2026-11-12) |
 | `docs/research/ACE_PILOT_ABC_V2_RESULTS_20261112.md` | `research_report` | 53 | 2308 | `9ffbea987169` | Pilot A/B/C v2 — Hasil (Fase 2, tahap 9) |
-| `docs/research/ACE_PLATFORM_REQUIREMENTS_SUMMARY.md` | `research_report` | 172 | 34455 | `b755b916222a` | Ringkasan Persyaratan Platform & Monetisasi ACE |
+| `docs/research/ACE_PLATFORM_REQUIREMENTS_SUMMARY.md` | `research_report` | 172 | 34455 | `d871b2df2ee2` | Ringkasan Persyaratan Platform & Monetisasi ACE |
 | `docs/research/ACE_REGRESSION_ANCHOR_20261113.md` | `research_report` | 67 | 2677 | `8e5ab1eb34b1` | Regression anchor — design + first self-test |
 | `docs/research/ACE_RESUME_DRILL_20261112.md` | `research_report` | 75 | 3392 | `49995ff49043` | ACE Resume Drill & G1 Criteria v2 — 2026-11-12 (Stage J) |
 | `docs/research/ACE_ROUND2_GATE_DESIGN_20261113.md` | `spec_governance` | 246 | 9661 | `ba1dcc06e895` | Round-2 gate design — the lifted mechanism behind a replication guard |
@@ -410,6 +413,7 @@
 | `docs/research/ACE_W4_EXPERIMENT_RESULTS_GRAPH_AND_RATIO4.md` | `research_report` | 27 | 1652 | `ad8b1671a772` | Hasil Eksperimen Riset W4: Pertumbuhan Kemampuan DSL (Graf & Rasio 4:1) |
 | `docs/research/ACE_W4_PREREGISTRATION_GRAPH_AND_RATIO4.md` | `preregistration` | 33 | 2069 | `ca3d780beb8b` | Preregistrasi Riset W4: Pertumbuhan Kemampuan DSL (Graf & Rasio 4:1) |
 | `docs/research/ACE_WIRING_AUDIT.md` | `audit_accounting` | 125 | 8345 | `88f841515e90` | Audit Keterhubungan Modul & Wilayah Menunggu — ACE |
+| `docs/research/ACE_WIRING_AUDIT_WAVE_D10.md` | `audit_accounting` | 172 | 12187 | `fe7a284db76d` | Audit & Backlog Penyambungan Gelombang D10 — ACE |
 | `docs/research/ACE_WS1_KBM_LOCAL_QUEUE.md` | `research_report` | 30 | 1747 | `f97881db1d68` | Antrean produksi lokal KBM WS-1 |
 | `docs/research/ACE_WS2_VERIFIKASI_PENDAPATAN.md` | `research_report` | 76 | 3455 | `4aa63f47113a` | Verifikasi pendapatan WS-2 |
 | `docs/research/ACE_WS3_WIRING_INVENTORY.md` | `consolidation_ops` | 30 | 2086 | `3cb07cb82c85` | Inventaris wiring WS-3 |

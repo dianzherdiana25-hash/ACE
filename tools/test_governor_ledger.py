@@ -3,8 +3,9 @@
 Mencakup governor runtime (`ace_operational.brain_bridge`) dan buku anggaran
 multi-rute (`tools.organ_quota_ledger`): akuntansi panggilan per hari,
 rollover hari/bulan, penolakan saat budget habis, dan ketahanan state rusak.
-Dugaan bug pada modul yang diuji didokumentasikan sebagai `@unittest.expectedFailure`
-berkomentar tanpa mengubah logika modul produksi.
+Dua dugaan bug `_budget_check` yang semula didokumentasikan di sini sebagai
+`@unittest.expectedFailure` terbukti dan sudah diperbaiki (#443, fail-closed);
+tesnya kini mengunci perilaku hasil perbaikan itu.
 """
 from __future__ import annotations
 
@@ -181,26 +182,28 @@ class BrainBridgeGovernorLedgerTests(unittest.TestCase):
                 self.assertEqual(body["error"]["type"], "budget_state_unavailable")
                 self.assertEqual(self.state.read_bytes(), raw)
 
-    # Dugaan bug brain_bridge._budget_check:
-    # `budget_response()` menolak JSON rusak/non-dict dengan 503 secara aman,
-    # tetapi `_budget_check()` memanggil `json.loads(STATE.read_text())` langsung
-    # tanpa try/except sehingga meledak `JSONDecodeError`.
-    @unittest.expectedFailure
+    # Bug yang ditemukan D7 dan diperbaiki #443:
+    # `_budget_check()` dulu memanggil `json.loads(STATE.read_text())` langsung
+    # tanpa try/except sehingga meledak `JSONDecodeError` pada state rusak.
+    # Perilaku kini (fail-closed): panggilan ditolak, `used` dilaporkan sebesar
+    # budget penuh agar pemanggil memperlakukan peran sebagai habis, dan berkas
+    # state TIDAK ditimpa (jatah harian tidak ter-reset diam-diam).
     def test_06_bug_budget_check_crashes_on_corrupt_state_json(self) -> None:
         self.state.write_bytes(b"{corrupt-json")
         ok, rem = bridge._budget_check("front")
         self.assertFalse(ok)
-        self.assertEqual(rem, 0)
+        self.assertEqual(rem, bridge.BUDGETS["front"])
+        self.assertEqual(self.state.read_bytes(), b"{corrupt-json")
 
-    # Dugaan bug brain_bridge._budget_check:
-    # Akar JSON berupa list/null/skalar atau `counts["front"]` berupa `bool`/`str`
-    # menyebabkan `AttributeError`/`TypeError` atau menghitung `True` sebagai `1`
-    # alih-alih fail-closed atau memulihkan state harian.
-    @unittest.expectedFailure
+    # Bug yang ditemukan D7 dan diperbaiki #443:
+    # akar JSON berupa list/null/skalar atau `counts["front"]` berupa `bool`/`str`
+    # dulu menyebabkan `AttributeError`/`TypeError` atau menghitung `True`
+    # sebagai `1`. Perilaku kini: fail-closed sama seperti state JSON rusak.
     def test_07_bug_budget_check_crashes_on_non_dict_or_bool_counts(self) -> None:
         self.state.write_text(json.dumps({"day": DAY_1, "counts": {"front": "bad"}}), encoding="utf-8")
-        ok, _ = bridge._budget_check("front")
+        ok, used = bridge._budget_check("front")
         self.assertFalse(ok)
+        self.assertEqual(used, bridge.BUDGETS["front"])
 
 
 class OrganQuotaLedgerGovernorTests(unittest.TestCase):

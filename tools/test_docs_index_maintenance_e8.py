@@ -11,12 +11,12 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-import builder_onboarding_pack as bop  # noqa: E402
-import handover_decision_extractor as hde  # noqa: E402
-import handover_index as hi  # noqa: E402
-import platform_requirements_summary as prs  # noqa: E402
-import program_glossary as pg  # noqa: E402
-import repo_cartography as rc  # noqa: E402
+from tools import builder_onboarding_pack as bop  # noqa: E402
+from tools import handover_decision_extractor as hde  # noqa: E402
+from tools import handover_index as hi  # noqa: E402
+from tools import platform_requirements_summary as prs  # noqa: E402
+from tools import program_glossary as pg  # noqa: E402
+from tools import repo_cartography as rc  # noqa: E402
 
 NOTE = ROOT / "docs" / "DOCS_INDEX_MAINTENANCE_20261119.md"
 LINK = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")

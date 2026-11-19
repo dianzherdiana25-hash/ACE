@@ -4,8 +4,8 @@
 
 ## 1. Statistik Pemindaian
 
-- Berkas Markdown dipindai: **479**
-- Total baris dipindai: **56976**
+- Berkas Markdown dipindai: **482**
+- Total baris dipindai: **57255**
 - Total sitasi syarat/batasan terpilih: **118** across `5` kelompok platform
 
 ### Distribusi Tag Syarat
@@ -20,7 +20,7 @@
 
 ## KBM App (Pilot Cerita Bersambung & SeaBank)
 
-- Total kecocokan terdeteksi: **112** | Ditampilkan: **25**
+- Total kecocokan terdeteksi: **113** | Ditampilkan: **25**
 
 | Sumber & Baris | Kategori | Kutipan Persyaratan / Kendala |
 | --- | --- | --- |

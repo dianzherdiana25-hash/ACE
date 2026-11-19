@@ -11,6 +11,10 @@
 
 > **Aturan D10**: Modul berstatus `MENUNGGU_ENGINEER_UTAMA` (23 modul) **TIDAK DISENTUH** pada gelombang ini dan diserahkan ke engineer utama. Penyambungan dilakukan bertahap **1 perkakas per PR** pada jalur non-terlarang.
 
+## Status Pasca-Penyambungan (diperbarui engineer utama, 20 Nov 2026)
+
+Keempat antrean prioritas di bawah **SUDAH disambungkan dan tergabung ke `main`**: `tools/kbm_qc.py` → `tools/kbm_produce.py` (#425), `tools/kbm_suite_v2.py` → `tools/kbm_pipeline.py` (#426), `tools/organ_quota_ledger.py` → `tools/daily_digest.py` (#427), `tools/writeback_diagnose.py` → `tools/daily_digest.py` (#428). Angka dan tabel di dokumen ini adalah potret audit pada `ba7f4b9` (sebelum penyambungan); audit langsung pasca-penggabungan melaporkan keempatnya berstatus `WIRED`. Daftar 23 modul `MENUNGGU_ENGINEER_UTAMA` tidak berubah.
+
 ## Antrean Prioritas Penyambungan Aman (1 PR per Perkakas)
 
 | Prioritas | Perkakas Target | Orkestrator Tujuan | Cabang D10 | Alasan |
