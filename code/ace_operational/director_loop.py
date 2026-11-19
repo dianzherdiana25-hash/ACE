@@ -159,6 +159,16 @@ def _normalised_title(title: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", folded).strip()
 
 
+def request_direction(observation: dict[str, Any],
+                      infer: Callable[[str], str]) -> dict[str, Any]:
+    """Ambil satu arahan tervalidasi untuk pemanggil yang memiliki agenda sendiri."""
+    prompt = render_prompt(observation) + "\nUntuk siklus ini, usulkan tepat satu arahan."
+    proposals = parse_proposals(infer(prompt), observation)
+    if len(proposals) != 1:
+        raise ProposalRejected("siklus engine memerlukan tepat satu arahan")
+    return proposals[0]
+
+
 # ---------------------------------------------------------------------------
 # The loop
 # ---------------------------------------------------------------------------

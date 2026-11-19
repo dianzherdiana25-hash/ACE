@@ -712,6 +712,7 @@ class OperationalStore:
         model_backend: str = "local-deterministic-v4",
         priority: float = 10.0,
         checkpoint: dict[str, Any] | None = None,
+        hold_for_review: bool = False,
     ) -> dict[str, Any]:
         with self._lock:
             task_id = f"task_{int(time.time() * 1000)}_{secrets.token_hex(4)}"
@@ -726,13 +727,14 @@ class OperationalStore:
                     lease_expires_at, attempt_count, stagnation_score, artifacts_json,
                     verification_summary_json, resume_condition, next_action, error_summary,
                     checkpoint_json, priority, created_at, updated_at
-                ) VALUES (?, ?, ?, ?, 'QUEUED', ?, ?, ?, ?, ?, ?, ?, ?, '', ?, '', 0, 0.0, '[]', '{}', '', 'mulai_eksekusi', '', ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '', ?, '', 0, 0.0, '[]', '{}', ?, ?, '', ?, ?, ?, ?)
                 """,
                 (
                     task_id,
                     conversation_id,
                     parent_task_id,
                     kind,
+                    "WAITING_FOR_DEPENDENCY" if hold_for_review else "QUEUED",
                     title_id,
                     user_request,
                     normalized_goal,
@@ -742,6 +744,8 @@ class OperationalStore:
                     current_strategy,
                     model_backend,
                     epoch,
+                    "Ulas usulan sebelum menjalankan tugas" if hold_for_review else "",
+                    "ulasan_usulan" if hold_for_review else "mulai_eksekusi",
                     json.dumps(checkpoint or {"stage": "queued"}, ensure_ascii=False),
                     float(priority),
                     now,
