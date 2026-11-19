@@ -20,6 +20,7 @@ import sys
 from typing import Any
 
 DISTILL_SCHEMA = "ace.pattern-distilled.v1"
+DEFAULT_MAX_CHARS = 2048
 
 _STOPWORDS = frozenset(
     {
@@ -124,8 +125,8 @@ def zlib_error_fallback() -> type[BaseException]:
 
 
 def _is_ratified(rec: dict[str, Any]) -> bool:
-    if isinstance(rec.get("ratified"), bool):
-        return rec["ratified"]
+    if "ratified" in rec:
+        return rec["ratified"] is True
     for key in ("status", "verdict", "decision"):
         val = rec.get(key)
         if isinstance(val, str) and val.strip().upper() in {"ACCEPTED", "RATIFIED", "PASS", "PASSED"}:
@@ -251,16 +252,44 @@ def _as_optional_float(value: Any) -> float | None:
     return f if f == f and abs(f) != float("inf") else None
 
 
+def _serialize_pattern(record: dict[str, Any]) -> str:
+    return json.dumps(record, ensure_ascii=False)
+
+
+def _bound_pattern(record: dict[str, Any], max_chars: int) -> None:
+    """Shorten distilled content while retaining the source identity and hashes.
+
+    The budget counts Unicode characters in the serialized JSON object,
+    including metadata and JSON escaping, and excludes the JSONL newline.
+    A budget too small for provenance and nonempty fields is rejected.
+    """
+    fields = []
+    for values in (record["approach"], record["pitfalls"]):
+        fields.extend((values, index) for index in range(len(values)))
+    while len(_serialize_pattern(record)) > max_chars:
+        container, key = max(fields, key=lambda field: len(field[0][field[1]]))
+        text = container[key]
+        if len(text) <= 1:
+            raise PatternDistillError("--max-chars terlalu kecil untuk provenance dan isi pola.")
+        excess = len(_serialize_pattern(record)) - max_chars
+        container[key] = text[:max(1, len(text) - excess)]
+
+
 def distill_evidence(
     evidence_paths: list[Path],
     output_path: Path,
     *,
     append: bool = False,
     allow_empty: bool = False,
+    max_chars: int = DEFAULT_MAX_CHARS,
 ) -> dict[str, Any]:
     """Distilasi keluaran ter-ratifikasi dari `evidence_paths` ke `output_path` JSONL staging."""
     if not evidence_paths:
         raise PatternDistillError("Minimal satu berkas evidence harus diberikan.")
+    if type(max_chars) is not int or max_chars <= 0:
+        raise PatternDistillError("--max-chars wajib bilangan bulat positif.")
+    if any(path.resolve() == output_path.resolve() for path in evidence_paths):
+        raise PatternDistillError("Keluaran harus berbeda dari berkas masukan.")
 
     existing_records: list[dict[str, Any]] = []
     seen_keys: set[tuple[str, str]] = set()
@@ -276,6 +305,8 @@ def distill_evidence(
                 ) from exc
             if not isinstance(old, dict):
                 raise PatternDistillError(f"Staging store '{output_path}' baris {line_no} bukan objek.")
+            if len(_serialize_pattern(old)) > max_chars:
+                raise PatternDistillError("Record lama melampaui --max-chars; append dibatalkan.")
             existing_records.append(old)
             ep_id = str(old.get("source_episode", ""))
             sha = str((old.get("provenance") or {}).get("output_sha256", ""))
@@ -322,6 +353,11 @@ def distill_evidence(
             score = _as_optional_float(rec.get("score"))
             margin = _as_optional_float(rec.get("margin"))
             reasons = rec.get("reasons") or rec.get("judge_reasons") or rec.get("rationale")
+            if reasons is None:
+                validator = rec.get("validator")
+                parsed = validator.get("parsed") if isinstance(validator, dict) else None
+                if isinstance(parsed, dict):
+                    reasons = parsed.get("reasons")
 
             instr_text = next(
                 (
@@ -351,6 +387,7 @@ def distill_evidence(
                     "instruction_sha256": _sha256_text(instr_text),
                 },
             }
+            _bound_pattern(pattern_rec, max_chars)
             distilled.append(pattern_rec)
 
     if not distilled and not (append and existing_records) and not allow_empty:
@@ -359,7 +396,7 @@ def distill_evidence(
         )
 
     all_records = [*existing_records, *distilled] if append else distilled
-    serialized = "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in all_records)
+    serialized = "".join(_serialize_pattern(r) + "\n" for r in all_records)
     _atomic_write_text(output_path, serialized)
 
     return {
@@ -372,6 +409,7 @@ def distill_evidence(
         "skipped_unratified": skipped_unratified,
         "skipped_incomplete": skipped_incomplete,
         "skipped_duplicate": skipped_duplicate,
+        "max_chars": max_chars,
     }
 
 
@@ -381,6 +419,10 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("evidence", nargs="+", type=Path, help="Berkas evidence JSON/JSONL/.json.gz.")
     parser.add_argument("--output", type=Path, required=True, help="Path store staging JSONL keluaran.")
+    parser.add_argument(
+        "--max-chars", type=int, default=DEFAULT_MAX_CHARS,
+        help="Panjang maksimum tiap record JSON (karakter Unicode, tanpa newline).",
+    )
     parser.add_argument(
         "--append",
         action="store_true",
@@ -403,6 +445,7 @@ def main(argv: list[str] | None = None) -> int:
             args.output,
             append=args.append,
             allow_empty=args.allow_empty,
+            max_chars=args.max_chars,
         )
         print(json.dumps(summary, ensure_ascii=False, indent=2))
         return 0
