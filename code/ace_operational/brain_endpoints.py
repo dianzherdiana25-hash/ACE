@@ -94,6 +94,23 @@ def bridge_mode() -> bool:
     return bridge_url() is not None
 
 
+# In bridge mode the relay answers every spooled request within its own
+# spool deadline (brain_bridge_relay.TIMEOUT_S = 240 s) — with the real
+# response or a 504 — so a client wait beyond that deadline plus a
+# transit margin can only ever be spent on a wedged relay, never on a
+# legitimate answer. Bridge-mode calls are therefore capped at this
+# bound no matter what timeout the caller asked for (the 900 s default
+# and the scored path's 2400 s are local-slate budgets). Found live
+# 2026-11-20: a dead VM pump left an engine cycle and two graceful
+# shutdowns hanging on unbounded bridge waits.
+BRIDGE_TIMEOUT_CAP_S = 270.0
+
+
+def _bridge_timeout(timeout: float) -> float:
+    """Bound a caller timeout to the bridge relay's own deadline."""
+    return min(timeout, BRIDGE_TIMEOUT_CAP_S)
+
+
 class BrainUnavailable(RuntimeError):
     """An organ is unreachable or unhealthy. Fail-closed: never faked."""
 
@@ -189,7 +206,7 @@ def bridge_budget(timeout: float = 120.0) -> dict | None:
     url = bridge_url()
     if url is None:
         return None
-    result = _request(f"{url}/v1/budget", None, timeout)
+    result = _request(f"{url}/v1/budget", None, _bridge_timeout(timeout))
     if not isinstance(result, dict):
         raise BrainUnavailable("bridge budget response is not an object")
     return result
@@ -325,7 +342,7 @@ def chat(organ: str, messages: list[dict], *, max_tokens: int = 512,
         }
         return parse_chat_response(_request(
             f"{bridge_url()}/v1/chat/completions",
-            bridge_payload, timeout))
+            bridge_payload, _bridge_timeout(timeout)))
     payload: dict = {
         "messages": messages,
         "temperature": temperature,
@@ -367,7 +384,7 @@ def embed(texts: list[str], *, timeout: float = 120.0,
         for text in texts:
             out = _request(f"{bridge_url()}/v1/embeddings",
                            {"role": "embedding", "input": text},
-                           timeout)
+                           _bridge_timeout(timeout))
             try:
                 vectors.append(out["data"][0]["embedding"])
             except (KeyError, IndexError, TypeError) as exc:

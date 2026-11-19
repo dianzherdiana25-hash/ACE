@@ -325,5 +325,69 @@ class BrainEndpointsEdgeTests(unittest.TestCase):
         self.assertEqual(res, [])
 
 
+class BridgeTimeoutCapTests(unittest.TestCase):
+    """Gelombang robustness 2026-11-20: panggilan bridge dibatasi oleh
+    deadline spool relay sendiri (BRIDGE_TIMEOUT_CAP_S), berapa pun
+    timeout yang diminta pemanggil; mode lokal tidak berubah."""
+
+    def setUp(self):
+        env = mock.patch.dict(
+            os.environ, {be.BRIDGE_ENV_VAR: "http://127.0.0.1:18931"})
+        env.start()
+        self.addCleanup(env.stop)
+        self.calls: list[tuple[str, float]] = []
+
+    def _stub_request(self, reply):
+        def fake(url, payload, timeout):
+            self.calls.append((url, timeout))
+            return reply
+        return mock.patch.object(be, "_request", fake)
+
+    def test_chat_default_timeout_capped_in_bridge_mode(self):
+        reply = {"choices": [{"message": {"content": "ok"}}],
+                 "brain_of_origin": "groq/model-x"}
+        with self._stub_request(reply):
+            res = be.chat("front", [{"role": "user", "content": "halo"}],
+                          check_health=False)
+        self.assertEqual(res.content, "ok")
+        self.assertEqual(self.calls[0][1], be.BRIDGE_TIMEOUT_CAP_S)
+
+    def test_chat_scored_timeout_capped_in_bridge_mode(self):
+        reply = {"choices": [{"message": {"content": "ok"}}]}
+        with self._stub_request(reply):
+            be.chat("front", [{"role": "user", "content": "halo"}],
+                    timeout=2400.0, check_health=False)
+        self.assertEqual(self.calls[0][1], be.BRIDGE_TIMEOUT_CAP_S)
+
+    def test_chat_small_caller_timeout_kept_in_bridge_mode(self):
+        reply = {"choices": [{"message": {"content": "ok"}}]}
+        with self._stub_request(reply):
+            be.chat("front", [{"role": "user", "content": "halo"}],
+                    timeout=30.0, check_health=False)
+        self.assertEqual(self.calls[0][1], 30.0)
+
+    def test_embed_timeout_capped_in_bridge_mode(self):
+        reply = {"data": [{"embedding": [0.1, 0.2]}]}
+        with self._stub_request(reply):
+            out = be.embed(["teks"], timeout=900.0, check_health=False)
+        self.assertEqual(out, [[0.1, 0.2]])
+        self.assertEqual(self.calls[0][1], be.BRIDGE_TIMEOUT_CAP_S)
+
+    def test_bridge_budget_timeout_capped(self):
+        with self._stub_request({"roles": {}}):
+            be.bridge_budget(timeout=900.0)
+        self.assertEqual(self.calls[0][1], be.BRIDGE_TIMEOUT_CAP_S)
+
+    def test_local_mode_timeout_not_capped(self):
+        reply = {"choices": [{"message": {"content": "ok"}}]}
+        with mock.patch.dict(os.environ, {}, clear=False) as _:
+            os.environ.pop(be.BRIDGE_ENV_VAR, None)
+            with mock.patch.object(be, "ensure_organ", return_value=False), \
+                    self._stub_request(reply):
+                be.chat("front", [{"role": "user", "content": "halo"}],
+                        timeout=900.0)
+        self.assertEqual(self.calls[0][1], 900.0)
+
+
 if __name__ == "__main__":
     unittest.main()
