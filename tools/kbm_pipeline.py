@@ -44,6 +44,10 @@ from tools.kbm_split import (
     KbmSplitError,
     split_manuscript,
 )
+from tools.kbm_suite_v2 import (
+    KbmSuiteV2Error,
+    audit_manuscript_package,
+)
 from tools.pack_evidence import (
     EvidencePackError,
     pack_evidence,
@@ -156,12 +160,16 @@ def run_pipeline(
     portable_bundle: Path | None = None,
     portable_force: bool = False,
     pack: bool = False,
+    qa_v2: bool = False,
+    max_words: int | None = None,
 ) -> dict[str, Any]:
     """Jalankan `kbm_split` diikuti `kbm_pack_check` dan opsional staging/sealing/bundel portabel."""
     if min_words < 0:
         raise KbmPipelineError("Nilai --min-words tidak boleh negatif.")
     if min_bytes < 0:
         raise KbmPipelineError("Nilai --min-bytes tidak boleh negatif.")
+    if max_words is not None and max_words < min_words:
+        raise KbmPipelineError("Nilai --max-words tidak boleh kurang dari --min-words.")
     if cover_name is not None and (
         not cover_name or "/" in cover_name or "\\" in cover_name or cover_name in (".", "..")
     ):
@@ -207,9 +215,21 @@ def run_pipeline(
         else:
             cover_valid = False
 
+    qa_v2_report: dict[str, Any] | None = None
+    qa_v2_valid = True
+    if qa_v2 or max_words is not None:
+        qa_v2_report = audit_manuscript_package(
+            output_dir,
+            min_words=min_words,
+            max_words=max_words if max_words is not None else 20000,
+            min_bytes=min_bytes,
+            cover_name=effective_cover,
+        )
+        qa_v2_valid = bool(qa_v2_report["qa_passed"])
+
     split_clean = split_report["below_threshold_count"] == 0
     pack_valid = bool(pack_report["valid"])
-    passed = manuscript_valid and split_clean and pack_valid and cover_valid
+    passed = manuscript_valid and split_clean and pack_valid and cover_valid and qa_v2_valid
 
     if passed:
         failed_stage = None
@@ -219,6 +239,8 @@ def run_pipeline(
         failed_stage = "check"
     elif not cover_valid:
         failed_stage = "cover"
+    elif not qa_v2_valid:
+        failed_stage = "qa_v2"
     else:
         failed_stage = "split"
 
@@ -279,6 +301,8 @@ def run_pipeline(
         result["manuscript_check"] = manuscript_report
     if cover_report is not None:
         result["cover_check"] = cover_report
+    if qa_v2_report is not None:
+        result["qa_v2"] = qa_v2_report
     if bundle_result is not None:
         result["bundle"] = bundle_result
     if evidence_result is not None:
@@ -360,6 +384,17 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Izinkan menimpa target --portable-bundle jika sudah ada.",
     )
+    parser.add_argument(
+        "--qa-v2",
+        action="store_true",
+        help="Jalankan audit QA lanjutan (pacing & deteksi duplikat bab) lewat kbm_suite_v2.",
+    )
+    parser.add_argument(
+        "--max-words",
+        type=int,
+        default=None,
+        help="Ambang maksimum kata per bab untuk audit kbm_suite_v2 (mengimplikasikan --qa-v2).",
+    )
     return parser
 
 
@@ -382,6 +417,8 @@ def main(argv: list[str] | None = None) -> int:
             portable_bundle=args.portable_bundle,
             portable_force=args.portable_force,
             pack=args.pack,
+            qa_v2=args.qa_v2,
+            max_words=args.max_words,
         )
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0 if report["passed"] else 1
@@ -391,6 +428,7 @@ def main(argv: list[str] | None = None) -> int:
         OSError,
         KbmPipelineError,
         KbmSplitError,
+        KbmSuiteV2Error,
         KbmPackCheckError,
         CoverCheckInputError,
         EvidencePackError,
