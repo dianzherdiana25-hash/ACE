@@ -4,9 +4,9 @@
 
 ## 1. Ringkasan Sumber
 
-- Berkas Markdown dipindai: **306**
-- Berkas Python AST dipindai (non-test): **464**
-- Total istilah terindeks: **336** (dari 1374 kandidat unik)
+- Berkas Markdown dipindai: **308**
+- Berkas Python AST dipindai (non-test): **466**
+- Total istilah terindeks: **336** (dari 1379 kandidat unik)
 
 ### Komposisi Sumber
 
@@ -123,6 +123,7 @@
 | `ace_self_evolver` | `ast_module` | `ace_self_evolver.py:1` | ACE Audited Self-Evolver (Strict Empirical Verification & Branch Isolation) |
 | `ACEWebCore` | `ast_class` | `code/ace_operational/web_server.py:1600` | Shared application state and API dispatcher used by HTTP server and direct test harness. |
 | `ACEWebServer` | `ast_class` | `code/ace_operational/web_server.py:2055` | Manageable localhost ThreadingHTTPServer wrapper for `ace web` and automated tests. |
+| `AckStoreCorrupt` | `ast_class` | `code/ace_operational/self_send.py:191` | The persistent ack file exists but cannot be trusted. |
 | `ActiveInformationGainSynthesizer` | `ast_class` | `code/ace_research_f12/causal_agent.py:176` | Synthesizes boundary queries that maximize epistemic information gain. |
 | `AdapterFeature` | `ast_class` | `code/ace_research_discovery/discovery.py:372` | Named boolean predicate atom with complexity cost for the shared target adapter. |
 | `Addendum 59` | `markdown_def` | `handover/local_state_sweep_20261115/study-ace-77cca3c.md:62` | A/B/C v3 selesai, DI pooled **−1,98pp → G2 MEASURED NOT_DEMONSTRATED** (null terukur ketiga); lahir agenda regresi-kontrol. |
@@ -202,6 +203,7 @@
 | `BudgetController` | `ast_class` | `code/ace_autonomy/budget.py:54` | Enforces declared step, candidate, retry, wall-time, and CPU-time ceilings. |
 | `BudgetExceededError` | `ast_class` | `code/ace_host_controller/budget_permits.py:13` | Raised when an allocated compute or query budget is exhausted. |
 | `BudgetExhaustedError` | `ast_class` | `code/ace_autonomy/errors.py:18` | Raised when a goal exceeds step, candidate, retry, wall-clock, or CPU ceilings. |
+| `BundleError` | `ast_class` | `tools/secrets_bundle.py:70` | Stable, value-free failure. |
 | `C1` | `markdown_def` | `docs/research/ACE_ROUND2_GATE_DESIGN_20261113.md:139` | identified improvement, measured |
 | `C1 SESUAI` | `markdown_def` | `docs/research/PREAUDIT_VALIDATOR_V1_PILOT.md:28` | 23/23 artifacts present, sizes and SHA-256 match. |
 | `C2` | `markdown_def` | `docs/research/ACE_ROUND2_GATE_DESIGN_20261113.md:144` | two distinct families evaluated: |
@@ -225,8 +227,6 @@
 | `CatalogGapError` | `ast_class` | `code/ace_operational/catalog_gap.py:58` | Raised when a discovery record or catalog |
 | `CausalEdge` | `ast_class` | `code/ace_causal/causal_miner.py:29` | Directed causal edge: source -> target (source causes target). |
 | `CausalGap` | `ast_class` | `code/ace_research_f12/causal_agent.py:19` | Diagnosed structural capability gap in existing mechanisms. |
-| `CausalGapAnalyzer` | `ast_class` | `code/ace_research_f12/causal_agent.py:58` | Analyzes error distributions between baseline predictions and observed evidence. |
-| `CausalInvariantMiner` | `ast_class` | `code/ace_causal/causal_miner.py:187` | Discovers true causal graph invariants, eliminating spurious confounders and co-effects. |
 | `code.ace_abstract_interp.__init__` | `ast_module` | `code/ace_abstract_interp/__init__.py:1` | ACE Abstract Interpretation & Invariant Synthesis Module. |
 | `code.ace_abstract_interp.disjunctive_domain` | `ast_module` | `code/ace_abstract_interp/disjunctive_domain.py:1` | Disjunctive Abstract Interpretation via Semantic Trace Partitioning. |
 | `code.ace_abstract_interp.invariants` | `ast_module` | `code/ace_abstract_interp/invariants.py:1` | Abstract Interpretation Invariant Analyzer & Invariant Synthesizer. |
