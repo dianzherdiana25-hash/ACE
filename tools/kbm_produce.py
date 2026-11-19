@@ -26,6 +26,7 @@ if str(_REPO_ROOT) not in sys.path:
 from tools.cover_check import check_cover
 from tools.kbm_pack_check import DEFAULT_MIN_BYTES
 from tools.kbm_pipeline import run_pipeline
+from tools.kbm_qc import audit_manuscript as qc_audit_manuscript
 from tools.kbm_split import split_manuscript
 from tools.royalty_track import RoyaltyTrackError, load_column_map, summarize_royalties
 
@@ -155,22 +156,33 @@ def run_production(
     bundle_dir: Path,
     royalty_paths: list[Path],
     royalty_map: Path | None = None,
+    title_config: Path | None = None,
     expected_chapters: int = 30,
     min_words: int = 1000,
     min_bytes: int = DEFAULT_MIN_BYTES,
 ) -> dict[str, Any]:
     """Jalankan tahap yang diperlukan untuk menyiapkan satu paket lokal."""
-    checks = (
+    checks: list[tuple[str, Any]] = [
         ("research", lambda: _research(materials)),
         ("chapter_check", lambda: _manuscript_check(
             manuscript, expected_chapters=expected_chapters, min_words=min_words,
         )),
-        ("cover_check", lambda: check_cover(cover)),
-        ("package", lambda: _assemble(
-            manuscript, cover, bundle_dir, expected_chapters=expected_chapters,
-            min_words=min_words, min_bytes=min_bytes,
-        )),
-        ("royalty", lambda: _royalties(royalty_paths, royalty_map)),
+    ]
+    if title_config is not None:
+        checks.append(
+            ("editorial_qc", lambda: qc_audit_manuscript(
+                manuscript, title_config, min_words=min_words,
+            ))
+        )
+    checks.extend(
+        [
+            ("cover_check", lambda: check_cover(cover)),
+            ("package", lambda: _assemble(
+                manuscript, cover, bundle_dir, expected_chapters=expected_chapters,
+                min_words=min_words, min_bytes=min_bytes,
+            )),
+            ("royalty", lambda: _royalties(royalty_paths, royalty_map)),
+        ]
     )
     stages: dict[str, Any] = {}
     failed_stage = None
@@ -201,6 +213,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--royalty-csv", type=Path, required=True, action="append",
                         help="Catatan CSV royalti. Ulangi argumen untuk beberapa berkas.")
     parser.add_argument("--royalty-map", type=Path, help="Pemetaan kolom untuk royalty_track.")
+    parser.add_argument("--title-config", type=Path, default=None,
+                        help="Konfigurasi judul JSON untuk gerbang QC editorial kbm_qc.")
     parser.add_argument("--chapter-count", type=int, default=30)
     parser.add_argument("--min-words", type=int, default=1000)
     parser.add_argument("--min-bytes", type=int, default=DEFAULT_MIN_BYTES)
@@ -208,7 +222,8 @@ def main(argv: list[str] | None = None) -> int:
     report = run_production(
         materials=args.materials, manuscript=args.manuscript, cover=args.cover,
         bundle_dir=args.bundle_dir, royalty_paths=args.royalty_csv, royalty_map=args.royalty_map,
-        expected_chapters=args.chapter_count, min_words=args.min_words, min_bytes=args.min_bytes,
+        title_config=args.title_config, expected_chapters=args.chapter_count,
+        min_words=args.min_words, min_bytes=args.min_bytes,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0 if report["passed"] else 1

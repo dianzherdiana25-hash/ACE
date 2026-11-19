@@ -117,5 +117,88 @@ class KbmProduceTests(unittest.TestCase):
         self.assertTrue((self.bundle / "upload_manifest.json").is_file())
 
 
+class TestKbmQcWiring(unittest.TestCase):
+    """Uji keterhubungan tools/kbm_qc.py ke orkestrator tools/kbm_produce.py."""
+
+    @staticmethod
+    def _valid_png_bytes() -> bytes:
+        import struct
+        import zlib
+        from tools.cover_check import DEFAULT_RULES
+
+        width = int(DEFAULT_RULES.get("min_width") or 600)
+        height = int(DEFAULT_RULES.get("min_height") or 800)
+        min_bytes = int(DEFAULT_RULES.get("min_bytes") or 1024)
+
+        def chunk(ctype: bytes, payload: bytes) -> bytes:
+            body = ctype + payload
+            return struct.pack(">I", len(payload)) + body + struct.pack(">I", zlib.crc32(body) & 0xFFFFFFFF)
+
+        ihdr = chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
+        pad_len = max(64, min_bytes)
+        text_chunk = chunk(b"tEXt", b"Comment\x00" + (b"x" * pad_len))
+        idat = chunk(b"IDAT", zlib.compress(b"\x00\x00\x00\x00"))
+        iend = chunk(b"IEND", b"")
+        return b"\x89PNG\r\n\x1a\n" + ihdr + text_chunk + idat + iend
+
+    def test_editorial_qc_passes_and_blocks_variant_before_staging(self) -> None:
+        import tempfile
+        from tools import kbm_produce, wiring_audit
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            materials = root / "bahan.md"
+            materials.write_text("- Pola: alur uji deterministik\n", encoding="utf-8")
+            cover = root / "cover.png"
+            cover.write_bytes(self._valid_png_bytes())
+            royalty = root / "royalty.csv"
+            royalty.write_text("serial,date,amount\nSeri1,2026-11-19,100000\n", encoding="utf-8")
+            title_cfg = root / "judul.json"
+            title_cfg.write_text(
+                json.dumps({"characters": ["Sora"], "name_variants": {"Sorra": "Sora"}}),
+                encoding="utf-8",
+            )
+
+            manuscript_bad = root / "naskah_bad.md"
+            manuscript_bad.write_text("# Bab 1\nSorra masuk ruangan.\n", encoding="utf-8")
+            bundle_bad = root / "bundle_bad"
+            rep_bad = kbm_produce.run_production(
+                materials=materials,
+                manuscript=manuscript_bad,
+                cover=cover,
+                bundle_dir=bundle_bad,
+                royalty_paths=[royalty],
+                title_config=title_cfg,
+                expected_chapters=1,
+                min_words=1,
+                min_bytes=1,
+            )
+            self.assertFalse(rep_bad["passed"])
+            self.assertEqual(rep_bad["failed_stage"], "editorial_qc")
+            self.assertFalse(bundle_bad.exists())
+
+            manuscript_ok = root / "naskah_ok.md"
+            manuscript_ok.write_text("# Bab 1\nSora masuk ruangan.\n", encoding="utf-8")
+            bundle_ok = root / "bundle_ok"
+            rc = kbm_produce.main([
+                "--materials", str(materials),
+                "--manuscript", str(manuscript_ok),
+                "--cover", str(cover),
+                "--bundle-dir", str(bundle_ok),
+                "--royalty-csv", str(royalty),
+                "--title-config", str(title_cfg),
+                "--chapter-count", "1",
+                "--min-words", "1",
+                "--min-bytes", "1",
+            ])
+            self.assertEqual(rc, 0)
+            self.assertTrue((bundle_ok / "upload_manifest.json").is_file())
+
+        audit = wiring_audit.audit_wiring(Path(__file__).resolve().parents[1])
+        by_path = {m["path"]: m for m in audit["modules"]}
+        self.assertEqual(by_path["tools/kbm_qc.py"]["status"], "WIRED")
+        self.assertIn("tools/kbm_produce.py", by_path["tools/kbm_qc.py"]["non_test_callers"])
+
+
 if __name__ == "__main__":
     unittest.main()
