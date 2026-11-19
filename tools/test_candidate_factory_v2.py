@@ -220,6 +220,41 @@ class TestCandidateFactoryV2(unittest.TestCase):
             )
             self.assertEqual(bad.returncode, 2)
 
+    def test_vacuous_spec_gate_rejects_empty_and_foreign_keys_only(self) -> None:
+        """Regresi D4: spec kosong & kunci asing/typo ditolak eksplisit; spec valid tetap lolos."""
+        sample_text = "Operator memeriksa jalur cadangan pagi ini. Sensor stabil tanpa gangguan."
+        # 1) Spec kosong -> gagal dengan alasan eksplisit di JSON
+        res_empty = cf2.verify_layered_lang_spec(sample_text, {})
+        self.assertFalse(res_empty["passed"])
+        self.assertIn("vacuous_spec", res_empty.get("reason", ""))
+        self.assertEqual(res_empty["checks"], {})
+
+        # 2) Spec berisi kunci asing saja (baik tanpa active_layers maupun typo di active_layers) -> gagal
+        res_foreign = cf2.verify_layered_lang_spec(sample_text, {"kunci_asing": 123, "typo_count": 9})
+        self.assertFalse(res_foreign["passed"])
+        self.assertIn("vacuous_spec", res_foreign.get("reason", ""))
+
+        res_typo_layer = cf2.verify_layered_lang_spec(
+            sample_text,
+            {"active_layers": ["word_cunt_typo"], "word_cunt_typo": {"exact": 10}},
+        )
+        self.assertFalse(res_typo_layer["passed"])
+        self.assertIn("vacuous_spec", res_typo_layer.get("reason", ""))
+
+        # 3) Spec valid -> tetap lolos persis seperti sebelumnya tanpa field reason tambahan
+        valid_spec = {
+            "episode_id": "reg-ok",
+            "language": "id",
+            "active_layers": ["word_count", "sentence_count"],
+            "word_count": {"exact": len(cf2.tokenize_words(sample_text))},
+            "sentence_count": {"exact": len(cf2.split_sentences(sample_text))},
+        }
+        res_ok = cf2.verify_layered_lang_spec(sample_text, valid_spec)
+        self.assertTrue(res_ok["passed"])
+        self.assertNotIn("reason", res_ok)
+        self.assertTrue(res_ok["checks"]["word_count"]["passed"])
+        self.assertTrue(res_ok["checks"]["sentence_count"]["passed"])
+
 
 if __name__ == "__main__":
     unittest.main()

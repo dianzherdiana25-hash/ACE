@@ -196,6 +196,24 @@ def verify_constraint_spec(text: str, spec: dict[str, Any]) -> dict[str, Any]:
     }
     all_passed = all_passed and order_passed
 
+    _recognized_keys = {
+        "word_count",
+        "sentence_count",
+        "required_phrases",
+        "forbidden_words",
+        "forbidden_affix_roots",
+        "required_order",
+    }
+    has_recognized = isinstance(spec, dict) and any(k in _recognized_keys for k in spec)
+    if not has_recognized:
+        return {
+            "schema": CONSTRAINT_SPEC_SCHEMA,
+            "episode_id": spec.get("episode_id", "") if isinstance(spec, dict) else "",
+            "passed": False,
+            "reason": "vacuous_spec: tidak ada satu pun kunci kendala resmi yang dikenali di spec",
+            "checks": checks,
+        }
+
     return {
         "schema": CONSTRAINT_SPEC_SCHEMA,
         "episode_id": spec.get("episode_id", ""),

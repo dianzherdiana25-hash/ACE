@@ -279,6 +279,53 @@ class TestCorpusGovernanceB3(unittest.TestCase):
             self.assertEqual(chk.returncode, 0, chk.stdout + chk.stderr)
             self.assertTrue(json.loads(chk.stdout)["clean"])
 
+    def test_linter_v2_rejects_vacuous_and_foreign_key_lang_specs(self) -> None:
+        """Regresi D4: corpus_lint_v2 menolak spec kosong dan spec kunci-asing-saja."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            samples = root / "samples"
+            samples.mkdir()
+            ep_path = root / "ep.jsonl"
+            ep_path.write_text(
+                "\n".join(
+                    [
+                        json.dumps({"id": "ep-empty", "kind": "episode", "task_kind": "language", "instruction": "Uji satu."}),
+                        json.dumps({"id": "ep-foreign", "kind": "episode", "task_kind": "language", "instruction": "Uji dua yang cukup berbeda jauh."}),
+                        json.dumps({"id": "ep-valid", "kind": "episode", "task_kind": "language", "instruction": "Uji tiga valid dengan kalimat baku berbeda."}),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            for eid in ("ep-empty", "ep-foreign", "ep-valid"):
+                (samples / f"{eid}.txt").write_text("Satu dua tiga. Empat lima enam.\n", encoding="utf-8")
+
+            lspecs = root / "lang_specs.jsonl"
+            lspecs.write_text(
+                "\n".join(
+                    [
+                        json.dumps({"episode_id": "ep-empty"}),
+                        json.dumps({"episode_id": "ep-foreign", "word_cunt": {"exact": 6}, "active_layers": ["typo_layer"]}),
+                        json.dumps({
+                            "episode_id": "ep-valid",
+                            "active_layers": ["word_count", "sentence_count"],
+                            "word_count": {"exact": 6},
+                            "sentence_count": {"exact": 2},
+                        }),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            res = cl2.lint_corpus_files_v2([ep_path], lang_specs_path=lspecs, lang_samples_dir=samples)
+            self.assertFalse(res["valid"])
+            by_id = {v["id"]: v for v in res["violations"]}
+            self.assertIn("ep-empty", by_id)
+            self.assertIn("vacuous_spec", by_id["ep-empty"]["message"])
+            self.assertIn("ep-foreign", by_id)
+            self.assertIn("vacuous_spec", by_id["ep-foreign"]["message"])
+            self.assertNotIn("ep-valid", by_id)
+
 
 if __name__ == "__main__":
     unittest.main()
