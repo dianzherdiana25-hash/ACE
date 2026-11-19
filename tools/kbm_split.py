@@ -56,36 +56,7 @@ def split_manuscript(
     except (OSError, UnicodeDecodeError) as exc:
         raise KbmSplitError(f"Gagal membaca '{manuscript_path}': {exc}") from exc
 
-    sections: list[dict[str, Any]] = []
-    current_lines: list[str] = []
-    current_meta: dict[str, Any] | None = None
-    in_code_fence = False
-
-    for line in raw_text.splitlines():
-        stripped = line.lstrip()
-        if stripped.startswith("```") or stripped.startswith("~~~"):
-            in_code_fence = not in_code_fence
-        if not in_code_fence:
-            match = _CHAPTER_HEADING_RE.match(line)
-            if match:
-                if current_meta is not None:
-                    current_meta["body_lines"] = current_lines
-                    sections.append(current_meta)
-                chap_num = int(match.group(1))
-                raw_title = (match.group(2) or match.group(3) or "").strip()
-                current_meta = {
-                    "chapter_number": chap_num,
-                    "heading": line.strip(),
-                    "title": raw_title or f"Bab {chap_num}",
-                }
-                current_lines = [line]
-                continue
-        if current_meta is not None:
-            current_lines.append(line)
-
-    if current_meta is not None:
-        current_meta["body_lines"] = current_lines
-        sections.append(current_meta)
+    sections = parse_chapters(raw_text)
 
     if not sections:
         raise KbmSplitError(
@@ -128,6 +99,42 @@ def split_manuscript(
         "below_threshold_files": below_threshold_files,
         "chapters": chapters,
     }
+
+
+def parse_chapters(raw_text: str) -> list[dict[str, Any]]:
+    """Pecah teks per bab agar QC dapat memakai penanda yang sama dengan splitter."""
+    sections: list[dict[str, Any]] = []
+    current_lines: list[str] = []
+    current_meta: dict[str, Any] | None = None
+    in_code_fence = False
+
+    for line in raw_text.splitlines():
+        stripped = line.lstrip()
+        if stripped.startswith("```") or stripped.startswith("~~~"):
+            in_code_fence = not in_code_fence
+        if not in_code_fence:
+            match = _CHAPTER_HEADING_RE.match(line)
+            if match:
+                if current_meta is not None:
+                    current_meta["body_lines"] = current_lines
+                    sections.append(current_meta)
+                chap_num = int(match.group(1))
+                raw_title = (match.group(2) or match.group(3) or "").strip()
+                current_meta = {
+                    "chapter_number": chap_num,
+                    "heading": line.strip(),
+                    "title": raw_title or f"Bab {chap_num}",
+                }
+                current_lines = [line]
+                continue
+        if current_meta is not None:
+            current_lines.append(line)
+
+    if current_meta is not None:
+        current_meta["body_lines"] = current_lines
+        sections.append(current_meta)
+
+    return sections
 
 
 def _build_parser() -> argparse.ArgumentParser:
