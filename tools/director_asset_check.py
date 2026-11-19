@@ -23,7 +23,32 @@ FILE_LITERAL = re.compile(r"(?:[\w.-]+/)*[\w.-]+\.(?:py|md|jsonl?|csv|txt|toml|y
 LABELLED_LINE = re.compile(r"^\s*[-*]\s*(?:\*\*)?(?:kombinasi aset|aset rumah dipakai ulang|aset)\s*:(?:\*\*)?\s*(.*)$", re.I)
 
 
-def _read_claims(text, is_json):
+_HEX_HASH = re.compile(r"^[0-9a-f]{7,64}$")
+_ALL_CAPS_TOKEN = re.compile(r"^[A-Z][A-Z0-9_]*$")
+
+
+def _resolve_md_link(raw_path: str, product_dir: PurePosixPath | None) -> str:
+    path = raw_path.split("#", 1)[0].strip()
+    if not path or "://" in path or path.startswith("/") or "\\" in path:
+        return path
+    if product_dir and str(product_dir) != "." and (path.startswith("./") or path.startswith("../")):
+        joined = (product_dir / path).parts
+        resolved: list[str] = []
+        for part in joined:
+            if part in ("", "."):
+                continue
+            if part == "..":
+                if not resolved:
+                    return path  # Keep escaping ../ so _check flags invalid_repo_path
+                resolved.pop()
+            else:
+                resolved.append(part)
+        if resolved:
+            return "/".join(resolved)
+    return path
+
+
+def _read_claims(text, is_json, *, product_path: str | None = None):
     if is_json:
         product = parse_json(text)
         if not isinstance(product, dict) or not isinstance(product.get("assets"), list):
@@ -36,6 +61,7 @@ def _read_claims(text, is_json):
             yield f"/assets/{index}", item["kind"], item["target"].strip()
         return
 
+    product_dir = PurePosixPath(product_path).parent if product_path else None
     for index, line in enumerate(text.splitlines(), 1):
         location = f"L{index}"
         seen = set()
@@ -52,17 +78,23 @@ def _read_claims(text, is_json):
             elif FILE_LITERAL.fullmatch(token):
                 seen.add(("file", token))
                 covered.append(match.span())
-            elif DOTTED.fullmatch(token):
+            elif DOTTED.fullmatch(token) and "." in token and not _HEX_HASH.fullmatch(token):
                 seen.add(("module", token))
+                covered.append(match.span())
+            elif DOTTED.fullmatch(token) and (_HEX_HASH.fullmatch(token) or _ALL_CAPS_TOKEN.fullmatch(token)):
                 covered.append(match.span())
         for start, end in covered:
             line = line[:start] + " " * (end - start) + line[end:]
         for match in MARKDOWN_PRS.finditer(line):
             seen.add(("pr", match[0]))
+        md_link_spans = []
         for match in re.finditer(r"\]\(([^)]+)\)", line):
-            path = match[1].split("#", 1)[0]
-            if FILE_LITERAL.fullmatch(path):
-                seen.add(("file", path))
+            resolved = _resolve_md_link(match[1], product_dir)
+            if FILE_LITERAL.fullmatch(resolved):
+                seen.add(("file", resolved))
+                md_link_spans.append(match.span())
+        for start, end in md_link_spans:
+            line = line[:start] + " " * (end - start) + line[end:]
         for match in FILE_LITERAL.finditer(line):
             if not re.search(r"[:/\w.-]$", line[:match.start()]):
                 seen.add(("file", match[0]))
@@ -71,7 +103,7 @@ def _read_claims(text, is_json):
             # Historical products also describe assets as free text.
             for part in re.split(r"\s+\+\s+|[,;]", label[1]):
                 part = MARKDOWN_PRS.sub("", part).strip(" \t`*")
-                if DOTTED.fullmatch(part):
+                if DOTTED.fullmatch(part) and not _HEX_HASH.fullmatch(part) and not _ALL_CAPS_TOKEN.fullmatch(part):
                     seen.add(("module", part))
                 elif FILE_LITERAL.fullmatch(part):
                     seen.add(("file", part))
@@ -180,7 +212,11 @@ def _check(repo, kind, target, origin, numbers):
 
 def verify_assets(repo, product_path, *, pr_snapshot_path=None):
     origin, numbers = _pr_ids(repo.read_json(pr_snapshot_path) if pr_snapshot_path else None)
-    claims = _read_claims(repo.read_text(product_path), PurePosixPath(product_path).suffix == ".json")
+    claims = _read_claims(
+        repo.read_text(product_path),
+        PurePosixPath(product_path).suffix == ".json",
+        product_path=product_path,
+    )
     rows = []
     for location, kind, target in claims:
         try:
