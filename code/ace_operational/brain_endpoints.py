@@ -184,6 +184,17 @@ def _request(url: str, payload: dict | None, timeout: float) -> dict:
         raise BrainUnavailable(f"request to {url} failed: {exc}") from exc
 
 
+def bridge_budget(timeout: float = 120.0) -> dict | None:
+    """Baca sisa budget sebelum menjadwalkan panggilan bridge."""
+    url = bridge_url()
+    if url is None:
+        return None
+    result = _request(f"{url}/v1/budget", None, timeout)
+    if not isinstance(result, dict):
+        raise BrainUnavailable("bridge budget response is not an object")
+    return result
+
+
 def health(organ: str, timeout: float = 5.0) -> bool:
     """True iff the organ's /health answers. Never raises."""
     try:

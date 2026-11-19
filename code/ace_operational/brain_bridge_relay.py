@@ -95,6 +95,8 @@ class Handler(BaseHTTPRequestHandler):
             with _models_lock:
                 snapshot = json.loads(json.dumps(_models_cache))
             self._send(200, snapshot)
+        elif self.path == "/v1/budget":
+            self._spool({"path": self.path, "request": {}})
         else:
             self._send(404, {"error": "not found"})
 
@@ -107,6 +109,8 @@ class Handler(BaseHTTPRequestHandler):
         return self._send(doc["status"], doc["body"])
 
     def do_POST(self):
+        if self.path == "/v1/budget":
+            return self._send(405, {"error": "method not allowed"})
         length = int(self.headers.get("Content-Length", 0))
         try:
             req = json.loads(self.rfile.read(length) or b"{}")
