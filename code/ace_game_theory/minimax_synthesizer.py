@@ -81,6 +81,7 @@ class HedgePlayer:
         self.eta: float = eta if eta is not None else 1.0
         self.weights: List[float] = [1.0] * num_actions
         self.cumulative_losses: List[float] = [0.0] * num_actions
+        self.realized_loss: float = 0.0
         self.total_rounds: int = 0
         self.strategy_history: List[List[float]] = []
 
@@ -99,6 +100,11 @@ class HedgePlayer:
         """
         strat = self.current_strategy
         self.strategy_history.append(strat)
+        # Realized loss of the strategy actually played this round:
+        # <p_t, cost_t>. Accumulated here because compute_regret cannot
+        # reconstruct it later from cumulative_losses alone.
+        self.realized_loss += sum(
+            strat[i] * feedback_vector[i] for i in range(self.num_actions))
 
         for i in range(self.num_actions):
             cost = feedback_vector[i]
@@ -120,25 +126,14 @@ class HedgePlayer:
         if self.total_rounds == 0:
             return 0.0
 
-        # Cumulative loss of the algorithm: ∑_t p^{(t) T} cost^{(t)}
-        alg_total_loss = 0.0
-        for t in range(self.total_rounds):
-            p_t = self.strategy_history[t]
-            # Since cumulative_losses stores sum over rounds, we reconstruct round losses or average
-            # Direct regret definition:
-            # For minimizer: Alg_Loss - min_i Cumulative_Loss[i]
-            # For maximizer: max_j Cumulative_Gain[j] - Alg_Gain
-        pass
-
+        # Cumulative loss of the algorithm: sum_t <p_t, cost_t>, tracked
+        # incrementally in update() as self.realized_loss.
         if self.is_minimizer:
             best_fixed = min(self.cumulative_losses)
-            # Estimate algorithm expected loss
-            est_alg = sum(self.current_strategy[i] * self.cumulative_losses[i] for i in range(self.num_actions))
-            return max(0.0, est_alg - best_fixed)
+            return max(0.0, self.realized_loss - best_fixed)
         else:
             best_fixed = max(self.cumulative_losses)
-            est_alg = sum(self.current_strategy[j] * self.cumulative_losses[j] for j in range(self.num_actions))
-            return max(0.0, best_fixed - est_alg)
+            return max(0.0, best_fixed - self.realized_loss)
 
 
 class MinimaxCoEvolution:
@@ -154,6 +149,8 @@ class MinimaxCoEvolution:
         eta_q: Optional[float] = None,
     ) -> Dict[str, Any]:
         """Simulates No-Regret repeated game and converges to epsilon-Nash equilibrium."""
+        if rounds <= 0:
+            raise ValueError("rounds must be a positive integer")
         m, n = self.game.m, self.game.n
 
         # Optimal learning rate for T rounds: eta = sqrt(8 * ln(K) / T)

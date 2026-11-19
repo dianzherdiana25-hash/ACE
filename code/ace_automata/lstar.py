@@ -51,7 +51,7 @@ class DFA:
         """Generates self-contained pure Python function."""
         lines = [
             f"def {func_name}(word: str) -> bool:",
-            "    state = 0",
+            f"    state = {self.initial_state!r}",
             f"    transitions = {repr(dict(self.transitions))}",
             f"    accepting = {repr(set(self.accepting_states))}",
             "    for char in word:",

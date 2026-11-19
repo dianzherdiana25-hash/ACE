@@ -311,10 +311,10 @@ class TestConformalRiskEdgeCases(unittest.TestCase):
         lam = ctrl.calibrate([(0.0, 0.0), (1.0, 1.0)], [2.0, 0.5, 1.0])
         self.assertEqual(lam, 2.0)
 
-    @unittest.expectedFailure
     def test_15_bug_controller_empty_lambda_candidates_index_error(self):
         # BUG (conformal_risk.py:131): empty lambda_candidates triggers raw IndexError
         # instead of ValueError validation.
+        # DIPERBAIKI (gelombang robustness 2026-11-20): calibrate menolak lambda_candidates kosong dengan ValueError.
         ctrl = ConformalRiskController(
             set_generator=lambda x, l: {x},
             loss_fn=lambda c, y: 0.0,
@@ -387,9 +387,9 @@ class TestPACBayesEdgeCases(unittest.TestCase):
         self.assertAlmostEqual(ens.posterior_weights[0], 0.5)
         self.assertEqual(ens.evaluate_empirical_risks([]), [0.0, 0.0])
 
-    @unittest.expectedFailure
     def test_21_bug_empty_ensemble_zero_division(self):
         # BUG (pac_bounds.py:162): empty program_ids raises raw ZeroDivisionError instead of ValueError.
+        # DIPERBAIKI (gelombang robustness 2026-11-20): __post_init__ menolak program_ids kosong dengan ValueError.
         with self.assertRaises(ValueError):
             ProgramEnsembleDistribution(program_ids=[], programs=[], prior_weights=[])
 
@@ -433,19 +433,19 @@ class TestMinimaxSynthesizerEdgeCases(unittest.TestCase):
         self.assertAlmostEqual(sum(strat), 1.0, places=9)
         self.assertGreater(strat[1], 0.99)
 
-    @unittest.expectedFailure
     def test_25_bug_hedge_compute_regret_uses_final_strategy_not_realized_loss(self):
         # BUG (minimax_synthesizer.py:124-141): strategy_history loop is a `pass` stub,
         # evaluating final current_strategy instead of realized sum_t <p_t, loss_t>.
         # Realized loss = 0.5*1 + (e/(1+e))*1 ~= 1.23106 vs best fixed = 1.0 (regret > 0.2).
+        # DIPERBAIKI (gelombang robustness 2026-11-20): update() mengakumulasi realized_loss <p_t, cost_t>.
         player = HedgePlayer(num_actions=2, is_minimizer=True, eta=1.0)
         player.update([1.0, 0.0])
         player.update([0.0, 1.0])
         self.assertGreater(player.compute_regret(), 0.2)
 
-    @unittest.expectedFailure
     def test_26_bug_minimax_solve_zero_rounds_raises_value_error(self):
         # BUG (minimax_synthesizer.py:161): rounds=0 fails with ZeroDivisionError instead of ValueError.
+        # DIPERBAIKI (gelombang robustness 2026-11-20): solve menolak rounds <= 0 dengan ValueError.
         engine = MinimaxCoEvolution(TwoPlayerGameMatrix([[0.5]]))
         with self.assertRaises(ValueError):
             engine.solve(rounds=0)
@@ -524,10 +524,10 @@ class TestWakeSleepEdgeCases(unittest.TestCase):
         self.assertEqual(second["new_primitives_promoted"], [])
         self.assertEqual(second["total_library_size"], 1)
 
-    @unittest.expectedFailure
     def test_30_bug_len_primitive_template_fails_sandbox_eval(self):
         # BUG (wake_sleep.py:29): TypedASTNode('len', 'INT').to_code() compiles to 'len(word)',
         # yet DiscoveredPrimitive.evaluate uses {'__builtins__': None} without supplying len in scope.
+        # DIPERBAIKI (gelombang robustness 2026-11-20): evaluate memasok len/max — seluruh kosakata callable to_code.
         engine = WakeSleepAbstractionEngine()
         for idx, k in enumerate((1, 5)):
             engine.record_solution(
@@ -581,9 +581,9 @@ class TestLStarAutomataEdgeCases(unittest.TestCase):
         self.assertGreaterEqual(len(dfa.states), 1)
         self.assertLessEqual(len(dfa.states), 8)
 
-    @unittest.expectedFailure
     def test_34_bug_to_python_code_ignores_nonzero_initial_state(self):
         # BUG (lstar.py:54): to_python_code hardcodes `state = 0` instead of `self.initial_state`.
+        # DIPERBAIKI (gelombang robustness 2026-11-20): kode yang dibangkitkan memakai self.initial_state.
         dfa = DFA(
             states=[0, 1, 2],
             alphabet=("a",),

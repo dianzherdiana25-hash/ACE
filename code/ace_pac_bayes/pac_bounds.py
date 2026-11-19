@@ -156,6 +156,8 @@ class ProgramEnsembleDistribution:
     posterior_weights: List[float] = field(default_factory=list)
 
     def __post_init__(self):
+        if not self.program_ids:
+            raise ValueError("program_ids must be non-empty.")
         # Normalize prior
         total_p = sum(self.prior_weights)
         if total_p <= 0:

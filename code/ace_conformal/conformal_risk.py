@@ -124,6 +124,8 @@ class ConformalRiskController:
         n = len(calibration_set)
         if n == 0:
             raise ValueError("Calibration set must be non-empty.")
+        if not lambda_candidates:
+            raise ValueError("lambda_candidates must be non-empty.")
 
         # Sort candidate parameters in increasing order of set size / decreasing loss
         sorted_lambdas = sorted(lambda_candidates)

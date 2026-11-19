@@ -26,7 +26,11 @@ class DiscoveredPrimitive:
     def evaluate(self, word: str, *args) -> Any:
         params = dict(zip(self.parameter_names, args))
         scope = {"word": word, **params}
-        return eval(self.template_expr, {"__builtins__": None}, scope)
+        # Template code comes from TypedASTNode.to_code(), whose whole
+        # callable vocabulary is len() and max() (mod guards its divisor
+        # with max(1, ...)). Supply exactly those two; builtins stay off.
+        return eval(self.template_expr,
+                    {"__builtins__": None, "len": len, "max": max}, scope)
 
 
 class WakeSleepAbstractionEngine:
