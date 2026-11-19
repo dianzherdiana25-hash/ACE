@@ -26,6 +26,12 @@ import zlib
 from pathlib import Path, PurePosixPath
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from tools import instance_kit as _instance_kit
+
 
 SCHEMA_VERSION = "ace.portability-pack.v1"
 PAYLOAD_DIRNAME = "payload"
@@ -118,6 +124,21 @@ def _compute_manifest_digest(files_entries: Sequence[Dict[str, Any]]) -> str:
     return hashlib.sha256(canonical).hexdigest()
 
 
+def validate_instance_isolation_paths(config_paths: Sequence[Path]) -> Dict[str, Any]:
+    """Muat dan verifikasi isolasi multi-instans fail-closed lewat tools.instance_kit."""
+    try:
+        configs = [_instance_kit.load_instance_config(Path(p)) for p in config_paths]
+        report = _instance_kit.validate_isolation(configs)
+    except _instance_kit.InstanceKitError as exc:
+        raise PortabilityPackError(f"Konfigurasi instans tidak sah: {exc}") from exc
+    if not report.get("isolated"):
+        raise PortabilityPackError(
+            "Validasi isolasi instans gagal (dibatalkan fail-closed): "
+            + json.dumps(report.get("violations", []), ensure_ascii=False)
+        )
+    return report
+
+
 def pack_bundle(
     *,
     source_dir: Path,
@@ -125,8 +146,11 @@ def pack_bundle(
     include_paths: Sequence[str],
     label: str = "ace-migration",
     force: bool = False,
+    instance_configs: Optional[Sequence[Path]] = None,
 ) -> Dict[str, Any]:
     """Kemaskan berkas sumber menjadi bundel direktori atau arsip .tar.gz."""
+    if instance_configs:
+        validate_instance_isolation_paths(instance_configs)
     src = Path(source_dir)
     dest = Path(out_path)
     items = _collect_source_files(src, include_paths)
@@ -360,8 +384,11 @@ def unpack_bundle(
     bundle_path: Path,
     dest_dir: Path,
     force: bool = False,
+    instance_configs: Optional[Sequence[Path]] = None,
 ) -> Dict[str, Any]:
     """Verifikasi integritas bundel terlebih dahulu, lalu bongkar dan verifikasi ulang hasil tulis."""
+    if instance_configs:
+        validate_instance_isolation_paths(instance_configs)
     report, payload_bytes = verify_bundle(bundle_path)
     if not report["ok"]:
         raise PortabilityPackError(
@@ -423,9 +450,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--paths", nargs="+", default=None, help="Daftar path relatif yang dikemas pada --pack")
     parser.add_argument("--label", default="ace-migration", help="Label bundel")
     parser.add_argument("--dest-dir", default=None, help="Direktori tujuan untuk --unpack")
+    parser.add_argument("--instance-configs", nargs="+", default=None, help="Opsional config JSON instance_kit untuk verifikasi isolasi")
     parser.add_argument("--force", action="store_true", help="Izinkan menimpa bundel/berkas yang sudah ada")
 
     args = parser.parse_args(argv)
+    inst_cfgs = [Path(p) for p in args.instance_configs] if args.instance_configs else None
     try:
         if args.pack:
             if not args.paths:
@@ -436,6 +465,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 include_paths=args.paths,
                 label=args.label,
                 force=args.force,
+                instance_configs=inst_cfgs,
             )
             print(json.dumps(res, indent=2, ensure_ascii=False))
             return 0
@@ -449,6 +479,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             bundle_path=Path(args.bundle),
             dest_dir=Path(args.dest_dir),
             force=args.force,
+            instance_configs=inst_cfgs,
         )
         print(json.dumps(res, indent=2, ensure_ascii=False))
         return 0
