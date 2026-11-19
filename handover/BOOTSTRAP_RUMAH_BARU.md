@@ -84,7 +84,22 @@ python3 tools/secrets_bundle.py add groq-api --service groq
 ```
 
 Lalu commit `secrets/bundle.gpg` + `secrets/manifest.json` lewat PR
-seperti perubahan lain. Di rumah baru mana pun setelah itu:
+seperti perubahan lain.
+
+*Status nyata 2026-11-19: atas perintah pemilik ("kamu aja"), `init`
+pertama dijalankan Ian di VM Ian. Passphrase master dibuat oleh
+mesin (32 byte acak) dan disimpan HANYA sebagai berkas lokal
+`~/.ace-secrets/bundle-passphrase` (izin 600) di VM Ian — tidak
+pernah tampil di chat, repo, atau catatan mana pun. Bundel lahir
+dengan 0 entri. Pemilik dapat mengambil alih passphrase kapan pun
+dengan `rotate-passphrase` di terminal rumah mana pun (passphrase
+lama dibaca Ian dari berkas itu tanpa menampilkannya), atau meminta
+Ian menjalankan `verify`/`get` secara transient dari berkas yang
+sama. Pengisian entri terjadi saat sebuah nilai secara sah berada
+di tangan operator; nilai yang tersimpan di Secure Vault tidak bisa
+diekstrak oleh siapa pun — itu memang desain brankasnya.*
+
+Di rumah baru mana pun setelah itu:
 
 ```sh
 python3 tools/secrets_bundle.py verify     # minta passphrase master
