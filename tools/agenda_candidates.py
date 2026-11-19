@@ -17,9 +17,18 @@ else:
 
 
 SCHEMA = "ace.agenda-proposal.v1"
+CLOSURE_SCHEMA = "ace.agenda-closure.v1"
 BRAIN_OF_ORIGIN = "codex-proposal"
 ASSET_KINDS = frozenset({"tool", "corpus", "engine"})
 PRIORITY = {"blocked": 1, "failure": 2, "null": 3, "asset_pair": 4}
+DECISION_STATUS_MAP = {
+    "APPROVED": ("CLOSED_APPROVED", True),
+    "COMPLETED": ("CLOSED_COMPLETED", True),
+    "REJECTED": ("CLOSED_REJECTED", True),
+    "DEFERRED": ("OPEN_DEFERRED", False),
+}
+_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+_COMMIT_RE = re.compile(r"^[0-9a-f]{7,40}$")
 VERDICTS = {
     "NOL": ("null", "NOL"),
     "NULL": ("null", "NULL"),
@@ -213,6 +222,229 @@ def prioritize(items: Iterable[dict]) -> list[dict]:
     return [{**row, "priority_rank": rank} for rank, row in enumerate(ordered, 1)]
 
 
+def _candidate_id(row: dict) -> str:
+    pid = row.get("proposal_id")
+    if _text(pid):
+        return pid
+    cid = row.get("candidate_id")
+    if _text(cid):
+        return cid
+    raise ValueError("Kandidat wajib memiliki proposal_id atau candidate_id.")
+
+
+def _verify_pointer(pointer: object, repo_root: Path | None) -> tuple[dict | None, list[str]]:
+    if not isinstance(pointer, dict):
+        return None, ["pointer keputusan wajib berupa objek JSON."]
+    errors: list[str] = []
+    raw_path = pointer.get("path")
+    try:
+        rel_path = _repo_name(raw_path)
+    except ValueError as exc:
+        return None, [str(exc)]
+
+    line = pointer.get("line")
+    if line is not None and (type(line) is not int or line < 1):
+        errors.append("pointer.line wajib bilangan bulat >= 1.")
+
+    sha = pointer.get("sha256") or pointer.get("content_sha256")
+    if sha is not None and (not isinstance(sha, str) or not _SHA256_RE.fullmatch(sha)):
+        errors.append("pointer.sha256 wajib 64 hex huruf kecil.")
+
+    commit = pointer.get("commit")
+    if commit is not None and (not isinstance(commit, str) or not _COMMIT_RE.fullmatch(commit)):
+        errors.append("pointer.commit wajib hash hex 7-40 karakter.")
+
+    excerpt = pointer.get("excerpt")
+    if excerpt is not None and not _text(excerpt):
+        errors.append("pointer.excerpt wajib teks non-kosong jika disertakan.")
+
+    if errors:
+        return None, errors
+
+    verified = {"path": rel_path}
+    if line is not None:
+        verified["line"] = line
+    if sha is not None:
+        verified["sha256"] = sha
+    if commit is not None:
+        verified["commit"] = commit
+
+    if repo_root is not None:
+        root = repo_root.resolve(strict=True)
+        try:
+            _, file_path = _source_file(root, rel_path)
+        except (OSError, ValueError):
+            return None, [f"Berkas pointer '{rel_path}' tidak ditemukan di dalam repo."]
+        raw_bytes = file_path.read_bytes()
+        actual_sha = hashlib.sha256(raw_bytes).hexdigest()
+        if sha is not None and actual_sha != sha:
+            return None, [f"SHA-256 pointer '{rel_path}' tidak cocok (harapan {sha}, aktual {actual_sha})."]
+        verified["observed_sha256"] = actual_sha
+        lines = raw_bytes.decode("utf-8", errors="replace").splitlines()
+        if line is not None and line > len(lines):
+            return None, [f"Baris pointer '{rel_path}:{line}' melampaui jumlah baris ({len(lines)})."]
+        if excerpt is not None:
+            haystack = lines[line - 1] if line is not None else "\n".join(lines)
+            if excerpt.strip() not in haystack:
+                return None, [f"Kutipan pointer tidak ditemukan pada '{rel_path}'."]
+            verified["excerpt"] = excerpt.strip()
+    elif excerpt is not None:
+        verified["excerpt"] = excerpt.strip()
+
+    return verified, []
+
+
+def _normalize_decision_record(row: object) -> dict:
+    if not isinstance(row, dict):
+        raise ValueError("Entri keputusan wajib berupa objek JSON.")
+    cid = _candidate_id(row)
+    decision_raw = row.get("decision")
+    if not _text(decision_raw):
+        raise ValueError(f"Keputusan untuk '{cid}' wajib memiliki field 'decision'.")
+    decision_norm = decision_raw.strip().upper()
+    if decision_norm not in DECISION_STATUS_MAP:
+        raise ValueError(f"Token keputusan '{decision_raw}' untuk '{cid}' tidak dikenali.")
+    decided_by = row.get("decided_by")
+    if not _text(decided_by):
+        raise ValueError(f"Keputusan untuk '{cid}' wajib mencantumkan 'decided_by'.")
+
+    raw_ptr = row.get("decision_pointer")
+    if raw_ptr is None and "decision_pointers" in row:
+        raw_ptr = row.get("decision_pointers")
+    if raw_ptr is None:
+        pointers = []
+    elif isinstance(raw_ptr, list):
+        pointers = list(raw_ptr)
+    else:
+        pointers = [raw_ptr]
+    return {
+        "candidate_id": cid,
+        "decision": decision_norm,
+        "decided_by": decided_by.strip(),
+        "raw_pointers": pointers,
+    }
+
+
+def build_closure_report(
+    proposals: Iterable[dict],
+    decisions: Iterable[dict],
+    *,
+    repo_root: Path | None = None,
+) -> dict:
+    """Buktikan status penutupan tiap kandidat agenda memakai ID dan pointer keputusan terverifikasi."""
+    candidates: dict[str, dict] = {}
+    for row in proposals:
+        if not isinstance(row, dict) or row.get("schema") != SCHEMA:
+            raise ValueError("Setiap usulan wajib ber-schema ace.agenda-proposal.v1.")
+        cid = _candidate_id(row)
+        cleaned = {field: value for field, value in row.items() if field != "priority_rank"}
+        if cid in candidates and candidates[cid] != cleaned:
+            raise ValueError(f"Tabrakan ID kandidat usulan dengan isi berbeda: {cid}.")
+        candidates[cid] = cleaned
+
+    grouped_decisions: dict[str, list[dict]] = defaultdict(list)
+    for row in decisions:
+        rec = _normalize_decision_record(row)
+        canonical_key = json.dumps(rec, ensure_ascii=False, sort_keys=True)
+        existing_keys = {
+            json.dumps(item, ensure_ascii=False, sort_keys=True)
+            for item in grouped_decisions[rec["candidate_id"]]
+        }
+        if canonical_key not in existing_keys:
+            grouped_decisions[rec["candidate_id"]].append(rec)
+
+    items = []
+    counts_by_status = defaultdict(int)
+    for cid in sorted(candidates):
+        prop = candidates[cid]
+        dec_list = grouped_decisions.get(cid, [])
+        verified_pointers = []
+        validation_errors = []
+        decision_val = None
+        decided_by = None
+
+        if not dec_list:
+            status = "OPEN_PENDING_DECISION"
+            closed = False
+        elif len(dec_list) > 1:
+            status = "CONFLICTING_DECISION"
+            closed = False
+            validation_errors.append(
+                f"Ditemukan {len(dec_list)} keputusan bertentangan untuk kandidat '{cid}'."
+            )
+        else:
+            rec = dec_list[0]
+            decision_val = rec["decision"]
+            decided_by = rec["decided_by"]
+            if not rec["raw_pointers"]:
+                status = "INVALID_DECISION_POINTER"
+                closed = False
+                validation_errors.append("Keputusan tidak menyertakan decision_pointer.")
+            else:
+                for ptr in rec["raw_pointers"]:
+                    ver_ptr, ptr_errs = _verify_pointer(ptr, repo_root)
+                    if ptr_errs:
+                        validation_errors.extend(ptr_errs)
+                    else:
+                        verified_pointers.append(ver_ptr)
+                if validation_errors or not verified_pointers:
+                    status = "INVALID_DECISION_POINTER"
+                    closed = False
+                    verified_pointers = []
+                else:
+                    status, closed = DECISION_STATUS_MAP[decision_val]
+
+        counts_by_status[status] += 1
+        proof_payload = json.dumps(
+            {
+                "candidate_id": cid,
+                "status": status,
+                "decision": decision_val,
+                "decided_by": decided_by,
+                "verified_pointers": verified_pointers,
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+        items.append({
+            "candidate_id": cid,
+            "kind": prop["kind"],
+            "title": prop["title"],
+            "sources": prop["sources"],
+            "status": status,
+            "closed": closed,
+            "decision": decision_val,
+            "decided_by": decided_by,
+            "verified_pointers": verified_pointers,
+            "validation_errors": validation_errors,
+            "proof_sha256": hashlib.sha256(proof_payload.encode("utf-8")).hexdigest(),
+        })
+
+    orphan_decisions = []
+    for cid in sorted(grouped_decisions.keys() - candidates.keys()):
+        for rec in grouped_decisions[cid]:
+            orphan_decisions.append({
+                "candidate_id": cid,
+                "decision": rec["decision"],
+                "decided_by": rec["decided_by"],
+                "raw_pointers": rec["raw_pointers"],
+            })
+
+    closed_count = sum(1 for item in items if item["closed"])
+    return {
+        "schema": CLOSURE_SCHEMA,
+        "summary": {
+            "total_candidates": len(items),
+            "closed_count": closed_count,
+            "open_or_invalid_count": len(items) - closed_count,
+            "orphan_decision_count": len(orphan_decisions),
+            "counts_by_status": {key: counts_by_status[key] for key in sorted(counts_by_status)},
+        },
+        "items": items,
+        "orphan_decisions": orphan_decisions,
+    }
+
+
 def _valid_sources(sources) -> bool:
     if not isinstance(sources, list) or not sources:
         return False
@@ -237,6 +469,22 @@ def _read_jsonl(path: Path) -> list[dict]:
             for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def _read_json_or_jsonl(path: Path) -> list[dict]:
+    text = path.read_text(encoding="utf-8").strip()
+    if not text:
+        return []
+    if text.startswith("["):
+        data = json.loads(text, object_pairs_hook=_unique_fields)
+        if not isinstance(data, list):
+            raise ValueError("Snapshot keputusan JSON wajib berupa array objek.")
+        return data
+    if text.startswith("{"):
+        parsed = json.loads(text, object_pairs_hook=_unique_fields)
+        if isinstance(parsed, dict) and "decisions" in parsed and isinstance(parsed["decisions"], list):
+            return parsed["decisions"]
+    return _read_jsonl(path)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", type=Path, default=Path.cwd(), help="Akar repo sumber.")
@@ -248,9 +496,18 @@ def main(argv: list[str] | None = None) -> int:
     failures.add_argument("documents", nargs="+")
     rank = commands.add_parser("prioritize", help="Urutkan daftar proposal JSONL.")
     rank.add_argument("proposals", nargs="+")
+    closure = commands.add_parser("closure", help="Laporan status penutupan kandidat agenda.")
+    closure.add_argument("--proposals", nargs="+", required=True)
+    closure.add_argument("--decisions", nargs="+", required=True)
     args = parser.parse_args(argv)
     try:
         root = args.repo.resolve(strict=True)
+        if args.command == "closure":
+            prop_rows = [entry for name in args.proposals for entry in _read_jsonl(_source_file(root, name)[1])]
+            dec_rows = [entry for name in args.decisions for entry in _read_json_or_jsonl(_source_file(root, name)[1])]
+            report = build_closure_report(prop_rows, dec_rows, repo_root=root)
+            print(json.dumps(report, ensure_ascii=False, sort_keys=True))
+            return 0
         if args.command == "assets":
             assets_name, assets_path = _source_file(root, args.assets_file)
             snapshot, snapshot_path = _source_file(root, args.register_snapshot)
