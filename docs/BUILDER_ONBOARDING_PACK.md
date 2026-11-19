@@ -24,13 +24,13 @@
 
 ## 3. Wilayah Terlarang (Hanya Engineer Utama — Jangan Disentuh)
 
-- Jalur eksak dipantau (`13` berkas) + `4` modul produksi `code/ace_evaluator/` + `3` corpus beku `handover/*.jsonl` + jalur direktori staging aktif EVO 0007.
+- Jalur eksak dipantau (`13` berkas) + `4` modul produksi `code/ace_evaluator/` + `5` corpus beku `handover/*.jsonl` + jalur direktori staging aktif EVO 0007.
 
 | Berkas / Wilayah | Keadaan di Disk Saat Ini |
 | --- | --- |
 | `code/ace_operational/abc_v3_scorer.py` | `PRESENT_ON_DISK` |
 | `code/ace_operational/cognitive_memory.py` | `PRESENT_ON_DISK` |
-| `code/ace_operational/evo0007_run.py` | `NOT_ON_MAIN_PROTECTED_RESERVED` |
+| `code/ace_operational/evo0007_run.py` | `PRESENT_ON_DISK` |
 | `code/ace_operational/g1_instrument.py` | `PRESENT_ON_DISK` |
 | `code/ace_operational/g3_instrument.py` | `PRESENT_ON_DISK` |
 | `code/ace_operational/g4_instrument.py` | `PRESENT_ON_DISK` |
@@ -51,9 +51,11 @@
 
 ### Corpus Beku `handover/*.jsonl` (Read-Only)
 
+- `handover/EVO0007_KANDIDAT_PABRIK.jsonl`
 - `handover/EVO_0003_CORPUS_TAIL_V1.jsonl`
 - `handover/EVO_0005_CORPUS_V1.jsonl`
 - `handover/EVO_0006_CORPUS_CANDIDATES_V1.jsonl`
+- `handover/KANDIDAT_PABRIK_0007_BEKU.jsonl`
 
 ## 4. Resep Verifikasi Sebelum Buka Draft PR
 

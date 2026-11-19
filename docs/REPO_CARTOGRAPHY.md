@@ -6,8 +6,8 @@
 
 - Schema: `ace.repo-cartography.v1`
 - Total subsistem: **68** (termasuk `4` subsistem zona terlindung/beku)
-- Total berkas terpetakan: **2002**
-- Modul Python produksi: **535** | Modul tes: **298**
+- Total berkas terpetakan: **2064**
+- Modul Python produksi: **548** | Modul tes: **316**
 - Tepi dependensi lintas subsistem (produksi): **117**
 - Siklus SCC lintas subsistem: **1**
 
@@ -46,7 +46,7 @@ flowchart LR
     code_ace_research_f13["code/ace_research_f13 (SAFE)"]
     code_ace_research_reptransfer["code/ace_research_reptransfer (SAFE)"]
     code_ace_core_repair["code/ace_core_repair (SAFE)"]
-    tools -->|51| code_ace_operational
+    tools -->|52| code_ace_operational
     evidence -->|25| code_ace_operational
     code_ace_operational -->|8| code_ace_mission
     code_ace_capability_evolution -->|7| code_ace_candidate_search
@@ -123,7 +123,7 @@ flowchart LR
 | `code/ace_mcts` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_mission` | `SAFE_WORKSPACE` | 9 | 6 | 3 | 5 | 3 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_neurosymbolic` | `SAFE_WORKSPACE` | 9 | 5 | 4 | 0 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_operational` | `MIXED_PROTECTED` | 178 | 87 | 87 | 5 | 14 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `code/ace_operational` | `MIXED_PROTECTED` | 194 | 93 | 97 | 5 | 14 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 | `code/ace_pac_bayes` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_real_world` | `SAFE_WORKSPACE` | 11 | 8 | 3 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_red_team` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
@@ -146,21 +146,21 @@ flowchart LR
 | `code/ace_visual_bridge` | `SAFE_WORKSPACE` | 4 | 3 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/checkpoints` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `data` | `SAFE_WORKSPACE` | 1 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `docs` | `SAFE_WORKSPACE` | 267 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `evidence` | `SAFE_WORKSPACE` | 710 | 29 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
+| `docs` | `SAFE_WORKSPACE` | 269 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
+| `evidence` | `SAFE_WORKSPACE` | 721 | 29 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `examples` | `SAFE_WORKSPACE` | 5 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `handover` | `FROZEN_CORPUS_SPEC` | 140 | 23 | 0 | 0 | 1 | Corpus beku, preregistrasi, & custody spec (read-only) |
+| `handover` | `FROZEN_CORPUS_SPEC` | 159 | 23 | 0 | 0 | 1 | Corpus beku, preregistrasi, & custody spec (read-only) |
 | `projects` | `SAFE_WORKSPACE` | 12 | 3 | 2 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
-| `root` | `SAFE_WORKSPACE` | 20 | 4 | 0 | 0 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
+| `root` | `SAFE_WORKSPACE` | 19 | 4 | 0 | 0 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
 | `secrets` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `tests` | `SAFE_WORKSPACE` | 19 | 0 | 19 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `tools` | `MIXED_PROTECTED` | 202 | 114 | 86 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `tools` | `MIXED_PROTECTED` | 217 | 121 | 94 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 
 ## 4. Tepi Ketergantungan Lintas Subsistem (Semua)
 
 | Asal | Tujuan | Bobot Impor | Contoh Target Modul |
 | --- | --- | ---: | --- |
-| `tools` | `code/ace_operational` | 51 | `ace_operational.abc_v3_scorer`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization` |
+| `tools` | `code/ace_operational` | 52 | `ace_operational.abc_v3_scorer`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization` |
 | `evidence` | `code/ace_operational` | 25 | `ace_operational.experiment_kernel`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization` |
 | `code/ace_operational` | `code/ace_mission` | 8 | `ace_mission.bus`, `ace_mission.schema` |
 | `code/ace_capability_evolution` | `code/ace_candidate_search` | 7 | `ace_candidate_search.model`, `ace_candidate_search.search` |
