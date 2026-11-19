@@ -1176,6 +1176,97 @@ def _make_optional_daily_digest_fuzzer():
     return _run
 
 
+def _make_optional_income_verify_fuzzer():
+    try:
+        mod = importlib.import_module("tools.income_verify")
+    except ImportError:
+        return None
+
+    id_pool = ["EVT-1", "EVT-2", "evt_3", "", "x" * 40, "EVT 1"]
+    rail_pool = ["gopay", "seabank", "qris", "fastwork", "", "RAIL!"]
+    field_pool = ["id", "rail", "ref", "provider", "date",
+                  "amount_rupiah", "recipient", "fee_rupiah", "extra"]
+
+    def _row(rng: random.Random) -> Any:
+        if rng.random() < 0.15:
+            return _random_json_value(rng)
+        row: dict[str, Any] = {}
+        for field in field_pool:
+            if rng.random() < 0.55:
+                continue
+            if field == "id":
+                row[field] = rng.choice(id_pool)
+            elif field == "rail":
+                row[field] = rng.choice(rail_pool)
+            elif field in ("amount_rupiah", "fee_rupiah"):
+                row[field] = rng.choice([0, 1, 15000, -5, 3.5, "15000",
+                                         None, True, [1], {"a": 1}])
+            elif field == "date":
+                row[field] = rng.choice(["2026-11-01", "2026-13-40",
+                                         "01/11/2026", "", None, 20261101])
+            else:
+                row[field] = rng.choice(["ref-1", "fastwork", "Dian", "",
+                                         None, 7, ["x"]])
+        return row
+
+    def _source(rng: random.Random) -> Any:
+        if rng.random() < 0.2:
+            return _random_json_value(rng)
+        return [_row(rng) for _ in range(rng.randint(0, 4))]
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        for i in range(iterations):
+            try:
+                mod.verify_income(
+                    platform=_source(rng),
+                    withdrawal=_source(rng),
+                    statement=_source(rng),
+                    recipient=rng.choice(["Dian Herdiana", "", "  ", "A\nB"]),
+                    max_lag_days=rng.choice([0, 14, -1, 365]),
+                )
+            except ValueError:
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
+def _make_optional_relay_spool_fuzzer():
+    try:
+        mod = importlib.import_module("tools.relay_spool_tools")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        target = tmp / "fuzz_spool.json"
+        for i in range(iterations):
+            mode = rng.random()
+            if mode < 0.4:
+                payload: Any = _random_json_value(rng)
+                target.write_text(json.dumps(payload), encoding="utf-8")
+            elif mode < 0.7:
+                payload = {"path": rng.choice(["/v1/chat/completions", "/v1/models", 7, None]),
+                           "request": _random_json_value(rng),
+                           "ts": rng.choice([0.0, "kemarin", None, -1])}
+                target.write_text(json.dumps(payload), encoding="utf-8")
+            else:
+                target.write_text(_random_text(rng, 200), encoding="utf-8")
+            kind = rng.choice([None, "req", "resp", "aneh"])
+            try:
+                mod.validate_spool_file(target, kind=kind)
+            except (mod.RelaySpoolError, OSError):
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
 def collect_targets() -> dict[str, Callable[[random.Random, int, Path], list[dict[str, Any]]]]:
     """Kumpulkan seluruh target parser `tools/` dan parser `code/` non-verdict."""
     targets: dict[str, Callable[[random.Random, int, Path], list[dict[str, Any]]]] = {
@@ -1214,6 +1305,8 @@ def collect_targets() -> dict[str, Callable[[random.Random, int, Path], list[dic
         "self_send_audit_view.inspect_audit_files": _make_optional_self_send_audit_view_fuzzer(),
         "repo_index.build_and_render": _make_optional_repo_index_fuzzer(),
         "daily_digest.build_daily_digest": _make_optional_daily_digest_fuzzer(),
+        "income_verify.verify_income": _make_optional_income_verify_fuzzer(),
+        "relay_spool_tools.validate_spool_file": _make_optional_relay_spool_fuzzer(),
     }
     for name, fn in optionals.items():
         if fn is not None:
