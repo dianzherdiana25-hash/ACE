@@ -58,7 +58,7 @@ def fake_pair(task_kind):
 
 def make_chat(*, accept=True, proposer_text=None, raise_unavailable=False,
               score="absent", judge_raw=None):
-    def chat(organ, messages, max_tokens=None):
+    def chat(organ, messages, max_tokens=None, timeout=None):
         if raise_unavailable:
             raise be.BrainUnavailable("organ down (fake)")
         is_judge = any(m.get("role") == "system"
@@ -242,7 +242,7 @@ class ScoredJudgeTests(unittest.TestCase):
     def test_scored_judge_gets_the_raised_token_budget(self):
         seen = {}
 
-        def chat(organ, messages, max_tokens=None):
+        def chat(organ, messages, max_tokens=None, timeout=None):
             is_judge = any(m.get("role") == "system"
                            and "validator" in m.get("content", "")
                            for m in messages)
@@ -261,7 +261,7 @@ class ScoredJudgeTests(unittest.TestCase):
     def test_unscored_judge_keeps_the_v2_token_budget(self):
         seen = {}
 
-        def chat(organ, messages, max_tokens=None):
+        def chat(organ, messages, max_tokens=None, timeout=None):
             is_judge = any(m.get("role") == "system"
                            and "validator" in m.get("content", "")
                            for m in messages)
@@ -276,6 +276,46 @@ class ScoredJudgeTests(unittest.TestCase):
         self.assertEqual(seen["judge_max_tokens"],
                          rl.JUDGE_MAX_TOKENS)
         self.assertEqual(rl.JUDGE_MAX_TOKENS, 300)
+
+    def test_scored_calls_carry_the_extended_timeout(self):
+        # Amendment 3: on the scored path BOTH chat calls
+        # (proposer and judge) receive the extended client
+        # timeout, so a slow-but-healthy judge is not cut
+        # off by the 900 s chat default.
+        calls = []
+
+        def chat(organ, messages, **kwargs):
+            calls.append(kwargs)
+            return make_chat(score=62)(
+                organ, messages,
+                max_tokens=kwargs.get("max_tokens"))
+
+        rl.run_ratification_episode(
+            CODE_EP, memory_root=None, scored=True,
+            chat_fn=chat, pair_fn=fake_pair)
+        self.assertEqual(len(calls), 2)
+        for kwargs in calls:
+            self.assertEqual(kwargs.get("timeout"),
+                             rl.SCORED_CHAT_TIMEOUT_S)
+        self.assertEqual(rl.SCORED_CHAT_TIMEOUT_S, 2400.0)
+
+    def test_unscored_calls_carry_no_timeout_kwarg(self):
+        # The unscored path must stay byte-identical in its
+        # call shape: no timeout kwarg, chat default rules.
+        calls = []
+
+        def chat(organ, messages, **kwargs):
+            calls.append(kwargs)
+            return make_chat()(
+                organ, messages,
+                max_tokens=kwargs.get("max_tokens"))
+
+        rl.run_ratification_episode(
+            CODE_EP, memory_root=None,
+            chat_fn=chat, pair_fn=fake_pair)
+        self.assertEqual(len(calls), 2)
+        for kwargs in calls:
+            self.assertNotIn("timeout", kwargs)
 
     def test_long_reasons_payload_parses_with_score(self):
         # The wave-1 failure shape: a verbose judge whose
