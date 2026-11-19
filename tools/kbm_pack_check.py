@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Pemeriksa paket unggah KBM: validasi sampul (JPEG/PNG), ukuran bab, dan urutan nomor bab.
+"""Periksa naskah utuh sebelum staging dan deteksi kerusakan paket unggah KBM.
+
+Untuk satu berkas naskah, validasi tepat 30 bab berurutan dengan setidaknya
+1.000 kata isi per bab. Laporan menunjukkan jumlah kata dan temuan per bab.
 
 Memeriksa direktori paket unggah KBM agar bebas dari:
 - sampul hilang atau header byte bukan JPEG/PNG asli;
@@ -9,6 +12,7 @@ Memeriksa direktori paket unggah KBM agar bebas dari:
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import json
 from pathlib import Path
 import re
@@ -17,10 +21,15 @@ from typing import Any
 
 if __package__ in (None, ""):
     from cover_check import CoverCheckInputError, check_cover
+    from kbm_split import KbmSplitError, split_manuscript
 else:
     from .cover_check import CoverCheckInputError, check_cover
+    from .kbm_split import KbmSplitError, split_manuscript
 
 PACK_CHECK_SCHEMA = "ace.kbm-pack-check.v1"
+MANUSCRIPT_CHECK_SCHEMA = "ace.kbm-manuscript-check.v1"
+REQUIRED_CHAPTER_COUNT = 30
+REQUIRED_CHAPTER_WORDS = 1000
 DEFAULT_MIN_BYTES = 1000
 
 JPEG_MAGIC = b"\xff\xd8\xff"
@@ -31,6 +40,71 @@ _CHAPTER_EXTS = frozenset({".md", ".txt"})
 
 class KbmPackCheckError(ValueError):
     """Kesalahan direktori paket atau argumen pemeriksaan tidak sah."""
+
+
+def check_manuscript_chapters(chapters: list[dict[str, Any]]) -> dict[str, Any]:
+    """Terapkan aturan naskah utuh pada laporan bab dari kbm_split."""
+    required_numbers = set(range(1, REQUIRED_CHAPTER_COUNT + 1))
+    counts = Counter(chapter["chapter_number"] for chapter in chapters)
+    missing = sorted(required_numbers - counts.keys())
+    duplicates = sorted(number for number, count in counts.items() if count > 1)
+    errors = []
+    if len(chapters) != REQUIRED_CHAPTER_COUNT:
+        errors.append(f"Jumlah bab harus tepat {REQUIRED_CHAPTER_COUNT}.")
+    if missing:
+        errors.append(f"Nomor bab hilang: {', '.join(map(str, missing))}.")
+    if duplicates:
+        errors.append(f"Nomor bab ganda: {', '.join(map(str, duplicates))}.")
+
+    chapter_reports = []
+    for position, chapter in enumerate(chapters, start=1):
+        number = chapter["chapter_number"]
+        words = chapter["word_count"]
+        chapter_errors = []
+        if words < REQUIRED_CHAPTER_WORDS:
+            chapter_errors.append(f"Isi bab kurang dari {REQUIRED_CHAPTER_WORDS} kata.")
+        if number not in required_numbers:
+            chapter_errors.append(f"Nomor di luar rentang 1–{REQUIRED_CHAPTER_COUNT}.")
+        if counts[number] > 1:
+            chapter_errors.append("Nomor bab ganda.")
+        if number != position:
+            chapter_errors.append(f"Pada posisi ini seharusnya bab {position}.")
+        chapter_reports.append({
+            "position": position,
+            "chapter_number": number,
+            "word_count": words,
+            "valid": not chapter_errors,
+            "errors": chapter_errors,
+        })
+    return {
+        "schema": MANUSCRIPT_CHECK_SCHEMA,
+        "valid": not errors and all(chapter["valid"] for chapter in chapter_reports),
+        "required_chapter_count": REQUIRED_CHAPTER_COUNT,
+        "min_words": REQUIRED_CHAPTER_WORDS,
+        "chapter_count": len(chapters),
+        "missing_numbers": missing,
+        "duplicate_numbers": duplicates,
+        "errors": errors,
+        "chapters": chapter_reports,
+    }
+
+
+def check_manuscript(manuscript_path: Path) -> dict[str, Any]:
+    """Periksa satu naskah utuh tanpa menulis berkas bab."""
+    split = split_manuscript(manuscript_path, None)
+    return {**check_manuscript_chapters(split["chapters"]), "source": split["source"]}
+
+
+def _print_manuscript_report(report: dict[str, Any]) -> None:
+    verdict = "LULUS" if report["valid"] else "GAGAL"
+    print(f"{verdict} — {report['chapter_count']}/{report['required_chapter_count']} bab")
+    for error in report["errors"]:
+        print(f"- {error}")
+    for chapter in report["chapters"]:
+        status = "LULUS" if chapter["valid"] else "GAGAL"
+        details = " ".join(chapter["errors"])
+        line = f"Bab {chapter['chapter_number']}: {chapter['word_count']} kata — {status}"
+        print(f"{line}. {details}" if details else line)
 
 
 def detect_image_format(path: Path) -> str | None:
@@ -215,9 +289,10 @@ def check_package(
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Pemeriksa paket unggah KBM (sampul JPEG/PNG, ukuran bab, urutan nomor bab)."
+        description="Periksa satu berkas naskah utuh atau direktori paket unggah KBM."
     )
-    parser.add_argument("package_dir", type=Path, help="Direktori paket unggah KBM.")
+    parser.add_argument("input_path", type=Path, help="Berkas naskah utuh atau direktori paket unggah.")
+    parser.add_argument("--json", action="store_true", help="Cetak laporan berkas naskah dalam JSON.")
     parser.add_argument(
         "--min-bytes",
         type=int,
@@ -238,17 +313,24 @@ def main(argv: list[str] | None = None) -> int:
     parser = _build_parser()
     try:
         args = parser.parse_args(argv)
-        report = check_package(
-            args.package_dir,
-            min_bytes=args.min_bytes,
-            cover_name=args.cover,
-            strict_cover=args.strict_cover,
-        )
-        print(json.dumps(report, ensure_ascii=False, indent=2))
+        if args.input_path.is_file():
+            report = check_manuscript(args.input_path)
+            if args.json:
+                print(json.dumps(report, ensure_ascii=False, indent=2))
+            else:
+                _print_manuscript_report(report)
+        else:
+            report = check_package(
+                args.input_path,
+                min_bytes=args.min_bytes,
+                cover_name=args.cover,
+                strict_cover=args.strict_cover,
+            )
+            print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0 if report["valid"] else 1
     except SystemExit as exc:
         return 0 if exc.code == 0 else 2
-    except (OSError, KbmPackCheckError) as exc:
+    except (OSError, KbmPackCheckError, KbmSplitError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 2
 
