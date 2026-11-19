@@ -328,8 +328,10 @@ class TestVerifySelfDevE3(unittest.TestCase):
             self.assertEqual(rc, 0)
             self.assertIn("Multi-cycle continuity confirmed across 3 cycles", out.getvalue())
 
-    def test_15_main_documents_nonblocking_note_on_broken_continuity_state(self):
-        # Documents current main() behavior: broken continuity prints NOTE/FAIL yet exits 0.
+    def test_15_main_fails_on_broken_continuity_state(self):
+        # Perilaku yang dikunci sejak perbaikan F7 (2026-11-20): kontinuitas
+        # yang rusak adalah kegagalan verifikasi — main() keluar non-nol,
+        # bukan lagi sekadar catatan NOTE/FAIL dengan exit 0.
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             v02 = root / vsd.V02_PRESCORE_FILE
@@ -339,17 +341,18 @@ class TestVerifySelfDevE3(unittest.TestCase):
             state.parent.mkdir(parents=True, exist_ok=True)
             state.write_text(json.dumps({"completed_cycles": [{"cycle_id": 1}]}), encoding="utf-8")
 
-            out = io.StringIO()
+            out, err = io.StringIO(), io.StringIO()
             with (
                 mock.patch.object(vsd, "REPO_ROOT", root),
                 mock.patch.object(vsd, "EXPECTED_V02_PRESCORE_HASH", hashlib.sha256(b"v02").hexdigest()),
                 mock.patch.object(vsd.subprocess, "run", return_value=subprocess.CompletedProcess([], 0)),
                 mock.patch.object(sys, "argv", ["verify_self_dev.py"]),
                 redirect_stdout(out),
+                redirect_stderr(err),
             ):
                 rc = vsd.main()
-            self.assertEqual(rc, 0)
-            self.assertIn("NOTE/FAIL: Expected at least 3 completed cycles", out.getvalue())
+            self.assertEqual(rc, 1)
+            self.assertIn("FAIL: Expected at least 3 completed cycles", err.getvalue())
 
     def test_16_live_repo_prescore_files_match_committed_sha256(self):
         v01 = ROOT / vsd.V01_PRESCORE_FILE

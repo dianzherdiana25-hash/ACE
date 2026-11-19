@@ -180,9 +180,9 @@ def main() -> int:
         if state_file.exists():
             ok_cont, cont_msg = verify_multi_cycle_continuity(art_dir, state_file)
             if not ok_cont:
-                print(f"  NOTE/FAIL: {cont_msg}")
-            else:
-                print(f"  OK: {cont_msg}")
+                print(f"FAIL: {cont_msg}", file=sys.stderr)
+                return 1
+            print(f"  OK: {cont_msg}")
         else:
             print("  NOTE: research_state.json not yet created on disk.")
 
