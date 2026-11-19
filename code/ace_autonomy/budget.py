@@ -42,12 +42,17 @@ class BudgetUsage:
     def from_dict(cls, raw: dict[str, Any] | None) -> BudgetUsage:
         if not raw:
             return cls()
+        retries = raw.get("retries_by_step", {})
+        if not isinstance(retries, dict):
+            raise ValueError(
+                f"retries_by_step harus berupa dict, bukan {type(retries).__name__}"
+            )
         return cls(
             steps_used=int(raw.get("steps_used", 0)),
             candidates_staged=int(raw.get("candidates_staged", 0)),
             wall_seconds_used=float(raw.get("wall_seconds_used", 0.0)),
             cpu_seconds_used=float(raw.get("cpu_seconds_used", 0.0)),
-            retries_by_step={str(k): int(v) for k, v in raw.get("retries_by_step", {}).items()},
+            retries_by_step={str(k): int(v) for k, v in retries.items()},
         )
 
 

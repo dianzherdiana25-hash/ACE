@@ -71,9 +71,16 @@ class AutonomousSoftwareResearcher:
 
         try:
             with open(self.state_file, "r", encoding="utf-8") as f:
-                return json.load(f)
+                state = json.load(f)
         except Exception:
             return {"schema_version": "3.0", "completed_cycles": 0, "history": []}
+        # JSON sah tetapi bentuk salah (mis. list) sama rusaknya dengan JSON
+        # tak terbaca: perlakukan sebagai state awal, jangan biarkan
+        # execute_autonomous_cycle meledak TypeError pada state["completed_cycles"].
+        completed = state.get("completed_cycles") if isinstance(state, dict) else None
+        if not isinstance(completed, int) or isinstance(completed, bool):
+            return {"schema_version": "3.0", "completed_cycles": 0, "history": []}
+        return state
 
     def _save_researcher_state(self, state: Dict[str, Any]) -> None:
         """Atomically saves researcher state to disk."""

@@ -203,12 +203,10 @@ class TestCodeAgentD5Edge(unittest.TestCase):
             self.assertEqual(result["patch"]["target_file"], "code/ace_self_dev/strategy_repair.py")
             pub_mock.assert_not_called()
 
-    @unittest.expectedFailure
     def test_07_controller_wrong_shape_json_state_bug(self) -> None:
-        # Dugaan bug di code/ace_code_agent/controller.py (baris 72-76 & 91):
-        # load_researcher_state() mengembalikan json.load(f) apa adanya tanpa memvalidasi
-        # bahwa hasilnya bertipe dict dengan kunci "completed_cycles". JSON sah berbentuk []
-        # memicu TypeError saat execute_autonomous_cycle() mengakses state["completed_cycles"].
+        # Bug yang sudah diperbaiki (2026-11-20): load_researcher_state() kini
+        # memvalidasi bentuk state — JSON sah berbentuk [] diperlakukan sebagai
+        # state awal, bukan memicu TypeError di execute_autonomous_cycle().
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             researcher = AutonomousSoftwareResearcher(repo_root=root, use_ai_fleet=False)
@@ -472,12 +470,10 @@ class TestCodeAgentD5Edge(unittest.TestCase):
 
     # --- worktree_harness.py ---
 
-    @unittest.expectedFailure
     def test_25_worktree_harness_from_import_os_bypass_bug(self) -> None:
-        # Dugaan bug di code/ace_code_agent/worktree_harness.py (baris 70-74):
-        # Pemeriksaan ast.ImportFrom hanya mengecek alias.name terhadap
-        # ("os", "sys", "subprocess", "socket", "shutil") tanpa memeriksa node.module,
-        # sehingga `from os import system` lolos validate_patch_security().
+        # Bypass yang sudah ditutup (2026-11-20): pemeriksaan ImportFrom kini
+        # memeriksa node.module, sehingga `from os import system` ditolak
+        # validate_patch_security() seperti halnya `import os`.
         harness = WorktreeHarness()
         _, _, patch, _ = _make_sample_objects()
         patch.replacement_code_snippet = "from os import system\n"

@@ -68,9 +68,17 @@ class WorktreeHarness:
                     elif isinstance(func, ast.Attribute) and func.attr in FORBIDDEN_CALLS:
                         return False, f"SECURITY VIOLATION: Forbidden method call '{func.attr}'"
                 elif isinstance(node, (ast.Import, ast.ImportFrom)):
-                    # Check for dangerous system imports
+                    # Check for dangerous system imports. Untuk ImportFrom,
+                    # modul sumber ada di node.module ("os" pada
+                    # `from os import system`) — memeriksa alias.name saja
+                    # meloloskan bentuk itu, jadi keduanya diperiksa.
+                    forbidden_modules = ("os", "sys", "subprocess", "socket", "shutil")
+                    if isinstance(node, ast.ImportFrom):
+                        module = (node.module or "").split(".")[0]
+                        if module in forbidden_modules:
+                            return False, f"SECURITY VIOLATION: Forbidden import from '{node.module}'"
                     for alias in node.names:
-                        if alias.name in ("os", "sys", "subprocess", "socket", "shutil"):
+                        if alias.name in forbidden_modules:
                             return False, f"SECURITY VIOLATION: Forbidden import '{alias.name}'"
         except Exception as e:
             return False, f"AST Syntax error in replacement snippet: {e}"

@@ -89,11 +89,10 @@ class BrainRegistryEdgeTests(unittest.TestCase):
         with self.assertRaises(json.JSONDecodeError):
             BrainRegistry(self.reg_path)
 
-    @unittest.expectedFailure
     def test_05_empty_descriptor_must_not_wildcard_match_unrelated_models(self) -> None:
-        # Bug terdokumentasi: match() mengecek `descriptor in hint`, sehingga descriptor=""
-        # cocok dengan hint apa pun ("" in "llama-70b" == True) dan dapat mengembalikan
-        # catatan brain yang salah tanpa penolakan pada register().
+        # Bug yang sudah diperbaiki (2026-11-20): match() kini melewati
+        # descriptor kosong — "" in hint selalu True sehingga brain ber-
+        # descriptor kosong dulu cocok dengan model apa pun.
         self.reg.register("blank", kind="local", descriptor="")
         self.assertIsNone(self.reg.match("llama-70b"))
 
@@ -343,10 +342,10 @@ class AutonomyBudgetBoundaryTests(unittest.TestCase):
         self.assertEqual(partial.candidates_staged, 0)
         self.assertEqual(partial.wall_seconds_used, 0.0)
 
-    @unittest.expectedFailure
     def test_29_budget_usage_from_dict_rejects_non_dict_retries_with_contract_error(self) -> None:
-        # Bug terdokumentasi di code/ace_autonomy/budget.py: BudgetUsage.from_dict memanggil
-        # raw.get("retries_by_step", {}).items() tanpa validasi tipe dict sehingga list memicu AttributeError.
+        # Bug yang sudah diperbaiki (2026-11-20): BudgetUsage.from_dict kini
+        # memvalidasi retries_by_step bertipe dict dan melempar ValueError,
+        # bukan AttributeError mentah dari .items() pada list.
         with self.assertRaises((TypeError, ValueError)):
             BudgetUsage.from_dict({"retries_by_step": ["not-a-dict"]})
 

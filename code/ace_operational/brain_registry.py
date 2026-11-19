@@ -99,6 +99,10 @@ class BrainRegistry:
         hint = model_hint.lower()
         for record in self._data["brains"].values():
             descriptor = record["descriptor"].lower()
+            if not descriptor:
+                # Descriptor kosong cocok dengan hint apa pun lewat
+                # `"" in hint` — lewati, jangan pernah wildcard-match.
+                continue
             if hint in descriptor or descriptor in hint:
                 return record
         return None
