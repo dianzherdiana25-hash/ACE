@@ -55,10 +55,10 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest -q   tools.test_
 | Proyek sistem manajemen usaha | Pengujian awal tertahan saat membuka socket. Pengulangan loopback menghasilkan 6 lulus. |
 | Fixture proyek pengelola keuangan | 6 lulus. |
 | Harness lineage, lewat eksekusi langsung berkas tes | 12 lulus. |
-| Discovery semua modul tes di `code/` | Pengujian pada checkout WS-4 sedang berjalan saat pencatatan. Delta WS-2 menambah dokumen dan perkakas. Hasil akhir dicatat terpisah ketika tersedia. |
+| Discovery semua modul tes di `code/` | 1.765 tes pada `75783e9` dengan 1 kegagalan installer, 27 galat, dan 17 skip. Installer dan kelompok yang terhalang saat membuka socket lulus saat diulang dengan izin loopback, cache fixture kosong, dan 98 tes terpilih. Delta WS-2 hanya menambah berkas perkakas dan dokumen. |
 
 **SELESAI** — seluruh serahan WS-2 dan WS-4 tersedia sebagai draf dengan bukti tes di atas.
 
-**TERSISA** — penyaringan draf dan pencatatan hasil discovery `code/`. Perbaikan fuzz dijadwalkan di Garis D.
+**TERSISA** — penyaringan draf. Perbaikan fuzz dijadwalkan di Garis D.
 
 **PENGHAMBAT** — nihil untuk serahan ronde. PR #332 menyediakan kriteria verifikasi WS-2.
