@@ -99,7 +99,11 @@ class TestF3KbmPortabilityWiring(unittest.TestCase):
             )
             self.assertFalse(report["passed"])
             self.assertFalse(report["cover_valid"])
-            self.assertEqual(report["failed_stage"], "cover")
+            # Merge-wave note (Ian): since WS-3 (#322) wired strict cover into
+            # kbm_pack_check itself, the same bad cover now fails the "check"
+            # stage as well as the "cover" stage, and "check" wins the label.
+            # The F3 guarantee is unchanged: rejected fail-closed before staging.
+            self.assertEqual(report["failed_stage"], "check")
             self.assertFalse(report["bundle"]["staged"])
             self.assertFalse((bundle_dir / "manifest.json").exists())
 
