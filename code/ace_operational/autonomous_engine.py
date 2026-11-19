@@ -28,6 +28,7 @@ from typing import Any
 from ace_indo_nlp.morphology import COLLOQUIAL_SLANG_MAP, analyze_morphology
 from ace_operational.autonomy_loop import AutonomyOrchestrator
 from ace_operational.coding_loop import CodingAgentLoop
+from ace_operational.curriculum_wave2 import LANGUAGE_WAVE2, TECHNICAL_WAVE2
 from ace_operational.models_backend import ModelRouter
 from ace_operational.self_evolution_engine import SelfEvolutionEngine
 from ace_operational.speech_acquisition import SpeechDevelopmentEngine
@@ -294,6 +295,7 @@ LANGUAGE_CURRICULUM: list[dict[str, Any]] = [
             "    print('EVALUASI_DIALOG_VERIFIED_OK')\n"
         ),
     },
+    *LANGUAGE_WAVE2,
 ]
 
 
@@ -583,6 +585,7 @@ TECHNICAL_CURRICULUM: list[dict[str, Any]] = [
             "    print('RATE_LIMITER_VERIFIED_OK')\n"
         ),
     },
+    *TECHNICAL_WAVE2,
 ]
 
 
