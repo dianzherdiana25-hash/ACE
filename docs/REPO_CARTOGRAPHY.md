@@ -5,10 +5,10 @@
 ## 1. Ringkasan Makro
 
 - Schema: `ace.repo-cartography.v1`
-- Total subsistem: **68** (termasuk `4` subsistem zona terlindung/beku)
-- Total berkas terpetakan: **1844**
-- Modul Python produksi: **486** | Modul tes: **244**
-- Tepi dependensi lintas subsistem (produksi): **116**
+- Total subsistem: **67** (termasuk `4` subsistem zona terlindung/beku)
+- Total berkas terpetakan: **1993**
+- Modul Python produksi: **533** | Modul tes: **296**
+- Tepi dependensi lintas subsistem (produksi): **117**
 - Siklus SCC lintas subsistem: **1**
 
 ## 2. Diagram Dependensi Lintas Subsistem (Top Bobot Impor)
@@ -28,9 +28,9 @@ flowchart LR
     code_ace_runtime["code/ace_runtime (SAFE)"]
     code_ace_selfmodel["code/ace_selfmodel (SAFE)"]
     code_ace_autonomy["code/ace_autonomy (SAFE)"]
+    code_ace_code_agent["code/ace_code_agent (SAFE)"]
     code_ace_research_primitives["code/ace_research_primitives (SAFE)"]
     code_ace_indo_nlp["code/ace_indo_nlp (SAFE)"]
-    code_ace_code_agent["code/ace_code_agent (SAFE)"]
     code_ace_cognition["code/ace_cognition (SAFE)"]
     code_ace_neurosymbolic["code/ace_neurosymbolic (SAFE)"]
     code_ace_evolution["code/ace_evolution (SAFE)"]
@@ -55,10 +55,10 @@ flowchart LR
     tools -->|7| code_ace_research_repair
     code_ace_runtime -->|6| code_ace_operational
     code_ace_selfmodel -->|6| code_ace_autonomy
+    tools -->|6| code_ace_code_agent
     tools -->|6| code_ace_mission
     code_ace_capability_evolution -->|5| code_ace_research_primitives
     code_ace_operational -->|5| code_ace_indo_nlp
-    tools -->|5| code_ace_code_agent
     tools -->|5| code_ace_cognition
     code_ace_neurosymbolic -->|4| code_ace_evolution
     code_ace_operational -->|4| code_ace_component_synthesis
@@ -89,7 +89,6 @@ flowchart LR
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | `.ace_evolution` | `SAFE_WORKSPACE` | 44 | 14 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `.github` | `SAFE_WORKSPACE` | 18 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `ace-work` | `SAFE_WORKSPACE` | 2 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `chat_tasks` | `SAFE_WORKSPACE` | 1 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `checkpoints` | `SAFE_WORKSPACE` | 13 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_abstract_interp` | `SAFE_WORKSPACE` | 5 | 3 | 2 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
@@ -106,7 +105,7 @@ flowchart LR
 | `code/ace_conformal` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_core_repair` | `SAFE_WORKSPACE` | 8 | 5 | 3 | 2 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_dsl_growth` | `SAFE_WORKSPACE` | 5 | 4 | 1 | 2 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_egraph` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
+| `code/ace_egraph` | `SAFE_WORKSPACE` | 4 | 2 | 2 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_epistemic` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_evaluator` | `PROTECTED_INSTRUMENT` | 5 | 4 | 1 | 3 | 0 | Wilayah evaluator / judge (Engineer Utama saja) |
 | `code/ace_evolution` | `SAFE_WORKSPACE` | 6 | 4 | 2 | 10 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
@@ -115,16 +114,16 @@ flowchart LR
 | `code/ace_host_controller` | `SAFE_WORKSPACE` | 18 | 14 | 4 | 5 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_host_exchange` | `SAFE_WORKSPACE` | 5 | 3 | 2 | 2 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_ilp` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_indo_nlp` | `SAFE_WORKSPACE` | 9 | 5 | 4 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
+| `code/ace_indo_nlp` | `SAFE_WORKSPACE` | 9 | 5 | 4 | 2 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_integration_redteam` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 6 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_interpolation` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_inversion` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_loop` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_mcp` | `SAFE_WORKSPACE` | 7 | 4 | 3 | 0 | 4 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_mcts` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_mission` | `SAFE_WORKSPACE` | 8 | 6 | 2 | 5 | 3 | Wilayah kerja aman (read-only AST / build tooling) |
+| `code/ace_mission` | `SAFE_WORKSPACE` | 9 | 6 | 3 | 5 | 3 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_neurosymbolic` | `SAFE_WORKSPACE` | 9 | 5 | 4 | 0 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_operational` | `MIXED_PROTECTED` | 174 | 86 | 84 | 5 | 14 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `code/ace_operational` | `MIXED_PROTECTED` | 176 | 86 | 86 | 5 | 14 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 | `code/ace_pac_bayes` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_real_world` | `SAFE_WORKSPACE` | 11 | 8 | 3 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_red_team` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
@@ -140,21 +139,21 @@ flowchart LR
 | `code/ace_research_repair` | `SAFE_WORKSPACE` | 13 | 10 | 3 | 3 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_research_reptransfer` | `SAFE_WORKSPACE` | 12 | 10 | 2 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_runtime` | `SAFE_WORKSPACE` | 5 | 3 | 2 | 12 | 6 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_self_dev` | `SAFE_WORKSPACE` | 35 | 26 | 9 | 3 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
+| `code/ace_self_dev` | `SAFE_WORKSPACE` | 36 | 26 | 10 | 3 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_selfmodel` | `SAFE_WORKSPACE` | 7 | 6 | 1 | 5 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_smt` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_synthesis` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_visual_bridge` | `SAFE_WORKSPACE` | 4 | 3 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/checkpoints` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `data` | `SAFE_WORKSPACE` | 1 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `docs` | `SAFE_WORKSPACE` | 218 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `evidence` | `SAFE_WORKSPACE` | 709 | 29 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
+| `docs` | `SAFE_WORKSPACE` | 267 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
+| `evidence` | `SAFE_WORKSPACE` | 710 | 29 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `examples` | `SAFE_WORKSPACE` | 5 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `handover` | `FROZEN_CORPUS_SPEC` | 137 | 23 | 0 | 0 | 1 | Corpus beku, preregistrasi, & custody spec (read-only) |
+| `handover` | `FROZEN_CORPUS_SPEC` | 138 | 23 | 0 | 0 | 1 | Corpus beku, preregistrasi, & custody spec (read-only) |
 | `projects` | `SAFE_WORKSPACE` | 12 | 3 | 2 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
-| `root` | `SAFE_WORKSPACE` | 19 | 4 | 0 | 0 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
+| `root` | `SAFE_WORKSPACE` | 20 | 4 | 0 | 0 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
 | `tests` | `SAFE_WORKSPACE` | 19 | 0 | 19 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `tools` | `MIXED_PROTECTED` | 106 | 66 | 38 | 1 | 27 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `tools` | `MIXED_PROTECTED` | 200 | 113 | 85 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 
 ## 4. Tepi Ketergantungan Lintas Subsistem (Semua)
 
@@ -169,10 +168,10 @@ flowchart LR
 | `tools` | `code/ace_research_repair` | 7 | `ace_research_repair.corpus`, `ace_research_repair.runner`, `ace_research_repair.verify` |
 | `code/ace_runtime` | `code/ace_operational` | 6 | `ace_operational.autonomous_engine`, `ace_operational.autonomy_loop`, `ace_operational.language` |
 | `code/ace_selfmodel` | `code/ace_autonomy` | 6 | `ace_autonomy`, `ace_autonomy.planner`, `ace_autonomy.policy` |
+| `tools` | `code/ace_code_agent` | 6 | `ace_code_agent.controller`, `ace_code_agent.repo_retrieval`, `ace_code_agent.static_probe` |
 | `tools` | `code/ace_mission` | 6 | `ace_mission.admission`, `ace_mission.bus`, `ace_mission.generator` |
 | `code/ace_capability_evolution` | `code/ace_research_primitives` | 5 | `ace_research_primitives.primitive_discovery` |
 | `code/ace_operational` | `code/ace_indo_nlp` | 5 | `ace_indo_nlp.discourse`, `ace_indo_nlp.lexicon_kb`, `ace_indo_nlp.morphology` |
-| `tools` | `code/ace_code_agent` | 5 | `ace_code_agent.controller`, `ace_code_agent.repo_retrieval`, `ace_code_agent.static_probe` |
 | `tools` | `code/ace_cognition` | 5 | `ace_cognition.reasoning`, `ace_cognition.substrate_guardian` |
 | `code/ace_neurosymbolic` | `code/ace_evolution` | 4 | `ace_evolution.island_search` |
 | `code/ace_operational` | `code/ace_component_synthesis` | 4 | `ace_component_synthesis.component_synthesizer` |
@@ -201,6 +200,7 @@ flowchart LR
 | `root` | `code/ace_runtime` | 2 | `ace_runtime.cli`, `ace_runtime.engine` |
 | `tools` | `code/ace_autonomy` | 2 | `ace_autonomy.errors`, `ace_autonomy.policy` |
 | `tools` | `code/ace_host_controller` | 2 | `ace_host_controller.repo_janitor`, `ace_host_controller.resilient_watchdog` |
+| `tools` | `code/ace_indo_nlp` | 2 | `ace_indo_nlp.morphology`, `ace_indo_nlp.phonotactics` |
 | `tools` | `code/ace_research_generations` | 2 | `ace_research_generations.verify`, `ace_research_generations.verify_growth` |
 | `tools` | `code/ace_self_dev` | 2 | `ace_self_dev.coordinator`, `ace_self_dev.models` |
 | `code/ace_abstraction` | `code/ace_evolution` | 1 | `ace_evolution.island_search` |

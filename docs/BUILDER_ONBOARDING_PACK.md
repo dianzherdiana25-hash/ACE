@@ -16,7 +16,7 @@
 | Berkas | Status | Baris | SHA-256 | Peran |
 | --- | --- | ---: | --- | --- |
 | `handover/GOVERNANCE_RULES_20261115.md` | `PRESENT` | 55 | `6ba6d9b54568` | Dua aturan tetap: hidup+tes hijau, & ratifikasi independen |
-| `tools/FUZZ_STANDARD.md` | `PRESENT` | 42 | `baa5de580cc0` | Standar matriks fuzz 3 seed x 300 iterasi (0 crash tak tertangani) |
+| `tools/FUZZ_STANDARD.md` | `PRESENT` | 47 | `89c9c1ccdb92` | Standar matriks fuzz 3 seed x 300 iterasi (0 crash tak tertangani) |
 | `tools/verify_sources.py` | `PRESENT` | 48 | `dacdda4d6992` | Verifikator luring SHA-1 blob berkas impor hulu |
 | `docs/UPSTREAM_SOURCES.json` | `PRESENT` | 106 | `cf6ffc77386a` | Manifes 25 berkas impor terpin blob Git |
 | `STATUS.md` | `PRESENT` | 101 | `7a88f0703c5e` | Papan status & aturan konsolidasi |

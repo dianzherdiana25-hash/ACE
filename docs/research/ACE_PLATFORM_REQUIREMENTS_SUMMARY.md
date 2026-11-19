@@ -4,27 +4,30 @@
 
 ## 1. Statistik Pemindaian
 
-- Berkas Markdown dipindai: **408**
-- Total baris dipindai: **51930**
-- Total sitasi syarat/batasan terpilih: **112** across `5` kelompok platform
+- Berkas Markdown dipindai: **456**
+- Total baris dipindai: **54585**
+- Total sitasi syarat/batasan terpilih: **118** across `5` kelompok platform
 
 ### Distribusi Tag Syarat
 
 | Kategori Tag | Jumlah Sitasi |
 | --- | ---: |
-| `content_ai_gate` | 39 |
-| `exclusivity_ip` | 22 |
-| `payout_fee_threshold` | 80 |
-| `privacy_redaction` | 9 |
-| `verification_blocker` | 21 |
+| `content_ai_gate` | 36 |
+| `exclusivity_ip` | 19 |
+| `payout_fee_threshold` | 89 |
+| `privacy_redaction` | 16 |
+| `verification_blocker` | 33 |
 
 ## KBM App (Pilot Cerita Bersambung & SeaBank)
 
-- Total kecocokan terdeteksi: **95** | Ditampilkan: **25**
+- Total kecocokan terdeteksi: **104** | Ditampilkan: **25**
 
 | Sumber & Baris | Kategori | Kutipan Persyaratan / Kendala |
 | --- | --- | --- |
-| `docs/research/ACE_KBM_PILOT_DESIGN_20261113.md:59` | `exclusivity_ip` | KBM contracts are **EXCLUSIVE**: a work published on KBM |
+| `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md:9` | `payout_fee_threshold`, `verification_blocker`, `privacy_redaction` | \| **H1** \| `gravity/h1-ws2-multi-rail-fixtures` \| `0bc65d2` \| [#380](https://github.com/dianzherdiana25-hash/ACE/pull/380) \| `tools/ws2_fixture_harness.py` (`ace.ws2-fixture-harness.v1`) + `tools/test_ws2_multi_rail_inte… |
+| `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md:11` | `payout_fee_threshold`, `content_ai_gate` | \| **H3** \| `gravity/h3-kbm-tools-v2` \| `1fb8bb5` \| [#382](https://github.com/dianzherdiana25-hash/ACE/pull/382) \| `tools/kbm_suite_v2.py` (`ace.kbm-suite.v2`) + `tools/test_kbm_suite_v2.py`: subkomando `qa` (`kbm_pack_ch… |
+| `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md:12` | `payout_fee_threshold`, `privacy_redaction` | \| **H4** \| `gravity/h4-platform-requirements-summary` \| `58c9611` \| [#383](https://github.com/dianzherdiana25-hash/ACE/pull/383) \| `tools/platform_requirements_summary.py` (`ace.platform-requirements-summary.v1`, `brain_… |
+| `docs/research/ACE_GRAVITY_GARIS_I_AKUNTANSI.md:109` | `payout_fee_threshold`, `verification_blocker` | 2. **Payout finansial nyata & 3 sel kontrak platform eksternal belum terverifikasi** (`evidence/handover/PELUANG_PANTAU_PERUBAHAN.md`, `ADDENDUM59`): durasi eksklusivitas KBM di aplikasi mobile, kontradiksi biaya penarik… |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM34.md:111` | `payout_fee_threshold`, `exclusivity_ip` | from real payouts. KBM contracts are EXCLUSIVE — weighed |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM38.md:70` | `exclusivity_ip`, `privacy_redaction` | privacy rule, and KBM exclusivity — promotion takes the |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM39.md:43` | `exclusivity_ip`, `privacy_redaction` | fences (privacy rule; KBM exclusivity — promotion is |
@@ -45,17 +48,18 @@
 | `evidence/handover/PELUANG_PANTAU_PERUBAHAN.md:40` | `payout_fee_threshold`, `content_ai_gate` | 1. **KBM ambang payout: Rp100.000 → Rp15.000.** Angka Rp100.000 di draf baseline pertama adalah salah tempat (itu ambang KaryaKarsa/Lynk.id). Nilai terverifikasi KBM = Rp15.000 (cek dalam aplikasi oleh pemilik 12 Nov; PR… |
 | `evidence/handover/PELUANG_PANTAU_PERUBAHAN.md:50` | `payout_fee_threshold`, `verification_blocker`, `content_ai_gate` | - **KBM:** ambang Rp15.000 + payout tgl 4 kini TERVERIFIKASI PUBLIK-RESMI (FAQ "JADI PENULIS", info.kbm.id) — naik status dari "cek aplikasi pemilik". Monetize publik-resmi: min 8 bab; Bab 8–10 koin emas+perak (perak tid… |
 | `evidence/handover/PELUANG_PANTAU_PERUBAHAN.md:55` | `payout_fee_threshold`, `content_ai_gate` | - **Bagi hasil KBM kini TERVERIFIKASI dari teks:** bertingkat menurut akumulasi omset — 100% (≤Rp100 rb) · 90% (≤Rp250 rb) · 80% (≤Rp500 rb) · 70% (≤Rp1 jt) · 65% (≤Rp5 jt) · 60% (>Rp5 jt); dihitung dari nominal setelah … |
-| `evidence/handover/PELUANG_PANTAU_PERUBAHAN.md:56` | `exclusivity_ip`, `verification_blocker` | - **Durasi kontrak TETAP belum terverifikasi** — tidak dinyatakan di Monetize Policy, FAQ, maupun S&K umum; dokumen berjudul "Perjanjian Karya Eksklusif" hanya ada di aplikasi mobile. Eksklusivitas berpijak pada FAQ + la… |
-| `evidence/handover/PELUANG_PETA_02.md:64` | `exclusivity_ip`, `content_ai_gate` | \| Bab/isi serial #1 (atau unggah ulang di mana pun) \| ❌ Terikat eksklusif KBM \| |
-| `evidence/handover/PELUANG_PETA_02.md:72` | `payout_fee_threshold`, `content_ai_gate` | - **Bloker sebenarnya = kapasitas menulis:** inventaris bersih menuntut karya BARU ketiga di samping serial KBM harian + bank serial AI #2. Satu novelet standalone (±15–25 rb kata) adalah satuan produksi terkecil yang ma… |
 | `evidence/handover/PELUANG_PETA_12_SIKLUS9.md:5` | `payout_fee_threshold`, `exclusivity_ip`, `content_ai_gate` | Bagi hasil KBM terverifikasi dari teks Monetize Policy: **bertingkat 100% (omset ≤Rp100 rb) → 90% → 80% → 70% → 65% → 60% (>Rp5 jt)**, dihitung setelah biaya admin pihak ketiga; bab premium **Rp1.500/15 koin emas**; fee … |
 
 ## Fastwork Indonesia (Rel Jasa & Penarikan Bank)
 
-- Total kecocokan terdeteksi: **32** | Ditampilkan: **25**
+- Total kecocokan terdeteksi: **43** | Ditampilkan: **25**
 
 | Sumber & Baris | Kategori | Kutipan Persyaratan / Kendala |
 | --- | --- | --- |
+| `docs/PROGRAM_GLOSSARY.md:359` | `payout_fee_threshold`, `privacy_redaction` | \| `Rel 2 — Fastwork → rekening bank` \| `markdown_heading` \| `handover/SPESIFIKASI_WS2_REL_DAN_BUKTI.md:47` \| - Kaki platform: riwayat penarikan Fastwork. \| |
+| `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md:9` | `payout_fee_threshold`, `verification_blocker`, `privacy_redaction` | \| **H1** \| `gravity/h1-ws2-multi-rail-fixtures` \| `0bc65d2` \| [#380](https://github.com/dianzherdiana25-hash/ACE/pull/380) \| `tools/ws2_fixture_harness.py` (`ace.ws2-fixture-harness.v1`) + `tools/test_ws2_multi_rail_inte… |
+| `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md:41` | `payout_fee_threshold`, `verification_blocker` | 2. Biaya penarikan Fastwork (teks resmi bertentangan Rp3.000 flat vs gratis → karenanya `H1`/`ws2_fixture_harness` mewajibkan `fee_rupiah` eksplisit pada catatan penarikan, tidak pernah di-hardcode). |
+| `docs/research/ACE_GRAVITY_GARIS_I_AKUNTANSI.md:109` | `payout_fee_threshold`, `verification_blocker` | 2. **Payout finansial nyata & 3 sel kontrak platform eksternal belum terverifikasi** (`evidence/handover/PELUANG_PANTAU_PERUBAHAN.md`, `ADDENDUM59`): durasi eksklusivitas KBM di aplikasi mobile, kontradiksi biaya penarik… |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261113_ADDENDUM59.md:162` | `payout_fee_threshold`, `verification_blocker` | Fastwork withdrawal fee (official self-contradiction: Rp3.000 flat vs |
 | `docs/research/ACE_SERVICES_DEMAND_TEST_20261113.md:56` | `payout_fee_threshold` | \| Fastwork Indonesia: web pentest + security report \| **Rp 100,000 (≈ $6)** listed \| https://fastwork.id/user/izzat_zet/web-programming-other-25939660 \| |
 | `docs/research/ACE_SERVICES_DEMAND_TEST_20261113.md:57` | `payout_fee_threshold` | \| Fastwork Indonesia: basic website security audit \| **from Rp 300,000 (≈ $18)** \| https://fastwork.id/user/iqbal393/cyber-security-27219522 \| |
@@ -63,6 +67,9 @@
 | `docs/research/ACE_SERVICES_DEMAND_TEST_20261113.md:59` | `payout_fee_threshold` | \| Fastwork Indonesia: security testing with retest tiers \| **Rp 1,500,000 (≈ $92)** \| https://fastwork.id/user/alxyz09/cyber-security-29823471 \| |
 | `docs/research/ACE_SERVICES_DEMAND_TEST_20261113.md:73` | `payout_fee_threshold` | The bottom is a price war: functionally identical "VAPT + PDF report" offers run $15 on Fiverr and Rp 100,000 (~$6) on Fastwork, mostly scanner-driven. The top is **credential-gated**: compliance-flavored work (SOC 2, IS… |
 | `docs/research/ACE_SERVICES_DEMAND_TEST_20261113.md:117` | `payout_fee_threshold` | **Cross-cutting note on Line 2:** viable only as the *audit + fix + sealed evidence + retest* bundle at roughly $300–$1,500 for small web/codebases; as report-only review it is commoditized, and as compliance attestation… |
+| `docs/research/ACE_WS2_VERIFIKASI_PENDAPATAN.md:16` | `payout_fee_threshold` | Contoh sintetis untuk satu pencairan Fastwork. |
+| `docs/research/ACE_WS2_VERIFIKASI_PENDAPATAN.md:43` | `payout_fee_threshold` | - `fastwork_bank` memakai `fastwork` untuk platform dan penarikan serta `bank` atau `seabank` untuk mutasi. Isi bruto di dua kaki awal dan neto di mutasi. Penarikan harus menyatakan biaya secara eksplisit, termasuk saat … |
+| `docs/research/ACE_WS2_VERIFIKASI_PENDAPATAN.md:67` | `payout_fee_threshold` | `HILANG` menandai kaki atau biaya Fastwork absen. `SEBAGIAN` menandai |
 | `evidence/handover/CHECKLIST_KONTRAK_PLATFORM.md:10` | `payout_fee_threshold` | 2. **Fastwork — biaya penarikan (kontradiksi resmi).** Kalkulator halaman Commission menyebut Rp3.000 flat per transaksi; artikel bantuan resmi menyebut penarikan gratis. Selisihnya memotong langsung bersih Paket A — jal… |
 | `evidence/handover/CHECKLIST_KONTRAK_PLATFORM.md:57` | `verification_blocker` | \| Eksklusivitas \| BELUM TERVERIFIKASI — tidak ada catatan syarat eksklusivitas/anti-pengalihan klien Fastwork di rekam. (Aturan anti-pengalihan yang tercatat adalah milik Projects.co.id — platform berbeda, tidak dipindah… |
 | `evidence/handover/CHECKLIST_KONTRAK_PLATFORM.md:58` | `verification_blocker` | \| Klausul AI \| BELUM TERVERIFIKASI — kebijakan konten/jasa AI Fastwork tidak tercatat di rekam. \| — \| |
@@ -73,22 +80,19 @@
 | `evidence/handover/PELUANG_PANTAU_PERUBAHAN.md:36` | `payout_fee_threshold`, `exclusivity_ip`, `verification_blocker`, `content_ai_gate` | - 13 Nov 2026 — pemeriksaan ulang lari #1 (semua sumber resmi dibuka langsung): Fastwork Bronze 12% terkonfirmasi (tabel lengkap Member 14/Bronze 12/Silver 11/Gold 10/Platinum 9/Diamond 6%; sumber pindah ke static.fastwo… |
 | `evidence/handover/PELUANG_PETA_01.md:28` | `payout_fee_threshold` | - **Terverifikasi:** kategori resmi "Jasa Cyber Security, mulai Rp300.000"; contoh listing pentest web Rp300.000 dengan format temuan+bukti+rekomendasi dan syarat izin tertulis pemilik (https://fastwork.id/cyber-security… |
 | `evidence/handover/PELUANG_PETA_01.md:82` | `payout_fee_threshold` | 1. **Fastwork (audit keamanan)** — satu-satunya peluang dengan kategori hidup + jangkar harga lokal terverifikasi (Rp300rb) + payout bank lokal mingguan + tanpa butuh audiens. Kemampuan persis terverifikasi ACE (PR #145)… |
-| `evidence/handover/PELUANG_PETA_01.md:83` | `payout_fee_threshold` | 2. **Upwork (audit AI/RAG + eval LLM)** — tiket 13–20× Fastwork ($200–400, job persis terbukti ada) untuk paket layanan yang SAMA; kerjakan sebagai etalase kedua setelah paket Fastwork jadi, dengan anggaran Connects keci… |
-| `evidence/handover/PELUANG_PETA_01.md:89` | `payout_fee_threshold` | - A. Ruang layanan (baru/ditunjuk): susun paket penawaran audit (1 halaman: ruang lingkup, batas izin tertulis, contoh format laporan bukti+retest, 3 tingkat harga untuk Fastwork Rp300rb / Upwork $200 / Fiverr) — dokumen… |
-| `evidence/handover/PELUANG_PETA_04.md:11` | `payout_fee_threshold` | \| W6 Projects.co.id \| 6,0 \| Fee 12% = Fastwork, tapi pasar lokal IDR + payout min Rp10 rb \| |
-| `evidence/handover/PELUANG_PETA_04.md:26` | `payout_fee_threshold` | - *Audit keamanan:* Simon Tech Rp3,5 jt (code scan)–Rp8,5 jt (web assessment) + retest gratis; KawanuaSec Rp490 rb/laporan; listing Fastwork Rp300 rb; retainer perawatan+keamanan Rp350–700 rb/bln. Paket A (Rp350 rb–1,5 j… |
-| `evidence/handover/PELUANG_PETA_04.md:34` | `payout_fee_threshold` | - **Projects.co.id (RESMI, Syarat Layanan Ps. 8–9):** fee project & service **12%**, produk digital 20%; escrow lokal; payout bank ID min **Rp10.000** (BCA/BNI/Mandiri gratis transfer), maks 3 hari kerja. Pasar lokal yan… |
-| `evidence/handover/PELUANG_PETA_04.md:62` | `content_ai_gate` | 1. **Direct (W8) diangkat sebagai venue formal kedua untuk Paket A** — sejajar Fastwork, dengan lima syarat minimum di atas sebagai gerbang kesiapan (kategori merchant = satu-satunya yang butuh tangan pemilik di aplikasi… |
-| `evidence/handover/PELUANG_PETA_05_SIKLUS2.md:15` | `payout_fee_threshold` | - **Projects.co.id (RESMI, S&K):** model **Service siap-beli ada persis seperti Fastwork** (fee 12%); verifikasi akun hanya email di S&K (kata "KTP" tidak muncul — siapkan sebagai jaga-jaga, jangan klaim syarat); kategor… |
 | `evidence/handover/PELUANG_PETA_08_SIKLUS5.md:8` | `payout_fee_threshold`, `privacy_redaction` | - Komisi Bronze 12% terkonfirmasi ulang dari halaman Komisi resmi berjalan (contoh Okt–Nov 2026; contoh "10%" di artikel bantuan = usang). **Bersih Paket A di Bronze: Rp350 rb → Rp308.000 · Rp850 rb → Rp748.000 · Rp1,5 j… |
 
 ## GoPay / QRIS / SeaBank / Rekening & Privasi
 
-- Total kecocokan terdeteksi: **26** | Ditampilkan: **25**
+- Total kecocokan terdeteksi: **31** | Ditampilkan: **25**
 
 | Sumber & Baris | Kategori | Kutipan Persyaratan / Kendala |
 | --- | --- | --- |
+| `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md:3` | `payout_fee_threshold`, `privacy_redaction` | > **Status:** Draft PR penutup Garis H (`H1–H4`). Seluruh pekerjaan berdiri di atas `origin/main` (`478848d`), pada branch `gravity/*`, **hanya membangun perkakas offline (eksekusi payout nyata diparkir)**. Zero panggila… |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261113_ADDENDUM59.md:153` | `privacy_redaction` | before a verified DP), QRIS receipt. Full account numbers appear |
+| `docs/research/ACE_WS2_VERIFIKASI_PENDAPATAN.md:42` | `payout_fee_threshold` | - `kbm_seabank` memakai `kbm` untuk platform dan penarikan serta `seabank` untuk mutasi. |
+| `docs/research/ACE_WS2_VERIFIKASI_PENDAPATAN.md:43` | `payout_fee_threshold` | - `fastwork_bank` memakai `fastwork` untuk platform dan penarikan serta `bank` atau `seabank` untuk mutasi. Isi bruto di dua kaki awal dan neto di mutasi. Penarikan harus menyatakan biaya secara eksplisit, termasuk saat … |
+| `docs/research/ACE_WS2_VERIFIKASI_PENDAPATAN.md:44` | `payout_fee_threshold` | - `gopay_qris` memakai `gopay` atau `qris` pada penyelesaian dan transfer, serta `gopay` atau `seabank` pada mutasi. |
 | `evidence/handover/ACE_HARUS_DIKUASAI_v1.md:5` | `payout_fee_threshold` | - **Kenapa paling mengganjal:** rel termurah yang terverifikasi justru direct (MDR QRIS 0–0,7% vs komisi 12–20%), dan dua pasar direct terbukti berharga terpublikasi (audit keamanan Rp300 rb–8,5 jt; taaruf Rp160–300 rb) … |
 | `evidence/handover/ACE_HARUS_DIKUASAI_v1.md:95` | `payout_fee_threshold`, `content_ai_gate` | - #3 Rel uang — koreksi Play Books: relnya wire-USD ambang $100 (+ biaya wire tak pasti) = rel akumulasi lambat; peta kas global kini berjenjang sadar: ambang terkecil yang terverifikasi = Lemon Squeezy $50 & PartnerStac… |
 | `evidence/handover/CHECKLIST_KONTRAK_PLATFORM.md:36` | `payout_fee_threshold`, `content_ai_gate` | \| Pembayaran \| Saldo minimum bisa-ditarik **1.000 Kakoin = Rp100.000** (bank internasional 2.000 Kakoin); dukungan menjadi bisa-ditarik setelah ±5 hari kerja (konfirmasi payment gateway); **biaya transfer Rp5.500** (Indo… |
@@ -108,18 +112,19 @@
 | `evidence/handover/PELUANG_PETA_06_SIKLUS3.md:12` | `payout_fee_threshold` | - **RESMI (S&K toko di domain lynk.id):** biaya kanal pembayaran dibebankan ke PEMBELI (QRIS 0,78%, kartu 2,9% + Rp2.500, VA BCA Rp4.400, dsb.) — bukan potongan penjual. |
 | `evidence/handover/PELUANG_PETA_06_SIKLUS3.md:14` | `payout_fee_threshold` | - Kesimpulan Siklus 2 tidak berubah: tiket kecil domestik tetap wilayah Lynk/QRIS, kini dengan mekanik penarikan yang pasti. |
 | `evidence/handover/PELUANG_PETA_07_SIKLUS4.md:13` | `payout_fee_threshold` | - Trakteer: fakta beranda resmi terkonfirmasi (Shop produk digital tanpa batasan format; dukungan cair ke bank/e-wallet; metode GoPay/OVO/DANA/LinkAja/ShopeePay/QRIS/transfer). **Catatan integritas:** agen Siklus 4 tidak… |
-| `evidence/handover/kit-jualan/ALUR_DP50.md:7` | `payout_fee_threshold` | 1. **Pekerjaan TIDAK dimulai sebelum DP 50% diterima DAN buktinya terverifikasi** (notifikasi / tangkapan layar yang cocok dengan rel pembayaran — nama merchant/NMID untuk QRIS, nama penerima untuk transfer). |
 | `evidence/handover/kit-jualan/TEMPLATE_INVOICE.md:54` | `payout_fee_threshold`, `privacy_redaction` | 2. **Transfer bank** — **SeaBank a.n. Dian Herdiana**, nomor rekening: [nomor tertera di ledger — minta ke Penyedia Jasa bila belum punya]. |
-| `evidence/handover/kit-jualan/TEMPLATE_KWITANSI_QRIS.md:3` | `payout_fee_threshold` | > Salin berkas ini untuk setiap pembayaran QRIS atau transfer langsung yang diterima, ganti semua isian dalam [KURUNG SIKU], simpan salinannya dengan nama sesuai nomor kwitansinya. Nomor kwitansi memakai skema yang sama … |
-| `evidence/handover/kit-jualan/TEMPLATE_KWITANSI_QRIS.md:24` | `payout_fee_threshold` | - [ ] **Transfer GoPay langsung** — a.n. Dian Herdiana [nomor tertera di ledger] |
-| `evidence/handover/kit-jualan/TEMPLATE_KWITANSI_QRIS.md:25` | `payout_fee_threshold` | - [ ] **Transfer bank** — SeaBank a.n. Dian Herdiana [nomor tertera di ledger] |
 
 ## Facebook Pro / Facebook (Terblokir Verifikasi Misi)
 
-- Total kecocokan terdeteksi: **12** | Ditampilkan: **12**
+- Total kecocokan terdeteksi: **18** | Ditampilkan: **18**
 
 | Sumber & Baris | Kategori | Kutipan Persyaratan / Kendala |
 | --- | --- | --- |
+| `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md:9` | `payout_fee_threshold`, `verification_blocker`, `privacy_redaction` | \| **H1** \| `gravity/h1-ws2-multi-rail-fixtures` \| `0bc65d2` \| [#380](https://github.com/dianzherdiana25-hash/ACE/pull/380) \| `tools/ws2_fixture_harness.py` (`ace.ws2-fixture-harness.v1`) + `tools/test_ws2_multi_rail_inte… |
+| `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md:42` | `payout_fee_threshold`, `verification_blocker` | 3. Penumpukan biaya Lynk.id di atas biaya transaksi 5% & verifikasi misi Facebook (menunggu panel pemilik). |
+| `docs/research/ACE_GRAVITY_GARIS_I_AKUNTANSI.md:79` | `payout_fee_threshold`, `verification_blocker`, `privacy_redaction` | - **0 eksekusi jaringan/HTTP live** & **0 eksekusi finansial/payout nyata** pada seluruh kode maupun suite pengujian Garis B–I (`DryRunOrganAdapter` E3 memblokir URL live; dashboard G1 memverifikasi `http://: False`, `ht… |
+| `docs/research/ACE_GRAVITY_GARIS_I_AKUNTANSI.md:109` | `payout_fee_threshold`, `verification_blocker` | 2. **Payout finansial nyata & 3 sel kontrak platform eksternal belum terverifikasi** (`evidence/handover/PELUANG_PANTAU_PERUBAHAN.md`, `ADDENDUM59`): durasi eksklusivitas KBM di aplikasi mobile, kontradiksi biaya penarik… |
+| `docs/research/ACE_HANDOVER_DECISIONS_EXTRACTED.md:137` | `verification_blocker` | \| `handover/SPESIFIKASI_WS2_REL_DAN_BUKTI.md:70` \| `repo_record` \| `gravity-proposal` \| - **Facebook** — syarat misinya belum terverifikasi di \| |
 | `docs/research/ACE_KBM_PILOT_DESIGN_20261113.md:64` | `exclusivity_ip` | cannot be re-sold on Lynk.id, serialized on Facebook, or |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM34.md:120` | `verification_blocker` | 5. **Facebook path (candidate, unverified terms):** the |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM38.md:130` | `verification_blocker` | Facebook mission verification remains blocked on the |
@@ -132,13 +137,16 @@
 | `evidence/handover/INSTAGRAM_BASELINE_PERAN.md:148` | `payout_fee_threshold` | 2. **Bio DIKEMBALIKAN persis ke baseline Bagian 1** dan terverifikasi baca-balik 01:55 WIB: teks kutip "Mari sukses bersama / Mari petik hasilnya" + Konsultan bisnis UMKM + "-Bisa DM ✨" + "GRATIS TIDAK DIPUNGUT BIAYA."; … |
 | `evidence/handover/LYNKID_KESIAPAN_TOKO.md:135` | `payout_fee_threshold` | Tidak boleh diklaim oleh produk mana pun: hasil G3/G4/G5, pendapatan KBM (terukur Rp0), pertumbuhan Facebook/Threads sebagai "metode terbukti cuan", atau materi apa pun dari ruang diskusi / karya KBM. |
 | `evidence/handover/PELUANG_PETA_01.md:38` | `payout_fee_threshold`, `privacy_redaction` | - **Terverifikasi:** "tidak ada minimal followers" — teks resmi; review pendaftaran maks 1 hari kerja; kanal resmi mencakup Instagram & Facebook (⚠️ Threads TIDAK tercantum — jangan andalkan Threads untuk ini) (https://s… |
+| `handover/SPESIFIKASI_WS2_REL_DAN_BUKTI.md:70` | `verification_blocker` | - **Facebook** — syarat misinya belum terverifikasi di |
 
 ## Royal Road / Lynk.id / Sribu / Penjualan Langsung
 
-- Total kecocokan terdeteksi: **49** | Ditampilkan: **25**
+- Total kecocokan terdeteksi: **51** | Ditampilkan: **25**
 
 | Sumber & Baris | Kategori | Kutipan Persyaratan / Kendala |
 | --- | --- | --- |
+| `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md:42` | `payout_fee_threshold`, `verification_blocker` | 3. Penumpukan biaya Lynk.id di atas biaya transaksi 5% & verifikasi misi Facebook (menunggu panel pemilik). |
+| `docs/research/ACE_GRAVITY_GARIS_I_AKUNTANSI.md:109` | `payout_fee_threshold`, `verification_blocker` | 2. **Payout finansial nyata & 3 sel kontrak platform eksternal belum terverifikasi** (`evidence/handover/PELUANG_PANTAU_PERUBAHAN.md`, `ADDENDUM59`): durasi eksklusivitas KBM di aplikasi mobile, kontradiksi biaya penarik… |
 | `docs/research/ACE_KBM_PILOT_DESIGN_20261113.md:64` | `exclusivity_ip` | cannot be re-sold on Lynk.id, serialized on Facebook, or |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261113_ADDENDUM59.md:129` | `content_ai_gate` | Royal Road requires the AI-Generated tag for AI adaptation without a |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261113_ADDENDUM59.md:163` | `payout_fee_threshold` | free); Lynk.id fee stacking on the 5% transaction fee. |
@@ -155,8 +163,6 @@
 | `evidence/handover/CHECKLIST_KONTRAK_PLATFORM.md:84` | `payout_fee_threshold`, `content_ai_gate` | \| Pembayaran \| Kontribusi natif dibayar via **Tipalti**: penerima Indonesia didukung penuh — transfer bank lokal **IDR (T+2)** via Global ACH (maks Rp500 jt/pembayaran; tanpa minimum provider yang dinyatakan), wire IDR/U… |
 | `evidence/handover/CHECKLIST_KONTRAK_PLATFORM.md:93` | `verification_blocker`, `content_ai_gate` | \| Eksklusivitas \| BELUM TERVERIFIKASI — tidak ada pernyataan syarat eksklusivitas Patreon di rekam. (Konfigurasi berjalan menempatkan Patreon sebagai lapisan bayar di belakang bab gratis Royal Road; itu fakta konfigurasi… |
 | `evidence/handover/G5_HARVEST_READINESS_MEMO.md:78` | `payout_fee_threshold` | \| C — kandidat peristiwa-pakai \| SIAP (bahan) \| ≥6 kandidat sudah terlihat di catatan (Task 09 §6) dan sebagian terverifikasi tercantum di addenda: amendemen Rp0 ("bukan sumpah", Addendum 23), Emansipasi (Addendum 32 dkk… |
-| `evidence/handover/INSTAGRAM_BASELINE_PERAN.md:8` | `payout_fee_threshold` | \| @dianzherdiana16 \| Creator \| 409 \| 250 \| 63 \| Nama "DianMA \\| Pemberdaya UMKM GRATIS"; bio konsultasi UMKM; tautan bio -> Facebook (bukan Lynk.id/KBM). Postingan feed Aug: carousel UMKM (0–5 Likes, satu 11 Comments). R… |
-| `evidence/handover/INSTAGRAM_BASELINE_PERAN.md:23` | `content_ai_gate` | **Lolos sebagian, dengan koreksi:** IG realistis sebagai *puncak corong visual* (penemuan + penggoda), bukan kasir dan bukan kanal penjualan langsung. Carousel kutipan/hook bab + Reel 20–30 detik pembacaan adegan bisa me… |
 | `evidence/handover/LYNKID_KESIAPAN_TOKO.md:94` | `payout_fee_threshold`, `privacy_redaction` | 2. Tambahkan **rekening bank** tujuan pencairan (hanya bank yang terdaftar di sistem Lynk.id yang bisa dipakai — panduan resmi input rekening via S6; nama pemilik + nomor rekening harus sesuai catatan bank — [SEKUNDER] p… |
 | `evidence/handover/PELUANG_PANTAU_PERUBAHAN.md:25` | `payout_fee_threshold`, `content_ai_gate` | - Penarikan (RESMI, FAQ lynk.id): saldo minimum **Rp100.000**; maksimum Rp200 jt; biaya **Free Rp5.000/tarik, PRO gratis**; frekuensi tanpa batas; proses maks **2 hari kerja**. |
 | `evidence/handover/PELUANG_PANTAU_PERUBAHAN.md:36` | `payout_fee_threshold`, `exclusivity_ip`, `verification_blocker`, `content_ai_gate` | - 13 Nov 2026 — pemeriksaan ulang lari #1 (semua sumber resmi dibuka langsung): Fastwork Bronze 12% terkonfirmasi (tabel lengkap Member 14/Bronze 12/Silver 11/Gold 10/Platinum 9/Diamond 6%; sumber pindah ke static.fastwo… |

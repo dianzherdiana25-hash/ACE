@@ -4,9 +4,9 @@
 
 ## 1. Ringkasan Sumber
 
-- Berkas Markdown dipindai: **270**
-- Berkas Python AST dipindai (non-test): **417**
-- Total istilah terindeks: **294** (dari 1242 kandidat unik)
+- Berkas Markdown dipindai: **306**
+- Berkas Python AST dipindai (non-test): **464**
+- Total istilah terindeks: **336** (dari 1374 kandidat unik)
 
 ### Komposisi Sumber
 
@@ -14,9 +14,9 @@
 | --- | ---: |
 | `ast_class` | 80 |
 | `ast_module` | 80 |
-| `ast_schema` | 41 |
+| `ast_schema` | 80 |
 | `markdown_def` | 80 |
-| `markdown_heading` | 13 |
+| `markdown_heading` | 16 |
 
 ## 2. Daftar Istilah Alfabetis
 
@@ -39,47 +39,86 @@
 | `AcceptanceDecision` | `ast_class` | `code/ace_host_controller/controller.py:22` | Decision emitted by Host Controller upon candidate evaluation. |
 | `ACCESS_DEMONSTRATED` | `markdown_def` | `docs/research/ACE_G4_G5_INSTRUMENT_DESIGN_20261112.md:102` | C1–C3 pass for the assessed |
 | `ace` | `ast_module` | `ace.py:1` | Run ACE from a source checkout without installing a package. |
+| `ace.agenda-closure.v1` | `ast_schema` | `tools/agenda_candidates.py:20` | Skema JSON `CLOSURE_SCHEMA` pada `tools/agenda_candidates.py` |
+| `ace.agenda-proposal.v1` | `ast_schema` | `tools/agenda_candidates.py:19` | Skema JSON `SCHEMA` pada `tools/agenda_candidates.py` |
 | `ace.attested_server.v1` | `ast_schema` | `code/ace_operational/attested_server.py:37` | Skema JSON `ATTESTATION_SCHEMA` pada `code/ace_operational/attested_server.py` |
 | `ace.autonomy.v1` | `ast_schema` | `code/ace_autonomy/core.py:54` | Skema JSON `SCHEMA` pada `code/ace_autonomy/core.py` |
 | `ace.bench-table.v1` | `ast_schema` | `tools/bench_table.py:19` | Skema JSON `BENCH_SCHEMA` pada `tools/bench_table.py` |
 | `ace.brain_registry.v1` | `ast_schema` | `code/ace_operational/brain_registry.py:27` | Skema JSON `REGISTRY_SCHEMA` pada `code/ace_operational/brain_registry.py` |
+| `ace.builder-onboarding-pack.v1` | `ast_schema` | `tools/builder_onboarding_pack.py:20` | Skema JSON `ONBOARDING_SCHEMA` pada `tools/builder_onboarding_pack.py` |
+| `ace.bundle-matrix-audit.v1` | `ast_schema` | `tools/seal_run.py:132` | Skema JSON `BUNDLE_MATRIX_SCHEMA` pada `tools/seal_run.py` |
+| `ace.candidate-corpus-quality.v1` | `ast_schema` | `tools/candidate_corpus_batch.py:17` | Skema JSON `SCHEMA` pada `tools/candidate_corpus_batch.py` |
+| `ace.candidate-factory-v2.v1` | `ast_schema` | `tools/candidate_factory_v2.py:40` | Skema JSON `FACTORY_V2_SCHEMA` pada `tools/candidate_factory_v2.py` |
+| `ace.candidate-readiness-census.v2` | `ast_schema` | `tools/candidate_factory_v2.py:43` | Skema JSON `CENSUS_V2_SCHEMA` pada `tools/candidate_factory_v2.py` |
 | `ace.chat.receipt.v1` | `ast_schema` | `code/ace_chat/task_runner.py:19` | Skema JSON `REPORT_SCHEMA` pada `code/ace_chat/task_runner.py` |
 | `ace.chat.request.v1` | `ast_schema` | `code/ace_chat/task_runner.py:18` | Skema JSON `SCHEMA` pada `code/ace_chat/task_runner.py` |
 | `ace.citation_rejection.v1` | `ast_schema` | `code/ace_operational/citation_validator.py:69` | Skema JSON `REJECTION_SCHEMA` pada `code/ace_operational/citation_validator.py` |
 | `ace.citation_validation.v1` | `ast_schema` | `code/ace_operational/citation_validator.py:70` | Skema JSON `REPORT_SCHEMA` pada `code/ace_operational/citation_validator.py` |
+| `ace.code-composite-spec.v2` | `ast_schema` | `tools/candidate_factory_v2.py:42` | Skema JSON `CODE_SPEC_V2_SCHEMA` pada `tools/candidate_factory_v2.py` |
 | `ace.corpus-factory-code.v1` | `ast_schema` | `tools/corpus_factory_code.py:30` | Skema JSON `FACTORY_SCHEMA` pada `tools/corpus_factory_code.py` |
 | `ace.corpus-factory-lang.v1` | `ast_schema` | `tools/corpus_factory_lang.py:33` | Skema JSON `FACTORY_LANG_SCHEMA` pada `tools/corpus_factory_lang.py` |
+| `ace.corpus-freeze-pack.v1` | `ast_schema` | `tools/corpus_freeze_packer.py:32` | Skema JSON `FREEZE_PACK_SCHEMA` pada `tools/corpus_freeze_packer.py` |
+| `ace.corpus-lint-v2.v1` | `ast_schema` | `tools/corpus_lint_v2.py:34` | Skema JSON `LINT_V2_SCHEMA` pada `tools/corpus_lint_v2.py` |
 | `ace.corpus-tags.v1` | `ast_schema` | `tools/corpus_tag.py:26` | Skema JSON `TAG_SCHEMA` pada `tools/corpus_tag.py` |
 | `ace.cover-check.v1` | `ast_schema` | `tools/cover_check.py:22` | Skema JSON `COVER_CHECK_SCHEMA` pada `tools/cover_check.py` |
+| `ace.coverage-flaky-audit.v1` | `ast_schema` | `tools/coverage_and_flaky_audit.py:32` | Skema JSON `AUDIT_SCHEMA` pada `tools/coverage_and_flaky_audit.py` |
+| `ace.cross-organ-agreement.v1` | `ast_schema` | `tools/cross_organ_agreement.py:23` | Skema JSON `AGREEMENT_SCHEMA` pada `tools/cross_organ_agreement.py` |
 | `ace.curriculum-gen.v1` | `ast_schema` | `tools/curriculum_gen.py:21` | Skema JSON `CURRICULUM_SCHEMA` pada `tools/curriculum_gen.py` |
+| `ace.director.prose-audit.v1` | `ast_schema` | `tools/director_prose_audit.py:18` | Skema JSON `PROSE_AUDIT_SCHEMA` pada `tools/director_prose_audit.py` |
 | `ace.distractor_inoculation.v1` | `ast_schema` | `code/ace_operational/distractor_inoculation.py:25` | Skema JSON `SCHEMA` pada `code/ace_operational/distractor_inoculation.py` |
 | `ace.distractor_registry.v1` | `ast_schema` | `code/ace_operational/distractor_inoculation.py:26` | Skema JSON `REGISTRY_SCHEMA` pada `code/ace_operational/distractor_inoculation.py` |
+| `ace.draft-preflight.v1` | `ast_schema` | `tools/draft_release_preflight.py:13` | Skema JSON `SCHEMA` pada `tools/draft_release_preflight.py` |
 | `ace.evidence-bundle.v1` | `ast_schema` | `tools/pack_evidence.py:19` | Skema JSON `BUNDLE_SCHEMA` pada `tools/pack_evidence.py` |
 | `ace.evo-census-hook.v1` | `ast_schema` | `tools/evo_scaffold.py:25` | Skema JSON `CENSUS_HOOK_SCHEMA` pada `tools/evo_scaffold.py` |
+| `ace.failure-to-agenda.v1` | `ast_schema` | `tools/failure_to_agenda.py:26` | Skema JSON `SCHEMA` pada `tools/failure_to_agenda.py` |
 | `ace.four-arm-report.v1` | `ast_schema` | `tools/four_arm_report.py:20` | Skema JSON `FOUR_ARM_SCHEMA` pada `tools/four_arm_report.py` |
 | `ace.frozen-corpus-registry.v1` | `ast_schema` | `tools/corpus_registry.py:21` | Skema JSON `REGISTRY_SCHEMA` pada `tools/corpus_registry.py` |
-| `ace.kbm-pack-check.v1` | `ast_schema` | `tools/kbm_pack_check.py:18` | Skema JSON `PACK_CHECK_SCHEMA` pada `tools/kbm_pack_check.py` |
-| `ace.kbm-pipeline.v1` | `ast_schema` | `tools/kbm_pipeline.py:38` | Skema JSON `KBM_PIPELINE_SCHEMA` pada `tools/kbm_pipeline.py` |
+| `ace.frozen-corpus-registry.v2` | `ast_schema` | `tools/frozen_corpus_registry.py:21` | Skema JSON `REGISTRY_V2_SCHEMA` pada `tools/frozen_corpus_registry.py` |
+| `ace.handover-decisions.v1` | `ast_schema` | `tools/handover_decision_extractor.py:21` | Skema JSON `DECISIONS_SCHEMA` pada `tools/handover_decision_extractor.py` |
+| `ace.handover-index.v1` | `ast_schema` | `tools/handover_index.py:21` | Skema JSON `HANDOVER_INDEX_SCHEMA` pada `tools/handover_index.py` |
+| `ace.introspect-recall.v1` | `ast_schema` | `tools/introspect_recall.py:28` | Skema JSON `SCHEMA` pada `tools/introspect_recall.py` |
+| `ace.judge-saturation-scan.v1` | `ast_schema` | `tools/saturation_scan.py:29` | Skema JSON `SATURATION_SCHEMA` pada `tools/saturation_scan.py` |
+| `ace.kbm-pack-check.v1` | `ast_schema` | `tools/kbm_pack_check.py:23` | Skema JSON `PACK_CHECK_SCHEMA` pada `tools/kbm_pack_check.py` |
+| `ace.kbm-pipeline.v1` | `ast_schema` | `tools/kbm_pipeline.py:52` | Skema JSON `KBM_PIPELINE_SCHEMA` pada `tools/kbm_pipeline.py` |
+| `ace.kbm-queue.v1` | `ast_schema` | `tools/kbm_production_queue.py:20` | Skema JSON `SCHEMA` pada `tools/kbm_production_queue.py` |
 | `ace.kbm-schedule.v1` | `ast_schema` | `tools/kbm_schedule.py:19` | Skema JSON `SCHEDULE_SCHEMA` pada `tools/kbm_schedule.py` |
 | `ace.kbm-split.v1` | `ast_schema` | `tools/kbm_split.py:18` | Skema JSON `KBM_SPLIT_SCHEMA` pada `tools/kbm_split.py` |
-| `ace.kbm-upload-manifest.v1` | `ast_schema` | `tools/kbm_pipeline.py:39` | Skema JSON `KBM_UPLOAD_MANIFEST_SCHEMA` pada `tools/kbm_pipeline.py` |
+| `ace.kbm-suite.v2` | `ast_schema` | `tools/kbm_suite_v2.py:36` | Skema JSON `KBM_SUITE_V2_SCHEMA` pada `tools/kbm_suite_v2.py` |
+| `ace.kbm-upload-manifest.v1` | `ast_schema` | `tools/kbm_pipeline.py:53` | Skema JSON `KBM_UPLOAD_MANIFEST_SCHEMA` pada `tools/kbm_pipeline.py` |
 | `ace.lang-constraint-spec.v1` | `ast_schema` | `tools/corpus_factory_lang.py:34` | Skema JSON `CONSTRAINT_SPEC_SCHEMA` pada `tools/corpus_factory_lang.py` |
+| `ace.lang-layered-spec.v2` | `ast_schema` | `tools/candidate_factory_v2.py:41` | Skema JSON `LANG_SPEC_V2_SCHEMA` pada `tools/candidate_factory_v2.py` |
+| `ace.metacog-consolidation.v1` | `ast_schema` | `tools/metacog_memory_consolidate.py:22` | Skema JSON `SCHEMA` pada `tools/metacog_memory_consolidate.py` |
+| `ace.migration-rehearsal.v1` | `ast_schema` | `tools/migration_rehearsal.py:15` | Skema JSON `SCHEMA` pada `tools/migration_rehearsal.py` |
 | `ace.mission.reasoning-candidate.v1` | `ast_schema` | `code/ace_mission/admission.py:16` | Skema JSON `ARTIFACT_SCHEMA` pada `code/ace_mission/admission.py` |
+| `ace.narrative-self-model.v1` | `ast_schema` | `tools/narrative_self_model.py:32` | Skema JSON `SCHEMA` pada `tools/narrative_self_model.py` |
 | `ace.novel_discovery.v1` | `ast_schema` | `code/ace_research_discovery/__init__.py:12` | Skema JSON `SCHEMA` pada `code/ace_research_discovery/__init__.py` |
 | `ace.open_world.plan.v1` | `ast_schema` | `code/ace_operational/open_world_task_bridge.py:25` | Skema JSON `SCHEMA` pada `code/ace_operational/open_world_task_bridge.py` |
+| `ace.organ-quota-ledger.v1` | `ast_schema` | `tools/organ_quota_ledger.py:20` | Skema JSON `LEDGER_SCHEMA` pada `tools/organ_quota_ledger.py` |
+| `ace.organ-registry-validate.v1` | `ast_schema` | `tools/organ_registry_validate.py:20` | Skema JSON `VALIDATOR_SCHEMA` pada `tools/organ_registry_validate.py` |
+| `ace.organ-slate.v1` | `ast_schema` | `tools/organ_registry_validate.py:21` | Skema JSON `SLATE_SCHEMA` pada `tools/organ_registry_validate.py` |
+| `ace.organ-smoke-harness.v1` | `ast_schema` | `tools/organ_smoke_harness.py:19` | Skema JSON `SMOKE_SCHEMA` pada `tools/organ_smoke_harness.py` |
+| `ace.pattern-catalog-diff.v1` | `ast_schema` | `tools/pattern_catalog.py:24` | Skema JSON `DIFF_SCHEMA` pada `tools/pattern_catalog.py` |
+| `ace.pattern-catalog.v1` | `ast_schema` | `tools/pattern_catalog.py:19` | Skema JSON `CATALOG_SCHEMA` pada `tools/pattern_catalog.py` |
+| `ace.pattern-conflict-trace.v1` | `ast_schema` | `tools/pattern_catalog.py:25` | Skema JSON `CONFLICT_TRACE_SCHEMA` pada `tools/pattern_catalog.py` |
 | `ace.pattern-distilled.v1` | `ast_schema` | `tools/pattern_distill.py:22` | Skema JSON `DISTILL_SCHEMA` pada `tools/pattern_distill.py` |
+| `ace.periodic-self-report.v1` | `ast_schema` | `tools/periodic_self_report.py:26` | Skema JSON `SCHEMA` pada `tools/periodic_self_report.py` |
+| `ace.platform-requirements-summary.v1` | `ast_schema` | `tools/platform_requirements_summary.py:20` | Skema JSON `PLATFORM_SUMMARY_SCHEMA` pada `tools/platform_requirements_summary.py` |
 | `ace.program-glossary.v1` | `ast_schema` | `tools/program_glossary.py:21` | Skema JSON `GLOSSARY_SCHEMA` pada `tools/program_glossary.py` |
 | `ace.reasoning.xy.v1` | `ast_schema` | `code/ace_cognition/reasoning.py:17` | Skema JSON `SCHEMA` pada `code/ace_cognition/reasoning.py` |
+| `ace.register-agenda-draft.v1` | `ast_schema` | `tools/failure_to_agenda.py:27` | Skema JSON `DRAFT_SCHEMA` pada `tools/failure_to_agenda.py` |
 | `ace.repair.memory.v1` | `ast_schema` | `code/ace_research_repair/memory.py:17` | Skema JSON `MEMORY_SCHEMA` pada `code/ace_research_repair/memory.py` |
 | `ace.repair.public.v1` | `ast_schema` | `code/ace_research_repair/runner.py:33` | Skema JSON `REPORT_SCHEMA` pada `code/ace_research_repair/runner.py` |
+| `ace.repo-cartography.v1` | `ast_schema` | `tools/repo_cartography.py:25` | Skema JSON `CARTOGRAPHY_SCHEMA` pada `tools/repo_cartography.py` |
 | `ace.repo-index.v1` | `ast_schema` | `tools/repo_index.py:19` | Skema JSON `INDEX_SCHEMA` pada `tools/repo_index.py` |
 | `ace.repo-status-dashboard.v2` | `ast_schema` | `tools/repo_status_dashboard.py:30` | Skema JSON `DASHBOARD_SCHEMA` pada `tools/repo_status_dashboard.py` |
+| `ace.repo-status-dashboard.v3` | `ast_schema` | `tools/repo_status_dashboard_v3.py:28` | Skema JSON `DASHBOARD_V3_SCHEMA` pada `tools/repo_status_dashboard_v3.py` |
+| `ace.revenue-evidence.v1` | `ast_schema` | `tools/revenue_verify.py:13` | Skema JSON `INPUT_SCHEMA` pada `tools/revenue_verify.py` |
+| `ace.revenue-reconcile.v1` | `ast_schema` | `tools/revenue_reconcile.py:23` | Skema JSON `RECONCILE_SCHEMA` pada `tools/revenue_reconcile.py` |
+| `ace.revenue-verification.v1` | `ast_schema` | `tools/revenue_reconcile.py:24` | Skema JSON `VERIFICATION_SCHEMA` pada `tools/revenue_reconcile.py` |
 | `ace.royalty-summary.v1` | `ast_schema` | `tools/royalty_track.py:25` | Skema JSON `ROYALTY_SCHEMA` pada `tools/royalty_track.py` |
+| `ace.run-evidence-pack.v1` | `ast_schema` | `tools/run_evidence_pack.py:35` | Skema JSON `RUN_PACK_SCHEMA` pada `tools/run_evidence_pack.py` |
 | `ace.runtime.v1` | `ast_schema` | `code/ace_runtime/engine.py:16` | Skema JSON `SCHEMA` pada `code/ace_runtime/engine.py` |
-| `ace.stage-verify.v1` | `ast_schema` | `tools/evo_scaffold.py:24` | Skema JSON `STAGE_SCHEMA` pada `tools/evo_scaffold.py` |
-| `ace.storage-debt.v1` | `ast_schema` | `tools/storage_debt.py:21` | Skema JSON `STORAGE_DEBT_SCHEMA` pada `tools/storage_debt.py` |
-| `ace.tools-fuzz-matrix.v1` | `ast_schema` | `tools/fuzz_parsers.py:21` | Skema JSON `FUZZ_MATRIX_SCHEMA` pada `tools/fuzz_parsers.py` |
-| `ace.tools-fuzz.v1` | `ast_schema` | `tools/fuzz_parsers.py:20` | Skema JSON `FUZZ_SCHEMA` pada `tools/fuzz_parsers.py` |
+| `ace.self-dev-branch-prereview.v1` | `ast_schema` | `tools/self_dev_git_audit.py:252` | Skema JSON `PREREVIEW_SCHEMA` pada `tools/self_dev_git_audit.py` |
 | `ACE_BASE_RUNTIME_EXECUTED` | `markdown_def` | `docs/ACE_AUTONOMY_V1_RESULTS.md:12` | **`TRUE`** — `ace_runtime` (`931b1582...`) dijalankan langsung maupun melalui `TypedToolBroker` (`ace_demo`, `ace_status`, `ace_enqueue_task`, `ace_run_tasks`, `ace_predict`, `ace_evaluate`, `ace_report`); `tools/verify_… |
 | `ace_self_evolver` | `ast_module` | `ace_self_evolver.py:1` | ACE Audited Self-Evolver (Strict Empirical Verification & Branch Isolation) |
 | `ACEWebCore` | `ast_class` | `code/ace_operational/web_server.py:1600` | Shared application state and API dispatcher used by HTTP server and direct test harness. |
@@ -120,6 +159,7 @@
 | `AttentionController` | `ast_class` | `code/ace_selfmodel/metacognition.py:137` | Prioritizes candidate goals using expected information gain, feasibility, and cost. |
 | `Aturan 1 — Kandidat self-dev hanya berhasil bila hidup` | `markdown_heading` | `handover/GOVERNANCE_RULES_20261115.md:9` | Sebuah kandidat hasil self-development (fitur, modul, |
 | `Aturan 2 — Ratifikasi independen adalah standar` | `markdown_heading` | `handover/GOVERNANCE_RULES_20261115.md:30` | Tidak ada hasil lini mana pun yang menjadi status resmi |
+| `AuditError` | `ast_class` | `tools/self_dev_git_audit.py:29` | Masukan audit atau objek Git lokal tidak dapat diperiksa. |
 | `AuditFinding` | `ast_class` | `code/ace_operational/evolution_mission_loop.py:258` | Deterministic, evidence-backed code/capability improvement finding. |
 | `AuditViewError` | `ast_class` | `tools/self_send_audit_view.py:25` | Error masukan berkas audit tidak ditemukan atau tidak bisa dibaca. |
 | `auto_curriculum` | `ast_module` | `auto_curriculum.py:1` | ACE Auto-Curriculum Runner |
@@ -152,6 +192,7 @@
 | `boundary_index` | `markdown_def` | `docs/ACE_REPAIR_PRESCORE_V1.md:60` | `T01_binary_search_index` (`<` vs `<=` convergence bound), `T02_interior_local_maxima` (`range` stop off-by-one), `T03_trimmed_floor_mean` (missing empty-sample guard). |
 | `BoundarySecurityViolation` | `ast_class` | `code/ace_host_controller/boundary.py:64` | Raised when an untrusted candidate attempts to breach supervisory boundaries. |
 | `BoundedRepositoryRetriever` | `ast_class` | `code/ace_code_agent/repo_retrieval.py:73` | AST symbol index with exact Git ignore behavior and explicit resource caps. |
+| `brain_of_origin` | `markdown_def` | `docs/research/ACE_C6_FAILURE_TO_AGENDA.md:8` | `"gravity-proposal"` |
 | `brain_registry.py` | `markdown_def` | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM29.md:5` | catatan otak bernama + log peristiwa |
 | `BrainContractAdapter` | `ast_class` | `code/ace_operational/oaie_unlimited.py:121` | Wraps any AI model or symbolic solver behind a zero-trust hypothesis interface. |
 | `BrainGovernanceError` | `ast_class` | `code/ace_operational/oaie_unlimited.py:111` | Raised when all candidate brains fail verification or a dismissed brain is invoked. |
@@ -171,6 +212,7 @@
 | `C3 UNKNOWN` | `markdown_def` | `docs/research/PREAUDIT_VALIDATOR_V1_PILOT.md:50` | no verdict check declared (these records carry no |
 | `CachingBudget` | `ast_class` | `code/ace_operational/pilot_abc.py:179` | Budget with compile-once scoring. |
 | `CalibrationReport` | `ast_class` | `code/ace_self_dev/metacognitive_predictor.py:128` | Complete calibration evaluation report (Brier, ECE, MCE, selective risk). |
+| `CandidateFactoryV2Error` | `ast_class` | `tools/candidate_factory_v2.py:81` | Kesalahan parameter masukan atau kegagalan gerbang validasi kandidat v2. |
 | `CandidateFeatures` | `ast_class` | `code/ace_self_dev/metacognitive_predictor.py:47` | Extracted structural, operator, and constraint features of a candidate mechanism. |
 | `CandidateNode` | `ast_class` | `code/ace_host_controller/lineage.py:24` | Represents a discrete candidate in the evolutionary lineage. |
 | `capability_record` | `markdown_def` | `docs/research/ACE_G4_PREREGISTRATION_20261113.md:209` | artifact file + digest + |
@@ -185,8 +227,6 @@
 | `CausalGap` | `ast_class` | `code/ace_research_f12/causal_agent.py:19` | Diagnosed structural capability gap in existing mechanisms. |
 | `CausalGapAnalyzer` | `ast_class` | `code/ace_research_f12/causal_agent.py:58` | Analyzes error distributions between baseline predictions and observed evidence. |
 | `CausalInvariantMiner` | `ast_class` | `code/ace_causal/causal_miner.py:187` | Discovers true causal graph invariants, eliminating spurious confounders and co-effects. |
-| `CausalMechanism` | `ast_class` | `code/ace_research_f12/causal_agent.py:422` | Evolutionary meta-mechanism defining inductive feature biases for generations G0, G1, G2. |
-| `CausalMemory` | `ast_class` | `code/ace_research_f12/causal_agent.py:28` | Structured causal memory tracking verified mechanisms, evidence, and hypothesis lineage. |
 | `code.ace_abstract_interp.__init__` | `ast_module` | `code/ace_abstract_interp/__init__.py:1` | ACE Abstract Interpretation & Invariant Synthesis Module. |
 | `code.ace_abstract_interp.disjunctive_domain` | `ast_module` | `code/ace_abstract_interp/disjunctive_domain.py:1` | Disjunctive Abstract Interpretation via Semantic Trace Partitioning. |
 | `code.ace_abstract_interp.invariants` | `ast_module` | `code/ace_abstract_interp/invariants.py:1` | Abstract Interpretation Invariant Analyzer & Invariant Synthesizer. |
@@ -280,6 +320,7 @@
 | `code/ace_operational/web_server.py` | `markdown_def` | `PROJECT.md:79` | Anime web server and SSE streams. |
 | `code/ace_research_repair/` | `markdown_def` | `docs/ACE_AUTONOMY_IMPLEMENTATION_GATES_20261107.md:11` | bug corpus, typed repair representation, reference transformations, localization, patches, tests and evidence. No production application code executes in privileged orchestrator. |
 | `code/ace_selfmodel/` | `markdown_def` | `docs/ACE_AUTONOMY_IMPLEMENTATION_GATES_20261107.md:12` | read-only runtime introspection and calibrated metacognition experiments. |
+| `CONFLICTING_DECISION` | `markdown_def` | `docs/research/ACE_A2_TRANCHE2_CLOSURE.md:17` | lebih dari satu keputusan berbeda untuk ID yang sama. |
 | `Context (Donor)` | `markdown_def` | `docs/research/external_repos/SOTA_GODEL_AND_ABSTRACTION_REPOS_20261107.md:195` | The *succeeding* lineage node (the donor of the working capability). |
 | `covered` | `markdown_def` | `docs/research/ACE_CATALOG_GAP_DESIGN_20261113.md:101` | the extended solver solves every |
 | `Cross-Task Transfer` | `markdown_def` | `docs/research/self_dev/SOTA_EXTERNAL_REPOSITORIES_SURVEY_20261107.md:325` | Candidate mechanisms evolved to solve one task family (e.g. modular stride shifts in Family K) are systematically cross-tested on other task families (e.g. balance shifts in Family J). |
@@ -293,6 +334,8 @@
 | `D5` | `markdown_def` | `handover/ECOSYSTEM_INTAKE_INTEGRATION_REVIEW_20261114.md:94` | Corpus provenance wording: `trial.py`'s docstring |
 | `data_dependency` | `markdown_def` | `docs/ACE_REPAIR_PRESCORE_V1.md:63` | `T10_apply_row_mask` (in-place mutation of caller template list), `T11_register_route` (shared mutable default route dictionary), `T12_compute_net_total` (tax computed on stale `subtotal` instead of `discounted` local va… |
 | `Date/scheduling arithmetic` | `markdown_def` | `docs/research/ACE_FAMILY3_DESIGN_20261113.md:82` | component |
+| `decision_owner` | `markdown_def` | `docs/research/ACE_C6_FAILURE_TO_AGENDA.md:9` | `"Ian"` |
+| `decision_status` | `markdown_def` | `docs/research/ACE_C6_FAILURE_TO_AGENDA.md:10` | `"PROPOSED_AWAITING_IAN"` (`claim_made=False`) |
 | `DELIVERY_ONLY` | `markdown_def` | `docs/research/ACE_G4_G5_INSTRUMENT_DESIGN_20261112.md:104` | summaries exist and were delivered |
 | `DG1` | `markdown_def` | `docs/research/generations/ACE_P4_GENERATIONS_GROWTH_PRESCORE_20261107.md:57` | `UG1` inverted terminal labels. |
 | `DG2` | `markdown_def` | `docs/research/generations/ACE_P4_GENERATIONS_GROWTH_PRESCORE_20261107.md:58` | `UG3` inverted terminal labels. |
@@ -301,10 +344,6 @@
 | `Engineering GO` | `markdown_def` | `docs/ACE_CAPABILITY_DECISION_AND_CODEX_HANDOFF_20261107.md:64` | bounded deterministic source is runnable, independently verifiable, original regression intact. |
 | `Environment Population` | `markdown_def` | `docs/research/self_dev/SOTA_EXTERNAL_REPOSITORIES_SURVEY_20261107.md:323` | In ACE, "environments" are diagnostic tasks and data distributions (`task_k1`, `task_k2`, `task_j1`, `task_j2`). |
 | `evaluation_report` | `markdown_def` | `docs/research/ACE_G4_PREREGISTRATION_20261113.md:215` | this text's back-reference, |
-| `evidence/lineage_guard_gate.py` | `markdown_def` | `docs/research/ACE_LINEAGE_GUARD_PREREG_FULL_DRAFT_20261113.md:198` | the step-4 gate |
-| `evidence/lineage_guard_harness.py` | `markdown_def` | `docs/research/ACE_LINEAGE_GUARD_PREREG_FULL_DRAFT_20261113.md:191` | the run harness |
-| `evidence/proposer_stage1/` | `markdown_def` | `docs/research/PROPOSER_ENGINE_STAGE1_DESIGN.md:31` | `PREREG_LOCK.md` (design, split, |
-| `evidence/test_lineage_guard_harness.py` | `markdown_def` | `docs/research/ACE_LINEAGE_GUARD_PREREG_FULL_DRAFT_20261113.md:196` | unit tests |
 | `G3 application run — starting` | `markdown_heading` | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM52.md:32` | Protocol `5f907362…b8bb6d` (Addendum 50). The runner |
 | `G4 application — INHERITANCE_DEMONSTRATED (instrument-scored)` | `markdown_heading` | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM57.md:11` | Experiment `g4-application-01`, protocol hash |
 | `Gate 0 — reproduce baseline and pin provenance` | `markdown_heading` | `docs/ACE_AUTONOMY_IMPLEMENTATION_GATES_20261107.md:18` | Inputs: source SHA, relevant branch head SHAs, exact environment, public protocol and commit-set. Execute and archive: |
@@ -316,3 +355,6 @@
 | `Gate 3 — family-disjoint representation transfer` | `markdown_heading` | `docs/ACE_AUTONOMY_IMPLEMENTATION_GATES_20261107.md:95` | Prior to implementation or terminal scoring, freeze: |
 | `Gate 4 — staged self-development generations G0 → G1 → G2` | `markdown_heading` | `docs/ACE_AUTONOMY_IMPLEMENTATION_GATES_20261107.md:113` | Allowed mutation scope: one bounded candidate module such as a repair search heuristic, learned feature extractor or policy ranking. Not mutable by candidate: evaluation, terminal data, audit, authorization, operator rev… |
 | `Gate 5 — functional self-model and consciousness-related research` | `markdown_heading` | `docs/ACE_AUTONOMY_IMPLEMENTATION_GATES_20261107.md:133` | Separate scientific endpoints: |
+| `Rel 1 — KBM → SeaBank (rel hidup program)` | `markdown_heading` | `handover/SPESIFIKASI_WS2_REL_DAN_BUKTI.md:35` | - Kaki platform: laporan royalti KBM. Keluaran |
+| `Rel 2 — Fastwork → rekening bank` | `markdown_heading` | `handover/SPESIFIKASI_WS2_REL_DAN_BUKTI.md:47` | - Kaki platform: riwayat penarikan Fastwork. |
+| `Rel 3 — GoPay / QRIS (rel langsung)` | `markdown_heading` | `handover/SPESIFIKASI_WS2_REL_DAN_BUKTI.md:60` | - Kaki platform: laporan penyelesaian (settlement) |

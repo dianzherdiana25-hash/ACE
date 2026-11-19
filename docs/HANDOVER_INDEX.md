@@ -5,28 +5,28 @@
 ## 1. Ringkasan
 
 - Schema: `ace.handover-index.v1`
-- Total berkas terindeks: **355** (`handover/`: **137**, `docs/`: **218**)
-- Total baris teks UTF-8: **74344**
-- Total ukuran: **4201292** byte
+- Total berkas terindeks: **405** (`handover/`: **138**, `docs/`: **267**)
+- Total baris teks UTF-8: **77453**
+- Total ukuran: **4503220** byte
 - Symlink dilewati: **0**
 
 ### Distribusi Kategori
 
 | Kategori | Jumlah Berkas |
 | --- | ---: |
-| `audit_accounting` | 24 |
-| `consolidation_ops` | 17 |
-| `corpus_frozen` | 8 |
+| `audit_accounting` | 38 |
+| `consolidation_ops` | 18 |
+| `corpus_frozen` | 10 |
 | `helper_script` | 22 |
 | `manifest_json` | 45 |
 | `preregistration` | 17 |
-| `reference_doc` | 45 |
-| `research_report` | 116 |
-| `slate_serving` | 12 |
-| `spec_governance` | 41 |
+| `reference_doc` | 48 |
+| `research_report` | 143 |
+| `slate_serving` | 13 |
+| `spec_governance` | 43 |
 | `verdict_decision` | 8 |
 
-## 2. Inventaris `handover/` (137 berkas)
+## 2. Inventaris `handover/` (138 berkas)
 
 | Berkas | Kategori | Baris | Byte | SHA-256 | Judul / Ringkasan |
 | --- | --- | ---: | ---: | --- | --- |
@@ -72,6 +72,7 @@
 | `handover/PROPOSER_STAGE2_CONSTITUTION_VERDICT_20261114.md` | `verdict_decision` | 43 | 6127 | `50dcc6f69068` | PROPOSER STAGE 2 — ISOLATED STAGING & CONSTITUTION ENGINE VERDICT (2026-11-14) |
 | `handover/RANCANGAN_EVO_0007.md` | `spec_governance` | 65 | 2677 | `53031e6d95e6` | RANCANGAN EVO 0007 — Recall Pola Terdistilasi ala Katalog |
 | `handover/SERVING_INTEGRATION_REVIEW_20261114.md` | `slate_serving` | 128 | 7807 | `addb982557b4` | SERVING PACKAGE — INTEGRATION REVIEW (2026-11-14) |
+| `handover/SPESIFIKASI_WS2_REL_DAN_BUKTI.md` | `spec_governance` | 87 | 3313 | `e7c1fcebb292` | Spesifikasi WS-2 — Rel yang Dicakup & Kriteria Bukti per Rel |
 | `handover/VALIDATOR_PRAAUDIT_V1_SPESIFIKASI_20261113.md` | `spec_governance` | 139 | 6541 | `204f6fd62008` | SPESIFIKASI KANDIDAT — VALIDATOR PRA-AUDIT v1 (2026-11-13) |
 | `handover/VERIFICATION_VENV_NOTE_20261115.md` | `audit_accounting` | 54 | 2068 | `9a692a5aabd8` | NOTA — Venv Verifikasi Rumah Kustodi Sandbox |
 | `handover/absorption_audit_20261115/engine_runtime/autonomous_engine.status.json` | `manifest_json` | 16 | 369 | `8c424170c776` | schema: ace.autonomous_engine.status.v1 |
@@ -168,7 +169,7 @@
 | `handover/sqlite-vec-trial/trial.py` | `helper_script` | 155 | 7400 | `9bbd2936d744` | sqlite-vec trial — ECOSYSTEM INTAKE #01 candidate #4 protocol. |
 | `handover/stack_intake/INTAKE_V2_20261116.json` | `consolidation_ops` | 1 | 1731 | `5809f86998c3` | status: INTAKEN_AND_VERIFIED — not loaded, not served; bench stage follows |
 
-## 3. Inventaris `docs/` (218 berkas)
+## 3. Inventaris `docs/` (267 berkas)
 
 | Berkas | Kategori | Baris | Byte | SHA-256 | Judul / Ringkasan |
 | --- | --- | ---: | ---: | --- | --- |
@@ -211,38 +212,63 @@
 | `docs/ACE_SELFMODEL_RESULTS_V1.md` | `reference_doc` | 40 | 4108 | `74cce49f7873` | ACE Fase 4 — Functional Self-Model & Metacognition: Results & Verification |
 | `docs/ACE_VISION_ALIGNMENT_CURRENT.md` | `reference_doc` | 122 | 22945 | `3e7934850d77` | ACE Vision Alignment, Historical Reconstruction, and Capability Matrix (2026-11-07) |
 | `docs/AUDIT_REMEDIATION_STATUS.md` | `audit_accounting` | 61 | 4154 | `d81457b60b88` | Audit remediation status |
+| `docs/BUILDER_ONBOARDING_PACK.md` | `reference_doc` | 64 | 3656 | `192e309b3da9` | Paket Onboarding Kontributor Builder ACE — ACE |
 | `docs/COMPOSITION_PROTOCOL_V03.md` | `reference_doc` | 48 | 3244 | `1f880488514f` | ACE v0.3: counterexample-triggered representation composition |
 | `docs/COMPOSITION_PROTOCOL_V031.md` | `reference_doc` | 14 | 889 | `809ede373ab8` | Protocol feasibility amendment v0.3.1 |
 | `docs/COMPOSITION_RESULTS_V03.md` | `reference_doc` | 84 | 5178 | `808029e06d80` | ACE v0.3 — learned counter/guard composition |
 | `docs/LAPORAN_HASIL_RISET_HP.md` | `reference_doc` | 63 | 5202 | `4e5fe567d704` | 📱 Laporan Hasil Riset ACE (Terbaca di Layar HP) |
 | `docs/PRD_ACE_v0.1.md` | `reference_doc` | 190 | 18816 | `03887aef928b` | PRODUCT REQUIREMENTS DOCUMENT (PRD) |
+| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54907 | `31d26dd3b3dd` | Glosarium Istilah Teknis ACE — ACE |
+| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 282 | 23725 | `8c4f4c1adae1` | Kartografi Repositori ACE — ACE |
 | `docs/REPO_INDEX.md` | `reference_doc` | 2545 | 205836 | `f67ada15f27e` | Indeks Repositori — ACE |
 | `docs/UPSTREAM_SOURCES.json` | `manifest_json` | 106 | 4914 | `cf6ffc77386a` | schema: ace.source-integration.v1 |
 | `docs/architecture/ACE_INDEPENDENT_HOST_CONTROLLER_SPEC_20261107.md` | `spec_governance` | 145 | 8693 | `b24b7c2ff49b` | ACE Independent Host Controller & Evaluation Architecture Specification |
 | `docs/architecture/ACE_OAIE_UNLIMITED_DOCTRINE.md` | `spec_governance` | 95 | 12335 | `55c3c609e9dd` | Doktrin & Arsitektur OAIE-Unlimited (`OAIE-∞`): Kedaulatan Epistemik, Orkestrasi Multi-Model, dan E… |
 | `docs/evaluation/ACE_SEALED_EVALUATION_V2_SPEC_20261107.md` | `spec_governance` | 91 | 6028 | `0e7caa8e3737` | ACE Sealed Evaluation V2: Dual-Oracle Decoupling & Merkle Exposure Auditing |
 | `docs/evolution/neutral_archive_prescore_20261109.md` | `reference_doc` | 11 | 2823 | `0f2fc31aca60` | S2 prescore — neutral equivalence archive (2026-11-09) |
+| `docs/research/ACE_A1_TRANCHE2_CATALOG_COMPAT.md` | `research_report` | 18 | 1755 | `9e079565687f` | Garis A Tranche 2 (A1) — Kompatibilitas Lintas Versi & Penelusuran Konflik Katalog |
+| `docs/research/ACE_A2_TRANCHE2_CLOSURE.md` | `research_report` | 26 | 1394 | `34c4dee6f343` | Garis A Tranche 2 (A2) — Laporan Penutupan Kandidat Agenda |
+| `docs/research/ACE_A3_TRANCHE2_PROSE_SHAPES.md` | `research_report` | 29 | 2812 | `fffe8b0b44e6` | Garis A Tranche 2 (A3) — Pemetaan Bentuk Klaim Prosa Historis Director |
+| `docs/research/ACE_A4_TRANCHE2_BUNDLE_AND_SCOPE.md` | `research_report` | 19 | 1535 | `75deac70feee` | Garis A Tranche 2 (A4) — Audit Bundel Lintas Paket & Catatan Cakupan Per Pasangan Paket |
+| `docs/research/ACE_A5_TRANCHE2_PREREVIEW.md` | `research_report` | 23 | 1576 | `0587ab250685` | Garis A Tranche 2 (A5) — Laporan Pra-Review Branch Terpin Operator |
 | `docs/research/ACE_ABC_V3_DESIGN_20261113.md` | `spec_governance` | 198 | 8839 | `8644f54106c7` | ACE Pilot A/B/C v3 — Desain: lengan dibedakan oleh STRATEGI (2026-11-13) |
 | `docs/research/ACE_ABC_V3_PREREGISTRATION_20261113.md` | `preregistration` | 184 | 7229 | `55b6331eeed0` | A/B/C v3 — preregistration (LOCKED) |
 | `docs/research/ACE_ABC_V3_PREREGISTRATION_DRAFT_20261113.md` | `preregistration` | 185 | 7235 | `2ad2949d9b9a` | A/B/C v3 — preregistration DRAFT |
 | `docs/research/ACE_ALGORITHMIC_DISCOVERY_ENGINES_V1.md` | `research_report` | 60 | 3832 | `08992919176a` | ACE Algorithmic Discovery Engines V1 (November 2026) |
 | `docs/research/ACE_ANTIGRAVITY_EXECUTION_CONTRACT_20261110.md` | `research_report` | 220 | 14649 | `0f62778217ce` | KONTRAK EKSEKUSI ACE — TUNTASKAN SELURUH HASIL OPERASIONAL |
 | `docs/research/ACE_AVA_VISUAL_BRIDGE_V01.md` | `research_report` | 81 | 6225 | `3d665118ab6e` | ACE × Autonomous Visual Agent — Evidence-First Bridge v0.1 |
+| `docs/research/ACE_B1_CANDIDATE_FACTORY_V2.md` | `research_report` | 15 | 1400 | `fb0fd4c914e4` | Garis B1 · Pabrik Kandidat v2 (`tools/candidate_factory_v2.py`) |
+| `docs/research/ACE_B2_SATURATION_SCAN.md` | `research_report` | 12 | 842 | `3c89867acd7f` | Garis B2 · Analisis Kejenuhan Judge (`tools/saturation_scan.py`) |
+| `docs/research/ACE_B3_CORPUS_GOVERNANCE.md` | `corpus_frozen` | 12 | 1134 | `a0a1399d451e` | Garis B3 · Tata Kelola Korpus (Perkakas Baru) |
 | `docs/research/ACE_B3_FREEZE_20261113.md` | `research_report` | 128 | 5431 | `b8cfdbe786a6` | Pricing substrate v1 — freeze record (Stage B-3) |
+| `docs/research/ACE_B4_EVAL_BENCH.md` | `research_report` | 12 | 1005 | `ec609b6c812f` | Garis B4 · Bench Evaluasi Berdiri (`tools/eval_bench.py`) |
 | `docs/research/ACE_BAKEOFF_02_DESIGN_20261113.md` | `spec_governance` | 319 | 14733 | `103b00dd7f46` | Bake-off 02 — design (successor candidate selection, citation-validator hardening, single composite… |
 | `docs/research/ACE_BAKEOFF_02_PREREGISTRATION_20261113.md` | `preregistration` | 194 | 8110 | `8b2fa02e6ec2` | BAKE-OFF 02 PREREGISTRATION — FINAL TEXT (NOT YET LOCKED) |
 | `docs/research/ACE_BAKEOFF_02_PREREGISTRATION_DRAFT_20261113.md` | `preregistration` | 134 | 5371 | `182cb58cfa27` | BAKE-OFF 02 PREREGISTRATION — DRAFT TEXT (NOT SUBMITTED) |
 | `docs/research/ACE_BAKEOFF_ARENA_EXPANSION_DESIGN_DRAFT_20261113.md` | `spec_governance` | 430 | 18772 | `325e6545fbf5` | Bake-off arena expansion — design note (30B-class challengers in the sandbox home) |
 | `docs/research/ACE_BRAIN_BAKEOFF_01_20261113.md` | `research_report` | 81 | 3980 | `7a2ba720934c` | Brain bake-off 01 — Qwen3-4B challenges Qwen3-8B for the local director seat (2026-11-13) |
 | `docs/research/ACE_BRAIN_BAKEOFF_02_MANUS_20261114.md` | `research_report` | 76 | 8273 | `8841e044a568` | Evaluasi Otak Lokal CPU-Only & Manus Bake-Off 02 Probes (2026-11-14) |
+| `docs/research/ACE_C1_NARRATIVE_SELF_MODEL.md` | `research_report` | 20 | 1428 | `841048ff6b40` | C1 · Model-Diri Naratif (`tools/narrative_self_model.py`) |
+| `docs/research/ACE_C2_CONTINUITY_PROBE.md` | `research_report` | 20 | 1057 | `12d3c827bf5f` | C2 · Probe Kontinuitas Model-Diri (`tools/self_model_continuity_probe.py`) |
+| `docs/research/ACE_C3_METACOG_CONSOLIDATION.md` | `research_report` | 18 | 1032 | `d69e5cb55671` | C3 · Konsolidasi Memori Metakognitif (`tools/metacog_memory_consolidate.py`) |
+| `docs/research/ACE_C4_INTROSPECT_RECALL.md` | `spec_governance` | 15 | 791 | `bbce6e7ddb8a` | C4 · CLI Recall & Introspeksi (`tools/introspect_recall.py`) |
+| `docs/research/ACE_C5_PERIODIC_SELF_REPORT.md` | `research_report` | 15 | 656 | `260ca03feefe` | C5 · Generator Laporan-Diri Berkala (`tools/periodic_self_report.py`) |
+| `docs/research/ACE_C6_FAILURE_TO_AGENDA.md` | `research_report` | 17 | 741 | `6adbac00c0c2` | C6 · Permukaan Agenda dari Kegagalan (`tools/failure_to_agenda.py`) |
 | `docs/research/ACE_CATALOG_GAP_DESIGN_20261113.md` | `spec_governance` | 285 | 11747 | `6ab1ae690f78` | Catalog gap analysis — design |
+| `docs/research/ACE_CODEX_A2_AGENDA.md` | `research_report` | 44 | 3676 | `91ebce7f4ed0` | Garis A2 — usulan agenda dari aset dan bukti handover |
+| `docs/research/ACE_CODEX_GARIS_A_AKUNTANSI.md` | `audit_accounting` | 65 | 4059 | `6436a212a8b4` | Akuntansi Garis A · Mesin evolusi |
+| `docs/research/ACE_CODEX_RONDE_2_AKUNTANSI.md` | `audit_accounting` | 81 | 8764 | `88c4cac092f0` | Akuntansi pembangunan ronde 2 |
 | `docs/research/ACE_CONTROL_REGRESSION_DESIGN_DRAFT_20261113.md` | `spec_governance` | 960 | 46117 | `4df97a53a629` | ACE Ω — Design Draft: The Control-Regression Phenomenon Under Catalog Enrichment (2026-11-13) |
 | `docs/research/ACE_CONTROL_REGRESSION_STAGE3_PREREG_DRAFT_20261113.md` | `research_report` | 246 | 12339 | `8ac613ebcdee` | ACE Ω — Stage 3 Preregistration DRAFT: One-Variable Intervention on the Control-Regression Mechanis… |
+| `docs/research/ACE_COVERAGE_AND_FLAKY_AUDIT.md` | `audit_accounting` | 140 | 7058 | `901556343ccf` | Audit Cakupan Simbol & Deteksi Tes Flaky — ACE |
 | `docs/research/ACE_CROSS_FAMILY_TRANSFER_PRESCORE_V1.md` | `research_report` | 44 | 11091 | `ac8aa3a24232` | ACE host-assisted cross-family transfer: proposed preregistration v1 |
 | `docs/research/ACE_CURRICULUM_GEN_DESIGN_20261113.md` | `spec_governance` | 259 | 10503 | `1f264df25b1f` | Weakness-targeting curriculum generator — design |
+| `docs/research/ACE_D1_FUZZ_HARDENING.md` | `research_report` | 37 | 4424 | `54cf1afc27bd` | Garis D1 — Pengerasan Fuzz Parser & Pembaca Berkas Non-Verdict (`gravity/d1-fuzz-hardening`) |
+| `docs/research/ACE_DIRECTOR_OFFLINE_CHECKS.md` | `research_report` | 103 | 3930 | `ae8b9994baae` | Pemeriksaan produk direktur |
 | `docs/research/ACE_DISCOVERY_ROUND2_PREREGISTRATION_20261113.md` | `preregistration` | 154 | 6209 | `6f5e0d9c9e68` | Discovery round 2 — preregistered confirmatory sandbox run |
 | `docs/research/ACE_DISCOVERY_VNEXT_DESIGN_20261113.md` | `spec_governance` | 286 | 12140 | `8e9749583d1c` | Discovery v-next — schema-space round 2: statement-level operators |
 | `docs/research/ACE_DISTRACTOR_INOCULATION_DESIGN_20261113.md` | `spec_governance` | 111 | 4759 | `7f77c197ec14` | DISTRACTOR-INOCULATION BATTERY — DESIGN + BUILD (2026-11-13) |
+| `docs/research/ACE_EVO_EXPERIMENT_SUPPORT_A4.md` | `research_report` | 92 | 3488 | `c7f96e5787d1` | Infrastruktur eksperimen A4 |
 | `docs/research/ACE_FAMILY3_DESIGN_20261113.md` | `spec_governance` | 231 | 9165 | `22ee1ce93048` | Family 3 design — text_transform (slug pipeline) |
 | `docs/research/ACE_FR01_BOUNDED_RETRIEVAL_PRESCORE_20261110.md` | `research_report` | 36 | 3339 | `95dcd8af8039` | ACE FR-01 bounded repository retrieval — preregistered protocol |
 | `docs/research/ACE_G1_INSTRUMENT_DESIGN_20261112.md` | `spec_governance` | 52 | 2370 | `d6f1f1b0a879` | Instrumen Pengukuran G1 — Desain dan Penerapan Pertama (Tahap H, 2026-11-12) |
@@ -251,7 +277,17 @@
 | `docs/research/ACE_G4_G5_INSTRUMENT_DESIGN_20261112.md` | `spec_governance` | 126 | 5793 | `f817ec9ee599` | ACE G4 + G5 Measurement Instruments — Design (Stage L1, design only) |
 | `docs/research/ACE_G4_PREREGISTRATION_20261113.md` | `preregistration` | 302 | 13318 | `841b3f167d80` | G4 application preregistration (draft text — locks the run, submits to no kernel) |
 | `docs/research/ACE_G5_HARVEST_PREREGISTRATION_DRAFT_20261113.md` | `preregistration` | 352 | 13888 | `e5d12ff4e79a` | G5 harvest — period preregistration LOCKED |
+| `docs/research/ACE_GRAVITY_GARIS_A_T2_AKUNTANSI.md` | `audit_accounting` | 64 | 5562 | `d4ad24a1a41d` | Akuntansi Garis A · Tranche 2 (Lanjutan Ian dari PR #339) |
+| `docs/research/ACE_GRAVITY_GARIS_B_AKUNTANSI.md` | `audit_accounting` | 36 | 4349 | `a654f281bcf3` | Akuntansi Garis B · Korpus, Kandidat, dan Evaluasi |
+| `docs/research/ACE_GRAVITY_GARIS_C_AKUNTANSI.md` | `audit_accounting` | 37 | 6064 | `461705d097a7` | Akuntansi Garis C · Memori & Lapis 3 |
+| `docs/research/ACE_GRAVITY_GARIS_D_AKUNTANSI.md` | `audit_accounting` | 69 | 10228 | `f84d9461fd3c` | Akuntansi Garis D · Pengujian, Pengerasan Fuzz & Deteksi Flaky |
+| `docs/research/ACE_GRAVITY_GARIS_E_AKUNTANSI.md` | `audit_accounting` | 44 | 5126 | `980b8c8528d2` | Akuntansi Garis E · Perkakas Organ & Multi-Brain EVO 0009 (Strictly Offline) |
+| `docs/research/ACE_GRAVITY_GARIS_F_AKUNTANSI.md` | `audit_accounting` | 92 | 5975 | `0cd49900e0fa` | Akuntansi Penutup Garis F — Penyambungan & Integrasi Aman (Gravity) |
+| `docs/research/ACE_GRAVITY_GARIS_G_AKUNTANSI.md` | `audit_accounting` | 60 | 5748 | `ab78c64c9960` | Akuntansi Penutup Garis G — Permukaan Pemilik & Operasi (Gravity) |
+| `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md` | `audit_accounting` | 51 | 5633 | `a9e5f090a06b` | Akuntansi Penutup Garis H — Produksi & Rel Pendapatan Luring (Gravity) |
+| `docs/research/ACE_GRAVITY_GARIS_I_AKUNTANSI.md` | `audit_accounting` | 110 | 15716 | `0a3bee1369c5` | Akuntansi Penutup Garis I & Rekapitulasi Induk Final — Satu Runtime Jauh (Gravity) |
 | `docs/research/ACE_GRID_GENERALIZATION_RESULTS_20261112.md` | `research_report` | 68 | 3131 | `70a9be5c9a1c` | ACE Ω — Hasil Semesta Generalisasi Grid (Tahap F, 2026-11-12) |
+| `docs/research/ACE_HANDOVER_DECISIONS_EXTRACTED.md` | `research_report` | 187 | 28982 | `402b28a41f8d` | Ekstraksi Keputusan Pemilik/Hub, Verdit, & Usulan Terbuka |
 | `docs/research/ACE_HOST_FOUNDATION_CHECKPOINT_20261109.md` | `research_report` | 43 | 2769 | `d4140a16e2e7` | Host-assisted ACE foundation checkpoint — 2026-11-09 |
 | `docs/research/ACE_INTERNAL_REASONING_PROTOCOL_20261110.md` | `research_report` | 72 | 4282 | `f9af4818bfae` | ACE internal reasoning integration — protocol v1 |
 | `docs/research/ACE_KBM_PILOT_DESIGN_20261113.md` | `spec_governance` | 142 | 6398 | `361026c6c074` | ACE KBM Pilot — Design Package (business study ladder, rung 2) |
@@ -326,17 +362,22 @@
 | `docs/research/ACE_OMEGA_OPEN_ENDED_EVOLUTION_BLUEPRINT_20261111.md` | `research_report` | 247 | 20656 | `de7595bc7b9f` | ACE Ω — Open-Ended Intelligence Evolution Ecosystem |
 | `docs/research/ACE_OMEGA_PR_AUDIT_20261111.md` | `audit_accounting` | 55 | 7318 | `af54ced48b88` | ACE Ω branch/PR audit, 2026-11-11 |
 | `docs/research/ACE_OPEN_WORLD_PLATFORM_RFC_20261111.md` | `research_report` | 317 | 17033 | `70d0cce28179` | ACE Open-World Platform RFC (11 November 2026) |
+| `docs/research/ACE_ORGAN_REGISTRY_VALIDATOR.md` | `research_report` | 24 | 1880 | `1388d771570d` | Validator Konfigurasi & Registry Organ Multi-Brain (E1) |
+| `docs/research/ACE_ORGAN_SMOKE_PROTOCOL.md` | `research_report` | 23 | 1607 | `9b1f49e05f82` | Protokol Smoke Harness Organ EVO 0009 (E3) |
+| `docs/research/ACE_PATTERN_CATALOG.md` | `research_report` | 34 | 2757 | `38518b8bd8cf` | Katalog pola berversi |
 | `docs/research/ACE_PHASE2_OMEGA05_PROBE_20261112.md` | `research_report` | 47 | 2568 | `c4f23f258c60` | ACE Fase 2 — Probe Isolasi Segar OMEGA-05: Vonis BLOCKED_ENVIRONMENT Gugur (2026-11-12) |
 | `docs/research/ACE_PHASE2_PILOT_ABC_DESIGN_20261112.md` | `spec_governance` | 90 | 4507 | `4a9dcbd81e7a` | ACE Fase 2 — Desain Pilot A/B/C Kustodi Penuh (2026-11-12) |
 | `docs/research/ACE_PHASE2_PILOT_ABC_RESULTS_20261112.md` | `research_report` | 70 | 3268 | `a650d35ce8d8` | ACE Fase 2 — Hasil Pilot A/B/C v1 (2026-11-12) |
 | `docs/research/ACE_PHASE2_RESIDUAL_DIAGNOSIS_20261112.md` | `research_report` | 50 | 2276 | `f646f6dc23f8` | ACE Fase 2 — Probe Residu Pilot: Bukan Pencarian, Melainkan Identifiabilitas Sinyal (2026-11-12) |
 | `docs/research/ACE_PHASE2_SHIPPING_MEASUREMENT_20261112.md` | `research_report` | 53 | 2602 | `113476d2a226` | ACE Fase 2 — Pengukuran Kelemahan Keluarga Shipping (2026-11-12) |
 | `docs/research/ACE_PILOT_ABC_V2_RESULTS_20261112.md` | `research_report` | 53 | 2308 | `9ffbea987169` | Pilot A/B/C v2 — Hasil (Fase 2, tahap 9) |
+| `docs/research/ACE_PLATFORM_REQUIREMENTS_SUMMARY.md` | `research_report` | 172 | 34455 | `1364da53daa2` | Ringkasan Persyaratan Platform & Monetisasi ACE |
 | `docs/research/ACE_REGRESSION_ANCHOR_20261113.md` | `research_report` | 67 | 2677 | `8e5ab1eb34b1` | Regression anchor — design + first self-test |
 | `docs/research/ACE_RESUME_DRILL_20261112.md` | `research_report` | 75 | 3392 | `49995ff49043` | ACE Resume Drill & G1 Criteria v2 — 2026-11-12 (Stage J) |
 | `docs/research/ACE_ROUND2_GATE_DESIGN_20261113.md` | `spec_governance` | 246 | 9661 | `ba1dcc06e895` | Round-2 gate design — the lifted mechanism behind a replication guard |
 | `docs/research/ACE_ROUND2_GATE_PREREGISTRATION_20261113.md` | `preregistration` | 173 | 6339 | `89dbb6f105eb` | Round-2 gate — preregistration (LOCKED) |
 | `docs/research/ACE_ROUND2_GATE_PREREGISTRATION_DRAFT_20261113.md` | `preregistration` | 144 | 5106 | `b7d0c33c1b59` | Round-2 gate — preregistration DRAFT |
+| `docs/research/ACE_SELF_DEV_GIT_AUDIT.md` | `audit_accounting` | 67 | 2678 | `08a352330c75` | Audit Git untuk checkpoint self-dev dan branch kerja |
 | `docs/research/ACE_SELF_DEV_LEASE_ADMISSION_PRESCORE_20261110.md` | `research_report` | 29 | 3134 | `204dc7765e56` | ACE Self-Development Lease Ownership: preregistered engineering falsification (2026-11-10) |
 | `docs/research/ACE_SELF_FUNDING_DESIGN_STUDY_20261112.md` | `spec_governance` | 91 | 4229 | `0fe2bcb69399` | Jalur Kemampuan: Pendanaan Mandiri ACE — Studi Desain (Tahap 1) |
 | `docs/research/ACE_SERVICES_DEMAND_TEST_20261113.md` | `research_report` | 117 | 18440 | `b43340e93834` | ACE Ω — Services Demand Test (Business Study Ladder, Rung 3) |
@@ -345,6 +386,15 @@
 | `docs/research/ACE_W3_ADMISSION_PRESCORE_20261110.md` | `research_report` | 70 | 4483 | `a101735a015a` | W3 — penerimaan berdasarkan bukti development |
 | `docs/research/ACE_W4_EXPERIMENT_RESULTS_GRAPH_AND_RATIO4.md` | `research_report` | 27 | 1652 | `ad8b1671a772` | Hasil Eksperimen Riset W4: Pertumbuhan Kemampuan DSL (Graf & Rasio 4:1) |
 | `docs/research/ACE_W4_PREREGISTRATION_GRAPH_AND_RATIO4.md` | `preregistration` | 33 | 2069 | `ca3d780beb8b` | Preregistrasi Riset W4: Pertumbuhan Kemampuan DSL (Graf & Rasio 4:1) |
+| `docs/research/ACE_WIRING_AUDIT.md` | `audit_accounting` | 125 | 8345 | `88f841515e90` | Audit Keterhubungan Modul & Wilayah Menunggu — ACE |
+| `docs/research/ACE_WS1_KBM_LOCAL_QUEUE.md` | `research_report` | 30 | 1747 | `f97881db1d68` | Antrean produksi lokal KBM WS-1 |
+| `docs/research/ACE_WS2_VERIFIKASI_PENDAPATAN.md` | `research_report` | 76 | 3455 | `4aa63f47113a` | Verifikasi pendapatan WS-2 |
+| `docs/research/ACE_WS3_WIRING_INVENTORY.md` | `consolidation_ops` | 30 | 2086 | `3cb07cb82c85` | Inventaris wiring WS-3 |
+| `docs/research/ACE_WS5_CANDIDATE_CORPUS.md` | `corpus_frozen` | 30 | 1620 | `c07ef3590126` | Paket kandidat corpus WS-5 |
+| `docs/research/ACE_WS6_SLATE_RESILIENCE.md` | `slate_serving` | 32 | 2990 | `9e06e8d881f3` | Audit ketahanan slate dan organ WS-6 |
+| `docs/research/ACE_WS7_MIGRATION_REHEARSAL.md` | `research_report` | 34 | 1873 | `38a170cddd5e` | Daftar periksa migrasi dan instans WS-7 |
+| `docs/research/ACE_WS8_DRAFT_RELEASE_PREFLIGHT.md` | `research_report` | 31 | 1484 | `c2e9f0619aa3` | Preflight draf dan daftar periksa rilis WS-8 |
+| `docs/research/ACE_WS9_LOOP_EDGE_WAVE.md` | `research_report` | 25 | 1410 | `8376de73bbae` | Gelombang tepi loop dan agenda WS-9 |
 | `docs/research/PREAUDIT_VALIDATOR_S3_EXTENSION_DESIGN.md` | `spec_governance` | 99 | 5190 | `ccbd4e34adf6` | Validator Pra-Audit — Stage-3 Extension Design (2026-11-13, worker pos validasi & pra-audit) |
 | `docs/research/PREAUDIT_VALIDATOR_S3_READINESS.md` | `audit_accounting` | 67 | 3635 | `bbaad4906e17` | Validator Pra-Audit — Stage-3 Readiness (2026-11-13, worker pos validasi & pra-audit) |
 | `docs/research/PREAUDIT_VALIDATOR_V1_DESIGN_FREEZE.md` | `spec_governance` | 166 | 9430 | `646038ed49a3` | Validator Pra-Audit Bukti ACE v1 — DESIGN FREEZE (2026-11-13) |
