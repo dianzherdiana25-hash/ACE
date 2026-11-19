@@ -15,6 +15,11 @@ import re
 import sys
 from typing import Any
 
+if __package__ in (None, ""):
+    from cover_check import CoverCheckInputError, check_cover
+else:
+    from .cover_check import CoverCheckInputError, check_cover
+
 PACK_CHECK_SCHEMA = "ace.kbm-pack-check.v1"
 DEFAULT_MIN_BYTES = 1000
 
@@ -57,12 +62,17 @@ def check_package(
     *,
     min_bytes: int = DEFAULT_MIN_BYTES,
     cover_name: str | None = None,
+    strict_cover: bool = False,
 ) -> dict[str, Any]:
     """Periksa integritas paket unggah KBM di `package_dir`."""
     if min_bytes < 0:
         raise KbmPackCheckError("Nilai --min-bytes tidak boleh negatif.")
     if not package_dir.is_dir():
         raise KbmPackCheckError(f"Direktori paket tidak ditemukan: {package_dir}")
+    if strict_cover and cover_name is not None and (
+        not cover_name or cover_name in {".", ".."} or "/" in cover_name or "\\" in cover_name
+    ):
+        raise KbmPackCheckError("Mode sampul ketat memerlukan nama berkas lokal.")
 
     root = package_dir.resolve()
     errors: list[dict[str, Any]] = []
@@ -74,7 +84,8 @@ def check_package(
         cover_info = {"found": False, "file": None, "format": None, "valid": False}
         errors.append({"code": "missing_cover", "message": "Berkas sampul (cover.*) tidak ditemukan."})
     else:
-        img_fmt = detect_image_format(cover_path)
+        unsafe_cover = strict_cover and cover_path.is_symlink()
+        img_fmt = None if unsafe_cover else detect_image_format(cover_path)
         valid_img = img_fmt in ("jpeg", "png")
         cover_info = {
             "found": True,
@@ -91,6 +102,16 @@ def check_package(
                     "message": "Header berkas sampul bukan JPEG atau PNG yang sah.",
                 }
             )
+        elif strict_cover:
+            try:
+                cover_report = check_cover(cover_path)
+            except CoverCheckInputError:
+                cover_report = {"valid": False, "failed_rules": ["unreadable_cover"]}
+            cover_info["validation"] = cover_report
+            cover_info["valid"] = cover_report["valid"]
+            if not cover_report["valid"]:
+                errors.append({"code": "cover_rules_failed", "file": cover_path.name,
+                               "failed_rules": cover_report["failed_rules"]})
 
     # 2. Pindai berkas teks bab dan ekstrak nomor bab
     chapter_files = sorted(
@@ -206,6 +227,8 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Nama berkas sampul spesifik (default: otomatis cari cover.*).",
     )
+    parser.add_argument("--strict-cover", action="store_true",
+                        help="Periksa juga dimensi, rasio, dan ukuran berkas sampul.")
     return parser
 
 
@@ -217,6 +240,7 @@ def main(argv: list[str] | None = None) -> int:
             args.package_dir,
             min_bytes=args.min_bytes,
             cover_name=args.cover,
+            strict_cover=args.strict_cover,
         )
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0 if report["valid"] else 1
