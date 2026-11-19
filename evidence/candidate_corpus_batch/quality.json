@@ -1,0 +1,37 @@
+{
+  "code_solutions_checked": 0,
+  "code_template_families": {
+    "bounded_graph_path": 12,
+    "dependency_dag": 16,
+    "deterministic_cache": 17,
+    "interval_scheduler": 17,
+    "monotonic_search": 19,
+    "sequence_alignment_dp": 13,
+    "sliding_window_stream": 20,
+    "structured_text_parser": 14
+  },
+  "corpus_sha256": "52bec9e502118a4b444c529726d36fede698fdcf331b3a931a9898697d19a34f",
+  "distinct_normalized_prefixes": 224,
+  "episodes": 224,
+  "frozen_overlap_checked": false,
+  "house_lint_passed": true,
+  "language_domains": {
+    "audit_log_pembangkit": 16,
+    "jalur_kereta_komuter": 14,
+    "kalibrasi_instrumen_lab": 11,
+    "koordinasi_dermaga_dingin": 12,
+    "manajemen_air_irigasi": 14,
+    "pengiriman_obat_klinik": 2,
+    "preservasi_arsip_museum": 13,
+    "restorasi_hutan_bakau": 14
+  },
+  "language_evidence_sha256": "282eec40526fd3b0e77811eb82db9738e78f985f8670ea2c1bfd35cc00e9c3fc",
+  "language_samples_verified": 96,
+  "sampling_status": "candidate_only",
+  "schema": "ace.candidate-corpus-quality.v1",
+  "seed": 711,
+  "task_kinds": {
+    "code": 128,
+    "language": 96
+  }
+}
