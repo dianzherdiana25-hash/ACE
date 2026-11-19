@@ -21,6 +21,21 @@ from typing import Any, Dict, List, Optional, Sequence
 
 
 SCHEMA_VERSION = "ace.daily-digest.v1"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from tools import (
+    kbm_schedule as _kbm_schedule,
+    repo_index as _repo_index,
+    repo_status_dashboard as _repo_status_dashboard,
+    royalty_track as _royalty_track,
+    ruleset_readiness as _ruleset_readiness,
+    self_send_audit_view as _self_send_audit_view,
+    stage_verify as _stage_verify,
+    storage_debt as _storage_debt,
+)
+
 NON_AUTHORITATIVE_NOTICE = (
     "Non-authoritative daily change digest material only; "
     "not an official verdict, merge gate, or release attestation."
@@ -173,17 +188,29 @@ def _summarize_signals(
     schedule_data: Optional[Dict[str, Any]],
     storage_debt_data: Optional[Dict[str, Any]],
     dashboard_data: Optional[Dict[str, Any]],
+    repo_index_data: Optional[Dict[str, Any]] = None,
+    ruleset_data: Optional[Dict[str, Any]] = None,
+    audit_data: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     signals: Dict[str, Any] = {}
 
     if stage_data is not None:
+        ok_val = stage_data.get("ok")
+        if ok_val is None and "valid" in stage_data:
+            ok_val = stage_data.get("valid")
+        verified_count = (
+            len(stage_data.get("verified_files", []))
+            if isinstance(stage_data.get("verified_files"), list)
+            else stage_data.get("verified_count", stage_data.get("actual_count"))
+        )
         signals["stage"] = {
             "schema": stage_data.get("schema"),
-            "stage": stage_data.get("stage") or stage_data.get("current_stage"),
-            "ok": stage_data.get("ok"),
-            "verified_count": len(stage_data.get("verified_files", []))
-            if isinstance(stage_data.get("verified_files"), list)
-            else stage_data.get("verified_count"),
+            "stage": stage_data.get("stage") or stage_data.get("current_stage") or stage_data.get("stage_dir"),
+            "ok": ok_val,
+            "verified_count": verified_count,
+            "missing_count": len(stage_data["missing"]) if isinstance(stage_data.get("missing"), list) else None,
+            "extra_count": len(stage_data["extra"]) if isinstance(stage_data.get("extra"), list) else None,
+            "modified_count": len(stage_data["modified"]) if isinstance(stage_data.get("modified"), list) else None,
         }
 
     if heartbeat_data is not None:
@@ -199,7 +226,8 @@ def _summarize_signals(
             "schema": royalty_data.get("schema"),
             "currency": royalty_data.get("currency") or totals.get("currency"),
             "total_royalty": totals.get("total_royalty") or royalty_data.get("total_royalty"),
-            "row_count": royalty_data.get("row_count") or totals.get("row_count"),
+            "totals_by_currency": royalty_data.get("totals_by_currency"),
+            "row_count": royalty_data.get("row_count") or totals.get("row_count") or royalty_data.get("valid_rows"),
         }
 
     if schedule_data is not None:
@@ -221,9 +249,41 @@ def _summarize_signals(
         }
 
     if dashboard_data is not None:
+        corpora = dashboard_data.get("frozen_corpora") if isinstance(dashboard_data.get("frozen_corpora"), dict) else {}
         signals["dashboard"] = {
             "schema": dashboard_data.get("schema"),
             "generated_at": dashboard_data.get("generated_at"),
+            "gate_count": dashboard_data.get("gate_count"),
+            "corpus_count": corpora.get("corpus_count") if corpora else None,
+            "timeline_count": dashboard_data.get("timeline_count"),
+        }
+
+    if repo_index_data is not None:
+        signals["repo_index"] = {
+            "schema": repo_index_data.get("schema"),
+            "directory_count": repo_index_data.get("directory_count"),
+            "file_count": repo_index_data.get("file_count"),
+            "module_count": repo_index_data.get("module_count"),
+        }
+
+    if ruleset_data is not None:
+        rs = ruleset_data.get("summary") if isinstance(ruleset_data.get("summary"), dict) else {}
+        signals["ruleset_readiness"] = {
+            "schema": ruleset_data.get("schema"),
+            "repo": ruleset_data.get("repo"),
+            "branch": ruleset_data.get("branch"),
+            "ready": ruleset_data.get("ready"),
+            "required_passed": rs.get("required_passed"),
+            "required_total": rs.get("required_total"),
+        }
+
+    if audit_data is not None:
+        aus = audit_data.get("summary") if isinstance(audit_data.get("summary"), dict) else {}
+        signals["self_send_audit"] = {
+            "schema": audit_data.get("schema"),
+            "total_rows": aus.get("total_rows"),
+            "delivered_count": aus.get("delivered_count"),
+            "anomaly_count": aus.get("anomaly_count"),
         }
 
     return signals
@@ -238,11 +298,24 @@ def build_daily_digest(
     max_commits: int = 25,
     digest_date: Optional[str] = None,
     stage_file: Optional[str] = None,
+    stage_dir: Optional[str] = None,
+    stage_manifest: Optional[str] = None,
     heartbeat_file: Optional[str] = None,
     royalty_file: Optional[str] = None,
+    royalty_csvs: Optional[Sequence[str]] = None,
+    royalty_map: Optional[str] = None,
     schedule_file: Optional[str] = None,
+    schedule_catalog: Optional[str] = None,
+    schedule_as_of: Optional[str] = None,
     storage_debt_file: Optional[str] = None,
+    auto_storage_debt: bool = False,
     dashboard_file: Optional[str] = None,
+    auto_dashboard: bool = False,
+    auto_repo_index: bool = False,
+    ruleset_snapshot: Optional[str] = None,
+    ruleset_repo: str = "dianzherdiana25-hash/ACE",
+    ruleset_branch: str = "main",
+    audit_files: Optional[Sequence[str]] = None,
 ) -> Dict[str, Any]:
     """Susun payload digest harian (skema ace.daily-digest.v1)."""
     repo_root = _ensure_git_repo(Path(repo_dir))
@@ -257,11 +330,73 @@ def build_daily_digest(
 
     warnings: List[str] = []
     stage_data = _load_optional_json(stage_file, "stage", warnings)
+    if stage_data is None and stage_dir:
+        try:
+            stage_data = _stage_verify.verify_stage(
+                Path(stage_dir),
+                manifest_path=Path(stage_manifest) if stage_manifest else None,
+            )
+        except _stage_verify.StageVerifyError as exc:
+            raise DailyDigestError(f"Verifikasi stage gagal: {exc}") from exc
+
     heartbeat_data = _load_optional_json(heartbeat_file, "heartbeat", warnings)
+
     royalty_data = _load_optional_json(royalty_file, "royalty", warnings)
+    if royalty_data is None and royalty_csvs:
+        try:
+            col_map = _royalty_track.load_column_map(Path(royalty_map) if royalty_map else None)
+            royalty_data = _royalty_track.summarize_royalties(
+                [Path(p) for p in royalty_csvs],
+                column_map=col_map,
+            )
+        except _royalty_track.RoyaltyTrackError as exc:
+            raise DailyDigestError(f"Ringkasan royalti gagal: {exc}") from exc
+
     schedule_data = _load_optional_json(schedule_file, "schedule", warnings)
+    if schedule_data is None and schedule_catalog:
+        try:
+            schedule_data = _kbm_schedule.build_schedule(
+                Path(schedule_catalog),
+                as_of_date=schedule_as_of,
+            )
+        except _kbm_schedule.KbmScheduleError as exc:
+            raise DailyDigestError(f"Jadwal KBM gagal: {exc}") from exc
+
     storage_debt_data = _load_optional_json(storage_debt_file, "storage_debt", warnings)
+    if storage_debt_data is None and auto_storage_debt:
+        try:
+            storage_debt_data = _storage_debt.scan_storage_debt(repo_root)
+        except _storage_debt.StorageDebtError as exc:
+            raise DailyDigestError(f"Pemindaian storage debt gagal: {exc}") from exc
+
     dashboard_data = _load_optional_json(dashboard_file, "dashboard", warnings)
+    if dashboard_data is None and auto_dashboard:
+        dashboard_data = _repo_status_dashboard.collect_repo_status(repo_root)
+
+    repo_index_data: Optional[Dict[str, Any]] = None
+    if auto_repo_index:
+        repo_index_data = _repo_index.build_repo_index(repo_root)
+
+    ruleset_data: Optional[Dict[str, Any]] = None
+    if ruleset_snapshot:
+        try:
+            ruleset_data = _ruleset_readiness.check_repo_readiness(
+                repo=ruleset_repo,
+                branch=ruleset_branch,
+                snapshot_path=Path(ruleset_snapshot),
+            )
+        except _ruleset_readiness.RulesetReadinessError as exc:
+            raise DailyDigestError(f"Pemeriksaan ruleset snapshot gagal: {exc}") from exc
+
+    audit_data: Optional[Dict[str, Any]] = None
+    if audit_files:
+        try:
+            audit_data = _self_send_audit_view.inspect_audit_files(
+                [Path(p) for p in audit_files],
+                allow_missing_extra=True,
+            )
+        except _self_send_audit_view.AuditViewError as exc:
+            raise DailyDigestError(f"Pembacaan audit self-send gagal: {exc}") from exc
 
     signals = _summarize_signals(
         stage_data=stage_data,
@@ -270,6 +405,9 @@ def build_daily_digest(
         schedule_data=schedule_data,
         storage_debt_data=storage_debt_data,
         dashboard_data=dashboard_data,
+        repo_index_data=repo_index_data,
+        ruleset_data=ruleset_data,
+        audit_data=audit_data,
     )
 
     touched_files = sorted({f for c in commits for f in c["files"]})
@@ -368,11 +506,25 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--max-commits", type=int, default=25, help="Batas maksimum commit (default: 25)")
     parser.add_argument("--date", default=None, help="Label tanggal digest YYYY-MM-DD (default: hari ini)")
     parser.add_argument("--stage-file", default=None, help="Berkas JSON stage_verify opsional")
+    parser.add_argument("--stage-dir", default=None, help="Direktori stage terisolasi opsional untuk stage_verify")
+    parser.add_argument("--stage-manifest", default=None, help="Manifest stage khusus untuk --stage-dir")
     parser.add_argument("--heartbeat-file", default=None, help="Berkas JSON heartbeat opsional")
     parser.add_argument("--royalty-file", default=None, help="Berkas JSON royalty_track opsional")
+    parser.add_argument("--royalty-csv", nargs="+", default=None, help="Berkas CSV royalti untuk dihitung langsung")
+    parser.add_argument("--royalty-map", default=None, help="JSON pemetaan kolom untuk --royalty-csv")
     parser.add_argument("--schedule-file", default=None, help="Berkas JSON kbm_schedule opsional")
+    parser.add_argument("--schedule-catalog", default=None, help="JSON katalog jadwal untuk dihitung langsung")
+    parser.add_argument("--schedule-as-of", default=None, help="Tanggal acuan YYYY-MM-DD untuk --schedule-catalog")
     parser.add_argument("--storage-debt-file", default=None, help="Berkas JSON storage_debt opsional")
+    parser.add_argument("--auto-storage-debt", action="store_true", help="Hitung storage debt langsung dari repo target")
     parser.add_argument("--dashboard-file", default=None, help="Berkas JSON repo_status_dashboard opsional")
+    parser.add_argument("--auto-dashboard", action="store_true", help="Kumpulkan sinyal repo_status_dashboard langsung")
+    parser.add_argument("--auto-repo-index", action="store_true", help="Kumpulkan ringkasan repo_index langsung")
+    parser.add_argument("--auto-all", action="store_true", help="Aktifkan --auto-storage-debt, --auto-dashboard, dan --auto-repo-index")
+    parser.add_argument("--ruleset-snapshot", default=None, help="Snapshot JSON ruleset_readiness (offline)")
+    parser.add_argument("--ruleset-repo", default="dianzherdiana25-hash/ACE", help="Nama owner/repo untuk --ruleset-snapshot")
+    parser.add_argument("--ruleset-branch", default="main", help="Branch untuk --ruleset-snapshot")
+    parser.add_argument("--audit-file", action="append", default=None, help="Berkas JSONL self_send_audit_view opsional")
     parser.add_argument("--out-json", default=None, help="Tulis output JSON ke berkas ini")
     parser.add_argument("--out-md", default=None, help="Tulis output Markdown ke berkas ini")
     parser.add_argument(
@@ -392,11 +544,24 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             max_commits=args.max_commits,
             digest_date=args.date,
             stage_file=args.stage_file,
+            stage_dir=args.stage_dir,
+            stage_manifest=args.stage_manifest,
             heartbeat_file=args.heartbeat_file,
             royalty_file=args.royalty_file,
+            royalty_csvs=args.royalty_csv,
+            royalty_map=args.royalty_map,
             schedule_file=args.schedule_file,
+            schedule_catalog=args.schedule_catalog,
+            schedule_as_of=args.schedule_as_of,
             storage_debt_file=args.storage_debt_file,
+            auto_storage_debt=bool(args.auto_storage_debt or args.auto_all),
             dashboard_file=args.dashboard_file,
+            auto_dashboard=bool(args.auto_dashboard or args.auto_all),
+            auto_repo_index=bool(args.auto_repo_index or args.auto_all),
+            ruleset_snapshot=args.ruleset_snapshot,
+            ruleset_repo=args.ruleset_repo,
+            ruleset_branch=args.ruleset_branch,
+            audit_files=args.audit_file,
         )
     except DailyDigestError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
