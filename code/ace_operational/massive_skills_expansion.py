@@ -25,8 +25,13 @@ logger = logging.getLogger("ace_massive_expansion")
 class MassiveSkillsExpander:
     """Executes empirical verification and mass promotion of skills into OperationalStore."""
 
-    def __init__(self, store: OperationalStore | None = None):
+    def __init__(self, store: OperationalStore | None = None,
+                 *, memory_root: str | Path | None = None):
         self.store = store or OperationalStore()
+        # Cognitive-memory write-back (EVO 0009 milestone 5):
+        # active only when a memory root is configured; None
+        # keeps every existing caller byte-identical.
+        self.memory_root = Path(memory_root) if memory_root else None
 
     def verify_metacognitive_self_model(self) -> dict[str, Any]:
         """Skill 1: Metacognitive introspection over live identity, RAM limits, and capabilities."""
@@ -210,6 +215,26 @@ class MassiveSkillsExpander:
                 verified_by="ace_massive_skills_expansion_engine",
                 passed=res["passed"],
             )
+            # Memory write-back (write-path design S3-S4,
+            # EVO 0009 milestone 5): an issued verification
+            # receipt for a passed skill is the verified event;
+            # write at the event point, anchored on the
+            # receipt's own canonical bytes.
+            if res["passed"] and self.memory_root is not None:
+                from .memory_writeback import record_verified_event
+                record_verified_event(
+                    self.memory_root,
+                    event="skill_verified",
+                    summary=(f"Skill {res['skill_name']} verified "
+                             f"in lab: receipt "
+                             f"{receipt['receipt_id']}"),
+                    evidence_bytes=json.dumps(
+                        receipt, ensure_ascii=False,
+                        sort_keys=True).encode("utf-8"),
+                    content_extra={
+                        "skill": res["skill_name"],
+                        "receipt_id": receipt["receipt_id"]},
+                )
             # Save skill
             self.store.save_skill(
                 name=res["skill_name"],
