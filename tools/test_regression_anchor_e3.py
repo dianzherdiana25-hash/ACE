@@ -301,13 +301,17 @@ class RegressionAnchorEdgeTests(unittest.TestCase):
         self.assertEqual(res["tasks"], 0)
         self.assertEqual(res["total"], 0)
 
-    # Dugaan bug minor E3 (EVIDENCE tidak dibuat otomatis sebelum _atomic_write):
-    # `run_anchor()` memanggil `_atomic_write(dest, ...)` tanpa `dest.parent.mkdir(parents=True, exist_ok=True)`.
-    @unittest.expectedFailure
+    # Bug minor E3 yang sudah diperbaiki (2026-11-20):
+    # `run_anchor()` dulu memanggil `_atomic_write(dest, ...)` tanpa membuat
+    # direktori EVIDENCE lebih dulu, sehingga gagal bila direktori belum ada.
+    # `_atomic_write` kini membuat direktori induknya sendiri.
     def test_16_bug_run_anchor_fails_if_evidence_dir_missing(self) -> None:
         missing_ev = self.base / "nonexistent_ev"
         with mock.patch.object(ra, "EVIDENCE", missing_ev):
-            ra.run_anchor([], "empty", "empty", "new_dir")
+            _, dest = ra.run_anchor([], "empty", "empty", "new_dir")
+        self.assertTrue(dest.is_file())
+        self.assertEqual(dest.parent, missing_ev)
+        self.assertIsInstance(json.loads(dest.read_text(encoding="utf-8")), dict)
 
 
 if __name__ == "__main__":

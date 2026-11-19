@@ -78,8 +78,12 @@ def _atomic_write(path, text):
     directory, fsync, then os.replace — the PR #181
     pattern generalized (2026-11-13). A host death
     mid-write leaves the old file or the new one,
-    never a torn one."""
+    never a torn one. The parent directory is created
+    first (E3 finding, fixed 2026-11-20): a missing
+    evidence dir must not fail an otherwise finished
+    anchor run."""
     import os as _os
+    path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_name(path.name + ".tmp")
     with open(tmp, "w", encoding="utf-8") as fh:
         fh.write(text)
