@@ -27,6 +27,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from tools import (
     kbm_schedule as _kbm_schedule,
+    organ_quota_ledger as _organ_quota_ledger,
     repo_index as _repo_index,
     repo_status_dashboard as _repo_status_dashboard,
     royalty_track as _royalty_track,
@@ -191,6 +192,7 @@ def _summarize_signals(
     repo_index_data: Optional[Dict[str, Any]] = None,
     ruleset_data: Optional[Dict[str, Any]] = None,
     audit_data: Optional[Dict[str, Any]] = None,
+    quota_data: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     signals: Dict[str, Any] = {}
 
@@ -286,6 +288,18 @@ def _summarize_signals(
             "anomaly_count": aus.get("anomaly_count"),
         }
 
+    if quota_data is not None:
+        snap = quota_data.get("snapshot") if isinstance(quota_data.get("snapshot"), dict) else quota_data
+        signals["organ_quota"] = {
+            "schema": quota_data.get("schema"),
+            "day": quota_data.get("day") or snap.get("day"),
+            "groq_remaining": snap.get("groq_remaining"),
+            "gemini_remaining": snap.get("gemini_remaining"),
+            "gonka_daily_remaining": snap.get("gonka_daily_remaining"),
+            "applied_ok": quota_data.get("applied_ok"),
+            "over_budget_events": quota_data.get("over_budget_events"),
+        }
+
     return signals
 
 
@@ -316,6 +330,8 @@ def build_daily_digest(
     ruleset_repo: str = "dianzherdiana25-hash/ACE",
     ruleset_branch: str = "main",
     audit_files: Optional[Sequence[str]] = None,
+    quota_file: Optional[str] = None,
+    quota_bridge_log: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Susun payload digest harian (skema ace.daily-digest.v1)."""
     repo_root = _ensure_git_repo(Path(repo_dir))
@@ -398,6 +414,28 @@ def build_daily_digest(
         except _self_send_audit_view.AuditViewError as exc:
             raise DailyDigestError(f"Pembacaan audit self-send gagal: {exc}") from exc
 
+    quota_data = _load_optional_json(quota_file, "organ_quota", warnings)
+    if quota_data is not None and isinstance(quota_data.get("routes"), dict):
+        try:
+            quota_data = {**quota_data, "snapshot": _organ_quota_ledger.route_snapshot(quota_data)}
+        except (KeyError, TypeError, ValueError) as exc:
+            warnings.append(f"organ_quota: snapshot buku kuota tidak sah ({exc})")
+    elif quota_data is None and quota_bridge_log:
+        try:
+            base_ledger = _organ_quota_ledger.create_ledger(
+                day=digest_date or _dt.date.today().isoformat(),
+            )
+            rep = _organ_quota_ledger.reconcile_bridge_log(base_ledger, Path(quota_bridge_log))
+            quota_data = {
+                "schema": rep["ledger"].get("schema"),
+                "day": rep["ledger"].get("day"),
+                "applied_ok": rep.get("applied_ok"),
+                "over_budget_events": rep.get("over_budget_events"),
+                "snapshot": _organ_quota_ledger.route_snapshot(rep["ledger"]),
+            }
+        except (OSError, ValueError) as exc:
+            raise DailyDigestError(f"Rekonsiliasi kuota organ gagal: {exc}") from exc
+
     signals = _summarize_signals(
         stage_data=stage_data,
         heartbeat_data=heartbeat_data,
@@ -408,6 +446,7 @@ def build_daily_digest(
         repo_index_data=repo_index_data,
         ruleset_data=ruleset_data,
         audit_data=audit_data,
+        quota_data=quota_data,
     )
 
     touched_files = sorted({f for c in commits for f in c["files"]})
@@ -525,6 +564,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--ruleset-repo", default="dianzherdiana25-hash/ACE", help="Nama owner/repo untuk --ruleset-snapshot")
     parser.add_argument("--ruleset-branch", default="main", help="Branch untuk --ruleset-snapshot")
     parser.add_argument("--audit-file", action="append", default=None, help="Berkas JSONL self_send_audit_view opsional")
+    parser.add_argument("--quota-file", default=None, help="Berkas JSON organ_quota_ledger opsional")
+    parser.add_argument("--quota-bridge-log", default=None, help="Log JSONL bridge_calls untuk direkonsiliasi lewat organ_quota_ledger")
     parser.add_argument("--out-json", default=None, help="Tulis output JSON ke berkas ini")
     parser.add_argument("--out-md", default=None, help="Tulis output Markdown ke berkas ini")
     parser.add_argument(
@@ -562,6 +603,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             ruleset_repo=args.ruleset_repo,
             ruleset_branch=args.ruleset_branch,
             audit_files=args.audit_file,
+            quota_file=args.quota_file,
+            quota_bridge_log=args.quota_bridge_log,
         )
     except DailyDigestError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
