@@ -45,10 +45,10 @@ class GitRepository:
         ):
             self.env.pop(name, None)
 
-    def run(self, *args: str, allowed_codes: tuple[int, ...] = (0,)):
+    def run(self, *args: str, allowed_codes: tuple[int, ...] = (0,), input_bytes: bytes | None = None):
         result = subprocess.run(
             ["git", "--no-replace-objects", "--literal-pathspecs", "-C", str(self.path), *args],
-            env=self.env, capture_output=True, check=False,
+            env=self.env, input=input_bytes, capture_output=True, check=False,
         )
         if result.returncode not in allowed_codes:
             raise AuditError(f"Git {args[0]} gagal pada objek lokal.")
@@ -249,6 +249,171 @@ def guard_branch(repo: GitRepository, base: str, tip: str, expected: Iterable[st
     }
 
 
+PREREVIEW_SCHEMA = "ace.self-dev-branch-prereview.v1"
+
+
+def _commit_parents_and_subject(repo: GitRepository, oid: str) -> tuple[list[str], str]:
+    raw = repo.run("show", "-s", "--no-show-signature", "--format=%P%n%s", "--end-of-options", oid).stdout
+    lines = raw.decode("utf-8", errors="replace").splitlines()
+    parents = lines[0].split() if lines and lines[0].strip() else []
+    subject = lines[1] if len(lines) > 1 else ""
+    return parents, subject
+
+
+def _commit_patch_id(repo: GitRepository, oid: str) -> str | None:
+    patch_bytes = repo.run("diff-tree", "--root", "--no-commit-id", "-p", "--binary", "--end-of-options", oid).stdout
+    if not patch_bytes.strip():
+        return None
+    out = repo.run("patch-id", "--stable", input_bytes=patch_bytes).stdout.decode("ascii", errors="replace").strip()
+    if not out:
+        return None
+    return out.split()[0]
+
+
+def pre_review_report(
+    repo: GitRepository,
+    base: str,
+    tip: str,
+    pinned_commits: Iterable[str],
+    *,
+    checkpoint_paths: Iterable[str] = (),
+) -> dict:
+    """Buat laporan pra-review branch dari commit terpin operator, cherry-pick, merge, dan diff checkpoint."""
+    pinned_ids = list(pinned_commits)
+    if any(not _OBJECT_ID.fullmatch(oid) for oid in pinned_ids):
+        raise AuditError("Setiap commit terpin operator wajib berupa ID objek Git penuh.")
+    if len(set(pinned_ids)) != len(pinned_ids):
+        raise AuditError("Daftar commit terpin memuat ID ganda.")
+    if repo.run("rev-parse", "--is-shallow-repository").stdout.strip() == b"true":
+        raise AuditError("Riwayat Git dangkal tidak cukup untuk laporan pra-review branch.")
+
+    base_commit, tip_commit = repo.commit(base), repo.commit(tip)
+    # Pastikan setiap commit terpin memang ada pada objek Git lokal
+    for pid in pinned_ids:
+        if repo.commit(pid) != pid:
+            raise AuditError(f"Commit terpin tidak menunjuk commit valid: {pid}.")
+
+    base_is_ancestor = repo.run(
+        "merge-base", "--is-ancestor", base_commit, tip_commit, allowed_codes=(0, 1),
+    ).returncode == 0
+    actual_commits = repo.run(
+        "rev-list", "--topo-order", "--reverse", f"{base_commit}..{tip_commit}",
+    ).stdout.decode("ascii").splitlines()
+
+    pinned_set = set(pinned_ids)
+    actual_set = set(actual_commits)
+
+    matched_pinned = [c for c in actual_commits if c in pinned_set]
+    unmatched_actual = [c for c in actual_commits if c not in pinned_set]
+    unmatched_pinned = [c for c in pinned_ids if c not in actual_set]
+
+    # Indeks patch-id untuk mencocokkan cherry-pick pada commit non-merge
+    pinned_by_patch: dict[str, list[str]] = {}
+    for pid in unmatched_pinned:
+        p_parents, _ = _commit_parents_and_subject(repo, pid)
+        if len(p_parents) <= 1:
+            patch_id = _commit_patch_id(repo, pid)
+            if patch_id is not None:
+                pinned_by_patch.setdefault(patch_id, []).append(pid)
+
+    merge_commits = []
+    cherry_picked_equivalents = []
+    unexpected_commits = []
+    matched_via_patch = set()
+
+    for oid in actual_commits:
+        parents, subject = _commit_parents_and_subject(repo, oid)
+        is_merge = len(parents) > 1
+        if is_merge:
+            merge_commits.append({
+                "commit": oid,
+                "parents": parents,
+                "pinned_exact": oid in pinned_set,
+                "subject": subject,
+            })
+        if oid in pinned_set:
+            continue
+        if not is_merge:
+            patch_id = _commit_patch_id(repo, oid)
+            candidates = [p for p in pinned_by_patch.get(patch_id, []) if p not in matched_via_patch] if patch_id else []
+            if candidates:
+                matched_pid = candidates[0]
+                matched_via_patch.add(matched_pid)
+                cherry_picked_equivalents.append({
+                    "actual_commit": oid,
+                    "matched_pinned_commit": matched_pid,
+                    "patch_id": patch_id,
+                    "subject": subject,
+                })
+                continue
+        unexpected_commits.append({"commit": oid, "is_merge": is_merge, "parents": parents, "subject": subject})
+
+    missing_pinned_commits = sorted(set(unmatched_pinned) - matched_via_patch)
+
+    changed_raw = repo.run(
+        "diff-tree", "--no-commit-id", "--name-status", "-r", "--end-of-options", base_commit, tip_commit,
+    ).stdout.decode("utf-8", errors="replace").splitlines()
+    changed_files = []
+    for row in changed_raw:
+        if "\t" in row:
+            status_code, rel_path = row.split("\t", 1)
+            changed_files.append({"status": status_code, "path": rel_path})
+    changed_files.sort(key=lambda item: item["path"])
+
+    checkpoint_diffs = [
+        diff_checkpoints(repo, base_commit, tip_commit, cp_path)
+        for cp_path in checkpoint_paths
+    ]
+
+    strict_oid_clean = base_is_ancestor and not unmatched_actual and not unmatched_pinned
+    unexpected_non_merge = [item for item in unexpected_commits if not item["is_merge"]]
+    patch_equivalent_clean = (
+        base_is_ancestor
+        and not unexpected_non_merge
+        and not missing_pinned_commits
+    )
+    if strict_oid_clean:
+        history_shape = "merge_clean" if merge_commits else "linear_exact"
+    elif cherry_picked_equivalents and patch_equivalent_clean:
+        history_shape = "cherry_pick_with_merge" if merge_commits else "cherry_pick_equivalent"
+    elif merge_commits:
+        history_shape = "merge_diverged"
+    else:
+        history_shape = "diverged"
+
+    return {
+        "schema": PREREVIEW_SCHEMA,
+        "base": base_commit,
+        "tip": tip_commit,
+        "base_is_ancestor": base_is_ancestor,
+        "history_shape": history_shape,
+        "pinned_count": len(pinned_ids),
+        "actual_commit_count": len(actual_commits),
+        "matched_pinned": matched_pinned,
+        "cherry_picked_equivalents": cherry_picked_equivalents,
+        "merge_commits": merge_commits,
+        "unexpected_commits": unexpected_commits,
+        "missing_pinned_commits": missing_pinned_commits,
+        "changed_files": changed_files,
+        "checkpoint_diffs": checkpoint_diffs,
+        "strict_oid_clean": strict_oid_clean,
+        "patch_equivalent_clean": patch_equivalent_clean,
+        "clean": strict_oid_clean,
+    }
+
+
+def _load_pinned_commits(spec_path: Path) -> list[str]:
+    try:
+        raw = json.loads(spec_path.read_text(encoding="utf-8"), object_pairs_hook=_unique_object)
+    except (OSError, ValueError, UnicodeDecodeError) as exc:
+        raise AuditError(f"Berkas daftar commit terpin tidak dapat dibaca: {exc}") from exc
+    if isinstance(raw, list):
+        return raw
+    if isinstance(raw, dict) and isinstance(raw.get("pinned_commits"), list):
+        return raw["pinned_commits"]
+    raise AuditError("Berkas pin harus berupa array JSON atau objek berisi 'pinned_commits'.")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", type=Path, default=Path.cwd(), help="Akar checkout Git lokal.")
@@ -270,6 +435,13 @@ def main(argv: list[str] | None = None) -> int:
     guard.add_argument("--tip", required=True)
     guard.add_argument("--expect", action="append", default=[], help="ID penuh commit yang diharapkan.")
 
+    prereview = commands.add_parser("prereview", help="Buat laporan pra-review branch dari commit terpin.")
+    prereview.add_argument("--base", required=True)
+    prereview.add_argument("--tip", required=True)
+    prereview.add_argument("--expect", action="append", default=[], help="ID penuh commit yang dipin operator.")
+    prereview.add_argument("--pin-file", type=Path, help="Berkas JSON berisi array atau pinned_commits.")
+    prereview.add_argument("--checkpoint", action="append", default=[], help="Jalur checkpoint JSON untuk diringkas.")
+
     args = parser.parse_args(argv)
     repo = GitRepository(args.repo)
     try:
@@ -277,8 +449,15 @@ def main(argv: list[str] | None = None) -> int:
             result = diff_checkpoints(repo, args.before, args.after, args.path)
         elif args.command == "history":
             result = field_history(repo, args.base, args.tip, args.path, args.field)
-        else:
+        elif args.command == "guard":
             result = guard_branch(repo, args.base, args.tip, args.expect)
+        else:
+            pinned = list(args.expect)
+            if args.pin_file is not None:
+                pinned.extend(_load_pinned_commits(args.pin_file))
+            result = pre_review_report(
+                repo, args.base, args.tip, pinned, checkpoint_paths=args.checkpoint,
+            )
     except AuditError as exc:
         parser.exit(2, f"Error: {exc}\n")
     except (OSError, UnicodeError, RecursionError):
