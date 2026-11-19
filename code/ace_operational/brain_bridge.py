@@ -72,10 +72,22 @@ def _budget_check(role):
     with _lock:
         state = {}
         if STATE.exists():
-            state = json.loads(STATE.read_text())
+            try:
+                state = json.loads(STATE.read_text())
+            except (OSError, ValueError):
+                # Fail-closed: state rusak tidak boleh mereset jatah
+                # (risiko boros kuota) dan tidak boleh menjatuhkan handler.
+                return False, BUDGETS[role]
+            if not isinstance(state, dict):
+                return False, BUDGETS[role]
         if state.get("day") != _today():
             state = {"day": _today(), "counts": {}}
-        used = state["counts"].get(role, 0)
+        counts = state.get("counts")
+        if not isinstance(counts, dict):
+            return False, BUDGETS[role]
+        used = counts.get(role, 0)
+        if type(used) is not int or used < 0:
+            return False, BUDGETS[role]
         if used >= BUDGETS[role]:
             return False, used
         state["counts"][role] = used + 1
