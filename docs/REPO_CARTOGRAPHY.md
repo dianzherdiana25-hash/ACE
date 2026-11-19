@@ -6,8 +6,8 @@
 
 - Schema: `ace.repo-cartography.v1`
 - Total subsistem: **68** (termasuk `4` subsistem zona terlindung/beku)
-- Total berkas terpetakan: **2106**
-- Modul Python produksi: **557** | Modul tes: **344**
+- Total berkas terpetakan: **2110**
+- Modul Python produksi: **557** | Modul tes: **346**
 - Tepi dependensi lintas subsistem (produksi): **117**
 - Siklus SCC lintas subsistem: **1**
 
@@ -123,7 +123,7 @@ flowchart LR
 | `code/ace_mcts` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_mission` | `SAFE_WORKSPACE` | 9 | 6 | 3 | 5 | 3 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_neurosymbolic` | `SAFE_WORKSPACE` | 9 | 5 | 4 | 0 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_operational` | `MIXED_PROTECTED` | 198 | 93 | 101 | 5 | 14 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `code/ace_operational` | `MIXED_PROTECTED` | 200 | 93 | 103 | 5 | 14 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 | `code/ace_pac_bayes` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_real_world` | `SAFE_WORKSPACE` | 12 | 8 | 4 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_red_team` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
@@ -147,7 +147,7 @@ flowchart LR
 | `code/checkpoints` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `data` | `SAFE_WORKSPACE` | 1 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `docs` | `SAFE_WORKSPACE` | 273 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `evidence` | `SAFE_WORKSPACE` | 721 | 29 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
+| `evidence` | `SAFE_WORKSPACE` | 723 | 29 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `examples` | `SAFE_WORKSPACE` | 5 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `handover` | `FROZEN_CORPUS_SPEC` | 159 | 23 | 0 | 0 | 1 | Corpus beku, preregistrasi, & custody spec (read-only) |
 | `projects` | `SAFE_WORKSPACE` | 12 | 3 | 2 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |

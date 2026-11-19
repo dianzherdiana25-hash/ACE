@@ -6,8 +6,8 @@
 
 - Schema: `ace.handover-index.v1`
 - Total berkas terindeks: **432** (`handover/`: **159**, `docs/`: **273**)
-- Total baris teks UTF-8: **80939**
-- Total ukuran: **4709514** byte
+- Total baris teks UTF-8: **81826**
+- Total ukuran: **4786026** byte
 - Symlink dilewati: **0**
 
 ### Distribusi Kategori
@@ -242,9 +242,9 @@
 | `docs/DOCS_INDEX_MAINTENANCE_20261119.md` | `reference_doc` | 28 | 1980 | `bab2a8c0f519` | Pemeliharaan Indeks Dokumen — 2026-11-19 (E8) |
 | `docs/LAPORAN_HASIL_RISET_HP.md` | `reference_doc` | 63 | 5202 | `4e5fe567d704` | 📱 Laporan Hasil Riset ACE (Terbaca di Layar HP) |
 | `docs/PRD_ACE_v0.1.md` | `reference_doc` | 190 | 18816 | `03887aef928b` | PRODUCT REQUIREMENTS DOCUMENT (PRD) |
-| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54702 | `ac73913f9fce` | Glosarium Istilah Teknis ACE — merge-antigravity |
-| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23847 | `894215be9914` | Kartografi Repositori ACE — merge-antigravity |
-| `docs/REPO_INDEX.md` | `reference_doc` | 2545 | 205836 | `f67ada15f27e` | Indeks Repositori — ACE |
+| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54702 | `0fad0a31602c` | Glosarium Istilah Teknis ACE — merge-antigravity |
+| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23847 | `eacaf2170cbf` | Kartografi Repositori ACE — merge-antigravity |
+| `docs/REPO_INDEX.md` | `reference_doc` | 3432 | 282348 | `c4fa68fe6110` | Indeks Repositori — merge-antigravity |
 | `docs/SENSUS_KANDIDAT.json` | `manifest_json` | 837 | 23986 | `94922b9f71e0` | schema: ace.candidate-census.v1 |
 | `docs/SENSUS_KANDIDAT.md` | `reference_doc` | 50 | 2531 | `65e4889ef370` | Sensus Kandidat Corpus ACE |
 | `docs/UPSTREAM_SOURCES.json` | `manifest_json` | 106 | 4914 | `cf6ffc77386a` | schema: ace.source-integration.v1 |
@@ -397,7 +397,7 @@
 | `docs/research/ACE_PHASE2_RESIDUAL_DIAGNOSIS_20261112.md` | `research_report` | 50 | 2276 | `f646f6dc23f8` | ACE Fase 2 — Probe Residu Pilot: Bukan Pencarian, Melainkan Identifiabilitas Sinyal (2026-11-12) |
 | `docs/research/ACE_PHASE2_SHIPPING_MEASUREMENT_20261112.md` | `research_report` | 53 | 2602 | `113476d2a226` | ACE Fase 2 — Pengukuran Kelemahan Keluarga Shipping (2026-11-12) |
 | `docs/research/ACE_PILOT_ABC_V2_RESULTS_20261112.md` | `research_report` | 53 | 2308 | `9ffbea987169` | Pilot A/B/C v2 — Hasil (Fase 2, tahap 9) |
-| `docs/research/ACE_PLATFORM_REQUIREMENTS_SUMMARY.md` | `research_report` | 172 | 34455 | `d871b2df2ee2` | Ringkasan Persyaratan Platform & Monetisasi ACE |
+| `docs/research/ACE_PLATFORM_REQUIREMENTS_SUMMARY.md` | `research_report` | 172 | 34455 | `eedcb7d1c79c` | Ringkasan Persyaratan Platform & Monetisasi ACE |
 | `docs/research/ACE_REGRESSION_ANCHOR_20261113.md` | `research_report` | 67 | 2677 | `8e5ab1eb34b1` | Regression anchor — design + first self-test |
 | `docs/research/ACE_RESUME_DRILL_20261112.md` | `research_report` | 75 | 3392 | `49995ff49043` | ACE Resume Drill & G1 Criteria v2 — 2026-11-12 (Stage J) |
 | `docs/research/ACE_ROUND2_GATE_DESIGN_20261113.md` | `spec_governance` | 246 | 9661 | `ba1dcc06e895` | Round-2 gate design — the lifted mechanism behind a replication guard |

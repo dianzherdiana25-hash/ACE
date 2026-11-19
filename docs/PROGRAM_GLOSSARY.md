@@ -200,7 +200,7 @@
 | `BrainUnavailable` | `ast_class` | `code/ace_operational/brain_endpoints.py:97` | An organ is unreachable or unhealthy. Fail-closed: never faked. |
 | `Budget` | `ast_class` | `code/ace_operational/reasoning_lab.py:57` | Shown-case fitness with a hard evaluation cap. |
 | `Budget Preservation` | `markdown_def` | `docs/research/self_dev/ACE_ANTI_STAGNATION_SELF_REPAIR_REPORT_20261107.md:66` | When stagnation is flagged, `should_evaluate=False` and `should_commit=False`, completely bypassing holdout evaluation and suppressing commit spam. |
-| `BudgetController` | `ast_class` | `code/ace_autonomy/budget.py:54` | Enforces declared step, candidate, retry, wall-time, and CPU-time ceilings. |
+| `BudgetController` | `ast_class` | `code/ace_autonomy/budget.py:59` | Enforces declared step, candidate, retry, wall-time, and CPU-time ceilings. |
 | `BudgetExceededError` | `ast_class` | `code/ace_host_controller/budget_permits.py:13` | Raised when an allocated compute or query budget is exhausted. |
 | `BudgetExhaustedError` | `ast_class` | `code/ace_autonomy/errors.py:18` | Raised when a goal exceeds step, candidate, retry, wall-clock, or CPU ceilings. |
 | `BundleError` | `ast_class` | `tools/secrets_bundle.py:70` | Stable, value-free failure. |
