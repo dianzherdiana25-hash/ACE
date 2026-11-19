@@ -94,6 +94,13 @@ ASSETS = {
         "status": "quota_exhausted_until_approx_2026-11-18",
         "evidence": "Task 01 stopped clean with no deliverable (individual quota reached)",
     },
+    "brain_director_strong": {
+        "kind": "brain",
+        "name": "Director-strong organs (Groq / Gemini API)",
+        "role": "director work only: agenda cycles, curriculum proposals, opportunity synthesis",
+        "status": "active_stage1_gate_ratified",
+        "evidence": "registered in the brain registry (PR #307, director_strong.py); Stage 1 gate ratified closed 2026-11-18; hub smoke: groq/openai/gpt-oss-120b ~481 t/s vs local front 0.45-0.79 t/s",
+    },
     # Capabilities — only ones with measured evidence.
     "cap_official_path_repair": {
         "kind": "capability", "name": "Official-path code repair",
@@ -124,6 +131,12 @@ ASSETS = {
         "role": "writer brain + editorial engine at near-zero marginal cost",
         "status": "unvalidated_as_product",
         "evidence": "named the first product line in the two-sided business study; no market validation yet",
+    },
+    "cap_render_3d_explainer": {
+        "kind": "capability", "name": "Code-built 3D explainer video production",
+        "role": "Blender headless pipeline: script + TTS + character rig to vertical explainer video",
+        "status": "measured_delivered",
+        "evidence": "submarine explainer delivered to the owner 2026-11-18 (115.08 s, 540x960, Cycles, two full renders on the sandbox)",
     },
 }
 
