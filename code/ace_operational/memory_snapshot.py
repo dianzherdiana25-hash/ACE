@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import time
 from pathlib import Path
 from typing import Any
@@ -18,6 +19,18 @@ from .store import OperationalStore
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SNAPSHOT_PATH = REPO_ROOT / "data" / "ace_seed_snapshot.json"
+
+
+def _safe_confidence(value: Any, default: float = 0.9) -> float:
+    if isinstance(value, bool) or value is None:
+        return default
+    try:
+        num = float(value)
+    except (TypeError, ValueError):
+        return default
+    if not math.isfinite(num):
+        return default
+    return max(0.0, min(1.0, num))
 
 
 def _default_workspace() -> Path:
@@ -58,18 +71,20 @@ def export_snapshot(
                 {
                     "text": text,
                     "kind": str(rec.get("kind") or "semantic"),
-                    "confidence": float(rec.get("confidence") or 0.9),
+                    "confidence": _safe_confidence(rec.get("confidence")),
                 }
             )
 
     corpus_entries: list[dict[str, Any]] = []
     corpus_file = ws / "projects" / "bahasa" / "dialog_corpus.jsonl"
-    if corpus_file.exists():
-        for raw in corpus_file.read_text(encoding="utf-8").splitlines()[-250:]:
+    if corpus_file.is_file():
+        for raw in corpus_file.read_text(encoding="utf-8", errors="replace").splitlines()[-250:]:
             if not raw.strip():
                 continue
             try:
-                corpus_entries.append(json.loads(raw))
+                parsed = json.loads(raw)
+                if isinstance(parsed, dict):
+                    corpus_entries.append(parsed)
             except ValueError:
                 continue
 
@@ -113,17 +128,24 @@ def import_snapshot_if_needed(
 
     try:
         data = json.loads(src.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+    except (OSError, UnicodeDecodeError, ValueError):
         return {"applied": False, "reason": "snapshot_unreadable"}
 
-    version = str(data.get("snapshot_version") or "")
+    if not isinstance(data, dict):
+        return {"applied": False, "reason": "snapshot_unreadable"}
+
+    raw_version = data.get("snapshot_version")
+    version = raw_version if isinstance(raw_version, str) else ""
     if version and store.get_meta("seed_snapshot_version", "") == version:
         return {"applied": False, "reason": "already_applied", "snapshot_version": version}
 
     speech = SpeechDevelopmentEngine(store)
     existing_words = {str(w.get("word") or "").lower() for w in speech.list_lexicon()}
     words_added = 0
-    for item in data.get("lexicon", []):
+    raw_lexicon = data.get("lexicon")
+    for item in raw_lexicon if isinstance(raw_lexicon, list) else ():
+        if not isinstance(item, dict):
+            continue
         word = str(item.get("word") or "").strip().lower()
         meaning = str(item.get("meaning_id") or "").strip()
         role = str(item.get("role") or "").strip()
@@ -140,13 +162,16 @@ def import_snapshot_if_needed(
         for rec in mem_mgr.list_snapshot().get("active_records", [])
     }
     memories_added = 0
-    for mem in data.get("memories", []):
+    raw_memories = data.get("memories")
+    for mem in raw_memories if isinstance(raw_memories, list) else ():
+        if not isinstance(mem, dict):
+            continue
         text = str(mem.get("text") or "").strip()
         if not text or text in existing_mem_texts:
             continue
         res = mem_mgr.remember_statement(
             text,
-            confidence=float(mem.get("confidence") or 0.9),
+            confidence=_safe_confidence(mem.get("confidence")),
             sensitivity="internal",
             source_kind="operator",
         )
@@ -155,7 +180,8 @@ def import_snapshot_if_needed(
             memories_added += 1
 
     corpus_added = 0
-    corpus_entries = data.get("dialog_corpus", [])
+    raw_corpus = data.get("dialog_corpus")
+    corpus_entries = [entry for entry in raw_corpus if isinstance(entry, dict)] if isinstance(raw_corpus, list) else []
     if corpus_entries:
         corpus_file = Path(store.workspace) / "projects" / "bahasa" / "dialog_corpus.jsonl"
         if not corpus_file.exists():
