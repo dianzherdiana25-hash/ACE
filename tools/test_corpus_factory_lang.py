@@ -146,6 +146,17 @@ class TestCorpusFactoryLang(unittest.TestCase):
             )
             self.assertEqual(bad_rc, 2)
 
+    def test_verify_constraint_spec_vacuous_gate_empty_and_foreign_keys(self) -> None:
+        """Regresi D4: spec kosong dan spec kunci-asing-saja gagal dengan alasan eksplisit."""
+        sample = "Kalimat pertama singkat. Kalimat kedua juga singkat."
+        res_empty = verify_constraint_spec(sample, {})
+        self.assertFalse(res_empty["passed"])
+        self.assertIn("vacuous_spec", res_empty.get("reason", ""))
+
+        res_foreign = verify_constraint_spec(sample, {"word_cunt": {"exact": 6}, "kunci_asing": True})
+        self.assertFalse(res_foreign["passed"])
+        self.assertIn("vacuous_spec", res_foreign.get("reason", ""))
+
 
 if __name__ == "__main__":
     unittest.main()

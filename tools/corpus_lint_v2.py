@@ -67,10 +67,38 @@ def _expand_forbidden_forms(root: str, language: str) -> set[str]:
     return {f"{clean}{s}" for s in _MULTI_INFLECTIONS.get(language, ("", "s"))}
 
 
+_RECOGNIZED_LANG_SPEC_KEYS = frozenset(
+    {
+        "word_count",
+        "sentence_count",
+        "required_phrases",
+        "forbidden_words",
+        "forbidden_roots",
+        "forbidden_affix_roots",
+        "required_order",
+        "surface_hygiene",
+    }
+)
+_RECOGNIZED_LANG_LAYERS = frozenset(
+    {
+        "word_count",
+        "sentence_count",
+        "required_phrases",
+        "forbidden_words",
+        "required_order",
+        "surface_hygiene",
+    }
+)
+
+
 def _check_layered_lang_sample(text: str, spec: dict[str, Any]) -> list[str]:
     if not text.strip():
         return ["empty_sample"]
+    if not isinstance(spec, dict) or not any(k in _RECOGNIZED_LANG_SPEC_KEYS for k in spec):
+        return ["vacuous_spec:no_recognized_constraint_keys"]
     active = list(spec.get("active_layers") or ["word_count", "sentence_count", "required_phrases", "forbidden_words", "required_order"])
+    if not (set(active) & _RECOGNIZED_LANG_LAYERS):
+        return ["vacuous_spec:no_recognized_active_layers"]
     lang = str(spec.get("language", "id")).strip().lower() or "id"
     words = _WORD_RE.findall(text)
     sentences = [p.strip() for p in _SENTENCE_SPLIT_RE.split(text.strip()) if p.strip()]

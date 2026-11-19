@@ -118,6 +118,19 @@ def _expand_forbidden_forms(root: str, language: str) -> set[str]:
     return forms
 
 
+_RECOGNIZED_LANG_SPEC_KEYS: frozenset[str] = frozenset(
+    {
+        "word_count",
+        "sentence_count",
+        "required_phrases",
+        "forbidden_roots",
+        "forbidden_words",
+        "required_order",
+        "surface_hygiene",
+    }
+)
+
+
 def verify_layered_lang_spec(text: str, spec: dict[str, Any]) -> dict[str, Any]:
     """Pemeriksa kendala mekanis bertingkat deterministik untuk kandidat bahasa v2."""
     if not isinstance(text, str) or not text.strip():
@@ -125,11 +138,24 @@ def verify_layered_lang_spec(text: str, spec: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(spec, dict):
         raise CandidateFactoryV2Error("Spesifikasi kendala bahasa wajib objek dict.")
 
-    active_layers = list(spec.get("active_layers") or [])
-    if not active_layers:
-        raise CandidateFactoryV2Error("Spesifikasi bahasa wajib memiliki `active_layers` tidak kosong.")
-
+    raw_active = spec.get("active_layers")
+    active_layers = list(raw_active) if isinstance(raw_active, (list, tuple)) else []
     language = str(spec.get("language", "id")).strip().lower() or "id"
+
+    has_recognized_spec_key = any(k in _RECOGNIZED_LANG_SPEC_KEYS for k in spec)
+    recognized_layers = [layer for layer in active_layers if layer in CONSTRAINT_LAYERS]
+    if not has_recognized_spec_key or not recognized_layers:
+        return {
+            "schema": LANG_SPEC_V2_SCHEMA,
+            "episode_id": str(spec.get("episode_id", "")),
+            "language": language,
+            "active_layers": active_layers,
+            "constraint_count": 0,
+            "passed": False,
+            "reason": "vacuous_spec: tidak ada satu pun kunci kendala resmi yang dikenali di spec",
+            "checks": {},
+        }
+
     words = tokenize_words(text)
     sentences = split_sentences(text)
     lowered_words = [w.lower() for w in words]
@@ -896,7 +922,8 @@ def validate_and_filter_v2_candidates(
                     ver = verify_layered_lang_spec(sample, spec or {})
                     if not ver["passed"]:
                         failed_checks = [k for k, v in ver["checks"].items() if not v.get("passed")]
-                        reasons.append("kendala_bahasa_gagal:" + ",".join(sorted(failed_checks)))
+                        detail = ",".join(sorted(failed_checks)) if failed_checks else str(ver.get("reason") or "vacuous_spec")
+                        reasons.append("kendala_bahasa_gagal:" + detail)
             elif tk == "code":
                 ver = verify_composite_code_spec(ep, spec or {})
                 if not ver["passed"]:
