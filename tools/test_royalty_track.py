@@ -298,22 +298,20 @@ class TestRoyaltyTrack(unittest.TestCase):
             with self.assertRaises(RoyaltyTrackError):
                 load_column_map(None, overrides={"serial": "   "})
 
-    @unittest.expectedFailure
     def test_expected_failure_currency_prefix_before_minus_sign(self) -> None:
-        """Dugaan bug D1: `Rp -1.500,00` menghilangkan tanda minus karena cek `startswith('-')` lebih dulu.
-
-        Sesuai aturan Gelombang D, logika modul tidak diubah pada PR tes ini;
-        bug dicatat sebagai expectedFailure untuk ditangani terpisah.
+        """Bug D1 yang sudah diperbaiki (2026-11-20): `Rp -1.500,00` dulu
+        menghilangkan tanda minus karena cek `startswith('-')` berjalan
+        sebelum awalan mata uang dibuang. Parser kini mengecek tanda lagi
+        sesudah awalan mata uang disingkirkan.
         """
         self.assertEqual(
             str(parse_decimal_amount("Rp -1.500,00", decimal_separator=",")),
             "-1500.00",
         )
 
-    @unittest.expectedFailure
     def test_expected_failure_pasal7_tiered_author_share_not_computed(self) -> None:
-        """Temuan celah D1: `summarize_royalties` hanya menjumlahkan kolom amount mentah
-        dan belum menghitung/melampirkan porsi bagi hasil bertingkat Pasal 7
+        """Celah D1 yang sudah ditutup (2026-11-20): `summarize_royalties`
+        kini melampirkan `tier_summary` Pasal 7 per serial
         (<=100rb: 100%, <=250rb: 90%, <=500rb: 80%, <=1jt: 70%, <=5jt: 65%, >5jt: 60%).
         """
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -323,7 +321,10 @@ class TestRoyaltyTrack(unittest.TestCase):
                 encoding="utf-8",
             )
             rep = summarize_royalties([csv_path])
-            self.assertIn("tier_summary", rep["totals_by_serial"]["IANILA"])
+            tier = rep["totals_by_serial"]["IANILA"]["tier_summary"]
+            self.assertEqual(tier["omzet_idr"], "250000")
+            self.assertEqual(tier["rate_percent"], "90")
+            self.assertEqual(tier["author_share_idr"], "225000")
 
 
 if __name__ == "__main__":

@@ -24,6 +24,34 @@ from typing import Any
 
 ROYALTY_SCHEMA = "ace.royalty-summary.v1"
 
+# Tangga bagi hasil Pasal 7 perjanjian KBM (terverifikasi dari teks resmi):
+# porsi penulis ditentukan oleh tingkat omzet kumulatif serial —
+# <=Rp100rb: 100%, <=Rp250rb: 90%, <=Rp500rb: 80%, <=Rp1jt: 70%,
+# <=Rp5jt: 65%, di atas itu: 60%. Diterapkan flat per tingkat:
+# seluruh omzet IDR serial dikenai persentase tingkat tempatnya jatuh.
+PASAL7_TIERS: tuple[tuple[Decimal | None, Decimal], ...] = (
+    (Decimal("100000"), Decimal("100")),
+    (Decimal("250000"), Decimal("90")),
+    (Decimal("500000"), Decimal("80")),
+    (Decimal("1000000"), Decimal("70")),
+    (Decimal("5000000"), Decimal("65")),
+    (None, Decimal("60")),
+)
+
+
+def pasal7_author_share(omzet_idr: Decimal) -> dict[str, str]:
+    """Porsi penulis menurut tangga Pasal 7 atas omzet IDR satu serial."""
+    for cap, pct in PASAL7_TIERS:
+        if cap is None or omzet_idr <= cap:
+            share = omzet_idr * pct / Decimal("100")
+            return {
+                "basis": "flat_per_tier",
+                "omzet_idr": format(omzet_idr, "f"),
+                "rate_percent": format(pct, "f"),
+                "author_share_idr": format(share, "f"),
+            }
+    raise AssertionError("tangga Pasal 7 tidak memiliki tingkat terminal")
+
 DEFAULT_COLUMN_MAP: dict[str, Any] = {
     "serial": "serial",
     "date": "date",
@@ -65,6 +93,16 @@ def parse_decimal_amount(raw_amount: str, *, decimal_separator: str = ".") -> De
     if not s:
         raise ValueError("Nominal kosong.")
     negative = False
+    if s.startswith("(") and s.endswith(")"):
+        negative = True
+        s = s[1:-1].strip()
+    elif s.startswith("-"):
+        negative = True
+        s = s[1:].strip()
+
+    # Awalan mata uang boleh mendahului tanda minus ("Rp -1.500,00"):
+    # buang run huruf/simbol mata uang di awal, lalu cek tanda sekali lagi.
+    s = re.sub(r"^[A-Za-z$€£¥\s]+", "", s)
     if s.startswith("(") and s.endswith(")"):
         negative = True
         s = s[1:-1].strip()
@@ -244,6 +282,7 @@ def summarize_royalties(
             "total_units": sb["total_units"],
             "row_count": sb["row_count"],
             "months": months_out,
+            "tier_summary": pasal7_author_share(sb["revenue_by_currency"].get("IDR", Decimal("0"))),
         }
 
     monthly_totals = [
