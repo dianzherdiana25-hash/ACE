@@ -116,10 +116,10 @@ class TestMissionEdgeCases(unittest.TestCase):
                 with self.assertRaises(MissionSchemaError):
                     validate_mission(_valid_mission(**patch))
 
-    @unittest.expectedFailure
     def test_02_bug_schema_accepts_non_iso_deadline_string(self):
         # BUG (ace_mission/schema.py:4,88-89): `import datetime` is unused and deadline only
         # checks non-empty string instead of validating ISO-8601 format.
+        # DIPERBAIKI (gelombang robustness 2026-11-20): deadline divalidasi fromisoformat + wajib ada komponen waktu.
         with self.assertRaises(MissionSchemaError):
             validate_mission(_valid_mission(deadline="not-an-iso-timestamp"))
 
@@ -335,11 +335,11 @@ class TestIndoNLPEdgeCases(unittest.TestCase):
         )
         self.assertIn("baik", morph_qa[0])
 
-    @unittest.expectedFailure
     def test_15b_bug_discourse_pending_word_anaphora_unreachable_for_artinya_apa(self):
         # BUG (ace_indo_nlp/discourse.py:177,205,219): optional `(?:artinya|maknanya)?` at L205
         # matches "artinya" as group 1 before L219's pending_word fallback runs, and "artinya"
         # is absent from `skip_words`.
+        # DIPERBAIKI (gelombang robustness 2026-11-20): kata bingkai makna masuk skip_words.
         q = extract_query_target("artinya apa?", pending_word="cakrawala")
         self.assertEqual(q, {"word": "cakrawala", "query_kind": "meaning"})
 
@@ -362,10 +362,10 @@ class TestIndoNLPEdgeCases(unittest.TestCase):
         )
         self.assertTrue(len(turn["clauses"]) >= 1)
 
-    @unittest.expectedFailure
     def test_17_bug_discourse_slang_thanks_abbreviations_unrecognized(self):
         # BUG (ace_indo_nlp/discourse.py:320): slang thanks (`mksh`, `mksih`, `thx`) normalize to
         # `"terima"` (not `"terima kasih"`), failing both checks in `is_thanks`.
+        # DIPERBAIKI (gelombang robustness 2026-11-20): is_thanks mengenali token singkatan itu.
         for slang in ("mksh", "thx"):
             with self.subTest(slang=slang):
                 self.assertTrue(analyze_discourse_cues(slang)["is_thanks"])
@@ -544,10 +544,10 @@ class TestMCPChatAndReportEdgeCases(unittest.TestCase):
         self.assertIn("INKONKLUSIF", rep_empty)
         self.assertIn("0.0%", rep_empty)
 
-    @unittest.expectedFailure
     def test_28_bug_mobile_report_negative_delta_formats_plus_minus(self):
         # BUG (ace_report/mobile_report.py:38): `f"+{(mean_c_g - mean_b_g) * 100:.1f}%"`
         # produces `+-15.0%` instead of `-15.0%` when condition C underperforms B.
+        # DIPERBAIKI (gelombang robustness 2026-11-20): format ":+.1f" sadar-tanda.
         rep = generate_indonesian_mobile_report(
             {"graph_results": {"A": {"mean": 0.8}, "B": {"mean": 0.85}, "C": {"mean": 0.70}}}
         )

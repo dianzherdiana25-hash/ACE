@@ -87,6 +87,15 @@ def validate_mission(mission: Dict[str, Any]) -> Dict[str, Any]:
 
     if not isinstance(mission["deadline"], str) or not mission["deadline"].strip():
         raise MissionSchemaError("deadline must be an ISO-8601 timestamp string")
+    deadline_raw = mission["deadline"].strip()
+    try:
+        if "T" not in deadline_raw:
+            raise ValueError("date-only is not a timestamp")
+        datetime.datetime.fromisoformat(deadline_raw.replace("Z", "+00:00"))
+    except ValueError:
+        raise MissionSchemaError(
+            f"deadline is not a valid ISO-8601 timestamp: {deadline_raw!r}"
+        ) from None
 
     if mission["status"] not in ALLOWED_STATUSES:
         raise MissionSchemaError(

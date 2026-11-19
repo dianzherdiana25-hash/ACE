@@ -35,7 +35,7 @@ Menguji apakah perluasan DSL dengan primitif penelusuran graf (BFS) dan pelacak 
   - Kondisi A (Statis 35 Lib): `{mean_a_g * 100:.1f}%`
   - Kondisi B (Adaptif Lokal): `{mean_b_g * 100:.1f}%`
   - **Kondisi C (Primitif Baru):** **`{mean_c_g * 100:.1f}%`**
-  - *Kenaikan Bersih:* `+{(mean_c_g - mean_b_g) * 100:.1f}%`
+  - *Kenaikan Bersih:* `{(mean_c_g - mean_b_g) * 100:+.1f}%`
 
 - **Keluarga Rasio 4:1:**
   - Kondisi A: `{ratio4_stats.get("A", {}).get("mean", 0.0) * 100:.1f}%`

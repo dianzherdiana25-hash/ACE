@@ -174,7 +174,10 @@ def parse_teaching_or_correction(raw_text: str, *, pending_word: str = "") -> di
 def extract_query_target(user_text: str, *, pending_word: str = "") -> dict[str, str] | None:
     """Extract meaning, synonym, antonym, or morphology Q&A target word and kind."""
     stripped = str(user_text or "").strip()
-    skip_words = QUESTION_WORDS_ID | {"yang", "dari", "dalam", "untuk", "itu", "ini", "sini", "situ", "sana"}
+    skip_words = QUESTION_WORDS_ID | {"yang", "dari", "dalam", "untuk", "itu", "ini", "sini", "situ", "sana",
+                                      # Kata bingkai tanya-makna tidak pernah menjadi kata target:
+                                      # "artinya apa?" harus jatuh ke fallback pending_word.
+                                      "arti", "artinya", "makna", "maknanya", "maksud", "maksudnya", "definisi"}
 
     kind_patterns: tuple[tuple[str, tuple[str, ...]], ...] = (
         (
@@ -317,7 +320,7 @@ def analyze_discourse_cues(
         any(p in comb for p in ("apa kabar", "kabarnya", "kabarmu", "gimana kabar", "bagaimana kabar", "kabar kamu"))
         or ("kabar" in tokens and bool(tokens & {"apa", "bagaimana", "baik"}))
     )
-    is_thanks = any(p in comb for p in ("terima kasih", "makasih", "trims", "thanks")) or ("terima" in tokens and "makasih" in raw_low)
+    is_thanks = any(p in comb for p in ("terima kasih", "makasih", "trims", "thanks")) or ("terima" in tokens and "makasih" in raw_low) or bool(tokens & {"mksh", "mksih", "thx"})
     is_question, q_focus = _detect_question_focus(norm_col, str(user_text or ""))
     neg_words = ("bingung", "pusing", "susah", "sulit", "error", "gagal", "kesal", "capek", "lelah", "sedih", "ragu", "bosan", "lapar", "cemas", "marah", "kecewa")
     is_confused = bool(tokens & set(neg_words))
