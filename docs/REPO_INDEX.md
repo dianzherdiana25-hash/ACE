@@ -1,7 +1,7 @@
 # Indeks Repositori — merge-antigravity
 
 - Schema: `ace.repo-index.v1`
-- Total direktori: 203
+- Total direktori: 204
 - Total berkas: 2110
 - Total modul Python: 903
 
@@ -1841,6 +1841,9 @@
 - `discovery_20261703.json` (data)
 - `gate.json` (data)
 
+### `evidence/migration-drill-20261120` (1 berkas)
+- `LAPORAN_BOR.md` (docs)
+
 ### `evidence/mission_admission` (12 berkas)
 - `additional-negative-findings.json` (data)
 - `additional-tests.json` (data)
@@ -1948,8 +1951,7 @@
 - `import_isolation.py` (python)
 - `probe_discovery.py` (python)
 
-### `evidence/real_world` (7 berkas)
-- `artifact_mission_6649bb636d3c0514.json` (data)
+### `evidence/real_world` (6 berkas)
 - `artifact_mission_88175a9bc539beba.json` (data)
 - `artifact_mission_aab6f01c0fae3104.json` (data)
 - `artifact_mission_bdf50cc60fde4095.json` (data)

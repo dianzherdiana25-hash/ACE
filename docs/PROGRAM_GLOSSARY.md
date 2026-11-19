@@ -197,7 +197,7 @@
 | `brain_registry.py` | `markdown_def` | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM29.md:5` | catatan otak bernama + log peristiwa |
 | `BrainContractAdapter` | `ast_class` | `code/ace_operational/oaie_unlimited.py:121` | Wraps any AI model or symbolic solver behind a zero-trust hypothesis interface. |
 | `BrainGovernanceError` | `ast_class` | `code/ace_operational/oaie_unlimited.py:111` | Raised when all candidate brains fail verification or a dismissed brain is invoked. |
-| `BrainUnavailable` | `ast_class` | `code/ace_operational/brain_endpoints.py:97` | An organ is unreachable or unhealthy. Fail-closed: never faked. |
+| `BrainUnavailable` | `ast_class` | `code/ace_operational/brain_endpoints.py:114` | An organ is unreachable or unhealthy. Fail-closed: never faked. |
 | `Budget` | `ast_class` | `code/ace_operational/reasoning_lab.py:57` | Shown-case fitness with a hard evaluation cap. |
 | `Budget Preservation` | `markdown_def` | `docs/research/self_dev/ACE_ANTI_STAGNATION_SELF_REPAIR_REPORT_20261107.md:66` | When stagnation is flagged, `should_evaluate=False` and `should_commit=False`, completely bypassing holdout evaluation and suppressing commit spam. |
 | `BudgetController` | `ast_class` | `code/ace_autonomy/budget.py:59` | Enforces declared step, candidate, retry, wall-time, and CPU-time ceilings. |
