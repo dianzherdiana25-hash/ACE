@@ -24,6 +24,11 @@ _REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
+from tools.cover_check import (
+    CoverCheckInputError,
+    check_cover,
+    load_rules,
+)
 from tools.kbm_pack_check import (
     DEFAULT_MIN_BYTES,
     KbmPackCheckError,
@@ -33,6 +38,15 @@ from tools.kbm_split import (
     DEFAULT_MIN_WORDS,
     KbmSplitError,
     split_manuscript,
+)
+from tools.pack_evidence import (
+    EvidencePackError,
+    pack_evidence,
+    verify_evidence,
+)
+from tools.portability_pack import (
+    PortabilityPackError,
+    pack_bundle as pack_portable_bundle,
 )
 
 KBM_PIPELINE_SCHEMA = "ace.kbm-pipeline.v1"
@@ -131,8 +145,13 @@ def run_pipeline(
     cover_name: str | None = None,
     cover_source: Path | None = None,
     bundle_dir: Path | None = None,
+    strict_cover: bool = False,
+    cover_rules: Path | None = None,
+    seal_bundle: bool = False,
+    portable_bundle: Path | None = None,
+    portable_force: bool = False,
 ) -> dict[str, Any]:
-    """Jalankan `kbm_split` diikuti `kbm_pack_check` dan opsional staging bundel unggah."""
+    """Jalankan `kbm_split` diikuti `kbm_pack_check` dan opsional staging/sealing/bundel portabel."""
     if min_words < 0:
         raise KbmPipelineError("Nilai --min-words tidak boleh negatif.")
     if min_bytes < 0:
@@ -145,6 +164,10 @@ def run_pipeline(
         raise KbmPipelineError(f"Berkas sampul sumber tidak ditemukan: {cover_source}")
     if bundle_dir is not None and bundle_dir.resolve() == output_dir.resolve():
         raise KbmPipelineError("--bundle-dir harus berbeda dari --output-dir.")
+    if (seal_bundle or portable_bundle is not None) and bundle_dir is None:
+        raise KbmPipelineError("--seal-bundle dan --portable-bundle wajib disertai --bundle-dir.")
+
+    loaded_cover_rules = load_rules(cover_rules) if (strict_cover or cover_rules is not None) else None
 
     split_report = split_manuscript(
         manuscript_path,
@@ -165,14 +188,26 @@ def run_pipeline(
         cover_name=effective_cover,
     )
 
+    cover_report: dict[str, Any] | None = None
+    cover_valid = True
+    if strict_cover or cover_rules is not None:
+        cover_file_name = (pack_report.get("cover") or {}).get("file")
+        if cover_file_name and (output_dir / str(cover_file_name)).is_file():
+            cover_report = check_cover(output_dir / str(cover_file_name), rules=loaded_cover_rules)
+            cover_valid = bool(cover_report["valid"])
+        else:
+            cover_valid = False
+
     split_clean = split_report["below_threshold_count"] == 0
     pack_valid = bool(pack_report["valid"])
-    passed = split_clean and pack_valid
+    passed = split_clean and pack_valid and cover_valid
 
     if passed:
         failed_stage = None
     elif not pack_valid:
         failed_stage = "check"
+    elif not cover_valid:
+        failed_stage = "cover"
     else:
         failed_stage = "split"
 
@@ -182,6 +217,8 @@ def run_pipeline(
     )
 
     bundle_result: dict[str, Any] | None = None
+    evidence_result: dict[str, Any] | None = None
+    portable_result: dict[str, Any] | None = None
     if bundle_dir is not None:
         if passed:
             bundle_result = _stage_upload_bundle(
@@ -191,6 +228,22 @@ def run_pipeline(
                 split_report=split_report,
                 pack_report=pack_report,
             )
+            if seal_bundle:
+                pack_res = pack_evidence(bundle_dir)
+                ver_res = verify_evidence(bundle_dir)
+                evidence_result = {"pack": pack_res, "verify": ver_res}
+                if not ver_res["valid"]:
+                    passed = False
+                    failed_stage = "seal"
+            if portable_bundle is not None and passed:
+                items = sorted(p.name for p in bundle_dir.iterdir() if not p.name.startswith("."))
+                portable_result = pack_portable_bundle(
+                    source_dir=bundle_dir,
+                    out_path=portable_bundle,
+                    include_paths=items,
+                    label=manuscript_path.stem,
+                    force=portable_force,
+                )
         else:
             bundle_result = {
                 "staged": False,
@@ -205,13 +258,20 @@ def run_pipeline(
         "passed": passed,
         "split_clean": split_clean,
         "pack_valid": pack_valid,
+        "cover_valid": cover_valid,
         "failed_stage": failed_stage,
         "short_chapters": short_chapters,
         "split": split_report,
         "pack_check": pack_report,
     }
+    if cover_report is not None:
+        result["cover_check"] = cover_report
     if bundle_result is not None:
         result["bundle"] = bundle_result
+    if evidence_result is not None:
+        result["evidence"] = evidence_result
+    if portable_result is not None:
+        result["portable_bundle"] = portable_result
     return result
 
 
@@ -255,6 +315,33 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Opsional path gambar sampul eksternal untuk disalin ke --output-dir sebelum pengecekan.",
     )
+    parser.add_argument(
+        "--strict-cover",
+        action="store_true",
+        help="Jalankan validator header/dimensi biner cover_check terhadap sampul paket.",
+    )
+    parser.add_argument(
+        "--cover-rules",
+        type=Path,
+        default=None,
+        help="Berkas JSON aturan kustom untuk cover_check (mengimplikasikan --strict-cover).",
+    )
+    parser.add_argument(
+        "--seal-bundle",
+        action="store_true",
+        help="Segel & verifikasi --bundle-dir dengan pack_evidence (`manifest.json`).",
+    )
+    parser.add_argument(
+        "--portable-bundle",
+        type=Path,
+        default=None,
+        help="Kemas --bundle-dir menjadi arsip/direktori portability_pack setelah lolos seluruh tahap.",
+    )
+    parser.add_argument(
+        "--portable-force",
+        action="store_true",
+        help="Izinkan menimpa target --portable-bundle jika sudah ada.",
+    )
     return parser
 
 
@@ -271,12 +358,25 @@ def main(argv: list[str] | None = None) -> int:
             cover_name=args.cover,
             cover_source=args.cover_file,
             bundle_dir=args.bundle_dir,
+            strict_cover=args.strict_cover,
+            cover_rules=args.cover_rules,
+            seal_bundle=args.seal_bundle,
+            portable_bundle=args.portable_bundle,
+            portable_force=args.portable_force,
         )
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0 if report["passed"] else 1
     except SystemExit as exc:
         return 0 if exc.code == 0 else 2
-    except (OSError, KbmPipelineError, KbmSplitError, KbmPackCheckError) as exc:
+    except (
+        OSError,
+        KbmPipelineError,
+        KbmSplitError,
+        KbmPackCheckError,
+        CoverCheckInputError,
+        EvidencePackError,
+        PortabilityPackError,
+    ) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 2
 
