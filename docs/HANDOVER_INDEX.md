@@ -5,9 +5,9 @@
 ## 1. Ringkasan
 
 - Schema: `ace.handover-index.v1`
-- Total berkas terindeks: **405** (`handover/`: **138**, `docs/`: **267**)
-- Total baris teks UTF-8: **77457**
-- Total ukuran: **4503943** byte
+- Total berkas terindeks: **407** (`handover/`: **140**, `docs/`: **267**)
+- Total baris teks UTF-8: **77871**
+- Total ukuran: **4523999** byte
 - Symlink dilewati: **0**
 
 ### Distribusi Kategori
@@ -20,24 +20,26 @@
 | `helper_script` | 22 |
 | `manifest_json` | 45 |
 | `preregistration` | 17 |
-| `reference_doc` | 48 |
+| `reference_doc` | 49 |
 | `research_report` | 143 |
 | `slate_serving` | 13 |
-| `spec_governance` | 43 |
+| `spec_governance` | 44 |
 | `verdict_decision` | 8 |
 
-## 2. Inventaris `handover/` (138 berkas)
+## 2. Inventaris `handover/` (140 berkas)
 
 | Berkas | Kategori | Baris | Byte | SHA-256 | Judul / Ringkasan |
 | --- | --- | ---: | ---: | --- | --- |
 | `handover/ABSORPTION_AUDIT_20261115.md` | `audit_accounting` | 74 | 6136 | `5704a513f062` | AUDIT PENYERAPAN BELAJAR — Inventaris + Klasifikasi (DRAF untuk hub) |
 | `handover/ATOMIC_WRITE_GENERALIZATION_20261113.md` | `reference_doc` | 68 | 2702 | `dc0a143fc632` | CRASH-SAFE ATOMIC WRITING — GENERALIZATION (2026-11-13) |
+| `handover/BOOTSTRAP_RUMAH_BARU.md` | `reference_doc` | 157 | 7528 | `800624031cd0` | Bootstrap Rumah Baru ACE |
 | `handover/BRAIN_SLATE_V2_DEPLOYMENT_20261116.md` | `slate_serving` | 114 | 6454 | `fcdb873a0c7e` | BRAIN SLATE v2 — DEPLOYMENT RECORD (2026-11-16) |
 | `handover/BRAIN_SLATE_V2_INTAKE_20261116.md` | `slate_serving` | 28 | 1370 | `714253ec129a` | REKAMAN INTAKE — Slate Otak v2 (Keputusan Pemilik 15 Nov 23:46 WIB) |
 | `handover/CUSTODY_POPULATION_MANIFEST_20261114.json` | `spec_governance` | 492 | 15840 | `c5625d5824a6` | JSON |
 | `handover/CUSTODY_REQUIREMENTS_LINEAGE_GUARD_20261114.md` | `spec_governance` | 101 | 4087 | `bece992be3ad` | CUSTODY REQUIREMENTS MANIFEST — Lineage-Guard Run Home (FROZEN, Ian, 2026-11-14) |
 | `handover/CUSTODY_SUPPLEMENT_MANIFEST_BATTERY_20261114.json` | `spec_governance` | 24 | 1402 | `fa4cc571acd6` | JSON |
 | `handover/CUSTODY_SUPPLEMENT_MANIFEST_INSTRUMENT_20261115.json` | `spec_governance` | 1 | 1493 | `d1a9d76297c5` | JSON |
+| `handover/DESAIN_KIRIM_SENDIRI_ACE_20261116.md` | `spec_governance` | 256 | 13042 | `0421d6001657` | DESAIN — KIRIM-SENDIRI ACE (draf untuk tinjauan hub) |
 | `handover/DIAGNOSIS_RECALL_EVO_0005.md` | `research_report` | 121 | 5261 | `f4e92991e155` | Diagnosis Mekanisme Recall — Kenapa Lift Nol di EVO 0005 |
 | `handover/ECOSYSTEM_INTAKE_01_20261113.md` | `consolidation_ops` | 44 | 1995 | `646d4167544b` | PROGRAM KECEPATAN — addendum (owner order, 2026-11-13 21:20 WIB) |
 | `handover/ECOSYSTEM_INTAKE_INTEGRATION_REVIEW_20261114.md` | `consolidation_ops` | 144 | 10306 | `ef18f988244a` | ECOSYSTEM INTAKE — INTEGRATION REVIEW (2026-11-14) |
@@ -218,8 +220,8 @@
 | `docs/COMPOSITION_RESULTS_V03.md` | `reference_doc` | 84 | 5178 | `808029e06d80` | ACE v0.3 — learned counter/guard composition |
 | `docs/LAPORAN_HASIL_RISET_HP.md` | `reference_doc` | 63 | 5202 | `4e5fe567d704` | 📱 Laporan Hasil Riset ACE (Terbaca di Layar HP) |
 | `docs/PRD_ACE_v0.1.md` | `reference_doc` | 190 | 18816 | `03887aef928b` | PRODUCT REQUIREMENTS DOCUMENT (PRD) |
-| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54907 | `31d26dd3b3dd` | Glosarium Istilah Teknis ACE — ACE |
-| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 282 | 23725 | `8c4f4c1adae1` | Kartografi Repositori ACE — ACE |
+| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54796 | `c1ea6f668f07` | Glosarium Istilah Teknis ACE — ACE |
+| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23831 | `f7bc04a4cbeb` | Kartografi Repositori ACE — ACE |
 | `docs/REPO_INDEX.md` | `reference_doc` | 2545 | 205836 | `f67ada15f27e` | Indeks Repositori — ACE |
 | `docs/UPSTREAM_SOURCES.json` | `manifest_json` | 106 | 4914 | `cf6ffc77386a` | schema: ace.source-integration.v1 |
 | `docs/architecture/ACE_INDEPENDENT_HOST_CONTROLLER_SPEC_20261107.md` | `spec_governance` | 145 | 8693 | `b24b7c2ff49b` | ACE Independent Host Controller & Evaluation Architecture Specification |
@@ -287,7 +289,7 @@
 | `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md` | `audit_accounting` | 55 | 6356 | `af7459e3a353` | Akuntansi Penutup Garis H — Produksi & Rel Pendapatan Luring (Gravity) |
 | `docs/research/ACE_GRAVITY_GARIS_I_AKUNTANSI.md` | `audit_accounting` | 110 | 15716 | `0a3bee1369c5` | Akuntansi Penutup Garis I & Rekapitulasi Induk Final — Satu Runtime Jauh (Gravity) |
 | `docs/research/ACE_GRID_GENERALIZATION_RESULTS_20261112.md` | `research_report` | 68 | 3131 | `70a9be5c9a1c` | ACE Ω — Hasil Semesta Generalisasi Grid (Tahap F, 2026-11-12) |
-| `docs/research/ACE_HANDOVER_DECISIONS_EXTRACTED.md` | `research_report` | 187 | 28982 | `402b28a41f8d` | Ekstraksi Keputusan Pemilik/Hub, Verdit, & Usulan Terbuka |
+| `docs/research/ACE_HANDOVER_DECISIONS_EXTRACTED.md` | `research_report` | 187 | 28473 | `123d108abcf3` | Ekstraksi Keputusan Pemilik/Hub, Verdit, & Usulan Terbuka |
 | `docs/research/ACE_HOST_FOUNDATION_CHECKPOINT_20261109.md` | `research_report` | 43 | 2769 | `d4140a16e2e7` | Host-assisted ACE foundation checkpoint — 2026-11-09 |
 | `docs/research/ACE_INTERNAL_REASONING_PROTOCOL_20261110.md` | `research_report` | 72 | 4282 | `f9af4818bfae` | ACE internal reasoning integration — protocol v1 |
 | `docs/research/ACE_KBM_PILOT_DESIGN_20261113.md` | `spec_governance` | 142 | 6398 | `361026c6c074` | ACE KBM Pilot — Design Package (business study ladder, rung 2) |
@@ -371,7 +373,7 @@
 | `docs/research/ACE_PHASE2_RESIDUAL_DIAGNOSIS_20261112.md` | `research_report` | 50 | 2276 | `f646f6dc23f8` | ACE Fase 2 — Probe Residu Pilot: Bukan Pencarian, Melainkan Identifiabilitas Sinyal (2026-11-12) |
 | `docs/research/ACE_PHASE2_SHIPPING_MEASUREMENT_20261112.md` | `research_report` | 53 | 2602 | `113476d2a226` | ACE Fase 2 — Pengukuran Kelemahan Keluarga Shipping (2026-11-12) |
 | `docs/research/ACE_PILOT_ABC_V2_RESULTS_20261112.md` | `research_report` | 53 | 2308 | `9ffbea987169` | Pilot A/B/C v2 — Hasil (Fase 2, tahap 9) |
-| `docs/research/ACE_PLATFORM_REQUIREMENTS_SUMMARY.md` | `research_report` | 172 | 34455 | `907452ce0d4e` | Ringkasan Persyaratan Platform & Monetisasi ACE |
+| `docs/research/ACE_PLATFORM_REQUIREMENTS_SUMMARY.md` | `research_report` | 172 | 34455 | `69df29fb3a75` | Ringkasan Persyaratan Platform & Monetisasi ACE |
 | `docs/research/ACE_REGRESSION_ANCHOR_20261113.md` | `research_report` | 67 | 2677 | `8e5ab1eb34b1` | Regression anchor — design + first self-test |
 | `docs/research/ACE_RESUME_DRILL_20261112.md` | `research_report` | 75 | 3392 | `49995ff49043` | ACE Resume Drill & G1 Criteria v2 — 2026-11-12 (Stage J) |
 | `docs/research/ACE_ROUND2_GATE_DESIGN_20261113.md` | `spec_governance` | 246 | 9661 | `ba1dcc06e895` | Round-2 gate design — the lifted mechanism behind a replication guard |
