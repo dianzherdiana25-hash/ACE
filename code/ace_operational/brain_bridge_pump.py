@@ -62,6 +62,8 @@ def scp_to(local_path, remote_path, deadline=90):
 
 
 def execute(path, req):
+    if path == "/v1/budget":
+        return bridge.budget_response()
     if path == "/v1/models":
         return 200, {"object": "list", "data": [
             {"id": f"{r}:{m}", "object": "model", "owned_by": p}

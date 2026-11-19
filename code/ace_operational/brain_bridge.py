@@ -83,6 +83,38 @@ def _budget_check(role):
         return True, used + 1
 
 
+def budget_response():
+    """Tampilkan saldo governor tanpa memakai jatah panggilan."""
+    with _lock:
+        try:
+            state = json.loads(STATE.read_text(encoding="utf-8"))
+        except FileNotFoundError:
+            state = None
+        except (OSError, ValueError):
+            return _budget_unavailable()
+        else:
+            if (not isinstance(state, dict)
+                    or not isinstance(state.get("day"), str)):
+                return _budget_unavailable()
+        initialized = state is not None and state["day"] == _today()
+        counts = state.get("counts") if initialized else {}
+        if not isinstance(counts, dict):
+            return _budget_unavailable()
+        roles = {}
+        for role, limit in BUDGETS.items():
+            used = counts.get(role, 0)
+            if type(used) is not int or used < 0:
+                return _budget_unavailable()
+            roles[role] = {"daily_budget": limit, "used_today": used,
+                           "remaining": max(0, limit - used)}
+    return 200, {"initialized": initialized, "roles": roles}
+
+
+def _budget_unavailable():
+    return 503, {"error": {"message": "bridge budget state unavailable",
+                           "type": "budget_state_unavailable"}}
+
+
 def _log(record):
     with _lock:
         with open(LOG, "a", encoding="utf-8") as fh:
@@ -214,10 +246,14 @@ class Handler(BaseHTTPRequestHandler):
                 {"id": f"{role}:{model}", "object": "model",
                  "owned_by": provider}
                 for role, (provider, model) in ROLE_MAP.items()]})
+        elif self.path == "/v1/budget":
+            self._send(*budget_response())
         else:
             self._send(404, {"error": "not found"})
 
     def do_POST(self):
+        if self.path == "/v1/budget":
+            return self._send(405, {"error": "method not allowed"})
         length = int(self.headers.get("Content-Length", 0))
         try:
             req = json.loads(self.rfile.read(length) or b"{}")
