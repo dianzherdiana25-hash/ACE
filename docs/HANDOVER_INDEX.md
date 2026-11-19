@@ -5,9 +5,9 @@
 ## 1. Ringkasan
 
 - Schema: `ace.handover-index.v1`
-- Total berkas terindeks: **407** (`handover/`: **140**, `docs/`: **267**)
-- Total baris teks UTF-8: **77886**
-- Total ukuran: **4524785** byte
+- Total berkas terindeks: **428** (`handover/`: **159**, `docs/`: **269**)
+- Total baris teks UTF-8: **79823**
+- Total ukuran: **4668189** byte
 - Symlink dilewati: **0**
 
 ### Distribusi Kategori
@@ -16,22 +16,26 @@
 | --- | ---: |
 | `audit_accounting` | 38 |
 | `consolidation_ops` | 18 |
-| `corpus_frozen` | 10 |
+| `corpus_frozen` | 12 |
 | `helper_script` | 22 |
 | `manifest_json` | 45 |
 | `preregistration` | 17 |
-| `reference_doc` | 49 |
+| `reference_doc` | 66 |
 | `research_report` | 143 |
 | `slate_serving` | 13 |
-| `spec_governance` | 44 |
+| `spec_governance` | 46 |
 | `verdict_decision` | 8 |
 
-## 2. Inventaris `handover/` (140 berkas)
+## 2. Inventaris `handover/` (159 berkas)
 
 | Berkas | Kategori | Baris | Byte | SHA-256 | Judul / Ringkasan |
 | --- | --- | ---: | ---: | --- | --- |
 | `handover/ABSORPTION_AUDIT_20261115.md` | `audit_accounting` | 74 | 6136 | `5704a513f062` | AUDIT PENYERAPAN BELAJAR — Inventaris + Klasifikasi (DRAF untuk hub) |
+| `handover/AMANDEMEN_EVO_0007_GEMMA_PROPOSER.md` | `reference_doc` | 71 | 3183 | `56cee761b82d` | AMANDEMEN EVO 0007 §10 — Proposer bahasa berpindah ke Gemma 4 31B untuk sisa lengan |
+| `handover/AMANDEMEN_EVO_0007_JUDGE_NVIDIA.md` | `reference_doc` | 221 | 10611 | `7fbb8d8cab72` | AMANDEMEN EVO 0007 — Judge fase lengan berpindah ke NVIDIA; kalibrasi ditutup pada 54 baris |
+| `handover/AMANDEMEN_EVO_0007_VALIDATOR_GEMMA.md` | `reference_doc` | 72 | 3329 | `68f842b9cb07` | AMANDEMEN EVO 0007 §11 — Parser validator fleksibel; validator kode berpindah ke Gemma 4 31B |
 | `handover/ATOMIC_WRITE_GENERALIZATION_20261113.md` | `reference_doc` | 68 | 2702 | `dc0a143fc632` | CRASH-SAFE ATOMIC WRITING — GENERALIZATION (2026-11-13) |
+| `handover/BAHAN_SIKLUS_DIREKTUR_PERTAMA.md` | `reference_doc` | 93 | 5072 | `ab76accd33b2` | BAHAN SIKLUS DIREKTUR PERTAMA — Keadaan Agenda + Celah |
 | `handover/BOOTSTRAP_RUMAH_BARU.md` | `reference_doc` | 172 | 8314 | `6d0b46388052` | Bootstrap Rumah Baru ACE |
 | `handover/BRAIN_SLATE_V2_DEPLOYMENT_20261116.md` | `slate_serving` | 114 | 6454 | `fcdb873a0c7e` | BRAIN SLATE v2 — DEPLOYMENT RECORD (2026-11-16) |
 | `handover/BRAIN_SLATE_V2_INTAKE_20261116.md` | `slate_serving` | 28 | 1370 | `714253ec129a` | REKAMAN INTAKE — Slate Otak v2 (Keputusan Pemilik 15 Nov 23:46 WIB) |
@@ -44,6 +48,7 @@
 | `handover/ECOSYSTEM_INTAKE_01_20261113.md` | `consolidation_ops` | 44 | 1995 | `646d4167544b` | PROGRAM KECEPATAN — addendum (owner order, 2026-11-13 21:20 WIB) |
 | `handover/ECOSYSTEM_INTAKE_INTEGRATION_REVIEW_20261114.md` | `consolidation_ops` | 144 | 10306 | `ef18f988244a` | ECOSYSTEM INTAKE — INTEGRATION REVIEW (2026-11-14) |
 | `handover/ECOSYSTEM_LMEVAL_EXHIBIT_01_20261113.md` | `reference_doc` | 115 | 6336 | `8afd403316ad` | ECOSYSTEM WAVE 2 — lm-evaluation-harness SCREENING EXHIBIT #01 (2026-11-13) |
+| `handover/EVO0007_KANDIDAT_PABRIK.jsonl` | `corpus_frozen` | 24 | 22690 | `d89727d36f0c` | JSONL corpus/stream |
 | `handover/EVO_0003_CORPUS_TAIL_V1.jsonl` | `corpus_frozen` | 16 | 4131 | `60177c51e095` | JSONL corpus/stream |
 | `handover/EVO_0003_KONSOLIDASI_20261116.md` | `consolidation_ops` | 197 | 9077 | `ea5186be9146` | KONSOLIDASI EVO 0003 — Ledakan, Ekor, dan Insiden |
 | `handover/EVO_0003_STAGING_NOTE.md` | `consolidation_ops` | 79 | 3745 | `326f727c365e` | EVO 0003 — STAGING NOTE (tree-independent parts) |
@@ -60,21 +65,35 @@
 | `handover/EVO_0006_KONSOLIDASI_20261117.md` | `consolidation_ops` | 77 | 3205 | `aa617b3fa307` | EVO 0006 — KONSOLIDASI (Ian, 2026-11-17 pagi) |
 | `handover/EVO_0006_STAGING_NOTE.md` | `consolidation_ops` | 28 | 1357 | `078317ae2441` | EVO 0006 — Staging Note (Ian, 2026-11-16 malam) |
 | `handover/GOVERNANCE_RULES_20261115.md` | `spec_governance` | 55 | 2293 | `6ba6d9b54568` | Aturan Tata Kelola Tetap — ACE Ω (15 November 2026) |
+| `handover/KANDIDAT_PABRIK_0007_BEKU.jsonl` | `corpus_frozen` | 24 | 9487 | `addecb8bad78` | JSONL corpus/stream |
+| `handover/KERANGKA_DERIVASI_TERKOREKSI.md` | `reference_doc` | 55 | 2812 | `44a2dc33e68f` | KERANGKA DERIVASI SLOT 0007 — TERKOREKSI (Ian, 18 Nov 2026) |
+| `handover/LAPORAN_ORIGIN_SHARE_20261118.md` | `reference_doc` | 41 | 1724 | `afb047019b77` | LAPORAN ORIGIN_SHARE — EDISI PERTAMA (18 Nov 2026) |
 | `handover/LINEAGE_GUARD_CONFIRMATION_VERDICT_20261114.md` | `verdict_decision` | 75 | 7791 | `e80ba211cf30` | PROGRAM VERDICT — LINEAGE-GUARD CONFIRMATION RUN: GUARD_ADOPTED (2026-11-14) |
 | `handover/MEMORY_WRITE_PATH_DESIGN_20261115.md` | `spec_governance` | 114 | 5037 | `244ba9821de6` | RANCANGAN — Jalur Tulis Engine → Ingatan Kognitif |
+| `handover/PEMBEKUAN_EVO_0007.md` | `reference_doc` | 96 | 4798 | `b05162d925f2` | PEMBEKUAN PAKET EVO 0007 — CATATAN PEMBEKUAN |
+| `handover/PENAPISAN_PRODUK_DIREKTUR_PERTAMA.md` | `reference_doc` | 97 | 5084 | `79dfc93aaaa0` | PENAPISAN PRODUK DIREKTUR PERTAMA — Ian |
+| `handover/PENAPISAN_SIKLUS_PELUANG_DAN_DERIVASI_0007.md` | `reference_doc` | 121 | 6680 | `c36d05ea34b0` | PENAPISAN SIKLUS PELUANG + DERIVASI 0007 — Ian |
 | `handover/PENILAIAN_G5_INSTRUMEN_TERAMENDEMEN_20261116.md` | `verdict_decision` | 119 | 5610 | `d9e579032146` | PENILAIAN G5 — Instrumen Teramendemen Pemilik (16 Nov 2026, 16:42) |
 | `handover/PETA_ARAH_SERIBU_TAHUN.md` | `reference_doc` | 444 | 21071 | `388dc33b5498` | PETA ARAH SERIBU TAHUN — ACE Ω |
+| `handover/PRAREGISTRASI_EVO_0007_FINAL_DRAF.md` | `reference_doc` | 177 | 8402 | `73a153ed6b51` | PRAREGISTRASI EVO 0007 — POLA TERDISTILASI (RE-SCOPE ORGAN API) |
 | `handover/PREREGISTRASI_EVO_0003_DRAF.md` | `preregistration` | 85 | 5161 | `021bcc7e89da` | PRAREGISTRASI EVO 0003 — BENTUK KILAT (DRAF) |
 | `handover/PREREGISTRASI_EVO_0004_DRAF.md` | `preregistration` | 49 | 5152 | `e01ff80b72ec` | RANCANGAN EVO 0004 — draft praregistrasi (dirancang hub, 2026-11-16) |
 | `handover/PREREGISTRASI_EVO_0005_DRAF.md` | `preregistration` | 63 | 2606 | `15dfc5c670b5` | PREREGISTRASI EVO 0005 — DRAF (Ian, 2026-11-16; untuk ratifikasi hub) |
 | `handover/PREREGISTRASI_EVO_0006_DRAF.md` | `preregistration` | 78 | 3304 | `baf45043f39f` | PREREGISTRASI EVO 0006 — DRAF (Ian, 2026-11-16 malam) |
 | `handover/PREREGISTRASI_EVO_0006_PENERUS_DRAF.md` | `preregistration` | 90 | 3853 | `9c6b6df00972` | PREREGISTRASI PENERUS EVO 0006 — DRAF (Ian, 2026-11-17 pagi) |
+| `handover/PRODUK_DIREKTUR_DERIVASI_0007.md` | `reference_doc` | 83 | 9464 | `8bd9d0bcccba` | PRODUK DIREKTUR — KERANGKA DERIVASI SLOT EVO 0007 |
+| `handover/PRODUK_DIREKTUR_PERTAMA.md` | `reference_doc` | 71 | 7068 | `2b243f1b816c` | PRODUK DIREKTUR PERTAMA — Siklus Direktur Organ director-strong |
+| `handover/PRODUK_DIREKTUR_SIKLUS_PELUANG.md` | `reference_doc` | 61 | 5660 | `3b777b30a8c0` | PRODUK DIREKTUR — SIKLUS SINTESIS PELUANG |
 | `handover/PROPOSER_STAGE1_EXIT_GATE_VERDICT_20261114.md` | `verdict_decision` | 120 | 5838 | `46e901cd55be` | PROGRAM VERDICT — PROPOSER ENGINE STAGE 1 EXIT GATE: NOT_PASSED |
 | `handover/PROPOSER_STAGE1_V2_EXIT_GATE_VERDICT_20261114.md` | `verdict_decision` | 42 | 3249 | `57b8c7df035f` | PROGRAM VERDICT — PROPOSER ENGINE STAGE 1 V2 EXIT GATE: PARTIAL (QUALITY PASS) |
 | `handover/PROPOSER_STAGE2_CONSTITUTION_VERDICT_20261114.md` | `verdict_decision` | 43 | 6127 | `50dcc6f69068` | PROPOSER STAGE 2 — ISOLATED STAGING & CONSTITUTION ENGINE VERDICT (2026-11-14) |
 | `handover/RANCANGAN_EVO_0007.md` | `spec_governance` | 65 | 2677 | `53031e6d95e6` | RANCANGAN EVO 0007 — Recall Pola Terdistilasi ala Katalog |
+| `handover/RANCANGAN_EVO_0009.md` | `spec_governance` | 223 | 12129 | `f2b30f22b62b` | RANCANGAN EVO 0009 — Menyalakan Lagi Mesin Belajar ACE di atas Organ API + Jalur Tulis Ingatan Kogn… |
+| `handover/RANCANGAN_FONDASI_BARU_0007.md` | `spec_governance` | 115 | 6004 | `6b415bb268e7` | RANCANGAN FONDASI BARU PRAREGISTRASI EVO 0007 |
 | `handover/SERVING_INTEGRATION_REVIEW_20261114.md` | `slate_serving` | 128 | 7807 | `addb982557b4` | SERVING PACKAGE — INTEGRATION REVIEW (2026-11-14) |
 | `handover/SPESIFIKASI_WS2_REL_DAN_BUKTI.md` | `spec_governance` | 87 | 3313 | `e7c1fcebb292` | Spesifikasi WS-2 — Rel yang Dicakup & Kriteria Bukti per Rel |
+| `handover/TAHAP1_OTAK_KUAT_REGISTRASI.md` | `reference_doc` | 68 | 3219 | `0ebffb584399` | TAHAP 1 OTAK KUAT — Registrasi Organ Director-Strong |
+| `handover/TAHAP1_TAMBAHAN_GONKA.md` | `reference_doc` | 49 | 2039 | `984e29b0ee78` | TAHAP 1 — TAMBAHAN ORGAN GONKA (director-strong ketiga) |
 | `handover/VALIDATOR_PRAAUDIT_V1_SPESIFIKASI_20261113.md` | `spec_governance` | 139 | 6541 | `204f6fd62008` | SPESIFIKASI KANDIDAT — VALIDATOR PRA-AUDIT v1 (2026-11-13) |
 | `handover/VERIFICATION_VENV_NOTE_20261115.md` | `audit_accounting` | 54 | 2068 | `9a692a5aabd8` | NOTA — Venv Verifikasi Rumah Kustodi Sandbox |
 | `handover/absorption_audit_20261115/engine_runtime/autonomous_engine.status.json` | `manifest_json` | 16 | 369 | `8c424170c776` | schema: ace.autonomous_engine.status.v1 |
@@ -171,7 +190,7 @@
 | `handover/sqlite-vec-trial/trial.py` | `helper_script` | 155 | 7400 | `9bbd2936d744` | sqlite-vec trial — ECOSYSTEM INTAKE #01 candidate #4 protocol. |
 | `handover/stack_intake/INTAKE_V2_20261116.json` | `consolidation_ops` | 1 | 1731 | `5809f86998c3` | status: INTAKEN_AND_VERIFIED — not loaded, not served; bench stage follows |
 
-## 3. Inventaris `docs/` (267 berkas)
+## 3. Inventaris `docs/` (269 berkas)
 
 | Berkas | Kategori | Baris | Byte | SHA-256 | Judul / Ringkasan |
 | --- | --- | ---: | ---: | --- | --- |
@@ -213,15 +232,17 @@
 | `docs/ACE_SELFMODEL_PRESCORE_V1.md` | `reference_doc` | 58 | 5888 | `0a9d1fdecfcd` | ACE Fase 4 — Functional Self-Model & Metacognition: PRE-REGISTRATION |
 | `docs/ACE_SELFMODEL_RESULTS_V1.md` | `reference_doc` | 40 | 4108 | `74cce49f7873` | ACE Fase 4 — Functional Self-Model & Metacognition: Results & Verification |
 | `docs/ACE_VISION_ALIGNMENT_CURRENT.md` | `reference_doc` | 122 | 22945 | `3e7934850d77` | ACE Vision Alignment, Historical Reconstruction, and Capability Matrix (2026-11-07) |
+| `docs/ARSITEKTUR_ENGINE.md` | `reference_doc` | 145 | 12430 | `8a0c17b62b05` | Arsitektur engine ACE |
 | `docs/AUDIT_REMEDIATION_STATUS.md` | `audit_accounting` | 61 | 4154 | `d81457b60b88` | Audit remediation status |
-| `docs/BUILDER_ONBOARDING_PACK.md` | `reference_doc` | 64 | 3656 | `192e309b3da9` | Paket Onboarding Kontributor Builder ACE — ACE |
+| `docs/BUILDER_ONBOARDING_PACK.md` | `reference_doc` | 66 | 3729 | `953a948a60c3` | Paket Onboarding Kontributor Builder ACE — ACE |
 | `docs/COMPOSITION_PROTOCOL_V03.md` | `reference_doc` | 48 | 3244 | `1f880488514f` | ACE v0.3: counterexample-triggered representation composition |
 | `docs/COMPOSITION_PROTOCOL_V031.md` | `reference_doc` | 14 | 889 | `809ede373ab8` | Protocol feasibility amendment v0.3.1 |
 | `docs/COMPOSITION_RESULTS_V03.md` | `reference_doc` | 84 | 5178 | `808029e06d80` | ACE v0.3 — learned counter/guard composition |
+| `docs/DOCS_INDEX_MAINTENANCE_20261119.md` | `reference_doc` | 28 | 1980 | `bab2a8c0f519` | Pemeliharaan Indeks Dokumen — 2026-11-19 (E8) |
 | `docs/LAPORAN_HASIL_RISET_HP.md` | `reference_doc` | 63 | 5202 | `4e5fe567d704` | 📱 Laporan Hasil Riset ACE (Terbaca di Layar HP) |
 | `docs/PRD_ACE_v0.1.md` | `reference_doc` | 190 | 18816 | `03887aef928b` | PRODUCT REQUIREMENTS DOCUMENT (PRD) |
-| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54796 | `c1ea6f668f07` | Glosarium Istilah Teknis ACE — ACE |
-| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23831 | `17a30eec82d6` | Kartografi Repositori ACE — ACE |
+| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54710 | `a08ab1607ca5` | Glosarium Istilah Teknis ACE — ACE |
+| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23831 | `8922febf16af` | Kartografi Repositori ACE — ACE |
 | `docs/REPO_INDEX.md` | `reference_doc` | 2545 | 205836 | `f67ada15f27e` | Indeks Repositori — ACE |
 | `docs/UPSTREAM_SOURCES.json` | `manifest_json` | 106 | 4914 | `cf6ffc77386a` | schema: ace.source-integration.v1 |
 | `docs/architecture/ACE_INDEPENDENT_HOST_CONTROLLER_SPEC_20261107.md` | `spec_governance` | 145 | 8693 | `b24b7c2ff49b` | ACE Independent Host Controller & Evaluation Architecture Specification |
@@ -289,7 +310,7 @@
 | `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md` | `audit_accounting` | 55 | 6356 | `af7459e3a353` | Akuntansi Penutup Garis H — Produksi & Rel Pendapatan Luring (Gravity) |
 | `docs/research/ACE_GRAVITY_GARIS_I_AKUNTANSI.md` | `audit_accounting` | 110 | 15716 | `0a3bee1369c5` | Akuntansi Penutup Garis I & Rekapitulasi Induk Final — Satu Runtime Jauh (Gravity) |
 | `docs/research/ACE_GRID_GENERALIZATION_RESULTS_20261112.md` | `research_report` | 68 | 3131 | `70a9be5c9a1c` | ACE Ω — Hasil Semesta Generalisasi Grid (Tahap F, 2026-11-12) |
-| `docs/research/ACE_HANDOVER_DECISIONS_EXTRACTED.md` | `research_report` | 187 | 28473 | `df8259af3b2d` | Ekstraksi Keputusan Pemilik/Hub, Verdit, & Usulan Terbuka |
+| `docs/research/ACE_HANDOVER_DECISIONS_EXTRACTED.md` | `research_report` | 187 | 28025 | `36864a61b6e8` | Ekstraksi Keputusan Pemilik/Hub, Verdit, & Usulan Terbuka |
 | `docs/research/ACE_HOST_FOUNDATION_CHECKPOINT_20261109.md` | `research_report` | 43 | 2769 | `d4140a16e2e7` | Host-assisted ACE foundation checkpoint — 2026-11-09 |
 | `docs/research/ACE_INTERNAL_REASONING_PROTOCOL_20261110.md` | `research_report` | 72 | 4282 | `f9af4818bfae` | ACE internal reasoning integration — protocol v1 |
 | `docs/research/ACE_KBM_PILOT_DESIGN_20261113.md` | `spec_governance` | 142 | 6398 | `361026c6c074` | ACE KBM Pilot — Design Package (business study ladder, rung 2) |
@@ -373,7 +394,7 @@
 | `docs/research/ACE_PHASE2_RESIDUAL_DIAGNOSIS_20261112.md` | `research_report` | 50 | 2276 | `f646f6dc23f8` | ACE Fase 2 — Probe Residu Pilot: Bukan Pencarian, Melainkan Identifiabilitas Sinyal (2026-11-12) |
 | `docs/research/ACE_PHASE2_SHIPPING_MEASUREMENT_20261112.md` | `research_report` | 53 | 2602 | `113476d2a226` | ACE Fase 2 — Pengukuran Kelemahan Keluarga Shipping (2026-11-12) |
 | `docs/research/ACE_PILOT_ABC_V2_RESULTS_20261112.md` | `research_report` | 53 | 2308 | `9ffbea987169` | Pilot A/B/C v2 — Hasil (Fase 2, tahap 9) |
-| `docs/research/ACE_PLATFORM_REQUIREMENTS_SUMMARY.md` | `research_report` | 172 | 34455 | `386c088bc6da` | Ringkasan Persyaratan Platform & Monetisasi ACE |
+| `docs/research/ACE_PLATFORM_REQUIREMENTS_SUMMARY.md` | `research_report` | 172 | 34455 | `b755b916222a` | Ringkasan Persyaratan Platform & Monetisasi ACE |
 | `docs/research/ACE_REGRESSION_ANCHOR_20261113.md` | `research_report` | 67 | 2677 | `8e5ab1eb34b1` | Regression anchor — design + first self-test |
 | `docs/research/ACE_RESUME_DRILL_20261112.md` | `research_report` | 75 | 3392 | `49995ff49043` | ACE Resume Drill & G1 Criteria v2 — 2026-11-12 (Stage J) |
 | `docs/research/ACE_ROUND2_GATE_DESIGN_20261113.md` | `spec_governance` | 246 | 9661 | `ba1dcc06e895` | Round-2 gate design — the lifted mechanism behind a replication guard |

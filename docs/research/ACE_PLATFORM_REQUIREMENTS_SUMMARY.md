@@ -4,8 +4,8 @@
 
 ## 1. Statistik Pemindaian
 
-- Berkas Markdown dipindai: **458**
-- Total baris dipindai: **55017**
+- Berkas Markdown dipindai: **479**
+- Total baris dipindai: **56976**
 - Total sitasi syarat/batasan terpilih: **118** across `5` kelompok platform
 
 ### Distribusi Tag Syarat
@@ -20,7 +20,7 @@
 
 ## KBM App (Pilot Cerita Bersambung & SeaBank)
 
-- Total kecocokan terdeteksi: **104** | Ditampilkan: **25**
+- Total kecocokan terdeteksi: **112** | Ditampilkan: **25**
 
 | Sumber & Baris | Kategori | Kutipan Persyaratan / Kendala |
 | --- | --- | --- |
@@ -124,7 +124,7 @@
 | `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md:42` | `payout_fee_threshold`, `verification_blocker` | 3. Penumpukan biaya Lynk.id di atas biaya transaksi 5% & verifikasi misi Facebook (menunggu panel pemilik). |
 | `docs/research/ACE_GRAVITY_GARIS_I_AKUNTANSI.md:79` | `payout_fee_threshold`, `verification_blocker`, `privacy_redaction` | - **0 eksekusi jaringan/HTTP live** & **0 eksekusi finansial/payout nyata** pada seluruh kode maupun suite pengujian Garis B–I (`DryRunOrganAdapter` E3 memblokir URL live; dashboard G1 memverifikasi `http://: False`, `ht… |
 | `docs/research/ACE_GRAVITY_GARIS_I_AKUNTANSI.md:109` | `payout_fee_threshold`, `verification_blocker` | 2. **Payout finansial nyata & 3 sel kontrak platform eksternal belum terverifikasi** (`evidence/handover/PELUANG_PANTAU_PERUBAHAN.md`, `ADDENDUM59`): durasi eksklusivitas KBM di aplikasi mobile, kontradiksi biaya penarik… |
-| `docs/research/ACE_HANDOVER_DECISIONS_EXTRACTED.md:137` | `verification_blocker` | \| `handover/SPESIFIKASI_WS2_REL_DAN_BUKTI.md:70` \| `repo_record` \| `gravity-proposal` \| - **Facebook** — syarat misinya belum terverifikasi di \| |
+| `docs/research/ACE_HANDOVER_DECISIONS_EXTRACTED.md:141` | `verification_blocker` | \| `handover/SPESIFIKASI_WS2_REL_DAN_BUKTI.md:70` \| `repo_record` \| `gravity-proposal` \| - **Facebook** — syarat misinya belum terverifikasi di \| |
 | `docs/research/ACE_KBM_PILOT_DESIGN_20261113.md:64` | `exclusivity_ip` | cannot be re-sold on Lynk.id, serialized on Facebook, or |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM34.md:120` | `verification_blocker` | 5. **Facebook path (candidate, unverified terms):** the |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM38.md:130` | `verification_blocker` | Facebook mission verification remains blocked on the |

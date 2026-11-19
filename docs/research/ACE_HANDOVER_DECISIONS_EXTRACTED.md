@@ -4,8 +4,8 @@
 
 ## 1. Ringkasan Pemindaian
 
-- Berkas `handover/` & `docs/` dipindai: **297**
-- Total baris dipindai: **35286**
+- Berkas `handover/` & `docs/` dipindai: **316**
+- Total baris dipindai: **37173**
 - Total butir tersitasi: **140**
 - Tag asal ringkasan: `gravity-proposal`
 
@@ -20,7 +20,7 @@
 
 ## Aturan Tata Kelola & Kontrak Tetap (`GOVERNANCE_RULE`)
 
-- Kecocokan total: **245** | Ditampilkan: **35**
+- Kecocokan total: **252** | Ditampilkan: **35**
 
 | Sumber & Baris | Aktor Sumber | Asal Ringkasan | Kutipan |
 | --- | --- | --- | --- |
@@ -49,20 +49,20 @@
 | `docs/ACE_SELFMODEL_RESULTS_V1.md:39` | `repo_record` | `gravity-proposal` | - **`H4` Honest Memory-Drop Uncertainty (`PASS`)**: Purging `36` non-mandatory episodic rows in `I4` reduced recalled episodes from `6` to exact `0` (zero hallucinated history), retained all `4/4` HMAC-signed mandatory s… |
 | `docs/research/ACE_B3_CORPUS_GOVERNANCE.md:1` | `repo_record` | `gravity-proposal` | # Garis B3 · Tata Kelola Korpus (Perkakas Baru) |
 | `docs/research/ACE_CONTROL_REGRESSION_DESIGN_DRAFT_20261113.md:199` | `repo_record` | `gravity-proposal` | ## 4. Staged experiment plan |
-| `docs/research/ACE_COVERAGE_AND_FLAKY_AUDIT.md:115` | `repo_record` | `gravity-proposal` | ## Berkas Wilayah Terlarang yang Dilewati Eksplisit |
-| `docs/research/ACE_D1_FUZZ_HARDENING.md:24` | `repo_record` | `gravity-proposal` | **Status wilayah terlarang:** Tidak ada instrumen verdict (`evo0007_run.py`, judge/scorer, runner preregistrasi) maupun jalur tulis memory store (`memory_writeback.py`, jalur tulis `cognitive_memory.py`) yang disentuh at… |
 | `docs/security/ACE_HOST_BOUNDARY_V2_SPEC_20261107.md:87` | `repo_record` | `gravity-proposal` | \| **5. Rules Tampering** \| `rules.min_gain = 0.0` \| FrozenInstanceError on immutable rules \| **BLOCKED (PASS)** \| |
 | `handover/EVO_0003_STAGING_NOTE.md:48` | `repo_record` | `gravity-proposal` | ## Dialogue corpus (tail) — STAGED v1 |
 | `handover/GOVERNANCE_RULES_20261115.md:1` | `repo_record` | `gravity-proposal` | # Aturan Tata Kelola Tetap — ACE Ω (15 November 2026) |
 | `handover/GOVERNANCE_RULES_20261115.md:9` | `repo_record` | `gravity-proposal` | ## Aturan 1 — Kandidat self-dev hanya berhasil bila hidup |
 | `handover/GOVERNANCE_RULES_20261115.md:30` | `repo_record` | `gravity-proposal` | ## Aturan 2 — Ratifikasi independen adalah standar |
+| `handover/PRODUK_DIREKTUR_PERTAMA.md:24` | `repo_record` | `gravity-proposal` | - **Prediksi terfalsifikasi:** Setelah aktivasi normalisasi, deviasi standar skor judge antar‑run (dalam 5 run selanjutnya) ≤ 5 % → usulan berhasil; > 5 % → gagal. |
+| `handover/PRODUK_DIREKTUR_PERTAMA.md:69` | `repo_record` | `gravity-proposal` | - **Prediksi terfalsifikasi:** Setelah menutup toggle dan menjalankan satu‑kali *royalty_audit* (menggunakan tiga‑bukti), laporan menunjukkan pendapatan ≥ Rp1 000 (angka arbitrer > 0) → usulan berhasil; jika tidak, gagal… |
 | `handover/PROPOSER_STAGE2_CONSTITUTION_VERDICT_20261114.md:32` | `repo_record` | `gravity-proposal` | \| `C1_DO_NOT_RUN_BLOCK` \| `EP1-G3-APPLICATION.txt` (`G3-20261113-LOCKED`) \| `recommended_option="do_not_run"` ratified -> `dispatch_staged` refuses (`DoNotRunError`), `runs_created=0` \| **PASS** \| |
 | `handover/PROPOSER_STAGE2_CONSTITUTION_VERDICT_20261114.md:36` | `repo_record` | `gravity-proposal` | \| `C5_IRREVOCABLE_MIDFLIGHT_REVOCATION` \| `EP5-G4-INHERITANCE.txt` (`G4-HERIT-20261113`) \| Mid-flight `revoke_staged(actor="evidence")` -> `STOPPED` (`revoked_at_seq:26`), `preaudit_exit_code=0`, re-ratify blocked (`Revo… |
 | `handover/local_state_sweep_20261115/study-ace-77cca3c.md:46` | `repo_record` | `gravity-proposal` | ## 2. TATA KELOLA & KLAIM — APA KATA REPO TENTANG DIRINYA |
 
 ## Keputusan Pemilik / Hub / Verdict (`OWNER_HUB_DECISION`)
 
-- Kecocokan total: **793** | Ditampilkan: **35**
+- Kecocokan total: **810** | Ditampilkan: **35**
 
 | Sumber & Baris | Aktor Sumber | Asal Ringkasan | Kutipan |
 | --- | --- | --- | --- |
@@ -104,20 +104,19 @@
 
 ## Butir Diparkir / Terblokir / Menunggu (`PARKED_OR_BLOCKED`)
 
-- Kecocokan total: **384** | Ditampilkan: **35**
+- Kecocokan total: **392** | Ditampilkan: **35**
 
 | Sumber & Baris | Aktor Sumber | Asal Ringkasan | Kutipan |
 | --- | --- | --- | --- |
-| `docs/ACE_AUTONOMOUS_RUNTIME_DEEP_RESEARCH_20261107.md:96` | `repo_record` | `gravity-proposal` | → REJECTED \| STAGED_FOR_REVIEW \| HALT_UNCERTAIN |
-| `docs/ACE_AUTONOMY_CORE_PRESCORE_V01.md:38` | `repo_record` | `gravity-proposal` | Scientific NOT_ASSESSED; OAIE, unrestricted repair, new representation classes |
-| `docs/ACE_AUTONOMY_CORE_PRESCORE_V01.md:40` | `repo_record` | `gravity-proposal` | its own verified sandbox and is blocked until then. |
-| `docs/ACE_AUTONOMY_IMPLEMENTATION_GATES_20261107.md:122` | `repo_record` | `gravity-proposal` | - Preserve complete ancestry and rejected variants; record model-provider weights/version when available, not only patch source. |
 | `docs/evolution/neutral_archive_prescore_20261109.md:11` | `repo_record` | `gravity-proposal` | Budget cap: 24 tasks x 5 arms x 25 proposals = 3000 proposal evaluations; 24 x 3 = 72 unique environment labels, reused across arms; 24 x 4 = 96 terminal labels for measurement; negative control additional 4 terminal lab… |
 | `docs/research/ACE_CROSS_FAMILY_TRANSFER_PRESCORE_V1.md:3` | `repo_record` | `gravity-proposal` | **State: DESIGN ONLY; scoring prohibited pending release gates.** Proposed on 2026-11-09. Research base `main` c0fd5bdb0b8654a3f6a50d9043eae77f50ef40b3; the integration candidate PR #93 is a separate, unmerged, changing … |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM23.md:1` | `pemilik` | `gravity-proposal` | # ACE Ω — Addendum 23, 2026-11-12: Tahap A — Rantai Blocker OMEGA-03, Vonis BLOCKED yang Persis, dan Amendemen Arah Pemilik |
 | `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM29.md:30` | `repo_record` | `gravity-proposal` | **rejected** oleh validator (proposal ke-3 tidak menyitir |
 | `docs/research/hypgen/ACE_F10_HYPOTHESIS_SYNTHESIS_PRESCORE_20261107.md:13` | `repo_record` | `gravity-proposal` | Prior autonomous execution in ACE Fase 9 (`code/ace_research_agenda/coordinator.py`) demonstrated autonomous multi-cycle execution, but its hypothesis proposal mechanism selected hypotheses from a fixed, hand-authored ca… |
 | `docs/research/self_dev/ACE_SELF_DEV_LOOP_V01_RESULTS_20261107.md:92` | `repo_record` | `gravity-proposal` | - **Proposal Title:** `ACE Self-Dev Cycle 1: task_k2_modular_stride_shift [REJECTED]` |
+| `handover/AMANDEMEN_EVO_0007_JUDGE_NVIDIA.md:82` | `repo_record` | `gravity-proposal` | dan tanpa kunci; tugasnya diparkir. Tangga kontingensi |
+| `handover/BAHAN_SIKLUS_DIREKTUR_PERTAMA.md:26` | `repo_record` | `gravity-proposal` | dengan ENAM slot kosong yang menunggu vonis penerus 0006: pita |
+| `handover/BAHAN_SIKLUS_DIREKTUR_PERTAMA.md:42` | `repo_record` | `gravity-proposal` | - **Self-send (PR #241):** putaran 4 selesai (42/42), menunggu vonis |
 | `handover/DESAIN_KIRIM_SENDIRI_ACE_20261116.md:26` | `repo_record` | `gravity-proposal` | auth gh/git untuk origin BELUM terverifikasi (pintu jatuh saat |
 | `handover/DESAIN_KIRIM_SENDIRI_ACE_20261116.md:118` | `repo_record` | `gravity-proposal` | (mengembalikan "BLOCKED: candidate-bound independent evaluation |
 | `handover/DESAIN_KIRIM_SENDIRI_ACE_20261116.md:202` | `repo_record` | `gravity-proposal` | ABSEN; gh auth tetap parkir menunggu verifikasi putaran ini. |
@@ -126,6 +125,9 @@
 | `handover/EVO_0003_STAGING_NOTE.md:16` | `repo_record` | `gravity-proposal` | 1801 suitable-unused, 1802 rejected) |
 | `handover/PETA_ARAH_SERIBU_TAHUN.md:33` | `repo_record` | `gravity-proposal` | G4 INHERITANCE_DEMONSTRATED; G5 NOT_ASSESSED |
 | `handover/PETA_ARAH_SERIBU_TAHUN.md:106` | `pemilik` | `gravity-proposal` | yang oleh pemilik sendiri diparkir bila ia memakan |
+| `handover/PRAREGISTRASI_EVO_0007_FINAL_DRAF.md:11` | `repo_record` | `gravity-proposal` | Praregistrasi 0007 lama menunggu vonis penerus 0006; vonis itu |
+| `handover/PRODUK_DIREKTUR_PERTAMA.md:59` | `repo_record` | `gravity-proposal` | - **Alasan:** Kegagalan berulang menunjukkan bug deterministik pada algoritma lift (item agenda → konsekuensi pemalsuan). Memperbaikinya dapat membuka jalur agenda baru yang sebelumnya terblokir. |
+| `handover/PRODUK_DIREKTUR_PERTAMA.md:67` | `repo_record` | `gravity-proposal` | - **Terikat celah:** 7. Lini KBM toggle “Selesai” masih terbuka; royalti pertama belum terverifikasi. |
 | `handover/PROPOSER_STAGE1_EXIT_GATE_VERDICT_20261114.md:33` | `repo_record` | `gravity-proposal` | \| EP1 G3 application \| 699 \| 887 \| REJECTED \| 0 \| 100 \| −100 \| |
 | `handover/PROPOSER_STAGE1_EXIT_GATE_VERDICT_20261114.md:36` | `repo_record` | `gravity-proposal` | \| EP4 control-regression attribution \| 764 \| 841 \| REJECTED \| 0 \| 90 \| −90 \| |
 | `handover/PROPOSER_STAGE1_EXIT_GATE_VERDICT_20261114.md:37` | `repo_record` | `gravity-proposal` | \| EP5 G4 inheritance \| 863 \| 891 \| REJECTED \| 0 \| 80 \| −80 \| |
@@ -134,41 +136,20 @@
 | `handover/PROPOSER_STAGE1_EXIT_GATE_VERDICT_20261114.md:71` | `repo_record` | `gravity-proposal` | under the locked rule a validator-rejected package scores 0, |
 | `handover/PROPOSER_STAGE2_CONSTITUTION_VERDICT_20261114.md:12` | `pemilik` | `gravity-proposal` | `FORBIDDEN_RATIFICATION_TERMS` (`owner_approval`, `owner_permission`, `izin_pemilik`, `persetujuan_pemilik`) are rejected fail-closed across proposal packages, `request_id`, ratification records, revocation metadata, sto… |
 | `handover/RANCANGAN_EVO_0007.md:5` | `repo_record` | `gravity-proposal` | 0007 menunggu vonis penerus 0006 — karena mesin probe |
+| `handover/RANCANGAN_EVO_0009.md:5` | `pemilik` | `gravity-proposal` | rancangan vonis-uang yang parkir atas steer pemilik 2026-11-18. |
+| `handover/RANCANGAN_FONDASI_BARU_0007.md:6` | `repo_record` | `gravity-proposal` | (kerangka 17 Nov menunggu vonis penerus) karena vonis itu tidak |
 | `handover/SPESIFIKASI_WS2_REL_DAN_BUKTI.md:70` | `repo_record` | `gravity-proposal` | - **Facebook** — syarat misinya belum terverifikasi di |
 | `handover/local_state_sweep_20261115/misi9/MISI9_LAPORAN.md:104` | `repo_record` | `gravity-proposal` | G5 NOT_ASSESSED) BERDIRI — tidak ada dokumen papan gerbang yang berubah |
 | `handover/local_state_sweep_20261115/study-ace-77cca3c.md:55` | `repo_record` | `gravity-proposal` | - **[BERKAS]** `release_gate=BLOCK_RELEASE`, `scientific_status=NOT_ASSESSED`, `oaie_established=False` — verbatim sama di `STATUS.md` §5, `README.md`, `TEST_READY.md` §5, `docs/ACE_VISION_ALIGNMENT_CURRENT.md`, dan blok… |
 | `handover/local_state_sweep_20261115/study-ace-77cca3c.md:148` | `repo_record` | `gravity-proposal` | - Governance verbatim: `{"release_gate": "BLOCK_RELEASE", "scientific_status": "NOT_ASSESSED", "oaie_established": false}`. |
 | `handover/local_state_sweep_20261115/study-ace-77cca3c.md:181` | `repo_record` | `gravity-proposal` | - **G5:** **tidak ada** berkas panen G5 di `evidence/`. Yang ada hanya memo kesiapan yang menyatakan verbatim: "Status: MEMO KESIAPAN — bukan panen, bukan praregistrasi, bukan penilaian. G5 tetap NOT_ASSESSED." (`evidenc… |
-| `handover/local_state_sweep_20261115/study-ace-77cca3c.md:207` | `hub` | `gravity-proposal` | Papan Ω repo sendiri (Addendum 59/60, §2.3) **identik** dengan papan hub: G2 NOT_DEMONSTRATED, G3 SPECIALIZATION, G4 INHERITANCE_DEMONSTRATED, round-2 LIFT_DEMONSTRATED, G5 NOT_ASSESSED. Proposer stage-1 v1 NOT_PASSED da… |
-| `handover/local_state_sweep_20261115/study-ace-77cca3c.md:212` | `pemilik` | `gravity-proposal` | 2. **`STATUS.md` kontradiksi diri + basi.** Header `CONFIRMED_SEALED (diotorisasi pemilik)` vs §5-nya sendiri `NOT_ASSESSED/BLOCK_RELEASE`; bertanggal 8 Nov/commit `de1f644` sementara tree 15 Nov; `CURRENT_STATE.md`/`NEX… |
-| `handover/local_state_sweep_20261115/study-ace-77cca3c.md:228` | `repo_record` | `gravity-proposal` | - **[KODE] yang benar-benar bekerja:** jalur terukur grid/discovery/scorer (tersambung, tanpa import hilang, tanpa stub); instrumen gerbang fail-closed; proposer/validator/battery sebagai subsistem mandiri yang utuh; `co… |
-| `handover/local_state_sweep_20261115/study-ace-77cca3c.md:230` | `repo_record` | `gravity-proposal` | - Repo ini secara tidak biasa **memuat koreksinya sendiri**: dokumen audit internal (`docs/validation/ACE_OAIE_AUDIT_20261110.md`, `docs/research/ACE_OMEGA_CAPABILITY_AUDIT_20261111.md`), field governance `BLOCK_RELEASE/… |
 
 ## Usulan / Draf / Langkah Berikutnya (`OPEN_PROPOSAL`)
 
-- Kecocokan total: **263** | Ditampilkan: **35**
+- Kecocokan total: **341** | Ditampilkan: **35**
 
 | Sumber & Baris | Aktor Sumber | Asal Ringkasan | Kutipan |
 | --- | --- | --- | --- |
-| `docs/research/ACE_CODEX_A2_AGENDA.md:1` | `repo_record` | `gravity-proposal` | # Garis A2 — usulan agenda dari aset dan bukti handover |
-| `docs/research/ACE_CODEX_GARIS_A_AKUNTANSI.md:41` | `repo_record` | `gravity-proposal` | ## Usulan tranche berikutnya untuk Garis A |
-| `docs/research/ACE_CODEX_GARIS_A_AKUNTANSI.md:54` | `repo_record` | `gravity-proposal` | ## Antrean berikutnya |
-| `docs/research/ACE_EVO_EXPERIMENT_SUPPORT_A4.md:6` | `repo_record` | `gravity-proposal` | ## Templat praregistrasi dari rancangan |
-| `docs/research/ACE_MASTER_PROMPT_ANTIGRAVITY_UNIVERSAL_OFFLINE_OAIE_20261110.md:1274` | `repo_record` | `gravity-proposal` | ## 38. STATE, ANTREAN, LEASE, DAN CRASH RECOVERY |
-| `docs/research/ACE_MISSION_ADMISSION_PROTOCOL_20261110.md:23` | `repo_record` | `gravity-proposal` | ## Rancangan terkunci sebelum implementasi/scoring |
-| `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM10.md:58` | `repo_record` | `gravity-proposal` | ## Antrean berikutnya |
-| `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM17.md:40` | `repo_record` | `gravity-proposal` | ## Urutan tahap berikutnya (dalam mandat) |
-| `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM4.md:39` | `repo_record` | `gravity-proposal` | ## Draf vonis (usulan direktur program) |
-| `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM8.md:48` | `repo_record` | `gravity-proposal` | ## Antrean Fase 1 berikutnya |
-| `docs/research/ACE_OMEGA_CHECKPOINT_20261112_ADDENDUM9.md:52` | `repo_record` | `gravity-proposal` | ## Antrean berikutnya |
-| `docs/research/ACE_ORGAN_SMOKE_PROTOCOL.md:5` | `repo_record` | `gravity-proposal` | ## Kontrak yang Diuji (§2.5 Rancangan EVO 0009) |
-| `docs/research/ACE_PHASE2_PILOT_ABC_RESULTS_20261112.md:62` | `repo_record` | `gravity-proposal` | ## Konsekuensi untuk tahap berikutnya |
-| `docs/research/ACE_PHASE2_SHIPPING_MEASUREMENT_20261112.md:42` | `repo_record` | `gravity-proposal` | ## Konsekuensi terukur untuk tahap berikutnya |
-| `docs/research/ACE_SELF_FUNDING_DESIGN_STUDY_20261112.md:81` | `pemilik` | `gravity-proposal` | ## 5. Tahap berikutnya (bila pemilik memberi mandat studi lanjut) |
-| `docs/research/ACE_W3_ADMISSION_PRESCORE_20261110.md:27` | `repo_record` | `gravity-proposal` | ## Rancangan terkunci |
-| `docs/research/ACE_WS1_KBM_LOCAL_QUEUE.md:1` | `repo_record` | `gravity-proposal` | # Antrean produksi lokal KBM WS-1 |
-| `docs/research/ACE_WS8_DRAFT_RELEASE_PREFLIGHT.md:1` | `repo_record` | `gravity-proposal` | # Preflight draf dan daftar periksa rilis WS-8 |
-| `docs/research/self_dev/ACE_SELF_DEV_LOOP_V01_RESULTS_20261107.md:89` | `repo_record` | `gravity-proposal` | ### Phase 6 & 7: Checkpoint & Proposal |
 | `handover/ABSORPTION_AUDIT_20261115.md:1` | `hub` | `gravity-proposal` | # AUDIT PENYERAPAN BELAJAR — Inventaris + Klasifikasi (DRAF untuk hub) |
 | `handover/ABSORPTION_AUDIT_20261115.md:41` | `repo_record` | `gravity-proposal` | ## Rancangan aktivasi kandidat #12 (guard default-on) |
 | `handover/ABSORPTION_AUDIT_20261115.md:61` | `repo_record` | `gravity-proposal` | ## Usulan urutan eksekusi kelas (b) |
@@ -178,10 +159,29 @@
 | `handover/EVO_0006_BAHAN_INHERITANCE.md:15` | `repo_record` | `gravity-proposal` | ## Bentuk uji (draf) |
 | `handover/MEMORY_WRITE_PATH_DESIGN_20261115.md:1` | `repo_record` | `gravity-proposal` | # RANCANGAN — Jalur Tulis Engine → Ingatan Kognitif |
 | `handover/MEMORY_WRITE_PATH_DESIGN_20261115.md:2` | `hub` | `gravity-proposal` | ## (Audit penyerapan PR #231, butir #8 — rancangan dulu, hub menilai) |
+| `handover/PENAPISAN_PRODUK_DIREKTUR_PERTAMA.md:31` | `repo_record` | `gravity-proposal` | ## Vonis per usulan |
 | `handover/PREREGISTRASI_EVO_0003_DRAF.md:1` | `repo_record` | `gravity-proposal` | # PRAREGISTRASI EVO 0003 — BENTUK KILAT (DRAF) |
 | `handover/PREREGISTRASI_EVO_0004_DRAF.md:1` | `hub` | `gravity-proposal` | # RANCANGAN EVO 0004 — draft praregistrasi (dirancang hub, 2026-11-16) |
 | `handover/PREREGISTRASI_EVO_0005_DRAF.md:1` | `hub` | `gravity-proposal` | # PREREGISTRASI EVO 0005 — DRAF (Ian, 2026-11-16; untuk ratifikasi hub) |
 | `handover/PREREGISTRASI_EVO_0006_DRAF.md:1` | `engineer_utama` | `gravity-proposal` | # PREREGISTRASI EVO 0006 — DRAF (Ian, 2026-11-16 malam) |
 | `handover/PREREGISTRASI_EVO_0006_PENERUS_DRAF.md:1` | `engineer_utama` | `gravity-proposal` | # PREREGISTRASI PENERUS EVO 0006 — DRAF (Ian, 2026-11-17 pagi) |
+| `handover/PRODUK_DIREKTUR_PERTAMA.md:12` | `repo_record` | `gravity-proposal` | ## Usulan 1: **Metrik Sumber‑Agenda ACE** |
+| `handover/PRODUK_DIREKTUR_PERTAMA.md:21` | `repo_record` | `gravity-proposal` | ## Usulan 2: **Normalisasi Variansi Judge di Gelombang 2** |
+| `handover/PRODUK_DIREKTUR_PERTAMA.md:30` | `repo_record` | `gravity-proposal` | ## Usulan 3: **Transformasi Pengetahuan Sebelum Recall EVO 0007** |
+| `handover/PRODUK_DIREKTUR_PERTAMA.md:39` | `repo_record` | `gravity-proposal` | ## Usulan 4: **Profiling & Batch‑Sizing Dinamis untuk Front‑OOM 6 GiB** |
+| `handover/PRODUK_DIREKTUR_PERTAMA.md:48` | `repo_record` | `gravity-proposal` | ## Usulan 5: **Keep‑Alive Ping untuk Chat‑Streaming (Opsi D)** |
+| `handover/PRODUK_DIREKTUR_PERTAMA.md:57` | `repo_record` | `gravity-proposal` | ## Usulan 6: **Analisis & Perbaikan Mekanisme Lift G2 (Tiga Nol)** |
+| `handover/PRODUK_DIREKTUR_PERTAMA.md:66` | `repo_record` | `gravity-proposal` | ## Usulan 7: **Finalisasi Serial 4 KBM & Validasi Royalti** |
+| `handover/PRODUK_DIREKTUR_SIKLUS_PELUANG.md:11` | `repo_record` | `gravity-proposal` | ## Usulan 1: Layanan Verifikasi “Rigour‑Verified” |
+| `handover/PRODUK_DIREKTUR_SIKLUS_PELUANG.md:20` | `repo_record` | `gravity-proposal` | ## Usulan 2: Paket Video Explainer 3D untuk Serial KBM |
+| `handover/PRODUK_DIREKTUR_SIKLUS_PELUANG.md:29` | `repo_record` | `gravity-proposal` | ## Usulan 3: SaaS “Royalty‑Track + Codex” untuk Penulis Indie |
+| `handover/PRODUK_DIREKTUR_SIKLUS_PELUANG.md:38` | `pemilik` | `gravity-proposal` | ## Usulan 4: Karikatur + NFT = “Owner‑Avatar” Marketplace |
+| `handover/PRODUK_DIREKTUR_SIKLUS_PELUANG.md:47` | `repo_record` | `gravity-proposal` | ## Usulan 5: “Codex‑Assisted” Penulisan Serial Interaktif |
+| `handover/PRODUK_DIREKTUR_SIKLUS_PELUANG.md:56` | `repo_record` | `gravity-proposal` | ## Usulan 6: Lisensi “Render‑Headless” untuk Agensi Eksternal |
 | `handover/RANCANGAN_EVO_0007.md:1` | `repo_record` | `gravity-proposal` | # RANCANGAN EVO 0007 — Recall Pola Terdistilasi ala Katalog |
+| `handover/RANCANGAN_EVO_0009.md:1` | `repo_record` | `gravity-proposal` | # RANCANGAN EVO 0009 — Menyalakan Lagi Mesin Belajar ACE di atas Organ API + Jalur Tulis Ingatan Kognitif |
+| `handover/RANCANGAN_EVO_0009.md:71` | `repo_record` | `gravity-proposal` | ## 2. Rancangan relight |
+| `handover/RANCANGAN_EVO_0009.md:149` | `repo_record` | `gravity-proposal` | ## 3. Rancangan write-back (mengadopsi rancangan 15 Nov) |
+| `handover/RANCANGAN_FONDASI_BARU_0007.md:1` | `repo_record` | `gravity-proposal` | # RANCANGAN FONDASI BARU PRAREGISTRASI EVO 0007 |
+| `handover/RANCANGAN_FONDASI_BARU_0007.md:110` | `repo_record` | `gravity-proposal` | ## 5. Yang rancangan ini bukan |
 | `handover/local_state_sweep_20261115/misi9/inventory_notes.md:1` | `repo_record` | `gravity-proposal` | # Misi 9 — Inventarisasi 08bd836..7541782 (draf kerja, 2026-11-15) |
