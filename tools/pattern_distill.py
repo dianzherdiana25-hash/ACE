@@ -248,7 +248,10 @@ def _extract_pitfalls(reasons_raw: Any, score: float | None, margin: float | Non
 def _as_optional_float(value: Any) -> float | None:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         return None
-    f = float(value)
+    try:
+        f = float(value)
+    except OverflowError:
+        return None
     return f if f == f and abs(f) != float("inf") else None
 
 
@@ -309,7 +312,9 @@ def distill_evidence(
                 raise PatternDistillError("Record lama melampaui --max-chars; append dibatalkan.")
             existing_records.append(old)
             ep_id = str(old.get("source_episode", ""))
-            sha = str((old.get("provenance") or {}).get("output_sha256", ""))
+            prov_raw = old.get("provenance")
+            prov = prov_raw if isinstance(prov_raw, dict) else {}
+            sha = str(prov.get("output_sha256", ""))
             seen_keys.add((ep_id, sha))
 
     distilled: list[dict[str, Any]] = []

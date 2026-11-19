@@ -12,22 +12,27 @@ Setiap PR parser atau pengubah format masukan baru di `tools/` wajib lulus uji m
 
 Exception kontrak yang terdokumentasi eksplisit (mis. `ValueError`, `*InputError`, `JSONDecodeError`, `OSError`) diterima sebagai penolakan masukan korup yang terkendali; exception tak terduga seperti `TypeError`, `KeyError`, `AttributeError`, atau `IndexError` dihitung sebagai crash yang wajib diperbaiki pada parser pemilik.
 
-## Target Aktif & Opsional
+## Target Aktif & Opsional (33 Target pada Garis D1)
 
-1. **Target `tools/` inti (selalu aktif):**
+1. **Target `tools/` inti (selalu aktif — 3 target):**
    - `ace_mobile_dashboard.parse_logs_to_stories`
    - `ace_ai_diagnostic.audit_consultations`
    - `dashboard_state_build.rp_to_int`
-2. **Target `code/` non-verdict aman (selalu aktif di `main`):**
-   - `ace_visual_bridge.cli.process`
-   - `ace_host_exchange.contracts.verify_request_and_candidate`
-   - `ace_autonomy.policy.BudgetCeiling.from_dict`
-   - `ace_code_agent.codebase_reader.read_failure_history`
-3. **Target `tools/` opsional (aktif bila modul hadir di branch kerja):**
+2. **Target `code/` non-verdict aman (selalu aktif — 6 target):**
+   - `code.ace_visual_bridge.cli.process`
+   - `code.ace_host_exchange.contracts.verify`
+   - `code.ace_autonomy.policy.BudgetCeiling`
+   - `code.ace_code_agent.read_failure_history`
+   - `code.ace_code_agent.verify_receipt`
+   - `code.ace_indo_nlp.syllabify_and_morphology`
+3. **Target `tools/` opsional (aktif bila modul hadir di branch kerja — 24 target):**
    - `corpus_lint.lint_file`, `screen_census.compute_census`, `corpus_registry`, `stage_verify.verify_stage`, `bench_table.summarize_bench`, `pack_evidence.verify_evidence`
-   - `pattern_distill.distill_patterns`, `four_arm_report.build_report`, `corpus_tag.tag_corpus`
-   - `cover_check.decode_image_dimensions`, `royalty_track.parse_decimal_amount`, `kbm_schedule.build_schedule`
-   - `kbm_split.split_manuscript`, `kbm_pack_check.check_package`
+   - `pattern_distill.distill_evidence`, `four_arm_report.analyze_four_arms`, `corpus_tag.tag_corpus`
+   - `cover_check.check_cover`, `royalty_track.summarize_royalties`, `kbm_schedule.build_schedule`
+   - `kbm_split.split_manuscript`, `kbm_pack_check.check_package`, `kbm_pipeline.run_pipeline`
+   - `curriculum_gen.generate_curricula`, `portability_pack.verify_bundle`, `instance_kit.validate_isolation`
+   - `ruleset_readiness.check_repo_readiness`, `opportunity_register.generate_proposals`, `repo_status_dashboard.collect_and_render`
+   - `self_send_audit_view.inspect_audit_files`, `repo_index.build_and_render`, `daily_digest.build_daily_digest`
 
 ## Perintah Standar
 
@@ -38,5 +43,5 @@ python3 -m unittest -v tools.test_fuzz_parsers
 
 ## Kebijakan Wilayah Terlarang
 
-- Harness fuzz **tidak boleh** diarahkan ke instrumen verdict, penilai aktif (`ace_evaluator`, `abc_v3_scorer`, `round2_instrument`, `g*_instrument`), maupun jalur tulis store (`memory_writeback`).
-- Jika pengujian fuzz menemukan bug pada modul yang berada di luar cakupan tugas aktif, catat temuan secara eksplisit melalui laporan atau `@unittest.expectedFailure` tanpa memodifikasi berkas target secara diam-diam.
+- Harness fuzz **tidak boleh** diarahkan ke instrumen verdict, penilai aktif (`ace_evaluator`, `abc_v3_scorer`, `round2_instrument`, `g*_instrument`, `evo0007_run`), maupun jalur tulis store (`memory_writeback`, jalur tulis `cognitive_memory`).
+- Jika pengujian fuzz menemukan bug pada modul `code/` yang berada di luar cakupan tugas aktif, catat temuan secara eksplisit melalui laporan atau `@unittest.expectedFailure` tanpa memodifikasi berkas target secara diam-diam.

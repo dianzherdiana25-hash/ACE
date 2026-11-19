@@ -223,7 +223,7 @@ def summarize_register(
     proposal_by_origin = {"ACE-origin": 0, "human-origin": 0}
     for prop in proposals:
         attr = prop.get("origin_attribution")
-        if attr in proposal_by_origin:
+        if isinstance(attr, str) and attr in proposal_by_origin:
             proposal_by_origin[attr] += 1
 
     total_existing = len(existing_entries)

@@ -195,17 +195,26 @@ def validate_isolation(
         allowed_root_raw = cfg.get("allowed_root")
         allowed_root: Optional[Path] = None
         if isinstance(allowed_root_raw, str) and allowed_root_raw.strip():
-            allowed_root = Path(os.path.abspath(allowed_root_raw)).resolve()
-            if check_symlinks:
-                sym = _check_symlink_components(Path(os.path.abspath(allowed_root_raw)))
-                if sym:
-                    violations.append(
-                        {
-                            "kind": "symlink_allowed_root",
-                            "instance": inst_id,
-                            "detail": f"allowed_root mengandung symlink: {sym}",
-                        }
-                    )
+            if "\x00" in allowed_root_raw:
+                violations.append(
+                    {
+                        "kind": "invalid_path_nul_byte",
+                        "instance": inst_id,
+                        "detail": "allowed_root mengandung NUL byte tersembunyi.",
+                    }
+                )
+            else:
+                allowed_root = Path(os.path.abspath(allowed_root_raw)).resolve()
+                if check_symlinks:
+                    sym = _check_symlink_components(Path(os.path.abspath(allowed_root_raw)))
+                    if sym:
+                        violations.append(
+                            {
+                                "kind": "symlink_allowed_root",
+                                "instance": inst_id,
+                                "detail": f"allowed_root mengandung symlink: {sym}",
+                            }
+                        )
 
         for field in DIR_FIELDS:
             raw_val = dirs.get(field)
@@ -215,6 +224,15 @@ def validate_isolation(
                         "kind": "missing_directory_field",
                         "instance": inst_id,
                         "detail": f"Direktori wajib '{field}' hilang/kosong.",
+                    }
+                )
+                continue
+            if "\x00" in raw_val:
+                violations.append(
+                    {
+                        "kind": "invalid_path_nul_byte",
+                        "instance": inst_id,
+                        "detail": f"{field} mengandung NUL byte tersembunyi.",
                     }
                 )
                 continue

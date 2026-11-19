@@ -56,6 +56,7 @@ def _parse_python_module(path: Path, rel_posix: str) -> dict[str, Any]:
             "path": rel_posix,
             "docstring": "",
             "raw_imports": [],
+            "from_imports": [],
             "relative_imports": [],
         }
 

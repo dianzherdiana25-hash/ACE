@@ -99,11 +99,20 @@ def evaluate_readiness(
     pr_rule = rules_map.get("pull_request")
     pr_rule_params = pr_rule.get("parameters", {}) if isinstance(pr_rule, dict) else {}
 
+    def _safe_nonneg_int(raw: Any, default: int = 0) -> int:
+        if raw is None or isinstance(raw, bool):
+            return default
+        try:
+            parsed = int(raw)
+        except (ValueError, TypeError, OverflowError):
+            return default
+        return parsed if parsed >= 0 else default
+
     required_approvals = 0
     if isinstance(pr_reviews, dict):
-        required_approvals = int(pr_reviews.get("required_approving_review_count") or 0)
+        required_approvals = _safe_nonneg_int(pr_reviews.get("required_approving_review_count"))
     elif isinstance(pr_rule_params, dict) and "required_approving_review_count" in pr_rule_params:
-        required_approvals = int(pr_rule_params.get("required_approving_review_count") or 0)
+        required_approvals = _safe_nonneg_int(pr_rule_params.get("required_approving_review_count"))
 
     pr_required_ok = bool(isinstance(pr_reviews, dict) or pr_rule is not None)
     approvals_ok = required_approvals >= 1

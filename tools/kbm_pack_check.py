@@ -67,6 +67,8 @@ def check_package(
     """Periksa integritas paket unggah KBM di `package_dir`."""
     if min_bytes < 0:
         raise KbmPackCheckError("Nilai --min-bytes tidak boleh negatif.")
+    if cover_name is not None and (not isinstance(cover_name, str) or "\x00" in cover_name):
+        raise KbmPackCheckError(f"Nama berkas sampul tidak sah: {cover_name!r}")
     if not package_dir.is_dir():
         raise KbmPackCheckError(f"Direktori paket tidak ditemukan: {package_dir}")
     if strict_cover and cover_name is not None and (

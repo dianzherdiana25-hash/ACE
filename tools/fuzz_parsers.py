@@ -493,9 +493,36 @@ def _make_optional_pattern_distill_fuzzer():
         ev = tmp / "fuzz_ev.jsonl"
         st = tmp / "fuzz_staging.jsonl"
         for i in range(iterations):
-            ev.write_text(_random_jsonl_payload(rng), encoding="utf-8")
+            if i % 10 == 0:
+                adv = "\n".join(
+                    [
+                        json.dumps(
+                            {
+                                "id": "ep1",
+                                "ratified": True,
+                                "output": "def f():\n    return 1\n",
+                                "score": rng.choice([10**400, float("nan"), None, "90"]),
+                                "margin": rng.choice([10**400, -1e308, []]),
+                                "reasons": rng.choice([123, ["a", None], {"k": 1}]),
+                            },
+                            allow_nan=True,
+                        ),
+                        '{"id": "ep2", "score": ' + ("9" * 5000) + "}",
+                    ]
+                )
+                ev.write_text(adv, encoding="utf-8")
+                if rng.random() < 0.5:
+                    st.write_text(json.dumps({"source_episode": "old", "provenance": rng.choice(["bad", [], None])}) + "\n", encoding="utf-8")
+            else:
+                ev.write_text(_random_jsonl_payload(rng), encoding="utf-8")
+            use_append = st.is_file() and i % 10 == 0 and rng.random() < 0.5
             try:
-                mod.distill_patterns([ev], out_path=st)
+                mod.distill_evidence(
+                    [ev],
+                    output_path=st,
+                    append=use_append,
+                    allow_empty=(i % 4 == 0),
+                )
             except (mod.PatternDistillError, OSError):
                 pass
             except Exception as exc:
@@ -513,11 +540,27 @@ def _make_optional_four_arm_fuzzer():
 
     def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
         crashes: list[dict[str, Any]] = []
-        arm = tmp / "fuzz_arm.jsonl"
+        arm = tmp / "fuzz_arm.json"
         for i in range(iterations):
-            arm.write_text(_random_jsonl_payload(rng), encoding="utf-8")
+            if i % 10 == 0:
+                payload: Any = rng.choice(
+                    [
+                        {"episodes": rng.choice(["bad", 123, {"x": 1}, None])},
+                        {"records": [None, 123]},
+                        [
+                            {"arm": "pattern", "ratified": True, "context_delivered": True, "score": 10**400},
+                            {"arm": "receipt", "ratified": False, "context_delivered": True, "score": None},
+                            {"arm": "sham", "ratified": False, "context_delivered": True, "error": {"msg": "x"}},
+                            {"arm": "no_context", "ratified": True},
+                        ],
+                    ]
+                )
+                arm.write_text(json.dumps(payload), encoding="utf-8")
+            else:
+                arm.write_text(_random_jsonl_payload(rng), encoding="utf-8")
             try:
-                mod.build_report([arm], strict=False)
+                rep = mod.analyze_four_arms([arm])
+                mod.render_markdown_report(rep)
             except (mod.FourArmReportError, OSError):
                 pass
             except Exception as exc:
@@ -650,6 +693,489 @@ def _make_optional_kbm_split_fuzzer():
     return _run
 
 
+def _make_optional_kbm_pack_check_fuzzer():
+    try:
+        mod = importlib.import_module("tools.kbm_pack_check")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        pkg_dir = tmp / "fuzz_kbm_pack"
+        pkg_dir.mkdir(exist_ok=True)
+        for i in range(iterations):
+            for existing in pkg_dir.iterdir():
+                if existing.is_file():
+                    existing.unlink()
+            if i % 3 != 0:
+                cover_file = pkg_dir / rng.choice(["cover.png", "cover.jpg", "cover.txt"])
+                cover_file.write_bytes(bytes(rng.randint(0, 255) for _ in range(rng.randint(0, 16))))
+            for k in range(rng.randint(0, 4)):
+                fname = rng.choice([f"bab_{k:02d}.md", "pendahuluan.md", "catatan.txt", "extra.json"])
+                (pkg_dir / fname).write_text(_random_text(rng, 120), encoding="utf-8")
+            cover_name = "bad\x00cover.png" if i % 20 == 0 else None
+            try:
+                mod.check_package(pkg_dir, min_bytes=10, cover_name=cover_name)
+            except (mod.KbmPackCheckError, OSError):
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
+def _make_optional_kbm_pipeline_fuzzer():
+    try:
+        mod = importlib.import_module("tools.kbm_pipeline")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        ms = tmp / "fuzz_pipe_ms.md"
+        out_dir = tmp / "fuzz_pipe_out"
+        for i in range(iterations):
+            ms.write_text(_random_text(rng, 200), encoding="utf-8")
+            try:
+                mod.run_pipeline(ms, out_dir, min_words=5, min_bytes=5)
+            except (mod.KbmPipelineError, mod.KbmSplitError, mod.KbmPackCheckError, OSError):
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
+def _make_optional_curriculum_gen_fuzzer():
+    try:
+        mod = importlib.import_module("tools.curriculum_gen")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        cand = tmp / "fuzz_curr_cand.jsonl"
+        cens = tmp / "fuzz_curr_cens.json"
+        stag = tmp / "fuzz_curr_stag.jsonl"
+        prop_out = tmp / "fuzz_curr_prop.jsonl"
+        base_out = tmp / "fuzz_curr_base.jsonl"
+        for i in range(iterations):
+            if i % 5 == 0:
+                cand.write_text('{"id":"e1","kind":"episode","task_kind":"code","instruction":"x"}\n', encoding="utf-8")
+            else:
+                cand.write_text(_random_jsonl_payload(rng), encoding="utf-8")
+            cens.write_text(_random_jsonl_payload(rng), encoding="utf-8")
+            if i % 10 == 0:
+                stag.write_text(
+                    json.dumps({"source_episode": "e1", "task_shape": {"keywords": rng.choice([123, {"a": 1}, "str"])}})
+                    + "\n",
+                    encoding="utf-8",
+                )
+            else:
+                stag.write_text(_random_jsonl_payload(rng), encoding="utf-8")
+            try:
+                mod.generate_curricula(
+                    candidates_path=cand,
+                    census_path=cens,
+                    proposed_out=prop_out,
+                    baseline_out=base_out,
+                    staging_path=stag if i % 2 == 0 else None,
+                )
+            except (mod.CurriculumGenError, OSError):
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
+def _make_optional_portability_pack_fuzzer():
+    import io
+    import tarfile
+
+    try:
+        mod = importlib.import_module("tools.portability_pack")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        bdir = tmp / "fuzz_port_dir"
+        (bdir / "payload").mkdir(parents=True, exist_ok=True)
+        arc = tmp / "fuzz_port.tar.gz"
+        for i in range(iterations):
+            if i % 2 == 0:
+                if i % 10 == 0:
+                    raw = json.dumps(
+                        {
+                            "schema": mod.SCHEMA_VERSION,
+                            "files": [
+                                {"path": rng.choice([None, 123, "../escape", "bad\x00file"]), "bytes": True, "sha256": 0},
+                                rng.choice(["bad_item", 42]),
+                            ],
+                        }
+                    )
+                else:
+                    raw = json.dumps(_random_json_value(rng)) if rng.random() < 0.7 else _random_text(rng, 120)
+                (bdir / "manifest.json").write_text(raw, encoding="utf-8")
+                try:
+                    mod.verify_bundle(bdir)
+                except (mod.PortabilityPackError, OSError):
+                    pass
+                except Exception as exc:
+                    crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+            else:
+                if i % 15 == 1:
+                    buf = io.BytesIO()
+                    with tarfile.open(fileobj=buf, mode="w:gz") as tf:
+                        ti = tarfile.TarInfo("manifest.json")
+                        data = b"{}"
+                        ti.size = len(data)
+                        tf.addfile(ti, io.BytesIO(data))
+                    raw_tar = buf.getvalue()
+                    arc.write_bytes(raw_tar[: max(1, len(raw_tar) // 2)])
+                else:
+                    arc.write_bytes(bytes(rng.randint(0, 255) for _ in range(rng.randint(0, 96))))
+                try:
+                    mod.verify_bundle(arc)
+                except (mod.PortabilityPackError, OSError):
+                    pass
+                except Exception as exc:
+                    crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
+def _make_optional_instance_kit_fuzzer():
+    try:
+        mod = importlib.import_module("tools.instance_kit")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        cfg_file = tmp / "fuzz_instance.json"
+        for i in range(iterations):
+            if i % 10 == 0:
+                cfgs: Any = [
+                    {
+                        "schema": mod.SCHEMA_VERSION,
+                        "instance_id": "inst-fuzz",
+                        "allowed_root": "/tmp/a\x00b",
+                        "directories": {
+                            "workspace_dir": "/tmp/w\x00x",
+                            "store_dir": rng.choice(["/tmp/s", 123, None]),
+                            "cache_dir": "/tmp/c",
+                            "log_dir": "/tmp/l",
+                        },
+                        "ports": rng.choice([{"api": True}, {"api": 10**40}, "bad"]),
+                        "lock_namespace": rng.choice(["lk", None]),
+                        "second_instance_active": False,
+                    }
+                ]
+            else:
+                val = _random_json_value(rng)
+                cfgs = val if isinstance(val, list) and val else [val]
+            cfg_file.write_text(
+                json.dumps(cfgs if i % 3 != 0 else _random_json_value(rng)) if rng.random() < 0.7 else _random_text(rng, 100),
+                encoding="utf-8",
+            )
+            try:
+                mod.validate_isolation(cfgs)
+                mod.load_instance_config(cfg_file)
+            except (mod.InstanceKitError, OSError):
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
+def _make_optional_ruleset_readiness_fuzzer():
+    try:
+        mod = importlib.import_module("tools.ruleset_readiness")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        snap = tmp / "fuzz_ruleset_snap.json"
+        for i in range(iterations):
+            if i % 10 == 0:
+                raw = json.dumps(
+                    {
+                        "protection": {
+                            "required_pull_request_reviews": {
+                                "required_approving_review_count": rng.choice(["bad", [], {}, 10**400])
+                            }
+                        },
+                        "branch_rules": rng.choice([123, [{"type": "pull_request", "parameters": {"required_approving_review_count": "nope"}}]]),
+                    }
+                )
+            else:
+                raw = json.dumps(_random_json_value(rng)) if rng.random() < 0.7 else _random_text(rng, 100)
+            snap.write_text(raw, encoding="utf-8")
+            try:
+                rep = mod.check_repo_readiness(repo="owner/repo", snapshot_path=snap)
+                mod.render_markdown(rep)
+            except (mod.RulesetReadinessError, OSError):
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
+def _make_optional_opportunity_register_fuzzer():
+    try:
+        mod = importlib.import_module("tools.opportunity_register")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        assets_f = tmp / "fuzz_opp_assets.json"
+        reg_f = tmp / "fuzz_opp_reg.jsonl"
+        for i in range(iterations):
+            if i % 10 == 0:
+                assets_f.write_text(
+                    json.dumps(
+                        {
+                            "v1": {"kind": "venue", "name": "KBM"},
+                            "c1": {"kind": "capability", "name": "Cap"},
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+                reg_f.write_text(json.dumps({"origin_attribution": {"bad": 1}, "combination": ["v1", "c1"]}) + "\n", encoding="utf-8")
+            else:
+                assets_f.write_text(
+                    json.dumps(_random_json_value(rng)) if rng.random() < 0.7 else _random_text(rng, 100),
+                    encoding="utf-8",
+                )
+                reg_f.write_text(_random_jsonl_payload(rng), encoding="utf-8")
+            try:
+                assets = mod.load_assets(assets_f)
+                existing = mod.load_registered_entries(reg_f)
+                props = mod.generate_proposals(assets, existing, max_proposals=5)
+                if i % 10 == 0:
+                    props.append({"origin_attribution": ["unhashable"]})
+                mod.summarize_register(props, existing)
+            except (mod.OpportunityRegisterToolError, OSError):
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
+def _make_optional_repo_status_dashboard_fuzzer():
+    try:
+        mod = importlib.import_module("tools.repo_status_dashboard")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        repo = tmp / "fuzz_dash_repo"
+        (repo / "docs").mkdir(parents=True, exist_ok=True)
+        (repo / "handover").mkdir(parents=True, exist_ok=True)
+        panel_f = tmp / "fuzz_dash_panel.json"
+        for i in range(iterations):
+            if i % 10 == 0:
+                (repo / "handover" / "FUZZ_CORPUS.jsonl").write_text(_random_jsonl_payload(rng), encoding="utf-8")
+                panel_obj: Any = {
+                    "file_count": "bad",
+                    "valid_rows": None,
+                    "invalid_rows": [],
+                    "files": [{"path": "a.txt", "size": "oops", "sha256": 123}, "bad"],
+                    "totals_by_serial": {"s1": {"total_units": "nan", "row_count": None}},
+                    "summary": {"completed": "x", "scheduled": {}, "overdue": "bad", "total_debt_files": None, "total_debt_bytes": []},
+                    "serials": [{"id": "s1", "completed_count": "a", "total_chapters": None, "overdue_count": []}],
+                    "programs": {"p1": {"file_count": "z", "total_bytes": None, "files": 123}},
+                }
+            else:
+                val = _random_json_value(rng)
+                panel_obj = val if isinstance(val, dict) else {"value": val}
+            panel_f.write_text(json.dumps(panel_obj), encoding="utf-8")
+            try:
+                st = mod.collect_repo_status(
+                    repo,
+                    stage_file=panel_f,
+                    heartbeat_file=panel_f,
+                    royalty_file=panel_f,
+                    schedule_file=panel_f,
+                    storage_debt_file=panel_f,
+                )
+                mod.render_dashboard_html(st)
+            except (ValueError, OSError):
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
+def _make_optional_self_send_audit_view_fuzzer():
+    try:
+        mod = importlib.import_module("tools.self_send_audit_view")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        audit_f = tmp / "fuzz_self_send.jsonl"
+        for i in range(iterations):
+            audit_f.write_text(_random_jsonl_payload(rng), encoding="utf-8")
+            try:
+                rep = mod.inspect_audit_files([audit_f])
+                mod.render_markdown(rep)
+            except (mod.AuditViewError, OSError):
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
+def _make_optional_repo_index_fuzzer():
+    try:
+        mod = importlib.import_module("tools.repo_index")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        sub = tmp / "fuzz_repo_index"
+        sub.mkdir(exist_ok=True)
+        py_f = sub / "sample_mod.py"
+        for i in range(iterations):
+            if i % 5 == 0:
+                py_f.write_bytes(b"\xff\xfe\x00def broken(")
+            else:
+                py_f.write_text(_random_text(rng, 160), encoding="utf-8")
+            try:
+                idx = mod.build_repo_index(sub)
+                mod.render_markdown_index(idx)
+            except (ValueError, OSError):
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
+def _fuzz_indo_nlp_syllabify(rng: random.Random, iterations: int, _tmp: Path) -> list[dict[str, Any]]:
+    from ace_indo_nlp import morphology, phonotactics
+
+    crashes: list[dict[str, Any]] = []
+    roots = frozenset({"ajar", "tulis", "baca", "uji", "cari", "kata"})
+    for i in range(iterations):
+        word = _random_text(rng, 48)
+        try:
+            phonotactics.syllabify_indonesian(word)
+            morphology.analyze_morphology(word, known_roots=roots)
+        except Exception as exc:
+            crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+    return crashes
+
+
+def _fuzz_patch_diagnostic_verify_receipt(rng: random.Random, iterations: int, _tmp: Path) -> list[dict[str, Any]]:
+    from ace_code_agent import patch_diagnostic
+
+    crashes: list[dict[str, Any]] = []
+    for i in range(iterations):
+        receipt = _random_json_value(rng)
+        if isinstance(receipt, dict) and rng.random() < 0.4:
+            receipt["receipt_sha256"] = rng.choice(["0" * 64, None, 123, []])
+        try:
+            res = patch_diagnostic.verify_receipt(receipt)  # type: ignore[arg-type]
+            if not isinstance(res, bool):
+                raise AssertionError(f"Expected bool, got {type(res).__name__}")
+        except Exception as exc:
+            crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+    return crashes
+
+
+def _make_optional_daily_digest_fuzzer():
+    import subprocess
+
+    try:
+        mod = importlib.import_module("tools.daily_digest")
+    except ImportError:
+        return None
+
+    def _run(rng: random.Random, iterations: int, tmp: Path) -> list[dict[str, Any]]:
+        crashes: list[dict[str, Any]] = []
+        repo = tmp / "fuzz_digest_git"
+        if not (repo / ".git").exists():
+            repo.mkdir(exist_ok=True)
+            subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+            subprocess.run(["git", "config", "user.email", "fuzz@local"], cwd=repo, check=True)
+            subprocess.run(["git", "config", "user.name", "fuzz"], cwd=repo, check=True)
+            (repo / "init.txt").write_text("init", encoding="utf-8")
+            subprocess.run(["git", "add", "init.txt"], cwd=repo, check=True)
+            subprocess.run(["git", "commit", "-q", "-m", "init"], cwd=repo, check=True)
+
+        sig_file = tmp / "fuzz_digest_sig.json"
+        for i in range(iterations):
+            payload = _random_json_value(rng) if rng.random() < 0.7 else _random_text(rng, 100)
+            sig_file.write_text(
+                payload if isinstance(payload, str) else json.dumps(payload),
+                encoding="utf-8",
+            )
+            try:
+                if i % 10 == 0:
+                    digest = mod.build_daily_digest(
+                        repo,
+                        max_commits=5,
+                        stage_file=str(sig_file),
+                        heartbeat_file=str(sig_file),
+                        royalty_file=str(sig_file),
+                        schedule_file=str(sig_file),
+                        storage_debt_file=str(sig_file),
+                        dashboard_file=str(sig_file),
+                    )
+                    mod.render_markdown(digest)
+                else:
+                    warnings: list[str] = []
+                    loaded = mod._load_optional_json(str(sig_file), "fuzz", warnings)
+                    signals = mod._summarize_signals(
+                        stage_data=loaded,
+                        heartbeat_data=loaded,
+                        royalty_data=loaded,
+                        schedule_data=loaded,
+                        storage_debt_data=loaded,
+                        dashboard_data=loaded,
+                    )
+                    fake = {
+                        "digest_date": "2026-11-19",
+                        "workspace": {"branch": "main", "head_short": "abc", "clean": True, "staged_count": 0, "modified_count": 0, "untracked_count": 0},
+                        "summary": {"commit_count": 0, "author_count": 0, "touched_file_count": 0},
+                        "commits": [],
+                        "signals": signals,
+                        "warnings": warnings,
+                    }
+                    mod.render_markdown(fake)
+            except (mod.DailyDigestError, OSError):
+                pass
+            except Exception as exc:
+                crashes.append({"iteration": i, "exc_type": type(exc).__name__, "message": str(exc)})
+        return crashes
+
+    return _run
+
+
 def collect_targets() -> dict[str, Callable[[random.Random, int, Path], list[dict[str, Any]]]]:
     """Kumpulkan seluruh target parser `tools/` dan parser `code/` non-verdict."""
     targets: dict[str, Callable[[random.Random, int, Path], list[dict[str, Any]]]] = {
@@ -660,6 +1186,8 @@ def collect_targets() -> dict[str, Callable[[random.Random, int, Path], list[dic
         "code.ace_host_exchange.contracts.verify": _fuzz_host_exchange_contracts,
         "code.ace_autonomy.policy.BudgetCeiling": _fuzz_autonomy_budget_ceiling,
         "code.ace_code_agent.read_failure_history": _fuzz_codebase_reader_history,
+        "code.ace_indo_nlp.syllabify_and_morphology": _fuzz_indo_nlp_syllabify,
+        "code.ace_code_agent.verify_receipt": _fuzz_patch_diagnostic_verify_receipt,
     }
     optionals = {
         "corpus_lint.lint_file": _make_optional_corpus_lint_fuzzer(),
@@ -668,13 +1196,24 @@ def collect_targets() -> dict[str, Callable[[random.Random, int, Path], list[dic
         "stage_verify.verify_stage": _make_optional_stage_verify_fuzzer(),
         "bench_table.summarize_bench": _make_optional_bench_table_fuzzer(),
         "pack_evidence.verify_evidence": _make_optional_pack_evidence_fuzzer(),
-        "pattern_distill.distill_patterns": _make_optional_pattern_distill_fuzzer(),
-        "four_arm_report.build_report": _make_optional_four_arm_fuzzer(),
+        "pattern_distill.distill_evidence": _make_optional_pattern_distill_fuzzer(),
+        "four_arm_report.analyze_four_arms": _make_optional_four_arm_fuzzer(),
         "corpus_tag.tag_corpus": _make_optional_corpus_tag_fuzzer(),
         "cover_check.check_cover": _make_optional_cover_check_fuzzer(),
         "royalty_track.summarize_royalties": _make_optional_royalty_track_fuzzer(),
         "kbm_schedule.build_schedule": _make_optional_kbm_schedule_fuzzer(),
         "kbm_split.split_manuscript": _make_optional_kbm_split_fuzzer(),
+        "kbm_pack_check.check_package": _make_optional_kbm_pack_check_fuzzer(),
+        "kbm_pipeline.run_pipeline": _make_optional_kbm_pipeline_fuzzer(),
+        "curriculum_gen.generate_curricula": _make_optional_curriculum_gen_fuzzer(),
+        "portability_pack.verify_bundle": _make_optional_portability_pack_fuzzer(),
+        "instance_kit.validate_isolation": _make_optional_instance_kit_fuzzer(),
+        "ruleset_readiness.check_repo_readiness": _make_optional_ruleset_readiness_fuzzer(),
+        "opportunity_register.generate_proposals": _make_optional_opportunity_register_fuzzer(),
+        "repo_status_dashboard.collect_and_render": _make_optional_repo_status_dashboard_fuzzer(),
+        "self_send_audit_view.inspect_audit_files": _make_optional_self_send_audit_view_fuzzer(),
+        "repo_index.build_and_render": _make_optional_repo_index_fuzzer(),
+        "daily_digest.build_daily_digest": _make_optional_daily_digest_fuzzer(),
     }
     for name, fn in optionals.items():
         if fn is not None:
