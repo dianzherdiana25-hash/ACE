@@ -129,6 +129,63 @@ def verify_run(bundle: Path, *, manifest_sha256: str | None = None) -> dict:
             "manifest_pinned": manifest_sha256 is not None}
 
 
+BUNDLE_MATRIX_SCHEMA = "ace.bundle-matrix-audit.v1"
+
+
+def audit_bundle_matrix(entries: list[dict], *, base_dir: Path | None = None) -> dict:
+    """Audit sekumpulan bundel lintas paket terhadap manifest_sha256 yang dipin."""
+    if not isinstance(entries, list) or not entries:
+        raise ValueError("Daftar bundel matriks wajib tidak kosong.")
+    results = []
+    seen_packages = set()
+    for index, entry in enumerate(entries):
+        if not isinstance(entry, dict):
+            raise ValueError(f"Entri matriks #{index} wajib objek JSON.")
+        package = entry.get("package")
+        raw_bundle = entry.get("bundle")
+        pinned_sha = entry.get("manifest_sha256")
+        if not isinstance(package, str) or not package.strip():
+            raise ValueError(f"Entri matriks #{index} wajib memiliki nama package.")
+        if package in seen_packages:
+            raise ValueError(f"Nama package ganda pada matriks: {package}.")
+        seen_packages.add(package)
+        if not isinstance(raw_bundle, str) or not raw_bundle.strip():
+            raise ValueError(f"Entri matriks '{package}' wajib memiliki path bundle.")
+        if not isinstance(pinned_sha, str) or not SHA256.fullmatch(pinned_sha):
+            raise ValueError(f"Entri matriks '{package}' wajib mencantumkan manifest_sha256 64-hex.")
+        bundle_path = Path(raw_bundle)
+        if not bundle_path.is_absolute() and base_dir is not None:
+            bundle_path = base_dir / bundle_path
+        try:
+            ver = verify_run(bundle_path, manifest_sha256=pinned_sha)
+        except (OSError, ValueError) as exc:
+            ver = {
+                "action": "verify",
+                "valid": False,
+                "manifest_pinned": False,
+                "reason": "corrupt_or_unreadable_bundle",
+                "error": str(exc),
+            }
+        results.append({
+            "package": package,
+            "bundle": str(raw_bundle),
+            "expected_manifest_sha256": pinned_sha,
+            **ver,
+        })
+    results.sort(key=lambda row: row["package"])
+    valid_count = sum(1 for row in results if row.get("valid") is True)
+    return {
+        "schema": BUNDLE_MATRIX_SCHEMA,
+        "all_valid": valid_count == len(results),
+        "summary": {
+            "total_bundles": len(results),
+            "valid_count": valid_count,
+            "failed_count": len(results) - valid_count,
+        },
+        "bundles": results,
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     modes = parser.add_subparsers(dest="mode", required=True)
@@ -138,12 +195,19 @@ def main(argv: list[str] | None = None) -> int:
     verify = modes.add_parser("verify", help="Cek bundel dan opsional pin SHA-256 manifest.")
     verify.add_argument("bundle", type=Path)
     verify.add_argument("--manifest-sha256")
+    matrix = modes.add_parser("audit-matrix", help="Audit matriks bundel lintas paket dari spesifikasi JSON.")
+    matrix.add_argument("spec", type=Path)
     args = parser.parse_args(argv)
     try:
         if args.mode == "pack":
             result = seal_run(args.source, args.bundle)
-        else:
+        elif args.mode == "verify":
             result = verify_run(args.bundle, manifest_sha256=args.manifest_sha256)
+        else:
+            raw_spec = json.loads(args.spec.read_text(encoding="utf-8"), object_pairs_hook=_unique_fields)
+            result = audit_bundle_matrix(raw_spec, base_dir=args.spec.parent)
+            print(json.dumps(result, ensure_ascii=False, sort_keys=True, indent=2))
+            return 0 if result["all_valid"] else 2
     except (OSError, ValueError) as exc:
         parser.exit(2, f"Error: {exc}\n")
     print(json.dumps(result, ensure_ascii=False, sort_keys=True, indent=2))
