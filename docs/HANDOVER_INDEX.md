@@ -6,8 +6,8 @@
 
 - Schema: `ace.handover-index.v1`
 - Total berkas terindeks: **405** (`handover/`: **138**, `docs/`: **267**)
-- Total baris teks UTF-8: **77453**
-- Total ukuran: **4503220** byte
+- Total baris teks UTF-8: **77457**
+- Total ukuran: **4503943** byte
 - Symlink dilewati: **0**
 
 ### Distribusi Kategori
@@ -284,7 +284,7 @@
 | `docs/research/ACE_GRAVITY_GARIS_E_AKUNTANSI.md` | `audit_accounting` | 44 | 5126 | `980b8c8528d2` | Akuntansi Garis E · Perkakas Organ & Multi-Brain EVO 0009 (Strictly Offline) |
 | `docs/research/ACE_GRAVITY_GARIS_F_AKUNTANSI.md` | `audit_accounting` | 92 | 5975 | `0cd49900e0fa` | Akuntansi Penutup Garis F — Penyambungan & Integrasi Aman (Gravity) |
 | `docs/research/ACE_GRAVITY_GARIS_G_AKUNTANSI.md` | `audit_accounting` | 60 | 5748 | `ab78c64c9960` | Akuntansi Penutup Garis G — Permukaan Pemilik & Operasi (Gravity) |
-| `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md` | `audit_accounting` | 51 | 5633 | `a9e5f090a06b` | Akuntansi Penutup Garis H — Produksi & Rel Pendapatan Luring (Gravity) |
+| `docs/research/ACE_GRAVITY_GARIS_H_AKUNTANSI.md` | `audit_accounting` | 55 | 6356 | `af7459e3a353` | Akuntansi Penutup Garis H — Produksi & Rel Pendapatan Luring (Gravity) |
 | `docs/research/ACE_GRAVITY_GARIS_I_AKUNTANSI.md` | `audit_accounting` | 110 | 15716 | `0a3bee1369c5` | Akuntansi Penutup Garis I & Rekapitulasi Induk Final — Satu Runtime Jauh (Gravity) |
 | `docs/research/ACE_GRID_GENERALIZATION_RESULTS_20261112.md` | `research_report` | 68 | 3131 | `70a9be5c9a1c` | ACE Ω — Hasil Semesta Generalisasi Grid (Tahap F, 2026-11-12) |
 | `docs/research/ACE_HANDOVER_DECISIONS_EXTRACTED.md` | `research_report` | 187 | 28982 | `402b28a41f8d` | Ekstraksi Keputusan Pemilik/Hub, Verdit, & Usulan Terbuka |
@@ -371,7 +371,7 @@
 | `docs/research/ACE_PHASE2_RESIDUAL_DIAGNOSIS_20261112.md` | `research_report` | 50 | 2276 | `f646f6dc23f8` | ACE Fase 2 — Probe Residu Pilot: Bukan Pencarian, Melainkan Identifiabilitas Sinyal (2026-11-12) |
 | `docs/research/ACE_PHASE2_SHIPPING_MEASUREMENT_20261112.md` | `research_report` | 53 | 2602 | `113476d2a226` | ACE Fase 2 — Pengukuran Kelemahan Keluarga Shipping (2026-11-12) |
 | `docs/research/ACE_PILOT_ABC_V2_RESULTS_20261112.md` | `research_report` | 53 | 2308 | `9ffbea987169` | Pilot A/B/C v2 — Hasil (Fase 2, tahap 9) |
-| `docs/research/ACE_PLATFORM_REQUIREMENTS_SUMMARY.md` | `research_report` | 172 | 34455 | `1364da53daa2` | Ringkasan Persyaratan Platform & Monetisasi ACE |
+| `docs/research/ACE_PLATFORM_REQUIREMENTS_SUMMARY.md` | `research_report` | 172 | 34455 | `907452ce0d4e` | Ringkasan Persyaratan Platform & Monetisasi ACE |
 | `docs/research/ACE_REGRESSION_ANCHOR_20261113.md` | `research_report` | 67 | 2677 | `8e5ab1eb34b1` | Regression anchor — design + first self-test |
 | `docs/research/ACE_RESUME_DRILL_20261112.md` | `research_report` | 75 | 3392 | `49995ff49043` | ACE Resume Drill & G1 Criteria v2 — 2026-11-12 (Stage J) |
 | `docs/research/ACE_ROUND2_GATE_DESIGN_20261113.md` | `spec_governance` | 246 | 9661 | `ba1dcc06e895` | Round-2 gate design — the lifted mechanism behind a replication guard |

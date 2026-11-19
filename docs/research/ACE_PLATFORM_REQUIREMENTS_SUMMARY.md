@@ -5,7 +5,7 @@
 ## 1. Statistik Pemindaian
 
 - Berkas Markdown dipindai: **456**
-- Total baris dipindai: **54585**
+- Total baris dipindai: **54589**
 - Total sitasi syarat/batasan terpilih: **118** across `5` kelompok platform
 
 ### Distribusi Tag Syarat
