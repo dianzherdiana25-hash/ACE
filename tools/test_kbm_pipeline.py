@@ -250,5 +250,82 @@ class KbmPipelineTests(unittest.TestCase):
             self.assertFalse((bad_bundle / "upload_manifest.json").exists())
 
 
+class TestKbmSuiteV2Wiring(unittest.TestCase):
+    """Uji keterhubungan tools/kbm_suite_v2.py ke orkestrator tools/kbm_pipeline.py."""
+
+    @staticmethod
+    def _valid_png_bytes() -> bytes:
+        import struct
+        import zlib
+        from tools.cover_check import DEFAULT_RULES
+
+        width = int(DEFAULT_RULES.get("min_width") or 600)
+        height = int(DEFAULT_RULES.get("min_height") or 800)
+        min_bytes = int(DEFAULT_RULES.get("min_bytes") or 1024)
+
+        def chunk(ctype: bytes, payload: bytes) -> bytes:
+            body = ctype + payload
+            return struct.pack(">I", len(payload)) + body + struct.pack(">I", zlib.crc32(body) & 0xFFFFFFFF)
+
+        ihdr = chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
+        text_chunk = chunk(b"tEXt", b"Comment\x00" + (b"x" * max(64, min_bytes)))
+        idat = chunk(b"IDAT", zlib.compress(b"\x00\x00\x00\x00"))
+        iend = chunk(b"IEND", b"")
+        return b"\x89PNG\r\n\x1a\n" + ihdr + text_chunk + idat + iend
+
+    def test_qa_v2_passes_distinct_chapters_and_blocks_duplicates(self) -> None:
+        from tools import wiring_audit
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            cover = root / "sampul.png"
+            cover.write_bytes(self._valid_png_bytes())
+
+            ok_ms = root / "naskah_unik.md"
+            ok_ms.write_text(
+                "# Bab 1: Arah Baru\n" + _words(110, "alfa") + "\n\n"
+                "# Bab 2: Langkah Lanjut\n" + _words(115, "beta") + "\n",
+                encoding="utf-8",
+            )
+            proc_ok = subprocess.run(
+                [
+                    sys.executable, str(SCRIPT), str(ok_ms),
+                    "--output-dir", str(root / "out_ok"),
+                    "--cover-file", str(cover),
+                    "--min-words", "100",
+                    "--max-words", "200",
+                    "--min-bytes", "100",
+                    "--qa-v2",
+                ],
+                capture_output=True, text=True,
+            )
+            self.assertEqual(proc_ok.returncode, 0, proc_ok.stderr)
+            rep_ok = json.loads(proc_ok.stdout)
+            self.assertTrue(rep_ok["passed"])
+            self.assertTrue(rep_ok["qa_v2"]["qa_passed"])
+            self.assertEqual(rep_ok["qa_v2"]["duplicate_chapter_groups"], [])
+
+            overlong_ms = root / "naskah_panjang.md"
+            overlong_ms.write_text(
+                "# Bab 1: Pendek\n" + _words(110, "cukup") + "\n\n"
+                "# Bab 2: Kepanjangan\n" + _words(165, "panjang") + "\n",
+                encoding="utf-8",
+            )
+            rep_long = run_pipeline(
+                overlong_ms, root / "out_long",
+                cover_source=cover,
+                min_words=100, min_bytes=100, qa_v2=True, max_words=140,
+            )
+            self.assertFalse(rep_long["passed"])
+            self.assertTrue(rep_long["pack_valid"])
+            self.assertEqual(rep_long["failed_stage"], "qa_v2")
+            self.assertEqual(len(rep_long["qa_v2"]["pacing_violations"]), 1)
+
+        audit = wiring_audit.audit_wiring(REPO_ROOT)
+        by_path = {m["path"]: m for m in audit["modules"]}
+        self.assertEqual(by_path["tools/kbm_suite_v2.py"]["status"], "WIRED")
+        self.assertIn("tools/kbm_pipeline.py", by_path["tools/kbm_suite_v2.py"]["non_test_callers"])
+
+
 if __name__ == "__main__":
     unittest.main()
