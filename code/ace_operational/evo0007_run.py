@@ -483,9 +483,15 @@ def _gemini_generate(key: str, model: str, prompt: str,
         # that dies with a urllib traceback carries the HTTP
         # status deep in the trace, past any truncation.
         tag = " [quota]" if _is_quota_error(out.stderr) else ""
+        # The raised text carries the stderr TAIL, not the
+        # head: the HTTP status line sits at the END of the
+        # helper's traceback, and callers classify the error
+        # (quota pause vs 503 retry) from this text. A head
+        # truncation amputated the status and blinded the
+        # arms driver's 503 retry (measured 2026-11-19).
         raise RuntimeError(
             f"gemini helper ({key}) failed{tag}: "
-            f"{out.stderr.strip()[:300]}")
+            f"{out.stderr.strip()[-400:]}")
     result = json.loads(out.stdout)
     if isinstance(result.get("content"), str):
         return result["content"]
