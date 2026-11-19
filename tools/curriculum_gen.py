@@ -112,9 +112,11 @@ def _load_staging_coverage(staging_path: Path | None) -> tuple[set[str], set[str
             covered_ids.add(src.strip())
         shape = obj.get("task_shape")
         if isinstance(shape, dict):
-            for kw in shape.get("keywords") or []:
-                if isinstance(kw, str) and kw.strip():
-                    covered_keywords.add(kw.strip().lower())
+            raw_kws = shape.get("keywords")
+            if isinstance(raw_kws, list):
+                for kw in raw_kws:
+                    if isinstance(kw, str) and kw.strip():
+                        covered_keywords.add(kw.strip().lower())
     return covered_ids, covered_keywords
 
 

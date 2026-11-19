@@ -143,6 +143,17 @@ def _scan_corpora_fallback(handover_dir: Path) -> dict[str, Any]:
     return {"corpus_count": len(entries), "corpora": entries}
 
 
+def _safe_int(value: Any, default: int = 0) -> int:
+    if value is None or isinstance(value, bool):
+        return default
+    if isinstance(value, float) and (value != value or abs(value) == float("inf")):
+        return default
+    try:
+        return int(value)
+    except (ValueError, TypeError, OverflowError):
+        return default
+
+
 def extract_frozen_corpora(repo_root: Path) -> dict[str, Any]:
     """Muat daftar corpus beku dari `handover/` via `corpus_registry` bila ada."""
     handover_dir = repo_root.resolve() / "handover"
@@ -156,9 +167,9 @@ def extract_frozen_corpora(repo_root: Path) -> dict[str, Any]:
     except Exception:
         data = _scan_corpora_fallback(handover_dir)
 
-    corpora = list(data.get("corpora", []))
-    total_lines = sum(int(c.get("line_count", 0)) for c in corpora)
-    total_bytes = sum(int(c.get("size_bytes", 0)) for c in corpora)
+    corpora = [c for c in (data.get("corpora", []) if isinstance(data.get("corpora"), list) else []) if isinstance(c, dict)]
+    total_lines = sum(_safe_int(c.get("line_count", 0)) for c in corpora)
+    total_bytes = sum(_safe_int(c.get("size_bytes", 0)) for c in corpora)
     return {
         "corpus_count": len(corpora),
         "total_lines": total_lines,
@@ -259,12 +270,12 @@ def _render_stage_section(stage: dict[str, Any] | None) -> str:
     meta_html = (
         f"<p class='meta'>Schema: <code>{esc(str(stage.get('schema', '-')))}</code> "
         f"| Status: <span class='badge'>{esc(str(status_label or 'LOADED'))}</span> "
-        f"| Berkas: <strong>{int(stage.get('file_count', len(files)))}</strong></p>"
+        f"| Berkas: <strong>{_safe_int(stage.get('file_count'), len(files))}</strong></p>"
     )
     rows = "".join(
         "<tr>"
         f"<td><code>{esc(str(f.get('path', f.get('name', '-'))))}</code></td>"
-        f"<td class='num'>{int(f.get('size', f.get('size_bytes', 0)))}</td>"
+        f"<td class='num'>{_safe_int(f.get('size', f.get('size_bytes', 0)))}</td>"
         f"<td><code>{esc(str(f.get('sha256', '-'))[:12])}…</code></td>"
         "</tr>"
         for f in files[:25]
@@ -297,17 +308,18 @@ def _render_royalty_section(royalty: dict[str, Any] | None) -> str:
     totals_text = ", ".join(f"{cur}: {amt}" for cur, amt in sorted(totals.items())) if isinstance(totals, dict) else "-"
     meta_html = (
         f"<p class='meta'>Total Akumulasi: <strong>{esc(totals_text or '-')}</strong> "
-        f"| Baris Valid: <strong>{int(royalty.get('valid_rows', 0))}</strong> "
-        f"(Invalid: {int(royalty.get('invalid_rows', 0))})</p>"
+        f"| Baris Valid: <strong>{_safe_int(royalty.get('valid_rows', 0))}</strong> "
+        f"(Invalid: {_safe_int(royalty.get('invalid_rows', 0))})</p>"
     )
+    serial_items = sorted(by_serial.items()) if isinstance(by_serial, dict) else []
     rows = "".join(
         "<tr>"
         f"<td><code>{esc(str(serial))}</code></td>"
         f"<td><code>{esc(json.dumps(info.get('revenue_by_currency', {}), ensure_ascii=False))}</code></td>"
-        f"<td class='num'>{int(info.get('total_units', 0))}</td>"
-        f"<td class='num'>{int(info.get('row_count', 0))}</td>"
+        f"<td class='num'>{_safe_int(info.get('total_units', 0))}</td>"
+        f"<td class='num'>{_safe_int(info.get('row_count', 0))}</td>"
         "</tr>"
-        for serial, info in sorted(by_serial.items())
+        for serial, info in serial_items
         if isinstance(info, dict)
     ) or "<tr><td colspan='4' class='empty'>Belum ada entri penjualan per serial.</td></tr>"
     return (
@@ -325,16 +337,16 @@ def _render_schedule_section(sched: dict[str, Any] | None) -> str:
     serials = sched.get("serials", []) if isinstance(sched.get("serials"), list) else []
     meta_html = (
         f"<p class='meta'>As-of: <code>{esc(str(sched.get('as_of', '-')))}</code> "
-        f"| Completed: <strong>{int(summary.get('completed', 0))}</strong> "
-        f"| Scheduled: <strong>{int(summary.get('scheduled', 0))}</strong> "
-        f"| Overdue: <strong>{int(summary.get('overdue', 0))}</strong></p>"
+        f"| Completed: <strong>{_safe_int(summary.get('completed', 0))}</strong> "
+        f"| Scheduled: <strong>{_safe_int(summary.get('scheduled', 0))}</strong> "
+        f"| Overdue: <strong>{_safe_int(summary.get('overdue', 0))}</strong></p>"
     )
     rows = "".join(
         "<tr>"
         f"<td><code>{esc(str(s.get('id', '-')))}</code></td>"
         f"<td>{esc(str(s.get('title', '-')))}</td>"
-        f"<td class='num'>{int(s.get('completed_count', 0))}/{int(s.get('total_chapters', 0))}</td>"
-        f"<td class='num'>{int(s.get('overdue_count', 0))}</td>"
+        f"<td class='num'>{_safe_int(s.get('completed_count', 0))}/{_safe_int(s.get('total_chapters', 0))}</td>"
+        f"<td class='num'>{_safe_int(s.get('overdue_count', 0))}</td>"
         f"<td><code>{esc(str(s.get('projected_completion_date', '-')))}</code></td>"
         "</tr>"
         for s in serials
@@ -354,15 +366,15 @@ def _render_storage_debt_section(debt: dict[str, Any] | None) -> str:
     summary = debt.get("summary", {}) if isinstance(debt.get("summary"), dict) else {}
     programs = debt.get("programs", {}) if isinstance(debt.get("programs"), dict) else {}
     meta_html = (
-        f"<p class='meta'>Total Berkas Belum Ter-commit/Tersinkron: <strong>{int(summary.get('total_debt_files', 0))}</strong> "
-        f"| Total Ukuran: <strong>{int(summary.get('total_debt_bytes', 0))}</strong> byte</p>"
+        f"<p class='meta'>Total Berkas Belum Ter-commit/Tersinkron: <strong>{_safe_int(summary.get('total_debt_files', 0))}</strong> "
+        f"| Total Ukuran: <strong>{_safe_int(summary.get('total_debt_bytes', 0))}</strong> byte</p>"
     )
     rows = "".join(
         "<tr>"
         f"<td><code>{esc(str(prog))}</code></td>"
-        f"<td class='num'>{int(info.get('file_count', 0))}</td>"
-        f"<td class='num'>{int(info.get('total_bytes', 0))}</td>"
-        f"<td><code>{esc(', '.join(str(x.get('path', '')) for x in info.get('files', [])[:3] if isinstance(x, dict)))}</code></td>"
+        f"<td class='num'>{_safe_int(info.get('file_count', 0))}</td>"
+        f"<td class='num'>{_safe_int(info.get('total_bytes', 0))}</td>"
+        f"<td><code>{esc(', '.join(str(x.get('path', '')) for x in (info.get('files') if isinstance(info.get('files'), list) else [])[:3] if isinstance(x, dict)))}</code></td>"
         "</tr>"
         for prog, info in sorted(programs.items())
         if isinstance(info, dict)
@@ -391,8 +403,8 @@ def render_dashboard_html(status: dict[str, Any]) -> str:
     corpus_rows = "".join(
         "<tr>"
         f"<td><code>{esc(str(c['name']))}</code></td>"
-        f"<td class='num'>{int(c['line_count'])}</td>"
-        f"<td class='num'>{int(c['size_bytes'])}</td>"
+        f"<td class='num'>{_safe_int(c.get('line_count', 0))}</td>"
+        f"<td class='num'>{_safe_int(c.get('size_bytes', 0))}</td>"
         f"<td><code>{esc(str(c['sha256'])[:12])}…</code></td>"
         f"<td><code>{esc(json.dumps(c.get('task_kind_counts', {}), ensure_ascii=False))}</code></td>"
         "</tr>"
@@ -404,15 +416,15 @@ def render_dashboard_html(status: dict[str, Any]) -> str:
         f"<td><code>{esc(str(t['directory']))}</code></td>"
         f"<td><code>{esc(str(t['path']))}</code></td>"
         f"<td>{esc(str(t['title']))}</td>"
-        f"<td class='num'>{int(t['lines'])}</td>"
+        f"<td class='num'>{_safe_int(t.get('lines', 0))}</td>"
         "</tr>"
         for t in timeline
     ) or "<tr><td colspan='4' class='empty'>Belum ada dokumen evo/checkpoint/addendum terdeteksi.</td></tr>"
 
     debt = status.get("storage_debt") or {}
-    debt_files_count = int(debt.get("summary", {}).get("total_debt_files", 0)) if isinstance(debt.get("summary"), dict) else 0
+    debt_files_count = _safe_int(debt.get("summary", {}).get("total_debt_files", 0)) if isinstance(debt.get("summary"), dict) else 0
     sched = status.get("schedule") or {}
-    sched_overdue = int(sched.get("summary", {}).get("overdue", 0)) if isinstance(sched.get("summary"), dict) else 0
+    sched_overdue = _safe_int(sched.get("summary", {}).get("overdue", 0)) if isinstance(sched.get("summary"), dict) else 0
 
     return f"""<!DOCTYPE html>
 <html lang="id">
@@ -449,10 +461,10 @@ def render_dashboard_html(status: dict[str, Any]) -> str:
   <p class="sub">Dibangun luring dari berkas lokal (<code>{esc(DASHBOARD_SCHEMA)}</code>; tanpa PR list GitHub).</p>
 
   <div class="cards">
-    <div class="card"><div class="k">Gate Terdeteksi</div><div class="v" id="stat-gates">{int(status['gate_count'])}</div></div>
-    <div class="card"><div class="k">Corpus Beku</div><div class="v" id="stat-corpora">{int(corpora['corpus_count'])}</div></div>
-    <div class="card"><div class="k">Total Baris Corpus</div><div class="v" id="stat-corpus-lines">{int(corpora['total_lines'])}</div></div>
-    <div class="card"><div class="k">Dokumen Evo / Docs</div><div class="v" id="stat-timeline">{int(status['timeline_count'])}</div></div>
+    <div class="card"><div class="k">Gate Terdeteksi</div><div class="v" id="stat-gates">{_safe_int(status['gate_count'])}</div></div>
+    <div class="card"><div class="k">Corpus Beku</div><div class="v" id="stat-corpora">{_safe_int(corpora['corpus_count'])}</div></div>
+    <div class="card"><div class="k">Total Baris Corpus</div><div class="v" id="stat-corpus-lines">{_safe_int(corpora['total_lines'])}</div></div>
+    <div class="card"><div class="k">Dokumen Evo / Docs</div><div class="v" id="stat-timeline">{_safe_int(status['timeline_count'])}</div></div>
     <div class="card"><div class="k">Bab Overdue</div><div class="v" id="stat-overdue">{sched_overdue}</div></div>
     <div class="card"><div class="k">Storage Debt Berkas</div><div class="v" id="stat-storage-debt">{debt_files_count}</div></div>
   </div>

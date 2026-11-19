@@ -22,6 +22,7 @@ import os
 import shutil
 import sys
 import tarfile
+import zlib
 from pathlib import Path, PurePosixPath
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
@@ -250,7 +251,7 @@ def _read_bundle_contents(bundle_path: Path) -> Tuple[Dict[str, Any], Dict[str, 
                         payload_bytes[rel] = data
                     else:
                         errors.append(f"unexpected_archive_member:{member.name}")
-        except (tarfile.TarError, OSError) as exc:
+        except (tarfile.TarError, OSError, EOFError, zlib.error) as exc:
             raise PortabilityPackError(f"Gagal membaca arsip bundel '{bundle_path}': {exc}") from exc
 
         if manifest_raw is None:
@@ -287,8 +288,11 @@ def verify_bundle(bundle_path: Path) -> Tuple[Dict[str, Any], Dict[str, bytes]]:
             errors.append(f"invalid_manifest_entry:{idx}")
             continue
         raw_rel = item.get("path")
+        if not isinstance(raw_rel, str):
+            errors.append(f"unsafe_manifest_path:non_str:{idx}")
+            continue
         try:
-            rel = normalize_rel_path(str(raw_rel))
+            rel = normalize_rel_path(raw_rel)
         except PortabilityPackError as exc:
             errors.append(f"unsafe_manifest_path:{exc}")
             continue
@@ -300,7 +304,12 @@ def verify_bundle(bundle_path: Path) -> Tuple[Dict[str, Any], Dict[str, bytes]]:
 
         expected_bytes = item.get("bytes")
         expected_sha = item.get("sha256")
-        if not isinstance(expected_bytes, int) or expected_bytes < 0 or not isinstance(expected_sha, str):
+        if (
+            isinstance(expected_bytes, bool)
+            or not isinstance(expected_bytes, int)
+            or expected_bytes < 0
+            or not isinstance(expected_sha, str)
+        ):
             errors.append(f"invalid_entry_metadata:{rel}")
             continue
 

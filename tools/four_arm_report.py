@@ -117,8 +117,14 @@ def _load_rows(paths: list[Path], *, arm_override: str | None = None) -> dict[st
                 if not isinstance(item, dict):
                     raise FourArmReportError(f"Entri #{idx} pada '{path}' bukan objek JSON.")
                 rows.append(item)
-        elif isinstance(parsed_single, dict) and any(k in parsed_single for k in ("episodes", "records", "results")):
-            seq = next(parsed_single[k] for k in ("episodes", "records", "results") if isinstance(parsed_single.get(k), list))
+        elif isinstance(parsed_single, dict) and any(
+            isinstance(parsed_single.get(k), list) for k in ("episodes", "records", "results")
+        ):
+            seq = next(
+                parsed_single[k]
+                for k in ("episodes", "records", "results")
+                if isinstance(parsed_single.get(k), list)
+            )
             for idx, item in enumerate(seq, start=1):
                 if not isinstance(item, dict):
                     raise FourArmReportError(f"Entri #{idx} pada '{path}' bukan objek JSON.")
