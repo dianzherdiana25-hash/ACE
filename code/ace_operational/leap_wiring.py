@@ -685,3 +685,51 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_mutation_engine(engine: Any) -> dict[str, Any]:
+    """Hasilkan usulan mutasi genotipe tervalidasi ke mutation_proposal.json."""
+    try:
+        from ace_operational.mutation_engine import (
+            MutationEngine,
+            genotype_digest,
+            validate_genotype,
+        )
+
+        custom = _read_json(engine.workspace / "mutation_parents.json", None)
+        parents = custom if isinstance(custom, list) and custom else [
+            {
+                "planner": "greedy",
+                "algorithm": "hill-climb",
+                "representation": "ast",
+                "learning": "none",
+                "architecture": "single",
+                "prompt_template": "direct",
+                "tool_set": ["read", "search", "edit", "test"],
+                "max_tokens": 512,
+                "temperature": 0.2,
+                "max_attempts": 2,
+            }
+        ]
+        if any(validate_genotype(p) for p in parents):
+            return {"status": "error", "reason": "invalid parent genotype"}
+        seed = int(getattr(engine, "cycle_count", 0))
+        res = MutationEngine(seed=seed).propose(parents, budget=2)
+        compact = {
+            "schema": "ace.mutation-proposal.v1",
+            "seed": seed,
+            "parent_digest": genotype_digest(parents[0]),
+            "admitted_count": len(res["admitted"]),
+            "rejected_count": len(res["rejected"]),
+            "attempts": res["attempts"],
+            "admitted_digests": [p["digest"] for p in res["admitted"]],
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "mutation_proposal.json", compact)
+        return {
+            "status": "ok",
+            "admitted_count": compact["admitted_count"],
+            "rejected_count": compact["rejected_count"],
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}

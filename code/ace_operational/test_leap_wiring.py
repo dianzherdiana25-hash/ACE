@@ -144,6 +144,14 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_mutation_engine_proposes_candidates(self):
+        res = leap_wiring.step_mutation_engine(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["admitted_count"], 2)
+        out = json.loads((self.ws / "mutation_proposal.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.mutation-proposal.v1")
+        self.assertEqual(len(out["admitted_digests"]), 2)
+
 
 if __name__ == "__main__":
     unittest.main()
