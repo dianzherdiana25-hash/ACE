@@ -37,6 +37,42 @@ class RecallAblationTests(unittest.TestCase):
             for name in ("results.jsonl", "summary.json"):
                 self.assertEqual((root / "one" / name).read_bytes(), (root / "two" / name).read_bytes())
 
+    def test_multiseed_classifies_seed_sensitive_and_stable_tasks(self):
+        tasks = [
+            {"id": "t_stable", "query": "q_stable", "cold_decision": "cold", "expected": "warm"},
+            {"id": "t_sensitive", "query": "q_sensitive", "cold_decision": "cold", "expected": "warm"},
+        ]
+        store = {
+            "q_stable": ["warm"],
+            "q_sensitive": ["warm", "alt"],
+        }
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            store_path, tasks_path = root / "store.json", root / "tasks.json"
+            store_path.write_text(json.dumps(store), encoding="utf-8")
+            tasks_path.write_text(json.dumps(tasks), encoding="utf-8")
+            out_dir = root / "multi"
+            self.assertEqual(
+                main([
+                    "--store", str(store_path),
+                    "--tasks", str(tasks_path),
+                    "--seed", "0",
+                    "--seeds", "6",
+                    "--output-dir", str(out_dir),
+                ]),
+                0,
+            )
+            summary = json.loads((out_dir / "summary.json").read_text(encoding="utf-8"))
+            self.assertEqual(summary["seed_count"], 6)
+            self.assertEqual(summary["seeds"], [0, 1, 2, 3, 4, 5])
+            self.assertEqual(summary["stable_tasks"], ["t_stable"])
+            self.assertEqual(summary["seed_sensitive_tasks"], ["t_sensitive"])
+            self.assertEqual(summary["stability_counts"], {"stable": 1, "seed_sensitive": 1})
+            self.assertEqual(summary["per_task"]["t_stable"]["classification"], "stable")
+            self.assertEqual(summary["per_task"]["t_stable"]["decision_change_rate"], 0.0)
+            self.assertEqual(summary["per_task"]["t_sensitive"]["classification"], "seed_sensitive")
+            self.assertGreater(summary["per_task"]["t_sensitive"]["decision_change_rate"], 0.0)
+
 
 if __name__ == "__main__":
     unittest.main()
