@@ -221,6 +221,7 @@ def embed_helper(model, text):
     # their own metric, but the second key is headroom all
     # the same when the first is refused).
     global LAST_KEY
+    LAST_KEY = None
     last_err = None
     for key in ("gemini", "gemini2", "gemini3"):
         helper = (HELPERS / f"custom.{key}" / "bin"
@@ -326,7 +327,8 @@ class Handler(BaseHTTPRequestHandler):
                 env = embed_helper(model, text)
                 _log({"ts": t0, "role": role,
                       "brain": f"{provider}/{model}",
-                      "result": "ok", "used_today": used})
+                      "result": "ok", "used_today": used,
+                      "key": LAST_KEY})
                 return self._send(200, {
                     "object": "list",
                     "data": [{"object": "embedding", "index": 0,
