@@ -1866,6 +1866,8 @@ class ContinuousAutonomousEngine:
                 _leap("self", leap_wiring.step_self)
             if self.cycle_count % 200 == 1:
                 _leap("organs", leap_wiring.step_organs)
+            if self.cycle_count % 50 == 0:
+                _leap("bridge_self_check", leap_wiring.step_bridge_self_check)
 
         # Step 4: Periodic AST self-audit
         audit_summary: dict[str, Any] | None = None

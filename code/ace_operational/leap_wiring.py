@@ -685,3 +685,53 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# Wave 2 (EVO 0051) — pemeriksa mandiri kesehatan bridge & engine
+# ------------------------------------------------------------------
+
+
+def step_bridge_self_check(engine: Any) -> dict[str, Any]:
+    """Diagnosis kesehatan bridge + status engine & rencana relight teks-saja secara fail-closed (AG201)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        import os
+        from tools import bridge_self_check
+
+        bridge_url = str(getattr(engine, "bridge_url", None) or os.environ.get("ACE_BRAIN_BRIDGE_URL") or "http://127.0.0.1:8931")
+        status_path = Path(getattr(engine, "engine_status_path", None) or (ws / "engine_status.json"))
+        custom_probe = getattr(engine, "bridge_health_probe", None)
+        if callable(custom_probe):
+            probe = custom_probe
+        elif os.environ.get("ACE_BRAIN_BRIDGE_URL"):
+            probe = bridge_self_check.bridge_healthy
+        else:
+            probe = lambda _url, _timeout: False
+
+        report = bridge_self_check.self_check(
+            bridge_url,
+            status_path,
+            health_probe=probe,
+        )
+        out_path = ws / "bridge_self_check.json"
+        _write_json(
+            out_path,
+            {"at": _now_iso(), "cycle": int(getattr(engine, "cycle_count", 0) or 0), **report},
+        )
+        return {
+            "status": "ok",
+            "classification": report["classification"],
+            "executed_relight": report["executed_relight"],
+            "needs_relight": report["needs_relight"],
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

@@ -144,6 +144,31 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_bridge_self_check_diagnoses_and_fails_closed(self) -> None:
+        from datetime import datetime, timezone
+
+        (self.ws / "engine_status.json").write_text(
+            json.dumps({
+                "running": True,
+                "pid": 1234,
+                "cycle_count": 50,
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            }),
+            encoding="utf-8",
+        )
+        self.engine.bridge_health_probe = lambda _u, _t: True
+        res = leap_wiring.step_bridge_self_check(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["classification"], "sehat")
+        self.assertFalse(res["executed_relight"])
+        saved = json.loads((self.ws / "bridge_self_check.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.bridge-self-check.v1")
+
+        self.engine.bridge_health_probe = lambda _u, _t: (_ for _ in ()).throw(RuntimeError("probe err"))
+        bad = leap_wiring.step_bridge_self_check(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
