@@ -144,6 +144,32 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_eval_bench_writes_report_and_runs_cross_organ(self) -> None:
+        (self.ws / "multi_organ.jsonl").write_text(
+            "\n".join(
+                [
+                    json.dumps({"id": "t1", "task_kind": "code", "organ": "front", "ratified": True, "score": 82}),
+                    json.dumps({"id": "t1", "task_kind": "code", "organ": "coder", "ratified": True, "score": 84}),
+                ]
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_eval_bench(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertTrue(res["overall_passed"])
+        saved = json.loads((self.ws / "eval_bench_report.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["cross_organ_consistency"]["comparable_tasks"], 1)
+        self.assertTrue(saved["format_regression"]["all_clean"])
+
+    def test_eval_bench_fails_closed_on_exception(self) -> None:
+        from unittest import mock
+
+        with mock.patch("tools.eval_bench.run_standalone_eval_bench", side_effect=RuntimeError("boom")):
+            res = leap_wiring.step_eval_bench(self.engine)
+        self.assertEqual(res["status"], "skipped")
+        self.assertIn("boom", res["error"])
+
 
 if __name__ == "__main__":
     unittest.main()

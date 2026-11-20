@@ -685,3 +685,49 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0047 — eval bench standalone periodik
+# ------------------------------------------------------------------
+
+
+def step_eval_bench(engine: Any) -> dict[str, Any]:
+    """Jalankan eval bench standalone (QA handover, konsistensi, format) secara fail-closed (AG168)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import eval_bench
+
+        handover_fixture = ws / "handover_fixture"
+        handover_dir = handover_fixture if handover_fixture.is_dir() else None
+        cross_candidates = [
+            ws / "multi_organ.jsonl",
+            ws / "cross_organ.jsonl",
+        ]
+        cross_paths = [p for p in cross_candidates if p.is_file()]
+
+        report = eval_bench.run_standalone_eval_bench(
+            handover_dir=handover_dir,
+            cross_organ_paths=cross_paths or None,
+        )
+        out_path = ws / "eval_bench_report.json"
+        payload = {
+            "at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            **report,
+        }
+        _write_json(out_path, payload)
+        return {
+            "status": "ok",
+            "overall_passed": bool(report.get("overall_passed", False)),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+
