@@ -122,19 +122,35 @@ class SpecializationDeltaTest(unittest.TestCase):
     def test_compatible_with_owner_benchmark_v1_output(self) -> None:
         from tools import owner_benchmark
 
-        pack = {
-            "pack_id": "owner-mini-v1",
-            "pack_version": "1.0",
-            "tasks": [
-                {"id": "t1", "domain": "coding", "prompt": "p1", "expected": "ans1"},
-                {"id": "t2", "domain": "language", "prompt": "p2", "expected": "ans2"},
-            ],
-        }
+        tasks = [
+            {
+                "id": "t1",
+                "domain": "coding",
+                "prompt": "p1",
+                "evaluator": {"kind": "exact_match", "expected": "ans1"},
+            },
+            {
+                "id": "t2",
+                "domain": "language",
+                "prompt": "p2",
+                "evaluator": {"kind": "exact_match", "expected": "ans2"},
+            },
+        ]
         r_base = owner_benchmark.run_benchmark(
-            pack, answers={"t1": "wrong", "t2": "ans2"}, seed=7, solver_id="base"
+            tasks,
+            lambda t: "wrong" if t["id"] == "t1" else "ans2",
+            pack_id="owner-mini-v1",
+            pack_version="1.0.0",
+            seed=7,
+            solver_id="base",
         )
         r_cand = owner_benchmark.run_benchmark(
-            pack, answers={"t1": "ans1", "t2": "ans2"}, seed=7, solver_id="cand"
+            tasks,
+            lambda t: "ans1" if t["id"] == "t1" else "ans2",
+            pack_id="owner-mini-v1",
+            pack_version="1.0.0",
+            seed=7,
+            solver_id="cand",
         )
         out = specialization_delta.compare_reports(r_base, r_cand)
         self.assertEqual(out["by_domain"]["coding"]["pass_rate_delta"], 1.0)
