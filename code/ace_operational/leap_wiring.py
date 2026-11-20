@@ -685,3 +685,61 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_evo_results_audit(engine: Any) -> dict[str, Any]:
+    """AG149: summarize EVO consolidation verdicts and EVO range completeness audit."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import evo_range_audit as era
+        from tools import evo_results as er
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        range_report = era.audit_evo_range(_REPO_ROOT, 1, 50)
+        candidates: list[Path] = []
+        custom_dir = ws / "evo_consolidations"
+        if custom_dir.is_dir():
+            candidates.extend(sorted(custom_dir.glob("*.md")))
+        elif (_REPO_ROOT / "handover").is_dir():
+            candidates.extend(sorted((_REPO_ROOT / "handover").glob("EVO_*KONSOLIDASI*.md")))
+
+        valid_docs: list[Path] = []
+        seen_pkgs: set[str] = set()
+        skipped_docs: list[str] = []
+        for path in candidates:
+            try:
+                doc = er.read_consolidation(path)
+                if doc.package in seen_pkgs:
+                    continue
+                seen_pkgs.add(doc.package)
+                valid_docs.append(path)
+            except Exception:
+                skipped_docs.append(path.name)
+
+        verdicts = er.tabulate_verdicts(valid_docs)
+        out = {
+            "status": "ok",
+            "verdicts": {
+                "schema": verdicts["schema"],
+                "doc_count": len(valid_docs),
+                "skipped_doc_count": len(skipped_docs),
+                "row_count": len(verdicts["rows"]),
+                "unknown_count": len(verdicts["unknown"]),
+                "rows": verdicts["rows"],
+            },
+            "range_audit": {
+                "schema": range_report["schema"],
+                "range": range_report["range"],
+                "summary": range_report["summary"],
+            },
+            "checked_at": _now_iso(),
+        }
+        _write_json(ws / "evo_results_summary.json", out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+

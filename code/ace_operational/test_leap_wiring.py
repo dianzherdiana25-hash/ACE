@@ -144,6 +144,26 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_evo_results_audit_summarizes_verdicts_and_range(self):
+        cdir = self.ws / "evo_consolidations"
+        cdir.mkdir(parents=True)
+        (cdir / "EVO_0003.md").write_text(
+            "# KONSOLIDASI EVO 0003\n\n## GATE G1 (PASS)\n\nSemua aman.\n",
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_evo_results_audit(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["verdicts"]["doc_count"], 1)
+        self.assertEqual(res["verdicts"]["rows"][0]["verdict"], "PASS")
+        self.assertEqual(res["range_audit"]["summary"]["total_evos"], 50)
+        self.assertTrue((self.ws / "evo_results_summary.json").is_file())
+
+    def test_evo_results_audit_fails_closed_on_error(self):
+        from unittest import mock
+        with mock.patch("tools.evo_range_audit.audit_evo_range", side_effect=RuntimeError("boom")):
+            res = leap_wiring.step_evo_results_audit(self.engine)
+        self.assertEqual(res["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()
