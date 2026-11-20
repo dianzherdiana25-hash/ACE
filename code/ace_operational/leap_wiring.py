@@ -685,3 +685,66 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0042 — AG117: curriculum fixed vs generated A/B report (%200)
+# ------------------------------------------------------------------
+
+def step_curriculum_ab_report(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import curriculum_ab_report as car
+
+        ws = Path(engine.workspace)
+        out_path = ws / "curriculum_ab.json"
+        tasks = engine.store.list_tasks(limit=200)
+        generated_task_ids = {
+            t["task_id"]
+            for t in tasks
+            if t.get("kind") == "learning_practice"
+            or "failure_taskgen" in str(t.get("model_backend") or "")
+            or "wave2" in str(t.get("model_backend") or "").lower()
+        }
+        fixed_rows: list[dict[str, Any]] = []
+        generated_rows: list[dict[str, Any]] = []
+
+        for g in engine.store.list_gaps():
+            row = {
+                "family": g.get("error_type") or g.get("gap_type") or "UNKNOWN",
+                "status": g.get("status") or "OPEN",
+            }
+            if g.get("linked_learning_task_id") in generated_task_ids:
+                generated_rows.append(row)
+            else:
+                fixed_rows.append(row)
+
+        for t in tasks:
+            if t.get("kind") == "learning_practice":
+                ckpt = t.get("checkpoint") if isinstance(t.get("checkpoint"), dict) else {}
+                td = ckpt.get("task") if isinstance(ckpt.get("task"), dict) else {}
+                fam = str(td.get("family") or td.get("gap_type") or "learning_practice")
+                closed = str(t.get("status") or "").upper() in ("COMPLETED", "VERIFIED", "DONE")
+                generated_rows.append({"family": fam, "closed": closed})
+
+        if not fixed_rows and not generated_rows:
+            skipped = {
+                "status": "skipped",
+                "reason": "no fixed or generated observations",
+                "generated_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        report = car.compare_curricula(fixed_rows, generated_rows)
+        report["status"] = "ok"
+        report["generated_at"] = _now_iso()
+        report["cycle"] = getattr(engine, "cycle_count", 0)
+        _write_json(out_path, report)
+        return {
+            "status": "ok",
+            "aggregate": report.get("aggregate"),
+            "families": len(report.get("by_family") or {}),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+

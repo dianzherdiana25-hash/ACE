@@ -144,6 +144,30 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_curriculum_ab_report_compares_fixed_and_generated(self) -> None:
+        self._seed_gap()
+        self.engine.store.create_task(
+            kind="learning_practice",
+            title_id="Generated Practice",
+            user_request="latihan",
+            normalized_goal="latihan",
+            model_backend="leap_wiring/failure_taskgen",
+            priority=5,
+            checkpoint={"task": {"family": "skill_missing"}},
+            hold_for_review=False,
+        )
+        out = leap_wiring.step_curriculum_ab_report(self.engine)
+        self.assertEqual(out["status"], "ok")
+        ab_path = self.ws / "curriculum_ab.json"
+        self.assertTrue(ab_path.is_file())
+        data = json.loads(ab_path.read_text(encoding="utf-8"))
+        self.assertIn("aggregate", data)
+
+    def test_curriculum_ab_report_empty_skips_cleanly(self) -> None:
+        out = leap_wiring.step_curriculum_ab_report(self.engine)
+        self.assertEqual(out["status"], "skipped")
+        self.assertTrue((self.ws / "curriculum_ab.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()
