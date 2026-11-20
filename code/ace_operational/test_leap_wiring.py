@@ -144,6 +144,22 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_metacog_consolidation_appends_report(self) -> None:
+        leap_wiring.step_recall(self.engine)
+        out = leap_wiring.step_metacog_consolidation(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertGreaterEqual(out["files_scanned"], 1)
+        out_path = self.ws / "metacog_consolidation.jsonl"
+        self.assertTrue(out_path.is_file())
+        row = json.loads(out_path.read_text(encoding="utf-8").strip().splitlines()[-1])
+        self.assertIn("totals", row)
+
+    def test_metacog_consolidation_empty_workspace_succeeds(self) -> None:
+        (self.ws / "cognitive_memory" / "memory.jsonl").unlink()
+        out = leap_wiring.step_metacog_consolidation(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["files_scanned"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -685,3 +685,44 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0041 — AG109: metacognitive memory consolidation (%50)
+# ------------------------------------------------------------------
+
+def step_metacog_consolidation(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import metacog_memory_consolidate as mmc
+
+        ws = Path(engine.workspace)
+        candidates = [
+            ws / "cognitive_memory" / "memory.jsonl",
+            ws / "recall_probe.jsonl",
+            ws / "recall_introspection.jsonl",
+            ws / "step_checkpoints.jsonl",
+            ws / "incidents.jsonl",
+            ws / "anchor_audit.jsonl",
+        ]
+        inputs = [p for p in candidates if p.is_file()]
+        report = mmc.consolidate_metacognitive_memory(inputs, root=ws)
+        entry = {
+            "at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "files_scanned": report.get("files_scanned", []),
+            "totals": report.get("totals", {}),
+            "failure_clusters": report.get("failure_clusters", []),
+            "success_clusters": report.get("success_clusters", []),
+            "negative_transfer_alerts": report.get("negative_transfer_alerts", []),
+            "open_high_findings": report.get("open_high_findings", []),
+            "superseded_debt": report.get("superseded_debt", []),
+        }
+        _append_jsonl(ws / "metacog_consolidation.jsonl", entry)
+        return {
+            "status": "ok",
+            "files_scanned": len(entry["files_scanned"]),
+            "totals": entry["totals"],
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
