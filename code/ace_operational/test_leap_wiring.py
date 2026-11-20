@@ -144,6 +144,40 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_evo_scaffold_writes_draft_in_workspace_and_is_idempotent(self):
+        (self.ws / "evo_scaffold_request.json").write_text(
+            json.dumps({
+                "evo_id": "EVO_0055",
+                "title": "Eksperimen Recall Lokal",
+                "claim": "Menguji ketepatan filter top-k.",
+            }),
+            encoding="utf-8",
+        )
+        out = leap_wiring.step_evo_scaffold(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["evo_id"], "EVO_0055")
+        self.assertTrue((self.ws / "project_scaffolds" / "EVO_0055" / "manifest.json").is_file())
+        self.assertTrue((self.ws / "project_scaffolds.jsonl").is_file())
+
+        again = leap_wiring.step_evo_scaffold(self.engine)
+        self.assertEqual(again["status"], "skipped")
+        self.assertEqual(again["reason"], "already_scaffolded")
+
+    def test_evo_scaffold_runs_from_step_projects_and_fails_closed(self):
+        (self.ws / "evo_scaffold_request.json").write_text(
+            json.dumps({"evo_id": "BAD_ID"}),
+            encoding="utf-8",
+        )
+        err = leap_wiring.step_evo_scaffold(self.engine)
+        self.assertEqual(err["status"], "error")
+
+        (self.ws / "evo_scaffold_request.json").unlink()
+        proj_out = leap_wiring.step_projects(self.engine)
+        self.assertEqual(proj_out["status"], "ok")
+        self.engine.cycle_count = 200
+        leap_wiring.step_projects(self.engine)
+        self.assertTrue((self.ws / "project_scaffolds.jsonl").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -565,6 +565,11 @@ def step_projects(engine: Any) -> dict[str, Any]:
             except Exception:
                 pass
         break  # tonggak berurutan: nilai satu per siklus
+    if (Path(engine.workspace) / "evo_scaffold_request.json").is_file() or int(getattr(engine, "cycle_count", 0) or 0) % 200 == 0:
+        try:
+            step_evo_scaffold(engine)
+        except Exception:
+            pass
     return {"status": "ok", "project": pid, "advanced": advanced}
 
 
@@ -685,3 +690,56 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_evo_scaffold(engine: Any) -> dict[str, Any]:
+    """AG145: generate draft EVO scaffold inside isolated workspace folder."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import evo_scaffold as es
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        req_path = ws / "evo_scaffold_request.json"
+        if req_path.is_file():
+            req = json.loads(req_path.read_text(encoding="utf-8"))
+            if not isinstance(req, dict):
+                raise ValueError("evo_scaffold_request.json must be an object")
+            evo_id = es.normalize_evo_id(str(req.get("evo_id") or ""))
+            title = str(req.get("title") or f"Rancangan proyek {evo_id}")
+            claim = str(req.get("claim") or "Hipotesis eksperimen proyek.")
+            force = bool(req.get("force", False))
+        else:
+            evo_id = "EVO_0099"
+            title = "Rancangan eksperimen proyek terpantau"
+            claim = "Verifikasi terisolasi peningkatan metrik pada lapisan proyek."
+            force = False
+
+        out_dir = ws / "project_scaffolds" / evo_id.upper()
+        if (out_dir / "manifest.json").is_file() and not force:
+            return {"status": "skipped", "reason": "already_scaffolded", "evo_id": evo_id}
+
+        result = es.scaffold_evo(
+            evo_id=evo_id,
+            out_dir=out_dir,
+            title=title,
+            author="ACE-Project",
+            claim=claim,
+            force=force,
+        )
+        entry = {
+            "at": _now_iso(),
+            "schema": result["schema"],
+            "evo_id": result["evo_id"],
+            "out_dir": result["out_dir"],
+            "files": sorted(result["files"].keys()),
+            "summary": result["summary"],
+        }
+        _append_jsonl(ws / "project_scaffolds.jsonl", entry)
+        return {"status": "ok", **entry}
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
