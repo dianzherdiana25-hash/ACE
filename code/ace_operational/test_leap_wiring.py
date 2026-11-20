@@ -144,6 +144,13 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_verify_self_dev_writes_report(self) -> None:
+        out = leap_wiring.step_verify_self_dev(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertTrue(out["sources_ok"])
+        self.assertGreaterEqual(out["verified_files"], 25)
+        self.assertTrue((self.ws / "self_verification.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

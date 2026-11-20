@@ -685,3 +685,78 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0044 — AG134: upstream source integrity & self-dev verification (%200)
+# ------------------------------------------------------------------
+
+def step_verify_self_dev(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import verify_self_dev as vsd
+        from tools import verify_sources as vs
+
+        ws = Path(engine.workspace)
+        sources_ok = False
+        sources_count = 0
+        sources_error: str | None = None
+        try:
+            import contextlib
+            import io
+
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
+                rc = vs.verify(_REPO_ROOT)
+            sources_count = int(rc or 0)
+            sources_ok = sources_count > 0
+        except SystemExit as sysex:
+            sources_ok = (sysex.code == 0)
+            if not sources_ok:
+                sources_error = f"SystemExit({sysex.code})"
+        except Exception as exc:
+            sources_error = f"{type(exc).__name__}: {exc}"
+
+        ev_dir = ws / "self_dev_evidence"
+        state_path = ws / "self_dev_state.json"
+        if ev_dir.is_dir() and state_path.is_file():
+            cont_ok, cont_msg = vsd.verify_multi_cycle_continuity(ev_dir, state_path)
+            cont_status = "checked"
+        else:
+            cont_ok, cont_msg = True, "skipped: no self_dev artifacts yet"
+            cont_status = "skipped"
+
+        evidence_checks: list[dict[str, Any]] = []
+        if ev_dir.is_dir():
+            for jf in sorted(ev_dir.glob("*.json"))[:10]:
+                data = _read_json(jf, None)
+                if isinstance(data, dict):
+                    ok, msg = vsd.verify_self_dev_evidence(data)
+                    evidence_checks.append({"file": jf.name, "ok": bool(ok), "message": msg})
+
+        payload = {
+            "status": "ok",
+            "checked_at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "upstream_sources": {
+                "ok": sources_ok,
+                "verified_files": sources_count,
+                "error": sources_error,
+            },
+            "self_dev": {
+                "continuity_status": cont_status,
+                "continuity_ok": bool(cont_ok),
+                "message": cont_msg,
+                "evidence_checks": evidence_checks,
+            },
+        }
+        _write_json(ws / "self_verification.json", payload)
+        return {
+            "status": "ok",
+            "sources_ok": sources_ok,
+            "verified_files": sources_count,
+            "continuity_status": cont_status,
+            "continuity_ok": bool(cont_ok),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
