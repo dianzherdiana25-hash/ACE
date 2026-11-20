@@ -68,3 +68,10 @@ class DeliberationWiringTests(unittest.TestCase):
         with patch.dict(os.environ, {"ACE_EVO0051_DELIBERATION": "1"}, clear=True):
             self.assertEqual(leap_wiring.step_evo0051_deliberation(self.engine),
                              {"status": "refused", "reason": "precedent_missing"})
+
+    def test_oversized_input_is_refused_before_json_replay(self):
+        self.export.write_bytes(b"[]")
+        with patch.dict(os.environ, {"ACE_EVO0051_DELIBERATION": "1"}, clear=True), \
+                patch("ace_deliberation.decision_brief.MAX_INPUT_BYTES", 1):
+            self.assertEqual(leap_wiring.step_evo0051_deliberation(self.engine),
+                             {"status": "refused", "reason": "input_too_large"})

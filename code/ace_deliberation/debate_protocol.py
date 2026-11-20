@@ -320,7 +320,7 @@ def main(argv=None):
             print(json.dumps({"valid": valid}))
             return int(not valid)
         print(json.dumps(replay(raw), ensure_ascii=False, indent=2))
-    except (OSError, ValueError) as exc:
+    except (OSError, ValueError, RecursionError) as exc:
         parser.exit(2, f"Error: {exc}\n")
     return 0
 
