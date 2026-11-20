@@ -685,3 +685,88 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0044 — AG135: isolated restore drill on workspace copy (%1000)
+# ------------------------------------------------------------------
+
+def step_restore_drill(engine: Any) -> dict[str, Any]:
+    try:
+        import hashlib
+        import shutil
+        import subprocess
+        import tempfile
+        from tools import restore_drill as rd
+
+        ws = Path(engine.workspace)
+        with tempfile.TemporaryDirectory(prefix="ace-restore-drill-") as tmp:
+            tmp_root = Path(tmp)
+            repo_src = tmp_root / "repo_src"
+            if (_REPO_ROOT / ".git").exists():
+                repo_src = _REPO_ROOT
+            else:
+                repo_src.mkdir(parents=True)
+                subprocess.run(["git", "-C", str(repo_src), "init", "-q"], check=True, capture_output=True)
+                (repo_src / "README.md").write_text("# Drill Snapshot\n", encoding="utf-8")
+                subprocess.run(["git", "-C", str(repo_src), "add", "README.md"], check=True, capture_output=True)
+                subprocess.run(
+                    [
+                        "git", "-C", str(repo_src),
+                        "-c", "user.name=Drill",
+                        "-c", "user.email=drill@example.invalid",
+                        "-c", "commit.gpgsign=false",
+                        "commit", "-q", "-m", "init",
+                    ],
+                    check=True, capture_output=True,
+                )
+
+            custody_copy = tmp_root / "custody_copy"
+            (custody_copy / "memory").mkdir(parents=True, exist_ok=True)
+            manifest_entries: list[dict[str, str]] = []
+
+            mem_src = ws / "cognitive_memory" / "memory.jsonl"
+            mem_dst = custody_copy / "memory" / "memory.jsonl"
+            if mem_src.is_file():
+                shutil.copyfile(mem_src, mem_dst)
+            else:
+                mem_dst.write_text("", encoding="utf-8")
+            manifest_entries.append({
+                "path": "memory/memory.jsonl",
+                "sha256": hashlib.sha256(mem_dst.read_bytes()).hexdigest(),
+            })
+
+            for extra_name in ("step_checkpoints.jsonl", "semantic_memory.json", "leap_state.json"):
+                src_f = ws / extra_name
+                if src_f.is_file():
+                    dst_f = custody_copy / extra_name
+                    shutil.copyfile(src_f, dst_f)
+                    manifest_entries.append({
+                        "path": extra_name,
+                        "sha256": hashlib.sha256(dst_f.read_bytes()).hexdigest(),
+                    })
+
+            manifest_path = tmp_root / "manifest.json"
+            manifest_path.write_text(json.dumps({"files": manifest_entries}), encoding="utf-8")
+
+            report = rd.run_fixture_restore_drill(
+                repo_source=repo_src,
+                custody_dir=custody_copy,
+                manifest_path=manifest_path,
+                target_dir=tmp_root / "restored_target",
+                memory_rel="memory/memory.jsonl",
+            )
+
+        report["status"] = "ok"
+        report["checked_at"] = _now_iso()
+        report["cycle"] = getattr(engine, "cycle_count", 0)
+        _write_json(ws / "restore_drill_report.json", report)
+        return {
+            "status": "ok",
+            "all_passed": bool(report.get("all_passed")),
+            "total_elapsed_ms": report.get("total_elapsed_ms"),
+            "phases": len(report.get("phases") or []),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+

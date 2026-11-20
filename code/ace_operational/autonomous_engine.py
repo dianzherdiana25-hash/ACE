@@ -1866,6 +1866,9 @@ class ContinuousAutonomousEngine:
                 _leap("self", leap_wiring.step_self)
             if self.cycle_count % 200 == 1:
                 _leap("organs", leap_wiring.step_organs)
+            # EVO 0044 — Rumah, Kustodi & Ketangguhan
+            if self.cycle_count % 1000 == 0:
+                _leap("restore_drill", leap_wiring.step_restore_drill)
 
         # Step 4: Periodic AST self-audit
         audit_summary: dict[str, Any] | None = None

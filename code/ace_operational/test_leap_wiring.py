@@ -144,6 +144,29 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_restore_drill_passes_on_cognitive_memory_copy(self) -> None:
+        from ace_operational.cognitive_memory import CognitiveMemory
+
+        real_dir = self.ws / "cognitive_memory"
+        (real_dir / "memory.jsonl").unlink()
+        mem = CognitiveMemory(real_dir)
+        d1 = mem.anchor_evidence(b"drill-ev")
+        mem.remember(
+            kind="episodic",
+            content={"topic": "restore drill", "text": "latihan pemulihan penuh"},
+            source_kind="evidence",
+            source_ref=d1,
+            confidence=0.95,
+        )
+        mem_path = real_dir / "memory.jsonl"
+        before_bytes = mem_path.read_bytes()
+
+        out = leap_wiring.step_restore_drill(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertTrue(out["all_passed"])
+        self.assertEqual(mem_path.read_bytes(), before_bytes)
+        self.assertTrue((self.ws / "restore_drill_report.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()
