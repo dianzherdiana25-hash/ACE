@@ -685,3 +685,43 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0050 — ringkasan persyaratan platform & batasan privasi/royalti
+# ------------------------------------------------------------------
+
+
+def step_platform_requirements(engine: Any) -> dict[str, Any]:
+    """Ekstrak ringkasan persyaratan platform read-only & fail-closed (AG198)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import platform_requirements_summary
+
+        repo_root = Path(getattr(engine, "repo_root", None) or _REPO_ROOT)
+        report = platform_requirements_summary.extract_platform_requirements(repo_root)
+        out_path = ws / "platform_requirements.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                **report,
+            },
+        )
+        summary = report.get("summary") or {}
+        return {
+            "status": "ok",
+            "platform_count": summary.get("platform_count", 0),
+            "total_citations_kept": summary.get("total_citations_kept", 0),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

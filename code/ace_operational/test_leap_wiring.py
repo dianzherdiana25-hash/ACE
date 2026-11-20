@@ -144,6 +144,18 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_platform_requirements_extracts_citations_and_fails_closed(self) -> None:
+        res = leap_wiring.step_platform_requirements(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertGreaterEqual(res["platform_count"], 4)
+        saved = json.loads((self.ws / "platform_requirements.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.platform-requirements-summary.v1")
+
+        self.engine.repo_root = self.ws / "missing_repo"
+        bad = leap_wiring.step_platform_requirements(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
