@@ -685,3 +685,27 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_generational_ladder(engine: Any) -> dict[str, Any]:
+    """Ekspor ringkasan Merkle pustaka primitif generasional ke generational_ladder.json."""
+    try:
+        from ace_self_dev.generational_ladder import GenerationalLibrary
+
+        lib = GenerationalLibrary(storage_path=engine.workspace / "generational_primitives.json")
+        summary = lib.export_summary()
+        compact = {
+            "schema": "ace.generational-ladder-step.v1",
+            "total_primitives": summary.get("total_primitives", 0),
+            "generations": summary.get("generations", {}),
+            "library_merkle_root": summary.get("library_merkle_root"),
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "generational_ladder.json", compact)
+        return {
+            "status": "ok",
+            "total_primitives": compact["total_primitives"],
+            "merkle_root": compact["library_merkle_root"],
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}

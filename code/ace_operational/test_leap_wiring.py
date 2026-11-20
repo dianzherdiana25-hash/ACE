@@ -144,6 +144,14 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_generational_ladder_exports_merkle_summary(self):
+        res = leap_wiring.step_generational_ladder(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(len(res["merkle_root"]), 64)
+        out = json.loads((self.ws / "generational_ladder.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.generational-ladder-step.v1")
+        self.assertEqual(out["library_merkle_root"], res["merkle_root"])
+
 
 if __name__ == "__main__":
     unittest.main()
