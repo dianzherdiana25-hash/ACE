@@ -4,17 +4,68 @@
 Konfigurasi JSON wajib memuat repo, helpers, budget_state, call_log,
 stdout_log, pid_file (path absolut), port, dan current_bridge_url.
 Bridge langsung menggantikan alamat relay. Jalur lama tetap tersedia untuk
-rollback sampai jam review operator selesai. Credential disiapkan oleh
-operator sebelum peluncuran. Generator hanya mencetak teks atau JSON.
+rollback sampai jam review operator selesai. Preflight membaca PID yang
+ditunjuk dan memeriksa keberadaan proses dengan sinyal 0. Pemeriksaan
+kredensial hanya memakai nama entri di manifest publik bundle. Generator
+mencetak teks atau JSON tanpa meluncurkan proses.
 """
 import argparse
 import json
+import os
 from pathlib import Path
 import shlex
 from urllib.parse import urlsplit
 
 
 PATH_FIELDS = ("repo", "helpers", "budget_state", "call_log", "stdout_log", "pid_file")
+BUNDLE_MANIFEST_SCHEMA = "ace.secrets-bundle-manifest.v1"
+REQUIRED_ENTRY_NAMES = ("groq-api-key", "gemini-api-key", "gonka-api-key")
+
+
+def _pid_running(pid):
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
+def _check_pid_file(path, probe):
+    try:
+        pid = int(path.read_text(encoding="utf-8").strip())
+    except FileNotFoundError:
+        return {"state": "missing", "safe_to_continue": True}
+    except (OSError, ValueError):
+        return {"state": "unverified", "safe_to_continue": False}
+    if not 0 < pid <= 2**31 - 1:
+        return {"state": "unverified", "safe_to_continue": False}
+    try:
+        running = probe(pid)
+    except OSError:
+        return {"state": "unverified", "safe_to_continue": False}
+    return {"state": "stale" if running is False else "live",
+            "safe_to_continue": running is False}
+
+
+def _check_bundle_markers(path):
+    if path is None:
+        return {"state": "unverified", "missing_names": list(REQUIRED_ENTRY_NAMES)}
+    try:
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        if (not isinstance(manifest, dict) or manifest.get("schema") != BUNDLE_MANIFEST_SCHEMA
+                or not isinstance(manifest.get("entries"), list)):
+            raise ValueError
+        names = set()
+        for entry in manifest["entries"]:
+            if not isinstance(entry, dict) or not isinstance(entry.get("name"), str):
+                raise ValueError
+            names.add(entry["name"])
+    except (OSError, ValueError):
+        return {"state": "unverified", "missing_names": list(REQUIRED_ENTRY_NAMES)}
+    missing = [name for name in REQUIRED_ENTRY_NAMES if name not in names]
+    return {"state": "missing" if missing else "present", "missing_names": missing}
 
 
 def _url(url):
@@ -32,7 +83,7 @@ def _health(url):
                        "--", url + "/health"])
 
 
-def plan_home(config):
+def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running):
     if not isinstance(config, dict):
         raise ValueError("Konfigurasi wajib berupa objek JSON.")
     paths = {}
@@ -52,6 +103,8 @@ def plan_home(config):
     target = f"http://127.0.0.1:{port}"
     if target == previous:
         raise ValueError("Alamat bridge lama dan baru wajib berbeda.")
+    pid_check = _check_pid_file(Path(paths["pid_file"]), pid_probe)
+    credentials = _check_bundle_markers(bundle_manifest)
     argv = ["nohup", "python3", str(Path(paths["repo"]) / "tools" / "brain_bridge.py"),
             "--port", str(port), "--state", paths["budget_state"], "--log", paths["call_log"],
             "--helpers", paths["helpers"]]
@@ -74,7 +127,10 @@ def plan_home(config):
         "Konfirmasi status engine pada jalur lama. Setelah itu hentikan proses bridge baru sesuai PID terverifikasi.",
     ]
     return {"schema": "ace.bridge-home-plan.v1", "current_bridge_url": previous,
-            "target_bridge_url": target, "steps": steps, "rollback": rollback}
+            "target_bridge_url": target, "steps": steps, "rollback": rollback,
+            "preflight": {"pid_file": pid_check, "credential_markers": credentials,
+                          "safe_to_continue": (pid_check["safe_to_continue"]
+                                               and credentials["state"] == "present")}}
 
 
 def markdown(plan):
@@ -82,6 +138,15 @@ def markdown(plan):
     for step in plan["steps"]:
         lines.append(f"- [ ] **{step['id']}** — {step['action']}")
         lines.append(f"  - Verifikasi — {step['verify']}")
+        if step["id"] == "preflight":
+            preflight = plan["preflight"]
+            pid = preflight["pid_file"]
+            status = "aman-untuk-lanjut" if pid["safe_to_continue"] else "perlu pemeriksaan"
+            lines.append(f"  - PID file — {pid['state']} ({status})")
+            credentials = preflight["credential_markers"]
+            lines.append(f"  - Penanda kredensial — {credentials['state']}")
+            if credentials["missing_names"]:
+                lines.append("  - Nama entri belum terverifikasi — " + ", ".join(credentials["missing_names"]))
     lines.extend(["", "## Langkah mundur", ""])
     lines.extend(f"- [ ] {step}" for step in plan["rollback"])
     return "\n".join(lines) + "\n"
@@ -90,10 +155,12 @@ def markdown(plan):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("config", type=Path)
+    parser.add_argument("--bundle-manifest", type=Path, help="Manifest publik berisi nama entri.")
     parser.add_argument("--format", choices=("json", "markdown"), default="markdown")
     args = parser.parse_args(argv)
     try:
-        result = plan_home(json.loads(args.config.read_text(encoding="utf-8")))
+        result = plan_home(json.loads(args.config.read_text(encoding="utf-8")),
+                           bundle_manifest=args.bundle_manifest)
     except (OSError, ValueError) as exc:
         parser.exit(2, f"Error: {exc}\n")
     print(markdown(result) if args.format == "markdown" else json.dumps(result, indent=2), end="\n")
