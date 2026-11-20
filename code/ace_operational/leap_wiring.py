@@ -685,3 +685,74 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0044 — AG133: lightweight checkpoint-vs-receipt chain verify (%10)
+# ------------------------------------------------------------------
+
+def step_checkpoint_chain_verify(engine: Any) -> dict[str, Any]:
+    try:
+        from ace_operational import step_checkpoint as sc
+
+        ws = Path(engine.workspace)
+        ckpt_path = ws / "step_checkpoints.jsonl"
+        receipts_path = ws / "director_exec_receipts.jsonl"
+        out_path = ws / "checkpoint_chain_status.json"
+
+        chain_valid = True
+        chain_error: str | None = None
+        entries: list[dict[str, Any]] = []
+        try:
+            entries = sc.verify_and_load_checkpoints(ckpt_path)
+        except Exception as exc:
+            chain_valid = False
+            chain_error = f"{type(exc).__name__}: {exc}"
+
+        started_ids: set[str] = set()
+        terminal_ids: set[str] = set()
+        receipt_lines = 0
+        torn_receipt_tail = False
+        if receipts_path.is_file():
+            raw_lines = receipts_path.read_text(encoding="utf-8", errors="ignore").splitlines()
+            for idx, ln in enumerate(raw_lines):
+                s = ln.strip()
+                if not s:
+                    continue
+                try:
+                    ev = json.loads(s)
+                    receipt_lines += 1
+                    tid = str(ev.get("task_id") or "")
+                    st = str(ev.get("status") or "").lower()
+                    if tid and st == "started":
+                        started_ids.add(tid)
+                    elif tid and st in ("completed", "failed"):
+                        terminal_ids.add(tid)
+                except Exception:
+                    if idx == len(raw_lines) - 1:
+                        torn_receipt_tail = True
+
+        latest = entries[-1] if entries else {}
+        payload = {
+            "status": "ok" if chain_valid else "corrupt",
+            "checked_at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "checkpoint_chain_valid": chain_valid,
+            "checkpoint_count": len(entries),
+            "latest_step_id": latest.get("step_id"),
+            "latest_hash": latest.get("hash"),
+            "chain_error": chain_error,
+            "receipt_lines": receipt_lines,
+            "pending_receipt_tasks": sorted(started_ids - terminal_ids),
+            "torn_receipt_tail": torn_receipt_tail,
+        }
+        _write_json(out_path, payload)
+        return {
+            "status": "ok",
+            "checkpoint_chain_valid": chain_valid,
+            "checkpoint_count": len(entries),
+            "pending_receipt_tasks": len(payload["pending_receipt_tasks"]),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+

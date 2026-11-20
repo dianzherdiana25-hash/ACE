@@ -144,6 +144,24 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_checkpoint_chain_verify_clean_and_corrupt(self) -> None:
+        leap_wiring.step_checkpoint(self.engine)
+        (self.ws / "director_exec_receipts.jsonl").write_text(
+            json.dumps({"task_id": "t1", "status": "started", "at": "2026-11-20T01:00:00Z"}) + "\n",
+            encoding="utf-8",
+        )
+        out = leap_wiring.step_checkpoint_chain_verify(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertTrue(out["checkpoint_chain_valid"])
+        self.assertEqual(out["checkpoint_count"], 1)
+        self.assertEqual(out["pending_receipt_tasks"], 1)
+        self.assertTrue((self.ws / "checkpoint_chain_status.json").is_file())
+
+        (self.ws / "step_checkpoints.jsonl").write_text("{corrupt\n", encoding="utf-8")
+        out_bad = leap_wiring.step_checkpoint_chain_verify(self.engine)
+        self.assertEqual(out_bad["status"], "ok")
+        self.assertFalse(out_bad["checkpoint_chain_valid"])
+
 
 if __name__ == "__main__":
     unittest.main()
