@@ -144,6 +144,24 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_verdict_board_reports_incomplete_honestly_and_fails_closed(self) -> None:
+        ev_dir = self.ws / "gate_evidence"
+        ev_dir.mkdir()
+        (ev_dir / "G1.json").write_text(
+            json.dumps({"status": "PASS", "evidence_pointer": "evidence/g1.json", "measured_date": "2026-11-20"}),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_verdict_board(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["known_gates"], 1)
+        self.assertEqual(res["board_verdict"], "INCOMPLETE")
+        self.assertIn("belum diketahui", (self.ws / "verdict_board.md").read_text(encoding="utf-8"))
+
+        (self.ws / "verdict_gate_paths.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_verdict_board(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()

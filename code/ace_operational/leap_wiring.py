@@ -685,3 +685,54 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0050 — perakit papan vonis gate G1-G5 (kejujuran "belum diketahui")
+# ------------------------------------------------------------------
+
+
+def step_verdict_board(engine: Any) -> dict[str, Any]:
+    """Rakit papan vonis gate G1-G5 read-only secara fail-closed (AG191)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import verdict_board
+
+        spec_path = ws / "verdict_gate_paths.json"
+        if spec_path.is_file():
+            raw = json.loads(spec_path.read_text(encoding="utf-8"))
+            if not isinstance(raw, dict):
+                raise ValueError("verdict_gate_paths.json wajib objek JSON.")
+            gate_paths = {str(k): Path(str(v)) for k, v in raw.items()}
+        elif (ws / "gate_evidence").is_dir():
+            gate_paths = verdict_board.discover_gate_files(ws / "gate_evidence")
+        else:
+            gate_paths = {}
+
+        board = verdict_board.assemble_verdict_board(gate_paths)
+        md_text = verdict_board.render_verdict_board_markdown(board)
+        json_path = ws / "verdict_board.json"
+        md_path = ws / "verdict_board.md"
+        _write_json(
+            json_path,
+            {"at": _now_iso(), "cycle": int(getattr(engine, "cycle_count", 0) or 0), **board},
+        )
+        md_path.write_text(md_text, encoding="utf-8")
+        summary = board["summary"]
+        return {
+            "status": "ok",
+            "board_verdict": summary["board_verdict"],
+            "known_gates": summary["known_gates"],
+            "pass_gates": summary["pass_gates"],
+            "report_path": str(json_path),
+            "markdown_path": str(md_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+
