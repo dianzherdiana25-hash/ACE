@@ -144,6 +144,30 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_tool_registry_validates_and_writes_snapshot(self):
+        (self.ws / "tool_registry.json").write_text(
+            json.dumps({
+                "tools": [
+                    {"name": "clean_csv", "version": "1.0.0", "origin_gap": "g-1", "status": "adopted"},
+                    {"name": "old_probe", "version": "0.1.0", "origin_gap": "g-2", "status": "candidate"},
+                ]
+            }),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_tool_registry(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["total_tools"], 2)
+        self.assertEqual(res["by_status"], {"adopted": 1, "candidate": 1})
+        saved = json.loads((self.ws / "tool_registry_snapshot.json").read_text())
+        self.assertEqual(saved["total_tools"], 2)
+
+    def test_tool_registry_skips_when_empty_and_fails_closed_on_corrupt(self):
+        res = leap_wiring.step_tool_registry(self.engine)
+        self.assertEqual(res["status"], "skipped")
+        (self.ws / "tool_registry.json").write_text("{bad json", encoding="utf-8")
+        err = leap_wiring.step_tool_registry(self.engine)
+        self.assertEqual(err["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

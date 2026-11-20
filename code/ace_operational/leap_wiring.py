@@ -685,3 +685,66 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_tool_registry(engine: Any) -> dict[str, Any]:
+    """AG141: validate forged-tool registry manifest and write snapshot."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from collections import Counter
+        from tools import tool_registry as tr
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        out_path = ws / "tool_registry_snapshot.json"
+        reg_path = ws / "tool_registry.json"
+        raw_reg: Any = None
+        if reg_path.is_file():
+            raw_reg = json.loads(reg_path.read_text(encoding="utf-8"))
+        elif (ws / "tool_forge_log.jsonl").is_file():
+            derived: list[dict[str, Any]] = []
+            seen: set[str] = set()
+            for ln in (ws / "tool_forge_log.jsonl").read_text(encoding="utf-8").splitlines():
+                if not ln.strip():
+                    continue
+                row = json.loads(ln)
+                name = str(row.get("tool_name") or "").strip()
+                if not name or name in seen:
+                    continue
+                seen.add(name)
+                derived.append({
+                    "name": name,
+                    "version": "1.0.0",
+                    "origin_gap": str(row.get("origin_gap") or "gap-auto"),
+                    "status": "adopted" if row.get("adoption_verdict") == "approved" else "candidate",
+                })
+            if derived:
+                raw_reg = {"tools": derived}
+
+        if not raw_reg or not (raw_reg.get("tools") if isinstance(raw_reg, dict) else raw_reg):
+            skipped = {
+                "status": "skipped",
+                "reason": "empty_registry",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        tools = tr.validate_registry(raw_reg)
+        counts = dict(sorted(Counter(t["status"] for t in tools).items()))
+        out = {
+            "status": "ok",
+            "schema": tr.SCHEMA,
+            "total_tools": len(tools),
+            "by_status": counts,
+            "tools": tools,
+            "checked_at": _now_iso(),
+        }
+        _write_json(out_path, out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
