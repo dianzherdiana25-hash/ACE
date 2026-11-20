@@ -16,17 +16,28 @@ nama meloloskan pemeriksaan PID saja. Bila expected_process_starttime
 dicatat, cocokkan juga tick starttime Linux sejak boot (field 22 stat).
 """
 import argparse
-from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
 import shlex
 from urllib.parse import urlsplit
 
+if __package__:
+    from .engine_status import (
+        DEFAULT_MAX_AGE_SECONDS as DEFAULT_ENGINE_STATUS_MAX_AGE_SECONDS,
+        format_for_bridge_home,
+        parse_engine_status,
+    )
+else:
+    from engine_status import (
+        DEFAULT_MAX_AGE_SECONDS as DEFAULT_ENGINE_STATUS_MAX_AGE_SECONDS,
+        format_for_bridge_home,
+        parse_engine_status,
+    )
+
 
 PATH_FIELDS = ("repo", "helpers", "budget_state", "call_log", "stdout_log", "pid_file")
 BUNDLE_MANIFEST_SCHEMA = "ace.secrets-bundle-manifest.v1"
-DEFAULT_ENGINE_STATUS_MAX_AGE_SECONDS = 300
 REQUIRED_ENTRY_NAMES = ("groq-api-key", "gemini-api-key", "gonka-api-key")
 
 
@@ -145,38 +156,10 @@ def _health(url):
 
 
 def _check_engine_status(path, *, max_age_seconds, now):
-    """Klasifikasikan berkas status engine dengan semantik yang sama
-    dengan tools/house_check.py: stopped mengikuti running=false berapa
-    pun usianya; running tanpa updated_at sehat; usia updated_at
-    melewati ambang = stale; berkas tak terbaca/tidak sah = unavailable.
-    Hanya healthy yang aman untuk lanjut."""
-    unavailable = {"state": "unavailable", "safe_to_continue": False}
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-        if (not isinstance(payload, dict)
-                or type(payload.get("pid")) is not int or payload["pid"] <= 0
-                or type(payload.get("cycle_count")) is not int or payload["cycle_count"] < 0
-                or type(payload.get("running")) is not bool):
-            return unavailable
-        if not payload["running"]:
-            return {"state": "stopped", "safe_to_continue": False}
-        if "updated_at" not in payload:
-            return {"state": "healthy", "safe_to_continue": True}
-        stamp = payload["updated_at"]
-        if not isinstance(stamp, str):
-            return unavailable
-        updated = datetime.fromisoformat(stamp)
-        current = now if now is not None else datetime.now(timezone.utc)
-        if updated.utcoffset() is None or current.utcoffset() is None:
-            return unavailable
-        age = (current - updated).total_seconds()
-        if age < 0:
-            return unavailable
-        state = "stale" if age > max_age_seconds else "healthy"
-        return {"state": state, "safe_to_continue": state == "healthy",
-                "age_seconds": age}
-    except (OSError, ValueError):
-        return unavailable
+    """Klasifikasikan berkas status engine lewat parser bersama tools/engine_status.py."""
+    return format_for_bridge_home(
+        parse_engine_status(path, max_age_seconds=max_age_seconds, now=now)
+    )
 
 
 def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running, identity_probe=_pid_identity,
