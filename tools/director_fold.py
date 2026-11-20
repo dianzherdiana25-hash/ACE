@@ -5,6 +5,8 @@ JSONL memuat task_id, based_on (daftar ref), status, dan created_at
 berzona. Field bukti dan batas dampak opsional mengikuti director_classes.
 Semua status ekspor ikut rencana. Kelas kelompok memakai kelas paling
 ketat dari anggotanya. Kelompok multi-gap minimal B.
+--require-anchored memeriksa kelas A terhadap --store, objek JSON dengan
+verified_refs berupa daftar string. Ref yang masih dangling menurunkan kelas ke B.
 """
 import argparse
 from collections import defaultdict
@@ -16,12 +18,24 @@ import sys
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "code"))
 from ace_operational.director_classes import classify_proposal
+from ace_operational.memory_anchor import check_anchors
 
 
 _RANK = {"A": 0, "B": 1, "C": 2}
 
 
-def fold_proposals(rows):
+class _FixtureStore:
+    def __init__(self, data):
+        refs = data.get("verified_refs") if isinstance(data, dict) else None
+        if not isinstance(refs, list) or any(not isinstance(ref, str) or not ref.strip() for ref in refs):
+            raise ValueError("Store memerlukan verified_refs berupa daftar string.")
+        self.refs = frozenset(refs)
+
+    def verify_ref(self, ref):
+        return ref in self.refs
+
+
+def fold_proposals(rows, *, anchor_store=None):
     groups = defaultdict(list)
     seen = set()
     for index, row in enumerate(rows, 1):
@@ -58,19 +72,29 @@ def fold_proposals(rows):
         suggested = max((entry["class"] for entry in classes), key=_RANK.get)
         if kind == "multi_gap" and suggested == "A":
             suggested = "B"
-        folded.append({"kind": kind, "based_on": [gap] if gap else sorted(refs),
-                       "representative": entries[0][1], "duplicates": [entry[1] for entry in entries[1:]],
-                       "initial_class": suggested, "classifications": classes})
+        group = {"kind": kind, "based_on": sorted(refs),
+                 "representative": entries[0][1], "duplicates": [entry[1] for entry in entries[1:]],
+                 "initial_class": suggested, "classifications": classes}
+        if (anchor_store is not None and suggested == "A"
+                and check_anchors(group["based_on"], anchor_store)["status"] != "anchored"):
+            group["initial_class"] = "B"
+            group["class_reasons"] = ["unanchored"]
+        folded.append(group)
     return {"schema": "ace.director-fold-plan.v1", "proposal_count": len(seen), "groups": folded}
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("proposals", type=Path)
+    parser.add_argument("--require-anchored", action="store_true")
+    parser.add_argument("--store", type=Path)
     args = parser.parse_args(argv)
+    if args.require_anchored != (args.store is not None):
+        parser.error("--require-anchored dan --store wajib dipakai bersama.")
     try:
+        store = _FixtureStore(json.loads(args.store.read_text(encoding="utf-8"))) if args.store else None
         with args.proposals.open(encoding="utf-8") as source:
-            result = fold_proposals(json.loads(line) for line in source if line.strip())
+            result = fold_proposals((json.loads(line) for line in source if line.strip()), anchor_store=store)
     except (OSError, ValueError) as exc:
         parser.exit(2, f"Error: {exc}\n")
     print(json.dumps(result, sort_keys=True, indent=2, ensure_ascii=False))
