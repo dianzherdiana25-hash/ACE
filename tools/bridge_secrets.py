@@ -54,6 +54,25 @@ def bridge_environment(bundle_dir: Path, passphrase: str, *, environ=None) -> di
     return child_env
 
 
+def rotate_bundle_passphrase(bundle_dir: Path, old_passphrase: str, new_passphrase: str) -> tuple[str, ...]:
+    """Enkripsi ulang bundel bridge dengan passphrase baru tanpa pernah mencetak nilai entri."""
+    for label, pw in (("lama", old_passphrase), ("baru", new_passphrase)):
+        if (not isinstance(pw, str) or not pw or "\n" in pw
+                or len(pw.encode("utf-8")) > 1024):
+            raise BridgeSecretsError(f"Passphrase {label} bundel absen atau tidak sah.")
+    if old_passphrase == new_passphrase:
+        raise BridgeSecretsError("Passphrase baru bundel wajib berbeda dari passphrase lama.")
+    # Pastikan bundel sah untuk bridge dengan passphrase lama terlebih dahulu
+    bridge_environment(bundle_dir, old_passphrase, environ={})
+    try:
+        data = secrets_bundle._load_values(old_passphrase, bundle_dir)
+        names_before = tuple(sorted(data["values"].keys()))
+        secrets_bundle._store_values(new_passphrase, bundle_dir, data)
+    except (OSError, ValueError, TypeError, KeyError, AttributeError, secrets_bundle.BundleError):
+        raise BridgeSecretsError("Rotasi passphrase bundel bridge gagal.") from None
+    return names_before
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--bundle", required=True, type=Path)
