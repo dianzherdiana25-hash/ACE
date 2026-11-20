@@ -685,3 +685,53 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_corpus_freeze_packer(engine: Any) -> dict[str, Any]:
+    """Kemas kandidat korpus tervalidasi lint_v2 secara terisolasi ke corpus_freeze_pack.json."""
+    try:
+        from tempfile import TemporaryDirectory
+        from tools.corpus_freeze_packer import freeze_candidates
+
+        custom_candidates = engine.workspace / "corpus_freeze_candidates.jsonl"
+        with TemporaryDirectory(prefix="ace-freeze-pack-") as tmp:
+            root = Path(tmp)
+            if custom_candidates.is_file():
+                cand_path = custom_candidates
+            else:
+                cand_path = root / "candidates.jsonl"
+                cand_path.write_text(
+                    json.dumps(
+                        {
+                            "id": "probe-c-1",
+                            "kind": "episode",
+                            "task_kind": "code",
+                            "instruction": "Tulis fungsi sapaan. Sertakan docstring Bahasa Indonesia.",
+                        }
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
+            res = freeze_candidates(
+                cand_path,
+                freeze_dir=root / "frozen",
+                freeze_name="cycle_probe_corpus.jsonl",
+                registry_path=root / "registry.json",
+                note_path=root / "freeze_note.md",
+            )
+        compact = {
+            "schema": res.get("schema", "ace.corpus-freeze-pack.v1"),
+            "registry_corpus_count": res.get("registry_corpus_count", 0),
+            "line_count": (res.get("registry_entry") or {}).get("line_count", 0),
+            "freeze_sha256": res.get("freeze_sha256"),
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "corpus_freeze_pack.json", compact)
+        return {
+            "status": "ok",
+            "schema": compact["schema"],
+            "freeze_sha256": compact["freeze_sha256"],
+            "line_count": compact["line_count"],
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}

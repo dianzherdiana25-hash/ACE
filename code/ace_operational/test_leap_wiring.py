@@ -144,6 +144,14 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_corpus_freeze_packer_writes_manifest_summary(self):
+        res = leap_wiring.step_corpus_freeze_packer(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["line_count"], 1)
+        self.assertEqual(len(res["freeze_sha256"]), 64)
+        out = json.loads((self.ws / "corpus_freeze_pack.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["freeze_sha256"], res["freeze_sha256"])
+
 
 if __name__ == "__main__":
     unittest.main()
