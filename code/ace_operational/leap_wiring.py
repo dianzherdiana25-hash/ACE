@@ -685,3 +685,45 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0050 — audit keterhubungan modul statis hidup (wiring_audit_live)
+# ------------------------------------------------------------------
+
+
+def step_wiring_audit(engine: Any) -> dict[str, Any]:
+    """Jalankan audit keterhubungan modul AST read-only & fail-closed (AG192)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import wiring_audit
+
+        repo_root = Path(getattr(engine, "repo_root", None) or _REPO_ROOT)
+        report = wiring_audit.audit_wiring(repo_root)
+        out_path = ws / "wiring_audit_live.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                **report,
+            },
+        )
+        summary = report.get("summary") or {}
+        return {
+            "status": "ok",
+            "wired": summary.get("wired", 0),
+            "cli_standalone": summary.get("cli_standalone", 0),
+            "orphan": summary.get("orphan", 0),
+            "total_modules": summary.get("total_modules", 0),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

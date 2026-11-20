@@ -144,6 +144,20 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_wiring_audit_writes_live_json_and_fails_closed(self) -> None:
+        res = leap_wiring.step_wiring_audit(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertGreater(res["wired"], 300)
+        saved = json.loads((self.ws / "wiring_audit_live.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.wiring-audit.v1")
+        by_mod = {m["module"]: m for m in saved["modules"]}
+        self.assertEqual(by_mod["tools.wiring_audit"]["status"], "WIRED")
+
+        self.engine.repo_root = self.ws / "missing_repo"
+        bad = leap_wiring.step_wiring_audit(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
