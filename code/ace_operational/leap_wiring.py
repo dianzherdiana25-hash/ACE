@@ -685,3 +685,45 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_specialization_delta(engine: Any) -> dict[str, Any]:
+    """Hitung delta spesialisasi per domain lintas baseline/kandidat ke specialization_delta.json."""
+    try:
+        from tools.specialization_delta import compare_reports
+
+        base_path = engine.workspace / "specialization_baseline.json"
+        cand_path = engine.workspace / "specialization_candidate.json"
+        base = _read_json(base_path, None) if base_path.exists() else None
+        cand = _read_json(cand_path, None) if cand_path.exists() else None
+        if not isinstance(base, (list, dict)) or not isinstance(cand, (list, dict)):
+            base = [
+                {
+                    "seed": 0,
+                    "summary": {"pass_rate": 0.5, "avg_score": 0.5},
+                    "by_domain": {"language": {"total": 2, "passed": 1, "pass_rate": 0.5, "avg_score": 0.5}},
+                }
+            ]
+            cand = [
+                {
+                    "seed": 0,
+                    "summary": {"pass_rate": 0.5, "avg_score": 0.5},
+                    "by_domain": {"language": {"total": 2, "passed": 1, "pass_rate": 0.5, "avg_score": 0.5}},
+                }
+            ]
+        report = compare_reports(base, cand)
+        compact = {
+            "schema": report.get("schema", "ace.specialization-delta.v1"),
+            "overall": report.get("overall", {}),
+            "summary": report.get("summary", {}),
+            "shared_seeds": report.get("shared_seeds", []),
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "specialization_delta.json", compact)
+        return {
+            "status": "ok",
+            "schema": compact["schema"],
+            "pass_rate_delta": compact["overall"].get("pass_rate_delta", 0.0),
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}

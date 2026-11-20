@@ -144,6 +144,21 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_specialization_delta_writes_report(self):
+        (self.ws / "specialization_baseline.json").write_text(json.dumps([{
+            "seed": 0, "summary": {"pass_rate": 0.5, "avg_score": 0.5},
+            "by_domain": {"code": {"total": 2, "passed": 1, "pass_rate": 0.5, "avg_score": 0.5}},
+        }]), encoding="utf-8")
+        (self.ws / "specialization_candidate.json").write_text(json.dumps([{
+            "seed": 0, "summary": {"pass_rate": 1.0, "avg_score": 0.9},
+            "by_domain": {"code": {"total": 2, "passed": 2, "pass_rate": 1.0, "avg_score": 0.9}},
+        }]), encoding="utf-8")
+        res = leap_wiring.step_specialization_delta(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["pass_rate_delta"], 0.5)
+        out = json.loads((self.ws / "specialization_delta.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.specialization-delta.v1")
+
 
 if __name__ == "__main__":
     unittest.main()
