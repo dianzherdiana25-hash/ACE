@@ -144,6 +144,24 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_home_replication_assembles_manifest_and_preserves_sqlite(self):
+        db_files = [p for p in self.ws.rglob("*") if p.is_file() and p.suffix in (".db", ".sqlite", ".sqlite3")]
+        self.assertTrue(db_files)
+        db_path = db_files[0]
+        before_bytes = db_path.read_bytes()
+        res = leap_wiring.step_home_replication(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertIs(res["foundation_only"], True)
+        self.assertIs(res["activation_authorized"], False)
+        self.assertTrue(res["replication"]["sync_clean"])
+        self.assertTrue(res["second_home"]["summary"]["all_assets_present"])
+        self.assertEqual(db_path.read_bytes(), before_bytes)
+        self.assertTrue((self.ws / "home_replication_status.json").is_file())
+
+    def test_home_replication_fails_closed_on_invalid_requirements(self):
+        (self.ws / "second_home_requirements.json").write_text("{bad", encoding="utf-8")
+        self.assertEqual(leap_wiring.step_home_replication(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -685,3 +685,98 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_home_replication(engine: Any) -> dict[str, Any]:
+    """AG159: dry-run replication manifest + second-home readiness checklist (read-only)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import home_replication_pack as hrp
+        from tools import second_home as sh
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        ws.mkdir(parents=True, exist_ok=True)
+        manifest = hrp.build_replication_manifest(ws)
+        for self_art in ("home_replication_status.json", "home_replication_target.json"):
+            manifest["files"].pop(self_art, None)
+            manifest["records"].pop(self_art, None)
+        manifest["file_count"] = len(manifest["files"])
+
+        target_path = ws / "home_replication_target.json"
+        if target_path.is_file():
+            compare = hrp.compare_homes(manifest, target_path)
+        else:
+            compare = hrp.compare_homes(manifest, manifest)
+
+        inv_path = ws / "repo_inventory.json"
+        if inv_path.is_file():
+            inventory_paths = sh.load_inventory(inv_path)
+            inv_src = str(inv_path)
+        else:
+            inventory_paths = {
+                p.relative_to(_REPO_ROOT).as_posix()
+                for sub in ("tools", "code/ace_operational", "docs")
+                if (_REPO_ROOT / sub).is_dir()
+                for p in (_REPO_ROOT / sub).rglob("*")
+                if p.is_file() and "__pycache__" not in p.parts
+            }
+            inv_src = str(_REPO_ROOT)
+
+        req_path = ws / "second_home_requirements.json"
+        if req_path.is_file():
+            reqs_doc = sh.load_requirements(req_path)
+            req_src = str(req_path)
+        else:
+            reqs_doc = {
+                "target_name": "second-home-dryrun",
+                "requirements": [
+                    {
+                        "id": "core-runtime",
+                        "name": "Core engine & bridge home assets",
+                        "description": "Kesiapan aset inti tanpa mengaktifkan instance kedua.",
+                        "prerequisites": [],
+                        "depends_on": [],
+                        "required_assets": [
+                            "tools/bridge_home.py",
+                            "code/ace_operational/autonomous_engine.py",
+                            "docs/UPSTREAM_SOURCES.json",
+                        ],
+                        "steps": ["Verifikasi manifest replikasi dan isolasi direktori."],
+                        "verifications": ["foundation_only=true & activation_authorized=false"],
+                    }
+                ],
+            }
+            req_src = "<builtin>"
+
+        checklist = sh.build_checklist(
+            inventory_paths,
+            reqs_doc,
+            inventory_source=inv_src,
+            requirements_source=req_src,
+        )
+        out = {
+            "status": "ok",
+            "foundation_only": checklist["foundation_only"],
+            "activation_authorized": checklist["activation_authorized"],
+            "replication": {
+                "schema": manifest["schema"],
+                "file_count": manifest["file_count"],
+                "sync_clean": compare["sync_clean"],
+                "conflict_count": compare["summary"]["record_conflict_count"],
+                "missing_file_count": compare["summary"]["missing_file_count"],
+            },
+            "second_home": {
+                "schema": checklist["schema"],
+                "summary": checklist["summary"],
+            },
+            "checked_at": _now_iso(),
+        }
+        _write_json(ws / "home_replication_status.json", out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
