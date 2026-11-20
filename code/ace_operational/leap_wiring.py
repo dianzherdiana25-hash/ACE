@@ -685,3 +685,22 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_mobile_report(engine: Any) -> dict[str, Any]:
+    """Hasilkan laporan ringkas seluler Bahasa Indonesia ke mobile_report.md."""
+    try:
+        from ace_report.mobile_report import generate_indonesian_mobile_report
+
+        custom = _read_json(engine.workspace / "experiment_data.json", None)
+        data = custom if isinstance(custom, dict) and custom else {
+            "scientific_claim_status": "NOT_ASSESSED",
+            "graph_results": {"A": {"mean": 0.0}, "B": {"mean": 0.0}, "C": {"mean": 0.0}},
+            "ratio4_results": {"A": {"mean": 0.0}, "B": {"mean": 0.0}, "C": {"mean": 0.0}},
+            "hypotheses_evaluation": {"cycle": int(getattr(engine, "cycle_count", 0))},
+        }
+        md = generate_indonesian_mobile_report(data)
+        (engine.workspace / "mobile_report.md").write_text(md, encoding="utf-8")
+        return {"status": "ok", "report_bytes": len(md.encode("utf-8"))}
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}

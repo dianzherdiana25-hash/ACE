@@ -144,6 +144,13 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_mobile_report_writes_markdown(self):
+        res = leap_wiring.step_mobile_report(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertGreater(res["report_bytes"], 0)
+        md = (self.ws / "mobile_report.md").read_text(encoding="utf-8")
+        self.assertIn("Laporan Hasil Riset ACE", md)
+
 
 if __name__ == "__main__":
     unittest.main()
