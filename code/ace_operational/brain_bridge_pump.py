@@ -89,6 +89,7 @@ def execute(path, req):
             bridge._log({"ts": t0, "role": role,
                          "brain": f"{provider}/{model}",
                          "result": "ok", "used_today": used,
+                         "key": bridge.LAST_KEY,
                          "via": "relay"})
             return 200, {"object": "list",
                          "data": [{"object": "embedding", "index": 0,
