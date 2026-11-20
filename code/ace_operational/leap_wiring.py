@@ -685,3 +685,49 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0041 — AG103: compare cognitive memory chain vs snapshot sidecar
+# ------------------------------------------------------------------
+
+def step_memory_chain_compare(engine: Any) -> dict[str, Any]:
+    try:
+        import shutil
+        from tools import memory_chain_compare as mcc
+
+        ws = Path(engine.workspace)
+        mem_path = ws / "cognitive_memory" / "memory.jsonl"
+        prev_path = ws / "memory_chain_prev.jsonl"
+        report_path = ws / "memory_chain_report.json"
+        if not mem_path.is_file():
+            out = {
+                "status": "skipped",
+                "reason": "no memory.jsonl",
+                "checked_at": _now_iso(),
+            }
+            _write_json(report_path, out)
+            return out
+        if not prev_path.is_file():
+            prev_path.parent.mkdir(parents=True, exist_ok=True)
+            prev_path.write_text("", encoding="utf-8")
+
+        report = mcc.compare_memory_chains(prev_path, mem_path)
+        report["checked_at"] = _now_iso()
+        report["cycle"] = getattr(engine, "cycle_count", 0)
+        _write_json(report_path, report)
+
+        if report.get("status") != "diverged":
+            tmp_prev = prev_path.with_suffix(".jsonl.tmp")
+            shutil.copyfile(mem_path, tmp_prev)
+            tmp_prev.replace(prev_path)
+
+        return {
+            "status": "ok",
+            "chain_status": report.get("status"),
+            "is_fork": report.get("is_fork"),
+            "ahead_entries": report.get("ahead_entries", 0),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+

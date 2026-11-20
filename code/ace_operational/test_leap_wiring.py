@@ -144,6 +144,31 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_memory_chain_compare_tracks_fast_forward_and_fork(self) -> None:
+        out1 = leap_wiring.step_memory_chain_compare(self.engine)
+        self.assertEqual(out1["status"], "ok")
+        self.assertEqual(out1["chain_status"], "fast_forward")
+        self.assertFalse(out1["is_fork"])
+        self.assertTrue((self.ws / "memory_chain_report.json").is_file())
+        self.assertTrue((self.ws / "memory_chain_prev.jsonl").is_file())
+
+        out2 = leap_wiring.step_memory_chain_compare(self.engine)
+        self.assertEqual(out2["chain_status"], "identical")
+
+        mem_path = self.ws / "cognitive_memory" / "memory.jsonl"
+        fork_row = _episode(1, "ep1", "bahasa", "morfologi imbuhan berlari")
+        fork_line = _episode(2, "epX", "fork", "divergent line").replace('"h2"', '"h2-fork"')
+        mem_path.write_text(fork_row + "\n" + fork_line + "\n", encoding="utf-8")
+        out3 = leap_wiring.step_memory_chain_compare(self.engine)
+        self.assertEqual(out3["chain_status"], "diverged")
+        self.assertTrue(out3["is_fork"])
+
+    def test_memory_chain_compare_missing_memory_fails_closed(self) -> None:
+        (self.ws / "cognitive_memory" / "memory.jsonl").unlink()
+        out = leap_wiring.step_memory_chain_compare(self.engine)
+        self.assertEqual(out["status"], "skipped")
+        self.assertTrue((self.ws / "memory_chain_report.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()
