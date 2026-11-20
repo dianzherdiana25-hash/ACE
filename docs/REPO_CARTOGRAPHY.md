@@ -6,8 +6,8 @@
 
 - Schema: `ace.repo-cartography.v1`
 - Total subsistem: **68** (termasuk `4` subsistem zona terlindung/beku)
-- Total berkas terpetakan: **2136**
-- Modul Python produksi: **571** | Modul tes: **359**
+- Total berkas terpetakan: **2145**
+- Modul Python produksi: **572** | Modul tes: **366**
 - Tepi dependensi lintas subsistem (produksi): **117**
 - Siklus SCC lintas subsistem: **1**
 
@@ -123,7 +123,7 @@ flowchart LR
 | `code/ace_mcts` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_mission` | `SAFE_WORKSPACE` | 9 | 6 | 3 | 5 | 3 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_neurosymbolic` | `SAFE_WORKSPACE` | 9 | 5 | 4 | 0 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_operational` | `MIXED_PROTECTED` | 208 | 97 | 107 | 5 | 14 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `code/ace_operational` | `MIXED_PROTECTED` | 209 | 97 | 108 | 5 | 14 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 | `code/ace_pac_bayes` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_real_world` | `SAFE_WORKSPACE` | 12 | 8 | 4 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_red_team` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
@@ -154,7 +154,7 @@ flowchart LR
 | `root` | `SAFE_WORKSPACE` | 20 | 4 | 0 | 0 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
 | `secrets` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `tests` | `SAFE_WORKSPACE` | 19 | 0 | 19 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `tools` | `MIXED_PROTECTED` | 267 | 140 | 125 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `tools` | `MIXED_PROTECTED` | 275 | 141 | 131 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 
 ## 4. Tepi Ketergantungan Lintas Subsistem (Semua)
 

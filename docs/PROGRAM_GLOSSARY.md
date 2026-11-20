@@ -5,8 +5,8 @@
 ## 1. Ringkasan Sumber
 
 - Berkas Markdown dipindai: **330**
-- Berkas Python AST dipindai (non-test): **502**
-- Total istilah terindeks: **336** (dari 1455 kandidat unik)
+- Berkas Python AST dipindai (non-test): **503**
+- Total istilah terindeks: **336** (dari 1458 kandidat unik)
 
 ### Komposisi Sumber
 
@@ -81,6 +81,7 @@
 | `ace.handover-index.v1` | `ast_schema` | `tools/handover_index.py:22` | Skema JSON `HANDOVER_INDEX_SCHEMA` pada `tools/handover_index.py` |
 | `ace.income-ledger.v1` | `ast_schema` | `tools/income_report.py:46` | Skema JSON `LEDGER_SCHEMA` pada `tools/income_report.py` |
 | `ace.income-verification.v1` | `ast_schema` | `tools/income_report.py:45` | Skema JSON `INCOME_SCHEMA` pada `tools/income_report.py` |
+| `ace.inheritance-provenance.v1` | `ast_schema` | `tools/inheritance_probe.py:20` | Skema JSON `PROVENANCE_SCHEMA` pada `tools/inheritance_probe.py` |
 | `ace.introspect-recall.v1` | `ast_schema` | `tools/introspect_recall.py:28` | Skema JSON `SCHEMA` pada `tools/introspect_recall.py` |
 | `ace.judge-saturation-scan.v1` | `ast_schema` | `tools/saturation_scan.py:29` | Skema JSON `SATURATION_SCHEMA` pada `tools/saturation_scan.py` |
 | `ace.kbm-manuscript-check.v1` | `ast_schema` | `tools/kbm_pack_check.py:30` | Skema JSON `MANUSCRIPT_CHECK_SCHEMA` pada `tools/kbm_pack_check.py` |
@@ -118,7 +119,6 @@
 | `ace.ram-window.v1` | `ast_schema` | `tools/ram_window.py:29` | Skema JSON `RAM_WINDOW_SCHEMA` pada `tools/ram_window.py` |
 | `ace.reasoning.xy.v1` | `ast_schema` | `code/ace_cognition/reasoning.py:17` | Skema JSON `SCHEMA` pada `code/ace_cognition/reasoning.py` |
 | `ace.register-agenda-draft.v1` | `ast_schema` | `tools/failure_to_agenda.py:27` | Skema JSON `DRAFT_SCHEMA` pada `tools/failure_to_agenda.py` |
-| `ace.relay-spool-clean.v1` | `ast_schema` | `tools/relay_spool_tools.py:25` | Skema JSON `CLEANER_SCHEMA` pada `tools/relay_spool_tools.py` |
 | `ACE_BASE_RUNTIME_EXECUTED` | `markdown_def` | `docs/ACE_AUTONOMY_V1_RESULTS.md:12` | **`TRUE`** — `ace_runtime` (`931b1582...`) dijalankan langsung maupun melalui `TypedToolBroker` (`ace_demo`, `ace_status`, `ace_enqueue_task`, `ace_run_tasks`, `ace_predict`, `ace_evaluate`, `ace_report`); `tools/verify_… |
 | `ace_self_evolver` | `ast_module` | `ace_self_evolver.py:1` | ACE Audited Self-Evolver (Strict Empirical Verification & Branch Isolation) |
 | `ACEWebCore` | `ast_class` | `code/ace_operational/web_server.py:1600` | Shared application state and API dispatcher used by HTTP server and direct test harness. |
