@@ -144,6 +144,38 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_pr_pack_builds_dry_run_bundle_without_network(self):
+        (self.ws / "pr_release_manifest.json").write_text(
+            json.dumps({
+                "branch": "gravity/sample-pr",
+                "base_ref": "main",
+                "manifest_sha256": "b" * 64,
+                "files": [
+                    {
+                        "path": "tools/sample.py",
+                        "status": "M",
+                        "classification": "tools",
+                        "size_bytes": 120,
+                        "sha256": "c" * 64,
+                        "in_allowlist": True,
+                    }
+                ],
+            }),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_pr_pack(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertIs(res["dry_run_only"], True)
+        self.assertEqual(res["network_calls"], 0)
+        self.assertIs(res["git_push_executed"], False)
+        self.assertTrue(res["required_headings_present"])
+        self.assertTrue((self.ws / "pr_pack.json").is_file())
+
+    def test_pr_pack_skips_when_missing_and_fails_closed_on_invalid(self):
+        self.assertEqual(leap_wiring.step_pr_pack(self.engine)["status"], "skipped")
+        (self.ws / "pr_release_manifest.json").write_text("{}", encoding="utf-8")
+        self.assertEqual(leap_wiring.step_pr_pack(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

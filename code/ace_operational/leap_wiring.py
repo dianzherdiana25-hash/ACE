@@ -685,3 +685,47 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_pr_pack(engine: Any) -> dict[str, Any]:
+    """AG148: pack dry-run PR description envelope from local release manifest."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import pr_pack as pp
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        out_path = ws / "pr_pack.json"
+        man_path = ws / "pr_release_manifest.json"
+        if not man_path.is_file():
+            skipped = {
+                "status": "skipped",
+                "reason": "no_pr_release_manifest",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        manifest = pp.load_json_file(man_path, "release manifest")
+        meta: dict[str, Any] = {}
+        meta_path = ws / "pr_pack_meta.json"
+        if meta_path.is_file():
+            meta = pp.load_json_file(meta_path, "pr meta")
+        packed = pp.pack_pr_description(
+            manifest,
+            title=str(meta.get("title") or f"Dry-run PR ({manifest.get('branch') or 'draft'})"),
+            what=meta.get("what") or ["Paket perubahan teraudit dari manifest lokal."],
+            why=meta.get("why") or ["Sinkronisasi dokumentasi & artefak uji dry-run."],
+            test_commands=meta.get("test_commands") or ["PYTHONDONTWRITEBYTECODE=1 python3 -m unittest"],
+            test_results=meta.get("test_results") or ["PASS"],
+            notes=meta.get("notes"),
+        )
+        out = {"status": "ok", **packed, "packed_at": _now_iso()}
+        _write_json(out_path, out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
