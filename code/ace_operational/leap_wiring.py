@@ -426,6 +426,52 @@ def step_director(engine: Any) -> dict[str, Any]:
             _append_jsonl(ws / "invariant_violations.jsonl", {
                 "at": _now_iso(), "cycle": engine.cycle_count,
                 "report": report})
+
+    # EVO 0043 — AG121: periksa keterjangkaran klaim kuantitatif proposal director
+    try:
+        from tools import director_grounding_check as dgc
+
+        prop_items = []
+        for t in waiting:
+            ckpt = t.get("checkpoint") if isinstance(t.get("checkpoint"), dict) else {}
+            prop = ckpt.get("proposal") if isinstance(ckpt.get("proposal"), dict) else {}
+            prop_items.append({
+                "id": t["task_id"],
+                "rationale": str(prop.get("rationale") or t.get("user_request") or ""),
+            })
+        if prop_items:
+            db_path = getattr(engine.store, "db_path", None) or (ws / "ace_operational.sqlite3")
+            db_file = Path(db_path)
+            if db_file.is_file():
+                facts_map = dgc.load_facts_from_sqlite(db_file)
+            else:
+                all_gaps = engine.store.list_gaps()
+                open_g = [g for g in all_gaps if g.get("status") == "OPEN"]
+                facts_map = {
+                    "open_gaps": len(open_g),
+                    "total_gaps": len(all_gaps),
+                    "dynamic_tech_practice_failed_gaps": sum(
+                        1 for g in open_g if g.get("error_type") == "DYNAMIC_TECH_PRACTICE_FAILED"
+                    ),
+                    "max_occurrence": max((int(g.get("occurrence_count") or 0) for g in all_gaps), default=0),
+                }
+            g_report = dgc.check_proposal_grounding(prop_items, facts_map)
+            _append_jsonl(ws / "proposal_grounding.jsonl", {
+                "at": _now_iso(),
+                "cycle": getattr(engine, "cycle_count", 0),
+                "all_grounded": g_report.get("all_grounded"),
+                "summary": g_report.get("summary"),
+                "proposals": g_report.get("proposals"),
+            })
+            out["grounding"] = {
+                "all_grounded": g_report.get("all_grounded"),
+                **(g_report.get("summary") or {}),
+            }
+        else:
+            out["grounding"] = {"status": "skipped", "total_proposals": 0}
+    except Exception as exc:
+        out["grounding"] = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
     return out
 
 

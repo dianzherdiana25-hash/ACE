@@ -144,6 +144,28 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_director_checks_proposal_grounding(self) -> None:
+        self._seed_gap()
+        self.engine.store.create_task(
+            kind="director_proposal",
+            title_id="Proposal Mismatch",
+            user_request="Saat ini terdapat 9 gap terbuka.",
+            normalized_goal="Proposal Mismatch",
+            model_backend="groq/openai/gpt-oss-120b",
+            priority=5,
+            checkpoint={"proposal": {
+                "title": "Proposal Mismatch",
+                "rationale": "Saat ini terdapat 9 gap terbuka sehingga perlu perbaikan.",
+                "based_on": ["gap_1"],
+            }},
+            hold_for_review=True,
+        )
+        out = leap_wiring.step_director(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertFalse(out["grounding"]["all_grounded"])
+        self.assertGreaterEqual(out["grounding"]["mismatched_claims"], 1)
+        self.assertTrue((self.ws / "proposal_grounding.jsonl").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()
