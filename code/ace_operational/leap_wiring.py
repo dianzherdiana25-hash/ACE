@@ -685,3 +685,75 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0043 — AG129: director injection defense gate (%25)
+# ------------------------------------------------------------------
+
+def step_director_injection_guard(engine: Any) -> dict[str, Any]:
+    try:
+        from ace_operational import memory_consolidation as mc
+        from tools import director_injection_fixtures as dif
+
+        ws = Path(engine.workspace)
+        suite_report = dif.evaluate_injection_suite()
+
+        verified: set[str] = {str(g["gap_id"]) for g in engine.store.list_gaps() if g.get("gap_id")}
+        mem_path = ws / "cognitive_memory" / "memory.jsonl"
+        if mem_path.is_file():
+            episodes, _ = mc.load_active_episodes(mem_path)
+            for ep in episodes:
+                eid = str(ep.get("id") or "").strip()
+                if eid:
+                    verified.add(eid)
+        live_store = dif.FixtureReferenceStore(verified)
+
+        live_fixtures: list[dict[str, Any]] = []
+        for t in engine.store.list_tasks(limit=100):
+            if t.get("kind") != "director_proposal":
+                continue
+            ckpt = t.get("checkpoint") if isinstance(t.get("checkpoint"), dict) else {}
+            prop = ckpt.get("proposal") if isinstance(ckpt.get("proposal"), dict) else {}
+            norm_ckpt = {
+                **ckpt,
+                "based_on": ckpt.get("based_on") or prop.get("based_on") or [],
+                "evidence_refs": ckpt.get("evidence_refs") or ckpt.get("based_on") or prop.get("based_on") or [],
+                "rationale": ckpt.get("rationale") or prop.get("rationale") or t.get("user_request") or "",
+            }
+            live_fixtures.append({
+                "id": t["task_id"],
+                "attack_vector": "live_proposal_intake",
+                "expected_stopped_by": "none",
+                "task": {"kind": "director_proposal", "checkpoint": norm_ckpt},
+            })
+
+        live_flagged: list[dict[str, Any]] = []
+        if live_fixtures:
+            live_report = dif.evaluate_injection_suite(live_fixtures, store=live_store)
+            for row in live_report.get("results") or []:
+                if row.get("stopped"):
+                    live_flagged.append({
+                        "task_id": row["id"],
+                        "effective_class": row.get("effective_class"),
+                        "guards_triggered": row.get("guards_triggered", []),
+                    })
+
+        _append_jsonl(ws / "injection_rejections.jsonl", {
+            "at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "suite_all_stopped": bool((suite_report.get("summary") or {}).get("all_stopped")),
+            "suite_admitted_class_a": (suite_report.get("summary") or {}).get("admitted_class_a_count", 0),
+            "live_checked": len(live_fixtures),
+            "live_flagged_count": len(live_flagged),
+            "live_flagged": live_flagged,
+        })
+        return {
+            "status": "ok",
+            "suite_all_stopped": bool((suite_report.get("summary") or {}).get("all_stopped")),
+            "live_checked": len(live_fixtures),
+            "live_flagged": len(live_flagged),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
