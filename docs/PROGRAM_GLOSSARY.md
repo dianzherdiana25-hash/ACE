@@ -5,8 +5,8 @@
 ## 1. Ringkasan Sumber
 
 - Berkas Markdown dipindai: **330**
-- Berkas Python AST dipindai (non-test): **507**
-- Total istilah terindeks: **336** (dari 1463 kandidat unik)
+- Berkas Python AST dipindai (non-test): **509**
+- Total istilah terindeks: **336** (dari 1469 kandidat unik)
 
 ### Komposisi Sumber
 
@@ -45,7 +45,7 @@
 | `ace.autonomy.v1` | `ast_schema` | `code/ace_autonomy/core.py:54` | Skema JSON `SCHEMA` pada `code/ace_autonomy/core.py` |
 | `ace.bench-table.v1` | `ast_schema` | `tools/bench_table.py:19` | Skema JSON `BENCH_SCHEMA` pada `tools/bench_table.py` |
 | `ace.brain_registry.v1` | `ast_schema` | `code/ace_operational/brain_registry.py:27` | Skema JSON `REGISTRY_SCHEMA` pada `code/ace_operational/brain_registry.py` |
-| `ace.builder-onboarding-pack.v1` | `ast_schema` | `tools/builder_onboarding_pack.py:21` | Skema JSON `ONBOARDING_SCHEMA` pada `tools/builder_onboarding_pack.py` |
+| `ace.builder-onboarding-pack.v1` | `ast_schema` | `tools/builder_onboarding_pack.py:26` | Skema JSON `ONBOARDING_SCHEMA` pada `tools/builder_onboarding_pack.py` |
 | `ace.bundle-matrix-audit.v1` | `ast_schema` | `tools/seal_run.py:132` | Skema JSON `BUNDLE_MATRIX_SCHEMA` pada `tools/seal_run.py` |
 | `ace.candidate-census.v1` | `ast_schema` | `tools/candidate_census.py:30` | Skema JSON `CENSUS_SCHEMA` pada `tools/candidate_census.py` |
 | `ace.candidate-corpus-quality.v1` | `ast_schema` | `tools/candidate_corpus_batch.py:17` | Skema JSON `SCHEMA` pada `tools/candidate_corpus_batch.py` |
@@ -77,8 +77,8 @@
 | `ace.four-arm-report.v1` | `ast_schema` | `tools/four_arm_report.py:20` | Skema JSON `FOUR_ARM_SCHEMA` pada `tools/four_arm_report.py` |
 | `ace.frozen-corpus-registry.v1` | `ast_schema` | `tools/corpus_registry.py:21` | Skema JSON `REGISTRY_SCHEMA` pada `tools/corpus_registry.py` |
 | `ace.frozen-corpus-registry.v2` | `ast_schema` | `tools/frozen_corpus_registry.py:21` | Skema JSON `REGISTRY_V2_SCHEMA` pada `tools/frozen_corpus_registry.py` |
-| `ace.handover-decisions.v1` | `ast_schema` | `tools/handover_decision_extractor.py:22` | Skema JSON `DECISIONS_SCHEMA` pada `tools/handover_decision_extractor.py` |
-| `ace.handover-index.v1` | `ast_schema` | `tools/handover_index.py:22` | Skema JSON `HANDOVER_INDEX_SCHEMA` pada `tools/handover_index.py` |
+| `ace.handover-decisions.v1` | `ast_schema` | `tools/handover_decision_extractor.py:27` | Skema JSON `DECISIONS_SCHEMA` pada `tools/handover_decision_extractor.py` |
+| `ace.handover-index.v1` | `ast_schema` | `tools/handover_index.py:27` | Skema JSON `HANDOVER_INDEX_SCHEMA` pada `tools/handover_index.py` |
 | `ace.income-ledger.v1` | `ast_schema` | `tools/income_report.py:46` | Skema JSON `LEDGER_SCHEMA` pada `tools/income_report.py` |
 | `ace.income-verification.v1` | `ast_schema` | `tools/income_report.py:45` | Skema JSON `INCOME_SCHEMA` pada `tools/income_report.py` |
 | `ace.inheritance-provenance.v1` | `ast_schema` | `tools/inheritance_probe.py:24` | Skema JSON `PROVENANCE_SCHEMA` pada `tools/inheritance_probe.py` |
@@ -97,6 +97,7 @@
 | `ace.kbm-upload-manifest.v1` | `ast_schema` | `tools/kbm_pipeline.py:62` | Skema JSON `KBM_UPLOAD_MANIFEST_SCHEMA` pada `tools/kbm_pipeline.py` |
 | `ace.lang-constraint-spec.v1` | `ast_schema` | `tools/corpus_factory_lang.py:34` | Skema JSON `CONSTRAINT_SPEC_SCHEMA` pada `tools/corpus_factory_lang.py` |
 | `ace.lang-layered-spec.v2` | `ast_schema` | `tools/candidate_factory_v2.py:41` | Skema JSON `LANG_SPEC_V2_SCHEMA` pada `tools/candidate_factory_v2.py` |
+| `ace.memory-anchor-audit.v1` | `ast_schema` | `tools/memory_anchor_audit.py:24` | Skema JSON `SCHEMA` pada `tools/memory_anchor_audit.py` |
 | `ace.metacog-consolidation.v1` | `ast_schema` | `tools/metacog_memory_consolidate.py:22` | Skema JSON `SCHEMA` pada `tools/metacog_memory_consolidate.py` |
 | `ace.migration-rehearsal.v1` | `ast_schema` | `tools/migration_rehearsal.py:15` | Skema JSON `SCHEMA` pada `tools/migration_rehearsal.py` |
 | `ace.mission.reasoning-candidate.v1` | `ast_schema` | `code/ace_mission/admission.py:16` | Skema JSON `ARTIFACT_SCHEMA` pada `code/ace_mission/admission.py` |
@@ -113,12 +114,11 @@
 | `ace.pattern-conflict-trace.v1` | `ast_schema` | `tools/pattern_catalog.py:25` | Skema JSON `CONFLICT_TRACE_SCHEMA` pada `tools/pattern_catalog.py` |
 | `ace.pattern-distilled.v1` | `ast_schema` | `tools/pattern_distill.py:22` | Skema JSON `DISTILL_SCHEMA` pada `tools/pattern_distill.py` |
 | `ace.periodic-self-report.v1` | `ast_schema` | `tools/periodic_self_report.py:26` | Skema JSON `SCHEMA` pada `tools/periodic_self_report.py` |
-| `ace.platform-requirements-summary.v1` | `ast_schema` | `tools/platform_requirements_summary.py:21` | Skema JSON `PLATFORM_SUMMARY_SCHEMA` pada `tools/platform_requirements_summary.py` |
+| `ace.platform-requirements-summary.v1` | `ast_schema` | `tools/platform_requirements_summary.py:26` | Skema JSON `PLATFORM_SUMMARY_SCHEMA` pada `tools/platform_requirements_summary.py` |
 | `ace.pr-pack.v1` | `ast_schema` | `tools/pr_pack.py:26` | Skema JSON `PR_PACK_SCHEMA` pada `tools/pr_pack.py` |
-| `ace.program-glossary.v1` | `ast_schema` | `tools/program_glossary.py:22` | Skema JSON `GLOSSARY_SCHEMA` pada `tools/program_glossary.py` |
+| `ace.program-glossary.v1` | `ast_schema` | `tools/program_glossary.py:27` | Skema JSON `GLOSSARY_SCHEMA` pada `tools/program_glossary.py` |
 | `ace.ram-window.v1` | `ast_schema` | `tools/ram_window.py:29` | Skema JSON `RAM_WINDOW_SCHEMA` pada `tools/ram_window.py` |
 | `ace.reasoning.xy.v1` | `ast_schema` | `code/ace_cognition/reasoning.py:17` | Skema JSON `SCHEMA` pada `code/ace_cognition/reasoning.py` |
-| `ace.register-agenda-draft.v1` | `ast_schema` | `tools/failure_to_agenda.py:27` | Skema JSON `DRAFT_SCHEMA` pada `tools/failure_to_agenda.py` |
 | `ACE_BASE_RUNTIME_EXECUTED` | `markdown_def` | `docs/ACE_AUTONOMY_V1_RESULTS.md:12` | **`TRUE`** — `ace_runtime` (`931b1582...`) dijalankan langsung maupun melalui `TypedToolBroker` (`ace_demo`, `ace_status`, `ace_enqueue_task`, `ace_run_tasks`, `ace_predict`, `ace_evaluate`, `ace_report`); `tools/verify_… |
 | `ace_self_evolver` | `ast_module` | `ace_self_evolver.py:1` | ACE Audited Self-Evolver (Strict Empirical Verification & Branch Isolation) |
 | `ACEWebCore` | `ast_class` | `code/ace_operational/web_server.py:1600` | Shared application state and API dispatcher used by HTTP server and direct test harness. |
@@ -162,7 +162,7 @@
 | `Aturan 2 — Ratifikasi independen adalah standar` | `markdown_heading` | `handover/GOVERNANCE_RULES_20261115.md:30` | Tidak ada hasil lini mana pun yang menjadi status resmi |
 | `AuditError` | `ast_class` | `tools/self_dev_git_audit.py:29` | Masukan audit atau objek Git lokal tidak dapat diperiksa. |
 | `AuditFinding` | `ast_class` | `code/ace_operational/evolution_mission_loop.py:258` | Deterministic, evidence-backed code/capability improvement finding. |
-| `AuditViewError` | `ast_class` | `tools/self_send_audit_view.py:25` | Error masukan berkas audit tidak ditemukan atau tidak bisa dibaca. |
+| `AuditViewError` | `ast_class` | `tools/self_send_audit_view.py:27` | Error masukan berkas audit tidak ditemukan atau tidak bisa dibaca. |
 | `auto_curriculum` | `ast_module` | `auto_curriculum.py:1` | ACE Auto-Curriculum Runner |
 | `AutomataProposer` | `ast_class` | `code/ace_mission/proposers.py:103` | Active Automata Proposer using Angluin's L* algorithm. |
 | `AutonomousEvolver` | `ast_class` | `code/ace_operational/autonomous_evolver.py:86` | Runs the unified, zero-theater self-evolution loop with causal lineage and passive work orders. |
@@ -198,7 +198,7 @@
 | `BrainContractAdapter` | `ast_class` | `code/ace_operational/oaie_unlimited.py:121` | Wraps any AI model or symbolic solver behind a zero-trust hypothesis interface. |
 | `BrainGovernanceError` | `ast_class` | `code/ace_operational/oaie_unlimited.py:111` | Raised when all candidate brains fail verification or a dismissed brain is invoked. |
 | `BrainUnavailable` | `ast_class` | `code/ace_operational/brain_endpoints.py:114` | An organ is unreachable or unhealthy. Fail-closed: never faked. |
-| `BridgeSecretsError` | `ast_class` | `tools/bridge_secrets.py:27` | Galat tetap tanpa isi credential. |
+| `BridgeSecretsError` | `ast_class` | `tools/bridge_secrets.py:32` | Galat tetap tanpa isi credential, dengan kode taksonomi terstruktur. |
 | `Budget` | `ast_class` | `code/ace_operational/reasoning_lab.py:57` | Shown-case fitness with a hard evaluation cap. |
 | `Budget Preservation` | `markdown_def` | `docs/research/self_dev/ACE_ANTI_STAGNATION_SELF_REPAIR_REPORT_20261107.md:66` | When stagnation is flagged, `should_evaluate=False` and `should_commit=False`, completely bypassing holdout evaluation and suppressing commit spam. |
 | `BudgetController` | `ast_class` | `code/ace_autonomy/budget.py:59` | Enforces declared step, candidate, retry, wall-time, and CPU-time ceilings. |
