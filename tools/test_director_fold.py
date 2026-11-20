@@ -14,15 +14,20 @@ def row(task_id, refs, day):
             "created_at": f"2026-11-{day:02d}T00:00:00Z"}
 
 
+def triage_fixture():
+    rows = [row(f"largest-{i}", ["g0"], i + 1) for i in range(11)]
+    for group in range(1, 10):
+        for i in range(3 if group < 9 else 2):
+            rows.append(row(f"g{group}-{i}", [f"g{group}"], i + 1))
+    rows.append({**row("multi", ["g0", "g1"], 1), "evidence_refs": ["r"],
+                 "touches_money": False, "touches_publication": False, "touches_external": False,
+                 "reversible": True})
+    return rows
+
+
 class DirectorFoldTests(unittest.TestCase):
     def test_38_fixture_proposals_determine_11_groups(self):
-        rows = [row(f"largest-{i}", ["g0"], i + 1) for i in range(11)]
-        for group in range(1, 10):
-            for i in range(3 if group < 9 else 2):
-                rows.append(row(f"g{group}-{i}", [f"g{group}"], i + 1))
-        rows.append({**row("multi", ["g0", "g1"], 1), "evidence_refs": ["r"],
-                     "touches_money": False, "touches_publication": False, "touches_external": False,
-                     "reversible": True})
+        rows = triage_fixture()
         plan = fold_proposals(rows[::-1])
         self.assertEqual(plan, fold_proposals(rows))
         self.assertEqual((plan["proposal_count"], len(plan["groups"])), (38, 11))
