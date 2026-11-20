@@ -694,16 +694,30 @@ def step_home_replication(engine: Any) -> dict[str, Any]:
         return {"status": "skipped", "reason": "no_workspace"}
     ws = Path(raw_ws)
     try:
+        import shutil
+        from tempfile import TemporaryDirectory
         from tools import home_replication_pack as hrp
         from tools import second_home as sh
     except Exception as exc:
         return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
     try:
         ws.mkdir(parents=True, exist_ok=True)
-        manifest = hrp.build_replication_manifest(ws)
-        for self_art in ("home_replication_status.json", "home_replication_target.json"):
-            manifest["files"].pop(self_art, None)
-            manifest["records"].pop(self_art, None)
+        with TemporaryDirectory(prefix="ace-home-repl-") as tmp_dir:
+            snap_dir = Path(tmp_dir)
+            for item in sorted(ws.iterdir()):
+                if item.is_file() and (
+                    item.suffix in (".db", ".sqlite", ".sqlite3")
+                    or item.name in ("brain_registry.json", "director_exec_receipts.jsonl", "step_checkpoints.jsonl")
+                ):
+                    shutil.copy2(item, snap_dir / item.name)
+            cm_dir = ws / "cognitive_memory"
+            if cm_dir.is_dir():
+                dst_cm = snap_dir / "cognitive_memory"
+                dst_cm.mkdir(parents=True, exist_ok=True)
+                for p in sorted(cm_dir.iterdir()):
+                    if p.is_file() and p.suffix in (".json", ".jsonl"):
+                        shutil.copy2(p, dst_cm / p.name)
+            manifest = hrp.build_replication_manifest(snap_dir)
         manifest["file_count"] = len(manifest["files"])
 
         target_path = ws / "home_replication_target.json"
