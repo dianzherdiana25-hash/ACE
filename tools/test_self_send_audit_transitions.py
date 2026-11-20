@@ -42,6 +42,8 @@ class TransitionTests(unittest.TestCase):
         report = audit(self.path)
         self.assertEqual(report["transitions"], [])
         self.assertEqual(report["findings"], [{
+            "source": str(self.path), "line": 1, "reason": "prepared_without_terminal",
+        }, {
             "source": str(self.path), "line": 2, "reason": "sent_without_prepared",
         }])
         self.assertEqual(report["violation_count"], 0)
