@@ -8,6 +8,10 @@ Dry-run membaca peta id → boolean pada field passes di setiap snapshot.
 CLI menulis manifest baru sebelum menjalankan probe. Default
 `inheritance-manifest.json` di direktori kerja. Gunakan `--verify-manifest`
 untuk mengulang dari berkas dan byte yang sama.
+
+`--two-instance` menjalankan dua resolver fixture di memori. Snapshot warisan
+berisi records (query ke keputusan), snapshot dingin berupa objek kosong.
+Tugas mode ini menambah query, expected, dan cold_decision.
 """
 import argparse
 import hashlib
@@ -97,6 +101,39 @@ def compare(inherited, cold, tasks, *, dry_run=False, runner=None, timeout=30):
             "delta": (totals["inherited"] - totals["cold"]) / len(tasks)}
 
 
+def compare_instances(inherited, cold, tasks):
+    """Nilai keputusan dua resolver terpisah dengan skor benar 1 dan salah 0."""
+    records = inherited.get("records") if isinstance(inherited, dict) else None
+    if (not isinstance(records, dict) or cold != {} or any(
+        not isinstance(key, str) or not key.strip() or not isinstance(value, str) or not value.strip()
+        for key, value in records.items()
+    )):
+        raise ValueError("Diperlukan records warisan dan snapshot dingin kosong.")
+    if not isinstance(tasks, list) or not tasks or any(
+        not isinstance(task, dict) or not all(
+            isinstance(task.get(field), str) and task[field].strip()
+            for field in ("id", "query", "cold_decision", "expected")
+        ) for task in tasks
+    ):
+        raise ValueError("Tugas dua-instance memerlukan id, query, cold_decision, dan expected.")
+    decisions = {
+        arm: {task["id"]: snapshot.get(task["query"], task["cold_decision"]) for task in tasks}
+        for arm, snapshot in (("inherited", records), ("cold", cold))
+    }
+    passes = {
+        arm: {"passes": {task["id"]: values[task["id"]] == task["expected"] for task in tasks}}
+        for arm, values in decisions.items()
+    }
+    result = compare(passes["inherited"], passes["cold"], tasks, dry_run=True)
+    result["mode"] = "two_instance_dry_run"
+    for row in result["tasks"]:
+        row["inherited_decision"] = decisions["inherited"][row["id"]]
+        row["cold_decision"] = decisions["cold"][row["id"]]
+        row["delta_score"] = int(row["inherited"]) - int(row["cold"])
+    result["score_delta_total"] = sum(row["delta_score"] for row in result["tasks"])
+    return result
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     for flag in ("inherited", "cold", "tasks"):
@@ -104,26 +141,35 @@ def main(argv=None):
     parser.add_argument("--runner-argv", type=Path)
     parser.add_argument("--timeout", type=int, default=30)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--two-instance", action="store_true")
     provenance = parser.add_mutually_exclusive_group()
     provenance.add_argument("--manifest", type=Path,
                             help="Berkas manifest baru. Default inheritance-manifest.json.")
     provenance.add_argument("--verify-manifest", type=Path, help="Verifikasi manifest sebelum lari.")
     args = parser.parse_args(argv)
+    if args.two_instance and args.runner_argv:
+        parser.error("--two-instance memakai runner internal fixture.")
     try:
         manifest, data = _prepare_inputs({
             "inherited": args.inherited, "cold": args.cold, "tasks": args.tasks,
             "runner_argv": args.runner_argv,
         })
         if args.verify_manifest:
-            _verify_manifest(json.loads(args.verify_manifest.read_bytes()), manifest)
+            manifest_bytes = args.verify_manifest.read_bytes()
+            _verify_manifest(json.loads(manifest_bytes), manifest)
         inherited, cold, tasks = (json.loads(data[key]) for key in ("inherited", "cold", "tasks"))
         runner = json.loads(data["runner_argv"]) if args.runner_argv and not args.dry_run else None
         if not args.verify_manifest:
             target = args.manifest or Path("inheritance-manifest.json")
-            with target.open("x", encoding="utf-8") as stream:
-                stream.write(json.dumps(manifest, sort_keys=True, indent=2) + "\n")
-        result = compare(inherited, cold, tasks,
-                         dry_run=args.dry_run, runner=runner, timeout=args.timeout)
+            manifest_bytes = (json.dumps(manifest, sort_keys=True, indent=2) + "\n").encode("utf-8")
+            with target.open("xb") as stream:
+                stream.write(manifest_bytes)
+        if args.two_instance:
+            result = compare_instances(inherited, cold, tasks)
+            result["manifest_sha256"] = hashlib.sha256(manifest_bytes).hexdigest()
+        else:
+            result = compare(inherited, cold, tasks,
+                             dry_run=args.dry_run, runner=runner, timeout=args.timeout)
     except subprocess.SubprocessError:
         parser.exit(2, "Runner fixture gagal atau habis waktu.\n")
     except (OSError, ValueError) as exc:
