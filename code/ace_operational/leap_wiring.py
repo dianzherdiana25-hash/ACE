@@ -685,3 +685,164 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0042 — AG119: companion Class A Wave-2 reversible executor
+# gated behind ACE_DIRECTOR_EXEC_A2=1 (default off)
+# ------------------------------------------------------------------
+
+class _WorkspaceWave2Store:
+    """Adapter store Kelas A dengan undo eksplisit atas workspace sidecar + checkpoint."""
+
+    def __init__(self, engine: Any, verified_refs: set[str]) -> None:
+        self._engine = engine
+        self._ws = Path(engine.workspace)
+        self._refs = verified_refs
+        self._prac_path = self._ws / "practice_schedule_status.json"
+        self._arch_path = self._ws / "proposal_archive_status.json"
+
+    def verify_ref(self, ref: str) -> bool:
+        return isinstance(ref, str) and ref in self._refs
+
+    def get_practice_status(self, practice_id: str) -> str | None:
+        data = _read_json(self._prac_path, {})
+        if isinstance(data, dict) and practice_id in data:
+            return str(data[practice_id])
+        task = self._engine.store.get_task(practice_id)
+        if task and task.get("kind") == "learning_practice":
+            return str((task.get("checkpoint") or {}).get("wave2_schedule_status") or task.get("status") or "QUEUED")
+        return None
+
+    def set_practice_status(self, practice_id: str, status: str) -> None:
+        data = _read_json(self._prac_path, {})
+        if not isinstance(data, dict):
+            data = {}
+        data[practice_id] = status
+        _write_json(self._prac_path, data)
+        task = self._engine.store.get_task(practice_id)
+        if task is not None:
+            self._engine.store.update_task(
+                practice_id, checkpoint={"wave2_schedule_status": status}
+            )
+
+    def get_proposal_status(self, proposal_id: str) -> str | None:
+        data = _read_json(self._arch_path, {})
+        if isinstance(data, dict) and proposal_id in data:
+            return str(data[proposal_id])
+        task = self._engine.store.get_task(proposal_id)
+        if task and task.get("kind") == "director_proposal":
+            return str((task.get("checkpoint") or {}).get("wave2_archive_status") or "PENDING_REVIEW")
+        return None
+
+    def set_proposal_status(self, proposal_id: str, status: str) -> None:
+        data = _read_json(self._arch_path, {})
+        if not isinstance(data, dict):
+            data = {}
+        data[proposal_id] = status
+        _write_json(self._arch_path, data)
+        task = self._engine.store.get_task(proposal_id)
+        if task is not None:
+            self._engine.store.update_task(
+                proposal_id, checkpoint={"wave2_archive_status": status}
+            )
+
+
+def _wave2_verified_refs(engine: Any) -> set[str]:
+    from ace_operational import memory_consolidation as mc
+
+    ws = Path(engine.workspace)
+    refs: set[str] = {str(g["gap_id"]) for g in engine.store.list_gaps() if g.get("gap_id")}
+    mem_path = ws / "cognitive_memory" / "memory.jsonl"
+    if mem_path.is_file():
+        episodes, _ = mc.load_active_episodes(mem_path)
+        for ep in episodes:
+            eid = str(ep.get("id") or "").strip()
+            if eid:
+                refs.add(eid)
+    return refs
+
+
+def undo_director_wave2_receipt(engine: Any, receipt: dict[str, Any]) -> dict[str, Any]:
+    from ace_operational import director_actions_wave2 as daw2
+
+    undo_payload = receipt.get("undo")
+    if not isinstance(undo_payload, dict):
+        return {"status": "error", "error": "missing undo payload"}
+    adapter = _WorkspaceWave2Store(engine, _wave2_verified_refs(engine))
+    act = undo_payload.get("action")
+    if act == "schedule_practice":
+        daw2.SchedulePractice(adapter).undo(undo_payload)
+    elif act == "archive_proposal":
+        daw2.ArchiveProposal(adapter).undo(undo_payload)
+    else:
+        return {"status": "error", "error": f"unknown wave2 action: {act}"}
+    return {"status": "ok", "reverted": act, "undo": undo_payload}
+
+
+def step_director_actions_wave2(engine: Any) -> dict[str, Any]:
+    try:
+        from ace_operational import director_actions_wave2 as daw2
+
+        if os.environ.get("ACE_DIRECTOR_EXEC_A2", "0") != "1":
+            return {"status": "gated_off", "env": "ACE_DIRECTOR_EXEC_A2"}
+
+        ws = Path(engine.workspace)
+        receipts_path = ws / "director_exec_a2_receipts.jsonl"
+        today_prefix = _now_iso()[:10]
+        today_count = 0
+        if receipts_path.is_file():
+            for raw in receipts_path.read_text(encoding="utf-8", errors="ignore").splitlines():
+                raw = raw.strip()
+                if not raw:
+                    continue
+                try:
+                    row = json.loads(raw)
+                    if isinstance(row, dict) and str(row.get("at") or "").startswith(today_prefix):
+                        today_count += 1
+                except Exception:
+                    continue
+        if today_count >= 3:
+            return {"status": "capped", "daily_count": today_count, "daily_cap": 3}
+
+        adapter = _WorkspaceWave2Store(engine, _wave2_verified_refs(engine))
+        tasks = engine.store.list_tasks(limit=100)
+        for t in tasks:
+            ckpt = t.get("checkpoint") if isinstance(t.get("checkpoint"), dict) else {}
+            if t.get("kind") == "learning_practice" and adapter.get_practice_status(t["task_id"]) == "QUEUED":
+                evs = ckpt.get("evidence_refs") or ([ckpt["gap_id"]] if ckpt.get("gap_id") else [])
+                payload = {"checkpoint": {"practice_id": t["task_id"], "evidence_refs": evs}}
+                undo_payload = daw2.SchedulePractice(adapter).execute(payload)
+                _append_jsonl(receipts_path, {
+                    "at": _now_iso(),
+                    "cycle": getattr(engine, "cycle_count", 0),
+                    "class": "A",
+                    "action": "schedule_practice",
+                    "task_id": t["task_id"],
+                    "reversible": True,
+                    "undo": undo_payload,
+                })
+                return {"status": "ok", "executed": "schedule_practice", "task_id": t["task_id"]}
+
+        for t in tasks:
+            ckpt = t.get("checkpoint") if isinstance(t.get("checkpoint"), dict) else {}
+            if t.get("kind") == "director_proposal" and ckpt.get("archive_requested") and adapter.get_proposal_status(t["task_id"]) == "PENDING_REVIEW":
+                prop = ckpt.get("proposal") if isinstance(ckpt.get("proposal"), dict) else {}
+                evs = ckpt.get("evidence_refs") or prop.get("based_on") or []
+                payload = {"checkpoint": {"proposal_id": t["task_id"], "evidence_refs": evs}}
+                undo_payload = daw2.ArchiveProposal(adapter).execute(payload)
+                _append_jsonl(receipts_path, {
+                    "at": _now_iso(),
+                    "cycle": getattr(engine, "cycle_count", 0),
+                    "class": "A",
+                    "action": "archive_proposal",
+                    "task_id": t["task_id"],
+                    "reversible": True,
+                    "undo": undo_payload,
+                })
+                return {"status": "ok", "executed": "archive_proposal", "task_id": t["task_id"]}
+
+        return {"status": "idle", "reason": "no eligible wave2 action"}
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+

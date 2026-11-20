@@ -144,6 +144,40 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_director_actions_wave2_gated_exec_and_undo(self) -> None:
+        import os
+        from unittest.mock import patch
+
+        self._seed_gap()
+        gid = self.engine.store.list_gaps(status="OPEN")[0]["gap_id"]
+        prac = self.engine.store.create_task(
+            kind="learning_practice",
+            title_id="Wave2 Practice",
+            user_request="latihan wave2",
+            normalized_goal="latihan wave2",
+            model_backend="leap_wiring/failure_taskgen",
+            priority=5,
+            checkpoint={"gap_id": gid, "evidence_refs": [gid]},
+            hold_for_review=False,
+        )
+        with patch.dict(os.environ, {"ACE_DIRECTOR_EXEC_A2": "0"}, clear=False):
+            off = leap_wiring.step_director_actions_wave2(self.engine)
+        self.assertEqual(off["status"], "gated_off")
+        self.assertFalse((self.ws / "director_exec_a2_receipts.jsonl").exists())
+
+        with patch.dict(os.environ, {"ACE_DIRECTOR_EXEC_A2": "1"}, clear=False):
+            on = leap_wiring.step_director_actions_wave2(self.engine)
+        self.assertEqual(on["status"], "ok")
+        self.assertEqual(on["executed"], "schedule_practice")
+        r_path = self.ws / "director_exec_a2_receipts.jsonl"
+        self.assertTrue(r_path.is_file())
+        receipt = json.loads(r_path.read_text(encoding="utf-8").strip().splitlines()[-1])
+        self.assertTrue(receipt["reversible"])
+        undo_res = leap_wiring.undo_director_wave2_receipt(self.engine, receipt)
+        self.assertEqual(undo_res["status"], "ok")
+        status_map = json.loads((self.ws / "practice_schedule_status.json").read_text(encoding="utf-8"))
+        self.assertEqual(status_map[prac["task_id"]], "QUEUED")
+
 
 if __name__ == "__main__":
     unittest.main()
