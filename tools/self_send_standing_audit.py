@@ -3,8 +3,7 @@
 
 Periode meliputi hari UTC yang muncul dalam berkas *.jsonl langsung di
 direktori. Laporan menghitung yatim sebagai prepared yang masih terbuka pada
-akhir hari. Terminal tanpa prepared dilaporkan terpisah. Log tanpa task_id
-menggunakan branch dan content_digest sebagai identitas dari amplop. Baris
+akhir hari. Terminal tanpa prepared dilaporkan terpisah. Kunci pasangan memakai branch, content_digest, dan task_id bila tersedia. Baris
 tanpa timestamp sah menambah pelanggaran tanpa tanggal.
 """
 import argparse
@@ -54,11 +53,14 @@ def standing_audit(directory):
             days.append(current)
         category, _ = classify_outcome(row["outcome"])
         current["envelope_violations"] += len(envelope_violations(row, category))
-        key = delivery_key(row)
+        envelope_key = delivery_key(row)
+        task_id = row.get("task_id")
+        if not isinstance(task_id, str) or not task_id.strip():
+            task_id = None
+        key = (*envelope_key, task_id) if envelope_key else None
         if category == "prepared":
             current["prepared"] += 1
-            task_id = row.get("task_id")
-            if not isinstance(task_id, str) or not task_id.strip():
+            if task_id is None:
                 task_id = f"{key[0]}@{key[1]}" if key else f"{source}:{line}"
             pending[key if key else (source, line)].append(task_id)
             open_count += 1

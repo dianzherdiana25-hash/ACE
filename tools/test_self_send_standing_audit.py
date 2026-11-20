@@ -71,3 +71,12 @@ class StandingAuditTests(unittest.TestCase):
         self.assertEqual(report["undated_violations"], 1)
         self.assertEqual(report["days"][0]["sent_without_prepared"], 1)
         self.assertEqual(report["open_orphan_task_ids"], [])
+
+    def test_distinct_task_ids_with_same_envelope_do_not_close_each_other(self):
+        base = {"ts": "2026-11-20T10:00:00Z", "branch": "ace-auto/20261120-only",
+                "content_digest": "synthetic"}
+        rows = [{**base, "task_id": task_id, "outcome": outcome} for task_id, outcome in (
+            ("first", "prepared"), ("second", "prepared"), ("second", "sent"),
+        )]
+        (self.root / "events.jsonl").write_text("".join(json.dumps(row) + "\n" for row in rows))
+        self.assertEqual(standing_audit(self.root)["open_orphan_task_ids"], ["first"])
