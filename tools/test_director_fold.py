@@ -47,3 +47,38 @@ class DirectorFoldTests(unittest.TestCase):
             group, = json.loads(run.stdout)["groups"]
             self.assertEqual((group["representative"], group["initial_class"]), ("old", "C"))
             self.assertEqual(source.read_bytes(), data)
+
+    def test_plan_mode_on_38_triage_proposals_yields_11_representatives_and_exact_duplicate_counts(self):
+        rows = triage_fixture()
+        with TemporaryDirectory() as directory:
+            source = Path(directory) / "triage_38.jsonl"
+            raw = "".join(json.dumps(item) + "\n" for item in rows).encode("utf-8")
+            source.write_bytes(raw)
+            run = subprocess.run(
+                [sys.executable, str(Path(__file__).with_name("director_fold.py")), str(source), "--plan"],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            plan = json.loads(run.stdout)
+            self.assertEqual(plan["mode"], "plan_only")
+            self.assertTrue(plan["read_only"])
+            self.assertEqual(plan["proposal_count"], 38)
+            self.assertEqual(plan["representative_count"], 11)
+            self.assertEqual(plan["duplicate_count"], 27)
+            self.assertEqual(plan["umbrella_count"], 1)
+            self.assertEqual(len(plan["representatives"]), 11)
+            self.assertEqual(plan["umbrella_groups"][0]["representative"], "multi")
+            self.assertEqual(plan["umbrella_groups"][0]["based_on"], ["g0", "g1"])
+
+            by_rep = plan["duplicates_by_group"]
+            self.assertEqual(by_rep["largest-0"]["duplicate_count"], 10)
+            for g in range(1, 9):
+                self.assertEqual(by_rep[f"g{g}-0"]["duplicate_count"], 2)
+            self.assertEqual(by_rep["g9-0"]["duplicate_count"], 1)
+            self.assertEqual(by_rep["multi"]["duplicate_count"], 0)
+            self.assertEqual(source.read_bytes(), raw)
+
+
+if __name__ == "__main__":
+    unittest.main()

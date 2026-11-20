@@ -83,9 +83,38 @@ def fold_proposals(rows, *, anchor_store=None):
     return {"schema": "ace.director-fold-plan.v1", "proposal_count": len(seen), "groups": folded}
 
 
+def build_fold_plan_view(folded: dict) -> dict:
+    """Bentuk rencana lipat JSON read-only berisi perwakilan, duplikat, dan payung multi-gap."""
+    groups = folded["groups"]
+    umbrella = [group for group in groups if group["kind"] == "multi_gap"]
+    return {
+        "schema": folded["schema"],
+        "mode": "plan_only",
+        "read_only": True,
+        "proposal_count": folded["proposal_count"],
+        "representative_count": len(groups),
+        "duplicate_count": sum(len(group["duplicates"]) for group in groups),
+        "umbrella_count": len(umbrella),
+        "representatives": [group["representative"] for group in groups],
+        "umbrella_groups": umbrella,
+        "duplicates_by_group": {
+            group["representative"]: {
+                "kind": group["kind"],
+                "based_on": group["based_on"],
+                "duplicate_count": len(group["duplicates"]),
+                "duplicates": group["duplicates"],
+                "initial_class": group["initial_class"],
+            }
+            for group in groups
+        },
+        "groups": groups,
+    }
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("proposals", type=Path)
+    parser.add_argument("--plan", action="store_true", help="Keluarkan ringkasan rencana lipat JSON tanpa mengubah berkas.")
     parser.add_argument("--require-anchored", action="store_true")
     parser.add_argument("--store", type=Path)
     args = parser.parse_args(argv)
@@ -95,6 +124,8 @@ def main(argv=None):
         store = _FixtureStore(json.loads(args.store.read_text(encoding="utf-8"))) if args.store else None
         with args.proposals.open(encoding="utf-8") as source:
             result = fold_proposals((json.loads(line) for line in source if line.strip()), anchor_store=store)
+        if args.plan:
+            result = build_fold_plan_view(result)
     except (OSError, ValueError) as exc:
         parser.exit(2, f"Error: {exc}\n")
     print(json.dumps(result, sort_keys=True, indent=2, ensure_ascii=False))
