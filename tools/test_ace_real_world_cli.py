@@ -43,10 +43,10 @@ class AceRealWorldCliSmokeTests(unittest.TestCase):
 
         with TemporaryDirectory() as tmp:
             repo = Path(tmp) / "repo"
-            repo.mkdir()
-            (repo / "sample.py").write_text("def hello():\n    return 1\n", encoding="utf-8")
+            (repo / "tools").mkdir(parents=True)
+            (repo / "tools" / "sample.py").write_text("def hello():\n    return 1\n", encoding="utf-8")
             subprocess.run(["git", "-C", str(repo), "init", "-q"], check=True, capture_output=True)
-            subprocess.run(["git", "-C", str(repo), "add", "sample.py"], check=True, capture_output=True)
+            subprocess.run(["git", "-C", str(repo), "add", "tools/sample.py"], check=True, capture_output=True)
             subprocess.run(
                 [
                     "git", "-C", str(repo),
