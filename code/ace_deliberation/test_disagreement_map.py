@@ -111,3 +111,8 @@ class DisagreementTests(unittest.TestCase):
         report = disagreement.compare(raw)
         self.assertTrue(all(row["distance"] is None for row in report["pairs"]))
         self.assertEqual(report["issue_profiles"][0]["stances"]["missing"], 3)
+
+    def test_invalid_xml_controls_in_participant_labels_are_refused(self):
+        raw = {**fixture(), "participants": ["normal", "unsafe\x01label"], "positions": []}
+        with self.assertRaises(disagreement.MapError):
+            disagreement.compare(raw)

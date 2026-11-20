@@ -40,8 +40,11 @@ yang ada di paket ini. Angka butir mengikuti rancangan EVO 0051.
 | 33 | `async_deliberation.py` | Buffer lintas siklus, deadline dan replay checkpoint |
 | 34 | `voi_limiter.py` | Posterior per hasil uji, nilai informasi bersih dan anggaran |
 | 35 | `disagreement_map.py` | Matriks posisi berbobot, abstain, data hilang dan SVG |
+| 36 | `worst_case_test.py` | Payoff worst-case, maximin, regret dan dominasi |
+| 37 | `argument_scorer.py` | Median rubrik, rentang observasi, kuorum dan kriteria kritis |
+| 38 | `circular_detector.py` | Fondasi independen, aturan multipremis dan saksi siklus residual |
 
-Butir tersisa pada 0051 mencakup 36–60. Pengukuran
+Butir tersisa pada 0051 mencakup 39–60. Pengukuran
 di paket ini memakai fixture sintetis. Pasangan program dan tes yang
 tercantum dihitung bersama untuk rentang baris per kemampuan. Verifier
 ambang dan langkah integrasi berada di luar hitungan kemampuan.
