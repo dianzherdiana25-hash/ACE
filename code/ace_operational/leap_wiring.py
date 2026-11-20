@@ -685,3 +685,65 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0049 — perancang eksperimen pemalsuan terkecil
+# ------------------------------------------------------------------
+
+
+def step_experiment_designer(engine: Any) -> dict[str, Any]:
+    """Susun spesifikasi eksperimen pemalsuan terkecil dari hipotesis workspace (AG181)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import experiment_designer
+
+        hyp_path = ws / "hypotheses.json"
+        out_path = ws / "experiment_designs.json"
+        cycle = int(getattr(engine, "cycle_count", 0) or 0)
+
+        if not hyp_path.is_file():
+            payload = {
+                "at": _now_iso(),
+                "cycle": cycle,
+                "schema": experiment_designer.BATCH_SCHEMA,
+                "count": 0,
+                "total_estimated_cycles": 0,
+                "by_type": {t: 0 for t in experiment_designer.VALID_EXPERIMENT_TYPES},
+                "designs": [],
+            }
+            _write_json(out_path, payload)
+            return {"status": "ok", "count": 0, "report_path": str(out_path)}
+
+        raw = json.loads(hyp_path.read_text(encoding="utf-8"))
+        if isinstance(raw, dict):
+            if isinstance(raw.get("hypotheses"), list):
+                items = list(raw["hypotheses"])
+            else:
+                items = [
+                    {**v, "hypothesis_id": str(v.get("hypothesis_id") or k)}
+                    for k, v in sorted(raw.items())
+                    if isinstance(v, dict)
+                ]
+        elif isinstance(raw, list):
+            items = [dict(x) for x in raw if isinstance(x, dict)]
+        else:
+            raise ValueError("hypotheses.json wajib objek atau daftar objek.")
+
+        batch = experiment_designer.design_batch(items)
+        _write_json(out_path, {"at": _now_iso(), "cycle": cycle, **batch})
+        return {
+            "status": "ok",
+            "count": batch["count"],
+            "total_estimated_cycles": batch["total_estimated_cycles"],
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

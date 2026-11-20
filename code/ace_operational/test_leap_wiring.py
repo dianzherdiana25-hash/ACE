@@ -144,6 +144,19 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_experiment_designer_generates_designs_and_fails_closed(self) -> None:
+        leap_wiring.step_self(self.engine)
+        res = leap_wiring.step_experiment_designer(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertGreaterEqual(res["count"], 1)
+        saved = json.loads((self.ws / "experiment_designs.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.experiment-design-batch.v1")
+
+        (self.ws / "hypotheses.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_experiment_designer(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
