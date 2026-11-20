@@ -8,6 +8,7 @@ ACE_BUNDLE_PASSPHRASE dan dikeluarkan dari env anak. Jalur CLI menyembunyikan
 stdout/stderr anak. Program anak harus dipercaya memakai env secara privat.
 """
 import argparse
+import json
 import os
 from pathlib import Path
 import subprocess
@@ -24,24 +25,124 @@ _BINDINGS = {"groq-api-key": "GROQ_API_KEY", "gemini-api-key": "GEMINI_API_KEY",
 _REQUIRED = ("groq-api-key", "gemini-api-key", "gonka-api-key")
 
 
+class _DuplicateEntryError(ValueError):
+    pass
+
+
 class BridgeSecretsError(ValueError):
-    """Galat tetap tanpa isi credential."""
+    """Galat tetap tanpa isi credential, dengan kode taksonomi terstruktur."""
+
+    def __init__(self, message: str, *, code: str = "bridge_secrets_error") -> None:
+        super().__init__(message)
+        self.code = code
+
+
+def _no_duplicate_object_pairs(pairs):
+    obj = {}
+    for key, value in pairs:
+        if key in obj:
+            raise _DuplicateEntryError(key)
+        obj[key] = value
+    return obj
+
+
+def _check_manifest_if_present(bundle_dir: Path) -> None:
+    manifest_path = bundle_dir / "manifest.json"
+    if not manifest_path.is_file():
+        return
+    try:
+        manifest = json.loads(
+            manifest_path.read_text(encoding="utf-8"),
+            object_pairs_hook=_no_duplicate_object_pairs,
+        )
+    except _DuplicateEntryError:
+        raise BridgeSecretsError(
+            "Bundel bridge memuat nama entri duplikat.",
+            code="duplicate_entry",
+        ) from None
+    except (OSError, ValueError):
+        raise BridgeSecretsError(
+            "Skema bundel bridge tidak sah.",
+            code="invalid_schema",
+        ) from None
+    if (
+        not isinstance(manifest, dict)
+        or manifest.get("schema") != secrets_bundle.SCHEMA_MANIFEST
+        or not isinstance(manifest.get("entries"), list)
+    ):
+        raise BridgeSecretsError(
+            "Skema bundel bridge tidak sah.",
+            code="invalid_schema",
+        )
+    seen_names: set[str] = set()
+    for entry in manifest["entries"]:
+        if not isinstance(entry, dict) or not isinstance(entry.get("name"), str):
+            raise BridgeSecretsError(
+                "Skema bundel bridge tidak sah.",
+                code="invalid_schema",
+            )
+        name = entry["name"]
+        if name in seen_names:
+            raise BridgeSecretsError(
+                "Bundel bridge memuat nama entri duplikat.",
+                code="duplicate_entry",
+            )
+        seen_names.add(name)
 
 
 def bridge_environment(bundle_dir: Path, passphrase: str, *, environ=None) -> dict:
-    if not (bundle_dir / "bundle.gpg").is_file():
-        raise BridgeSecretsError("Bundel bridge tidak ditemukan.")
+    bundle_path = bundle_dir / "bundle.gpg"
+    if not bundle_path.is_file():
+        raise BridgeSecretsError("Bundel bridge tidak ditemukan.", code="bundle_missing")
     if (not isinstance(passphrase, str) or not passphrase or "\n" in passphrase
             or len(passphrase.encode("utf-8")) > 1024):
-        raise BridgeSecretsError("Passphrase bundel absen atau tidak sah.")
+        raise BridgeSecretsError("Passphrase bundel absen atau tidak sah.", code="invalid_passphrase")
     try:
-        values = secrets_bundle._load_values(passphrase, bundle_dir)["values"]
-    except (OSError, ValueError, TypeError, KeyError, AttributeError, secrets_bundle.BundleError):
-        raise BridgeSecretsError("Bundel bridge gagal didekripsi atau tidak sah.") from None
+        if bundle_path.stat().st_size == 0:
+            raise BridgeSecretsError("Bundel bridge kosong.", code="bundle_empty")
+    except OSError:
+        raise BridgeSecretsError("Bundel bridge tidak ditemukan.", code="bundle_missing") from None
+
+    _check_manifest_if_present(bundle_dir)
+
+    try:
+        raw = secrets_bundle._decrypt(passphrase, bundle_path)
+    except (OSError, secrets_bundle.BundleError):
+        raise BridgeSecretsError(
+            "Bundel bridge gagal didekripsi: passphrase salah atau ciphertext rusak.",
+            code="wrong_passphrase",
+        ) from None
+
+    if not raw or not raw.strip():
+        raise BridgeSecretsError("Bundel bridge kosong.", code="bundle_empty")
+
+    try:
+        data = json.loads(raw.decode("utf-8"), object_pairs_hook=_no_duplicate_object_pairs)
+    except _DuplicateEntryError:
+        raise BridgeSecretsError(
+            "Bundel bridge memuat nama entri duplikat.",
+            code="duplicate_entry",
+        ) from None
+    except (ValueError, UnicodeDecodeError):
+        raise BridgeSecretsError("Skema bundel bridge tidak sah.", code="invalid_schema") from None
+
+    if (
+        not isinstance(data, dict)
+        or data.get("schema") != secrets_bundle.SCHEMA_BUNDLE
+        or not isinstance(data.get("values"), dict)
+    ):
+        raise BridgeSecretsError("Skema bundel bridge tidak sah.", code="invalid_schema")
+
+    values = data["values"]
+    if len(values) == 0:
+        raise BridgeSecretsError("Bundel bridge kosong.", code="bundle_empty")
 
     for key in _REQUIRED:
         if key not in values:
-            raise BridgeSecretsError("Bundel belum memuat semua entri wajib bridge.")
+            raise BridgeSecretsError(
+                "Bundel belum memuat semua entri wajib bridge.",
+                code="missing_required_entry",
+            )
     child_env = dict(os.environ if environ is None else environ)
     child_env.pop("ACE_BUNDLE_PASSPHRASE", None)
     for key, target in _BINDINGS.items():
@@ -49,7 +150,10 @@ def bridge_environment(bundle_dir: Path, passphrase: str, *, environ=None) -> di
         if key in values:
             value = values[key]
             if not isinstance(value, str) or not value.strip() or "\0" in value:
-                raise BridgeSecretsError("Bundel memuat entri bridge yang tidak sah.")
+                raise BridgeSecretsError(
+                    "Bundel memuat entri bridge yang tidak sah.",
+                    code="invalid_entry_value",
+                )
             child_env[target] = value
     return child_env
 
@@ -66,11 +170,11 @@ def main(argv=None):
         env = bridge_environment(args.bundle, os.environ.get("ACE_BUNDLE_PASSPHRASE"))
         result = subprocess.run(command, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except BridgeSecretsError as exc:
-        parser.exit(2, f"Error: {exc}\n")
+        parser.exit(2, f"Error [{exc.code}]: {exc}\n")
     except (OSError, ValueError):
-        parser.exit(2, "Error: proses anak bridge tidak dapat dimulai.\n")
+        parser.exit(2, "Error [child_spawn_failed]: proses anak bridge tidak dapat dimulai.\n")
     if result.returncode:
-        parser.exit(1, "Error: proses anak bridge gagal.\n")
+        parser.exit(1, "Error [child_failed]: proses anak bridge gagal.\n")
     return 0
 
 
