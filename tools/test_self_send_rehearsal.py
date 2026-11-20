@@ -29,3 +29,28 @@ class RehearsalTests(unittest.TestCase):
             {"source": "audit.jsonl", "line": 1, "reason": "prepared_without_terminal"},
         ])
         self.assertEqual(result["audit"]["violation_count"], 0)
+
+    def test_batch_rejects_invalid_envelope_before_prepared_or_mock(self):
+        result = self_send_rehearsal.rehearse_batch(4)
+        first, rejected, third, fourth = result["envelopes"]
+        self.assertEqual([item["status"] for item in (first, third, fourth)], ["sent"] * 3)
+        self.assertEqual((rejected["branch"], rejected["status"]), ("main", "rejected"))
+        self.assertEqual(rejected["envelope"]["checks"]["target_branch"],
+                         {"passed": False, "reason": "branch_refused"})
+        self.assertNotIn("mock_argv", rejected)
+        self.assertEqual([(row["branch"], row["outcome"]) for row in result["log"]], [
+            (item["branch"], event) for item in (first, third, fourth) for event in ("prepared", "sent")
+        ])
+        stamps = [row["ts"] for row in result["log"]]
+        self.assertEqual(stamps, sorted(set(stamps)))
+        self.assertEqual(result["audit"]["sent"], 3)
+        self.assertEqual(result["audit"]["findings"], [])
+        self.assertEqual(result["audit"]["violation_count"], 0)
+        self.assertEqual(result["audit"]["transitions"], [
+            {"prepared": {"source": "audit.jsonl", "line": line},
+             "sent": {"source": "audit.jsonl", "line": line + 1}} for line in (1, 3, 5)
+        ])
+
+    def test_batch_needs_a_rejected_and_a_valid_envelope(self):
+        with self.assertRaises(ValueError):
+            self_send_rehearsal.rehearse_batch(1)
