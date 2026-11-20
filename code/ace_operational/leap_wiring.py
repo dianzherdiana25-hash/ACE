@@ -685,3 +685,70 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0049 — pabrik perangkat lunak multi-agen (AST + QA + receipt)
+# ------------------------------------------------------------------
+
+
+def step_software_factory(engine: Any) -> dict[str, Any]:
+    """Jalankan pabrik perangkat lunak atas spesifikasi workspace atau probe AST (AG189)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from ace_operational import software_factory
+
+        store = getattr(engine, "store", None)
+        if store is None:
+            return {"status": "skipped", "reason": "no store"}
+
+        factory = software_factory.SoftwareFactory(store)
+        spec_path = ws / "software_factory_spec.json"
+        cycle = int(getattr(engine, "cycle_count", 0) or 0)
+        target_dir = ws / "factory_projects"
+        out_path = ws / "software_factory_status.json"
+
+        if spec_path.is_file():
+            spec = json.loads(spec_path.read_text(encoding="utf-8"))
+            if not isinstance(spec, dict):
+                raise ValueError("software_factory_spec.json wajib objek JSON.")
+            pname = str(spec.get("project_name") or f"proj-{cycle}")
+            spec_id = str(spec.get("specification_id") or f"spec-{cycle}")
+            files_spec = spec.get("files")
+            if not isinstance(files_spec, dict) or not files_spec:
+                raise ValueError("files wajib berupa dict non-kosong.")
+            raw_test = spec.get("test_spec")
+            test_spec = (str(raw_test[0]), str(raw_test[1])) if isinstance(raw_test, list) and len(raw_test) == 2 else None
+            res = factory.build_project(
+                pname,
+                spec_id,
+                target_dir / pname,
+                {str(k): str(v) for k, v in files_spec.items()},
+                test_spec=test_spec,
+            )
+            mode = "build_project"
+        else:
+            probe = factory.synthesize_module(
+                target_dir / "_probe.py",
+                "def ok() -> bool:\n    return True\n",
+                is_python=True,
+            )
+            res = {"success": bool(probe.get("success")), **probe}
+            mode = "synthesize_probe"
+
+        _write_json(out_path, {"at": _now_iso(), "cycle": cycle, "mode": mode, **res})
+        return {
+            "status": "ok",
+            "mode": mode,
+            "success": bool(res.get("success", False)),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

@@ -144,6 +144,33 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_software_factory_synthesizes_runs_tests_and_fails_closed(self) -> None:
+        (self.ws / "software_factory_spec.json").write_text(
+            json.dumps(
+                {
+                    "project_name": "mini_add",
+                    "specification_id": "spec-1",
+                    "files": {"mod.py": "def add(a, b):\n    return a + b\n"},
+                    "test_spec": [
+                        "test_mod.py",
+                        "import unittest\nfrom mod import add\nclass T(unittest.TestCase):\n    def test_a(self):\n        self.assertEqual(add(2, 3), 5)\nif __name__ == '__main__':\n    unittest.main()\n",
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_software_factory(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["mode"], "build_project")
+        self.assertTrue(res["success"])
+        saved = json.loads((self.ws / "software_factory_status.json").read_text(encoding="utf-8"))
+        self.assertTrue(saved["success"])
+
+        (self.ws / "software_factory_spec.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_software_factory(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
