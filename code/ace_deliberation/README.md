@@ -35,8 +35,13 @@ yang ada di paket ini. Angka butir mengikuti rancangan EVO 0051.
 | 28 | `signal_watcher.py` | Sampel beruntun, hysteresis, kedaluwarsa dan bukti |
 | 29 | `forecast_aggregator.py` | Bobot per keluarga, log-odds dan sensitivitas |
 | 30 | `decision_linker.py` | Versi yang dirujuk, ambang dan daftar putusan terdampak |
+| 31 | `source_credibility.py` | Penilaian per topik, umur bukti, dan satu kontribusi per klaim |
+| 32 | `weighted_voting.py` | Bobot keahlian, kuorum, transfer preferensi dan seri |
+| 33 | `async_deliberation.py` | Buffer lintas siklus, deadline dan replay checkpoint |
+| 34 | `voi_limiter.py` | Posterior per hasil uji, nilai informasi bersih dan anggaran |
+| 35 | `disagreement_map.py` | Matriks posisi berbobot, abstain, data hilang dan SVG |
 
-Butir tersisa pada 0051 mencakup 31–60. Pengukuran
+Butir tersisa pada 0051 mencakup 36–60. Pengukuran
 di paket ini memakai fixture sintetis. Pasangan program dan tes yang
 tercantum dihitung bersama untuk rentang baris per kemampuan. Verifier
 ambang dan langkah integrasi berada di luar hitungan kemampuan.
