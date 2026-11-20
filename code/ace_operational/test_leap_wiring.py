@@ -144,6 +144,15 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_program_glossary_writes_compact_summary(self):
+        res = leap_wiring.step_program_glossary(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["schema"], "ace.program-glossary.v1")
+        out = json.loads((self.ws / "program_glossary.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.program-glossary.v1")
+        self.assertGreater(len(out["term_groups"]), 0)
+        self.assertGreater(out["term_count"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

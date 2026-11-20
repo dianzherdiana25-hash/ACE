@@ -685,3 +685,29 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_program_glossary(engine: Any) -> dict[str, Any]:
+    """Bangun ringkasan glosarium program repo ke program_glossary.json."""
+    try:
+        from tools.program_glossary import build_glossary
+
+        report = build_glossary(_REPO_ROOT, max_per_kind=20)
+        summary = dict(report.get("summary") or {})
+        kind_counts = summary.get("kind_counts") or {}
+        compact = {
+            "schema": report.get("schema", "ace.program-glossary.v1"),
+            "summary": summary,
+            "term_groups": sorted(kind_counts.keys()) if isinstance(kind_counts, dict) else [],
+            "term_count": len(report.get("terms") or []),
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "program_glossary.json", compact)
+        return {
+            "status": "ok",
+            "schema": compact["schema"],
+            "groups": len(compact["term_groups"]),
+            "terms": compact["term_count"],
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}
