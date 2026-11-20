@@ -132,3 +132,15 @@ class PositionDriftTests(unittest.TestCase):
         raw["rounds"] = [record(1, ("a", "one", "support")), record(2, ("a", "two", "oppose"))]
         one, two = drift.measure(raw)["comparisons"][0]["issues"]
         self.assertTrue(all(item["net_shift"] is None and item["individual_drift"] is None for item in (one, two)))
+
+    def test_round_number_cannot_be_reused_to_hide_multiple_positions(self):
+        raw = fixture()
+        raw["rounds"][1]["number"] = raw["rounds"][0]["number"]
+        with self.assertRaisesRegex(drift.DriftError, "Nomor"):
+            drift.measure(raw)
+
+    def test_measurement_never_mutates_fixture_order_or_votes(self):
+        raw = fixture()
+        before = json.dumps(raw, sort_keys=True)
+        drift.measure(raw)
+        self.assertEqual(json.dumps(raw, sort_keys=True), before)

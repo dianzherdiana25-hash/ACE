@@ -116,3 +116,7 @@ class CircularTests(unittest.TestCase):
         self.assertEqual(report["ungrounded_non_cyclic"], ["a", "b", "c", "d"])
         self.assertEqual(report["cycles"], [])
         self.assertEqual(report["grounded"], [])
+
+    def test_empty_claim_registry_cannot_supply_foundations(self):
+        with self.assertRaises(circular.CircularError):
+            circular.detect({"claims": [], "foundations": [], "rules": []})

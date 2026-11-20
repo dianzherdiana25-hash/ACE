@@ -47,8 +47,10 @@ yang ada di paket ini. Angka butir mengikuti rancangan EVO 0051.
 | 40 | `expert_witness.py` | Undangan lokal terikat hash dan testimoni dalam jendela |
 | 41 | `claim_timeline.py` | Versi klaim bertanggal dan diff yang menyertakan perubahan antara |
 | 42 | `position_drift.py` | Drift individu, variasi distribusi dan peserta pembanding |
+| 43 | `dual_brief.py` | Dua format, glosarium bersumber dan angka literal terjaga |
+| 44 | `debate_archiver.py` | Paket preseden kanonis, lesson, manifest dan hash eksternal |
 
-Butir tersisa pada 0051 mencakup 43–60. Pengukuran
+Butir tersisa pada 0051 mencakup 45–60. Pengukuran
 di paket ini memakai fixture sintetis. Pasangan program dan tes yang
 tercantum dihitung bersama untuk rentang baris per kemampuan. Verifier
 ambang dan langkah integrasi berada di luar hitungan kemampuan.
