@@ -144,6 +144,19 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_daily_digest_writes_non_authoritative_json_and_fails_closed(self) -> None:
+        res = leap_wiring.step_daily_digest(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertFalse(res["authoritative"])
+        self.assertGreaterEqual(res["commit_count"], 1)
+        saved = json.loads((self.ws / "daily_digest.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.daily-digest.v1")
+
+        self.engine.repo_root = self.ws
+        bad = leap_wiring.step_daily_digest(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -685,3 +685,49 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0048 — digest perubahan harian non-otoritatif
+# ------------------------------------------------------------------
+
+
+def step_daily_digest(engine: Any) -> dict[str, Any]:
+    """Susun digest harian read-only non-otoritatif secara fail-closed (AG174)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import daily_digest
+
+        repo_dir = Path(getattr(engine, "repo_root", None) or _REPO_ROOT)
+        digest = daily_digest.build_daily_digest(
+            repo_dir,
+            max_commits=10,
+            auto_storage_debt=False,
+            auto_dashboard=False,
+            auto_repo_index=False,
+        )
+        out_path = ws / "daily_digest.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                **digest,
+            },
+        )
+        summary = digest.get("summary") or {}
+        return {
+            "status": "ok",
+            "authoritative": bool(digest.get("authoritative", False)),
+            "commit_count": summary.get("commit_count", 0),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+
