@@ -32,6 +32,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from tools._repo_name import canonical_repo_name
 from tools import (
     kbm_schedule as _kbm_schedule,
     repo_index as _repo_index,
@@ -320,7 +321,7 @@ def collect_repo_status(
 
     return {
         "schema": DASHBOARD_SCHEMA,
-        "repo_name": root.name,
+        "repo_name": canonical_repo_name(root),
         "gate_count": len(gates),
         "gates": gates,
         "frozen_corpora": corpora,

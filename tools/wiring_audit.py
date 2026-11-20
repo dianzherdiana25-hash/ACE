@@ -23,6 +23,11 @@ import re
 import sys
 from typing import Any
 
+if __package__:
+    from ._repo_name import canonical_repo_name
+else:
+    from _repo_name import canonical_repo_name
+
 WIRING_SCHEMA = "ace.wiring-audit.v1"
 REPO_ROOT = Path(__file__).resolve().parents[1]
 IGNORED_DIRS = frozenset({".git", "__pycache__", ".pytest_cache", ".mypy_cache", ".venv", "venv", "checkpoints"})
@@ -279,7 +284,7 @@ def audit_wiring(repo_root: Path) -> dict[str, Any]:
 
     return {
         "schema": WIRING_SCHEMA,
-        "repo_name": root.name,
+        "repo_name": canonical_repo_name(root),
         "summary": {
             "total_modules": len(records),
             "wired": status_counts["WIRED"],
