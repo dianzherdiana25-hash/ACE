@@ -11,6 +11,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 5 | `lora_trainer.py` | Optimasi dua faktor pada aktivasi dense beku, gradien numerik, dan loss train |
 | 6 | `preference_trainer.py` | DPO readout fitur tetap, log-ratio relatif referensi, dan gradien |
 | 7 | `forgetting_guard.py` | Akurasi berpasangan per domain, penurunan kritis, dan bukti yang kurang |
+| 8 | `merge_lab.py` | Interpolasi, delta terhadap basis, layout identik, dan jarak bobot |
+| 9 | `model_registry_v2.py` | Replay registry tertambat, lineage, review, dan retire tanpa mutasi |
 | 10 | `brain_bench.py` | Perbandingan kualitas dan sumber daya, hash artefak, dan diagnosis per kasus |
 
 ```sh
@@ -65,3 +67,11 @@ Anchor dimasukkan lewat `--expect-pairs-sha256`. Hasilnya adalah delta
 linear pada fitur tersebut dan trace loss DPO. Keduanya menguji optimizer
 dengan fixture numerik. Ekstraksi aktivasi, fitting model penuh, integrasi
 runtime, dan gain held-out memerlukan proses atau bukti terpisah.
+
+`merge_lab.py` menerima resep, daftar snapshot tensor JSON, dan
+`--expect-recipe-sha256`. Input dapat mencakup snapshot basis pada mode
+delta. Nama, shape, dan arsitektur tensor harus cocok. Jarak dalam
+receipt adalah diagnostik perubahan bobot. `model_registry_v2.py`
+membaca JSONL kanonis dengan `--expect-head`. Mode `--propose-event`
+mencetak baris baru untuk disaring, dengan status review berasal
+dari receipt penilai yang dirujuk. Registry ini hanya katalog lokal.
