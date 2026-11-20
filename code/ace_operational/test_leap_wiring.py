@@ -144,6 +144,24 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_self_send_standing_audit_reads_shards_and_fails_closed(self) -> None:
+        from tools.self_send_rehearsal import rehearse_batch
+
+        logs = self.ws / "self_send_logs"
+        logs.mkdir()
+        prepared = {**rehearse_batch(2)["log"][0], "ts": "2026-11-20T01:00:00Z", "task_id": "t-1"}
+        (logs / "2026-11-20.jsonl").write_text(json.dumps(prepared) + "\n", encoding="utf-8")
+        res = leap_wiring.step_self_send_standing_audit(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["open_orphans"], 1)
+        saved = json.loads((self.ws / "self_send_standing_audit.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.self-send-standing-audit.v1")
+
+        (self.ws / "self_send_audit_dir.txt").write_text(str(self.ws / "missing_logs_dir"), encoding="utf-8")
+        bad = leap_wiring.step_self_send_standing_audit(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -685,3 +685,55 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0050 — audit standing read-only log self-send (tanpa kirim live)
+# ------------------------------------------------------------------
+
+
+def step_self_send_standing_audit(engine: Any) -> dict[str, Any]:
+    """Audit yatim/pelanggaran log self-send secara read-only & fail-closed (AG195)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        import tempfile
+        from tools import self_send_standing_audit
+
+        spec_file = ws / "self_send_audit_dir.txt"
+        logs_dir = ws / "self_send_logs"
+        if spec_file.is_file():
+            target_dir = Path(spec_file.read_text(encoding="utf-8").strip())
+            report = self_send_standing_audit.standing_audit(target_dir)
+        elif logs_dir.is_dir():
+            report = self_send_standing_audit.standing_audit(logs_dir)
+        else:
+            with tempfile.TemporaryDirectory(prefix="ace-ss-empty-", dir="/tmp") as td:
+                report = self_send_standing_audit.standing_audit(Path(td))
+
+        summary_text = self_send_standing_audit.text_summary(report)
+        out_path = ws / "self_send_standing_audit.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                "summary_text": summary_text,
+                **report,
+            },
+        )
+        return {
+            "status": "ok",
+            "days_count": len(report.get("days") or {}),
+            "open_orphans": len(report.get("open_orphan_task_ids") or []),
+            "undated_violations": report.get("undated_violations", 0),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+
