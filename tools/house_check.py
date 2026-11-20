@@ -10,15 +10,24 @@ menjadi stale bila usia updated_at melampaui ambang (default 300 detik).
 Tepat pada ambang masih sehat. Status lama tanpa updated_at mengikuti running.
 """
 import argparse
-from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
 from urllib.parse import urlsplit
 from urllib.request import urlopen
 
-
-DEFAULT_MAX_AGE_SECONDS = 300
+if __package__:
+    from .engine_status import (
+        DEFAULT_MAX_AGE_SECONDS,
+        format_for_house_check,
+        parse_engine_status,
+    )
+else:
+    from engine_status import (
+        DEFAULT_MAX_AGE_SECONDS,
+        format_for_house_check,
+        parse_engine_status,
+    )
 
 
 def pid_present(pid):
@@ -58,29 +67,9 @@ def inspect_house(bridge_url, pump_pid_file, engine_status, *, timeout=2,
     except (OSError, ValueError):
         pump = {"state": "unavailable"}
 
-    try:
-        payload = json.loads(engine_status.read_text(encoding="utf-8"))
-        if (not isinstance(payload, dict) or type(payload.get("running")) is not bool
-                or type(payload.get("pid")) is not int or payload["pid"] <= 0
-                or type(payload.get("cycle_count")) is not int or payload["cycle_count"] < 0):
-            raise ValueError
-        state = "healthy" if payload["running"] else "stopped"
-        engine = {"state": state, **{key: payload[key] for key in ("pid", "cycle_count", "running")}}
-        if payload["running"] and "updated_at" in payload:
-            stamp = payload["updated_at"]
-            if not isinstance(stamp, str):
-                raise ValueError
-            updated = datetime.fromisoformat(stamp)
-            current = now if now is not None else datetime.now(timezone.utc)
-            if updated.utcoffset() is None or current.utcoffset() is None:
-                raise ValueError
-            age = (current - updated).total_seconds()
-            if age < 0:
-                raise ValueError
-            engine.update(age_seconds=age,
-                          state="stale" if age > max_age_seconds else "healthy")
-    except (OSError, ValueError):
-        engine = {"state": "unavailable"}
+    engine = format_for_house_check(
+        parse_engine_status(engine_status, max_age_seconds=max_age_seconds, now=now)
+    )
     code = 2 if not bridge else int(any(unit["state"] != "healthy" for unit in (pump, engine)))
     return {"schema": "ace.house-check.v1", "exit_code": code,
             "summary": ("healthy", "degraded", "dead")[code],
