@@ -685,3 +685,48 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0050 — generator dashboard HTML & state repo v3 luring
+# ------------------------------------------------------------------
+
+
+def step_dashboard_v3(engine: Any) -> dict[str, Any]:
+    """Hasilkan snapshot JSON & HTML dashboard repo v3 secara luring & fail-closed (AG196)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import repo_status_dashboard_v3
+
+        repo_root = Path(getattr(engine, "repo_root", None) or _REPO_ROOT)
+        state = repo_status_dashboard_v3.collect_v3_status(repo_root)
+        html_doc = repo_status_dashboard_v3.render_v3_html(state)
+        json_path = ws / "repo_dashboard_v3.json"
+        html_path = ws / "repo_dashboard_v3.html"
+        _write_json(
+            json_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                **state,
+            },
+        )
+        html_path.write_text(html_doc, encoding="utf-8")
+        summary = state.get("summary") or {}
+        return {
+            "status": "ok",
+            "tool_count": summary.get("tool_count", 0),
+            "code_module_count": summary.get("code_module_count", 0),
+            "gate_count": summary.get("gate_count", 0),
+            "report_path": str(json_path),
+            "html_path": str(html_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

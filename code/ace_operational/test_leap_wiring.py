@@ -144,6 +144,20 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_dashboard_v3_generates_json_and_html_and_fails_closed(self) -> None:
+        res = leap_wiring.step_dashboard_v3(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertGreater(res["tool_count"], 50)
+        saved = json.loads((self.ws / "repo_dashboard_v3.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.repo-status-dashboard.v3")
+        html_out = (self.ws / "repo_dashboard_v3.html").read_text(encoding="utf-8")
+        self.assertIn("<html", html_out.lower())
+
+        self.engine.repo_root = self.ws / "missing_repo"
+        bad = leap_wiring.step_dashboard_v3(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
