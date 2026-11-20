@@ -144,6 +144,28 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_custody_manifest_check_verifies_files(self) -> None:
+        import hashlib
+
+        cust = self.ws / "custody"
+        cust.mkdir(parents=True)
+        f1 = cust / "state.json"
+        f1.write_text('{"ok":true}\n', encoding="utf-8")
+        manifest = self.ws / "custody_manifest.json"
+        manifest.write_text(
+            json.dumps({"files": [{"path": "state.json", "sha256": hashlib.sha256(f1.read_bytes()).hexdigest()}]}),
+            encoding="utf-8",
+        )
+        out = leap_wiring.step_custody_manifest_check(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertTrue(out["all_ok"])
+        self.assertTrue((self.ws / "custody_check.json").is_file())
+
+    def test_custody_manifest_check_missing_skips_cleanly(self) -> None:
+        out = leap_wiring.step_custody_manifest_check(self.engine)
+        self.assertEqual(out["status"], "skipped")
+        self.assertTrue((self.ws / "custody_check.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

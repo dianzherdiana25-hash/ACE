@@ -685,3 +685,46 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0044 — AG132: custody manifest SHA-256 verification (%200)
+# ------------------------------------------------------------------
+
+def step_custody_manifest_check(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import custody_manifest_check as cmc
+
+        ws = Path(engine.workspace)
+        out_path = ws / "custody_check.json"
+        manifest_path = ws / "custody_manifest.json"
+        if not manifest_path.is_file():
+            manifest_path = ws / "custody" / "custody_manifest.json"
+        if not manifest_path.is_file():
+            skipped = {
+                "status": "skipped",
+                "reason": "no custody_manifest.json",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        root_dir = (ws / "custody") if (ws / "custody").is_dir() else ws
+        report = cmc.verify_custody_manifest(manifest_path, root_dir)
+        payload = {
+            "status": "ok",
+            "checked_at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "all_ok": bool(report.get("all_ok")),
+            "summary": report.get("summary", {}),
+            "files": report.get("files", []),
+        }
+        _write_json(out_path, payload)
+        return {
+            "status": "ok",
+            "all_ok": bool(report.get("all_ok")),
+            "summary": report.get("summary", {}),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
