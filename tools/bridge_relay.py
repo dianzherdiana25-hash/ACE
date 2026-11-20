@@ -50,15 +50,26 @@ def drain_spool_with_backoff(
         raise ValueError("Parameter backoff tidak sah.")
     req_dir = spool / "req"
     resp_dir = spool / "resp"
+    corrupt_dir = spool / "corrupt"
     req_dir.mkdir(parents=True, exist_ok=True)
     resp_dir.mkdir(parents=True, exist_ok=True)
 
     entries = []
+    skipped_corrupt: list[dict] = []
     for path in sorted(req_dir.glob("*.json")):
-        if path.is_symlink() or not path.is_file():
+        if path.name.startswith(".") or path.is_symlink() or not path.is_file():
             continue
-        data = json.loads(path.read_text(encoding="utf-8"))
-        entries.append((float(data.get("ts", 0.0)), path.name, path, data))
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(data, dict):
+                raise ValueError("entri spool wajib berupa objek JSON")
+            ts_val = float(data.get("ts", 0.0))
+        except (OSError, UnicodeDecodeError, ValueError, TypeError) as exc:
+            corrupt_dir.mkdir(parents=True, exist_ok=True)
+            os.replace(path, corrupt_dir / path.name)
+            skipped_corrupt.append({"file": path.name, "reason": str(exc)})
+            continue
+        entries.append((ts_val, path.name, path, data))
     entries.sort(key=lambda item: (item[0], item[1]))
 
     backoff_delays: list[float] = []
@@ -84,6 +95,7 @@ def drain_spool_with_backoff(
                         "pending_count": len(list(req_dir.glob("*.json"))),
                         "backoff_delays": backoff_delays,
                         "attempt_timestamps": attempt_timestamps,
+                        "skipped_corrupt": skipped_corrupt,
                     }
                 delay = min(max_delay, base_delay * (factor ** (attempt - 1)))
                 backoff_delays.append(delay)
@@ -102,6 +114,7 @@ def drain_spool_with_backoff(
         "pending_count": len(list(req_dir.glob("*.json"))),
         "backoff_delays": backoff_delays,
         "attempt_timestamps": attempt_timestamps,
+        "skipped_corrupt": skipped_corrupt,
     }
 
 
