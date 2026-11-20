@@ -206,6 +206,92 @@ def _follow_relocation(repo, origin, target, index):
             return chain, None, "relocation_hop_limit"
 
 
+def _validate_origin_commit(repo, raw_rev, index):
+    if not isinstance(raw_rev, str) or not raw_rev.strip():
+        raise ValueError(f"origin_commit klaim {index} tidak sah.")
+    rev = raw_rev.strip()
+    if rev.startswith("-") or not rev.isprintable() or any(ch.isspace() for ch in rev) or ".." in rev or ":" in rev:
+        raise ValueError(f"origin_commit klaim {index} tidak sah.")
+    try:
+        resolved = _git(repo, "rev-parse", "--verify", f"{rev}^{{commit}}", quiet=True).decode().strip()
+    except subprocess.CalledProcessError as exc:
+        raise ValueError(f"origin_commit klaim {index} tidak ditemukan di repo: {rev}") from exc
+    if not re.fullmatch(r"[0-9a-f]{40}", resolved):
+        raise ValueError(f"origin_commit klaim {index} bukan SHA commit sah.")
+    return resolved
+
+
+def _find_historical_commit_for_digest(repo, rel, expected_digest, *, exclude_commit=None):
+    try:
+        commits = _git(
+            repo,
+            "--literal-pathspecs",
+            "log",
+            "--format=%H",
+            "HEAD",
+            "--",
+            rel.as_posix(),
+            quiet=True,
+        ).decode().splitlines()
+    except subprocess.CalledProcessError:
+        return None
+    for commit in commits:
+        c = commit.strip()
+        if not c or c == exclude_commit:
+            continue
+        try:
+            data = _git(repo, "cat-file", "blob", f"{c}:{rel.as_posix()}", quiet=True)
+        except subprocess.CalledProcessError:
+            continue
+        if hashlib.sha256(data).hexdigest() == expected_digest:
+            return c
+    return None
+
+
+def _verify_at_origin_commit(repo, rel, expected_digest, origin_commit):
+    try:
+        data = _git(repo, "cat-file", "blob", f"{origin_commit}:{rel.as_posix()}", quiet=True)
+    except subprocess.CalledProcessError:
+        older = _find_historical_commit_for_digest(repo, rel, expected_digest, exclude_commit=origin_commit)
+        if older:
+            return {
+                "state": "missing_at_origin_commit_matched_older_version",
+                "commit": origin_commit,
+                "sha256": None,
+                "expected_sha256": expected_digest,
+                "matched_older_commit": older,
+            }
+        return {
+            "state": "missing_at_origin_commit",
+            "commit": origin_commit,
+            "sha256": None,
+            "expected_sha256": expected_digest,
+        }
+    actual_digest = hashlib.sha256(data).hexdigest()
+    if actual_digest == expected_digest:
+        return {
+            "state": "match",
+            "commit": origin_commit,
+            "sha256": actual_digest,
+            "expected_sha256": expected_digest,
+        }
+    older = _find_historical_commit_for_digest(repo, rel, expected_digest, exclude_commit=origin_commit)
+    if older:
+        return {
+            "state": "mismatch_matched_older_version",
+            "commit": origin_commit,
+            "sha256": actual_digest,
+            "expected_sha256": expected_digest,
+            "matched_older_commit": older,
+        }
+    return {
+        "state": "mismatch",
+        "commit": origin_commit,
+        "sha256": actual_digest,
+        "expected_sha256": expected_digest,
+    }
+
+
 def _git_origin(repo, rel, expected):
     try:
         revision = _git(repo, "--literal-pathspecs", "log", "-1", "--diff-filter=AMCRT",
@@ -228,6 +314,7 @@ def map_claims(repo, claims, result):
     inventoried = {item["path"] for item in result["files"]}
     missing, untested = [], []
     verified, unverified = [], []
+    origin_verified, origin_unverified = [], []
     seen = set()
     for index, claim in enumerate(claims, 1):
         if (not isinstance(claim, dict) or not isinstance(claim.get("id"), str)
@@ -239,6 +326,8 @@ def map_claims(repo, claims, result):
         seen.add(claim_id)
         rel, path = _claim_path(repo, claim["evidence"], index)
         relocated = _claim_path(repo, claim["relocated_to"], index) if "relocated_to" in claim else None
+        has_origin_commit = "origin_commit" in claim
+        origin_commit = _validate_origin_commit(repo, claim["origin_commit"], index) if has_origin_commit else None
         row = {"id": claim_id, "evidence": rel.as_posix(), "status": claim["status"],
                "in_successor_inventory": rel.as_posix() in inventoried}
         if relocated is not None:
@@ -247,21 +336,66 @@ def map_claims(repo, claims, result):
                 raise ValueError(f"SHA-256 bukti asli klaim {index} tidak sah.")
             digest = digest.lower()
             chain, final_digest, reason = _follow_relocation(repo, (rel, path), relocated, index)
-            origin = _git_origin(repo, rel, digest)
+            origin = (
+                _verify_at_origin_commit(repo, rel, digest, origin_commit)
+                if origin_commit is not None
+                else _git_origin(repo, rel, digest)
+            )
             relocation = {**row, "relocated_to": chain[-1], "sha256": digest,
                           "relocation_chain": chain, "git_origin": origin}
+            if origin_commit is not None:
+                relocation["origin_commit"] = origin_commit
             if reason is None and final_digest != digest:
                 reason = "sha256_mismatch"
-            if reason is None and origin["state"] == "mismatch":
-                reason = "origin_blob_mismatch"
+            if reason is None and origin["state"] != "match" and origin["state"] != "unavailable":
+                reason = (
+                    origin["state"]
+                    if origin_commit is not None
+                    else "origin_blob_mismatch"
+                )
             if reason is not None:
                 unverified.append({**relocation, "reason": reason})
                 missing.append(row)
+                if origin_commit is not None:
+                    origin_unverified.append({**relocation, "reason": reason})
             else:
                 verified.append(relocation)
+                if origin_commit is not None:
+                    origin_verified.append(relocation)
                 if claim["status"] == "belum":
                     untested.append({**row, "evidence": chain[-1],
                                      "in_successor_inventory": chain[-1] in inventoried})
+            continue
+        if origin_commit is not None:
+            digest = claim.get("sha256")
+            if digest is not None:
+                if not isinstance(digest, str) or not re.fullmatch(r"[a-fA-F0-9]{64}", digest):
+                    raise ValueError(f"SHA-256 bukti asli klaim {index} tidak sah.")
+                target_digest = digest.lower()
+            elif path.is_file():
+                target_digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            else:
+                target_digest = None
+            if target_digest is None:
+                origin = {
+                    "state": "missing_expected_digest_and_file",
+                    "commit": origin_commit,
+                    "sha256": None,
+                }
+            else:
+                origin = _verify_at_origin_commit(repo, rel, target_digest, origin_commit)
+            origin_row = {**row, "origin_commit": origin_commit, "git_origin": origin}
+            if target_digest is not None:
+                origin_row["sha256"] = target_digest
+            if origin["state"] == "match":
+                origin_verified.append(origin_row)
+                if not path.is_file():
+                    missing.append(row)
+                elif claim["status"] == "belum":
+                    untested.append(row)
+            else:
+                origin_unverified.append({**origin_row, "reason": origin["state"]})
+                missing.append(row)
             continue
         if not path.is_file():
             missing.append(row)
@@ -272,6 +406,9 @@ def map_claims(repo, claims, result):
     if verified or unverified:
         mapped["relocated_verified"] = sorted(verified, key=lambda row: row["id"])
         mapped["relocation_unverified"] = sorted(unverified, key=lambda row: row["id"])
+    if origin_verified or origin_unverified:
+        mapped["origin_commit_verified"] = sorted(origin_verified, key=lambda row: row["id"])
+        mapped["origin_commit_unverified"] = sorted(origin_unverified, key=lambda row: row["id"])
     return mapped
 
 
