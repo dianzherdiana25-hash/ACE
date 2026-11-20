@@ -144,6 +144,21 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_builder_onboarding_pack_writes_markdown_in_workspace(self):
+        res = leap_wiring.step_builder_onboarding_pack(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertIn("upstream_status", res["summary"])
+        md_path = self.ws / "builder_onboarding.md"
+        self.assertTrue(md_path.is_file())
+        self.assertIn("Wilayah Terlarang", md_path.read_text(encoding="utf-8"))
+
+    def test_builder_onboarding_pack_fails_closed_on_error(self):
+        from unittest import mock
+        with mock.patch("tools.builder_onboarding_pack.build_onboarding_pack",
+                        side_effect=RuntimeError("io err")):
+            res = leap_wiring.step_builder_onboarding_pack(self.engine)
+        self.assertEqual(res["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

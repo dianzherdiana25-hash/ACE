@@ -685,3 +685,32 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_builder_onboarding_pack(engine: Any) -> dict[str, Any]:
+    """AG147: assemble contributor onboarding summary Markdown in workspace."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import builder_onboarding_pack as bop
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        pack = bop.build_onboarding_pack(_REPO_ROOT)
+        md = bop.render_markdown(pack)
+        out_path = ws / "builder_onboarding.md"
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = out_path.with_suffix(".md.tmp")
+        tmp.write_text(md, encoding="utf-8")
+        tmp.replace(out_path)
+        return {
+            "status": "ok",
+            "schema": pack["schema"],
+            "repo_name": pack["repo_name"],
+            "summary": pack["summary"],
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
