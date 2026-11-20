@@ -144,6 +144,14 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_inheritance_probe_writes_delta(self):
+        res = leap_wiring.step_inheritance_probe(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["delta"], 1.0)
+        out = json.loads((self.ws / "inheritance_probe.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.inheritance-probe.v1")
+        self.assertEqual(out["pass_counts"]["inherited"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -685,3 +685,40 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_inheritance_probe(engine: Any) -> dict[str, Any]:
+    """Jalankan probe komparatif dua-instans dry-run ke inheritance_probe.json."""
+    try:
+        from tools.inheritance_probe import compare_instances
+
+        cfg = _read_json(engine.workspace / "inheritance_probe_input.json", None)
+        if isinstance(cfg, dict) and {"inherited", "cold", "tasks"} <= cfg.keys():
+            inherited, cold, tasks = cfg["inherited"], cfg["cold"], cfg["tasks"]
+        else:
+            inherited = {"records": {"cek-status": "accept"}}
+            cold = {}
+            tasks = [
+                {
+                    "id": "probe_1",
+                    "query": "cek-status",
+                    "cold_decision": "reject",
+                    "expected": "accept",
+                }
+            ]
+        report = compare_instances(inherited, cold, tasks)
+        out = {
+            "schema": report.get("schema", "ace.inheritance-probe.v1"),
+            "mode": report.get("mode"),
+            "pass_counts": report.get("pass_counts", {}),
+            "delta": report.get("delta", 0.0),
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "inheritance_probe.json", out)
+        return {
+            "status": "ok",
+            "schema": out["schema"],
+            "delta": out["delta"],
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}
