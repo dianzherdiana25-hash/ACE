@@ -685,3 +685,90 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0042 — AG118: Wave-2 curriculum state & gated practice scheduler (%25)
+# ------------------------------------------------------------------
+
+def step_curriculum_wave2(engine: Any) -> dict[str, Any]:
+    try:
+        from ace_operational import curriculum_wave2 as cw2
+
+        ws = Path(engine.workspace)
+        out_path = ws / "curriculum_wave2_state.json"
+        learned: set[str] = set()
+        for ev in engine.store.list_events(limit=500):
+            if ev.get("kind") == "skill_learned" and ev.get("verification_passed", True):
+                sn = ev.get("skill_name") or (
+                    (ev.get("technical_detail") or {}).get("skill_name")
+                    if isinstance(ev.get("technical_detail"), dict)
+                    else ""
+                )
+                if isinstance(sn, str) and sn:
+                    learned.add(sn)
+        if hasattr(engine.store, "list_skills"):
+            try:
+                for sk in engine.store.list_skills():
+                    sn = sk.get("skill_name") or sk.get("name") or ""
+                    if isinstance(sn, str) and sn:
+                        learned.add(sn)
+            except Exception:
+                pass
+
+        all_items = [
+            {"track": "language_wave2", **item} for item in cw2.LANGUAGE_WAVE2
+        ] + [
+            {"track": "technical_wave2", **item} for item in cw2.TECHNICAL_WAVE2
+        ]
+        mastered_items = [it["skill_name"] for it in all_items if it["skill_name"] in learned]
+        pending_items = [it for it in all_items if it["skill_name"] not in learned]
+
+        queued_skill: str | None = None
+        flag_enabled = os.environ.get("ACE_WAVE2_PRACTICE", "0") == "1"
+        if flag_enabled and pending_items:
+            existing_titles = {
+                t.get("title_id")
+                for t in engine.store.list_tasks(limit=200)
+                if t.get("kind") == "learning_practice"
+            }
+            for cand in pending_items:
+                title = f"wave2:{cand['skill_name']}"
+                if title in existing_titles:
+                    continue
+                engine.store.create_task(
+                    kind="learning_practice",
+                    title_id=title,
+                    user_request=str(cand.get("goal") or cand["title"]),
+                    normalized_goal=str(cand.get("goal") or cand["title"]),
+                    model_backend="leap_wiring/curriculum_wave2",
+                    priority=6,
+                    checkpoint={"stage": "curriculum_wave2", "skill_name": cand["skill_name"], "track": cand["track"]},
+                    hold_for_review=False,
+                )
+                queued_skill = cand["skill_name"]
+                break
+
+        payload = {
+            "status": "ok",
+            "generated_at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "flag_enabled": flag_enabled,
+            "total_wave2": len(all_items),
+            "mastered_count": len(mastered_items),
+            "pending_count": len(pending_items),
+            "mastered_skills": mastered_items,
+            "pending_skills": [it["skill_name"] for it in pending_items],
+            "queued_skill": queued_skill,
+        }
+        _write_json(out_path, payload)
+        return {
+            "status": "ok",
+            "total_wave2": payload["total_wave2"],
+            "mastered_count": payload["mastered_count"],
+            "pending_count": payload["pending_count"],
+            "queued_skill": queued_skill,
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+

@@ -144,6 +144,22 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_curriculum_wave2_state_and_flag_gate(self) -> None:
+        import os
+        from unittest.mock import patch
+
+        with patch.dict(os.environ, {"ACE_WAVE2_PRACTICE": "0"}, clear=False):
+            out = leap_wiring.step_curriculum_wave2(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["total_wave2"], 12)
+        self.assertIsNone(out["queued_skill"])
+        self.assertTrue((self.ws / "curriculum_wave2_state.json").is_file())
+
+        with patch.dict(os.environ, {"ACE_WAVE2_PRACTICE": "1"}, clear=False):
+            out_on = leap_wiring.step_curriculum_wave2(self.engine)
+        self.assertEqual(out_on["status"], "ok")
+        self.assertIsNotNone(out_on["queued_skill"])
+
 
 if __name__ == "__main__":
     unittest.main()
