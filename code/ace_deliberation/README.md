@@ -60,7 +60,12 @@ yang ada di paket ini. Angka butir mengikuti rancangan EVO 0051.
 | 51 | `bias_flagger.py` | Asosiasi kepentingan yang dideklarasikan dengan ramalan sezaman |
 | 52 | `forecast_quarterly_audit.py` | Kohort terbit UTC, Brier berpasangan dan baseline pra-triwulan |
 
-Butir tersisa pada 0051 mencakup 53–60. Pengukuran
+| 53 | `case_library.py` | Snapshot pustaka bertanggal, isolasi partisi, dan provenance pelajaran |
+| 54 | `crisis_backtest.py` | Replay kronologis, embargo dan Brier berpasangan pada jendela simulasi |
+| 55 | `question_portfolio.py` | Optimasi eksak dan batas kapasitas untuk kategori tumpang tindih |
+| 56 | `calibration_report.py` | Cakupan per domain, bin, delta antarperiode dan ekspor Markdown |
+
+Butir tersisa pada 0051 mencakup 57–60. Pengukuran
 di paket ini memakai fixture sintetis. Pasangan program dan tes yang
 tercantum dihitung bersama untuk rentang baris per kemampuan. Verifier
 ambang dan langkah integrasi berada di luar hitungan kemampuan.
