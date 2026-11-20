@@ -426,6 +426,40 @@ def step_director(engine: Any) -> dict[str, Any]:
             _append_jsonl(ws / "invariant_violations.jsonl", {
                 "at": _now_iso(), "cycle": engine.cycle_count,
                 "report": report})
+
+    # EVO 0043 — AG122: rute antrean proposal director (praktik / payung / riset)
+    try:
+        from tools import director_queue_router as dqr
+
+        prop_items = []
+        for t in waiting:
+            ckpt = t.get("checkpoint") if isinstance(t.get("checkpoint"), dict) else {}
+            prop = ckpt.get("proposal") if isinstance(ckpt.get("proposal"), dict) else {}
+            anchors = prop.get("based_on") if isinstance(prop.get("based_on"), list) else []
+            prop_items.append({"id": t["task_id"], "based_on": anchors})
+        if prop_items:
+            db_path = getattr(engine.store, "db_path", None) or (ws / "ace_operational.sqlite3")
+            db_file = Path(db_path)
+            if db_file.is_file():
+                gap_errors = dqr.load_gap_errors_from_sqlite(db_file)
+            else:
+                gap_errors = {
+                    g["gap_id"]: str(g.get("error_type") or g.get("gap_type") or "UNKNOWN")
+                    for g in engine.store.list_gaps()
+                }
+            r_report = dqr.route_proposals(prop_items, gap_errors)
+            _append_jsonl(ws / "director_routing.jsonl", {
+                "at": _now_iso(),
+                "cycle": getattr(engine, "cycle_count", 0),
+                "summary": r_report.get("summary"),
+                "queues": r_report.get("queues"),
+            })
+            out["routing"] = r_report.get("summary")
+        else:
+            out["routing"] = {"status": "skipped", "total_proposals": 0}
+    except Exception as exc:
+        out["routing"] = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
     return out
 
 

@@ -144,6 +144,32 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_director_routes_proposals_into_queues(self) -> None:
+        self.engine.store.record_gap(
+            source_task_id="t-prac", error_type="DYNAMIC_TECH_PRACTICE_FAILED",
+            missing_skill_or_tool="dedup_csv", description_id="gagal dedup",
+            reproduction_ref="probe:prac",
+        )
+        gid = self.engine.store.list_gaps(status="OPEN")[0]["gap_id"]
+        self.engine.store.create_task(
+            kind="director_proposal",
+            title_id="Proposal Praktik",
+            user_request="latihan",
+            normalized_goal="latihan",
+            model_backend="groq/openai/gpt-oss-120b",
+            priority=5,
+            checkpoint={"proposal": {
+                "title": "Proposal Praktik",
+                "rationale": "perlu latihan",
+                "based_on": [gid],
+            }},
+            hold_for_review=True,
+        )
+        out = leap_wiring.step_director(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["routing"]["praktik"], 1)
+        self.assertTrue((self.ws / "director_routing.jsonl").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()
