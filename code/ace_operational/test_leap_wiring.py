@@ -144,6 +144,18 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_release_manifest_builds_offline_json_and_fails_closed(self) -> None:
+        res = leap_wiring.step_release_manifest(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["changed_file_count"], 0)
+        saved = json.loads((self.ws / "release_manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.release-manifest.v1")
+
+        (self.ws / "release_manifest_spec.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_release_manifest(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()

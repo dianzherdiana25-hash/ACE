@@ -685,3 +685,60 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0050 — perakit manifest rilis luring deterministik
+# ------------------------------------------------------------------
+
+
+def step_release_manifest(engine: Any) -> dict[str, Any]:
+    """Bangun manifest rilis JSON luring atas objek Git lokal secara fail-closed (AG193)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import release_manifest
+
+        repo_root = Path(getattr(engine, "repo_root", None) or _REPO_ROOT)
+        base_ref = "HEAD"
+        head_ref = "HEAD"
+        spec_path = ws / "release_manifest_spec.json"
+        if spec_path.is_file():
+            spec = json.loads(spec_path.read_text(encoding="utf-8"))
+            if not isinstance(spec, dict):
+                raise ValueError("release_manifest_spec.json wajib objek JSON.")
+            if spec.get("repo_dir"):
+                repo_root = Path(str(spec["repo_dir"]))
+            base_ref = str(spec.get("base_ref") or "HEAD")
+            head_ref = str(spec.get("head_ref") or "HEAD")
+
+        manifest = release_manifest.build_release_manifest(
+            repo_root,
+            base_ref=base_ref,
+            head_ref=head_ref,
+        )
+        out_path = ws / "release_manifest.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                **manifest,
+            },
+        )
+        summary = manifest.get("summary") or {}
+        return {
+            "status": "ok",
+            "changed_file_count": summary.get("changed_file_count", 0),
+            "warning_count": summary.get("warning_count", 0),
+            "manifest_sha256": manifest.get("manifest_sha256"),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+
