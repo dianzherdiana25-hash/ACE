@@ -8,6 +8,10 @@ rollback sampai jam review operator selesai. Preflight membaca PID yang
 ditunjuk dan memeriksa keberadaan proses dengan sinyal 0. Pemeriksaan
 kredensial hanya memakai nama entri di manifest publik bundle. Generator
 mencetak teks atau JSON tanpa meluncurkan proses.
+
+Jika PID masih hidup, `expected_process_name` opsional menentukan nama
+proses yang diharapkan. Nama yang beda atau tak terbaca perlu pemeriksaan
+operator. Kecocokan nama meloloskan pemeriksaan PID saja.
 """
 import argparse
 import json
@@ -32,7 +36,11 @@ def _pid_running(pid):
     return True
 
 
-def _check_pid_file(path, probe):
+def _pid_identity(pid):
+    return Path(f"/proc/{pid}/comm").read_text(encoding="utf-8").strip()
+
+
+def _check_pid_file(path, probe, expected_name, identity_probe):
     try:
         pid = int(path.read_text(encoding="utf-8").strip())
     except FileNotFoundError:
@@ -45,8 +53,21 @@ def _check_pid_file(path, probe):
         running = probe(pid)
     except OSError:
         return {"state": "unverified", "safe_to_continue": False}
-    return {"state": "stale" if running is False else "live",
-            "safe_to_continue": running is False}
+    if running is False:
+        return {"state": "stale", "safe_to_continue": True}
+    if running is not True:
+        return {"state": "unverified", "safe_to_continue": False}
+    if expected_name is None:
+        return {"state": "live", "safe_to_continue": False, "reason": "identity_unverified"}
+    try:
+        observed = identity_probe(pid)
+    except (OSError, UnicodeError):
+        observed = None
+    if not isinstance(observed, str) or not observed.strip():
+        return {"state": "unverified", "safe_to_continue": False, "reason": "identity_unverified"}
+    if observed.strip() != expected_name:
+        return {"state": "identity_mismatch", "safe_to_continue": False}
+    return {"state": "live", "safe_to_continue": True, "reason": "identity_matched"}
 
 
 def _check_bundle_markers(path):
@@ -83,7 +104,7 @@ def _health(url):
                        "--", url + "/health"])
 
 
-def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running):
+def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running, identity_probe=_pid_identity):
     if not isinstance(config, dict):
         raise ValueError("Konfigurasi wajib berupa objek JSON.")
     paths = {}
@@ -103,7 +124,13 @@ def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running):
     target = f"http://127.0.0.1:{port}"
     if target == previous:
         raise ValueError("Alamat bridge lama dan baru wajib berbeda.")
-    pid_check = _check_pid_file(Path(paths["pid_file"]), pid_probe)
+    expected_name = config.get("expected_process_name")
+    if expected_name is not None and (
+        not isinstance(expected_name, str) or not expected_name.strip() or not expected_name.isprintable()
+    ):
+        raise ValueError("expected_process_name wajib berupa satu nama proses.")
+    pid_check = _check_pid_file(Path(paths["pid_file"]), pid_probe,
+                               expected_name.strip() if expected_name is not None else None, identity_probe)
     credentials = _check_bundle_markers(bundle_manifest)
     argv = ["nohup", "python3", str(Path(paths["repo"]) / "tools" / "brain_bridge.py"),
             "--port", str(port), "--state", paths["budget_state"], "--log", paths["call_log"],
@@ -141,7 +168,7 @@ def markdown(plan):
         if step["id"] == "preflight" and "preflight" in plan:
             preflight = plan["preflight"]
             pid = preflight["pid_file"]
-            status = "aman-untuk-lanjut" if pid["safe_to_continue"] else "perlu pemeriksaan"
+            status = "aman-untuk-lanjut" if pid["safe_to_continue"] else "perlu pemeriksaan operator"
             lines.append(f"  - PID file — {pid['state']} ({status})")
             credentials = preflight["credential_markers"]
             lines.append(f"  - Penanda kredensial — {credentials['state']}")
