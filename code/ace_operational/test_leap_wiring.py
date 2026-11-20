@@ -144,6 +144,16 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_atomic_lease_acquires_fences_and_releases(self):
+        r1 = leap_wiring.step_atomic_lease(self.engine)
+        r2 = leap_wiring.step_atomic_lease(self.engine)
+        self.assertEqual(r1["status"], "ok")
+        self.assertEqual(r2["status"], "ok")
+        self.assertGreater(r2["epoch"], r1["epoch"])
+        out = json.loads((self.ws / "atomic_lease_status.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.atomic-lease.v1")
+        self.assertEqual(out["epoch"], r2["epoch"])
+
 
 if __name__ == "__main__":
     unittest.main()

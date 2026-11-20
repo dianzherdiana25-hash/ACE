@@ -685,3 +685,40 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_atomic_lease(engine: Any) -> dict[str, Any]:
+    """Audit akuisisi, receipt berpagar epoch, dan pelepasan lease di leases_audit."""
+    try:
+        from ace_self_dev.atomic_lease import FencedStore, StateManager  # noqa: F401
+
+        audit_dir = engine.workspace / "leases_audit"
+        audit_dir.mkdir(parents=True, exist_ok=True)
+        store = FencedStore(audit_dir / "lease.db")
+        cycle = int(getattr(engine, "cycle_count", 0))
+        lease = store.acquire("cycle_probe", "engine", ttl=30.0)
+        try:
+            seq = store.append_receipt(
+                lease,
+                f"cycle_{cycle}_{lease.epoch}",
+                {"cycle": cycle, "epoch": lease.epoch},
+            )
+            snap = store.snapshot("cycle_probe")
+        finally:
+            store.release(lease)
+        compact = {
+            "schema": "ace.atomic-lease.v1",
+            "job_id": lease.job_id,
+            "epoch": lease.epoch,
+            "event_seq": seq,
+            "snapshot_hash": snap[2] if snap else None,
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "atomic_lease_status.json", compact)
+        return {
+            "status": "ok",
+            "epoch": lease.epoch,
+            "event_seq": seq,
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}
