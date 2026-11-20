@@ -102,15 +102,22 @@ def _budget_check(role):
                 if not _is_valid_budget_state(loaded):
                     corrupt_reason = "invalid_schema_or_negative_count"
             if corrupt_reason is not None:
+                # Fail-closed (keputusan saringan Ian atas AG15, 2026-11-20):
+                # state rusak TIDAK mereset jatah — perilaku reset AG15
+                # membatalkan keputusan fail-closed 96f1fa8 dan membuka
+                # pelipatgandaan anggaran lewat korupsi berulang. Yang
+                # dipertahankan dari AG15: validator skema + catatan
+                # peringatan di log. Berkas state dibiarkan apa adanya
+                # untuk diperiksa operator.
                 _write_log_unlocked({
                     "ts": time.time(),
                     "role": role,
                     "level": "warning",
-                    "warning": "corrupt_budget_state_reset",
+                    "warning": "corrupt_budget_state_blocked",
                     "reason": corrupt_reason,
-                    "result": "state_reset_from_corrupt",
+                    "result": "fail_closed_state_untouched",
                 })
-                state = {"day": today, "counts": {}}
+                return False, BUDGETS[role]
             elif loaded.get("day") == today:
                 state = loaded
         used = state["counts"].get(role, 0)
