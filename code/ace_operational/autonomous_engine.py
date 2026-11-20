@@ -1867,6 +1867,9 @@ class ContinuousAutonomousEngine:
             if self.cycle_count % 200 == 1:
                 _leap("organs", leap_wiring.step_organs)
 
+            # EVO 0041 — Mengingat yang hidup
+            if self.cycle_count % 50 == 0: _leap("memory_hygiene", leap_wiring.step_memory_hygiene_audit)
+
         # Step 4: Periodic AST self-audit
         audit_summary: dict[str, Any] | None = None
         if self.cycle_count % 10 == 0:

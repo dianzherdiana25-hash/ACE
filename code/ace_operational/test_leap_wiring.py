@@ -144,6 +144,85 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_memory_hygiene_audit_writes_artifact_with_duplicates_orphans_stale(self) -> None:
+        from tools import memory_hygiene_audit as mha
+
+        log_path = self.ws / "cognitive_memory" / "memory.jsonl"
+        before_e1 = mha.compute_entry_hash(
+            mha.GENESIS_PREV,
+            {
+                "type": "record",
+                "record": {
+                    "id": "ep-clean",
+                    "kind": "fact",
+                    "content": "fakta bersih tentang spool",
+                    "source": {"kind": "verify", "ref": "probe:ok"},
+                    "evidence_refs": ["probe:ok"],
+                    "confidence": 0.9,
+                    "created_at": "2020-01-01T00:00:00Z",
+                },
+            },
+        )
+        e1 = {
+            "seq": 1,
+            "prev": mha.GENESIS_PREV,
+            "hash": before_e1,
+            "event": {
+                "type": "record",
+                "record": {
+                    "id": "ep-clean",
+                    "kind": "fact",
+                    "content": "fakta bersih tentang spool",
+                    "source": {"kind": "verify", "ref": "probe:ok"},
+                    "evidence_refs": ["probe:ok"],
+                    "confidence": 0.9,
+                    "created_at": "2020-01-01T00:00:00Z",
+                },
+            },
+        }
+        e2_ev = {
+            "type": "record",
+            "record": {
+                "id": "ep-dup-orphan",
+                "kind": "fact",
+                "content": "fakta bersih tentang spool",
+                "source": {"kind": "verify", "ref": "missing:ref/file.json"},
+                "evidence_refs": ["missing:ref/file.json"],
+                "confidence": 0.8,
+            },
+        }
+        e2 = {
+            "seq": 2,
+            "prev": e1["hash"],
+            "hash": mha.compute_entry_hash(e1["hash"], e2_ev),
+            "event": e2_ev,
+        }
+        log_path.write_text(json.dumps(e1) + "\n" + json.dumps(e2) + "\n", encoding="utf-8")
+        raw_before = log_path.read_bytes()
+
+        self.engine.cycle_count = 50
+        out = leap_wiring.step_memory_hygiene_audit(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["duplicate_groups"], 1)
+        self.assertEqual(out["orphan_refs"], 2)
+        self.assertEqual(out["stale_count"], 1)
+        self.assertEqual(log_path.read_bytes(), raw_before)
+
+        artifact = json.loads((self.ws / "memory_hygiene.json").read_text(encoding="utf-8"))
+        self.assertEqual(artifact["schema"], mha.SCHEMA)
+        self.assertEqual(artifact["stale"]["stale_memory_records"], ["ep-clean"])
+
+        # Verifikasi dispatch Step 3d di autonomous_engine.py saat cycle=50 dan ACE_LEAPS=1.
+        src = (Path(__file__).resolve().with_name("autonomous_engine.py")).read_text(encoding="utf-8")
+        self.assertIn("step_memory_hygiene_audit", src)
+
+    def test_memory_hygiene_audit_no_log_is_fail_closed(self) -> None:
+        (self.ws / "cognitive_memory" / "memory.jsonl").unlink()
+        out = leap_wiring.step_memory_hygiene_audit(self.engine)
+        self.assertEqual(out["status"], "ok")
+        artifact = json.loads((self.ws / "memory_hygiene.json").read_text(encoding="utf-8"))
+        self.assertEqual(artifact["status"], "no_memory_log")
+
 
 if __name__ == "__main__":
     unittest.main()

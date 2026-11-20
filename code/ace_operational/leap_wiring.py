@@ -685,3 +685,125 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0041 — Mengingat yang hidup (AG101+)
+# ------------------------------------------------------------------
+
+def step_memory_hygiene_audit(engine: Any) -> dict[str, Any]:
+    """Audit kebersihan store memori (duplikat, yatim, basi) → memory_hygiene.json."""
+    from datetime import timedelta
+    from tools import memory_hygiene_audit as mha
+
+    ws: Path = engine.workspace
+    now_dt = datetime.now(timezone.utc)
+    now_iso = now_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+    log_path = ws / "cognitive_memory" / "memory.jsonl"
+
+    stale_cutoff = now_dt - timedelta(days=60)
+    stale_records: list[str] = []
+    stale_open_gaps: list[str] = []
+
+    try:
+        for gap in engine.store.list_gaps(status="OPEN"):
+            raw_ts = str(gap.get("updated_at") or gap.get("created_at") or "").strip()
+            if raw_ts:
+                try:
+                    dt = datetime.fromisoformat(raw_ts.replace("Z", "+00:00"))
+                    if dt.tzinfo is None:
+                        dt = dt.replace(tzinfo=timezone.utc)
+                    if dt < stale_cutoff:
+                        stale_open_gaps.append(str(gap.get("gap_id") or ""))
+                except ValueError:
+                    pass
+    except Exception:
+        pass
+
+    if not log_path.is_file():
+        payload = {
+            "schema": mha.SCHEMA,
+            "at": now_iso,
+            "cycle": engine.cycle_count,
+            "memory_path": str(log_path),
+            "status": "no_memory_log",
+            "hygiene_ok": len(stale_open_gaps) == 0,
+            "stale": {
+                "threshold_days": 60,
+                "stale_memory_records": [],
+                "stale_open_gaps": stale_open_gaps,
+                "stale_count": len(stale_open_gaps),
+            },
+        }
+        _write_json(ws / "memory_hygiene.json", payload)
+        return {
+            "status": "ok",
+            "artifact": "memory_hygiene.json",
+            "hygiene_ok": payload["hygiene_ok"],
+            "stale_count": len(stale_open_gaps),
+        }
+
+    for line in log_path.read_text(encoding="utf-8", errors="replace").splitlines():
+        s = line.strip()
+        if not s:
+            continue
+        try:
+            obj = json.loads(s)
+        except Exception:
+            continue
+        if not isinstance(obj, dict):
+            continue
+        ev = obj.get("event") if isinstance(obj.get("event"), dict) else {}
+        rec = ev.get("record") if isinstance(ev.get("record"), dict) else {}
+        raw_ts = str(rec.get("created_at") or rec.get("ts") or obj.get("ts") or "").strip()
+        if not raw_ts:
+            continue
+        try:
+            dt = datetime.fromisoformat(raw_ts.replace("Z", "+00:00"))
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            if dt < stale_cutoff:
+                stale_records.append(str(rec.get("id") or f"seq:{obj.get('seq')}"))
+        except ValueError:
+            pass
+
+    known_refs: set[str] = set()
+    try:
+        for gap in engine.store.list_gaps():
+            if gap.get("gap_id"):
+                known_refs.add(str(gap["gap_id"]))
+            if gap.get("reproduction_ref"):
+                known_refs.add(str(gap["reproduction_ref"]))
+    except Exception:
+        pass
+
+    audit = mha.audit_memory_log(
+        log_path,
+        known_refs=known_refs if known_refs else None,
+        evidence_root=ws,
+    )
+    # Jangan biarkan anchor evidence ref internal dari log sendiri terhitung yatim bila pakai known_refs.
+    stale_count = len(stale_records) + len(stale_open_gaps)
+    report = {
+        **audit,
+        "at": now_iso,
+        "cycle": engine.cycle_count,
+        "stale": {
+            "threshold_days": 60,
+            "stale_memory_records": stale_records,
+            "stale_open_gaps": stale_open_gaps,
+            "stale_count": stale_count,
+        },
+    }
+    _write_json(ws / "memory_hygiene.json", report)
+    dup_groups = int((audit.get("duplicates") or {}).get("exact_duplicate_group_count") or 0)
+    orphan_cnt = int((audit.get("orphan_refs") or {}).get("dangling_evidence_count") or 0)
+    return {
+        "status": "ok",
+        "artifact": "memory_hygiene.json",
+        "hygiene_ok": bool(audit.get("hygiene_ok")),
+        "duplicate_groups": dup_groups,
+        "orphan_refs": orphan_cnt,
+        "stale_count": stale_count,
+    }
+
