@@ -144,6 +144,34 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_recall_probes_writes_report_on_cognitive_memory(self) -> None:
+        from ace_operational.cognitive_memory import CognitiveMemory
+
+        real_dir = self.ws / "cognitive_memory"
+        (real_dir / "memory.jsonl").unlink()
+        mem = CognitiveMemory(real_dir)
+        d1 = mem.anchor_evidence(b"bridge-evidence")
+        mem.remember(
+            kind="episodic",
+            content={"topic": "bridge relay backoff", "fact": "jeda eksponensial"},
+            source_kind="evidence",
+            source_ref=d1,
+            confidence=0.9,
+        )
+        self._seed_gap()
+        out = leap_wiring.step_recall_probes(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertTrue((self.ws / "recall_probes.json").is_file())
+        data = json.loads((self.ws / "recall_probes.json").read_text(encoding="utf-8"))
+        self.assertEqual(data["precision"]["retriever_mode"], "cognitive_memory")
+        self.assertGreaterEqual(data["delivery"]["summary"]["total_tasks"], 1)
+
+    def test_recall_probes_empty_store_fails_closed(self) -> None:
+        (self.ws / "cognitive_memory" / "memory.jsonl").unlink()
+        out = leap_wiring.step_recall_probes(self.engine)
+        self.assertEqual(out["status"], "skipped")
+        self.assertTrue((self.ws / "recall_probes.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

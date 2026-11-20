@@ -685,3 +685,141 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0041 — AG105: recall delivery & precision probes (%25)
+# ------------------------------------------------------------------
+
+def step_recall_probes(engine: Any) -> dict[str, Any]:
+    try:
+        import shutil
+        from ace_operational import memory_consolidation as mc
+        from ace_operational import recall_candidates as rc
+        from tools import recall_delivery_probe as rdp
+        from tools import recall_precision_probe as rpp
+
+        ws = Path(engine.workspace)
+        mem_path = ws / "cognitive_memory" / "memory.jsonl"
+        out_path = ws / "recall_probes.json"
+        episodes: list[dict[str, Any]] = []
+        if mem_path.is_file():
+            episodes, _ = mc.load_active_episodes(mem_path)
+            if not episodes:
+                for raw in mem_path.read_text(encoding="utf-8", errors="ignore").splitlines():
+                    raw = raw.strip()
+                    if not raw:
+                        continue
+                    try:
+                        entry = json.loads(raw)
+                        ev = entry.get("event") if isinstance(entry, dict) else None
+                        if isinstance(ev, dict) and ev.get("type") == "record":
+                            rec = ev.get("record")
+                            if isinstance(rec, dict) and rec.get("status", "active") == "active":
+                                episodes.append(rec)
+                    except Exception:
+                        continue
+
+        gaps = engine.store.list_gaps(status="OPEN")
+        tasks: list[dict[str, Any]] = []
+        queries: list[dict[str, Any]] = []
+
+        for ep in episodes[:5]:
+            eid = str(ep.get("id") or "").strip()
+            content = ep.get("content") if isinstance(ep.get("content"), dict) else {}
+            text = " ".join(str(v) for v in content.values() if isinstance(v, (str, int, float)))
+            if eid and text.strip():
+                tasks.append({"id": f"ep:{eid}", "query": text})
+                queries.append({"query_id": f"ep:{eid}", "query": text, "relevant_ids": [eid]})
+
+        for g in gaps[:5]:
+            gid = str(g.get("gap_id") or "").strip()
+            q = " ".join(str(g.get(k) or "") for k in (
+                "error_type", "missing_skill_or_tool", "description_id",
+                "gap_type", "skill_name", "title", "description",
+            )).strip()
+            if gid and q:
+                tasks.append({"id": gid, "query": q})
+                if episodes:
+                    class _GapStore:
+                        def list_records(self_inner):  # noqa: N805
+                            return episodes
+
+                    lex = rc.lexical_candidates(q, _GapStore(), limit=3)
+                    rel = [str(c.get("id") or "") for c in lex if c.get("id")]
+                    if rel:
+                        queries.append({"query_id": gid, "query": q, "relevant_ids": rel})
+
+        if not tasks or not mem_path.is_file():
+            skipped = {
+                "status": "skipped",
+                "reason": "no episodes/gaps or missing memory.jsonl",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        class _Store:
+            def list_records(self_inner):  # noqa: N805
+                return episodes
+
+        delivered_map: dict[str, list[str]] = {}
+        for t in tasks:
+            cands = rc.lexical_candidates(t["query"], _Store(), limit=5)
+            delivered_map[t["id"]] = [str(c.get("id")) for c in cands if c.get("id")]
+
+        store_payload = {
+            "records": [
+                {
+                    "id": str(ep.get("id") or ""),
+                    "content": ep.get("content") if isinstance(ep.get("content"), dict) else {},
+                    "text": " ".join(
+                        str(v)
+                        for v in (ep.get("content") or {}).values()
+                        if isinstance(v, (str, int, float))
+                    ) if isinstance(ep.get("content"), dict) else str(ep.get("content") or ""),
+                }
+                for ep in episodes
+            ],
+            "delivered": delivered_map,
+        }
+        delivery_report = rdp.probe_recall_delivery(tasks, store_payload)
+
+        precision_report: dict[str, Any]
+        if queries:
+            retriever = None
+            retriever_mode = "cognitive_memory"
+            try:
+                retriever = rpp.make_cognitive_memory_cached_retriever(mem_path)
+                precision_report = rpp.evaluate_recall_precision(queries, retriever, default_limit=5)
+            except Exception:
+                retriever_mode = "lexical_fallback"
+
+                def _fallback_retriever(q: str, limit: int = 5) -> list[str]:
+                    return [str(c.get("id")) for c in rc.lexical_candidates(q, _Store(), limit=limit) if c.get("id")]
+
+                precision_report = rpp.evaluate_recall_precision(queries, _fallback_retriever, default_limit=5)
+            finally:
+                cleanup_dir = getattr(retriever, "_cleanup_dir", None)
+                if cleanup_dir:
+                    shutil.rmtree(cleanup_dir, ignore_errors=True)
+            precision_report["retriever_mode"] = retriever_mode
+        else:
+            precision_report = {"status": "skipped", "reason": "no relevance queries", "summary": {"query_count": 0}}
+
+        payload = {
+            "status": "ok",
+            "checked_at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "delivery": delivery_report,
+            "precision": precision_report,
+        }
+        _write_json(out_path, payload)
+        return {
+            "status": "ok",
+            "delivery_summary": delivery_report.get("summary"),
+            "precision_summary": precision_report.get("summary"),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
