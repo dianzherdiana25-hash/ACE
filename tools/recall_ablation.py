@@ -27,8 +27,11 @@ def _tokenize_query(text):
     return set(re.findall(r"[a-z0-9_]+", str(text).lower()))
 
 
-def load_sqlite_ablation_store(db_path, tasks, *, anchored=False, pool_cleanup=False):
+def load_sqlite_ablation_store(db_path, tasks, *, anchored=False, pool_cleanup=False,
+                                semantic=False, embedder=None, top_k=3):
     """Baca OperationalStore SQLite secara read-only (URI mode=ro) dan petakan ke store ablation."""
+    if semantic and not callable(embedder):
+        raise ValueError("Mode semantik memerlukan embedder callable.")
     if not isinstance(tasks, list) or not tasks:
         raise ValueError("Daftar tugas wajib berupa larik berisi.")
     resolved = Path(db_path).resolve()
@@ -138,9 +141,42 @@ def load_sqlite_ablation_store(db_path, tasks, *, anchored=False, pool_cleanup=F
         task["query"] for task in tasks
         if isinstance(task, dict) and isinstance(task.get("query"), str) and task["query"].strip()
     })
+
+    # EVO 0017 M3 — peringkat semantik: kolam per query = top_k kandidat
+    # terdekat secara kosinus embedding atas haystack (pengganti filter
+    # tumpang-tindih token, yang membuang kandidat parafrase ber-overlap
+    # nol). Embedding dihitung sekali per teks unik (deterministik).
+    _emb_cache: dict[str, list[float]] = {}
+
+    def _embed(text: str) -> list[float]:
+        if text not in _emb_cache:
+            _emb_cache[text] = [float(v) for v in embedder(text)]
+        return _emb_cache[text]
+
+    def _cosine(a: list[float], b: list[float]) -> float:
+        dot = sum(x * y for x, y in zip(a, b))
+        na = sum(x * x for x in a) ** 0.5
+        nb = sum(y * y for y in b) ** 0.5
+        if na == 0.0 or nb == 0.0:
+            return 0.0
+        return dot / (na * nb)
+
+    def _semantic_pool(query: str) -> list[tuple]:
+        qv = _embed(query)
+        scored = [(_cosine(qv, _embed(haystack)), sort_key, haystack, decision, refs)
+                  for haystack, decision, refs, sort_key in candidates]
+        scored.sort(key=lambda item: (-item[0], item[1]))
+        return scored[:top_k]
+
     if anchored:
         records = {}
         for query in queries:
+            if semantic:
+                records[query] = [
+                    {"decision": decision, "based_on": sorted(set(refs))}
+                    for _score, _key, _hay, decision, refs in _semantic_pool(query)
+                ]
+                continue
             q_toks = _tokenize_query(query)
             matched = []
             for haystack, decision, refs, sort_key in candidates:
@@ -153,6 +189,9 @@ def load_sqlite_ablation_store(db_path, tasks, *, anchored=False, pool_cleanup=F
 
     plain_store = {}
     for query in queries:
+        if semantic:
+            plain_store[query] = [decision for _s, _k, _h, decision, _r in _semantic_pool(query)]
+            continue
         q_toks = _tokenize_query(query)
         matched = []
         for haystack, decision, _refs, sort_key in candidates:
@@ -386,18 +425,44 @@ def main(argv=None):
     parser.add_argument("--anchored", action="store_true")
     parser.add_argument("--pool-cleanup", action="store_true",
                         help="EVO 0017 M2: keluarkan kandidat riwayat tugas dari kolam keputusan.")
+    parser.add_argument("--semantic", action="store_true",
+                        help="EVO 0017 M3: kolam per query = top-k terdekat kosinus embedding.")
+    parser.add_argument("--top-k", type=int, default=3,
+                        help="Ukuran kolam semantik per query (default 3).")
+    parser.add_argument("--embedding-url", default="http://127.0.0.1:8931",
+                        help="Basis URL bridge embedding (POST /v1/embeddings).")
     args = parser.parse_args(argv)
     try:
         tasks_data = json.loads(args.tasks.read_text(encoding="utf-8"))
+        embedder = None
+        if args.semantic:
+            import urllib.request
+
+            def embedder(text, _url=args.embedding_url.rstrip("/")):
+                req = urllib.request.Request(
+                    _url + "/v1/embeddings",
+                    data=json.dumps({"input": text}).encode("utf-8"),
+                    headers={"Content-Type": "application/json"}, method="POST")
+                with urllib.request.urlopen(req, timeout=120) as resp:
+                    payload = json.loads(resp.read().decode("utf-8"))
+                return payload["data"][0]["embedding"]
+
         store_data = (
             load_sqlite_ablation_store(args.sqlite, tasks_data, anchored=args.anchored,
-                                        pool_cleanup=args.pool_cleanup)
+                                        pool_cleanup=args.pool_cleanup,
+                                        semantic=args.semantic, embedder=embedder,
+                                        top_k=args.top_k)
             if args.sqlite is not None
             else json.loads(args.store.read_text(encoding="utf-8"))
         )
         data, summary = run_ablation(store_data,
                                     tasks_data,
                                     seed=args.seed, anchored=args.anchored, seeds=args.seeds)
+        if args.semantic:
+            summary["ranking"] = "semantic_top_k"
+            summary["top_k"] = args.top_k
+        if args.pool_cleanup:
+            summary["pool_cleanup"] = True
         args.output_dir.mkdir()
         (args.output_dir / "results.jsonl").write_bytes(data)
         (args.output_dir / "summary.json").write_text(
