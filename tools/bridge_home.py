@@ -12,7 +12,8 @@ mencetak teks atau JSON tanpa meluncurkan proses.
 Jika PID masih hidup, `expected_process_name` opsional menentukan nama
 proses yang diharapkan. Nama yang beda atau tak terbaca perlu pemeriksaan
 operator. Dua pengamatan PID dan identitas harus konsisten. Kecocokan
-nama meloloskan pemeriksaan PID saja.
+nama meloloskan pemeriksaan PID saja. Bila expected_process_starttime
+dicatat, cocokkan juga tick starttime Linux sejak boot (field 22 stat).
 """
 import argparse
 import json
@@ -41,7 +42,16 @@ def _pid_identity(pid):
     return Path(f"/proc/{pid}/comm").read_text(encoding="utf-8").strip()
 
 
-def _observe_pid(path, probe, expected_name, identity_probe):
+def _pid_starttime(pid):
+    raw = Path(f"/proc/{pid}/stat").read_text(encoding="utf-8")
+    _, delimiter, tail = raw.rpartition(") ")
+    fields = tail.split()
+    if not delimiter or len(fields) < 20:
+        raise ValueError("Stat proses tidak lengkap.")
+    return int(fields[19])
+
+
+def _observe_pid(path, probe, expected_name, identity_probe, expected_start, starttime_probe):
     try:
         pid = int(path.read_text(encoding="utf-8").strip())
     except FileNotFoundError:
@@ -59,21 +69,29 @@ def _observe_pid(path, probe, expected_name, identity_probe):
             observed = None
         if isinstance(observed, str):
             identity = observed.strip() or None
-    return pid, running, identity
+    starttime = None
+    if running and expected_start is not None:
+        try:
+            value = starttime_probe(pid)
+        except (OSError, ValueError):
+            value = None
+        if type(value) is int and value >= 0:
+            starttime = value
+    return pid, running, identity, starttime
 
 
-def _check_pid_file(path, probe, expected_name, identity_probe):
+def _check_pid_file(path, probe, expected_name, identity_probe, expected_start, starttime_probe):
     unverified = {"state": "unverified", "safe_to_continue": False}
     try:
-        first = _observe_pid(path, probe, expected_name, identity_probe)
-        second = _observe_pid(path, probe, expected_name, identity_probe)
+        first = _observe_pid(path, probe, expected_name, identity_probe, expected_start, starttime_probe)
+        second = _observe_pid(path, probe, expected_name, identity_probe, expected_start, starttime_probe)
     except (OSError, ValueError):
         return unverified
     if first is None and second is None:
         return {"state": "missing", "safe_to_continue": True}
     if first != second:
         return {**unverified, "reason": "pid_probe_inconsistent"}
-    _, running, observed = second
+    _, running, observed, starttime = second
     if not running:
         return {"state": "stale", "safe_to_continue": True}
     if expected_name is None:
@@ -82,6 +100,11 @@ def _check_pid_file(path, probe, expected_name, identity_probe):
         return {**unverified, "reason": "identity_unverified"}
     if observed != expected_name:
         return {"state": "identity_mismatch", "safe_to_continue": False}
+    if expected_start is not None:
+        if starttime is None:
+            return {**unverified, "reason": "starttime_unverified"}
+        if starttime != expected_start:
+            return {"state": "identity_mismatch", "safe_to_continue": False, "reason": "starttime_mismatch"}
     return {"state": "live", "safe_to_continue": True, "reason": "identity_matched"}
 
 
@@ -119,7 +142,8 @@ def _health(url):
                        "--", url + "/health"])
 
 
-def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running, identity_probe=_pid_identity):
+def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running, identity_probe=_pid_identity,
+              starttime_probe=_pid_starttime):
     if not isinstance(config, dict):
         raise ValueError("Konfigurasi wajib berupa objek JSON.")
     paths = {}
@@ -144,8 +168,12 @@ def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running, identity_
         not isinstance(expected_name, str) or not expected_name.strip() or not expected_name.isprintable()
     ):
         raise ValueError("expected_process_name wajib berupa satu nama proses.")
+    expected_start = config.get("expected_process_starttime")
+    if expected_start is not None and (type(expected_start) is not int or expected_start < 0):
+        raise ValueError("expected_process_starttime wajib berupa tick Linux nonnegatif.")
     pid_check = _check_pid_file(Path(paths["pid_file"]), pid_probe,
-                               expected_name.strip() if expected_name is not None else None, identity_probe)
+                               expected_name.strip() if expected_name is not None else None,
+                               identity_probe, expected_start, starttime_probe)
     credentials = _check_bundle_markers(bundle_manifest)
     argv = ["nohup", "python3", str(Path(paths["repo"]) / "tools" / "brain_bridge.py"),
             "--port", str(port), "--state", paths["budget_state"], "--log", paths["call_log"],
