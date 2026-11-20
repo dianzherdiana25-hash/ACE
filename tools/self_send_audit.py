@@ -17,6 +17,27 @@ else:
 _BRANCH = re.compile(r"ace-auto/[0-9]{8}-[a-z0-9][a-z0-9-]{0,40}")
 
 
+def envelope_violations(row, category):
+    """Pakai aturan amplop yang sama di audit satu log dan laporan berkala."""
+    reasons = []
+    branch = row.get("branch")
+    if branch or category in {"prepared", "partial", "delivered"}:
+        if not isinstance(branch, str) or not _BRANCH.fullmatch(branch):
+            reasons.append("target_branch_refused")
+    if row.get("merge_authority", False) is not False:
+        reasons.append("merge_authority_not_absent")
+    if category == "unknown":
+        reasons.append("unknown_outcome")
+    return reasons
+
+
+def delivery_key(row):
+    branch, digest = row.get("branch"), row.get("content_digest")
+    if isinstance(branch, str) and isinstance(digest, str) and digest:
+        return branch, digest
+    return None
+
+
 def audit(path):
     rows, anomalies = parse_audit_jsonl(path)
     violations = [{"line": item["line"], "reason": item["kind"]} for item in anomalies]
@@ -28,16 +49,9 @@ def audit(path):
         line = row["_line"]
         branch = row.get("branch")
         category, _ = classify_outcome(row["outcome"])
-        if branch or category in {"prepared", "partial", "delivered"}:
-            if not isinstance(branch, str) or not _BRANCH.fullmatch(branch):
-                violations.append({"line": line, "reason": "target_branch_refused"})
-        if row.get("merge_authority", False) is not False:
-            violations.append({"line": line, "reason": "merge_authority_not_absent"})
-        if category == "unknown":
-            violations.append({"line": line, "reason": "unknown_outcome"})
+        violations.extend({"line": line, "reason": reason} for reason in envelope_violations(row, category))
         source = {"source": row["_source"], "line": line}
-        digest = row.get("content_digest")
-        key = (branch, digest) if isinstance(branch, str) and isinstance(digest, str) and digest else None
+        key = delivery_key(row)
         if category == "prepared" and key:
             prepared[key].append(source)
         elif category in {"partial", "delivered"}:
