@@ -685,3 +685,72 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0048 — kustodi arsip kelahiran varian penerus diff-tunggal
+# ------------------------------------------------------------------
+
+
+def step_successor_variant(engine: Any) -> dict[str, Any]:
+    """Kemas & verifikasi arsip varian penerus diff-tunggal secara fail-closed (AG179)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import successor_variant
+
+        spec_file = ws / "successor_variant_spec.json"
+        archive_dir = ws / "successor_variant_archive"
+        out_path = ws / "successor_variant_status.json"
+        cycle = int(getattr(engine, "cycle_count", 0) or 0)
+
+        if spec_file.is_file():
+            spec = json.loads(spec_file.read_text(encoding="utf-8"))
+            if not isinstance(spec, dict):
+                raise ValueError("successor_variant_spec.json wajib objek JSON.")
+            manifest = successor_variant.build_variant_archive(
+                archive_dir,
+                variant_id=str(spec.get("variant_id") or f"var-{cycle}"),
+                origin_commit=str(spec.get("origin_commit") or "HEAD"),
+                target_file=str(spec.get("target_file") or ""),
+                diff_text=str(spec.get("diff_text") or ""),
+                prediction=spec.get("prediction") if isinstance(spec.get("prediction"), dict) else {},
+            )
+            verification = successor_variant.verify_variant_archive(archive_dir, strict=True)
+            mode = "built_and_verified"
+        elif archive_dir.is_dir():
+            verification = successor_variant.verify_variant_archive(archive_dir, strict=True)
+            manifest = None
+            mode = "verified_existing"
+        else:
+            _write_json(
+                out_path,
+                {"at": _now_iso(), "cycle": cycle, "mode": "no_variant_pending", "valid": None},
+            )
+            return {"status": "ok", "mode": "no_variant_pending", "report_path": str(out_path)}
+
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": cycle,
+                "mode": mode,
+                "manifest_hash": manifest.get("manifest_hash") if isinstance(manifest, dict) else None,
+                "verification": verification,
+            },
+        )
+        return {
+            "status": "ok",
+            "mode": mode,
+            "valid": bool(verification.get("valid", False)),
+            "verified_files": verification.get("verified_files", 0),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

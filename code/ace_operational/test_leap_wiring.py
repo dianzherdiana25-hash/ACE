@@ -144,6 +144,42 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_successor_variant_custody_builds_verifies_and_fails_on_multidiff(self) -> None:
+        (self.ws / "successor_variant_spec.json").write_text(
+            json.dumps(
+                {
+                    "variant_id": "v-1000",
+                    "origin_commit": "abc1234",
+                    "target_file": "tools/a.py",
+                    "diff_text": "--- a/tools/a.py\n+++ b/tools/a.py\n@@ -1 +1 @@\n-x=1\n+x=2\n",
+                    "prediction": {"expected_advantage": "faster check", "success_metric": "latency"},
+                }
+            ),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_successor_variant(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertTrue(res["valid"])
+        self.assertEqual(res["mode"], "built_and_verified")
+        saved = json.loads((self.ws / "successor_variant_status.json").read_text(encoding="utf-8"))
+        self.assertTrue(saved["verification"]["valid"])
+
+        (self.ws / "successor_variant_spec.json").write_text(
+            json.dumps(
+                {
+                    "variant_id": "v-bad",
+                    "origin_commit": "abc1234",
+                    "target_file": "tools/a.py",
+                    "diff_text": "--- a/tools/a.py\n+++ b/tools/a.py\n+x\n--- a/tools/b.py\n+++ b/tools/b.py\n+y\n",
+                    "prediction": {"expected_advantage": "none", "success_metric": "m"},
+                }
+            ),
+            encoding="utf-8",
+        )
+        bad = leap_wiring.step_successor_variant(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
