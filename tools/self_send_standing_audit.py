@@ -13,11 +13,15 @@ import json
 from pathlib import Path
 
 if __package__:
-    from .self_send_audit import delivery_key, envelope_violations
+    from .self_send_audit import delivery_key, envelope_violations, iter_audit_shards
     from .self_send_audit_view import AuditViewError, classify_outcome, parse_audit_jsonl
 else:
-    from self_send_audit import delivery_key, envelope_violations
+    from self_send_audit import delivery_key, envelope_violations, iter_audit_shards
     from self_send_audit_view import AuditViewError, classify_outcome, parse_audit_jsonl
+
+
+def _shard_stem_for_order(source_name: str) -> str:
+    return source_name[:-3] if source_name.endswith(".gz") else source_name
 
 
 def standing_audit(directory):
@@ -25,11 +29,17 @@ def standing_audit(directory):
         raise ValueError("Direktori log tidak tersedia.")
     rows = []
     undated = 0
-    for path in sorted(directory.glob("*.jsonl")):
-        if path.is_symlink() or not path.is_file():
-            continue
+    corrupt_shards = []
+    for path in iter_audit_shards(directory):
         batch, anomalies = parse_audit_jsonl(path)
         undated += len(anomalies)
+        for anom in anomalies:
+            if anom["kind"] == "corrupt_gzip_shard":
+                corrupt_shards.append({
+                    "source": anom["source"],
+                    "reason": anom["kind"],
+                    "detail": anom["detail"],
+                })
         for row in batch:
             try:
                 stamp = datetime.fromisoformat(row["ts"])
@@ -39,7 +49,7 @@ def standing_audit(directory):
             except (OverflowError, ValueError):
                 undated += 1
                 continue
-            rows.append((utc, path.name, row["_line"], row))
+            rows.append((utc, _shard_stem_for_order(path.name), row["_line"], row))
 
     current = None
     days = []
@@ -74,9 +84,12 @@ def standing_audit(directory):
                 current["sent_without_prepared"] += 1
         current["orphans"] = open_count
 
-    return {"schema": "ace.self-send-standing-audit.v1", "days": days,
-            "open_orphan_task_ids": sorted(task_id for queue in pending.values() for task_id in queue),
-            "undated_violations": undated}
+    report = {"schema": "ace.self-send-standing-audit.v1", "days": days,
+              "open_orphan_task_ids": sorted(task_id for queue in pending.values() for task_id in queue),
+              "undated_violations": undated}
+    if corrupt_shards:
+        report["corrupt_shards"] = corrupt_shards
+    return report
 
 
 def text_summary(report):

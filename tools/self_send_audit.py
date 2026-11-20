@@ -38,13 +38,39 @@ def delivery_key(row):
     return None
 
 
+def _shard_sort_key(path: Path) -> tuple[str, str]:
+    stem = path.name[:-3] if path.name.endswith(".gz") else path.name
+    return stem, path.name
+
+
+def iter_audit_shards(target: Path) -> list[Path]:
+    """Kembalikan daftar berkas shard audit (.jsonl atau .gz) secara deterministik."""
+    if target.is_dir():
+        shards = [
+            p for p in target.iterdir()
+            if not p.is_symlink() and p.is_file() and (
+                p.name.endswith(".jsonl") or p.name.endswith(".jsonl.gz") or p.name.endswith(".gz")
+            )
+        ]
+        return sorted(shards, key=_shard_sort_key)
+    return [target]
+
+
 def audit(path):
-    rows, anomalies = parse_audit_jsonl(path)
+    rows = []
+    anomalies = []
+    for shard in iter_audit_shards(path):
+        batch, shard_anomalies = parse_audit_jsonl(shard)
+        rows.extend(batch)
+        anomalies.extend(shard_anomalies)
     violations = [{"line": item["line"], "reason": item["kind"]} for item in anomalies]
     days = defaultdict(Counter)
     prepared = defaultdict(deque)
     transitions = []
-    findings = []
+    findings = [
+        {"source": item["source"], "line": item["line"], "reason": item["kind"]}
+        for item in anomalies if item["kind"] == "corrupt_gzip_shard"
+    ]
     for row in rows:
         line = row["_line"]
         branch = row.get("branch")
