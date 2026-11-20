@@ -6,8 +6,10 @@ import io
 import json
 import os
 from pathlib import Path
+from subprocess import CompletedProcess, TimeoutExpired
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from tools import coverage_and_flaky_audit as cfa
 
@@ -208,37 +210,27 @@ class TestCoverageAndFlakyAudit(unittest.TestCase):
         self.assertIn("leaked_artifact.txt", by_target["tools.test_dirty"]["dirty_entries"])
 
     def test_06_flaky_detector_handles_consistent_fail_and_timeout(self):
-        _write_text(self.root / "tools" / "__init__.py", "")
-        _write_text(
-            self.root / "tools" / "test_always_fail.py",
-            (
-                "import unittest\n"
-                "class TestFail(unittest.TestCase):\n"
-                "    def test_boom(self):\n"
-                "        self.fail('expected failure in test')\n"
-            ),
-        )
-        _write_text(
-            self.root / "tools" / "test_slow.py",
-            (
-                "import time, unittest\n"
-                "class TestSlow(unittest.TestCase):\n"
-                "    def test_sleep(self):\n"
-                "        time.sleep(0.5)\n"
-            ),
-        )
-        res = cfa.run_flaky_audit(
-            self.root,
-            ["tools.test_always_fail", "tools.test_slow"],
-            runs=2,
-            timeout_sec=0.1,
-        )
-        self.assertFalse(res["summary"]["passed"])
-        by_target = {t["target"]: t for t in res["targets"]}
-        self.assertTrue(by_target["tools.test_always_fail"]["consistent_fail"])
-        self.assertEqual(by_target["tools.test_always_fail"]["statuses"], ["FAIL", "FAIL"])
-        self.assertEqual(by_target["tools.test_slow"]["timeout_runs"], 2)
-        self.assertEqual(by_target["tools.test_slow"]["statuses"], ["TIMEOUT", "TIMEOUT"])
+        outcomes = {"tools.test_fast": "PASS", "tools.test_always_fail": "FAIL",
+                    "tools.test_slow": "TIMEOUT"}
+
+        def fixture_process(argv, *, timeout, **kwargs):
+            self.assertEqual(timeout, 0.1)
+            outcome = outcomes[argv[-1]]
+            if outcome == "TIMEOUT":
+                raise TimeoutExpired(argv, timeout)
+            return CompletedProcess(argv, int(outcome == "FAIL"), stdout="", stderr="Ran 1 test")
+
+        with patch.object(cfa.subprocess, "run", side_effect=fixture_process) as fake_run:
+            result = cfa.run_flaky_audit(self.root, list(outcomes), runs=20, timeout_sec=0.1)
+
+        self.assertFalse(result["summary"]["passed"])
+        self.assertEqual(fake_run.call_count, 60)
+        for target in result["targets"]:
+            expected = outcomes[target["target"]]
+            with self.subTest(target=target["target"]):
+                self.assertEqual(target["statuses"], [expected] * 20)
+                self.assertEqual(target["timeout_runs"], 20 if expected == "TIMEOUT" else 0)
+                self.assertEqual(target["consistent_fail"], expected != "PASS")
 
     def test_07_validation_rejects_bad_runs_timeout_forbidden_and_flags(self):
         self._seed_sample_repo()
