@@ -144,6 +144,16 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_candidate_factory_v2_writes_intake_episodes(self) -> None:
+        out = leap_wiring.step_candidate_factory_v2(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertGreaterEqual(out["episodes"], 15)
+        intake = self.ws / "candidate_intake.jsonl"
+        self.assertTrue(intake.is_file())
+        first = json.loads(intake.read_text(encoding="utf-8").splitlines()[0])
+        self.assertEqual(first["kind"], "episode")
+        self.assertTrue((self.ws / "candidate_v2_summary.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

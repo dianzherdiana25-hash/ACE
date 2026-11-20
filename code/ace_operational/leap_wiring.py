@@ -685,3 +685,45 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0043 — AG126: candidate_factory_v2 intake generator (%50)
+# ------------------------------------------------------------------
+
+def step_candidate_factory_v2(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import candidate_factory_v2 as cf2
+
+        ws = Path(engine.workspace)
+        cycle = int(getattr(engine, "cycle_count", 0) or 0)
+        bundle_dir = ws / "candidates_v2"
+        result = cf2.generate_candidate_v2_bundle(
+            bundle_dir,
+            id_lang_count=5,
+            ml_lang_count=5,
+            code_count=5,
+            seed=20261119 + cycle,
+        )
+        ep_path = Path(result["episodes_path"])
+        intake_path = ws / "candidate_intake.jsonl"
+        tmp_intake = intake_path.with_suffix(".jsonl.tmp")
+        tmp_intake.write_text(ep_path.read_text(encoding="utf-8"), encoding="utf-8")
+        tmp_intake.replace(intake_path)
+
+        census = result.get("readiness_census") or {}
+        _write_json(ws / "candidate_v2_summary.json", {
+            "status": "ok",
+            "generated_at": _now_iso(),
+            "cycle": cycle,
+            "episodes_path": str(intake_path),
+            "readiness_census": census,
+        })
+        return {
+            "status": "ok",
+            "episodes": census.get("accepted_count", 15),
+            "rejected": census.get("rejected_count", 0),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
