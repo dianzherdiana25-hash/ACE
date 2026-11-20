@@ -144,6 +144,27 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_director_prose_audit_logs_results(self) -> None:
+        (self.ws / "notes.md").write_text("# Ringkasan\nLaporan bersih lokal.\n", encoding="utf-8")
+        self.engine.store.create_task(
+            kind="director_proposal",
+            title_id="Proposal Prose",
+            user_request="uji prose",
+            normalized_goal="Proposal Prose",
+            model_backend="groq/openai/gpt-oss-120b",
+            priority=5,
+            checkpoint={"proposal": {"title": "Proposal Prose", "rationale": "Perlu audit deskripsi."}},
+            hold_for_review=True,
+        )
+        out = leap_wiring.step_director_prose_audit(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["audited"], 2)
+        self.assertTrue((self.ws / "prose_audit.jsonl").is_file())
+
+    def test_director_prose_audit_empty_skips_cleanly(self) -> None:
+        out = leap_wiring.step_director_prose_audit(self.engine)
+        self.assertEqual(out["status"], "skipped")
+
 
 if __name__ == "__main__":
     unittest.main()

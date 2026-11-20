@@ -685,3 +685,63 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0043 — AG123: audit prose/narasi proposal director & laporan (%25)
+# ------------------------------------------------------------------
+
+def step_director_prose_audit(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import director_prose_audit as dpa
+
+        ws = Path(engine.workspace)
+        sections: list[tuple[str, str]] = []
+
+        for md_file in sorted(ws.glob("*.md"))[:10]:
+            try:
+                text = md_file.read_text(encoding="utf-8", errors="ignore")
+                if text.strip():
+                    sections.append((md_file.name, text))
+            except Exception:
+                continue
+
+        prop_lines: list[str] = []
+        for t in engine.store.list_tasks(limit=100):
+            if t.get("kind") != "director_proposal":
+                continue
+            ckpt = t.get("checkpoint") if isinstance(t.get("checkpoint"), dict) else {}
+            prop = ckpt.get("proposal") if isinstance(ckpt.get("proposal"), dict) else {}
+            title = str(prop.get("title") or t.get("title_id") or t["task_id"])
+            rat = str(prop.get("rationale") or t.get("user_request") or "").strip()
+            if rat:
+                prop_lines.append(f"- {title}: {rat}")
+        if prop_lines:
+            sections.append(("director_proposals.md", "\n".join(prop_lines)))
+
+        if not sections:
+            return {"status": "skipped", "reason": "no workspace prose or proposals", "audited": 0}
+
+        results = []
+        total_unrecognized = 0
+        for label, text in sections:
+            rep = dpa.audit_historical_prose(text, product_path=label)
+            summary = rep.get("summary") or {}
+            total_unrecognized += int(summary.get("unrecognized_prose_count") or 0)
+            results.append({"product": label, "summary": summary})
+
+        _append_jsonl(ws / "prose_audit.jsonl", {
+            "at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "audited": len(results),
+            "unrecognized_total": total_unrecognized,
+            "products": results,
+        })
+        return {
+            "status": "ok",
+            "audited": len(results),
+            "unrecognized_total": total_unrecognized,
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
