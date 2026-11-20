@@ -1,4 +1,5 @@
 """Periksa pemuatan GPG memakai nilai sintetis yang dibuat saat tes."""
+import json
 import os
 from pathlib import Path
 import secrets
@@ -51,6 +52,113 @@ class BridgeSecretsTests(unittest.TestCase):
         self.assertNotIn(self.value, str(raised.exception))
         with self.assertRaisesRegex(bridge_secrets.BridgeSecretsError, "tidak ditemukan"):
             bridge_secrets.bridge_environment(self.root / "missing", self.passphrase)
+
+    def test_error_taxonomy_matrix_distinct_codes_messages_and_zero_credential_leak(self):
+        script = Path(__file__).with_name("bridge_secrets.py")
+        secret_tokens = {
+            "groq": f"SECRET_GROQ_{secrets.token_hex(12)}",
+            "gemini": f"SECRET_GEMINI_{secrets.token_hex(12)}",
+            "gonka": f"SECRET_GONKA_{secrets.token_hex(12)}",
+        }
+
+        def make_bundle_dir(name: str, raw_plaintext: bytes | None) -> Path:
+            d = self.root / name
+            d.mkdir()
+            if raw_plaintext is not None:
+                secrets_bundle._encrypt(self.passphrase, raw_plaintext, d / "bundle.gpg")
+            return d
+
+        empty_dir = make_bundle_dir(
+            "empty_values",
+            json.dumps({"schema": secrets_bundle.SCHEMA_BUNDLE, "values": {}}).encode("utf-8"),
+        )
+        bad_schema_dir = make_bundle_dir(
+            "bad_schema",
+            json.dumps({
+                "schema": "ace.wrong-schema.v0",
+                "values": {
+                    "groq-api-key": secret_tokens["groq"],
+                    "gemini-api-key": secret_tokens["gemini"],
+                    "gonka-api-key": secret_tokens["gonka"],
+                },
+            }).encode("utf-8"),
+        )
+        dup_json = (
+            '{"schema": "' + secrets_bundle.SCHEMA_BUNDLE + '", "values": {'
+            f'"groq-api-key": "{secret_tokens["groq"]}", '
+            f'"groq-api-key": "{secret_tokens["gemini"]}", '
+            f'"gemini-api-key": "{secret_tokens["gemini"]}", '
+            f'"gonka-api-key": "{secret_tokens["gonka"]}"'
+            "}}"
+        ).encode("utf-8")
+        dup_dir = make_bundle_dir("duplicate_entry", dup_json)
+        missing_req_dir = make_bundle_dir(
+            "missing_required",
+            json.dumps({
+                "schema": secrets_bundle.SCHEMA_BUNDLE,
+                "values": {
+                    "groq-api-key": secret_tokens["groq"],
+                    "gemini-api-key": secret_tokens["gemini"],
+                },
+            }).encode("utf-8"),
+        )
+        valid_dir = make_bundle_dir(
+            "valid_for_wrong_pw",
+            json.dumps({
+                "schema": secrets_bundle.SCHEMA_BUNDLE,
+                "values": {
+                    "groq-api-key": secret_tokens["groq"],
+                    "gemini-api-key": secret_tokens["gemini"],
+                    "gonka-api-key": secret_tokens["gonka"],
+                },
+            }).encode("utf-8"),
+        )
+
+        wrong_pw = secrets.token_hex(10)
+        cases = [
+            ("bundle_missing", self.root / "does_not_exist", self.passphrase),
+            ("bundle_empty", empty_dir, self.passphrase),
+            ("invalid_schema", bad_schema_dir, self.passphrase),
+            ("duplicate_entry", dup_dir, self.passphrase),
+            ("wrong_passphrase", valid_dir, wrong_pw),
+            ("missing_required_entry", missing_req_dir, self.passphrase),
+        ]
+
+        observed_codes = []
+        observed_messages = []
+        observed_cli_Errors = []
+
+        for expected_code, bundle_path, pw in cases:
+            with self.subTest(case=expected_code):
+                with self.assertRaises(bridge_secrets.BridgeSecretsError) as ctx:
+                    bridge_secrets.bridge_environment(bundle_path, pw)
+                exc = ctx.exception
+                self.assertEqual(exc.code, expected_code)
+                msg = str(exc)
+                observed_codes.append(exc.code)
+                observed_messages.append(msg)
+
+                env = {**os.environ, "ACE_BUNDLE_PASSPHRASE": pw}
+                proc = subprocess.run(
+                    [sys.executable, str(script), "--bundle", str(bundle_path), "--", sys.executable, "-c", "pass"],
+                    env=env,
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                self.assertEqual(proc.returncode, 2)
+                self.assertIn(expected_code, proc.stderr)
+                observed_cli_Errors.append(proc.stderr.strip())
+
+                for token in (*secret_tokens.values(), self.value, self.passphrase, wrong_pw):
+                    self.assertNotIn(token, msg)
+                    self.assertNotIn(token, proc.stdout)
+                    self.assertNotIn(token, proc.stderr)
+
+        # Semua 6 kasus harus memiliki kode dan pesan generik yang berbeda satu sama lain
+        self.assertEqual(len(set(observed_codes)), 6)
+        self.assertEqual(len(set(observed_messages)), 6)
+        self.assertEqual(len(set(observed_cli_Errors)), 6)
 
 
 if __name__ == "__main__":
