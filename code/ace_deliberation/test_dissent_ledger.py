@@ -82,3 +82,12 @@ class DissentLedgerTests(unittest.TestCase):
         with self.assertRaises(ledger.LedgerError):
             ledger.append_event(self.path, {**dissent(), "refs": []})
         self.assertFalse(self.path.exists())
+
+    def test_missing_anchored_ledger_is_not_silently_recreated(self):
+        anchor = {"sequence": 1, "sha256": "a" * 64}
+        with self.assertRaises(FileNotFoundError):
+            ledger.append_event(self.path, dissent(), anchor=anchor)
+        self.assertFalse(self.path.exists())
+        with self.assertRaises(ledger.LedgerError):
+            ledger.append_event(self.path, dissent(), anchor={**anchor, "sequence": 0})
+        self.assertFalse(self.path.exists())

@@ -109,10 +109,7 @@ class _LedgerState:
     def check_anchor(self, anchor):
         if anchor is None:
             return
-        if (not isinstance(anchor, dict) or set(anchor) != {"sequence", "sha256"}
-                or type(anchor["sequence"]) is not int or anchor["sequence"] < 0
-                or not isinstance(anchor["sha256"], str) or not _DIGEST.fullmatch(anchor["sha256"])):
-            raise LedgerError("Bentuk checkpoint tidak sah.")
+        _validate_anchor(anchor)
         position = anchor["sequence"]
         if position > len(self.entries):
             raise LedgerError("Ledger terpotong sebelum checkpoint.")
@@ -121,10 +118,20 @@ class _LedgerState:
             raise LedgerError("Ledger tidak cocok dengan checkpoint.")
 
 
+def _validate_anchor(anchor):
+    if (not isinstance(anchor, dict) or set(anchor) != {"sequence", "sha256"}
+            or type(anchor["sequence"]) is not int or anchor["sequence"] < 0
+            or not isinstance(anchor["sha256"], str) or not _DIGEST.fullmatch(anchor["sha256"])
+            or (anchor["sequence"] == 0 and anchor["sha256"] != GENESIS)):
+        raise LedgerError("Bentuk checkpoint tidak sah.")
+
+
 @contextmanager
-def _locked(path, *, writable):
+def _locked(path, *, writable, create=False):
     flags = os.O_NOFOLLOW | os.O_NONBLOCK
-    flags |= os.O_RDWR | os.O_CREAT | os.O_APPEND if writable else os.O_RDONLY
+    flags |= os.O_RDWR | os.O_APPEND if writable else os.O_RDONLY
+    if writable and create:
+        flags |= os.O_CREAT
     fd = os.open(path, flags, 0o600)
     try:
         if not stat.S_ISREG(os.fstat(fd).st_mode):
@@ -164,7 +171,10 @@ def _read(stream):
 def append_event(path, raw, *, anchor=None):
     """Tambah dissent atau putusan dengan pemeriksaan ulang rantai di bawah lock."""
     event = _normalize(raw)
-    with _locked(path, writable=True) as stream:
+    if anchor is not None:
+        _validate_anchor(anchor)
+    create = anchor is None or anchor["sequence"] == 0
+    with _locked(path, writable=True, create=create) as stream:
         state = _read(stream)
         state.check_anchor(anchor)
         state.validate(event)

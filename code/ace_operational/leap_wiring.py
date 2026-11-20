@@ -843,6 +843,38 @@ class _HypothesisFileStore:
         return [dict(r) for r in self._all().values() if isinstance(r, dict)]
 
 
+def step_evo0051_deliberation(engine: Any) -> dict[str, Any]:
+    """Periksa brief masukan lokal saat flag deliberasi diaktifkan."""
+    if os.environ.get("ACE_EVO0051_DELIBERATION") != "1":
+        return {"status": "disabled"}
+
+    import hashlib
+    import stat
+    from ace_deliberation.decision_brief import MAX_INPUT_BYTES, make_brief
+
+    path = engine.workspace / "evo0051_deliberation_input.json"
+    try:
+        fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        with os.fdopen(fd, "rb") as stream:
+            if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+                return {"status": "refused", "reason": "invalid_input"}
+            payload = stream.read(MAX_INPUT_BYTES + 1)
+        if len(payload) > MAX_INPUT_BYTES:
+            return {"status": "refused", "reason": "input_too_large"}
+        brief = make_brief(json.loads(payload))
+    except FileNotFoundError:
+        return {"status": "idle", "reason": "input_missing"}
+    except (OSError, ValueError, RecursionError):
+        return {"status": "refused", "reason": "invalid_input"}
+
+    if brief["precedent_status"] != "cited":
+        return {"status": "refused", "reason": "precedent_missing"}
+
+    return {"status": "reviewable", "input_sha256": hashlib.sha256(payload).hexdigest(),
+            "debate_sha256": brief["debate_sha256"], "dissent_count": len(brief["dissent"]),
+            "precedent_cited": True}
+
+
 def step_self(engine: Any) -> dict[str, Any]:
     from ace_operational import hypothesis_book as hb
     from ace_operational import self_model as sm
@@ -898,6 +930,8 @@ def step_self(engine: Any) -> dict[str, Any]:
     out["curiosity_new"] = len(new_q)
     out["saturation"] = step_saturation_scan(engine)
     out["corpus_novelty"] = step_corpus_novelty(engine)
+    if os.environ.get("ACE_EVO0051_DELIBERATION") == "1":
+        out["evo0051_deliberation"] = step_evo0051_deliberation(engine)
     return out
 
 
