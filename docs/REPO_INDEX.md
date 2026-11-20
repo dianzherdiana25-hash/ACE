@@ -2,8 +2,8 @@
 
 - Schema: `ace.repo-index.v1`
 - Total direktori: 205
-- Total berkas: 2161
-- Total modul Python: 953
+- Total berkas: 2165
+- Total modul Python: 957
 
 ## Daftar Berkas per Direktori
 
@@ -2284,7 +2284,7 @@
 - `test_sandbox_ast_gate.py` (python)
 - `test_zero_cost_governance.py` (python)
 
-### `tools` (289 berkas)
+### `tools` (293 berkas)
 - `FUZZ_STANDARD.md` (docs)
 - `__init__.py` (python)
 - `_director_sources.py` (python)
@@ -2419,6 +2419,7 @@
 - `self_send_audit.py` (python)
 - `self_send_audit_view.py` (python)
 - `self_send_rehearsal.py` (python)
+- `self_send_standing_audit.py` (python)
 - `stage_verify.py` (python)
 - `storage_debt.py` (python)
 - `successor_inventory.py` (python)
@@ -2459,6 +2460,7 @@
 - `test_dashboard_utils_edge.py` (python)
 - `test_derived_docs_two_checkout.py` (python)
 - `test_director_audit.py` (python)
+- `test_director_chain_rehearsal.py` (python)
 - `test_director_fold.py` (python)
 - `test_director_fold_anchored.py` (python)
 - `test_director_fold_rehearsal.py` (python)
@@ -2483,6 +2485,7 @@
 - `test_house_check.py` (python)
 - `test_house_check_failure_matrix.py` (python)
 - `test_house_check_staleness.py` (python)
+- `test_house_state_agreement.py` (python)
 - `test_income_report.py` (python)
 - `test_income_verify.py` (python)
 - `test_inheritance_probe.py` (python)
@@ -2552,6 +2555,7 @@
 - `test_self_send_audit_view.py` (python)
 - `test_self_send_dryrun.py` (python)
 - `test_self_send_rehearsal.py` (python)
+- `test_self_send_standing_audit.py` (python)
 - `test_sensus_kandidat_e1.py` (python)
 - `test_stage_verify.py` (python)
 - `test_storage_debt.py` (python)
@@ -3380,6 +3384,7 @@
 | `tools.self_send_audit` | `tools/self_send_audit.py` | Ringkas kiriman yang tercatat dan tunjukkan pelanggaran amplop per baris. | `tools.self_send_audit_view` |
 | `tools.self_send_audit_view` | `tools/self_send_audit_view.py` | Read-only viewer untuk audit JSONL self-send ACE (WS-F #17). | - |
 | `tools.self_send_rehearsal` | `tools/self_send_rehearsal.py` | Latih amplop self-send dengan repo bare dan proses gh palsu di fixture. | `tools.self_send`, `tools.self_send_audit` |
+| `tools.self_send_standing_audit` | `tools/self_send_standing_audit.py` | Lacak prepared yang belum ditutup saat log self-send berganti berkas. | `tools.self_send_audit`, `tools.self_send_audit_view` |
 | `tools.stage_verify` | `tools/stage_verify.py` | Verifikator direktori staging terhadap manifest berkas (sha256 + ukuran). | - |
 | `tools.storage_debt` | `tools/storage_debt.py` | Pemindai utang penyimpanan / artefak belum tersinkron ke Git (WS-E #14). | - |
 | `tools.successor_inventory` | `tools/successor_inventory.py` | Buat inventaris successor agar klaim dapat dirunut ke berkas repo. | - |
@@ -3420,6 +3425,7 @@
 | `tools.test_dashboard_utils_edge` | `tools/test_dashboard_utils_edge.py` | Uji kasus tepi untuk utilitas dashboard: dashboard_state_build dan ace_mobile_dashboard (>=25 kasus). | `tools.ace_mobile_dashboard`, `tools.dashboard_state_build` |
 | `tools.test_derived_docs_two_checkout` | `tools/test_derived_docs_two_checkout.py` | Jaga nama repo dan fixpoint renderer saat lokasi checkout berbeda. | `tools.program_glossary`, `tools.repo_cartography`, `tools.repo_index` |
 | `tools.test_director_audit` | `tools/test_director_audit.py` | Fixture audit direktur pada snapshot Git sintetis. | `tools._director_sources`, `tools.director_asset_check`, `tools.director_cycle_record`, `tools.director_value_check` |
+| `tools.test_director_chain_rehearsal` | `tools/test_director_chain_rehearsal.py` | Periksa bahwa lipatan tertambat menjadi satu-satunya masukan rehearsal A. | `ace_operational.director_executor`, `ace_operational.memory_anchor`, `tools.director_fold`, `tools.test_director_fold` |
 | `tools.test_director_fold` | `tools/test_director_fold.py` | Uji lipatan 38 proposal dan kelas konservatif untuk multi-gap. | `tools.director_fold` |
 | `tools.test_director_fold_anchored` | `tools/test_director_fold_anchored.py` | Pastikan rencana lipat hanya menawarkan kelas A bila based_on tertambat. | `tools.test_director_fold` |
 | `tools.test_director_fold_rehearsal` | `tools/test_director_fold_rehearsal.py` | Periksa bahwa rehearsal kering hanya meneruskan wakil lipatan. | `ace_operational.director_executor`, `tools.director_fold`, `tools.test_director_fold` |
@@ -3444,6 +3450,7 @@
 | `tools.test_house_check` | `tools/test_house_check.py` | Jalankan watchdog pada HTTP loopback dan berkas status fixture. | `tools.house_check` |
 | `tools.test_house_check_failure_matrix` | `tools/test_house_check_failure_matrix.py` | Uji urutan laporan watchdog saat beberapa komponen gagal sekaligus. | `tools.house_check` |
 | `tools.test_house_check_staleness` | `tools/test_house_check_staleness.py` | Uji usia status engine dengan jam fixture tetap. | `tools.house_check` |
+| `tools.test_house_state_agreement` | `tools/test_house_state_agreement.py` | Kontrak status engine yang disepakati watchdog dan rencana cutover. | `tools.bridge_home`, `tools.house_check`, `tools.test_bridge_home` |
 | `tools.test_income_report` | `tools/test_income_report.py` | Pastikan ringkasan periode dan posisi ledger memakai bukti yang tepat. | `tools.income_report` |
 | `tools.test_income_verify` | `tools/test_income_verify.py` | Pastikan tiga berkas bukti menghasilkan verdict sesuai kebijakan WS-2. | `tools.income_verify` |
 | `tools.test_inheritance_probe` | `tools/test_inheritance_probe.py` | Uji delta fixture, data cacat, dan protokol subprocess lokal. | `tools.inheritance_probe` |
@@ -3513,6 +3520,7 @@
 | `tools.test_self_send_audit_view` | `tools/test_self_send_audit_view.py` | Unit tests untuk tools/self_send_audit_view.py (WS-F #17). | `tools.self_send_audit_view` |
 | `tools.test_self_send_dryrun` | `tools/test_self_send_dryrun.py` | Jaga agar preflight tidak mencapai jaringan atau membaca nilai token. | `tools.self_send` |
 | `tools.test_self_send_rehearsal` | `tools/test_self_send_rehearsal.py` | Buktikan mock sukses dan gagal dapat diperiksa dari log rehearsal. | `tools.self_send_rehearsal` |
+| `tools.test_self_send_standing_audit` | `tools/test_self_send_standing_audit.py` | Pastikan rollover log mempertahankan pasangan kirim dan yatim yang terbuka. | `tools.self_send_rehearsal`, `tools.self_send_standing_audit` |
 | `tools.test_sensus_kandidat_e1` | `tools/test_sensus_kandidat_e1.py` | Verifikasi integritas artefak sensus kandidat E1 (docs/SENSUS_KANDIDAT.*). | - |
 | `tools.test_stage_verify` | `tools/test_stage_verify.py` | Uji unit untuk verifikator direktori staging tools/stage_verify.py. | `tools.stage_verify` |
 | `tools.test_storage_debt` | `tools/test_storage_debt.py` | Unit tests untuk tools/storage_debt.py (WS-E #14). | `tools.storage_debt` |

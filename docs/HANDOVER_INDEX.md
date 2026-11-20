@@ -6,8 +6,8 @@
 
 - Schema: `ace.handover-index.v1`
 - Total berkas terindeks: **432** (`handover/`: **159**, `docs/`: **273**)
-- Total baris teks UTF-8: **81931**
-- Total ukuran: **4796650** byte
+- Total baris teks UTF-8: **81939**
+- Total ukuran: **4797757** byte
 - Symlink dilewati: **0**
 
 ### Distribusi Kategori
@@ -242,9 +242,9 @@
 | `docs/DOCS_INDEX_MAINTENANCE_20261119.md` | `reference_doc` | 28 | 1980 | `bab2a8c0f519` | Pemeliharaan Indeks Dokumen — 2026-11-19 (E8) |
 | `docs/LAPORAN_HASIL_RISET_HP.md` | `reference_doc` | 63 | 5202 | `4e5fe567d704` | 📱 Laporan Hasil Riset ACE (Terbaca di Layar HP) |
 | `docs/PRD_ACE_v0.1.md` | `reference_doc` | 190 | 18816 | `03887aef928b` | PRODUCT REQUIREMENTS DOCUMENT (PRD) |
-| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54668 | `c2de4d527588` | Glosarium Istilah Teknis ACE — ACE |
-| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23833 | `b3d71fec46f7` | Kartografi Repositori ACE — ACE |
-| `docs/REPO_INDEX.md` | `reference_doc` | 3537 | 293034 | `75ee54518eca` | Indeks Repositori — ACE |
+| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54668 | `458e796d615d` | Glosarium Istilah Teknis ACE — ACE |
+| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23833 | `3ed7416b89c8` | Kartografi Repositori ACE — ACE |
+| `docs/REPO_INDEX.md` | `reference_doc` | 3545 | 294141 | `c9e968a2ad0a` | Indeks Repositori — ACE |
 | `docs/SENSUS_KANDIDAT.json` | `manifest_json` | 837 | 23986 | `94922b9f71e0` | schema: ace.candidate-census.v1 |
 | `docs/SENSUS_KANDIDAT.md` | `reference_doc` | 50 | 2531 | `65e4889ef370` | Sensus Kandidat Corpus ACE |
 | `docs/UPSTREAM_SOURCES.json` | `manifest_json` | 106 | 4914 | `cf6ffc77386a` | schema: ace.source-integration.v1 |

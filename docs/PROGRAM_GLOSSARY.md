@@ -5,8 +5,8 @@
 ## 1. Ringkasan Sumber
 
 - Berkas Markdown dipindai: **330**
-- Berkas Python AST dipindai (non-test): **506**
-- Total istilah terindeks: **336** (dari 1461 kandidat unik)
+- Berkas Python AST dipindai (non-test): **507**
+- Total istilah terindeks: **336** (dari 1463 kandidat unik)
 
 ### Komposisi Sumber
 

@@ -6,8 +6,8 @@
 
 - Schema: `ace.repo-cartography.v1`
 - Total subsistem: **68** (termasuk `4` subsistem zona terlindung/beku)
-- Total berkas terpetakan: **2160**
-- Modul Python produksi: **575** | Modul tes: **378**
+- Total berkas terpetakan: **2164**
+- Modul Python produksi: **576** | Modul tes: **381**
 - Tepi dependensi lintas subsistem (produksi): **117**
 - Siklus SCC lintas subsistem: **1**
 
@@ -154,7 +154,7 @@ flowchart LR
 | `root` | `SAFE_WORKSPACE` | 20 | 4 | 0 | 0 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
 | `secrets` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `tests` | `SAFE_WORKSPACE` | 19 | 0 | 19 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `tools` | `MIXED_PROTECTED` | 290 | 144 | 143 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `tools` | `MIXED_PROTECTED` | 294 | 145 | 146 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 
 ## 4. Tepi Ketergantungan Lintas Subsistem (Semua)
 
