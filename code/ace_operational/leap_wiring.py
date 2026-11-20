@@ -496,6 +496,29 @@ def step_practice(engine: Any) -> dict[str, Any]:
         g["gap_id"]: int(g.get("occurrence_count") or 0) for g in gaps}
     _save_state(engine, state)
     out["practice_tasks_created"] = created
+
+    # EVO 0042 — AG113: laporan akar masalah gap read-only atas OperationalStore
+    try:
+        from tools import gap_root_cause_report as grc
+
+        db_path = getattr(engine.store, "db_path", None) or (ws / "ace_operational.sqlite3")
+        db_file = Path(db_path)
+        if db_file.is_file():
+            rc_report = grc.analyze_gap_root_causes(db_file)
+            rc_report["generated_at"] = _now_iso()
+            rc_report["cycle"] = getattr(engine, "cycle_count", 0)
+            _write_json(ws / "gap_root_causes.json", rc_report)
+            out["gap_root_causes"] = {
+                "total_gaps": (rc_report.get("summary") or {}).get("total_gaps", 0),
+                "groups": len(rc_report.get("groups") or []),
+            }
+        else:
+            skipped = {"status": "skipped", "reason": "no sqlite store", "generated_at": _now_iso()}
+            _write_json(ws / "gap_root_causes.json", skipped)
+            out["gap_root_causes"] = skipped
+    except Exception as exc:
+        out["gap_root_causes"] = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
     return out
 
 

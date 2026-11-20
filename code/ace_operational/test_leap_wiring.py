@@ -144,6 +144,17 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_practice_writes_gap_root_causes(self) -> None:
+        self._seed_gap()
+        out = leap_wiring.step_practice(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertIn("gap_root_causes", out)
+        rc_path = self.ws / "gap_root_causes.json"
+        self.assertTrue(rc_path.is_file())
+        data = json.loads(rc_path.read_text(encoding="utf-8"))
+        self.assertGreaterEqual(data["summary"]["total_gaps"], 1)
+        self.assertGreaterEqual(out["gap_root_causes"]["total_gaps"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()
