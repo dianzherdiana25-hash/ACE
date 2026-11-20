@@ -685,3 +685,71 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0044 — AG137: bundle manifest completeness & name diff (%200)
+# ------------------------------------------------------------------
+
+def step_bundle_manifest(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import bundle_manifest as bm
+        from tools import bundle_manifest_check as bmc
+
+        ws = Path(engine.workspace)
+        manifest_path = ws / "bundle_manifest.json"
+        prev_path = ws / "bundle_manifest_prev.json"
+        out_path = ws / "bundle_status.json"
+
+        if not manifest_path.is_file():
+            skipped = {
+                "status": "skipped",
+                "reason": "no bundle_manifest.json",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        check_report = bmc.check_bundle_manifest(manifest_path)
+        curr_raw = _read_json(manifest_path, {})
+        names_only = {
+            "schema": curr_raw.get("schema") if isinstance(curr_raw, dict) else None,
+            "entries": [
+                {"name": e["name"]}
+                for e in (curr_raw.get("entries") or [])
+                if isinstance(e, dict) and isinstance(e.get("name"), str)
+            ] if isinstance(curr_raw, dict) else [],
+        }
+
+        diff_report: dict[str, Any] = {"status": "skipped"}
+        if prev_path.is_file():
+            prev_raw = _read_json(prev_path, {})
+            try:
+                diff_report = {"status": "ok", **bm.diff_manifests(prev_raw, names_only)}
+            except Exception as exc:
+                diff_report = {"status": "skipped", "reason": f"{type(exc).__name__}: {exc}"}
+        if names_only.get("schema"):
+            _write_json(prev_path, names_only)
+
+        payload = {
+            "status": "ok",
+            "checked_at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "bundle_status": check_report.get("status"),
+            "has_all_required": bool(check_report.get("has_all_required")),
+            "clean": bool(check_report.get("clean")),
+            "missing_required": check_report.get("missing_required", []),
+            "missing_optional": check_report.get("missing_optional", []),
+            "unexpected_names": check_report.get("unexpected_names", []),
+            "diff": diff_report,
+        }
+        _write_json(out_path, payload)
+        return {
+            "status": "ok",
+            "bundle_status": check_report.get("status"),
+            "has_all_required": bool(check_report.get("has_all_required")),
+            "clean": bool(check_report.get("clean")),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+

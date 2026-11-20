@@ -144,6 +144,44 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_bundle_manifest_checks_names_and_diffs_without_leaks(self) -> None:
+        from tools import bridge_home
+
+        canary = "SECRET_BUNDLE_CANARY_9911"
+        names = [*bridge_home.REQUIRED_ENTRY_NAMES]
+        manifest_path = self.ws / "bundle_manifest.json"
+        manifest_path.write_text(
+            json.dumps({
+                "schema": bridge_home.BUNDLE_MANIFEST_SCHEMA,
+                "entries": [{"name": n, "value": canary} for n in names],
+            }),
+            encoding="utf-8",
+        )
+        out1 = leap_wiring.step_bundle_manifest(self.engine)
+        self.assertEqual(out1["status"], "ok")
+        self.assertTrue(out1["has_all_required"])
+        raw_status = (self.ws / "bundle_status.json").read_text(encoding="utf-8")
+        self.assertNotIn(canary, raw_status)
+        self.assertNotIn(canary, (self.ws / "bundle_manifest_prev.json").read_text(encoding="utf-8"))
+
+        # Tambah nama opsional -> diff terdeteksi
+        manifest_path.write_text(
+            json.dumps({
+                "schema": bridge_home.BUNDLE_MANIFEST_SCHEMA,
+                "entries": [{"name": n} for n in [*names, "gemini2-api-key"]],
+            }),
+            encoding="utf-8",
+        )
+        out2 = leap_wiring.step_bundle_manifest(self.engine)
+        self.assertEqual(out2["status"], "ok")
+        rep2 = json.loads((self.ws / "bundle_status.json").read_text(encoding="utf-8"))
+        self.assertEqual(rep2["diff"]["added"], ["gemini2-api-key"])
+
+    def test_bundle_manifest_missing_skips_cleanly(self) -> None:
+        out = leap_wiring.step_bundle_manifest(self.engine)
+        self.assertEqual(out["status"], "skipped")
+        self.assertTrue((self.ws / "bundle_status.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()
