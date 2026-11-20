@@ -16,6 +16,7 @@ nama meloloskan pemeriksaan PID saja. Bila expected_process_starttime
 dicatat, cocokkan juga tick starttime Linux sejak boot (field 22 stat).
 """
 import argparse
+from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
@@ -25,6 +26,7 @@ from urllib.parse import urlsplit
 
 PATH_FIELDS = ("repo", "helpers", "budget_state", "call_log", "stdout_log", "pid_file")
 BUNDLE_MANIFEST_SCHEMA = "ace.secrets-bundle-manifest.v1"
+DEFAULT_ENGINE_STATUS_MAX_AGE_SECONDS = 300
 REQUIRED_ENTRY_NAMES = ("groq-api-key", "gemini-api-key", "gonka-api-key")
 
 
@@ -142,8 +144,43 @@ def _health(url):
                        "--", url + "/health"])
 
 
+def _check_engine_status(path, *, max_age_seconds, now):
+    """Klasifikasikan berkas status engine dengan semantik yang sama
+    dengan tools/house_check.py: stopped mengikuti running=false berapa
+    pun usianya; running tanpa updated_at sehat; usia updated_at
+    melewati ambang = stale; berkas tak terbaca/tidak sah = unavailable.
+    Hanya healthy yang aman untuk lanjut."""
+    unavailable = {"state": "unavailable", "safe_to_continue": False}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if (not isinstance(payload, dict)
+                or type(payload.get("pid")) is not int or payload["pid"] <= 0
+                or type(payload.get("cycle_count")) is not int or payload["cycle_count"] < 0
+                or type(payload.get("running")) is not bool):
+            return unavailable
+        if not payload["running"]:
+            return {"state": "stopped", "safe_to_continue": False}
+        if "updated_at" not in payload:
+            return {"state": "healthy", "safe_to_continue": True}
+        stamp = payload["updated_at"]
+        if not isinstance(stamp, str):
+            return unavailable
+        updated = datetime.fromisoformat(stamp)
+        current = now if now is not None else datetime.now(timezone.utc)
+        if updated.utcoffset() is None or current.utcoffset() is None:
+            return unavailable
+        age = (current - updated).total_seconds()
+        if age < 0:
+            return unavailable
+        state = "stale" if age > max_age_seconds else "healthy"
+        return {"state": state, "safe_to_continue": state == "healthy",
+                "age_seconds": age}
+    except (OSError, ValueError):
+        return unavailable
+
+
 def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running, identity_probe=_pid_identity,
-              starttime_probe=_pid_starttime):
+              starttime_probe=_pid_starttime, now=None):
     if not isinstance(config, dict):
         raise ValueError("Konfigurasi wajib berupa objek JSON.")
     paths = {}
@@ -175,6 +212,20 @@ def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running, identity_
                                expected_name.strip() if expected_name is not None else None,
                                identity_probe, expected_start, starttime_probe)
     credentials = _check_bundle_markers(bundle_manifest)
+    engine_status = None
+    status_file = config.get("engine_status_file")
+    if status_file is not None:
+        if (not isinstance(status_file, str) or not Path(status_file).is_absolute()
+                or any(ord(char) < 32 for char in status_file)
+                or ".." in Path(status_file).parts):
+            raise ValueError("engine_status_file wajib berupa path absolut.")
+        max_age = config.get("engine_status_max_age_seconds",
+                             DEFAULT_ENGINE_STATUS_MAX_AGE_SECONDS)
+        if type(max_age) is not int or max_age < 0:
+            raise ValueError("engine_status_max_age_seconds wajib bilangan bulat nonnegatif.")
+        engine_status = {"path": str(Path(status_file)),
+                         **_check_engine_status(Path(status_file),
+                                                max_age_seconds=max_age, now=now)}
     argv = ["nohup", "python3", str(Path(paths["repo"]) / "tools" / "brain_bridge.py"),
             "--port", str(port), "--state", paths["budget_state"], "--log", paths["call_log"],
             "--helpers", paths["helpers"]]
@@ -199,11 +250,16 @@ def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running, identity_
         f"Periksa health lama dengan {_health(previous)}, lalu jalankan restart engine terkontrol.",
         "Konfirmasi status engine pada jalur lama. Setelah itu hentikan proses bridge baru sesuai PID terverifikasi.",
     ]
+    preflight = {"pid_file": pid_check, "credential_markers": credentials,
+                 "safe_to_continue": (pid_check["safe_to_continue"]
+                                      and credentials["state"] == "present"
+                                      and (engine_status is None
+                                           or engine_status["safe_to_continue"]))}
+    if engine_status is not None:
+        preflight["engine_status"] = engine_status
     return {"schema": "ace.bridge-home-plan.v1", "current_bridge_url": previous,
             "target_bridge_url": target, "steps": steps, "rollback": rollback,
-            "preflight": {"pid_file": pid_check, "credential_markers": credentials,
-                          "safe_to_continue": (pid_check["safe_to_continue"]
-                                               and credentials["state"] == "present")}}
+            "preflight": preflight}
 
 
 def markdown(plan):

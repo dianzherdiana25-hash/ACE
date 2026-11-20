@@ -1,4 +1,10 @@
-"""Rekam batas kontrak status engine di antara watchdog dan rencana cutover."""
+"""Kontrak status engine yang disepakati watchdog dan rencana cutover.
+
+Sejak saringan Gelombang K (keputusan engineer utama, 20 Nov 2026):
+bila konfigurasi menyebut engine_status_file, preflight bridge_home
+mengklasifikasikan berkas itu dengan semantik house_check dan hanya
+status healthy yang aman untuk lanjut. Tanpa penyebutan itu, rencana
+v1 lama tidak berubah."""
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -32,7 +38,7 @@ class HouseStateAgreementTests(unittest.TestCase):
             state.write_text(data, encoding="utf-8")
             status = house_check.inspect_house("fixture", pump, state, health_probe=lambda *_: True,
                                                pid_probe=lambda _: True, now=now)
-            plan = bridge_home.plan_home(config, bundle_manifest=bundle)
+            plan = bridge_home.plan_home(config, bundle_manifest=bundle, now=now)
             observations[name] = {
                 "house_engine": status["components"]["engine"]["state"],
                 "house_safe": status["exit_code"] == 0,
@@ -42,12 +48,13 @@ class HouseStateAgreementTests(unittest.TestCase):
             }
         return observations
 
-    def test_matrix_observes_current_contract_and_fresh_preflight_agreement(self):
+    def test_matrix_observes_agreed_contract(self):
         observed = self.matrix()
         print(json.dumps({"house_agreement_matrix": observed}, sort_keys=True))
         self.assertEqual(observed, {
-            name: {"house_engine": state, "house_safe": safe, "bridge_preflight_safe": True,
-                   "bridge_status_safe": None, "path_referenced": False}
+            name: {"house_engine": state, "house_safe": safe,
+                   "bridge_preflight_safe": safe, "bridge_status_safe": safe,
+                   "path_referenced": True}
             for name, state, safe in (
                 ("fresh", "healthy", True), ("stale", "stale", False),
                 ("stopped", "stopped", False), ("invalid", "unavailable", False),
@@ -55,10 +62,7 @@ class HouseStateAgreementTests(unittest.TestCase):
         })
         self.assertEqual(observed["fresh"]["house_safe"], observed["fresh"]["bridge_preflight_safe"])
 
-    @unittest.expectedFailure
-    def test_status_gate_agreement_is_blocked_until_cutover_references_status_file(self):
-        # plan_home currently checks PID and bundle markers. It only mentions
-        # engine status in prose after cutover, so it cannot make this decision.
+    def test_status_gate_agreement_across_matrix(self):
         actual = {name: (row["path_referenced"], row["bridge_status_safe"])
                   for name, row in self.matrix().items()}
         self.assertEqual(actual, {"fresh": (True, True), "stale": (True, False),
