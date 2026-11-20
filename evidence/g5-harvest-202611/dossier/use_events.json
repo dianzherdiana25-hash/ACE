@@ -1,0 +1,49 @@
+{
+  "events": [
+    {
+      "event_id": "g5-e1",
+      "message_ref": "778a9d72-9b2c-46c6-bd8d-173814d7ebd9",
+      "timestamp": "2026-11-12T21:20:55.006000+07:00",
+      "content_digest": "eb70b84760b9a57e4c829fc2b42d0ce79753558397de9fb105c7c228706db9b5",
+      "references_unit": "g5-u2",
+      "action_type": "correction",
+      "domain": "governance"
+    },
+    {
+      "event_id": "g5-e2",
+      "message_ref": "discussion:seq-27637",
+      "timestamp": "2026-11-18T20:01:45.616000+07:00",
+      "content_digest": "abb4e64f252168714a63f30863d29a2cc7842e5e0b69041f054ee0c51359b6ff",
+      "references_unit": "g5-u4",
+      "action_type": "direction",
+      "domain": "operations"
+    },
+    {
+      "event_id": "g5-e3",
+      "message_ref": "discussion:seq-27647",
+      "timestamp": "2026-11-18T20:07:16.258000+07:00",
+      "content_digest": "27f09db4823472f16601826cf923c45846b2d42b93f3bdc0327a43d56bf867b6",
+      "references_unit": "g5-u6",
+      "action_type": "resource_commitment",
+      "domain": "development"
+    },
+    {
+      "event_id": "g5-e4",
+      "message_ref": "discussion:seq-27654",
+      "timestamp": "2026-11-18T20:08:50.165000+07:00",
+      "content_digest": "3bbdd8166a37b93a111036997526119624647785509366e7b8c37344391aedd0",
+      "references_unit": "g5-u7",
+      "action_type": "correction",
+      "domain": "process"
+    },
+    {
+      "event_id": "g5-e5",
+      "message_ref": "discussion:seq-27656",
+      "timestamp": "2026-11-18T20:10:11.779000+07:00",
+      "content_digest": "9b1ea9820a081928b7c90170660f526fd029fa986a9bb81f258f296ef2e986f1",
+      "references_unit": "g5-u7",
+      "action_type": "direction",
+      "domain": "development"
+    }
+  ]
+}

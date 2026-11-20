@@ -1,0 +1,124 @@
+{
+  "units": [
+    {
+      "unit_id": "g5-u1",
+      "message_ref": "assistant-msg-db2ddcb3-96b0-4c8d-b8fd-7272ab50be5e",
+      "timestamp": "2026-11-12T19:54:34.805000+07:00",
+      "author_id": "ila-discussion-room",
+      "content_digest": "6cf1134d1bce54cbfd840ff89a7d70f44ca424d8d995f7fd90819a652d229b50",
+      "fields": {
+        "dicoba": true,
+        "hasil": true,
+        "keyakinan": false,
+        "batas": true
+      },
+      "delivered_in_channel": true,
+      "self_contained": true
+    },
+    {
+      "unit_id": "g5-u2",
+      "message_ref": "assistant-msg-0c7be7db-8ab8-4a50-8e8c-ad24d16c6978",
+      "timestamp": "2026-11-12T21:16:35.616000+07:00",
+      "author_id": "ila-discussion-room",
+      "content_digest": "cedd3f56fc80ae1cd64684c92ba3abd04ffd8d3d4e7894d65b1566b41042a05c",
+      "fields": {
+        "dicoba": true,
+        "hasil": true,
+        "keyakinan": true,
+        "batas": true
+      },
+      "delivered_in_channel": true,
+      "self_contained": true
+    },
+    {
+      "unit_id": "g5-u3",
+      "message_ref": "assistant-msg-302c600c-2110-4586-8e66-e439e9666272",
+      "timestamp": "2026-11-12T21:22:00.705000+07:00",
+      "author_id": "ila-discussion-room",
+      "content_digest": "2f19f3f3ef17fabb55a514dc041e6f16240dcb3b86b148f53dda442f1569e649",
+      "fields": {
+        "dicoba": true,
+        "hasil": true,
+        "keyakinan": true,
+        "batas": true
+      },
+      "delivered_in_channel": true,
+      "self_contained": true
+    },
+    {
+      "unit_id": "g5-u4",
+      "message_ref": "discussion:seq-27533",
+      "timestamp": "2026-11-18T17:07:38.173000+07:00",
+      "author_id": "ila-discussion-room",
+      "content_digest": "0a3fb826b0a975cca8aba39ff9eba5cfe3af34f38acf21953f66b159a5d5201b",
+      "fields": {
+        "dicoba": true,
+        "hasil": true,
+        "keyakinan": true,
+        "batas": true
+      },
+      "delivered_in_channel": true,
+      "self_contained": true
+    },
+    {
+      "unit_id": "g5-u5",
+      "message_ref": "discussion:seq-27643",
+      "timestamp": "2026-11-18T20:03:44.607000+07:00",
+      "author_id": "ila-discussion-room",
+      "content_digest": "c769a50af9616e30f295c54a3f3fa2110918796bf26e373258d155fa0e186ac6",
+      "fields": {
+        "dicoba": true,
+        "hasil": true,
+        "keyakinan": true,
+        "batas": true
+      },
+      "delivered_in_channel": true,
+      "self_contained": true
+    },
+    {
+      "unit_id": "g5-u6",
+      "message_ref": "discussion:seq-27646",
+      "timestamp": "2026-11-18T20:04:58.678000+07:00",
+      "author_id": "ila-discussion-room",
+      "content_digest": "f0f0eea9c87cd853afc3905489a13636df33a9a6637ce9b75fd99eed6fb081cd",
+      "fields": {
+        "dicoba": true,
+        "hasil": true,
+        "keyakinan": true,
+        "batas": true
+      },
+      "delivered_in_channel": true,
+      "self_contained": true
+    },
+    {
+      "unit_id": "g5-u7",
+      "message_ref": "discussion:seq-27653",
+      "timestamp": "2026-11-18T20:07:51.559000+07:00",
+      "author_id": "ila-discussion-room",
+      "content_digest": "9db6c5f38fcaac5a5821f145a201a3717e8371741bb91c0bc2f5345c3926a8d7",
+      "fields": {
+        "dicoba": true,
+        "hasil": true,
+        "keyakinan": false,
+        "batas": true
+      },
+      "delivered_in_channel": true,
+      "self_contained": true
+    },
+    {
+      "unit_id": "g5-u8",
+      "message_ref": "discussion:seq-30767",
+      "timestamp": "2026-11-20T09:20:56.969000+07:00",
+      "author_id": "ila-discussion-room",
+      "content_digest": "35bfaa19e744972031d815220916c56708eba9d5c9ed61dcac1a28520e3eebfc",
+      "fields": {
+        "dicoba": true,
+        "hasil": true,
+        "keyakinan": true,
+        "batas": true
+      },
+      "delivered_in_channel": true,
+      "self_contained": true
+    }
+  ]
+}

@@ -1,0 +1,292 @@
+{
+  "delta": 0.05454545454545454,
+  "mean_decision_change_rate": 0.6818181818181818,
+  "per_task": {
+    "abl-01": {
+      "arm_change_rates": {
+        "active": 0.75,
+        "off": 0.0
+      },
+      "classification": "seed_sensitive",
+      "decision_change_rate": 0.75,
+      "decisions_by_seed": {
+        "0": "ringkasan_teks_ekstraktif_id",
+        "1": "urut_topologis_graf_dependensi",
+        "2": "urut_topologis_graf_dependensi",
+        "3": "algoritma_dijkstra_rute_terpendek",
+        "4": "ringkasan_teks_ekstraktif_id"
+      },
+      "seed_sensitive": true,
+      "stable": false,
+      "task_id": "abl-01",
+      "unique_decisions": [
+        "algoritma_dijkstra_rute_terpendek",
+        "ringkasan_teks_ekstraktif_id",
+        "urut_topologis_graf_dependensi"
+      ]
+    },
+    "abl-02": {
+      "arm_change_rates": {
+        "active": 1.0,
+        "off": 0.0
+      },
+      "classification": "seed_sensitive",
+      "decision_change_rate": 1.0,
+      "decisions_by_seed": {
+        "0": "algoritma_dijkstra_rute_terpendek",
+        "1": "struktur_binary_search_tree_dasar",
+        "2": "algoritma_dijkstra_rute_terpendek",
+        "3": "urut_topologis_graf_dependensi",
+        "4": "algoritma_dijkstra_rute_terpendek"
+      },
+      "seed_sensitive": true,
+      "stable": false,
+      "task_id": "abl-02",
+      "unique_decisions": [
+        "algoritma_dijkstra_rute_terpendek",
+        "struktur_binary_search_tree_dasar",
+        "urut_topologis_graf_dependensi"
+      ]
+    },
+    "abl-03": {
+      "arm_change_rates": {
+        "active": 0.75,
+        "off": 0.0
+      },
+      "classification": "seed_sensitive",
+      "decision_change_rate": 0.75,
+      "decisions_by_seed": {
+        "0": "ekstraksi_entitas_waktu_id",
+        "1": "ekstraksi_entitas_waktu_id",
+        "2": "pemeriksa_kompleksitas_ast_python",
+        "3": "struktur_binary_search_tree_dasar",
+        "4": "pemeriksa_kompleksitas_ast_python"
+      },
+      "seed_sensitive": true,
+      "stable": false,
+      "task_id": "abl-03",
+      "unique_decisions": [
+        "ekstraksi_entitas_waktu_id",
+        "pemeriksa_kompleksitas_ast_python",
+        "struktur_binary_search_tree_dasar"
+      ]
+    },
+    "abl-04": {
+      "arm_change_rates": {
+        "active": 0.5,
+        "off": 0.0
+      },
+      "classification": "seed_sensitive",
+      "decision_change_rate": 0.5,
+      "decisions_by_seed": {
+        "0": "kamus_slang_dan_idiom_gaul_id",
+        "1": "kamus_slang_dan_idiom_gaul_id",
+        "2": "etl_csv_json_validasi_sha256",
+        "3": "kamus_slang_dan_idiom_gaul_id",
+        "4": "kamus_slang_dan_idiom_gaul_id"
+      },
+      "seed_sensitive": true,
+      "stable": false,
+      "task_id": "abl-04",
+      "unique_decisions": [
+        "etl_csv_json_validasi_sha256",
+        "kamus_slang_dan_idiom_gaul_id"
+      ]
+    },
+    "abl-05": {
+      "arm_change_rates": {
+        "active": 1.0,
+        "off": 0.0
+      },
+      "classification": "seed_sensitive",
+      "decision_change_rate": 1.0,
+      "decisions_by_seed": {
+        "0": "kalkulator_finansial_cagr_roi",
+        "1": "evaluasi_kualitas_dialog_id",
+        "2": "kalkulator_finansial_cagr_roi",
+        "3": "analisis_konfiks_pe_an_ke_an",
+        "4": "kalkulator_finansial_cagr_roi"
+      },
+      "seed_sensitive": true,
+      "stable": false,
+      "task_id": "abl-05",
+      "unique_decisions": [
+        "analisis_konfiks_pe_an_ke_an",
+        "evaluasi_kualitas_dialog_id",
+        "kalkulator_finansial_cagr_roi"
+      ]
+    },
+    "abl-06": {
+      "arm_change_rates": {
+        "active": 0.5,
+        "off": 0.0
+      },
+      "classification": "seed_sensitive",
+      "decision_change_rate": 0.5,
+      "decisions_by_seed": {
+        "0": "latihan_perbaikan_concurrency_dan_edgecase",
+        "1": "maksimum_sliding_window_linear",
+        "2": "maksimum_sliding_window_linear",
+        "3": "latihan_perbaikan_concurrency_dan_edgecase",
+        "4": "latihan_perbaikan_concurrency_dan_edgecase"
+      },
+      "seed_sensitive": true,
+      "stable": false,
+      "task_id": "abl-06",
+      "unique_decisions": [
+        "latihan_perbaikan_concurrency_dan_edgecase",
+        "maksimum_sliding_window_linear"
+      ]
+    },
+    "abl-07": {
+      "arm_change_rates": {
+        "active": 0.5,
+        "off": 0.0
+      },
+      "classification": "seed_sensitive",
+      "decision_change_rate": 0.5,
+      "decisions_by_seed": {
+        "0": "kamus_slang_dan_idiom_gaul_id",
+        "1": "analisis_konfiks_pe_an_ke_an",
+        "2": "analisis_konfiks_pe_an_ke_an",
+        "3": "kamus_slang_dan_idiom_gaul_id",
+        "4": "kamus_slang_dan_idiom_gaul_id"
+      },
+      "seed_sensitive": true,
+      "stable": false,
+      "task_id": "abl-07",
+      "unique_decisions": [
+        "analisis_konfiks_pe_an_ke_an",
+        "kamus_slang_dan_idiom_gaul_id"
+      ]
+    },
+    "abl-08": {
+      "arm_change_rates": {
+        "active": 0.25,
+        "off": 0.0
+      },
+      "classification": "seed_sensitive",
+      "decision_change_rate": 0.25,
+      "decisions_by_seed": {
+        "0": "kamus_slang_dan_idiom_gaul_id",
+        "1": "kamus_slang_dan_idiom_gaul_id",
+        "2": "kamus_slang_dan_idiom_gaul_id",
+        "3": "ringkasan_teks_ekstraktif_id",
+        "4": "ringkasan_teks_ekstraktif_id"
+      },
+      "seed_sensitive": true,
+      "stable": false,
+      "task_id": "abl-08",
+      "unique_decisions": [
+        "kamus_slang_dan_idiom_gaul_id",
+        "ringkasan_teks_ekstraktif_id"
+      ]
+    },
+    "abl-09": {
+      "arm_change_rates": {
+        "active": 0.75,
+        "off": 0.0
+      },
+      "classification": "seed_sensitive",
+      "decision_change_rate": 0.75,
+      "decisions_by_seed": {
+        "0": "kamus_slang_dan_idiom_gaul_id",
+        "1": "keterampilan_berbicara_bertahap_id",
+        "2": "analisis_sentimen_dan_emosi_id",
+        "3": "kamus_slang_dan_idiom_gaul_id",
+        "4": "kamus_slang_dan_idiom_gaul_id"
+      },
+      "seed_sensitive": true,
+      "stable": false,
+      "task_id": "abl-09",
+      "unique_decisions": [
+        "analisis_sentimen_dan_emosi_id",
+        "kamus_slang_dan_idiom_gaul_id",
+        "keterampilan_berbicara_bertahap_id"
+      ]
+    },
+    "abl-10": {
+      "arm_change_rates": {
+        "active": 0.75,
+        "off": 0.0
+      },
+      "classification": "seed_sensitive",
+      "decision_change_rate": 0.75,
+      "decisions_by_seed": {
+        "0": "susun_kalimat_pasif_persona",
+        "1": "susun_kalimat_pasif_persona",
+        "2": "kamus_slang_dan_idiom_gaul_id",
+        "3": "susun_kalimat_pasif_persona",
+        "4": "analisis_sentimen_dan_emosi_id"
+      },
+      "seed_sensitive": true,
+      "stable": false,
+      "task_id": "abl-10",
+      "unique_decisions": [
+        "analisis_sentimen_dan_emosi_id",
+        "kamus_slang_dan_idiom_gaul_id",
+        "susun_kalimat_pasif_persona"
+      ]
+    },
+    "abl-11": {
+      "arm_change_rates": {
+        "active": 0.75,
+        "off": 0.0
+      },
+      "classification": "seed_sensitive",
+      "decision_change_rate": 0.75,
+      "decisions_by_seed": {
+        "0": "ekstraksi_entitas_waktu_id",
+        "1": "ekstraksi_entitas_waktu_id",
+        "2": "analisis_sentimen_dan_emosi_id",
+        "3": "keterampilan_berbicara_bertahap_id",
+        "4": "ekstraksi_entitas_waktu_id"
+      },
+      "seed_sensitive": true,
+      "stable": false,
+      "task_id": "abl-11",
+      "unique_decisions": [
+        "analisis_sentimen_dan_emosi_id",
+        "ekstraksi_entitas_waktu_id",
+        "keterampilan_berbicara_bertahap_id"
+      ]
+    }
+  },
+  "pool_cleanup": true,
+  "ranking": "semantic_top_k",
+  "results_sha256": "9b43d67b4816c0d52c9d2e8b4d1ec268bf04ace15b91349e962d1780e3aed74b",
+  "schema": "ace.recall-ablation.v1",
+  "scores": {
+    "active": 13,
+    "off": 10
+  },
+  "seed": 0,
+  "seed_count": 5,
+  "seed_sensitive_tasks": [
+    "abl-01",
+    "abl-02",
+    "abl-03",
+    "abl-04",
+    "abl-05",
+    "abl-06",
+    "abl-07",
+    "abl-08",
+    "abl-09",
+    "abl-10",
+    "abl-11"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "stability_counts": {
+    "seed_sensitive": 11,
+    "stable": 0
+  },
+  "stable_tasks": [],
+  "tasks": 11,
+  "top_k": 3
+}

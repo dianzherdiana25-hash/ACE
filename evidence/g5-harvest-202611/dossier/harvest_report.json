@@ -1,0 +1,17 @@
+{
+  "period_start": "2026-11-12T00:00:00+07:00",
+  "period_end": "2026-11-20T23:59:59+07:00",
+  "c1_threshold": 0.8,
+  "c2_threshold": 0.8,
+  "c3_min_events": 3,
+  "c3_min_domains": 2,
+  "c3_requires_correction": true,
+  "harvester_id": "ian-main-chat",
+  "summary_author_ids": [
+    "ila-discussion-room"
+  ],
+  "sealed_digests": {
+    "units": "8c663d33a62cdcb4881f3cf2de63b1c930671fb4bbc6b3362b37780f44442aff",
+    "use_events": "5e02f8a0654534acded912073cf263091a4ea0e8874c0e71012d565cc329a44d"
+  }
+}
