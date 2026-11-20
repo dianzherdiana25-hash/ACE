@@ -144,6 +144,31 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_organ_forensics_detects_crash_and_restart_events(self):
+        (self.ws / "organ.log").write_text(
+            "\n".join([
+                "2026-11-20T01:00:00Z llama-server booting",
+                "2026-11-20T01:00:05Z llama-server killed process by oom-killer",
+                "2026-11-20T01:00:08Z brain_bridge restarting service",
+            ]) + "\n",
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_organ_forensics(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["incident_count"], 2)
+        self.assertEqual(res["crash_count"], 1)
+        self.assertEqual(res["restart_count"], 1)
+        self.assertTrue((self.ws / "organ_forensics.jsonl").is_file())
+
+    def test_organ_forensics_handles_no_logs_and_fails_closed(self):
+        empty = leap_wiring.step_organ_forensics(self.engine)
+        self.assertEqual(empty["status"], "ok")
+        self.assertEqual(empty["incident_count"], 0)
+        from unittest import mock
+        with mock.patch("tools.organ_forensics.analyze_log_lines", side_effect=RuntimeError("boom")):
+            err = leap_wiring.step_organ_forensics(self.engine)
+        self.assertEqual(err["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

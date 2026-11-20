@@ -685,3 +685,66 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_organ_forensics(engine: Any) -> dict[str, Any]:
+    """AG153: run read-only forensics over organ/bridge snapshot logs."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from collections import Counter
+        from tools import organ_forensics as of
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        log_files: list[Path] = []
+        for cand in (ws / "organ.log", ws / "brain_bridge.log", ws / "engine.log"):
+            if cand.is_file():
+                log_files.append(cand)
+        organ_dir = ws / "organ_logs"
+        if organ_dir.is_dir():
+            for p in sorted(organ_dir.glob("*.log")):
+                if p.is_file() and p not in log_files:
+                    log_files.append(p)
+                    if len(log_files) >= 8:
+                        break
+
+        total_lines = 0
+        incident_count = 0
+        crash_count = 0
+        restart_count = 0
+        cat_counts: Counter[str] = Counter()
+        organ_counts: Counter[str] = Counter()
+
+        if not log_files:
+            empty_rep = of.analyze_log_lines([], source_name="workspace:none")
+            schema = empty_rep["schema"]
+        else:
+            schema = of.ORGAN_FORENSICS_SCHEMA
+            for lf in log_files:
+                rep = of.analyze_log_file(lf)
+                total_lines += rep["total_lines"]
+                incident_count += rep["incident_count"]
+                crash_count += rep["crash_count"]
+                restart_count += rep["restart_count"]
+                cat_counts.update(rep["category_counts"])
+                organ_counts.update(rep["organ_counts"])
+
+        entry = {
+            "at": _now_iso(),
+            "schema": schema,
+            "sources": [p.name for p in log_files],
+            "total_lines": total_lines,
+            "incident_count": incident_count,
+            "crash_count": crash_count,
+            "restart_count": restart_count,
+            "category_counts": dict(sorted(cat_counts.items())),
+            "organ_counts": dict(sorted(organ_counts.items())),
+        }
+        _append_jsonl(ws / "organ_forensics.jsonl", entry)
+        return {"status": "ok", **entry}
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
