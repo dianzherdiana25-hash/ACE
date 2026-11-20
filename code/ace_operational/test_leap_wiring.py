@@ -144,6 +144,20 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_mastery_board_writes_json_and_md(self) -> None:
+        self._seed_gap()
+        out = leap_wiring.step_mastery_board(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertTrue((self.ws / "mastery_board.json").is_file())
+        self.assertTrue((self.ws / "mastery_board.md").is_file())
+        board = json.loads((self.ws / "mastery_board.json").read_text(encoding="utf-8"))
+        self.assertIn("domains", board)
+
+    def test_mastery_board_empty_store_honest_unknown(self) -> None:
+        out = leap_wiring.step_mastery_board(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["aggregate_mastery"], "belum diketahui")
+
 
 if __name__ == "__main__":
     unittest.main()

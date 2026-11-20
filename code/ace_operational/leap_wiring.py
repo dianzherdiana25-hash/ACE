@@ -685,3 +685,82 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0042 — AG111: cross-domain mastery board (%25)
+# ------------------------------------------------------------------
+
+def step_mastery_board(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import mastery_board as mb
+
+        ws = Path(engine.workspace)
+        gaps = engine.store.list_gaps()
+
+        def _closure_for(subset: list[dict[str, Any]]) -> float | None:
+            if not subset:
+                return None
+            closed = sum(1 for g in subset if str(g.get("status") or "").upper() != "OPEN")
+            return closed / len(subset)
+
+        lang_tokens = ("bahasa", "language", "morfologi", "vocab", "kalimat", "speech")
+        lang_gaps = [
+            g for g in gaps
+            if any(tok in (" ".join(str(g.get(k) or "") for k in ("skill_name", "gap_type", "error_type", "description_id"))).lower() for tok in lang_tokens)
+        ]
+        coding_gaps = [g for g in gaps if g not in lang_gaps]
+
+        transfer_score: float | None = None
+        tp_path = ws / "transfer_probe_report.json"
+        if tp_path.is_file():
+            tp_data = _read_json(tp_path, {})
+            val = ((tp_data.get("summary") or {}).get("target_score")) if isinstance(tp_data, dict) else None
+            if isinstance(val, (int, float)):
+                transfer_score = float(val)
+
+        retention_score: float | None = None
+        reg_path = ws / "regression_series.jsonl"
+        if reg_path.is_file():
+            lines = [ln.strip() for ln in reg_path.read_text(encoding="utf-8", errors="ignore").splitlines() if ln.strip()]
+            if lines:
+                try:
+                    last = json.loads(lines[-1])
+                    if isinstance(last, dict) and isinstance(last.get("score"), (int, float)):
+                        retention_score = float(last["score"])
+                except Exception:
+                    pass
+
+        domain_inputs: dict[str, dict[str, float]] = {"coding": {}, "language": {}, "operational": {}}
+        c_closure = _closure_for(coding_gaps)
+        l_closure = _closure_for(lang_gaps)
+        o_closure = _closure_for(gaps)
+        if c_closure is not None:
+            domain_inputs["coding"]["closure"] = c_closure
+        if l_closure is not None:
+            domain_inputs["language"]["closure"] = l_closure
+        if o_closure is not None:
+            domain_inputs["operational"]["closure"] = o_closure
+        if transfer_score is not None:
+            domain_inputs["coding"]["transfer"] = transfer_score
+        if retention_score is not None:
+            domain_inputs["operational"]["retention"] = retention_score
+
+        board = mb.build_mastery_board(domain_inputs)
+        board["generated_at"] = _now_iso()
+        board["cycle"] = getattr(engine, "cycle_count", 0)
+        _write_json(ws / "mastery_board.json", board)
+        md_text = mb.render_markdown(board)
+        md_path = ws / "mastery_board.md"
+        md_path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_md = md_path.with_suffix(".md.tmp")
+        tmp_md.write_text(md_text, encoding="utf-8")
+        tmp_md.replace(md_path)
+        return {
+            "status": "ok",
+            "complete_domains": len((board.get("summary") or {}).get("complete_domains", [])),
+            "aggregate_mastery": (board.get("summary") or {}).get("aggregate_mastery"),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
