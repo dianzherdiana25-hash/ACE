@@ -6,8 +6,8 @@
 
 - Schema: `ace.repo-cartography.v1`
 - Total subsistem: **68** (termasuk `4` subsistem zona terlindung/beku)
-- Total berkas terpetakan: **2155**
-- Modul Python produksi: **574** | Modul tes: **374**
+- Total berkas terpetakan: **2160**
+- Modul Python produksi: **575** | Modul tes: **378**
 - Tepi dependensi lintas subsistem (produksi): **117**
 - Siklus SCC lintas subsistem: **1**
 
@@ -46,7 +46,7 @@ flowchart LR
     code_ace_research_f13["code/ace_research_f13 (SAFE)"]
     code_ace_research_reptransfer["code/ace_research_reptransfer (SAFE)"]
     code_ace_core_repair["code/ace_core_repair (SAFE)"]
-    tools -->|57| code_ace_operational
+    tools -->|58| code_ace_operational
     evidence -->|25| code_ace_operational
     code_ace_operational -->|8| code_ace_mission
     code_ace_capability_evolution -->|7| code_ace_candidate_search
@@ -154,13 +154,13 @@ flowchart LR
 | `root` | `SAFE_WORKSPACE` | 20 | 4 | 0 | 0 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
 | `secrets` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `tests` | `SAFE_WORKSPACE` | 19 | 0 | 19 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `tools` | `MIXED_PROTECTED` | 285 | 143 | 139 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `tools` | `MIXED_PROTECTED` | 290 | 144 | 143 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 
 ## 4. Tepi Ketergantungan Lintas Subsistem (Semua)
 
 | Asal | Tujuan | Bobot Impor | Contoh Target Modul |
 | --- | --- | ---: | --- |
-| `tools` | `code/ace_operational` | 57 | `ace_operational.abc_v3_scorer`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization` |
+| `tools` | `code/ace_operational` | 58 | `ace_operational.abc_v3_scorer`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization` |
 | `evidence` | `code/ace_operational` | 25 | `ace_operational.experiment_kernel`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization` |
 | `code/ace_operational` | `code/ace_mission` | 8 | `ace_mission.bus`, `ace_mission.schema` |
 | `code/ace_capability_evolution` | `code/ace_candidate_search` | 7 | `ace_candidate_search.model`, `ace_candidate_search.search` |

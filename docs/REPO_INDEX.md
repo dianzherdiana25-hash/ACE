@@ -2,8 +2,8 @@
 
 - Schema: `ace.repo-index.v1`
 - Total direktori: 205
-- Total berkas: 2156
-- Total modul Python: 948
+- Total berkas: 2161
+- Total modul Python: 953
 
 ## Daftar Berkas per Direktori
 
@@ -2284,7 +2284,7 @@
 - `test_sandbox_ast_gate.py` (python)
 - `test_zero_cost_governance.py` (python)
 
-### `tools` (284 berkas)
+### `tools` (289 berkas)
 - `FUZZ_STANDARD.md` (docs)
 - `__init__.py` (python)
 - `_director_sources.py` (python)
@@ -2315,6 +2315,7 @@
 - `bridge_relay.py` (python)
 - `bridge_secrets.py` (python)
 - `builder_onboarding_pack.py` (python)
+- `bundle_manifest.py` (python)
 - `candidate_census.py` (python)
 - `candidate_corpus_batch.py` (python)
 - `candidate_factory_v2.py` (python)
@@ -2435,6 +2436,7 @@
 - `test_bridge_home_pid_reuse.py` (python)
 - `test_bridge_secrets.py` (python)
 - `test_builder_onboarding_pack.py` (python)
+- `test_bundle_manifest.py` (python)
 - `test_candidate_census.py` (python)
 - `test_candidate_corpus_batch.py` (python)
 - `test_candidate_factory_v2.py` (python)
@@ -2458,6 +2460,8 @@
 - `test_derived_docs_two_checkout.py` (python)
 - `test_director_audit.py` (python)
 - `test_director_fold.py` (python)
+- `test_director_fold_anchored.py` (python)
+- `test_director_fold_rehearsal.py` (python)
 - `test_director_historical_shapes.py` (python)
 - `test_director_screen.py` (python)
 - `test_discriminating_candidate_factory.py` (python)
@@ -2477,6 +2481,7 @@
 - `test_handover_decision_extractor.py` (python)
 - `test_handover_index.py` (python)
 - `test_house_check.py` (python)
+- `test_house_check_failure_matrix.py` (python)
 - `test_house_check_staleness.py` (python)
 - `test_income_report.py` (python)
 - `test_income_verify.py` (python)
@@ -3272,6 +3277,7 @@
 | `tools.bridge_relay` | `tools/bridge_relay.py` | Jalankan relay protokol bridge dengan spool yang dipilih operator. | `ace_operational.brain_bridge_relay` |
 | `tools.bridge_secrets` | `tools/bridge_secrets.py` | Siapkan env anak bridge agar credential tidak perlu masuk berkas plaintext. | `tools.secrets_bundle` |
 | `tools.builder_onboarding_pack` | `tools/builder_onboarding_pack.py` | Perakit paket onboarding kontributor ACE berbasis berkas kontrak aktual (`ace.builder-onboarding-pack.v1`). | - |
+| `tools.bundle_manifest` | `tools/bundle_manifest.py` | Buat penanda preflight cutover agar laporan hanya memuat nama entri bundel. | `tools.secrets_bundle` |
 | `tools.candidate_census` | `tools/candidate_census.py` | Sensus kandidat corpus JSONL untuk menilai kesiapan pembekuan secara objektif. | `tools.corpus_lint` |
 | `tools.candidate_corpus_batch` | `tools/candidate_corpus_batch.py` | Build and check a local batch of future candidate episodes. | `tools.corpus_factory_code`, `tools.corpus_factory_lang`, `tools.corpus_lint` |
 | `tools.candidate_factory_v2` | `tools/candidate_factory_v2.py` | Pabrik kandidat corpus v2 (Garis B1). | `tools.corpus_lint` |
@@ -3295,7 +3301,7 @@
 | `tools.dashboard_state_build` | `tools/dashboard_state_build.py` | Build ace_dashboard_state.json — the Ω-program feed for the ACE mobile dashboard. | - |
 | `tools.director_asset_check` | `tools/director_asset_check.py` | Audit klaim aset pada produk direktur terhadap snapshot Git lokal. | `tools._director_sources` |
 | `tools.director_cycle_record` | `tools/director_cycle_record.py` | Ekspor catatan siklus direktur dari berkas JSON yang tercatat di Git. | `tools._director_sources` |
-| `tools.director_fold` | `tools/director_fold.py` | Rencanakan lipatan ekspor proposal supaya duplikat bisa ditelaah lokal. | `ace_operational.director_classes` |
+| `tools.director_fold` | `tools/director_fold.py` | Rencanakan lipatan ekspor proposal supaya duplikat bisa ditelaah lokal. | `ace_operational.director_classes`, `ace_operational.memory_anchor` |
 | `tools.director_prose_audit` | `tools/director_prose_audit.py` | Audit dan petakan bentuk klaim prosa historis pada artefak direktur ACE. | `tools._director_sources`, `tools.director_asset_check` |
 | `tools.director_screen` | `tools/director_screen.py` | Orkestrator saringan direktur (director screen) terpadu berbasis snapshot Git (E2). | `tools._director_sources`, `tools.director_asset_check`, `tools.director_cycle_record`, `tools.director_value_check` |
 | `tools.director_value_check` | `tools/director_value_check.py` | Cocokkan klaim angka direktur dengan field JSON pada snapshot Git lokal. | `tools._director_sources` |
@@ -3391,6 +3397,7 @@
 | `tools.test_bridge_home_pid_reuse` | `tools/test_bridge_home_pid_reuse.py` | Cegah PID daur ulang dianggap milik bridge tanpa identitas yang cocok. | `tools.bridge_home`, `tools.test_bridge_home` |
 | `tools.test_bridge_secrets` | `tools/test_bridge_secrets.py` | Periksa pemuatan GPG memakai nilai sintetis yang dibuat saat tes. | `tools.bridge_secrets`, `tools.secrets_bundle` |
 | `tools.test_builder_onboarding_pack` | `tools/test_builder_onboarding_pack.py` | Unit & adversarial tests untuk tools/builder_onboarding_pack.py (I3). | `tools.builder_onboarding_pack` |
+| `tools.test_bundle_manifest` | `tools/test_bundle_manifest.py` | Buktikan preflight membaca penanda dari bundle GPG sintetis. | `tools.bridge_home`, `tools.bridge_secrets`, `tools.secrets_bundle`, `tools.test_bridge_home` |
 | `tools.test_candidate_census` | `tools/test_candidate_census.py` | Tes unit untuk `tools/candidate_census.py` (Gelombang C1). | `tools.candidate_census` |
 | `tools.test_candidate_corpus_batch` | `tools/test_candidate_corpus_batch.py` | - | `tools.candidate_corpus_batch` |
 | `tools.test_candidate_factory_v2` | `tools/test_candidate_factory_v2.py` | Tes unit & CLI untuk `tools/candidate_factory_v2.py` (Garis B1). | `tools.candidate_factory_v2`, `tools.corpus_lint` |
@@ -3414,6 +3421,8 @@
 | `tools.test_derived_docs_two_checkout` | `tools/test_derived_docs_two_checkout.py` | Jaga nama repo dan fixpoint renderer saat lokasi checkout berbeda. | `tools.program_glossary`, `tools.repo_cartography`, `tools.repo_index` |
 | `tools.test_director_audit` | `tools/test_director_audit.py` | Fixture audit direktur pada snapshot Git sintetis. | `tools._director_sources`, `tools.director_asset_check`, `tools.director_cycle_record`, `tools.director_value_check` |
 | `tools.test_director_fold` | `tools/test_director_fold.py` | Uji lipatan 38 proposal dan kelas konservatif untuk multi-gap. | `tools.director_fold` |
+| `tools.test_director_fold_anchored` | `tools/test_director_fold_anchored.py` | Pastikan rencana lipat hanya menawarkan kelas A bila based_on tertambat. | `tools.test_director_fold` |
+| `tools.test_director_fold_rehearsal` | `tools/test_director_fold_rehearsal.py` | Periksa bahwa rehearsal kering hanya meneruskan wakil lipatan. | `ace_operational.director_executor`, `tools.director_fold`, `tools.test_director_fold` |
 | `tools.test_director_historical_shapes` | `tools/test_director_historical_shapes.py` | Fixture per bentuk klaim prosa yang disetujui & audit dokumen historis (Garis A3 Tranche 2). | `tools._director_sources`, `tools.director_asset_check`, `tools.director_prose_audit` |
 | `tools.test_director_screen` | `tools/test_director_screen.py` | Tes fixture untuk tools/director_screen.py (E2 — saringan direktur terpadu). | `tools._director_sources`, `tools.director_screen`, `tools.wiring_audit` |
 | `tools.test_discriminating_candidate_factory` | `tools/test_discriminating_candidate_factory.py` | Tes fixture untuk tools/discriminating_candidate_factory.py (D9). | `tools.corpus_factory_lang`, `tools.corpus_lint`, `tools.discriminating_candidate_factory` |
@@ -3433,6 +3442,7 @@
 | `tools.test_handover_decision_extractor` | `tools/test_handover_decision_extractor.py` | Unit & adversarial tests untuk tools/handover_decision_extractor.py (I1). | `tools.handover_decision_extractor` |
 | `tools.test_handover_index` | `tools/test_handover_index.py` | Unit & adversarial tests untuk tools/handover_index.py (G2). | `tools.handover_index` |
 | `tools.test_house_check` | `tools/test_house_check.py` | Jalankan watchdog pada HTTP loopback dan berkas status fixture. | `tools.house_check` |
+| `tools.test_house_check_failure_matrix` | `tools/test_house_check_failure_matrix.py` | Uji urutan laporan watchdog saat beberapa komponen gagal sekaligus. | `tools.house_check` |
 | `tools.test_house_check_staleness` | `tools/test_house_check_staleness.py` | Uji usia status engine dengan jam fixture tetap. | `tools.house_check` |
 | `tools.test_income_report` | `tools/test_income_report.py` | Pastikan ringkasan periode dan posisi ledger memakai bukti yang tepat. | `tools.income_report` |
 | `tools.test_income_verify` | `tools/test_income_verify.py` | Pastikan tiga berkas bukti menghasilkan verdict sesuai kebijakan WS-2. | `tools.income_verify` |
