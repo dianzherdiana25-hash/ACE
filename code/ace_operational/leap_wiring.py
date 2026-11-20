@@ -685,3 +685,28 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_evidence_archiver(engine: Any) -> dict[str, Any]:
+    """Indeks manifes bukti terisolasi di workspace/evidence_archive ke evidence_archiver_status.json."""
+    try:
+        from ace_self_dev.evidence_archiver import EvidenceArchiver
+
+        archiver = EvidenceArchiver(engine.workspace / "evidence_archive")
+        archiver.checkpoints_dir.mkdir(parents=True, exist_ok=True)
+        archiver.evidence_dir.mkdir(parents=True, exist_ok=True)
+        manifest = archiver.build_or_update_manifest()
+        compact = {
+            "schema": "ace.evidence-archiver-step.v1",
+            "schema_version": manifest.get("schema_version", "1.0"),
+            "total_artifacts": manifest.get("total_artifacts", 0),
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "evidence_archiver_status.json", compact)
+        return {
+            "status": "ok",
+            "schema_version": compact["schema_version"],
+            "total_artifacts": compact["total_artifacts"],
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}

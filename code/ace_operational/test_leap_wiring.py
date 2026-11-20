@@ -144,6 +144,14 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_evidence_archiver_writes_manifest(self):
+        res = leap_wiring.step_evidence_archiver(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["schema_version"], "1.0")
+        out = json.loads((self.ws / "evidence_archiver_status.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.evidence-archiver-step.v1")
+        self.assertTrue((self.ws / "evidence_archive").is_dir())
+
 
 if __name__ == "__main__":
     unittest.main()
