@@ -144,6 +144,38 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_writeback_diagnose_runs_on_snapshot_and_fails_closed(self) -> None:
+        from ace_operational.cognitive_memory import CognitiveMemory
+
+        with tempfile.TemporaryDirectory() as td:
+            wb_ws = Path(td)
+            store = OperationalStore(wb_ws)
+            try:
+                store.record_receipt(
+                    task_id="t1", action_kind="check", input_data=b"", output_data=b"",
+                    command_or_operation="fixture", exit_code=0, passed=True,
+                )
+                CognitiveMemory(wb_ws / "cognitive_memory").remember(
+                    kind="semantic", content={"note": "valid snapshot"}, source_kind="operator",
+                )
+                db_file = wb_ws / "ace_operational.sqlite3"
+                before_bytes = db_file.read_bytes()
+                stub_ok = type("ValidEng", (), {"workspace": str(wb_ws), "cycle_count": 200, "store": store})()
+                res = leap_wiring.step_writeback_diagnose(stub_ok)
+                self.assertEqual(res["status"], "ok")
+                self.assertTrue(res["chain_ok"])
+                self.assertEqual(db_file.read_bytes(), before_bytes)
+                saved = json.loads((wb_ws / "writeback_diagnose.json").read_text(encoding="utf-8"))
+                self.assertTrue(saved["cognitive_memory"]["available"])
+            finally:
+                store.close()
+
+        with tempfile.TemporaryDirectory() as empty_dir:
+            stub_bad = type("EmptyEng", (), {"workspace": empty_dir, "cycle_count": 1, "store": None})()
+            bad = leap_wiring.step_writeback_diagnose(stub_bad)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()

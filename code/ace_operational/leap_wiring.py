@@ -685,3 +685,71 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0048 — diagnosis kesehatan write-back (salinan read-only)
+# ------------------------------------------------------------------
+
+
+def step_writeback_diagnose(engine: Any) -> dict[str, Any]:
+    """Periksa kesehatan write-back lewat salinan snapshot read-only tanpa mutasi state (AG176)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        import shutil
+        import tempfile
+        from tools import writeback_diagnose
+
+        direct_db = ws / "ace_operational.sqlite3"
+        if direct_db.is_file():
+            report = writeback_diagnose.diagnose(ws)
+        else:
+            store_db_raw = getattr(getattr(engine, "store", None), "db_path", None)
+            cand_dbs = [
+                Path(store_db_raw) if store_db_raw else None,
+                ws / "ops.sqlite3",
+                ws / "operational.sqlite3",
+            ]
+            src_db = next((p for p in cand_dbs if p is not None and p.is_file()), None)
+            if src_db is None:
+                # Delegasikan ke writeback_diagnose agar fail-closed resmi
+                report = writeback_diagnose.diagnose(ws)
+            else:
+                with tempfile.TemporaryDirectory(prefix="ace-wb-stage-", dir="/tmp") as td:
+                    snap = Path(td)
+                    shutil.copyfile(src_db, snap / "ace_operational.sqlite3")
+                    wal = Path(f"{src_db}-wal")
+                    if wal.is_file():
+                        shutil.copyfile(wal, snap / "ace_operational.sqlite3-wal")
+                    mem = ws / "cognitive_memory" / "memory.jsonl"
+                    if mem.is_file():
+                        (snap / "cognitive_memory").mkdir(parents=True, exist_ok=True)
+                        shutil.copyfile(mem, snap / "cognitive_memory" / "memory.jsonl")
+                    report = writeback_diagnose.diagnose(snap)
+
+        out_path = ws / "writeback_diagnose.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                **report,
+            },
+        )
+        cm = report.get("cognitive_memory") or {}
+        return {
+            "status": "ok",
+            "chain_ok": cm.get("chain_ok"),
+            "events": cm.get("events"),
+            "open_gaps": len(report.get("top_open_gaps") or []),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+
