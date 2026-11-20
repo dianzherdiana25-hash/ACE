@@ -685,3 +685,32 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0043 — AG127: discriminating candidate factory intake (%50)
+# ------------------------------------------------------------------
+
+def step_discriminating_candidate_factory(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import discriminating_candidate_factory as dcf
+
+        ws = Path(engine.workspace)
+        cycle = int(getattr(engine, "cycle_count", 0) or 0)
+        result = dcf.generate_discriminating_candidates(
+            lang_count=4,
+            code_count=4,
+            seed=20261119 + cycle,
+        )
+        intake_path = ws / "discriminating_intake.jsonl"
+        meta_path = ws / "discriminating_meta.json"
+        dcf.write_new_candidate_file(intake_path, result, meta_path=meta_path)
+        return {
+            "status": "ok",
+            "total_episodes": result.get("total_episodes", 0),
+            "rejected_count": result.get("rejected_count", 0),
+            "jsonl_sha256": result.get("jsonl_sha256"),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
