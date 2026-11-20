@@ -57,6 +57,9 @@ def audit(path):
                 continue
             day = stamp.astimezone(timezone.utc).date().isoformat()
             days[day][branch if isinstance(branch, str) and _BRANCH.fullmatch(branch) else "(ditolak)"] += 1
+    for pending in prepared.values():
+        findings.extend({**source, "reason": "prepared_without_terminal"} for source in pending)
+    findings.sort(key=lambda item: (item["line"], item["reason"]))
     violations.sort(key=lambda item: (item["line"], item["reason"]))
     return {"schema": "ace.self-send-audit.v1", "sent": sum(sum(day.values()) for day in days.values()),
             "by_day_and_target": {day: dict(sorted(counts.items())) for day, counts in sorted(days.items())},
