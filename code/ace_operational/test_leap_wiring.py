@@ -144,6 +144,25 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_run_evidence_pack_bundles_clean_artifacts(self):
+        (self.ws / "summary.json").write_text('{"ok": true}\n', encoding="utf-8")
+        (self.ws / "events.jsonl").write_text('{"step": 1}\n', encoding="utf-8")
+        res = leap_wiring.step_run_evidence_pack(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["secret_scan"]["status"], "CLEAN")
+        self.assertGreaterEqual(res["file_count"], 2)
+        saved = json.loads((self.ws / "run_evidence_pack.json").read_text())
+        self.assertEqual(saved["schema"], res["schema"])
+
+    def test_run_evidence_pack_blocks_leaked_token_pattern(self):
+        fake_prefix = "ghp_"
+        (self.ws / "leak_note.txt").write_text(
+            fake_prefix + "a" * 24 + "\n", encoding="utf-8",
+        )
+        res = leap_wiring.step_run_evidence_pack(self.engine)
+        self.assertEqual(res["status"], "blocked")
+        self.assertNotIn("a" * 24, res.get("reason", ""))
+
 
 if __name__ == "__main__":
     unittest.main()

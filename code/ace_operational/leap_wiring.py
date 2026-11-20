@@ -685,3 +685,65 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_run_evidence_pack(engine: Any) -> dict[str, Any]:
+    """AG139: assemble a compact run-evidence summary on an isolated copy."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        import shutil
+        from tempfile import TemporaryDirectory
+        from tools.run_evidence_pack import RunEvidencePackError, pack_run_evidence
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        with TemporaryDirectory(prefix="ace-evidence-pack-") as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            stage_dir = tmp_path / "stage"
+            stage_dir.mkdir(parents=True, exist_ok=True)
+            copied = 0
+            if ws.is_dir():
+                for p in sorted(ws.iterdir()):
+                    if p.is_symlink() or not p.is_file():
+                        continue
+                    if p.name in ("run_evidence_pack.json", "manifest.json"):
+                        continue
+                    if p.suffix.lower() not in (".json", ".jsonl", ".md", ".txt", ".log"):
+                        continue
+                    try:
+                        if p.stat().st_size > 1048576:
+                            continue
+                    except OSError:
+                        continue
+                    shutil.copy2(p, stage_dir / p.name)
+                    copied += 1
+                    if copied >= 24:
+                        break
+            if copied == 0:
+                (stage_dir / "cycle_state.json").write_text(
+                    json.dumps({"cycle": int(getattr(engine, "cycle_count", 0) or 0)}),
+                    encoding="utf-8",
+                )
+            packed = pack_run_evidence(
+                stage_dir,
+                manifest_path=tmp_path / "manifest.json",
+                allow_unredacted=False,
+            )
+        out = {
+            "status": "ok",
+            "schema": packed["schema"],
+            "file_count": packed["file_count"],
+            "total_bytes": packed["total_bytes"],
+            "categories": packed["categories"],
+            "secret_scan": packed["secret_scan"],
+        }
+        _write_json(ws / "run_evidence_pack.json", out)
+        return out
+    except RunEvidencePackError as exc:
+        return {"status": "blocked", "reason": str(exc)}
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
