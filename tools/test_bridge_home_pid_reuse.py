@@ -25,6 +25,7 @@ class BridgePIDReuseTests(unittest.TestCase):
         plan = plan_home(self.config, pid_probe=lambda _: True, identity_probe=identity)
         identity.assert_called_once_with(900)
         self.assertTrue(plan["preflight"]["pid_file"]["safe_to_continue"])
+        self.assertIn("Gunakan kembali", plan["steps"][1]["action"])
 
     def test_reused_pid_requires_operator(self):
         plan = plan_home(self.config, pid_probe=lambda _: True, identity_probe=lambda _: "other")

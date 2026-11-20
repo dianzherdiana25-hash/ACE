@@ -138,11 +138,14 @@ def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running, identity_
     quote = shlex.quote
     command = (f"{shlex.join(argv)} > {quote(paths['stdout_log'])} 2>&1 < /dev/null & "
                f"printf '%s\\n' \"$!\" > {quote(paths['pid_file'])}")
+    launch_verify = f"Cocokkan PID baru di {paths['pid_file']} dengan proses bridge."
+    if pid_check.get("reason") == "identity_matched":
+        command = "Gunakan kembali proses bridge yang tercatat."
+        launch_verify = f"Periksa health proses yang ada lewat {_health(target)}."
     steps = [
         {"id": "preflight", "action": "Siapkan direktori dan credential untuk proses bridge. Pertahankan jalur lama.",
          "verify": f"Pastikan direktori keluaran bisa ditulis dan health lama lolos lewat {_health(previous)}."},
-        {"id": "launch", "action": command,
-         "verify": f"Cocokkan PID baru di {paths['pid_file']} dengan proses bridge."},
+        {"id": "launch", "action": command, "verify": launch_verify},
         {"id": "health", "action": _health(target),
          "verify": "Periksa ok=true dan role yang diharapkan. Lanjut setelah health lulus."},
         {"id": "cutover", "action": f"Terapkan ACE_BRAIN_BRIDGE_URL={target} pada konfigurasi engine.",
