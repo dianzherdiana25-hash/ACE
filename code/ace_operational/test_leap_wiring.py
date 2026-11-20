@@ -144,6 +144,35 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_organ_quality_board_scores_receipts_and_grounding(self):
+        (self.ws / "director_exec_receipts.jsonl").write_text(
+            "\n".join([
+                json.dumps({"task_id": "t1", "organ": "groq/qwen", "status": "completed", "at": "2026-11-18T10:00:00Z"}),
+                json.dumps({"task_id": "t2", "organ": "gemini/flash", "status": "failed", "at": "2026-11-18T11:00:00Z"}),
+            ]) + "\n",
+            encoding="utf-8",
+        )
+        (self.ws / "proposal_grounding.jsonl").write_text(
+            json.dumps({"task_id": "t1", "organ": "groq/qwen", "grounded": True, "at": "2026-11-18T10:00:00Z"}) + "\n",
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_organ_quality_board(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["summary"]["organ_count"], 2)
+        self.assertAlmostEqual(res["by_organ"]["groq/qwen"]["execution_success_rate"], 1.0)
+        self.assertAlmostEqual(res["by_organ"]["gemini/flash"]["execution_success_rate"], 0.0)
+        self.assertTrue((self.ws / "organ_quality.json").is_file())
+
+    def test_organ_quality_board_runs_inside_step_organs_and_fails_closed(self):
+        from unittest import mock
+        with mock.patch("tools.organ_smoke.run_organ_smoke",
+                        return_value={"scores": {"front": 0.9, "coder": 0.8}}):
+            out = leap_wiring.step_organs(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertTrue((self.ws / "organ_quality.json").is_file())
+        (self.ws / "director_exec_receipts.jsonl").write_text("{bad\n", encoding="utf-8")
+        self.assertEqual(leap_wiring.step_organ_quality_board(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

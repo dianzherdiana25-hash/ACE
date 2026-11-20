@@ -683,5 +683,39 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "at": _now_iso(), "recommended": best,
             "basis": "skor smoke organ tertinggi pada putaran terakhir",
             "scores": scores})
+    try:
+        step_organ_quality_board(engine)
+    except Exception:
+        pass
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_organ_quality_board(engine: Any) -> dict[str, Any]:
+    """AG152: aggregate per-organ execution/grounding scoreboard into organ_quality.json."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import organ_quality_board as oqb
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        receipts_path = ws / "director_exec_receipts.jsonl"
+        grounding_path = ws / "proposal_grounding.jsonl"
+        receipts = oqb._load_receipts(receipts_path) if receipts_path.is_file() else []
+        grounding = oqb._load_grounding(grounding_path) if grounding_path.is_file() else []
+        board = oqb.build_organ_scoreboard(receipts, grounding)
+        out = {
+            "status": "ok",
+            "schema": board["schema"],
+            "summary": board["summary"],
+            "by_organ": board["by_organ"],
+            "checked_at": _now_iso(),
+        }
+        _write_json(ws / "organ_quality.json", out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
