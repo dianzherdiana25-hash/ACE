@@ -426,6 +426,34 @@ def step_director(engine: Any) -> dict[str, Any]:
             _append_jsonl(ws / "invariant_violations.jsonl", {
                 "at": _now_iso(), "cycle": engine.cycle_count,
                 "report": report})
+
+    # EVO 0043 — AG128: kandidat agenda dari dokumen verdict/laporan workspace
+    try:
+        from tools import agenda_candidates as ac
+
+        docs: dict[str, str] = {}
+        for md_file in sorted(ws.glob("*.md"))[:15]:
+            try:
+                text = md_file.read_text(encoding="utf-8", errors="ignore")
+                if text.strip():
+                    docs[md_file.name] = text
+            except Exception:
+                continue
+        raw_cands = ac.scan_failure_documents(docs) if docs else []
+        if raw_cands:
+            ranked = ac.prioritize(raw_cands)
+            _append_jsonl(ws / "agenda_candidates.jsonl", {
+                "at": _now_iso(),
+                "cycle": getattr(engine, "cycle_count", 0),
+                "count": len(ranked),
+                "candidates": ranked[:20],
+            })
+            out["agenda_candidates"] = {"count": len(ranked), "top_id": ranked[0].get("proposal_id")}
+        else:
+            out["agenda_candidates"] = {"status": "skipped", "count": 0}
+    except Exception as exc:
+        out["agenda_candidates"] = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
     return out
 
 

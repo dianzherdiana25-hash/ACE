@@ -144,6 +144,19 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_director_scans_and_prioritizes_agenda_candidates(self) -> None:
+        (self.ws / "verdict_local.md").write_text(
+            "# Probe Lokal\n**Gate 1: NOT_PASSED.**\n## Hasil: FAIL\n",
+            encoding="utf-8",
+        )
+        out = leap_wiring.step_director(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertGreaterEqual(out["agenda_candidates"]["count"], 1)
+        out_path = self.ws / "agenda_candidates.jsonl"
+        self.assertTrue(out_path.is_file())
+        last = json.loads(out_path.read_text(encoding="utf-8").strip().splitlines()[-1])
+        self.assertGreaterEqual(last["count"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()
