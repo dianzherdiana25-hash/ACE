@@ -144,6 +144,18 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_recall_ablation_writes_summary_readonly(self):
+        db_raw = getattr(getattr(self.engine, "store", None), "db_path", None)
+        before_bytes = Path(db_raw).read_bytes() if db_raw and Path(db_raw).is_file() else None
+        res = leap_wiring.step_recall_ablation(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["schema"], "ace.recall-ablation.v1")
+        out = json.loads((self.ws / "recall_ablation.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.recall-ablation.v1")
+        self.assertIn(out["source_mode"], {"sqlite_ro", "fixture"})
+        if before_bytes is not None:
+            self.assertEqual(Path(db_raw).read_bytes(), before_bytes)
+
 
 if __name__ == "__main__":
     unittest.main()

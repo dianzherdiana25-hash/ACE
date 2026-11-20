@@ -685,3 +685,42 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_recall_ablation(engine: Any) -> dict[str, Any]:
+    """Jalankan ablation recall deterministik (SQLite ?mode=ro bila ada) ke recall_ablation.json."""
+    try:
+        from tools.recall_ablation import load_sqlite_ablation_store, run_ablation
+
+        custom_tasks = _read_json(engine.workspace / "recall_ablation_tasks.json", None)
+        tasks = (
+            custom_tasks
+            if isinstance(custom_tasks, list) and custom_tasks
+            else [
+                {
+                    "id": "ab_1",
+                    "query": "cek-cache",
+                    "cold_decision": "lewat",
+                    "expected": "gunakan_cache",
+                }
+            ]
+        )
+        db_raw = getattr(getattr(engine, "store", None), "db_path", None)
+        db_path = Path(db_raw) if db_raw and str(db_raw) != ":memory:" else (engine.workspace / "operational.db")
+        if db_path.is_file():
+            store_data = load_sqlite_ablation_store(db_path, tasks)
+            source_mode = "sqlite_ro"
+        else:
+            store_data = {"cek-cache": ["gunakan_cache"]}
+            source_mode = "fixture"
+        _, summary = run_ablation(store_data, tasks, seed=0)
+        out = {**summary, "source_mode": source_mode, "ts": _now_iso()}
+        _write_json(engine.workspace / "recall_ablation.json", out)
+        return {
+            "status": "ok",
+            "schema": out["schema"],
+            "delta": out["delta"],
+            "source_mode": source_mode,
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}
