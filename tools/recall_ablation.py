@@ -17,7 +17,145 @@ import hashlib
 import json
 from pathlib import Path
 import random
+import re
+import sqlite3
 import sys
+from urllib.parse import quote
+
+
+def _tokenize_query(text):
+    return set(re.findall(r"[a-z0-9_]+", str(text).lower()))
+
+
+def load_sqlite_ablation_store(db_path, tasks, *, anchored=False):
+    """Baca OperationalStore SQLite secara read-only (URI mode=ro) dan petakan ke store ablation."""
+    if not isinstance(tasks, list) or not tasks:
+        raise ValueError("Daftar tugas wajib berupa larik berisi.")
+    resolved = Path(db_path).resolve()
+    if not resolved.is_file():
+        raise ValueError(f"Berkas SQLite tidak ditemukan: {db_path}")
+
+    uri = f"file:{quote(str(resolved))}?mode=ro"
+    candidates = []
+    verified_refs = set()
+    refs_by_task = {}
+
+    try:
+        conn = sqlite3.connect(uri, uri=True)
+    except sqlite3.Error as exc:
+        raise ValueError(f"Gagal membuka SQLite secara read-only: {exc}") from None
+    try:
+        conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA query_only = ON")
+        tables = {
+            row["name"]
+            for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
+        }
+
+        if "receipts" in tables:
+            for row in conn.execute("SELECT receipt_id, task_id, passed FROM receipts ORDER BY receipt_id"):
+                rid = str(row["receipt_id"] or "").strip()
+                tid = str(row["task_id"] or "").strip()
+                if rid and int(row["passed"] or 0) == 1:
+                    verified_refs.add(rid)
+                    if tid:
+                        refs_by_task.setdefault(tid, []).append(rid)
+
+        if "learning_experiences" in tables:
+            for row in conn.execute(
+                "SELECT experience_id, task_id, failure_signature, extracted_rule, strategy_after, verification_evidence_json "
+                "FROM learning_experiences ORDER BY experience_id"
+            ):
+                decision = str(row["extracted_rule"] or row["strategy_after"] or "").strip()
+                if not decision:
+                    continue
+                haystack = f"{row['failure_signature']} {row['extracted_rule']} {row['strategy_after']}"
+                refs = list(refs_by_task.get(str(row["task_id"] or ""), []))
+                try:
+                    ev = json.loads(row["verification_evidence_json"] or "{}")
+                    if isinstance(ev, dict):
+                        for key in ("receipt_id", "evidence_ref"):
+                            val = ev.get(key)
+                            if isinstance(val, str) and val.strip():
+                                refs.append(val.strip())
+                except ValueError:
+                    pass
+                if not refs:
+                    refs = [str(row["experience_id"])]
+                candidates.append((haystack, decision, refs, f"exp:{row['experience_id']}"))
+
+        if "skills" in tables:
+            for row in conn.execute(
+                "SELECT skill_id, name, domain, procedure_steps_json, source_task_ids_json, status "
+                "FROM skills WHERE status = 'ACTIVE' ORDER BY skill_id"
+            ):
+                decision = str(row["name"] or "").strip()
+                if not decision:
+                    continue
+                steps_txt = ""
+                try:
+                    steps = json.loads(row["procedure_steps_json"] or "[]")
+                    if isinstance(steps, list):
+                        steps_txt = " ".join(str(s) for s in steps)
+                except ValueError:
+                    pass
+                haystack = f"{row['name']} {row['domain']} {steps_txt}"
+                refs = []
+                try:
+                    tids = json.loads(row["source_task_ids_json"] or "[]")
+                    if isinstance(tids, list):
+                        for tid in tids:
+                            refs.extend(refs_by_task.get(str(tid), []))
+                except ValueError:
+                    pass
+                if not refs:
+                    refs = [str(row["skill_id"])]
+                candidates.append((haystack, decision, refs, f"skill:{row['skill_id']}"))
+
+        if "tasks" in tables:
+            for row in conn.execute(
+                "SELECT task_id, normalized_goal, next_action, status FROM tasks "
+                "WHERE status = 'COMPLETED' ORDER BY task_id"
+            ):
+                decision = str(row["next_action"] or "").strip()
+                if not decision:
+                    continue
+                haystack = f"{row['normalized_goal']} {row['task_id']}"
+                refs = list(refs_by_task.get(str(row["task_id"]), [])) or [str(row["task_id"])]
+                candidates.append((haystack, decision, refs, f"task:{row['task_id']}"))
+    except sqlite3.Error as exc:
+        raise ValueError(f"Kueri OperationalStore SQLite gagal: {exc}") from None
+    finally:
+        conn.close()
+
+    queries = sorted({
+        task["query"] for task in tasks
+        if isinstance(task, dict) and isinstance(task.get("query"), str) and task["query"].strip()
+    })
+    if anchored:
+        records = {}
+        for query in queries:
+            q_toks = _tokenize_query(query)
+            matched = []
+            for haystack, decision, refs, sort_key in candidates:
+                overlap = len(q_toks & _tokenize_query(haystack))
+                if query.lower() in haystack.lower() or overlap > 0:
+                    matched.append((overlap, sort_key, {"decision": decision, "based_on": sorted(set(refs))}))
+            matched.sort(key=lambda item: (-item[0], item[1]))
+            records[query] = [item[2] for item in matched]
+        return {"records": records, "verified_refs": sorted(verified_refs)}
+
+    plain_store = {}
+    for query in queries:
+        q_toks = _tokenize_query(query)
+        matched = []
+        for haystack, decision, _refs, sort_key in candidates:
+            overlap = len(q_toks & _tokenize_query(haystack))
+            if query.lower() in haystack.lower() or overlap > 0:
+                matched.append((overlap, sort_key, decision))
+        matched.sort(key=lambda item: (-item[0], item[1]))
+        plain_store[query] = [item[2] for item in matched]
+    return plain_store
 
 
 def fixture_recall(query, store):
@@ -232,7 +370,9 @@ def run_ablation(store, tasks, *, recall=fixture_recall, seed=0, anchored=False,
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--store", type=Path, required=True)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--store", type=Path)
+    source.add_argument("--sqlite", type=Path, help="Baca OperationalStore SQLite secara read-only.")
     parser.add_argument("--tasks", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=0)
@@ -240,8 +380,14 @@ def main(argv=None):
     parser.add_argument("--anchored", action="store_true")
     args = parser.parse_args(argv)
     try:
-        data, summary = run_ablation(json.loads(args.store.read_text(encoding="utf-8")),
-                                    json.loads(args.tasks.read_text(encoding="utf-8")),
+        tasks_data = json.loads(args.tasks.read_text(encoding="utf-8"))
+        store_data = (
+            load_sqlite_ablation_store(args.sqlite, tasks_data, anchored=args.anchored)
+            if args.sqlite is not None
+            else json.loads(args.store.read_text(encoding="utf-8"))
+        )
+        data, summary = run_ablation(store_data,
+                                    tasks_data,
                                     seed=args.seed, anchored=args.anchored, seeds=args.seeds)
         args.output_dir.mkdir()
         (args.output_dir / "results.jsonl").write_bytes(data)
