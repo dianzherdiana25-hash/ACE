@@ -685,3 +685,46 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0041 — AG106: incremental embedding index sidecar (%10)
+# ------------------------------------------------------------------
+
+def step_embedding_index(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import embedding_index as ei
+
+        ws = Path(engine.workspace)
+        mem_path = ws / "cognitive_memory" / "memory.jsonl"
+        index_path = ws / "cognitive_memory" / "embedding_index.jsonl"
+        state_path = ws / "embedding_index_state.json"
+
+        if not mem_path.is_file():
+            skipped = {
+                "status": "skipped",
+                "reason": "no memory.jsonl",
+                "checked_at": _now_iso(),
+            }
+            _write_json(state_path, skipped)
+            return skipped
+
+        build_report = ei.build_or_update_index(mem_path, index_path)
+        verify_report = ei.verify_index(mem_path, index_path)
+        payload = {
+            "status": "ok",
+            "checked_at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "index_path": str(index_path),
+            "build": build_report,
+            "verify": verify_report,
+        }
+        _write_json(state_path, payload)
+        return {
+            "status": "ok",
+            "build": build_report,
+            "verify": verify_report,
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+

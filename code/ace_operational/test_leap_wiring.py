@@ -144,6 +144,22 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_embedding_index_builds_and_verifies_sidecar(self) -> None:
+        mem_path = self.ws / "cognitive_memory" / "memory.jsonl"
+        before_bytes = mem_path.read_bytes()
+        out = leap_wiring.step_embedding_index(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(mem_path.read_bytes(), before_bytes)
+        self.assertTrue((self.ws / "cognitive_memory" / "embedding_index.jsonl").is_file())
+        self.assertTrue((self.ws / "embedding_index_state.json").is_file())
+        self.assertTrue(out["verify"].get("valid") or out["verify"].get("ok"))
+
+    def test_embedding_index_missing_memory_fails_closed(self) -> None:
+        (self.ws / "cognitive_memory" / "memory.jsonl").unlink()
+        out = leap_wiring.step_embedding_index(self.engine)
+        self.assertEqual(out["status"], "skipped")
+        self.assertTrue((self.ws / "embedding_index_state.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()
