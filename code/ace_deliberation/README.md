@@ -31,8 +31,12 @@ yang ada di paket ini. Angka butir mengikuti rancangan EVO 0051.
 | 24 | `prediction_ledger.py` | Riwayat versi, batas ramalan, resolusi, dan checkpoint |
 | 25 | `brier_scorer.py` | Brier berpasangan, baseline laju dasar, dan kontrol urutan waktu |
 | 26 | `calibration_analyzer.py` | ECE, bin kosong, reliabilitas, dan grafik SVG |
+| 27 | `scenario_generator.py` | Pohon peluang eksak, pengamatan bersarang dan payoff |
+| 28 | `signal_watcher.py` | Sampel beruntun, hysteresis, kedaluwarsa dan bukti |
+| 29 | `forecast_aggregator.py` | Bobot per keluarga, log-odds dan sensitivitas |
+| 30 | `decision_linker.py` | Versi yang dirujuk, ambang dan daftar putusan terdampak |
 
-Butir tersisa pada 0051 mencakup 27–60. Pengukuran
+Butir tersisa pada 0051 mencakup 31–60. Pengukuran
 di paket ini memakai fixture sintetis. Pasangan program dan tes yang
 tercantum dihitung bersama untuk rentang baris per kemampuan. Verifier
 ambang dan langkah integrasi berada di luar hitungan kemampuan.
