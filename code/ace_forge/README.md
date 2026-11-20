@@ -14,6 +14,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 8 | `merge_lab.py` | Interpolasi, delta terhadap basis, layout identik, dan jarak bobot |
 | 9 | `model_registry_v2.py` | Replay registry tertambat, lineage, review, dan retire tanpa mutasi |
 | 10 | `brain_bench.py` | Perbandingan kualitas dan sumber daya, hash artefak, dan diagnosis per kasus |
+| 11 | `data_quality_scorer.py` | Rubrik mekanis berbobot, status unscored, dan contoh berkustodi |
+| 12 | `near_dup_detector.py` | Jaccard shingle eksak lintas dataset, cluster, dan kebocoran partisi |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -75,3 +77,10 @@ receipt adalah diagnostik perubahan bobot. `model_registry_v2.py`
 membaca JSONL kanonis dengan `--expect-head`. Mode `--propose-event`
 mencetak baris baru untuk disaring, dengan status review berasal
 dari receipt penilai yang dirujuk. Registry ini hanya katalog lokal.
+
+`data_quality_scorer.py` membaca dataset berkustodi dan rubrik eksplisit
+untuk panjang, bentuk jawaban, label bahasa, dan pemeriksaan teks.
+Rujukan, skor, serta blocker keluar per baris. `near_dup_detector.py`
+mencari pasangan lintas dataset, dengan irisan partisi train/held-out
+ditandai dan daftar cluster transitif tetap membawa anggota bersumber.
+Ambang Jaccard bersifat leksikal dan tidak menilai kesetaraan semantik.
