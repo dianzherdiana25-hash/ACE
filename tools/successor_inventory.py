@@ -3,7 +3,8 @@
 
 `--claims` menerima larik JSON dengan id, evidence (path relatif repo)
 dan status teruji atau belum. Peta membedakan bukti hilang dan klaim belum
-teruji dengan bukti yang tersedia.
+teruji dengan bukti yang tersedia. Klaim yang berpindah dapat memuat
+relocated_to (path relatif repo) dan sha256 bukti asli (64 digit hex).
 """
 
 import argparse
@@ -68,6 +69,20 @@ def inventory(repo: Path, snapshot: Path) -> dict:
             "branches": branches, "files": files, "records": records}
 
 
+def _claim_path(repo, raw_path, index):
+    if not isinstance(raw_path, str):
+        raise ValueError(f"Path bukti klaim {index} tidak sah.")
+    rel = Path(raw_path)
+    if (not rel.parts or rel.is_absolute() or ".." in rel.parts
+            or "\\" in raw_path or ":" in raw_path or not raw_path.isprintable()
+            or not _allowed(rel)):
+        raise ValueError(f"Path bukti klaim {index} di luar ruang inventaris.")
+    path = (repo / rel).resolve()
+    if not path.is_relative_to(repo) or not _allowed(path.relative_to(repo)):
+        raise ValueError(f"Path bukti klaim {index} di luar ruang inventaris.")
+    return rel, path
+
+
 def map_claims(repo, claims, result):
     """Periksa path klaim dan hubungkan dengan daftar berkas inventaris."""
     if not isinstance(claims, list):
@@ -75,6 +90,7 @@ def map_claims(repo, claims, result):
     repo = repo.resolve()
     inventoried = {item["path"] for item in result["files"]}
     missing, untested = [], []
+    verified, unverified = [], []
     seen = set()
     for index, claim in enumerate(claims, 1):
         if (not isinstance(claim, dict) or not isinstance(claim.get("id"), str)
@@ -84,23 +100,36 @@ def map_claims(repo, claims, result):
             raise ValueError(f"Klaim {index} tidak sah atau ID ganda.")
         claim_id = claim["id"]
         seen.add(claim_id)
-        raw_path = claim["evidence"]
-        rel = Path(raw_path)
-        if (not rel.parts or rel.is_absolute() or ".." in rel.parts
-                or "\\" in raw_path or ":" in raw_path or not raw_path.isprintable()
-                or not _allowed(rel)):
-            raise ValueError(f"Path bukti klaim {index} di luar ruang inventaris.")
-        path = (repo / rel).resolve()
-        if not path.is_relative_to(repo) or not _allowed(path.relative_to(repo)):
-            raise ValueError(f"Path bukti klaim {index} di luar ruang inventaris.")
+        rel, path = _claim_path(repo, claim["evidence"], index)
+        relocated = _claim_path(repo, claim["relocated_to"], index) if "relocated_to" in claim else None
         row = {"id": claim_id, "evidence": rel.as_posix(), "status": claim["status"],
                "in_successor_inventory": rel.as_posix() in inventoried}
+        if relocated is not None:
+            new_rel, new_path = relocated
+            digest = claim.get("sha256")
+            if not isinstance(digest, str) or not re.fullmatch(r"[a-fA-F0-9]{64}", digest):
+                raise ValueError(f"SHA-256 bukti asli klaim {index} tidak sah.")
+            relocation = {**row, "relocated_to": new_rel.as_posix(), "sha256": digest.lower()}
+            if not new_path.is_file():
+                unverified.append({**relocation, "reason": "file_missing"})
+            elif hashlib.sha256(new_path.read_bytes()).hexdigest() != digest.lower():
+                unverified.append({**relocation, "reason": "sha256_mismatch"})
+            else:
+                verified.append(relocation)
+                if claim["status"] == "belum":
+                    untested.append({**row, "evidence": new_rel.as_posix(),
+                                     "in_successor_inventory": new_rel.as_posix() in inventoried})
+                continue
         if not path.is_file():
             missing.append(row)
         elif claim["status"] == "belum":
             untested.append(row)
-    return {"missing_evidence": sorted(missing, key=lambda row: row["id"]),
-            "untested_with_evidence": sorted(untested, key=lambda row: row["id"])}
+    mapped = {"missing_evidence": sorted(missing, key=lambda row: row["id"]),
+              "untested_with_evidence": sorted(untested, key=lambda row: row["id"])}
+    if verified or unverified:
+        mapped["relocated_verified"] = sorted(verified, key=lambda row: row["id"])
+        mapped["relocation_unverified"] = sorted(unverified, key=lambda row: row["id"])
+    return mapped
 
 
 def markdown(result):
@@ -120,6 +149,17 @@ def markdown(result):
             rows = result["claims"][key]
             lines.extend([f"## {heading} ({len(rows)})", ""])
             lines.extend(f"- {escape(row['id'])} · {escape(row['evidence'])}" for row in rows)
+            lines.append("")
+        for key, heading in (("relocated_verified", "Bukti terverifikasi di lokasi baru"),
+                             ("relocation_unverified", "Bukti relokasi belum terverifikasi")):
+            if key not in result["claims"]:
+                continue
+            rows = result["claims"][key]
+            lines.extend([f"## {heading} ({len(rows)})", ""])
+            for row in rows:
+                suffix = f" · {row['reason']}" if "reason" in row else ""
+                lines.append(f"- {escape(row['id'])} · {escape(row['evidence'])} → "
+                             f"{escape(row['relocated_to'])} · `{row['sha256']}`{suffix}")
             lines.append("")
     return "\n".join(lines)
 
