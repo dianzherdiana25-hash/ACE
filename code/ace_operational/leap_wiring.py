@@ -685,3 +685,82 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_migration_rehearsal(engine: Any) -> dict[str, Any]:
+    """AG138: dry migration rehearsal over an isolated copy of workspace files."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        import shutil
+        from tempfile import TemporaryDirectory
+        from tools.instance_kit import build_instance_config
+        from tools.migration_rehearsal import _path_allowed, rehearse
+        from tools.portability_pack import pack_bundle
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        candidates: list[str] = []
+        if ws.is_dir():
+            for p in sorted(ws.iterdir()):
+                if not p.is_file() or p.name == "migration_rehearsal.json":
+                    continue
+                if p.suffix not in (".json", ".jsonl", ".txt", ".md"):
+                    continue
+                if not _path_allowed(p.name):
+                    continue
+                try:
+                    size = p.stat().st_size
+                except OSError:
+                    continue
+                if size == 0 or size > 524288:
+                    continue
+                candidates.append(p.name)
+                if len(candidates) >= 16:
+                    break
+
+        with TemporaryDirectory(prefix="ace-mig-rehearsal-") as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            source = build_instance_config(
+                instance_id="live-copy", base_dir=tmp_path, port_base=18100,
+            )
+            target = build_instance_config(
+                instance_id="preview-rehearsal", base_dir=tmp_path, port_base=18200,
+            )
+            src_ws = Path(source["directories"]["workspace_dir"])
+            dst_ws = Path(target["directories"]["workspace_dir"])
+            src_ws.mkdir(parents=True, exist_ok=True)
+            dst_ws.mkdir(parents=True, exist_ok=True)
+
+            staged: list[str] = []
+            for rel in candidates:
+                shutil.copy2(ws / rel, src_ws / rel)
+                staged.append(rel)
+            if not staged:
+                (src_ws / "snapshot_probe.json").write_text(
+                    json.dumps({"cycle": int(getattr(engine, "cycle_count", 0) or 0)}),
+                    encoding="utf-8",
+                )
+                staged.append("snapshot_probe.json")
+
+            bundle_dir = tmp_path / "capsule"
+            packed = pack_bundle(
+                source_dir=src_ws, out_path=bundle_dir, include_paths=staged,
+            )
+            report = rehearse(
+                bundle_dir, source, target,
+                expected_manifest_sha256=packed["manifest_sha256"],
+            )
+        out = {
+            "status": "ok",
+            "mode": "isolated_copy",
+            "staged_files": len(staged),
+            "rehearsal": report,
+        }
+        _write_json(ws / "migration_rehearsal.json", out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+

@@ -144,6 +144,27 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_migration_rehearsal_runs_on_isolated_copy(self):
+        probe_file = self.ws / "state_note.json"
+        probe_file.write_bytes(b'{"k":"v"}\n')
+        res = leap_wiring.step_migration_rehearsal(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["mode"], "isolated_copy")
+        self.assertTrue(res["rehearsal"]["isolation_passed"])
+        self.assertTrue(res["rehearsal"]["preview_cleaned"])
+        self.assertIs(res["rehearsal"]["activation_authorized"], False)
+        self.assertEqual(probe_file.read_bytes(), b'{"k":"v"}\n')
+        saved = json.loads((self.ws / "migration_rehearsal.json").read_text())
+        self.assertEqual(saved["rehearsal"]["manifest_sha256"],
+                         res["rehearsal"]["manifest_sha256"])
+
+    def test_migration_rehearsal_fails_closed_on_error(self):
+        from unittest import mock
+        with mock.patch("tools.portability_pack.pack_bundle",
+                        side_effect=RuntimeError("boom")):
+            res = leap_wiring.step_migration_rehearsal(self.engine)
+        self.assertEqual(res["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()
