@@ -685,3 +685,56 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0048 — probe kontinuitas model-diri lintas label organ
+# ------------------------------------------------------------------
+
+
+def step_continuity_probe(engine: Any) -> dict[str, Any]:
+    """Jalankan probe kontinuitas model-diri lintas konfigurasi organ secara fail-closed (AG172)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import self_model_continuity_probe
+
+        mem_file = ws / "cognitive_memory" / "memory.jsonl"
+        memory_path = mem_file if mem_file.is_file() else None
+        slates_file = ws / "continuity_slates.json"
+        organ_slates = None
+        if slates_file.is_file():
+            loaded = json.loads(slates_file.read_text(encoding="utf-8"))
+            if not isinstance(loaded, list):
+                raise ValueError("continuity_slates.json wajib berupa larik.")
+            organ_slates = loaded
+
+        report = self_model_continuity_probe.run_continuity_probe(
+            _REPO_ROOT,
+            memory_path=memory_path,
+            organ_slates=organ_slates,
+        )
+        out_path = ws / "continuity_probe.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                **report,
+            },
+        )
+        return {
+            "status": "ok",
+            "verdict": report["verdict"],
+            "continuity_passed": bool(report["continuity_passed"]),
+            "variants_tested": report["variants_tested"],
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

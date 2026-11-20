@@ -144,6 +144,19 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_continuity_probe_writes_report_and_fails_closed(self) -> None:
+        res = leap_wiring.step_continuity_probe(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertTrue(res["continuity_passed"])
+        self.assertEqual(res["verdict"], "CONTINUITY_INTACT")
+        saved = json.loads((self.ws / "continuity_probe.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.self-model-continuity-probe.v1")
+
+        (self.ws / "continuity_slates.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_continuity_probe(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
