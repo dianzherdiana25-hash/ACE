@@ -685,3 +685,48 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_quota_failover_sim(engine: Any) -> dict[str, Any]:
+    """AG156: record deterministic bridge quota/failover accounting without critical fallback."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import quota_failover_sim as qfs
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        budgets_path = ws / "bridge_budgets.json"
+        steps_path = ws / "bridge_steps.json"
+        if budgets_path.is_file():
+            budgets = json.loads(budgets_path.read_text(encoding="utf-8"))
+        else:
+            fails = int(getattr(engine, "_bridge_transport_failures", 0) or 0)
+            budgets = {
+                "roles": {
+                    "front": {"remaining": 0 if fails > 0 else 4, "fallback_role": "coder"},
+                    "coder": {"remaining": 4},
+                    "validator": {"remaining": 2},
+                }
+            }
+        if steps_path.is_file():
+            steps = json.loads(steps_path.read_text(encoding="utf-8"))
+        else:
+            steps = [
+                {"step_id": "s-front", "role": "front", "critical": False, "cost": 1},
+                {"step_id": "s-val", "role": "validator", "critical": True, "cost": 1},
+            ]
+        sim = qfs.simulate_failover(budgets, steps)
+        entry = {
+            "at": _now_iso(),
+            "schema": sim["schema"],
+            "summary": sim["summary"],
+            "decisions": sim["decisions"],
+        }
+        _append_jsonl(ws / "failover_accounting.jsonl", entry)
+        return {"status": "ok", **entry}
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+

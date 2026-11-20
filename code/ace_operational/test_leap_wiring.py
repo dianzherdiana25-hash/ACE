@@ -144,6 +144,35 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_quota_failover_sim_routes_noncritical_fallback_and_never_critical(self):
+        (self.ws / "bridge_budgets.json").write_text(
+            json.dumps({
+                "roles": {
+                    "front": {"remaining": 0, "fallback_role": "coder"},
+                    "coder": {"remaining": 2},
+                    "validator": {"remaining": 0, "fallback_role": "coder"},
+                }
+            }),
+            encoding="utf-8",
+        )
+        (self.ws / "bridge_steps.json").write_text(
+            json.dumps([
+                {"step_id": "s1", "role": "front", "critical": False, "cost": 1},
+                {"step_id": "s2", "role": "validator", "critical": True, "cost": 1},
+            ]),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_quota_failover_sim(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["summary"]["fallback_count"], 1)
+        self.assertEqual(res["summary"]["wait_count"], 1)
+        self.assertEqual(res["summary"]["critical_fallback_count"], 0)
+        self.assertTrue((self.ws / "failover_accounting.jsonl").is_file())
+
+    def test_quota_failover_sim_fails_closed_on_invalid_budgets(self):
+        (self.ws / "bridge_budgets.json").write_text("{bad", encoding="utf-8")
+        self.assertEqual(leap_wiring.step_quota_failover_sim(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()
