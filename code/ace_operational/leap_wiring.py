@@ -685,3 +685,58 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0049 — validator sitasi proposal per-fact-id
+# ------------------------------------------------------------------
+
+
+def step_citation_validator(engine: Any) -> dict[str, Any]:
+    """Validasi sitasi proposal terhadap paket observasi secara fail-closed (AG184)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from ace_operational import citation_validator
+
+        cycle = int(getattr(engine, "cycle_count", 0) or 0)
+        in_path = ws / "citation_input.json"
+        if in_path.is_file():
+            raw = json.loads(in_path.read_text(encoding="utf-8"))
+            if not isinstance(raw, dict):
+                raise ValueError("citation_input.json wajib objek JSON.")
+            packet = raw.get("packet")
+            proposals = raw.get("proposals")
+            if not isinstance(proposals, list):
+                raise ValueError("proposals wajib berupa daftar objek.")
+            exp_digest = raw.get("expected_packet_digest")
+            exp_id = str(raw.get("experiment_id") or f"cycle-{cycle}")
+        else:
+            packet = {"fact_ids": ["workspace-state", "memory-chain"]}
+            proposals = [{"id": f"prop-{cycle}", "based_on": ["workspace-state"]}]
+            exp_digest = None
+            exp_id = f"cycle-{cycle}"
+
+        report = citation_validator.validate_reply(
+            packet=packet,
+            proposals=proposals,
+            experiment_id=exp_id,
+            expected_packet_digest=exp_digest,
+        )
+        out_path = ws / "citation_validation.json"
+        _write_json(out_path, {"at": _now_iso(), "cycle": cycle, **report})
+        return {
+            "status": "ok",
+            "accepted": len(report["accepted_proposals"]),
+            "rejected": len(report["rejected_proposals"]),
+            "packet_digest": report["packet_digest"],
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

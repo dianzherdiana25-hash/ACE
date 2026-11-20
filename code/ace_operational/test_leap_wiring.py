@@ -144,6 +144,41 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_citation_validator_accepts_known_and_rejects_fabricated_fact_id(self) -> None:
+        (self.ws / "citation_input.json").write_text(
+            json.dumps(
+                {
+                    "packet": {"fact_ids": ["f1", "f2"]},
+                    "proposals": [
+                        {"id": "p-ok", "based_on": ["f1"]},
+                        {"id": "p-bad", "based_on": ["nimbus-gate"]},
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_citation_validator(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["accepted"], 1)
+        self.assertEqual(res["rejected"], 1)
+        saved = json.loads((self.ws / "citation_validation.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.citation_validation.v1")
+        self.assertEqual(saved["rejections"][0]["fact_id"], "nimbus-gate")
+
+        (self.ws / "citation_input.json").write_text(
+            json.dumps(
+                {
+                    "packet": {"fact_ids": ["f1"]},
+                    "proposals": [{"id": "p-ok", "based_on": ["f1"]}],
+                    "expected_packet_digest": "0" * 64,
+                }
+            ),
+            encoding="utf-8",
+        )
+        bad = leap_wiring.step_citation_validator(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
