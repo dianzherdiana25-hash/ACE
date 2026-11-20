@@ -18,6 +18,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 12 | `near_dup_detector.py` | Jaccard shingle eksak lintas dataset, cluster, dan kebocoran partisi |
 | 13 | `mixture_planner.py` | Minimum per tugas, apportionment berbobot, ambang skor, dan shortfall |
 | 14 | `train_runner.py` | Orkestrasi optimizer fixture dan kelanjutan pada batas checkpoint pekerjaan |
+| 15 | `hyperparam_searcher.py` | Successive halving dari receipt, reservasi kredit, dan cutoff per rung |
+| 16 | `eval_harness.py` | Protokol bersama, gerbang target/regresi, dan frontier kualitas/sumber daya |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -97,3 +99,14 @@ atau jumlah target tidak terpenuhi, report menahan rencana.
 pekerjaan selesai. Berkas checkpoint bisa diperiksa lewat
 `--checkpoint-from` dan `--expect-head`. Resume hanya mencetak record
 baru. Pekerjaan yang belum memiliki checkpoint diulang dari awal.
+
+`hyperparam_searcher.py` mengeluarkan slot trial berikutnya dari
+kebijakan terikat `--expect-policy-sha256` serta receipt yang sudah
+tersedia. Kredit adalah unit abstrak per trial. Rung parsial menahan
+eliminasi.
+
+`eval_harness.py` mengikat rencana lewat `--expect-plan-sha256`.
+Artefak dinilai dari paket bench dan guard yang masuk, dengan rubrik
+dan roster kasus tetap serta domain target dan umum yang terpisah.
+Frontier mempertahankan kandidat yang tidak dikalahkan di gabungan
+kualitas, durasi, dan peak byte. Pemeriksa tidak mengaktifkan artefak.
