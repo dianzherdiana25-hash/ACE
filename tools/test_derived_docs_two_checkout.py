@@ -6,27 +6,52 @@ import subprocess
 from tempfile import TemporaryDirectory
 import unittest
 
-from tools import program_glossary, repo_cartography, repo_index
+from tools import (
+    builder_onboarding_pack,
+    handover_decision_extractor,
+    handover_index,
+    platform_requirements_summary,
+    program_glossary,
+    repo_cartography,
+    repo_index,
+)
 
 
 GENERATORS = (
     (repo_index, "docs/REPO_INDEX.md"),
     (repo_cartography, repo_cartography.DEFAULT_OUTPUT_REL),
     (program_glossary, program_glossary.DEFAULT_OUTPUT_REL),
+    (handover_index, handover_index.DEFAULT_OUTPUT_REL),
+    (builder_onboarding_pack, builder_onboarding_pack.DEFAULT_OUTPUT_REL),
+    (platform_requirements_summary, platform_requirements_summary.DEFAULT_OUTPUT_REL),
+    (handover_decision_extractor, handover_decision_extractor.DEFAULT_OUTPUT_REL),
+)
+
+JSON_GENERATORS = (
+    repo_cartography,
+    program_glossary,
+    handover_index,
+    builder_onboarding_pack,
+    platform_requirements_summary,
+    handover_decision_extractor,
 )
 
 
 class TwoCheckoutTests(unittest.TestCase):
-    def seed(self, root, derived=b""):
+    def seed(self, root, derived=b"", remote_url="https://example.invalid/research/canonical-fixture.git"):
         root.mkdir()
         subprocess.run(["git", "-C", str(root), "init", "-q"], check=True, capture_output=True)
-        subprocess.run(["git", "-C", str(root), "remote", "add", "origin",
-                        "https://example.invalid/research/canonical-fixture.git"],
+        subprocess.run(["git", "-C", str(root), "remote", "add", "origin", remote_url],
                        check=True, capture_output=True)
-        (root / "docs").mkdir()
+        (root / "docs" / "research").mkdir(parents=True)
+        (root / "handover").mkdir()
         (root / "tools").mkdir()
-        (root / "README.md").write_text("# Program fixture\n\n**Gate**: aturan periksa bukti.\n")
-        (root / "tools" / "local_task.py").write_text('"""Pemeriksaan fixture."""\n')
+        (root / "README.md").write_text("# Program fixture\n\n**Gate**: aturan periksa bukti.\n", encoding="utf-8")
+        (root / "handover" / "GOVERNANCE_RULES_20261115.md").write_text(
+            "# Aturan Tata Kelola\n\n- Keputusan Pemilik: batas KBM Rp 100000.\n",
+            encoding="utf-8",
+        )
+        (root / "tools" / "local_task.py").write_text('"""Pemeriksaan fixture."""\n', encoding="utf-8")
         if derived is not None:
             for _, rel in GENERATORS:
                 (root / rel).write_bytes(derived)
@@ -37,21 +62,57 @@ class TwoCheckoutTests(unittest.TestCase):
         return {rel: (root / rel).read_bytes() for _, rel in GENERATORS}
 
     def test_two_checkout_outputs_and_second_round_are_identical(self):
-        temp = Path(self.enterContext(TemporaryDirectory()))
-        versions = []
-        for name in ("checkout-one-unique", "checkout-two-unique"):
-            root = temp / name
-            self.seed(root)
-            first = self.render(root)
-            hashes = {rel: hashlib.sha256(data).hexdigest() for rel, data in first.items()}
-            second = self.render(root)
-            self.assertEqual({rel: hashlib.sha256(data).hexdigest() for rel, data in second.items()}, hashes)
-            for data in second.values():
-                self.assertIn(b"canonical-fixture", data)
-                self.assertNotIn(name.encode(), data)
-                self.assertNotIn(str(root).encode(), data)
-            versions.append(second)
-        self.assertEqual(*versions)
+        self.assertEqual(len(GENERATORS), 7)
+        for remote_url in (
+            "https://example.invalid/research/canonical-fixture.git",
+            "ssh://git@example.invalid:2222/research/canonical-fixture.git?shallow=1",
+        ):
+            with self.subTest(remote_url=remote_url):
+                temp = Path(self.enterContext(TemporaryDirectory()))
+                versions = []
+                json_versions = []
+                for name in ("checkout-one-unique", "checkout-two-unique"):
+                    root = temp / name
+                    self.seed(root, remote_url=remote_url)
+                    converged, diagnosis = self.converge(root)
+                    self.assertEqual(diagnosis["status"], "converged", diagnosis)
+                    hashes = {rel: hashlib.sha256(data).hexdigest() for rel, data in converged.items()}
+                    second = self.render(root)
+                    self.assertEqual(
+                        {rel: hashlib.sha256(data).hexdigest() for rel, data in second.items()},
+                        hashes,
+                    )
+                    for rel, data in second.items():
+                        self.assertNotIn(name.encode(), data, rel)
+                        self.assertNotIn(str(root).encode(), data, rel)
+                        self.assertNotIn(b"shallow=1", data, rel)
+                    for heading_rel in (
+                        "docs/REPO_INDEX.md",
+                        repo_cartography.DEFAULT_OUTPUT_REL,
+                        program_glossary.DEFAULT_OUTPUT_REL,
+                        handover_index.DEFAULT_OUTPUT_REL,
+                        builder_onboarding_pack.DEFAULT_OUTPUT_REL,
+                    ):
+                        self.assertIn(b"canonical-fixture", second[heading_rel], heading_rel)
+
+                    json_map = {}
+                    for generator in JSON_GENERATORS:
+                        out_json = temp / f"{name}_{generator.__name__.rsplit('.', 1)[-1]}.json"
+                        self.assertEqual(
+                            generator.main(["--root", str(root), "--format", "json", "--output", str(out_json)]),
+                            0,
+                        )
+                        raw_json = out_json.read_bytes()
+                        self.assertNotIn(name.encode(), raw_json)
+                        self.assertNotIn(str(root).encode(), raw_json)
+                        payload = json.loads(raw_json)
+                        self.assertEqual(payload["repo_name"], "canonical-fixture")
+                        json_map[generator.__name__] = raw_json
+
+                    versions.append(second)
+                    json_versions.append(json_map)
+                self.assertEqual(*versions)
+                self.assertEqual(*json_versions)
 
     def snapshot(self, root):
         return {rel: (root / rel).read_bytes() for _, rel in GENERATORS if (root / rel).is_file()}
@@ -107,6 +168,7 @@ class TwoCheckoutTests(unittest.TestCase):
         self.assertGreater(report["bootstrap_rounds"], 1)
         self.assertGreater(report["refresh_rounds"], 1)
         self.assertEqual(bootstrap_changes, sorted(expected))
+        self.assertEqual(len(bootstrap_changes), 7)
         self.assertEqual(report["cross_checkout_differences"], {"bootstrap": [], "stale": []})
         self.assertEqual(bootstrapped, expected)
         self.assertEqual(refreshed, expected)

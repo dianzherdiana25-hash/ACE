@@ -19,22 +19,17 @@ import subprocess
 import sys
 from typing import Any
 
+if __package__:
+    from ._repo_name import canonical_repo_name
+else:
+    from _repo_name import canonical_repo_name
+
 HANDOVER_INDEX_SCHEMA = "ace.handover-index.v1"
 
+
 def _canonical_repo_name(root: Path) -> str:
-    """Nama repo dari URL remote git — stabil di semua nama direktori
-    checkout; jatuh ke nama direktori bila bukan repo git."""
-    try:
-        url = subprocess.run(
-            ["git", "-C", str(root), "remote", "get-url", "origin"],
-            capture_output=True, text=True, timeout=10,
-        ).stdout.strip()
-    except Exception:
-        url = ""
-    if url:
-        name = url.rstrip("/").rsplit("/", 1)[-1].rsplit(":", 1)[-1]
-        return name[:-4] if name.endswith(".git") else name
-    return root.name
+    """Nama repo dari URL remote origin via helper kanonis bersama."""
+    return canonical_repo_name(root)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 IGNORED_DIRS = frozenset({".git", "__pycache__", ".pytest_cache", ".mypy_cache", ".venv", "venv"})
