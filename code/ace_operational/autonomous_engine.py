@@ -1866,6 +1866,9 @@ class ContinuousAutonomousEngine:
                 _leap("self", leap_wiring.step_self)
             if self.cycle_count % 200 == 1:
                 _leap("organs", leap_wiring.step_organs)
+            # EVO 0042 — Kurikulum & Praktik
+            if self.cycle_count % 10 == 0:
+                _leap("occurrence_outlier_scan", leap_wiring.step_occurrence_outlier_scan)
 
         # Step 4: Periodic AST self-audit
         audit_summary: dict[str, Any] | None = None

@@ -144,6 +144,21 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_occurrence_outlier_scan_flags_high_occurrence_gap(self) -> None:
+        self._seed_gap()
+        gid = self.engine.store.list_gaps(status="OPEN")[0]["gap_id"]
+        self.engine.store._conn.execute(
+            "UPDATE gaps SET occurrence_count = 250 WHERE gap_id = ?", (gid,)
+        )
+        self.engine.store._conn.commit()
+        out = leap_wiring.step_occurrence_outlier_scan(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertGreaterEqual(out["outlier_count"], 1)
+        out_path = self.ws / "gap_outliers.jsonl"
+        self.assertTrue(out_path.is_file())
+        last = json.loads(out_path.read_text(encoding="utf-8").strip().splitlines()[-1])
+        self.assertIn(gid, last["outlier_gap_ids"])
+
 
 if __name__ == "__main__":
     unittest.main()

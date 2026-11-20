@@ -685,3 +685,37 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0042 — AG114: occurrence outlier scan over OperationalStore (%10)
+# ------------------------------------------------------------------
+
+def step_occurrence_outlier_scan(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import occurrence_outlier_scan as oos
+
+        ws = Path(engine.workspace)
+        db_path = getattr(engine.store, "db_path", None) or (ws / "ace_operational.sqlite3")
+        db_file = Path(db_path)
+        if not db_file.is_file():
+            return {"status": "skipped", "reason": "no sqlite store"}
+
+        report = oos.scan_occurrence_outliers(db_file)
+        entry = {
+            "at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "threshold": report.get("threshold"),
+            "summary": report.get("summary", {}),
+            "outlier_gap_ids": report.get("outlier_gap_ids", []),
+            "outliers": report.get("outliers", []),
+        }
+        _append_jsonl(ws / "gap_outliers.jsonl", entry)
+        return {
+            "status": "ok",
+            "gaps_scanned": entry["summary"].get("gaps_scanned", 0),
+            "outlier_count": entry["summary"].get("outlier_count", 0),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
