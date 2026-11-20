@@ -144,6 +144,32 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_failover_drill_generates_plan_only_and_computes_rto(self):
+        plan_res = leap_wiring.step_failover_drill(self.engine)
+        self.assertEqual(plan_res["status"], "ok")
+        self.assertIs(plan_res["plan_only"], True)
+        self.assertIs(plan_res["executes_shutdown"], False)
+        self.assertTrue((self.ws / "failover_drill.json").is_file())
+
+        (self.ws / "failover_timings.json").write_text(
+            json.dumps({
+                "t_trigger": "2026-11-20T01:00:00Z",
+                "t_detected": "2026-11-20T01:00:05Z",
+                "t_takeover_complete": "2026-11-20T01:00:20Z",
+                "t_health_verified": "2026-11-20T01:00:25Z",
+            }),
+            encoding="utf-8",
+        )
+        rto_res = leap_wiring.step_failover_drill(self.engine)
+        self.assertEqual(rto_res["status"], "ok")
+        self.assertEqual(rto_res["time_report"]["metrics_seconds"]["total_rto"], 25.0)
+
+    def test_failover_drill_fails_closed_on_invalid_timings(self):
+        (self.ws / "failover_timings.json").write_text(
+            json.dumps({"t_trigger": "not-a-ts"}), encoding="utf-8",
+        )
+        self.assertEqual(leap_wiring.step_failover_drill(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

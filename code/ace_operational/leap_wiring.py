@@ -685,3 +685,50 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_failover_drill(engine: Any) -> dict[str, Any]:
+    """AG158: generate deterministic plan-only failover drill artifact (never kills live procs)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import failover_drill as fd
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        cycle = int(getattr(engine, "cycle_count", 0) or 0)
+        seed = cycle if cycle > 0 else 1000
+        day_str = _now_iso()[:10]
+        plan = fd.build_failover_drill_plan(seed=seed, window_date=day_str)
+        timings_path = ws / "failover_timings.json"
+        filled_report = None
+        if timings_path.is_file():
+            timings = json.loads(timings_path.read_text(encoding="utf-8"))
+            filled_report = fd.fill_time_report(
+                plan,
+                t_trigger=timings["t_trigger"],
+                t_detected=timings["t_detected"],
+                t_takeover_complete=timings["t_takeover_complete"],
+                t_health_verified=timings["t_health_verified"],
+                operator_id=str(timings.get("operator_id") or "engine-drill"),
+                notes=str(timings.get("notes") or ""),
+            )
+        out = {
+            "status": "ok",
+            "schema": plan["schema"],
+            "plan_only": plan["plan_only"],
+            "executes_shutdown": plan["executes_shutdown"],
+            "drill_id": plan["drill_id"],
+            "seed": plan["seed"],
+            "shutdown_sequence": plan["shutdown_sequence"],
+            "takeover_checklist": plan["takeover_checklist"],
+            "time_report": filled_report or plan["time_report_template"],
+            "generated_at": _now_iso(),
+        }
+        _write_json(ws / "failover_drill.json", out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
