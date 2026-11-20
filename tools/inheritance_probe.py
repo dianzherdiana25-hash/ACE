@@ -5,12 +5,48 @@ Snapshot dan tugas ialah JSON. Tugas berupa larik objek dengan id unik.
 Runner tepercaya memakai argv JSON, token literal {snapshot} dan {tasks}
 diganti dengan path salinan fixture. Stdout runner ialah objek id → boolean.
 Dry-run membaca peta id → boolean pada field passes di setiap snapshot.
+CLI menulis manifest baru sebelum menjalankan probe. Default
+`inheritance-manifest.json` di direktori kerja. Gunakan `--verify-manifest`
+untuk mengulang dari berkas dan byte yang sama.
 """
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import subprocess
 from tempfile import TemporaryDirectory
+
+
+PROVENANCE_SCHEMA = "ace.inheritance-provenance.v1"
+
+
+def _prepare_inputs(paths):
+    inputs = {}
+    contents = {}
+    for label, path in paths.items():
+        if path is None:
+            inputs[label] = None
+            continue
+        resolved = path.resolve()
+        data = resolved.read_bytes()
+        contents[label] = data
+        inputs[label] = {"path": str(resolved), "sha256": hashlib.sha256(data).hexdigest(),
+                         "size_bytes": len(data)}
+    return {"schema": PROVENANCE_SCHEMA, "inputs": inputs}, contents
+
+
+def _verify_manifest(expected, observed):
+    if (not isinstance(expected, dict) or expected.get("schema") != PROVENANCE_SCHEMA
+            or not isinstance(expected.get("inputs"), dict)):
+        raise ValueError("Skema manifest provenance tidak sah.")
+    checked = expected["inputs"]
+    inputs = observed["inputs"]
+    if checked.keys() != inputs.keys():
+        raise ValueError("Daftar masukan manifest tidak sah.")
+    for label, current in inputs.items():
+        if checked[label] != current:
+            name = Path(current["path"]).name if current else label
+            raise ValueError(f"Manifest tidak cocok untuk {label} ({name}).")
 
 
 def _check_results(result, ids):
@@ -68,12 +104,25 @@ def main(argv=None):
     parser.add_argument("--runner-argv", type=Path)
     parser.add_argument("--timeout", type=int, default=30)
     parser.add_argument("--dry-run", action="store_true")
+    provenance = parser.add_mutually_exclusive_group()
+    provenance.add_argument("--manifest", type=Path,
+                            help="Berkas manifest baru. Default inheritance-manifest.json.")
+    provenance.add_argument("--verify-manifest", type=Path, help="Verifikasi manifest sebelum lari.")
     args = parser.parse_args(argv)
     try:
-        def read(path):
-            return json.loads(path.read_text(encoding="utf-8"))
-        runner = read(args.runner_argv) if args.runner_argv and not args.dry_run else None
-        result = compare(read(args.inherited), read(args.cold), read(args.tasks),
+        manifest, data = _prepare_inputs({
+            "inherited": args.inherited, "cold": args.cold, "tasks": args.tasks,
+            "runner_argv": args.runner_argv,
+        })
+        if args.verify_manifest:
+            _verify_manifest(json.loads(args.verify_manifest.read_bytes()), manifest)
+        inherited, cold, tasks = (json.loads(data[key]) for key in ("inherited", "cold", "tasks"))
+        runner = json.loads(data["runner_argv"]) if args.runner_argv and not args.dry_run else None
+        if not args.verify_manifest:
+            target = args.manifest or Path("inheritance-manifest.json")
+            with target.open("x", encoding="utf-8") as stream:
+                stream.write(json.dumps(manifest, sort_keys=True, indent=2) + "\n")
+        result = compare(inherited, cold, tasks,
                          dry_run=args.dry_run, runner=runner, timeout=args.timeout)
     except subprocess.SubprocessError:
         parser.exit(2, "Runner fixture gagal atau habis waktu.\n")
