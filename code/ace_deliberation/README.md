@@ -17,12 +17,22 @@ yang ada di paket ini. Angka butir mengikuti rancangan EVO 0051.
 | 10 | `steelman_generator.py` | Jalur dukungan terkuat dan pemilihan keluarga independen |
 | 11 | `minority_report.py` | Posisi, sanggahan luar kelompok, dan tanggapan dalam transcript |
 | 12 | `decision_brief.py` | Replay transcript, indeks dasar putusan, dissent, dan preseden |
+| 13 | `moderator.py` | Giliran, rujukan agenda wajib, dan tenggat inklusif |
+| 14 | `role_rotation.py` | Penugasan minimum, eligibilitas, riwayat, dan pemecah seri |
+| 15 | `anonymous_round.py` | Token per ronde, batas kuorum, dan transcript tanpa roster |
+| 16 | `expert_panel.py` | Cakupan topik, konflik, masa berlaku, kapasitas dan anggaran |
+| 17 | `conflict_mapper.py` | Jalur kepentingan bertanggal dan tumpang tindih pihak |
+| 18 | `synthesis_engine.py` | Grounded labeling, bukti diakui, serta rekomendasi atau tunda |
+| 19 | `appeal_protocol.py` | Bukti baru, review independen, dan riwayat putusan asal |
+| 20 | `emergency_decision.py` | Putusan sementara, review terikat hash, dan kedaluwarsa |
 | 21 | `quorum_engine.py` | Kelas masalah, peran, pembulatan, penarikan, dan sumber kehadiran |
+| 22 | `deliberation_scheduler.py` | Optimasi urgensi dengan tenggat dan kredit internal |
 | 23 | `forecaster.py` | Odds Bayesian, rentang skenario, dan dampak satu sumber dihapus |
+| 24 | `prediction_ledger.py` | Riwayat versi, batas ramalan, resolusi, dan checkpoint |
 | 25 | `brier_scorer.py` | Brier berpasangan, baseline laju dasar, dan kontrol urutan waktu |
 | 26 | `calibration_analyzer.py` | ECE, bin kosong, reliabilitas, dan grafik SVG |
 
-Butir tersisa pada 0051 mencakup 13–20, 22, 24, dan 27–60. Pengukuran
+Butir tersisa pada 0051 mencakup 27–60. Pengukuran
 di paket ini memakai fixture sintetis. Pasangan program dan tes yang
 tercantum dihitung bersama untuk rentang baris per kemampuan. Verifier
 ambang dan langkah integrasi berada di luar hitungan kemampuan.
