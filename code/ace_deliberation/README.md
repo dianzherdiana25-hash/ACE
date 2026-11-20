@@ -55,7 +55,12 @@ yang ada di paket ini. Angka butir mengikuti rancangan EVO 0051.
 | 47 | `question_decomposer.py` | Saksi logis, subpertanyaan berulang dan peluang bersyarat |
 | 48 | `hybrid_forecast.py` | Bobot Brier eksak, ketersediaan sumber, dan diagnosis leave-one-out |
 
-Butir tersisa pada 0051 mencakup 49–60. Pengukuran
+| 49 | `resolution_panel.py` | Rubrik terikat hash, kuorum substantif dan batas ambiguitas |
+| 50 | `decision_value.py` | Nilai harapan eksak, titik impas dan regret pada rentang peluang |
+| 51 | `bias_flagger.py` | Asosiasi kepentingan yang dideklarasikan dengan ramalan sezaman |
+| 52 | `forecast_quarterly_audit.py` | Kohort terbit UTC, Brier berpasangan dan baseline pra-triwulan |
+
+Butir tersisa pada 0051 mencakup 53–60. Pengukuran
 di paket ini memakai fixture sintetis. Pasangan program dan tes yang
 tercantum dihitung bersama untuk rentang baris per kemampuan. Verifier
 ambang dan langkah integrasi berada di luar hitungan kemampuan.
