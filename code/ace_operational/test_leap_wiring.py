@@ -144,6 +144,31 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_saturation_scan_writes_report_via_step_self_and_fails_closed(self) -> None:
+        rows = [
+            {"id": "e1", "task_kind": "code", "group": "g1", "ratified": True, "score": 92},
+            {"id": "e1", "task_kind": "code", "group": "g1", "ratified": True, "score": 95},
+            {"id": "c1", "task_kind": "code", "group": "g2", "ratified": False, "score": 48},
+            {"id": "c1", "task_kind": "code", "group": "g2", "ratified": True, "score": 71},
+        ]
+        (self.ws / "saturation_inputs.jsonl").write_text(
+            "\n".join(json.dumps(r) for r in rows) + "\n",
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_self(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["saturation"]["status"], "ok")
+        self.assertEqual(res["saturation"]["always_pass_tasks"], 1)
+        saved = json.loads((self.ws / "saturation.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["summary"]["valid_rows"], 4)
+        self.assertEqual(saved["summary"]["split_tasks"], 1)
+        self.assertEqual(saved["recommendations_by_group"]["code:g1"]["action"], "RETIRE_EASY")
+
+        (self.ws / "saturation_inputs.jsonl").write_text("{corrupt\n", encoding="utf-8")
+        bad = leap_wiring.step_saturation_scan(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()

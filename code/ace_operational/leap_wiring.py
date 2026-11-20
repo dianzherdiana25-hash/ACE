@@ -646,6 +646,7 @@ def step_self(engine: Any) -> dict[str, Any]:
         asked.extend(str(q.get("question") or q) for q in new_q)
         _write_json(asked_path, asked[-200:])
     out["curiosity_new"] = len(new_q)
+    out["saturation"] = step_saturation_scan(engine)
     return out
 
 
@@ -685,3 +686,62 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0047 — pemindaian kejenuhan tugas berkala
+# ------------------------------------------------------------------
+
+
+def step_saturation_scan(engine: Any) -> dict[str, Any]:
+    """Pindai kejenuhan pasangan tugas secara read-only & fail-closed (AG169)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import saturation_scan
+
+        candidates = [
+            ws / "saturation_inputs.jsonl",
+            ws / "eval_results.jsonl",
+            ws / "multi_organ.jsonl",
+            ws / "task_outcomes.jsonl",
+        ]
+        inputs = [p for p in candidates if p.is_file()]
+        out_path = ws / "saturation.json"
+        if not inputs:
+            payload = {
+                "at": _now_iso(),
+                "cycle": getattr(engine, "cycle_count", 0),
+                "status": "no_inputs",
+                "summary": {"valid_rows": 0, "total_tasks": 0},
+            }
+            _write_json(out_path, payload)
+            return {
+                "status": "no_inputs",
+                "report_path": str(out_path),
+                "valid_rows": 0,
+            }
+
+        report = saturation_scan.scan_saturation(inputs)
+        payload = {
+            "at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            **report,
+        }
+        _write_json(out_path, payload)
+        summary = report.get("summary") or {}
+        return {
+            "status": "ok",
+            "valid_rows": summary.get("valid_rows", 0),
+            "always_pass_tasks": summary.get("always_pass_tasks", 0),
+            "always_fail_tasks": summary.get("always_fail_tasks", 0),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+
