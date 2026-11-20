@@ -14,11 +14,28 @@ import json
 import os
 from pathlib import Path
 import re
+import subprocess
 import sys
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DECISIONS_SCHEMA = "ace.handover-decisions.v1"
+
+def _canonical_repo_name(root: Path) -> str:
+    """Nama repo dari URL remote git — stabil di semua nama direktori
+    checkout; jatuh ke nama direktori bila bukan repo git."""
+    try:
+        url = subprocess.run(
+            ["git", "-C", str(root), "remote", "get-url", "origin"],
+            capture_output=True, text=True, timeout=10,
+        ).stdout.strip()
+    except Exception:
+        url = ""
+    if url:
+        name = url.rstrip("/").rsplit("/", 1)[-1].rsplit(":", 1)[-1]
+        return name[:-4] if name.endswith(".git") else name
+    return root.name
+
 DEFAULT_OUTPUT_REL = "docs/research/ACE_HANDOVER_DECISIONS_EXTRACTED.md"
 IGNORED_DIRS = frozenset({".git", "__pycache__", ".pytest_cache", ".mypy_cache", ".venv", "venv"})
 DERIVED_DOC_NAMES = frozenset(
@@ -186,7 +203,7 @@ def extract_decisions(
     return {
         "schema": DECISIONS_SCHEMA,
         "brain_of_origin": "gravity-proposal",
-        "repo_name": root.name,
+        "repo_name": _canonical_repo_name(root),
         "summary": {
             "files_scanned": len(sources),
             "lines_scanned": lines_scanned,

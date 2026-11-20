@@ -45,7 +45,7 @@
 | `ace.autonomy.v1` | `ast_schema` | `code/ace_autonomy/core.py:54` | Skema JSON `SCHEMA` pada `code/ace_autonomy/core.py` |
 | `ace.bench-table.v1` | `ast_schema` | `tools/bench_table.py:19` | Skema JSON `BENCH_SCHEMA` pada `tools/bench_table.py` |
 | `ace.brain_registry.v1` | `ast_schema` | `code/ace_operational/brain_registry.py:27` | Skema JSON `REGISTRY_SCHEMA` pada `code/ace_operational/brain_registry.py` |
-| `ace.builder-onboarding-pack.v1` | `ast_schema` | `tools/builder_onboarding_pack.py:20` | Skema JSON `ONBOARDING_SCHEMA` pada `tools/builder_onboarding_pack.py` |
+| `ace.builder-onboarding-pack.v1` | `ast_schema` | `tools/builder_onboarding_pack.py:21` | Skema JSON `ONBOARDING_SCHEMA` pada `tools/builder_onboarding_pack.py` |
 | `ace.bundle-matrix-audit.v1` | `ast_schema` | `tools/seal_run.py:132` | Skema JSON `BUNDLE_MATRIX_SCHEMA` pada `tools/seal_run.py` |
 | `ace.candidate-census.v1` | `ast_schema` | `tools/candidate_census.py:30` | Skema JSON `CENSUS_SCHEMA` pada `tools/candidate_census.py` |
 | `ace.candidate-corpus-quality.v1` | `ast_schema` | `tools/candidate_corpus_batch.py:17` | Skema JSON `SCHEMA` pada `tools/candidate_corpus_batch.py` |
@@ -77,8 +77,8 @@
 | `ace.four-arm-report.v1` | `ast_schema` | `tools/four_arm_report.py:20` | Skema JSON `FOUR_ARM_SCHEMA` pada `tools/four_arm_report.py` |
 | `ace.frozen-corpus-registry.v1` | `ast_schema` | `tools/corpus_registry.py:21` | Skema JSON `REGISTRY_SCHEMA` pada `tools/corpus_registry.py` |
 | `ace.frozen-corpus-registry.v2` | `ast_schema` | `tools/frozen_corpus_registry.py:21` | Skema JSON `REGISTRY_V2_SCHEMA` pada `tools/frozen_corpus_registry.py` |
-| `ace.handover-decisions.v1` | `ast_schema` | `tools/handover_decision_extractor.py:21` | Skema JSON `DECISIONS_SCHEMA` pada `tools/handover_decision_extractor.py` |
-| `ace.handover-index.v1` | `ast_schema` | `tools/handover_index.py:21` | Skema JSON `HANDOVER_INDEX_SCHEMA` pada `tools/handover_index.py` |
+| `ace.handover-decisions.v1` | `ast_schema` | `tools/handover_decision_extractor.py:22` | Skema JSON `DECISIONS_SCHEMA` pada `tools/handover_decision_extractor.py` |
+| `ace.handover-index.v1` | `ast_schema` | `tools/handover_index.py:22` | Skema JSON `HANDOVER_INDEX_SCHEMA` pada `tools/handover_index.py` |
 | `ace.income-ledger.v1` | `ast_schema` | `tools/income_report.py:46` | Skema JSON `LEDGER_SCHEMA` pada `tools/income_report.py` |
 | `ace.income-verification.v1` | `ast_schema` | `tools/income_report.py:45` | Skema JSON `INCOME_SCHEMA` pada `tools/income_report.py` |
 | `ace.introspect-recall.v1` | `ast_schema` | `tools/introspect_recall.py:28` | Skema JSON `SCHEMA` pada `tools/introspect_recall.py` |
@@ -112,9 +112,9 @@
 | `ace.pattern-conflict-trace.v1` | `ast_schema` | `tools/pattern_catalog.py:25` | Skema JSON `CONFLICT_TRACE_SCHEMA` pada `tools/pattern_catalog.py` |
 | `ace.pattern-distilled.v1` | `ast_schema` | `tools/pattern_distill.py:22` | Skema JSON `DISTILL_SCHEMA` pada `tools/pattern_distill.py` |
 | `ace.periodic-self-report.v1` | `ast_schema` | `tools/periodic_self_report.py:26` | Skema JSON `SCHEMA` pada `tools/periodic_self_report.py` |
-| `ace.platform-requirements-summary.v1` | `ast_schema` | `tools/platform_requirements_summary.py:20` | Skema JSON `PLATFORM_SUMMARY_SCHEMA` pada `tools/platform_requirements_summary.py` |
+| `ace.platform-requirements-summary.v1` | `ast_schema` | `tools/platform_requirements_summary.py:21` | Skema JSON `PLATFORM_SUMMARY_SCHEMA` pada `tools/platform_requirements_summary.py` |
 | `ace.pr-pack.v1` | `ast_schema` | `tools/pr_pack.py:26` | Skema JSON `PR_PACK_SCHEMA` pada `tools/pr_pack.py` |
-| `ace.program-glossary.v1` | `ast_schema` | `tools/program_glossary.py:21` | Skema JSON `GLOSSARY_SCHEMA` pada `tools/program_glossary.py` |
+| `ace.program-glossary.v1` | `ast_schema` | `tools/program_glossary.py:22` | Skema JSON `GLOSSARY_SCHEMA` pada `tools/program_glossary.py` |
 | `ace.ram-window.v1` | `ast_schema` | `tools/ram_window.py:29` | Skema JSON `RAM_WINDOW_SCHEMA` pada `tools/ram_window.py` |
 | `ace.reasoning.xy.v1` | `ast_schema` | `code/ace_cognition/reasoning.py:17` | Skema JSON `SCHEMA` pada `code/ace_cognition/reasoning.py` |
 | `ace.register-agenda-draft.v1` | `ast_schema` | `tools/failure_to_agenda.py:27` | Skema JSON `DRAFT_SCHEMA` pada `tools/failure_to_agenda.py` |

@@ -15,11 +15,27 @@ import json
 import os
 from pathlib import Path
 import re
+import subprocess
 import sys
 from typing import Any
 
 HANDOVER_INDEX_SCHEMA = "ace.handover-index.v1"
-REPO_NAME = "ACE"  # nama kanonis repo — deterministik, tidak memakai nama direktori checkout (nama direktori membuat dokumen turunan berbeda di setiap rumah dan menggagalkan uji kesegaran)
+
+def _canonical_repo_name(root: Path) -> str:
+    """Nama repo dari URL remote git — stabil di semua nama direktori
+    checkout; jatuh ke nama direktori bila bukan repo git."""
+    try:
+        url = subprocess.run(
+            ["git", "-C", str(root), "remote", "get-url", "origin"],
+            capture_output=True, text=True, timeout=10,
+        ).stdout.strip()
+    except Exception:
+        url = ""
+    if url:
+        name = url.rstrip("/").rsplit("/", 1)[-1].rsplit(":", 1)[-1]
+        return name[:-4] if name.endswith(".git") else name
+    return root.name
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 IGNORED_DIRS = frozenset({".git", "__pycache__", ".pytest_cache", ".mypy_cache", ".venv", "venv"})
 DEFAULT_OUTPUT_REL = "docs/HANDOVER_INDEX.md"
@@ -184,7 +200,7 @@ def build_handover_index(
 
     return {
         "schema": HANDOVER_INDEX_SCHEMA,
-        "repo_name": REPO_NAME,
+        "repo_name": _canonical_repo_name(root),
         "areas_scanned": list(areas),
         "missing_areas": sorted(missing_areas),
         "summary": {

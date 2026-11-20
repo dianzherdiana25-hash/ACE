@@ -13,11 +13,28 @@ import json
 import os
 from pathlib import Path
 import re
+import subprocess
 import sys
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 ONBOARDING_SCHEMA = "ace.builder-onboarding-pack.v1"
+
+def _canonical_repo_name(root: Path) -> str:
+    """Nama repo dari URL remote git — stabil di semua nama direktori
+    checkout; jatuh ke nama direktori bila bukan repo git."""
+    try:
+        url = subprocess.run(
+            ["git", "-C", str(root), "remote", "get-url", "origin"],
+            capture_output=True, text=True, timeout=10,
+        ).stdout.strip()
+    except Exception:
+        url = ""
+    if url:
+        name = url.rstrip("/").rsplit("/", 1)[-1].rsplit(":", 1)[-1]
+        return name[:-4] if name.endswith(".git") else name
+    return root.name
+
 DEFAULT_OUTPUT_REL = "docs/BUILDER_ONBOARDING_PACK.md"
 
 CONTRACT_REFERENCES: tuple[tuple[str, str], ...] = (
@@ -171,7 +188,7 @@ def build_onboarding_pack(repo_root: Path) -> dict[str, Any]:
     upstream = _check_upstream_manifest_ro(root)
     return {
         "schema": ONBOARDING_SCHEMA,
-        "repo_name": root.name,
+        "repo_name": _canonical_repo_name(root),
         "summary": {
             "contracts_present": present_contracts,
             "contracts_total": len(contracts),

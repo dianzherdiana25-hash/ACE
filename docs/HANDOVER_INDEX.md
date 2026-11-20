@@ -7,7 +7,7 @@
 - Schema: `ace.handover-index.v1`
 - Total berkas terindeks: **432** (`handover/`: **159**, `docs/`: **273**)
 - Total baris teks UTF-8: **81882**
-- Total ukuran: **4791167** byte
+- Total ukuran: **4791153** byte
 - Symlink dilewati: **0**
 
 ### Distribusi Kategori
@@ -235,14 +235,14 @@
 | `docs/AKTIVASI_SELF_SEND.md` | `reference_doc` | 57 | 2599 | `5b4c53fcf022` | Aktivasi Self-Send ACE (khusus operator) |
 | `docs/ARSITEKTUR_ENGINE.md` | `reference_doc` | 145 | 12430 | `8a0c17b62b05` | Arsitektur engine ACE |
 | `docs/AUDIT_REMEDIATION_STATUS.md` | `audit_accounting` | 61 | 4154 | `d81457b60b88` | Audit remediation status |
-| `docs/BUILDER_ONBOARDING_PACK.md` | `reference_doc` | 66 | 3743 | `11118c1f0bdd` | Paket Onboarding Kontributor Builder ACE — merge-antigravity |
+| `docs/BUILDER_ONBOARDING_PACK.md` | `reference_doc` | 66 | 3729 | `953a948a60c3` | Paket Onboarding Kontributor Builder ACE — ACE |
 | `docs/COMPOSITION_PROTOCOL_V03.md` | `reference_doc` | 48 | 3244 | `1f880488514f` | ACE v0.3: counterexample-triggered representation composition |
 | `docs/COMPOSITION_PROTOCOL_V031.md` | `reference_doc` | 14 | 889 | `809ede373ab8` | Protocol feasibility amendment v0.3.1 |
 | `docs/COMPOSITION_RESULTS_V03.md` | `reference_doc` | 84 | 5178 | `808029e06d80` | ACE v0.3 — learned counter/guard composition |
 | `docs/DOCS_INDEX_MAINTENANCE_20261119.md` | `reference_doc` | 28 | 1980 | `bab2a8c0f519` | Pemeliharaan Indeks Dokumen — 2026-11-19 (E8) |
 | `docs/LAPORAN_HASIL_RISET_HP.md` | `reference_doc` | 63 | 5202 | `4e5fe567d704` | 📱 Laporan Hasil Riset ACE (Terbaca di Layar HP) |
 | `docs/PRD_ACE_v0.1.md` | `reference_doc` | 190 | 18816 | `03887aef928b` | PRODUCT REQUIREMENTS DOCUMENT (PRD) |
-| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54660 | `1e9c8c48e877` | Glosarium Istilah Teknis ACE — ACE |
+| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54660 | `ea4bbccae099` | Glosarium Istilah Teknis ACE — ACE |
 | `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23833 | `a7bb0701b6cf` | Kartografi Repositori ACE — ACE |
 | `docs/REPO_INDEX.md` | `reference_doc` | 3488 | 287545 | `f5692e6418b5` | Indeks Repositori — ACE |
 | `docs/SENSUS_KANDIDAT.json` | `manifest_json` | 837 | 23986 | `94922b9f71e0` | schema: ace.candidate-census.v1 |
