@@ -16,6 +16,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 10 | `brain_bench.py` | Perbandingan kualitas dan sumber daya, hash artefak, dan diagnosis per kasus |
 | 11 | `data_quality_scorer.py` | Rubrik mekanis berbobot, status unscored, dan contoh berkustodi |
 | 12 | `near_dup_detector.py` | Jaccard shingle eksak lintas dataset, cluster, dan kebocoran partisi |
+| 13 | `mixture_planner.py` | Minimum per tugas, apportionment berbobot, ambang skor, dan shortfall |
+| 14 | `train_runner.py` | Orkestrasi optimizer fixture dan kelanjutan pada batas checkpoint pekerjaan |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -84,3 +86,14 @@ Rujukan, skor, serta blocker keluar per baris. `near_dup_detector.py`
 mencari pasangan lintas dataset, dengan irisan partisi train/held-out
 ditandai dan daftar cluster transitif tetap membawa anggota bersumber.
 Ambang Jaccard bersifat leksikal dan tidak menilai kesetaraan semantik.
+
+`mixture_planner.py` mengambil baris skor yang diproyeksikan ke ID,
+jenis tugas, partisi, status, skor dan rujukan bukti. Kebijakan target
+serta stok kandidat diikat dengan `--expect-input-sha256`. Bila minimum
+atau jumlah target tidak terpenuhi, report menahan rencana.
+
+`train_runner.py` memakai rencana dan bundel resep numerik terikat
+`--expect-plan-sha256`. Program mencetak checkpoint JSONL ketika tiap
+pekerjaan selesai. Berkas checkpoint bisa diperiksa lewat
+`--checkpoint-from` dan `--expect-head`. Resume hanya mencetak record
+baru. Pekerjaan yang belum memiliki checkpoint diulang dari awal.
