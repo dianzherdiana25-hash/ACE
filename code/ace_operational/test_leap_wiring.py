@@ -144,6 +144,29 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_brain_registry_snapshots_active_dismissed_and_empty(self):
+        res_empty = leap_wiring.step_brain_registry(self.engine)
+        self.assertEqual(res_empty["status"], "ok")
+        self.assertFalse(res_empty["registry_present"])
+        self.assertEqual(res_empty["brain_count"], 0)
+
+        from ace_operational.brain_registry import BrainRegistry
+        reg = BrainRegistry(self.ws / "brain_registry.json")
+        reg.register("b-front", kind="local", descriptor="Qwen3-8B", status="active")
+        reg.register("b-ext", kind="bridge", descriptor="gemini", status="declared-unavailable")
+        reg.dismiss("b-ext", reason="policy_test")
+
+        res = leap_wiring.step_brain_registry(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertTrue(res["registry_present"])
+        self.assertEqual(res["brain_count"], 2)
+        self.assertEqual(res["by_status"], {"active": 1, "dismissed": 1})
+        self.assertTrue((self.ws / "brain_registry_snapshot.json").is_file())
+
+    def test_brain_registry_fails_closed_on_corrupt_json(self):
+        (self.ws / "brain_registry.json").write_text("{corrupt", encoding="utf-8")
+        self.assertEqual(leap_wiring.step_brain_registry(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

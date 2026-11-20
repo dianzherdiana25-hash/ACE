@@ -685,3 +685,44 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_brain_registry(engine: Any) -> dict[str, Any]:
+    """AG151: snapshot multi-brain registry state and event counts cleanly."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from collections import Counter
+        from ace_operational.brain_registry import BrainRegistry, REGISTRY_SCHEMA
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        reg_path = ws / "brain_registry.json"
+        reg = BrainRegistry(reg_path)
+        brains = reg.brains()
+        events = reg.events()
+        counts = dict(sorted(Counter(str(b.get("status") or "unknown") for b in brains).items()))
+        out = {
+            "status": "ok",
+            "schema": REGISTRY_SCHEMA,
+            "registry_present": reg_path.is_file(),
+            "brain_count": len(brains),
+            "event_count": len(events),
+            "by_status": counts,
+            "brains": [
+                {
+                    "brain_id": b.get("brain_id"),
+                    "kind": b.get("kind"),
+                    "status": b.get("status"),
+                }
+                for b in brains
+            ],
+            "checked_at": _now_iso(),
+        }
+        _write_json(ws / "brain_registry_snapshot.json", out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
