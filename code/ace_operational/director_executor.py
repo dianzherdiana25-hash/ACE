@@ -35,8 +35,21 @@ def _read_receipts(stream):
     started = {}
     pending = set()
     stream.seek(0)
-    for line in stream:
-        record = json.loads(line)
+    lines = stream.readlines()
+    for index, line in enumerate(lines):
+        is_last = index == len(lines) - 1
+        if is_last and not line.endswith("\n"):
+            pending.add("<torn_receipt>")
+            break
+        try:
+            record = json.loads(line)
+        except json.JSONDecodeError:
+            if is_last:
+                pending.add("<torn_receipt>")
+                break
+            raise
+        if not isinstance(record, dict):
+            raise ValueError("receipt invalid")
         task_id, timestamp, status = record["task_id"], record["at"], record["status"]
         instant = datetime.fromisoformat(timestamp)
         if instant.tzinfo is None or not isinstance(task_id, str) or not task_id:
