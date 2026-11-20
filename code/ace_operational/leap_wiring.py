@@ -685,3 +685,42 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0043 — AG124: AIMD daily cap accounting over director receipts (%25)
+# ------------------------------------------------------------------
+
+def step_director_cap_simulator(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import director_cap_simulator as dcs
+
+        ws = Path(engine.workspace)
+        events: list[dict[str, Any]] = []
+        malformed: list[dict[str, Any]] = []
+        for fname in ("director_exec_receipts.jsonl", "director_exec_a2_receipts.jsonl"):
+            p = ws / fname
+            if p.is_file():
+                ev, bad = dcs.load_receipt_events(p)
+                events.extend(ev)
+                malformed.extend(bad)
+
+        sim = dcs.simulate_daily_caps(events)
+        payload = {
+            "status": "ok",
+            "generated_at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "malformed_lines": len(malformed),
+            **sim,
+        }
+        _write_json(ws / "director_cap_accounting.json", payload)
+        summary = sim.get("summary") or {}
+        return {
+            "status": "ok",
+            "final_cap": summary.get("final_cap"),
+            "days_replayed": summary.get("days_replayed"),
+            "malformed_lines": len(malformed),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+

@@ -144,6 +144,21 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_director_cap_simulator_accounts_receipts(self) -> None:
+        (self.ws / "director_exec_receipts.jsonl").write_text(
+            "\n".join([
+                json.dumps({"status": "completed", "task_id": "t1", "at": "2026-11-18T01:00:00Z"}),
+                json.dumps({"status": "completed", "task_id": "t2", "at": "2026-11-18T02:00:00Z"}),
+                '{"status": "torn',
+            ]) + "\n",
+            encoding="utf-8",
+        )
+        out = leap_wiring.step_director_cap_simulator(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["final_cap"], 3)
+        self.assertEqual(out["malformed_lines"], 1)
+        self.assertTrue((self.ws / "director_cap_accounting.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()
