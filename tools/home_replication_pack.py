@@ -281,6 +281,190 @@ def compare_homes(
     }
 
 
+MERGE_PLAN_SCHEMA = "ace.home-replication-merge-plan.v1"
+
+
+def build_merge_plan(
+    left: Path | Mapping[str, Any],
+    right: Path | Mapping[str, Any],
+    *,
+    left_name: str = "home_a",
+    right_name: str = "home_b",
+) -> dict[str, Any]:
+    """Bangun RENCANA gabung dua rumah/manifes (tabel lease, urutan salin, konflik) tanpa menyalin apa pun."""
+    m_left = _as_manifest(left)
+    m_right = _as_manifest(right)
+    cmp_rep = compare_homes(m_left, m_right)
+
+    left_files: Mapping[str, Mapping[str, Any]] = m_left.get("files", {})
+    right_files: Mapping[str, Mapping[str, Any]] = m_right.get("files", {})
+    left_recs: Mapping[str, Mapping[str, str]] = m_left.get("records", {})
+    right_recs: Mapping[str, Mapping[str, str]] = m_right.get("records", {})
+
+    lease_table: list[dict[str, Any]] = []
+    copy_sequence: list[dict[str, Any]] = []
+    conflicts_requiring_decision: list[dict[str, Any]] = []
+
+    # 1. File unik (hanya di left atau hanya di right) + entri lease per rekaman file tersebut.
+    for rel in cmp_rep["files"]["missing_on_target"]:
+        copy_sequence.append(
+            {
+                "step": len(copy_sequence) + 1,
+                "kind": "copy_file",
+                "file": rel,
+                "from_home": left_name,
+                "to_home": right_name,
+                "sha256": str(left_files[rel]["sha256"]),
+            }
+        )
+        for rid, digest in sorted(left_recs.get(rel, {}).items()):
+            lease_table.append(
+                {
+                    "file": rel,
+                    "record_id": rid,
+                    "writer_lease": left_name,
+                    "status": "unique_left",
+                    "action": f"copy_{left_name}_to_{right_name}",
+                    "sha256": digest,
+                }
+            )
+
+    for rel in cmp_rep["files"]["extra_on_target"]:
+        copy_sequence.append(
+            {
+                "step": len(copy_sequence) + 1,
+                "kind": "copy_file",
+                "file": rel,
+                "from_home": right_name,
+                "to_home": left_name,
+                "sha256": str(right_files[rel]["sha256"]),
+            }
+        )
+        for rid, digest in sorted(right_recs.get(rel, {}).items()):
+            lease_table.append(
+                {
+                    "file": rel,
+                    "record_id": rid,
+                    "writer_lease": right_name,
+                    "status": "unique_right",
+                    "action": f"copy_{right_name}_to_{left_name}",
+                    "sha256": digest,
+                }
+            )
+
+    # 2. Rekaman pada file bersama.
+    for row in cmp_rep["records"]["matching"]:
+        lease_table.append(
+            {
+                "file": row["file"],
+                "record_id": row["record_id"],
+                "writer_lease": "shared_synced",
+                "status": "identical",
+                "action": "no_op",
+                "sha256": row["sha256"],
+            }
+        )
+
+    for row in cmp_rep["records"]["missing_on_target"]:
+        rel, rid = row["file"], row["record_id"]
+        digest = str(left_recs.get(rel, {}).get(rid, ""))
+        lease_table.append(
+            {
+                "file": rel,
+                "record_id": rid,
+                "writer_lease": left_name,
+                "status": "unique_left",
+                "action": f"copy_{left_name}_to_{right_name}",
+                "sha256": digest,
+            }
+        )
+        copy_sequence.append(
+            {
+                "step": len(copy_sequence) + 1,
+                "kind": "copy_record",
+                "file": rel,
+                "record_id": rid,
+                "from_home": left_name,
+                "to_home": right_name,
+                "sha256": digest,
+            }
+        )
+
+    for row in cmp_rep["records"]["extra_on_target"]:
+        rel, rid = row["file"], row["record_id"]
+        digest = str(right_recs.get(rel, {}).get(rid, ""))
+        lease_table.append(
+            {
+                "file": rel,
+                "record_id": rid,
+                "writer_lease": right_name,
+                "status": "unique_right",
+                "action": f"copy_{right_name}_to_{left_name}",
+                "sha256": digest,
+            }
+        )
+        copy_sequence.append(
+            {
+                "step": len(copy_sequence) + 1,
+                "kind": "copy_record",
+                "file": rel,
+                "record_id": rid,
+                "from_home": right_name,
+                "to_home": left_name,
+                "sha256": digest,
+            }
+        )
+
+    for row in cmp_rep["records"]["conflicts"]:
+        rel, rid = row["file"], row["record_id"]
+        lease_table.append(
+            {
+                "file": rel,
+                "record_id": rid,
+                "writer_lease": "HELD_PENDING_OPERATOR_DECISION",
+                "status": "conflict",
+                "action": "require_decision",
+                "left_sha256": row["source_sha256"],
+                "right_sha256": row["target_sha256"],
+            }
+        )
+        conflicts_requiring_decision.append(
+            {
+                "file": rel,
+                "record_id": rid,
+                "left_home": left_name,
+                "right_home": right_name,
+                "left_sha256": row["source_sha256"],
+                "right_sha256": row["target_sha256"],
+                "held": True,
+                "resolution_options": [
+                    f"keep_{left_name}",
+                    f"keep_{right_name}",
+                    "manual_merge",
+                ],
+            }
+        )
+
+    lease_table.sort(key=lambda r: (r["file"], r["record_id"]))
+
+    return {
+        "schema": MERGE_PLAN_SCHEMA,
+        "plan_only": True,
+        "executed_copy": False,
+        "left_home": left_name,
+        "right_home": right_name,
+        "summary": {
+            "lease_entry_count": len(lease_table),
+            "copy_step_count": len(copy_sequence),
+            "conflict_decision_count": len(conflicts_requiring_decision),
+            "clean_auto_merge": len(conflicts_requiring_decision) == 0,
+        },
+        "lease_table": lease_table,
+        "copy_sequence": copy_sequence,
+        "conflicts_requiring_decision": conflicts_requiring_decision,
+    }
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Bangun manifest replikasi dan bandingkan dua rumah ACE secara read-only."
@@ -296,12 +480,26 @@ def main(argv: Sequence[str] | None = None) -> int:
     p_cmp.add_argument("--target", required=True, help="Direktori atau JSON manifest rumah B.")
     p_cmp.add_argument("--out", help="Path output JSON opsional (default stdout).")
 
+    p_plan = sub.add_parser("merge-plan", help="Bangun RENCANA gabung (lease + urutan salin + konflik) tanpa menyalin.")
+    p_plan.add_argument("--left", required=True, help="Direktori atau JSON manifest rumah kiri.")
+    p_plan.add_argument("--right", required=True, help="Direktori atau JSON manifest rumah kanan.")
+    p_plan.add_argument("--left-name", default="home_a")
+    p_plan.add_argument("--right-name", default="home_b")
+    p_plan.add_argument("--out", help="Path output JSON opsional (default stdout).")
+
     args = parser.parse_args(argv)
     try:
         if args.cmd == "manifest":
             result = build_replication_manifest(Path(args.home))
-        else:
+        elif args.cmd == "compare":
             result = compare_homes(Path(args.source), Path(args.target))
+        else:
+            result = build_merge_plan(
+                Path(args.left),
+                Path(args.right),
+                left_name=args.left_name,
+                right_name=args.right_name,
+            )
     except (OSError, json.JSONDecodeError, sqlite3.Error, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
