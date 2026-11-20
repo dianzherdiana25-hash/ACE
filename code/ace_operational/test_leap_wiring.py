@@ -144,6 +144,34 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_owner_benchmark_writes_report_and_scores_workspace_pack(self) -> None:
+        pack_lines = [
+            {"kind": "pack_meta", "pack_id": "owner-test", "pack_version": "2026.11-v1"},
+            {"id": "c1", "domain": "code", "prompt": "LIFO?", "evaluator": {"kind": "exact_match", "expected": "stack"}},
+            {"id": "l1", "domain": "language", "prompt": "Konfiks?", "evaluator": {"kind": "exact_match", "expected": "pe-an"}},
+        ]
+        (self.ws / "owner_benchmark_pack.jsonl").write_text(
+            "".join(json.dumps(r) + "\n" for r in pack_lines),
+            encoding="utf-8",
+        )
+        (self.ws / "owner_benchmark_answers.json").write_text(
+            json.dumps({"c1": "stack", "l1": "salah"}),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_owner_benchmark(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["passed_tasks"], 1)
+        self.assertEqual(res["total_tasks"], 2)
+        saved = json.loads((self.ws / "owner_benchmark.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["sealed_pack"]["pack_id"], "owner-test")
+        self.assertEqual(saved["summary"]["pass_rate"], 0.5)
+
+    def test_owner_benchmark_fails_closed_on_corrupt_pack(self) -> None:
+        (self.ws / "owner_benchmark_pack.jsonl").write_text("{corrupt\n", encoding="utf-8")
+        res = leap_wiring.step_owner_benchmark(self.engine)
+        self.assertEqual(res["status"], "skipped")
+        self.assertIn("error", res)
+
 
 if __name__ == "__main__":
     unittest.main()

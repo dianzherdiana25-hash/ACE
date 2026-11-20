@@ -685,3 +685,89 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0047 — tolok ukur pemilik periodik
+# ------------------------------------------------------------------
+
+
+def step_owner_benchmark(engine: Any) -> dict[str, Any]:
+    """Jalankan tolok ukur pemilik tersegel secara fail-closed (AG167)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import owner_benchmark
+
+        pack_path = ws / "owner_benchmark_pack.jsonl"
+        answers_path = ws / "owner_benchmark_answers.json"
+
+        if pack_path.is_file():
+            meta, tasks = owner_benchmark.load_benchmark_pack(pack_path)
+            source = "workspace_pack"
+        else:
+            meta = {
+                "pack_id": "owner-core-default",
+                "pack_version": "v1",
+                "pack_sha256": "",
+            }
+            tasks = [
+                {
+                    "id": "code-1",
+                    "domain": "code",
+                    "prompt": "Struktur data LIFO dasar.",
+                    "evaluator": {"kind": "exact_match", "expected": "stack"},
+                },
+                {
+                    "id": "lang-1",
+                    "domain": "language",
+                    "prompt": "Konfiks nomina abstrak dari kerja.",
+                    "evaluator": {"kind": "exact_match", "expected": "pe-an"},
+                },
+                {
+                    "id": "ops-1",
+                    "domain": "ops",
+                    "prompt": "Batas cap eksekutor kelas A.",
+                    "evaluator": {"kind": "numeric_tolerance", "expected": 3, "tolerance": 0.0},
+                },
+            ]
+            source = "default_mini"
+
+        ans = _read_json(answers_path, {}) if answers_path.is_file() else {}
+        if not isinstance(ans, dict):
+            ans = {}
+
+        report = owner_benchmark.run_benchmark(
+            tasks,
+            lambda t: str(ans.get(t["id"], "")),
+            pack_id=str(meta.get("pack_id") or "owner-core"),
+            pack_version=str(meta.get("pack_version") or "v1"),
+            pack_sha256=str(meta.get("pack_sha256") or ""),
+            seed=int(getattr(engine, "cycle_count", 0) or 0),
+            solver_id="workspace-answers",
+        )
+        out_path = ws / "owner_benchmark.json"
+        payload = {
+            "at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "source": source,
+            **report,
+        }
+        _write_json(out_path, payload)
+        summary = report.get("summary") or {}
+        return {
+            "status": "ok",
+            "source": source,
+            "total_tasks": summary.get("total_tasks", 0),
+            "passed_tasks": summary.get("passed_tasks", 0),
+            "pass_rate": summary.get("pass_rate", 0.0),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+
