@@ -14,11 +14,18 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+import sys
 from tempfile import TemporaryDirectory
 import threading
 import time
 import unittest
 from unittest import mock
+
+# Gate ace_operational berjalan dari code/ tanpa akar repo di
+# sys.path; sisipkan agar impor tools.* sah di kedua konvensi lari.
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 
 from ace_operational import brain_bridge_relay as relay
 from tools.bridge_relay import enqueue_spool

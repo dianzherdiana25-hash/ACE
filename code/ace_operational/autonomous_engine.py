@@ -1710,6 +1710,10 @@ class ContinuousAutonomousEngine:
                 {"id": item["deliverable_id"], "status": item["status"]}
                 for item in self.store.list_deliverables()
             ],
+            memory_facts=(
+                [{"receipt_context": self._director_context_block}]
+                if getattr(self, "_director_context_block", None) else None
+            ),
         )
         origin = ""
 
@@ -1820,6 +1824,33 @@ class ContinuousAutonomousEngine:
             except Exception as exc:
                 director_exec_res = {"status": "error", "error": type(exc).__name__}
 
+        # Step 3d: Wiring lompatan EVO 0031–0040 — env-gated
+        # ACE_LEAPS; tiap step fail-closed per pola Step 3c, dengan
+        # throttle per step agar biaya siklus tetap kecil.
+        leaps_res: dict[str, Any] = {}
+        if os.environ.get("ACE_LEAPS") == "1":
+            from ace_operational import leap_wiring
+
+            def _leap(name: str, fn: Any) -> None:
+                try:
+                    leaps_res[name] = fn(self)
+                except Exception as exc:
+                    leaps_res[name] = {"status": "error",
+                                       "error": type(exc).__name__}
+
+            self.update_status_file("leap_steps")
+            _leap("checkpoint", leap_wiring.step_checkpoint)
+            _leap("house", leap_wiring.step_house)
+            _leap("director", leap_wiring.step_director)
+            _leap("practice", leap_wiring.step_practice)
+            _leap("projects", leap_wiring.step_projects)
+            if self.cycle_count % 10 == 0:
+                _leap("recall", leap_wiring.step_recall)
+            if self.cycle_count % 25 == 0:
+                _leap("self", leap_wiring.step_self)
+            if self.cycle_count % 200 == 1:
+                _leap("organs", leap_wiring.step_organs)
+
         # Step 4: Periodic AST self-audit
         audit_summary: dict[str, Any] | None = None
         if self.cycle_count % 10 == 0:
@@ -1845,6 +1876,8 @@ class ContinuousAutonomousEngine:
             summary["director"] = director_res
         if director_exec_res is not None:
             summary["director_execution"] = director_exec_res
+        if leaps_res:
+            summary["leaps"] = leaps_res
         slowest_name, slowest_seconds = max(step_durations, key=lambda step: step[1])
         self._last_cycle_duration_seconds = time.monotonic() - cycle_started_at
         self._slowest_step = {"name": slowest_name, "seconds": slowest_seconds}

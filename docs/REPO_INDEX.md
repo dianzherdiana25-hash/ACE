@@ -2,8 +2,8 @@
 
 - Schema: `ace.repo-index.v1`
 - Total direktori: 205
-- Total berkas: 2338
-- Total modul Python: 1124
+- Total berkas: 2341
+- Total modul Python: 1127
 
 ## Daftar Berkas per Direktori
 
@@ -397,7 +397,7 @@
 - `test_neural_guided_search.py` (python)
 - `test_sketch_synthesizer.py` (python)
 
-### `code/ace_operational` (240 berkas)
+### `code/ace_operational` (242 berkas)
 - `__init__.py` (python)
 - `abc_v3_scorer.py` (python)
 - `abstraction_engine.py` (python)
@@ -450,6 +450,7 @@
 - `house_model.py` (python)
 - `hypothesis_book.py` (python)
 - `language.py` (python)
+- `leap_wiring.py` (python)
 - `lexical_ops.py` (python)
 - `local_repo_workflow.py` (python)
 - `local_sandbox.py` (python)
@@ -572,6 +573,7 @@
 - `test_house_model.py` (python)
 - `test_hybrid_routing.py` (python)
 - `test_hypothesis_book.py` (python)
+- `test_leap_wiring.py` (python)
 - `test_lexical_ops.py` (python)
 - `test_lineage_guard_default.py` (python)
 - `test_local_repo_workflow.py` (python)
@@ -2315,7 +2317,7 @@
 - `test_sandbox_ast_gate.py` (python)
 - `test_zero_cost_governance.py` (python)
 
-### `tools` (429 berkas)
+### `tools` (430 berkas)
 - `FUZZ_STANDARD.md` (docs)
 - `__init__.py` (python)
 - `_director_sources.py` (python)
@@ -2671,6 +2673,7 @@
 - `test_recall_ablation_sqlite.py` (python)
 - `test_recall_anchor_audit.py` (python)
 - `test_recall_delivery_probe.py` (python)
+- `test_recall_pool_cleanup.py` (python)
 - `test_recall_precision_probe.py` (python)
 - `test_receipt_chain_verify.py` (python)
 - `test_redteam_rotation.py` (python)
@@ -2979,7 +2982,7 @@
 | `ace_operational.abstraction_engine` | `code/ace_operational/abstraction_engine.py` | E4 Cross-Family AST & Operator Macro Abstraction Engine (Wake-Sleep Compression). | `ace_operational.lexical_ops`, `ace_operational.operator_discovery` |
 | `ace_operational.admission_hygiene` | `code/ace_operational/admission_hygiene.py` | Admission hygiene, Pareto parsimony, and non-regression controls for ACE discovery. | `ace_operational.abc_v3_scorer`, `ace_operational.distractor_inoculation`, `ace_operational.operator_discovery` |
 | `ace_operational.attested_server` | `code/ace_operational/attested_server.py` | Harness-attested local inference servers (Phase 2, stage E). | - |
-| `ace_operational.autonomous_engine` | `code/ace_operational/autonomous_engine.py` | Autonomous Engine Daemon for ACE Edition 4 (Continuous OAIE & Language Learning Loop). | `ace_indo_nlp.morphology`, `ace_operational.autonomy_loop`, `ace_operational.brain_endpoints`, `ace_operational.coding_loop`, `ace_operational.curriculum_wave2`, `ace_operational.director_execution`, `ace_operational.director_loop`, `ace_operational.director_strong`, `ace_operational.memory_snapshot`, `ace_operational.memory_writeback`, `ace_operational.models_backend`, `ace_operational.ratification_loop`, `ace_operational.self_evolution_engine`, `ace_operational.speech_acquisition`, `ace_operational.store` |
+| `ace_operational.autonomous_engine` | `code/ace_operational/autonomous_engine.py` | Autonomous Engine Daemon for ACE Edition 4 (Continuous OAIE & Language Learning Loop). | `ace_indo_nlp.morphology`, `ace_operational.autonomy_loop`, `ace_operational.brain_endpoints`, `ace_operational.coding_loop`, `ace_operational.curriculum_wave2`, `ace_operational.director_execution`, `ace_operational.director_loop`, `ace_operational.director_strong`, `ace_operational.leap_wiring`, `ace_operational.memory_snapshot`, `ace_operational.memory_writeback`, `ace_operational.models_backend`, `ace_operational.ratification_loop`, `ace_operational.self_evolution_engine`, `ace_operational.speech_acquisition`, `ace_operational.store` |
 | `ace_operational.autonomous_evolver` | `code/ace_operational/autonomous_evolver.py` | Unified Zero-Theater Autonomous Evolver uniting formal synthesis, co-evolution, | `ace_component_synthesis.component_synthesizer`, `ace_operational.causal_repo_evolution`, `ace_operational.coevolution_arena`, `ace_operational.compositional_oaie`, `ace_operational.evolution_mission_loop`, `ace_operational.local_repo_workflow`, `ace_operational.neuro_formal_genesis`, `ace_operational.oaie_unlimited`, `ace_operational.ontological_godel_engine`, `ace_operational.sovereign_runtime` |
 | `ace_operational.autonomy_loop` | `code/ace_operational/autonomy_loop.py` | Gap Discovery, Capability Frontier, AI Worker Orchestration, Learning Loop, and Anti-Stagnation (Appendices AA, AB). | `ace_mission.bus`, `ace_operational`, `ace_operational.coding_loop`, `ace_operational.language`, `ace_operational.models_backend`, `ace_operational.store`, `ace_operational.web_server`, `ace_self_dev.stagnation_detector` |
 | `ace_operational.b2a_market` | `code/ace_operational/b2a_market.py` | Uji B2A-01 — ACE as a machine customer (B2A economics test). | - |
@@ -3024,6 +3027,7 @@
 | `ace_operational.house_model` | `code/ace_operational/house_model.py` | Pembangun model dunia rumah ACE dari telemetri JSON dengan aturan kebaruan (AG76). | - |
 | `ace_operational.hypothesis_book` | `code/ace_operational/hypothesis_book.py` | Buku registri hipotesis terstruktur dengan transisi status ketat (AG94). | - |
 | `ace_operational.language` | `code/ace_operational/language.py` | Indonesian Conversational Intake, Intent Frame Classifier, and Dialogue Controller (Sections 10-12, Appendix A). | `ace_operational.autonomy_loop`, `ace_operational.coding_loop`, `ace_operational.memory_bridge`, `ace_operational.memory_snapshot`, `ace_operational.models_backend`, `ace_operational.speech_acquisition`, `ace_operational.store` |
+| `ace_operational.leap_wiring` | `code/ace_operational/leap_wiring.py` | Wiring live lompatan EVO 0031–0040 ke siklus engine. | `ace_operational.brain_endpoints`, `ace_operational.director_receipt_context`, `ace_operational.evolution_proposals`, `ace_operational.house_model`, `ace_operational.hypothesis_book`, `ace_operational.memory_consolidation`, `ace_operational.practice_scheduler`, `ace_operational.project_layer`, `ace_operational.recall_candidates`, `ace_operational.recall_reranker`, `ace_operational.self_model`, `ace_operational.step_checkpoint`, `tools.curiosity_questions`, `tools.cycle_planner_sim`, `tools.director_challenger`, `tools.director_fold`, `tools.execution_invariants`, `tools.failure_taskgen`, `tools.incident_book`, `tools.organ_smoke`, `tools.regression_probe` |
 | `ace_operational.lexical_ops` | `code/ace_operational/lexical_ops.py` | Lexical, method, wrapper, and argument AST operators for multi-family discovery. | `ace_operational.curriculum_lab`, `ace_operational.operator_discovery`, `ace_operational.reasoning_lab` |
 | `ace_operational.local_repo_workflow` | `code/ace_operational/local_repo_workflow.py` | Bounded local-model repo repair, composed from ACE's existing components. | `ace_code_agent.repo_retrieval`, `ace_operational.coding_loop`, `ace_operational.local_sandbox`, `ace_operational.local_sandbox_v2`, `ace_operational.models_backend`, `ace_operational.store` |
 | `ace_operational.local_sandbox` | `code/ace_operational/local_sandbox.py` | Least-privilege local Python test runner for experimental code candidates. | - |
@@ -3144,6 +3148,7 @@
 | `ace_operational.test_house_model` | `code/ace_operational/test_house_model.py` | Tes tiga keadaan model dunia rumah + aturan kebaruan telemetri (AG76). | `ace_operational.house_model` |
 | `ace_operational.test_hybrid_routing` | `code/ace_operational/test_hybrid_routing.py` | Unit tests for Dynamic Hybrid Routing in ModelRouter. | `ace_operational.models_backend`, `ace_operational.store` |
 | `ace_operational.test_hypothesis_book` | `code/ace_operational/test_hypothesis_book.py` | Tes unit untuk code/ace_operational/hypothesis_book.py (AG94). | `ace_operational.hypothesis_book` |
+| `ace_operational.test_leap_wiring` | `code/ace_operational/test_leap_wiring.py` | Tes wiring lompatan EVO 0031–0040 (leap_wiring) pada stub engine | `ace_operational.leap_wiring`, `ace_operational.store` |
 | `ace_operational.test_lexical_ops` | `code/ace_operational/test_lexical_ops.py` | Tests for generic AST lexical/method/wrapper/arg discovery and Family 3/4 transfer. | `ace_operational.catalog_gap`, `ace_operational.curriculum_generator`, `ace_operational.family3_prototype`, `ace_operational.lexical_ops` |
 | `ace_operational.test_lineage_guard_default` | `code/ace_operational/test_lineage_guard_default.py` | Lineage-Guard default-on regression tests. | `ace_operational.distractor_inoculation`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization`, `ace_operational.operator_discovery` |
 | `ace_operational.test_local_repo_workflow` | `code/ace_operational/test_local_repo_workflow.py` | Control-plane tests; mocked inference is never counted as model ability. | `ace_operational.coding_loop`, `ace_operational.local_repo_workflow`, `ace_operational.local_sandbox_v2`, `ace_operational.store` |
@@ -3809,6 +3814,7 @@
 | `tools.test_recall_ablation_sqlite` | `tools/test_recall_ablation_sqlite.py` | Tes mode --sqlite read-only pada recall_ablation.py + regresi byte-identik mode fixture (AG28). | `tools.recall_ablation` |
 | `tools.test_recall_anchor_audit` | `tools/test_recall_anchor_audit.py` | Audit ref pada keputusan yang berubah lewat modul recall dan anchor asli. | `ace_operational.memory_anchor`, `tools.recall_ablation` |
 | `tools.test_recall_delivery_probe` | `tools/test_recall_delivery_probe.py` | Tes probe keteririman recall pada 8 tugas held-out (7 bertetangga + 1 benar-benar kosong) — AG27. | `tools.recall_delivery_probe` |
+| `tools.test_recall_pool_cleanup` | `tools/test_recall_pool_cleanup.py` | Regresi EVO 0017 M2: pool_cleanup mengeluarkan kandidat riwayat | `tools.recall_ablation` |
 | `tools.test_recall_precision_probe` | `tools/test_recall_precision_probe.py` | Tes regresi fixture-only untuk tools.recall_precision_probe (AG43). | `ace_operational.cognitive_memory`, `tools.recall_precision_probe` |
 | `tools.test_receipt_chain_verify` | `tools/test_receipt_chain_verify.py` | Tes regresi fixture-only untuk tools.receipt_chain_verify (AG53). | `tools.receipt_chain_verify` |
 | `tools.test_redteam_rotation` | `tools/test_redteam_rotation.py` | Tes pelari rotasi red team: semua tertahan kecuali satu lolos sebagai kandidat gerbang regresi (AG73). | `tools.director_injection_fixtures`, `tools.redteam_rotation` |

@@ -6,9 +6,9 @@
 
 - Schema: `ace.repo-cartography.v1`
 - Total subsistem: **68** (termasuk `4` subsistem zona terlindung/beku)
-- Total berkas terpetakan: **2337**
-- Modul Python produksi: **650** | Modul tes: **474**
-- Tepi dependensi lintas subsistem (produksi): **117**
+- Total berkas terpetakan: **2340**
+- Modul Python produksi: **651** | Modul tes: **476**
+- Tepi dependensi lintas subsistem (produksi): **118**
 - Siklus SCC lintas subsistem: **1**
 
 ## 2. Diagram Dependensi Lintas Subsistem (Top Bobot Impor)
@@ -45,9 +45,9 @@ flowchart LR
     code_ace_integration_redteam["code/ace_integration_redteam (SAFE)"]
     code_ace_research_f13["code/ace_research_f13 (SAFE)"]
     code_ace_research_reptransfer["code/ace_research_reptransfer (SAFE)"]
-    code_ace_core_repair["code/ace_core_repair (SAFE)"]
     tools -->|65| code_ace_operational
     evidence -->|25| code_ace_operational
+    code_ace_operational -->|9| tools
     code_ace_operational -->|8| code_ace_mission
     code_ace_capability_evolution -->|7| code_ace_candidate_search
     code_ace_self_dev -->|7| code_ace_loop
@@ -80,7 +80,6 @@ flowchart LR
     code_ace_research_agenda -->|2| code_ace_research_repair
     code_ace_research_f13 -->|2| code_ace_host_controller
     code_ace_research_reptransfer -->|2| code_ace_research_primitives
-    code_ace_runtime -->|2| code_ace_core_repair
 ```
 
 ## 3. Inventaris Subsistem & Klasifikasi Zona
@@ -123,7 +122,7 @@ flowchart LR
 | `code/ace_mcts` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_mission` | `SAFE_WORKSPACE` | 9 | 6 | 3 | 5 | 3 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_neurosymbolic` | `SAFE_WORKSPACE` | 9 | 5 | 4 | 0 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_operational` | `MIXED_PROTECTED` | 240 | 111 | 125 | 5 | 14 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `code/ace_operational` | `MIXED_PROTECTED` | 242 | 112 | 126 | 5 | 15 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 | `code/ace_pac_bayes` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_real_world` | `SAFE_WORKSPACE` | 12 | 8 | 4 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_red_team` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
@@ -154,7 +153,7 @@ flowchart LR
 | `root` | `SAFE_WORKSPACE` | 20 | 4 | 0 | 0 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
 | `secrets` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `tests` | `SAFE_WORKSPACE` | 19 | 0 | 19 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `tools` | `MIXED_PROTECTED` | 436 | 205 | 222 | 1 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `tools` | `MIXED_PROTECTED` | 437 | 205 | 223 | 2 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 
 ## 4. Tepi Ketergantungan Lintas Subsistem (Semua)
 
@@ -162,6 +161,7 @@ flowchart LR
 | --- | --- | ---: | --- |
 | `tools` | `code/ace_operational` | 65 | `ace_operational.abc_v3_scorer`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization` |
 | `evidence` | `code/ace_operational` | 25 | `ace_operational.experiment_kernel`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization` |
+| `code/ace_operational` | `tools` | 9 | `tools.curiosity_questions`, `tools.cycle_planner_sim`, `tools.director_challenger` |
 | `code/ace_operational` | `code/ace_mission` | 8 | `ace_mission.bus`, `ace_mission.schema` |
 | `code/ace_capability_evolution` | `code/ace_candidate_search` | 7 | `ace_candidate_search.model`, `ace_candidate_search.search` |
 | `code/ace_self_dev` | `code/ace_loop` | 7 | `ace_loop.source_evolution` |

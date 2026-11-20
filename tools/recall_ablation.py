@@ -27,7 +27,7 @@ def _tokenize_query(text):
     return set(re.findall(r"[a-z0-9_]+", str(text).lower()))
 
 
-def load_sqlite_ablation_store(db_path, tasks, *, anchored=False):
+def load_sqlite_ablation_store(db_path, tasks, *, anchored=False, pool_cleanup=False):
     """Baca OperationalStore SQLite secara read-only (URI mode=ro) dan petakan ke store ablation."""
     if not isinstance(tasks, list) or not tasks:
         raise ValueError("Daftar tugas wajib berupa larik berisi.")
@@ -112,7 +112,13 @@ def load_sqlite_ablation_store(db_path, tasks, *, anchored=False):
                     refs = [str(row["skill_id"])]
                 candidates.append((haystack, decision, refs, f"skill:{row['skill_id']}"))
 
-        if "tasks" in tables:
+        # EVO 0017 M2 (diagnosis M1): kandidat riwayat tugas COMPLETED
+        # mencemari kolam keputusan — next_action generiknya menang
+        # tumpang-tindih token atas kandidat skill/pengalaman. Dengan
+        # pool_cleanup, riwayat tugas keluar dari kolam keputusan
+        # (perannya provenance saja); default mati agar protokol M1
+        # yang tersegel tetap dapat direproduksi persis.
+        if "tasks" in tables and not pool_cleanup:
             for row in conn.execute(
                 "SELECT task_id, normalized_goal, next_action, status FROM tasks "
                 "WHERE status = 'COMPLETED' ORDER BY task_id"
@@ -378,11 +384,14 @@ def main(argv=None):
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--seeds", type=int, default=None)
     parser.add_argument("--anchored", action="store_true")
+    parser.add_argument("--pool-cleanup", action="store_true",
+                        help="EVO 0017 M2: keluarkan kandidat riwayat tugas dari kolam keputusan.")
     args = parser.parse_args(argv)
     try:
         tasks_data = json.loads(args.tasks.read_text(encoding="utf-8"))
         store_data = (
-            load_sqlite_ablation_store(args.sqlite, tasks_data, anchored=args.anchored)
+            load_sqlite_ablation_store(args.sqlite, tasks_data, anchored=args.anchored,
+                                        pool_cleanup=args.pool_cleanup)
             if args.sqlite is not None
             else json.loads(args.store.read_text(encoding="utf-8"))
         )
