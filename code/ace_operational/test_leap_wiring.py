@@ -144,6 +144,33 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_tool_retirement_scan_flags_unused_and_failing_tools(self):
+        (self.ws / "tool_registry.json").write_text(
+            json.dumps({
+                "tools": [
+                    {"name": "healthy_tool", "version": "1.0.0", "origin_gap": "g1", "status": "adopted"},
+                    {"name": "dormant_tool", "version": "1.0.0", "origin_gap": "g2", "status": "adopted"},
+                    {"name": "flaky_tool", "version": "1.0.0", "origin_gap": "g3", "status": "adopted"},
+                ]
+            }),
+            encoding="utf-8",
+        )
+        now = leap_wiring._now_iso()
+        events = [
+            {"tool": "healthy_tool", "success": True, "ts": now},
+            {"tool": "flaky_tool", "success": False, "ts": now},
+            {"tool": "flaky_tool", "success": False, "ts": now},
+            {"tool": "flaky_tool", "success": False, "ts": now},
+        ]
+        (self.ws / "tool_usage.jsonl").write_text(
+            "\n".join(json.dumps(e) for e in events) + "\n", encoding="utf-8",
+        )
+        res = leap_wiring.step_tool_retirement_scan(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["summary"]["keep_active"], ["healthy_tool"])
+        self.assertEqual(res["summary"]["retire_candidates"], ["dormant_tool", "flaky_tool"])
+        self.assertTrue((self.ws / "tool_retirement_candidates.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

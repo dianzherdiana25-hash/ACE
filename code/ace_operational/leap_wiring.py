@@ -685,3 +685,55 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_tool_retirement_scan(engine: Any) -> dict[str, Any]:
+    """AG143: read-only evaluation of forged tools for retirement candidates."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import tool_registry as tr
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        out_path = ws / "tool_retirement_candidates.json"
+        reg_path = ws / "tool_registry.json"
+        if not reg_path.is_file():
+            skipped = {
+                "status": "skipped",
+                "reason": "no_tool_registry",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+        raw_reg = json.loads(reg_path.read_text(encoding="utf-8"))
+        tools_list = raw_reg.get("tools") if isinstance(raw_reg, dict) else raw_reg
+        if not tools_list:
+            skipped = {
+                "status": "skipped",
+                "reason": "empty_registry",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        usage_events: list[dict[str, Any]] = []
+        usage_path = ws / "tool_usage.jsonl"
+        if usage_path.is_file():
+            usage_events = tr._load_usage(usage_path)
+
+        report = tr.evaluate_registry(raw_reg, usage_events, as_of=_now_iso())
+        out = {
+            "status": "ok",
+            "schema": report["schema"],
+            "as_of": report["as_of"],
+            "summary": report["summary"],
+            "tools": report["tools"],
+        }
+        _write_json(out_path, out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
