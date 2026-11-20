@@ -144,6 +144,19 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_periodic_self_report_writes_json_and_fails_closed(self) -> None:
+        res = leap_wiring.step_periodic_self_report(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertGreaterEqual(res["gates_count"], 1)
+        saved = json.loads((self.ws / "periodic_self_report.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.periodic-self-report.v1")
+        self.assertTrue(saved["read_only"])
+
+        (self.ws / "narrative_self_model.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_periodic_self_report(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()

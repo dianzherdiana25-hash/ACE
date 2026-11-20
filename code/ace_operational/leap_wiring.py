@@ -685,3 +685,47 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0048 — laporan-diri berkala pemilik
+# ------------------------------------------------------------------
+
+
+def step_periodic_self_report(engine: Any) -> dict[str, Any]:
+    """Bangun laporan-diri berkala read-only dengan kejujuran SOURCE_NOT_PRESENT (AG173)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import periodic_self_report
+
+        mem_file = ws / "cognitive_memory" / "memory.jsonl"
+        narr_file = ws / "narrative_self_model.json"
+        report = periodic_self_report.build_periodic_self_report(
+            _REPO_ROOT,
+            memory_path=mem_file if mem_file.is_file() else None,
+            narrative_json_path=narr_file if narr_file.is_file() else None,
+        )
+        out_path = ws / "periodic_self_report.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                **report,
+            },
+        )
+        return {
+            "status": "ok",
+            "gates_count": len(report.get("gates") or []),
+            "debts_count": len(report.get("named_evidence_debt") or []),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+
