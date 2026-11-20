@@ -685,3 +685,44 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_curriculum_lab(engine: Any) -> dict[str, Any]:
+    """Jalankan analisis baca-saja lab kurikulum ke curriculum_lab.md."""
+    try:
+        from tempfile import TemporaryDirectory
+        from tools.curriculum_lab import run_lab
+
+        src = engine.workspace / "curriculum_episodes.jsonl"
+        corpus = engine.workspace / "curriculum_corpus.jsonl"
+        if src.exists() and src.is_file():
+            md = run_lab(src, corpus=corpus if corpus.is_file() else None)
+        else:
+            with TemporaryDirectory(prefix="ace-curriculum-lab-") as tmp:
+                ep_file = Path(tmp) / "episodes.json"
+                ep_file.write_text(
+                    json.dumps(
+                        [
+                            {
+                                "id": "ep_rat",
+                                "task_kind": "code",
+                                "ratified": True,
+                                "instruction": "Fungsi penjumlahan deterministik",
+                                "output": "def add(a, b):\n    return a + b\n",
+                            },
+                            {
+                                "id": "ep_gap",
+                                "task_kind": "code",
+                                "ratified": False,
+                                "instruction": "Fungsi penjumlahan deterministik",
+                                "output": "def add(a, b):\n    return 0\n",
+                            },
+                        ]
+                    ),
+                    encoding="utf-8",
+                )
+                md = run_lab(ep_file)
+        (engine.workspace / "curriculum_lab.md").write_text(md, encoding="utf-8")
+        return {"status": "ok", "report_bytes": len(md.encode("utf-8"))}
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}
