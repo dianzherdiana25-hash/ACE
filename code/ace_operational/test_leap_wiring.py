@@ -144,6 +144,30 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_cross_organ_agreement_computes_kappa_and_disagreements(self):
+        rows = [
+            {"task_id": "t1", "organ": "groq/qwen", "status": "ok", "answer": "YA"},
+            {"task_id": "t1", "organ": "gemini/flash", "status": "ok", "answer": "ya"},
+            {"task_id": "t2", "organ": "groq/qwen", "status": "ok", "answer": "A"},
+            {"task_id": "t2", "organ": "gemini/flash", "status": "ok", "answer": "B"},
+        ]
+        (self.ws / "organ_outputs.jsonl").write_text(
+            "\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8",
+        )
+        res = leap_wiring.step_cross_organ_agreement(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["network_calls"], 0)
+        self.assertEqual(res["summary"]["unanimous_tasks"], 1)
+        self.assertEqual(res["summary"]["disagreement_count"], 1)
+        self.assertTrue((self.ws / "organ_agreement.json").is_file())
+
+    def test_cross_organ_agreement_skips_when_absent_and_fails_closed(self):
+        self.assertEqual(leap_wiring.step_cross_organ_agreement(self.engine)["status"], "skipped")
+        from unittest import mock
+        with mock.patch("tools.cross_organ_agreement.load_fixture_jsonl", side_effect=RuntimeError("boom")):
+            (self.ws / "organ_outputs.jsonl").write_text("{}\n", encoding="utf-8")
+            self.assertEqual(leap_wiring.step_cross_organ_agreement(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

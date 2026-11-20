@@ -685,3 +685,51 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_cross_organ_agreement(engine: Any) -> dict[str, Any]:
+    """AG154: evaluate offline cross-organ agreement & Cohen's kappa over fixture JSONL."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import cross_organ_agreement as coa
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        out_path = ws / "organ_agreement.json"
+        src = ws / "organ_outputs.jsonl"
+        if not src.is_file():
+            src = ws / "cross_organ_outputs.jsonl"
+        if not src.is_file():
+            skipped = {
+                "status": "skipped",
+                "reason": "no_organ_outputs",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        matrix, anomalies = coa.load_fixture_jsonl(src)
+        organs = {organ for task_map in matrix.values() for organ in task_map}
+        if len(organs) < 2:
+            skipped = {
+                "status": "skipped",
+                "reason": f"insufficient_organs:{len(organs)}",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        report = coa.evaluate_cross_organ_agreement(matrix, anomalies=anomalies)
+        out = {
+            "status": "ok",
+            **report,
+            "checked_at": _now_iso(),
+        }
+        _write_json(out_path, out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
