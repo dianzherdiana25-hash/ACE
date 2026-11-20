@@ -34,6 +34,12 @@ class CutoverFixtureTests(unittest.TestCase):
         self.assertTrue(plan["preflight"]["safe_to_continue"])
         self.assertIn("stale (aman-untuk-lanjut)", markdown(plan))
 
+    def test_markdown_accepts_a_legacy_v1_plan(self):
+        plan = plan_home(self.config, pid_probe=lambda _: False)
+        del plan["preflight"]
+        self.assertIn("Langkah mundur", markdown(plan))
+        self.assertNotIn("PID file", markdown(plan))
+
     def test_only_presence_of_required_names_controls_credential_marker(self):
         self.write_entries([{"name": "groq-api-key", "extra": "fixture-not-for-report"}])
         plan = plan_home(self.config, bundle_manifest=self.manifest, pid_probe=lambda _: True)

@@ -138,7 +138,7 @@ def markdown(plan):
     for step in plan["steps"]:
         lines.append(f"- [ ] **{step['id']}** — {step['action']}")
         lines.append(f"  - Verifikasi — {step['verify']}")
-        if step["id"] == "preflight":
+        if step["id"] == "preflight" and "preflight" in plan:
             preflight = plan["preflight"]
             pid = preflight["pid_file"]
             status = "aman-untuk-lanjut" if pid["safe_to_continue"] else "perlu pemeriksaan"
