@@ -144,6 +144,18 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_organ_registry_validate_checks_default_and_fails_closed(self) -> None:
+        res = leap_wiring.step_organ_registry_validate(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertTrue(res["valid"])
+        saved = json.loads((self.ws / "organ_registry_validation.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.organ-registry-validate.v1")
+
+        (self.ws / "organ_registry_config_path.txt").write_text(str(self.ws / "missing.json"), encoding="utf-8")
+        bad = leap_wiring.step_organ_registry_validate(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
