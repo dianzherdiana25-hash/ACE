@@ -10,7 +10,7 @@ verified_refs berupa daftar string. Ref yang masih dangling menurunkan kelas ke 
 """
 import argparse
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 from pathlib import Path
 import sys
@@ -111,19 +111,67 @@ def build_fold_plan_view(folded: dict) -> dict:
     }
 
 
+def build_fold_receipt_lines(folded: dict, *, at: str | None = None) -> list[dict]:
+    """Konversi rencana lipat menjadi calon baris receipt JSONL (satu per kelompok)."""
+    stamp_str = at or datetime.now(timezone.utc).isoformat()
+    instant = datetime.fromisoformat(stamp_str)
+    if instant.tzinfo is None:
+        raise ValueError("Timestamp receipt wajib memiliki zona waktu ISO.")
+
+    receipts: list[dict] = []
+    for group in folded["groups"]:
+        rep = group["representative"]
+        dups = list(group["duplicates"])
+        reason_parts = [f"fold_kind={group['kind']}", f"class={group['initial_class']}"]
+        if group.get("class_reasons"):
+            reason_parts.extend(group["class_reasons"])
+        reason_parts.append(f"duplicate_count={len(dups)}")
+        receipts.append(
+            {
+                "task_id": rep,
+                "status": "started",
+                "at": stamp_str,
+                "action": "fold_proposals",
+                "representative": rep,
+                "duplicates": dups,
+                "reason": "; ".join(reason_parts),
+                "evidence_refs": list(group["based_on"]),
+                "undo": {"representative": rep, "restored_duplicates": dups},
+                "dry_run_plan_only": True,
+            }
+        )
+    return receipts
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("proposals", type=Path)
     parser.add_argument("--plan", action="store_true", help="Keluarkan ringkasan rencana lipat JSON tanpa mengubah berkas.")
+    parser.add_argument(
+        "--receipt-format",
+        action="store_true",
+        help="Keluarkan rencana lipat sebagai calon baris receipt JSONL (satu per kelompok).",
+    )
+    parser.add_argument(
+        "--receipt-at",
+        help="Timestamp ISO berzona deterministik opsional untuk --receipt-format.",
+    )
     parser.add_argument("--require-anchored", action="store_true")
     parser.add_argument("--store", type=Path)
     args = parser.parse_args(argv)
     if args.require_anchored != (args.store is not None):
         parser.error("--require-anchored dan --store wajib dipakai bersama.")
+    if args.plan and args.receipt_format:
+        parser.error("--plan dan --receipt-format tidak dapat dipakai bersamaan.")
     try:
         store = _FixtureStore(json.loads(args.store.read_text(encoding="utf-8"))) if args.store else None
         with args.proposals.open(encoding="utf-8") as source:
             result = fold_proposals((json.loads(line) for line in source if line.strip()), anchor_store=store)
+        if args.receipt_format:
+            receipts = build_fold_receipt_lines(result, at=args.receipt_at)
+            for row in receipts:
+                print(json.dumps(row, sort_keys=True, ensure_ascii=False))
+            return 0
         if args.plan:
             result = build_fold_plan_view(result)
     except (OSError, ValueError) as exc:
