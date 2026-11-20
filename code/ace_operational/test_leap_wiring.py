@@ -144,6 +144,28 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_receipt_chain_verify_detects_clean_and_torn_tail(self) -> None:
+        r_path = self.ws / "director_exec_receipts.jsonl"
+        r_path.write_text(
+            json.dumps({"task_id": "t1", "status": "started", "at": "2026-11-20T01:00:00Z"})
+            + "\n"
+            + json.dumps({"task_id": "t1", "status": "completed", "at": "2026-11-20T01:01:00Z"})
+            + "\n"
+            + '{"task_id": "t2", "status": "star',
+            encoding="utf-8",
+        )
+        out = leap_wiring.step_receipt_chain_verify(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertTrue(out["torn_tail"])
+        self.assertTrue(out["valid_sequence"])
+        self.assertEqual(out["chain_status"], "torn_tail_pending")
+        self.assertTrue((self.ws / "receipt_chain_status.json").is_file())
+
+    def test_receipt_chain_verify_missing_skips_cleanly(self) -> None:
+        out = leap_wiring.step_receipt_chain_verify(self.engine)
+        self.assertEqual(out["status"], "skipped")
+        self.assertTrue((self.ws / "receipt_chain_status.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

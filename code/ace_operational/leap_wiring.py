@@ -685,3 +685,48 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0044 — AG131: verify director execution receipt chain (%50)
+# ------------------------------------------------------------------
+
+def step_receipt_chain_verify(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import receipt_chain_verify as rcv
+
+        ws = Path(engine.workspace)
+        receipts_path = ws / "director_exec_receipts.jsonl"
+        out_path = ws / "receipt_chain_status.json"
+        if not receipts_path.is_file():
+            skipped = {
+                "status": "skipped",
+                "reason": "no director_exec_receipts.jsonl",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        report = rcv.verify_receipts_file(receipts_path)
+        payload = {
+            "status": "ok",
+            "checked_at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "chain_status": report.get("status"),
+            "valid_sequence": report.get("valid_sequence"),
+            "torn_tail": report.get("torn_tail"),
+            "pending_tasks": report.get("pending_tasks", []),
+            "summary": report.get("summary", {}),
+            "findings": report.get("findings", []),
+        }
+        _write_json(out_path, payload)
+        return {
+            "status": "ok",
+            "chain_status": report.get("status"),
+            "valid_sequence": bool(report.get("valid_sequence")),
+            "torn_tail": bool(report.get("torn_tail")),
+            "finding_count": (report.get("summary") or {}).get("finding_count", 0),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
