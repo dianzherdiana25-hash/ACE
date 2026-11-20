@@ -144,6 +144,13 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_kbm_titles_writes_summary(self):
+        res = leap_wiring.step_kbm_titles(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["total_serials"], 1)
+        out = json.loads((self.ws / "kbm_titles_report.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["summary"]["total_serials"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

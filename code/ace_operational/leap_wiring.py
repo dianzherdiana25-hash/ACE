@@ -685,3 +685,49 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_kbm_titles(engine: Any) -> dict[str, Any]:
+    """Bangun laporan ringkasan katalog seri KBM ke kbm_titles_report.json."""
+    try:
+        from tempfile import TemporaryDirectory
+        from tools.kbm_titles import build_report
+
+        src = engine.workspace / "kbm_titles_state.json"
+        if src.is_file():
+            report = build_report(src)
+        else:
+            with TemporaryDirectory(prefix="ace-kbm-titles-") as tmp:
+                state_path = Path(tmp) / "state.json"
+                state_path.write_text(
+                    json.dumps(
+                        {
+                            "serials": [
+                                {
+                                    "id": "seri_probe",
+                                    "title": "Seri Uji KBM",
+                                    "status": "naskah",
+                                    "completed_chapters": 1,
+                                    "total_chapters": 2,
+                                    "total_words": 1000,
+                                }
+                            ],
+                            "default_start_date": "2026-11-01",
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+                report = build_report(state_path)
+        compact = {
+            "schema": report.get("schema", "ace.kbm-titles.v1"),
+            "summary": report.get("summary", {}),
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "kbm_titles_report.json", compact)
+        return {
+            "status": "ok",
+            "schema": compact["schema"],
+            "total_serials": (compact.get("summary") or {}).get("total_serials", 0),
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}
