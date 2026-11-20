@@ -2,7 +2,7 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, call
 
 from tools.bridge_home import markdown, plan_home
 from tools.test_bridge_home import CONFIG
@@ -23,7 +23,7 @@ class BridgePIDReuseTests(unittest.TestCase):
     def test_live_match_is_safe_for_pid_check(self):
         identity = Mock(return_value="bridge-fixture")
         plan = plan_home(self.config, pid_probe=lambda _: True, identity_probe=identity)
-        identity.assert_called_once_with(900)
+        self.assertEqual(identity.call_args_list, [call(900), call(900)])
         self.assertTrue(plan["preflight"]["pid_file"]["safe_to_continue"])
         self.assertIn("Gunakan kembali", plan["steps"][1]["action"])
 
@@ -39,3 +39,25 @@ class BridgePIDReuseTests(unittest.TestCase):
                 plan = plan_home(self.config, pid_probe=lambda _: True, identity_probe=identity)
                 self.assertEqual(plan["preflight"]["pid_file"]["state"], "unverified")
                 self.assertFalse(plan["preflight"]["pid_file"]["safe_to_continue"])
+
+    def test_exiting_and_appearing_processes_both_require_operator(self):
+        for readings, identities in (
+            ((True, False), ProcessLookupError),
+            ((False, True), ("bridge-fixture",)),
+        ):
+            with self.subTest(readings=readings):
+                existence = Mock(side_effect=readings)
+                identity = Mock(side_effect=identities)
+                plan = plan_home(self.config, pid_probe=existence, identity_probe=identity)
+                self.assertEqual(existence.call_args_list, [call(900), call(900)])
+                identity.assert_called_once_with(900)
+                self.assertEqual(plan["preflight"]["pid_file"], {
+                    "state": "unverified", "safe_to_continue": False, "reason": "pid_probe_inconsistent",
+                })
+                self.assertIn("perlu pemeriksaan operator", markdown(plan))
+
+    def test_change_of_identity_between_reads_requires_operator(self):
+        identity = Mock(side_effect=["bridge-fixture", "another-process"])
+        plan = plan_home(self.config, pid_probe=lambda _: True, identity_probe=identity)
+        self.assertEqual(plan["preflight"]["pid_file"]["state"], "unverified")
+        self.assertFalse(plan["preflight"]["pid_file"]["safe_to_continue"])

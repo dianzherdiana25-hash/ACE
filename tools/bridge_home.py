@@ -11,7 +11,8 @@ mencetak teks atau JSON tanpa meluncurkan proses.
 
 Jika PID masih hidup, `expected_process_name` opsional menentukan nama
 proses yang diharapkan. Nama yang beda atau tak terbaca perlu pemeriksaan
-operator. Kecocokan nama meloloskan pemeriksaan PID saja.
+operator. Dua pengamatan PID dan identitas harus konsisten. Kecocokan
+nama meloloskan pemeriksaan PID saja.
 """
 import argparse
 import json
@@ -40,32 +41,46 @@ def _pid_identity(pid):
     return Path(f"/proc/{pid}/comm").read_text(encoding="utf-8").strip()
 
 
-def _check_pid_file(path, probe, expected_name, identity_probe):
+def _observe_pid(path, probe, expected_name, identity_probe):
     try:
         pid = int(path.read_text(encoding="utf-8").strip())
     except FileNotFoundError:
-        return {"state": "missing", "safe_to_continue": True}
-    except (OSError, ValueError):
-        return {"state": "unverified", "safe_to_continue": False}
+        return None
     if not 0 < pid <= 2**31 - 1:
-        return {"state": "unverified", "safe_to_continue": False}
+        raise ValueError("PID tidak sah")
+    running = probe(pid)
+    if type(running) is not bool:
+        raise ValueError("Status PID tidak sah")
+    identity = None
+    if running and expected_name is not None:
+        try:
+            observed = identity_probe(pid)
+        except (OSError, UnicodeError):
+            observed = None
+        if isinstance(observed, str):
+            identity = observed.strip() or None
+    return pid, running, identity
+
+
+def _check_pid_file(path, probe, expected_name, identity_probe):
+    unverified = {"state": "unverified", "safe_to_continue": False}
     try:
-        running = probe(pid)
-    except OSError:
-        return {"state": "unverified", "safe_to_continue": False}
-    if running is False:
+        first = _observe_pid(path, probe, expected_name, identity_probe)
+        second = _observe_pid(path, probe, expected_name, identity_probe)
+    except (OSError, ValueError):
+        return unverified
+    if first is None and second is None:
+        return {"state": "missing", "safe_to_continue": True}
+    if first != second:
+        return {**unverified, "reason": "pid_probe_inconsistent"}
+    _, running, observed = second
+    if not running:
         return {"state": "stale", "safe_to_continue": True}
-    if running is not True:
-        return {"state": "unverified", "safe_to_continue": False}
     if expected_name is None:
         return {"state": "live", "safe_to_continue": False, "reason": "identity_unverified"}
-    try:
-        observed = identity_probe(pid)
-    except (OSError, UnicodeError):
-        observed = None
-    if not isinstance(observed, str) or not observed.strip():
-        return {"state": "unverified", "safe_to_continue": False, "reason": "identity_unverified"}
-    if observed.strip() != expected_name:
+    if observed is None:
+        return {**unverified, "reason": "identity_unverified"}
+    if observed != expected_name:
         return {"state": "identity_mismatch", "safe_to_continue": False}
     return {"state": "live", "safe_to_continue": True, "reason": "identity_matched"}
 
