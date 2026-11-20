@@ -496,6 +496,30 @@ def step_practice(engine: Any) -> dict[str, Any]:
         g["gap_id"]: int(g.get("occurrence_count") or 0) for g in gaps}
     _save_state(engine, state)
     out["practice_tasks_created"] = created
+
+    # EVO 0042 — AG115: konversi pola gagal workspace menjadi kandidat agenda
+    try:
+        from tools import failure_to_agenda as fta
+
+        mem_file = ws / "cognitive_memory" / "memory.jsonl"
+        cons_file = ws / "metacog_consolidation.jsonl"
+        agenda_rep = fta.generate_failure_agenda_candidates(
+            ws,
+            docs=[],
+            consolidation_paths=[cons_file] if cons_file.is_file() else [],
+            memory_paths=[mem_file] if mem_file.is_file() else [],
+            scan_default_repo_docs=False,
+        )
+        _append_jsonl(ws / "failure_agenda.jsonl", {
+            "at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "candidates_count": agenda_rep.get("candidates_count", 0),
+            "candidates": agenda_rep.get("candidates", []),
+        })
+        out["failure_agenda"] = {"candidates_count": agenda_rep.get("candidates_count", 0)}
+    except Exception as exc:
+        out["failure_agenda"] = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
     return out
 
 

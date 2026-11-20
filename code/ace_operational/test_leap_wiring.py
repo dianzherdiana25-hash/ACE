@@ -144,6 +144,15 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_practice_appends_failure_agenda(self) -> None:
+        out = leap_wiring.step_practice(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertIn("failure_agenda", out)
+        fa_path = self.ws / "failure_agenda.jsonl"
+        self.assertTrue(fa_path.is_file())
+        last = json.loads(fa_path.read_text(encoding="utf-8").strip().splitlines()[-1])
+        self.assertIn("candidates_count", last)
+
 
 if __name__ == "__main__":
     unittest.main()
