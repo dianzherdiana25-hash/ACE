@@ -52,6 +52,35 @@ class ProvenanceTests(unittest.TestCase):
         self.assertIn("inherited.json", output.getvalue())
         run.assert_not_called()
 
+    def test_manifest_binds_task_set_hash_and_rejects_single_task_change(self):
+        # Perluas fixture dengan dua tugas agar perubahan satu tugas terbukti terdeteksi
+        self.paths["inherited"].write_text(json.dumps({"passes": {"t1": True, "t2": True}}), encoding="utf-8")
+        self.paths["cold"].write_text(json.dumps({"passes": {"t1": False, "t2": False}}), encoding="utf-8")
+        self.paths["tasks"].write_text(
+            json.dumps([{"id": "t1", "prompt": "awal"}, {"id": "t2", "prompt": "stabil"}]),
+            encoding="utf-8",
+        )
+        self.generate_manifest()
+
+        manifest_data = json.loads(self.manifest.read_bytes())
+        expected_tasks_sha = hashlib.sha256(self.paths["tasks"].read_bytes()).hexdigest()
+        self.assertEqual(manifest_data["inputs"]["tasks"]["sha256"], expected_tasks_sha)
+        self.assertEqual(manifest_data["task_set"]["sha256"], expected_tasks_sha)
+        self.assertEqual(manifest_data["task_set"]["task_count"], 2)
+        self.assertEqual(sorted(manifest_data["task_set"]["task_sha256s"].keys()), ["t1", "t2"])
+
+        # Ubah tepat satu tugas setelah manifest dibuat
+        self.paths["tasks"].write_text(
+            json.dumps([{"id": "t1", "prompt": "berubah"}, {"id": "t2", "prompt": "stabil"}]),
+            encoding="utf-8",
+        )
+        with patch.object(inheritance_probe, "compare") as run, redirect_stderr(StringIO()) as output:
+            with self.assertRaises(SystemExit) as raised:
+                inheritance_probe.main([*self.args, "--verify-manifest", str(self.manifest)])
+        self.assertEqual(raised.exception.code, 2)
+        self.assertIn("tasks.json", output.getvalue())
+        run.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()
