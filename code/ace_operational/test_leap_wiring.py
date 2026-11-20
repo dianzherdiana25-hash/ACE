@@ -144,6 +144,49 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_tool_forge_approves_safe_spec_and_rejects_forbidden_import(self):
+        spec_path = self.ws / "tool_forge_spec.json"
+        spec_path.write_text(
+            json.dumps({
+                "name": "trim_lower_helper",
+                "origin_gap": "gap-forge-1",
+                "io_contract": {"inputs": ["payload"], "output": "normalized"},
+            }),
+            encoding="utf-8",
+        )
+        ok_res = leap_wiring.step_tool_forge(self.engine)
+        self.assertEqual(ok_res["status"], "ok")
+        self.assertEqual(ok_res["adoption_verdict"], "approved")
+        self.assertFalse((self.ws / "trim_lower_helper.py").exists())
+
+        spec_path.write_text(
+            json.dumps({
+                "name": "bad_subproc_helper",
+                "origin_gap": "gap-forge-2",
+                "io_contract": {"inputs": ["payload"], "output": "bad"},
+                "imports": ["subprocess"],
+            }),
+            encoding="utf-8",
+        )
+        bad_res = leap_wiring.step_tool_forge(self.engine)
+        self.assertEqual(bad_res["status"], "ok")
+        self.assertEqual(bad_res["adoption_verdict"], "rejected")
+        lines = (self.ws / "tool_forge_log.jsonl").read_text(encoding="utf-8").splitlines()
+        self.assertEqual(len(lines), 2)
+
+    def test_tool_forge_runs_from_step_projects_when_spec_present(self):
+        (self.ws / "tool_forge_spec.json").write_text(
+            json.dumps({
+                "name": "proj_norm_helper",
+                "origin_gap": "gap-proj-1",
+                "io_contract": {"inputs": ["payload"], "output": "normalized"},
+            }),
+            encoding="utf-8",
+        )
+        out = leap_wiring.step_projects(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertTrue((self.ws / "tool_forge_log.jsonl").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

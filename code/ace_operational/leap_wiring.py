@@ -565,6 +565,11 @@ def step_projects(engine: Any) -> dict[str, Any]:
             except Exception:
                 pass
         break  # tonggak berurutan: nilai satu per siklus
+    if (Path(engine.workspace) / "tool_forge_spec.json").is_file() or int(getattr(engine, "cycle_count", 0) or 0) % 50 == 0:
+        try:
+            step_tool_forge(engine)
+        except Exception:
+            pass
     return {"status": "ok", "project": pid, "advanced": advanced}
 
 
@@ -685,3 +690,52 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_tool_forge(engine: Any) -> dict[str, Any]:
+    """AG142: forge a candidate helper inside an isolated sandbox and log verdict."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        import re
+        from tools import tool_forge as tf
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        spec_path = ws / "tool_forge_spec.json"
+        spec: dict[str, Any] | None = None
+        if spec_path.is_file():
+            spec = json.loads(spec_path.read_text(encoding="utf-8"))
+        elif getattr(engine, "store", None) is not None:
+            gaps = engine.store.list_gaps(status="OPEN") or []
+            for gap in gaps:
+                missing = str(gap.get("missing_skill_or_tool") or "").strip().lower()
+                slug = re.sub(r"[^a-z0-9_]+", "_", missing).strip("_")[:32]
+                if slug and slug[0].isalpha():
+                    spec = {
+                        "name": f"tool_{slug}"[:40] if not slug.startswith("tool_") else slug[:40],
+                        "origin_gap": str(gap.get("gap_id") or "gap-open"),
+                        "io_contract": {"inputs": ["payload"], "output": "normalized"},
+                    }
+                    break
+        if spec is None:
+            return {"status": "skipped", "reason": "no_forge_spec"}
+
+        verdict = tf.forge_tool(spec, forge_root=None)
+        entry = {
+            "at": _now_iso(),
+            "schema": verdict["schema"],
+            "tool_name": verdict["tool_name"],
+            "origin_gap": verdict["origin_gap"],
+            "static_audit": verdict["static_audit"],
+            "unit_tests": verdict["unit_tests"],
+            "adoption_verdict": verdict["adoption_verdict"],
+            "reasons": verdict["reasons"],
+        }
+        _append_jsonl(ws / "tool_forge_log.jsonl", entry)
+        return {"status": "ok", **entry}
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
