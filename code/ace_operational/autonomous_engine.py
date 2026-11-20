@@ -1866,6 +1866,228 @@ class ContinuousAutonomousEngine:
                 _leap("self", leap_wiring.step_self)
             if self.cycle_count % 200 == 1:
                 _leap("organs", leap_wiring.step_organs)
+            # EVO 0041 — Memori & Recall
+            if self.cycle_count % 200 == 0:
+                _leap("memory_chain_compare", leap_wiring.step_memory_chain_compare)
+            # EVO 0041 — Memori & Recall
+            if self.cycle_count % 25 == 0:
+                _leap("recall_probes", leap_wiring.step_recall_probes)
+            # EVO 0041 — Memori & Recall
+            if self.cycle_count % 10 == 0:
+                _leap("embedding_index", leap_wiring.step_embedding_index)
+            # EVO 0041 — Memori & Recall
+            if self.cycle_count % 25 == 0:
+                _leap("introspect_recall", leap_wiring.step_introspect_recall)
+            # EVO 0041 — Memori & Recall
+            if self.cycle_count % 200 == 0:
+                _leap("transfer_probe", leap_wiring.step_transfer_probe)
+            # EVO 0041 — Memori & Recall
+            if self.cycle_count % 50 == 0:
+                _leap("metacog_consolidation", leap_wiring.step_metacog_consolidation)
+            # EVO 0042 — Kurikulum & Praktik
+            if self.cycle_count % 25 == 0:
+                _leap("mastery_board", leap_wiring.step_mastery_board)
+            # EVO 0042 — Kurikulum & Praktik
+            if self.cycle_count % 10 == 0:
+                _leap("occurrence_outlier_scan", leap_wiring.step_occurrence_outlier_scan)
+            # EVO 0042 — Kurikulum & Praktik
+            if self.cycle_count % 25 == 0:
+                _leap("practice_task_lint", leap_wiring.step_practice_task_lint)
+            # EVO 0042 — Kurikulum & Praktik
+            if self.cycle_count % 200 == 0:
+                _leap("curriculum_ab_report", leap_wiring.step_curriculum_ab_report)
+            # EVO 0042 — Kurikulum & Praktik
+            if self.cycle_count % 25 == 0:
+                _leap("curriculum_wave2", leap_wiring.step_curriculum_wave2)
+            # EVO 0042 — Kurikulum & Praktik
+            _leap("director_actions_wave2", leap_wiring.step_director_actions_wave2)
+            # EVO 0043 — Director & Kandidat
+            if self.cycle_count % 25 == 0:
+                _leap("director_prose_audit", leap_wiring.step_director_prose_audit)
+            # EVO 0043 — Director & Kandidat
+            if self.cycle_count % 25 == 0:
+                _leap("director_cap_simulator", leap_wiring.step_director_cap_simulator)
+            # EVO 0043 — Director & Kandidat
+            if self.cycle_count % 25 == 0:
+                _leap("candidate_census", leap_wiring.step_candidate_census)
+            # EVO 0043 — Director & Kandidat
+            if self.cycle_count % 50 == 0:
+                _leap("candidate_factory_v2", leap_wiring.step_candidate_factory_v2)
+            # EVO 0043 — Director & Kandidat
+            if self.cycle_count % 50 == 0:
+                _leap("discriminating_candidate_factory", leap_wiring.step_discriminating_candidate_factory)
+            # EVO 0043 — Director & Kandidat
+            if self.cycle_count % 25 == 0:
+                _leap("director_injection_guard", leap_wiring.step_director_injection_guard)
+            # EVO 0044 — Rumah, Kustodi & Ketangguhan
+            if self.cycle_count % 50 == 0:
+                _leap("receipt_chain_verify", leap_wiring.step_receipt_chain_verify)
+            # EVO 0044 — Rumah, Kustodi & Ketangguhan
+            if self.cycle_count % 200 == 0:
+                _leap("custody_manifest_check", leap_wiring.step_custody_manifest_check)
+            # EVO 0044 — Rumah, Kustodi & Ketangguhan
+            if self.cycle_count % 10 == 0:
+                _leap("checkpoint_chain_verify", leap_wiring.step_checkpoint_chain_verify)
+            # EVO 0044 — Rumah, Kustodi & Ketangguhan
+            if self.cycle_count % 200 == 0:
+                _leap("verify_self_dev", leap_wiring.step_verify_self_dev)
+            # EVO 0044 — Rumah, Kustodi & Ketangguhan
+            if self.cycle_count % 1000 == 0:
+                _leap("restore_drill", leap_wiring.step_restore_drill)
+            # EVO 0044 — Rumah, Kustodi & Ketangguhan
+            if self.cycle_count % 200 == 0:
+                _leap("coverage_and_flaky_audit", leap_wiring.step_coverage_and_flaky_audit)
+            # EVO 0044 — Rumah, Kustodi & Ketangguhan
+            if self.cycle_count % 200 == 0:
+                _leap("bundle_manifest", leap_wiring.step_bundle_manifest)
+            if self.cycle_count % 1000 == 0:
+                _leap("migration_rehearsal", leap_wiring.step_migration_rehearsal)
+            if self.cycle_count % 50 == 0:
+                _leap("run_evidence_pack", leap_wiring.step_run_evidence_pack)
+            if self.cycle_count % 25 == 0:
+                _leap("tool_registry", leap_wiring.step_tool_registry)
+            if self.cycle_count % 200 == 0:
+                _leap("tool_retirement_scan", leap_wiring.step_tool_retirement_scan)
+            if self.cycle_count % 200 == 0:
+                _leap("repo_arena", leap_wiring.step_repo_arena)
+            if self.cycle_count % 50 == 0:
+                _leap("pattern_catalog", leap_wiring.step_pattern_catalog)
+            if self.cycle_count % 200 == 0:
+                _leap("builder_onboarding", leap_wiring.step_builder_onboarding_pack)
+            if self.cycle_count % 50 == 0:
+                _leap("pr_pack", leap_wiring.step_pr_pack)
+            if self.cycle_count % 200 == 0:
+                _leap("evo_results_audit", leap_wiring.step_evo_results_audit)
+            if self.cycle_count % 200 == 0:
+                _leap("brain_registry", leap_wiring.step_brain_registry)
+            if self.cycle_count % 200 == 0:
+                _leap("organ_forensics", leap_wiring.step_organ_forensics)
+            if self.cycle_count % 25 == 0:
+                _leap("cross_organ_agreement", leap_wiring.step_cross_organ_agreement)
+            if self.cycle_count % 50 == 0:
+                _leap("engine_idle_report", leap_wiring.step_engine_idle_report)
+            if self.cycle_count % 50 == 0:
+                _leap("quota_failover_sim", leap_wiring.step_quota_failover_sim)
+            if self.cycle_count % 1000 == 0:
+                _leap("failover_drill", leap_wiring.step_failover_drill)
+            if self.cycle_count % 1000 == 0:
+                _leap("home_replication", leap_wiring.step_home_replication)
+            if self.cycle_count % 200 == 0:
+                _leap("autobiography_probe", leap_wiring.step_autobiography_probe)
+            if self.cycle_count % 200 == 0:
+                _leap("behavior_fingerprint", leap_wiring.step_behavior_fingerprint)
+            if self.cycle_count % 50 == 0:
+                _leap("narrative_consistency", leap_wiring.step_narrative_consistency_gate)
+            if self.cycle_count % 200 == 0:
+                _leap("constitution_dilemma", leap_wiring.step_constitution_dilemma)
+            if self.cycle_count % 50 == 0:
+                _leap("environment_probe", leap_wiring.step_environment_probe)
+            if self.cycle_count % 200 == 0:
+                _leap("capability_report", leap_wiring.step_capability_report)
+            if self.cycle_count % 1000 == 0:
+                _leap("owner_benchmark", leap_wiring.step_owner_benchmark)
+            if self.cycle_count % 200 == 0:
+                _leap("eval_bench", leap_wiring.step_eval_bench)
+            if self.cycle_count % 200 == 0:
+                _leap("self_assessment", leap_wiring.step_self_assessment)
+            if self.cycle_count % 200 == 0:
+                _leap("continuity_probe", leap_wiring.step_continuity_probe)
+            if self.cycle_count % 200 == 0:
+                _leap("periodic_self_report", leap_wiring.step_periodic_self_report)
+            if self.cycle_count % 200 == 0:
+                _leap("daily_digest", leap_wiring.step_daily_digest)
+            if self.cycle_count % 50 == 0:
+                _leap("metacog_consolidate", leap_wiring.step_metacog_consolidate)
+            if self.cycle_count % 200 == 0:
+                _leap("writeback_diagnose", leap_wiring.step_writeback_diagnose)
+            if self.cycle_count % 200 == 0:
+                _leap("self_dev_git_audit", leap_wiring.step_self_dev_git_audit)
+            if self.cycle_count % 200 == 0:
+                _leap("successor_inventory", leap_wiring.step_successor_inventory)
+            if self.cycle_count % 1000 == 0:
+                _leap("successor_variant", leap_wiring.step_successor_variant)
+            if self.cycle_count % 200 == 0:
+                _leap("experiment_designer", leap_wiring.step_experiment_designer)
+            if self.cycle_count % 200 == 0:
+                _leap("teaching_program", leap_wiring.step_teaching_program)
+            if self.cycle_count % 200 == 0:
+                _leap("citation_validator", leap_wiring.step_citation_validator)
+            if self.cycle_count % 200 == 0:
+                _leap("catalog_audit", leap_wiring.step_catalog_audit)
+            if self.cycle_count % 200 == 0:
+                _leap("preaudit_oracle", leap_wiring.step_preaudit_oracle)
+            if self.cycle_count % 200 == 0 and os.environ.get("ACE_PROPOSER_V2") == "1":
+                _leap("proposer_v2", leap_wiring.step_proposer_v2)
+            if self.cycle_count % 1000 == 0:
+                _leap("software_factory", leap_wiring.step_software_factory)
+            if self.cycle_count % 200 == 0:
+                _leap("verdict_board", leap_wiring.step_verdict_board)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_audit", leap_wiring.step_wiring_audit)
+            if self.cycle_count % 200 == 0:
+                _leap("release_manifest", leap_wiring.step_release_manifest)
+            if self.cycle_count % 200 == 0:
+                _leap("draft_release_preflight", leap_wiring.step_draft_release_preflight)
+            if self.cycle_count % 200 == 0:
+                _leap("self_send_standing_audit", leap_wiring.step_self_send_standing_audit)
+            if self.cycle_count % 200 == 0:
+                _leap("dashboard_v3", leap_wiring.step_dashboard_v3)
+            if self.cycle_count % 200 == 0:
+                _leap("handover_index", leap_wiring.step_handover_index)
+            if self.cycle_count % 200 == 0:
+                _leap("platform_requirements", leap_wiring.step_platform_requirements)
+            if self.cycle_count % 50 == 0:
+                _leap("bridge_self_check", leap_wiring.step_bridge_self_check)
+            if self.cycle_count % 200 == 0:
+                _leap("organ_registry_validate", leap_wiring.step_organ_registry_validate)
+            if self.cycle_count % 200 == 0:
+                _leap("repo_cartography", leap_wiring.step_repo_cartography)
+            if self.cycle_count % 200 == 0:
+                _leap("program_glossary", leap_wiring.step_program_glossary)
+            if self.cycle_count % 200 == 0:
+                _leap("seal_run", leap_wiring.step_seal_run)
+            if self.cycle_count % 200 == 0:
+                _leap("arc_rubric", leap_wiring.step_arc_rubric)
+            if self.cycle_count % 200 == 0:
+                _leap("specialization_delta", leap_wiring.step_specialization_delta)
+            if self.cycle_count % 200 == 0:
+                _leap("curriculum_lab", leap_wiring.step_curriculum_lab)
+            if self.cycle_count % 200 == 0:
+                _leap("inheritance_probe", leap_wiring.step_inheritance_probe)
+            if self.cycle_count % 200 == 0:
+                _leap("recall_ablation", leap_wiring.step_recall_ablation)
+            if self.cycle_count % 200 == 0:
+                _leap("corpus_freeze_packer", leap_wiring.step_corpus_freeze_packer)
+            if self.cycle_count % 50 == 0:
+                _leap("relay_spool_tools", leap_wiring.step_relay_spool_tools)
+            if self.cycle_count % 200 == 0:
+                _leap("director_screen", leap_wiring.step_director_screen)
+            if self.cycle_count % 200 == 0:
+                _leap("redteam_rotation", leap_wiring.step_redteam_rotation)
+            if self.cycle_count % 200 == 0:
+                _leap("kbm_titles", leap_wiring.step_kbm_titles)
+            if self.cycle_count % 1000 == 0:
+                _leap("kbm_produce", leap_wiring.step_kbm_produce)
+            if self.cycle_count % 200 == 0:
+                _leap("mutation_engine", leap_wiring.step_mutation_engine)
+            if self.cycle_count % 50 == 0:
+                _leap("drift_quarantine", leap_wiring.step_drift_quarantine)
+            if self.cycle_count % 50 == 0:
+                _leap("atomic_lease", leap_wiring.step_atomic_lease)
+            if self.cycle_count % 200 == 0:
+                _leap("evidence_archiver", leap_wiring.step_evidence_archiver)
+            if self.cycle_count % 200 == 0:
+                _leap("generational_ladder", leap_wiring.step_generational_ladder)
+            if self.cycle_count % 200 == 0:
+                _leap("mobile_report", leap_wiring.step_mobile_report)
+            if self.cycle_count % 200 == 0:
+                _leap("mission_proposers", leap_wiring.step_mission_proposers)
+
+            # EVO 0041 — Mengingat yang hidup
+            if self.cycle_count % 50 == 0: _leap("memory_hygiene", leap_wiring.step_memory_hygiene_audit)
+
+            # EVO 0041 — Mengingat yang hidup
+            if self.cycle_count % 50 == 0: _leap("memory_decay", leap_wiring.step_memory_decay)
 
         # Step 4: Periodic AST self-audit
         audit_summary: dict[str, Any] | None = None
