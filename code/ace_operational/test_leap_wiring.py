@@ -144,6 +144,36 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_metacog_consolidate_writes_readonly_report_and_fails_closed(self) -> None:
+        (self.ws / "metacog_observations.json").write_text(
+            json.dumps(
+                {
+                    "records": [
+                        {"id": "m1", "domain": "code", "actual_success": False, "predicted_prob": 0.9, "summary": "timeout bridge"},
+                        {"id": "m2", "domain": "code", "actual_success": False, "predicted_prob": 0.85, "summary": "timeout bridge"},
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_metacog_consolidate(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertGreaterEqual(res["observations"], 2)
+        self.assertEqual(res["failure_clusters"], 1)
+        saved = json.loads((self.ws / "metacog_consolidation.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.metacog-consolidation.v1")
+        self.assertTrue(saved["read_only"])
+
+        from unittest import mock
+
+        with mock.patch(
+            "tools.metacog_memory_consolidate.consolidate_metacognitive_memory",
+            side_effect=RuntimeError("boom"),
+        ):
+            bad = leap_wiring.step_metacog_consolidate(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("boom", bad["error"])
+
 
 if __name__ == "__main__":
     unittest.main()
