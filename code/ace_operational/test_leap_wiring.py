@@ -144,6 +144,43 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_recall_audits_proposal_anchors(self) -> None:
+        self._seed_gap()
+        gaps = self.engine.store.list_gaps(status="OPEN")
+        gid = gaps[0]["gap_id"]
+        self.engine.store.create_task(
+            kind="director_proposal", title_id="Anchored Prop",
+            user_request="uji anchored", normalized_goal="Anchored Prop",
+            model_backend="groq/openai/gpt-oss-120b", priority=5,
+            checkpoint={"proposal": {"based_on": [gid]}},
+            hold_for_review=True,
+        )
+        t_dang = self.engine.store.create_task(
+            kind="director_proposal", title_id="Dangling Prop",
+            user_request="uji dangling", normalized_goal="Dangling Prop",
+            model_backend="groq/openai/gpt-oss-120b", priority=5,
+            checkpoint={"proposal": {"based_on": ["missing:ref-999"]}},
+            hold_for_review=False,
+        )
+        self.engine.store.update_task(t_dang["task_id"], status="CANCELLED")
+        self.engine.store.create_task(
+            kind="director_proposal", title_id="No Base Prop",
+            user_request="uji no base", normalized_goal="No Base Prop",
+            model_backend="groq/openai/gpt-oss-120b", priority=5,
+            checkpoint={"proposal": {}},
+            hold_for_review=True,
+        )
+        out = leap_wiring.step_recall(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["anchor_audit"]["total"], 3)
+        self.assertEqual(out["anchor_audit"]["anchored"], 1)
+        self.assertEqual(out["anchor_audit"]["dangling"], 1)
+        self.assertEqual(out["anchor_audit"]["missing_based_on"], 1)
+        audit_path = self.ws / "anchor_audit.jsonl"
+        self.assertTrue(audit_path.is_file())
+        last = json.loads(audit_path.read_text(encoding="utf-8").strip().splitlines()[-1])
+        self.assertEqual(last["counts"]["anchored"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -206,6 +206,61 @@ def step_recall(engine: Any) -> dict[str, Any]:
         "semantic_probes": semantic_hits})
     out["probe"] = {"probed": probed, "delivered": delivered, "rate": rate,
                     "semantic_probes": semantic_hits}
+
+    # EVO 0041 — AG104: audit jangkar proposal director terhadap ref terverifikasi
+    try:
+        from tools import memory_anchor_audit as maa
+
+        ref_pool: set[str] = set()
+        for g in engine.store.list_gaps():
+            gid = str(g.get("gap_id") or "").strip()
+            if gid:
+                ref_pool.add(gid)
+        for ep in episodes:
+            eid = str(ep.get("id") or "").strip()
+            if eid:
+                ref_pool.add(eid)
+            for sref in ep.get("source_refs") or []:
+                sref_s = str(sref or "").strip()
+                if sref_s:
+                    ref_pool.add(sref_s)
+
+        prop_rows: list[dict[str, Any]] = []
+        seen_pids: set[str] = set()
+        for t in engine.store.list_tasks(limit=200):
+            if t.get("kind") != "director_proposal":
+                continue
+            tid = str(t.get("task_id") or "").strip()
+            if not tid or tid in seen_pids:
+                continue
+            seen_pids.add(tid)
+            ckpt = t.get("checkpoint") if isinstance(t.get("checkpoint"), dict) else {}
+            prop = ckpt.get("proposal") if isinstance(ckpt.get("proposal"), dict) else {}
+            row: dict[str, Any] = {"task_id": tid}
+            if "based_on" in t:
+                row["based_on"] = t.get("based_on")
+            elif "based_on" in prop:
+                row["based_on"] = prop.get("based_on")
+            elif "based_on" in ckpt:
+                row["based_on"] = ckpt.get("based_on")
+            prop_rows.append(row)
+
+        ref_store = maa.VerifiedRefSet(sorted(ref_pool))
+        audit_report = maa.audit_proposals(prop_rows, ref_store)
+        _append_jsonl(ws / "anchor_audit.jsonl", {
+            "at": _now_iso(),
+            "cycle": engine.cycle_count,
+            "total_proposals": audit_report["total_proposals"],
+            "counts": audit_report["counts"],
+            "proposals": audit_report["proposals"],
+        })
+        out["anchor_audit"] = {
+            "total": audit_report["total_proposals"],
+            **audit_report["counts"],
+        }
+    except Exception as exc:
+        out["anchor_audit"] = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
     return out
 
 
