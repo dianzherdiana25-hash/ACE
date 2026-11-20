@@ -144,6 +144,15 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_transfer_probe_writes_report(self) -> None:
+        out = leap_wiring.step_transfer_probe(self.engine)
+        self.assertEqual(out["status"], "ok")
+        report_path = self.ws / "transfer_probe_report.json"
+        self.assertTrue(report_path.is_file())
+        data = json.loads(report_path.read_text(encoding="utf-8"))
+        self.assertGreaterEqual(data["summary"]["pair_count"], 3)
+        self.assertIn("transfer_gap", data["summary"])
+
 
 if __name__ == "__main__":
     unittest.main()

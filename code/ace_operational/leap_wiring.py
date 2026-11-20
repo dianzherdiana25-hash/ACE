@@ -685,3 +685,46 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0041 — AG108: structural transfer probe (%200)
+# ------------------------------------------------------------------
+
+def step_transfer_probe(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import transfer_probe as tp
+
+        ws = Path(engine.workspace)
+        out_path = ws / "transfer_probe_report.json"
+        suite_path = getattr(tp, "DEFAULT_SUITE_PATH", None)
+        if suite_path is None or not Path(suite_path).is_file():
+            skipped = {
+                "status": "skipped",
+                "reason": "transfer suite not found",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        suite = tp.load_transfer_suite(suite_path)
+        cycle = int(getattr(engine, "cycle_count", 0) or 0)
+        report = tp.run_transfer_probe(suite, tp.structural_toy_solver, seed=cycle)
+        sem_path = ws / "semantic_memory.json"
+        sem = _read_json(sem_path, {}) if sem_path.is_file() else {}
+        report["status"] = "ok"
+        report["checked_at"] = _now_iso()
+        report["cycle"] = cycle
+        report["workspace_context"] = {
+            "has_semantic_memory": sem_path.is_file(),
+            "consolidated_clusters": sem.get("consolidated_cluster_count", 0) if isinstance(sem, dict) else 0,
+        }
+        _write_json(out_path, report)
+        return {
+            "status": "ok",
+            "summary": report.get("summary"),
+            "integrity": report.get("integrity"),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+

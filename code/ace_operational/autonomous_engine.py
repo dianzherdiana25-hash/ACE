@@ -1866,6 +1866,9 @@ class ContinuousAutonomousEngine:
                 _leap("self", leap_wiring.step_self)
             if self.cycle_count % 200 == 1:
                 _leap("organs", leap_wiring.step_organs)
+            # EVO 0041 — Memori & Recall
+            if self.cycle_count % 200 == 0:
+                _leap("transfer_probe", leap_wiring.step_transfer_probe)
 
         # Step 4: Periodic AST self-audit
         audit_summary: dict[str, Any] | None = None
