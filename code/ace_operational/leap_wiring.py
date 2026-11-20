@@ -208,7 +208,7 @@ def step_house(engine: Any) -> dict[str, Any]:
         from ace_operational import recall_candidates as rc
         from tools import regression_probe as rp
 
-        pack = _REPO_ROOT / "tools" / "fixtures" / "regression_probes_v1.jsonl"
+        pack = _REPO_ROOT / "tools" / "fixtures" / "heldout_regression_tasks_v1.jsonl"
         log_path = ws / "cognitive_memory" / "memory.jsonl"
         episodes: list[dict[str, Any]] = []
         if log_path.is_file():
