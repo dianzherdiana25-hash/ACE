@@ -685,3 +685,64 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0049 — proposer stage 1 v2 (env-gated ACE_PROPOSER_V2=1)
+# ------------------------------------------------------------------
+
+
+def step_proposer_v2(engine: Any) -> dict[str, Any]:
+    """Siapkan / validasi paket proposer stage 1 v2 secara offline saat ACE_PROPOSER_V2=1 (AG187)."""
+    import os
+
+    if os.environ.get("ACE_PROPOSER_V2") != "1":
+        return {"status": "skipped", "reason": "ACE_PROPOSER_V2 disabled"}
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from ace_operational import proposer_stage1_v2
+
+        digest = proposer_stage1_v2.schema_digest()
+        cand_path = ws / "proposer_v2_candidate.json"
+        if cand_path.is_file():
+            raw_pkg = cand_path.read_text(encoding="utf-8")
+            pkg = proposer_stage1_v2.extract_package(raw_pkg)
+            if pkg is None:
+                raise ValueError("Kandidat proposer v2 tidak dapat di-parse.")
+            accepted, reasons = proposer_stage1_v2.validate_package(pkg)
+            mode = "candidate_validated"
+        else:
+            episodes = proposer_stage1_v2.load_episodes()
+            preview_count = len(episodes)
+            accepted = True
+            reasons = []
+            mode = f"schema_ready(episodes={preview_count})"
+
+        out_path = ws / "proposer_v2_report.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                "mode": mode,
+                "schema_digest": digest,
+                "accepted": bool(accepted),
+                "reasons": list(reasons),
+            },
+        )
+        return {
+            "status": "ok",
+            "mode": mode,
+            "schema_digest": digest,
+            "accepted": bool(accepted),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

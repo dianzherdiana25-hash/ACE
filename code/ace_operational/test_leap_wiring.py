@@ -144,6 +144,25 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_proposer_v2_is_default_off_and_runs_offline_when_enabled(self) -> None:
+        from unittest import mock
+
+        with mock.patch.dict("os.environ", {}, clear=False):
+            import os as _os
+            _os.environ.pop("ACE_PROPOSER_V2", None)
+            off_res = leap_wiring.step_proposer_v2(self.engine)
+        self.assertEqual(off_res["status"], "skipped")
+        self.assertIn("disabled", off_res["reason"])
+
+        with mock.patch.dict("os.environ", {"ACE_PROPOSER_V2": "1"}):
+            on_res = leap_wiring.step_proposer_v2(self.engine)
+            self.assertEqual(on_res["status"], "ok")
+            self.assertTrue((self.ws / "proposer_v2_report.json").is_file())
+            (self.ws / "proposer_v2_candidate.json").write_text("{corrupt", encoding="utf-8")
+            bad_res = leap_wiring.step_proposer_v2(self.engine)
+            self.assertEqual(bad_res["status"], "skipped")
+            self.assertIn("error", bad_res)
+
 
 if __name__ == "__main__":
     unittest.main()
