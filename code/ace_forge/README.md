@@ -8,6 +8,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 2 | `dataset_custody.py` | SHA-256 per baris dan rantai provenance, penolakan perubahan relatif terhadap anchor eksternal |
 | 3 | `synthetic_data_generator.py` | Tiga keluarga tugas berseed, cek mekanis mandiri, dan laporan shortfall |
 | 4 | `curriculum_distiller.py` | Distilasi urutan dari demonstrasi berkustodi, konflik, dan isolasi held-out |
+| 7 | `forgetting_guard.py` | Akurasi berpasangan per domain, penurunan kritis, dan bukti yang kurang |
+| 10 | `brain_bench.py` | Perbandingan kualitas dan sumber daya, hash artefak, dan diagnosis per kasus |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -41,3 +43,14 @@ langkah demonstrasi train yang melewati ambang dukungan. Laporan
 memuat konflik urutan beserta ID pendukung. Baris held-out membawa
 soal dan pointer verifier, sementara jawaban disimpan di dataset
 kustodi untuk penilai. Pengaruh terhadap hasil belajar belum dinilai.
+
+`forgetting_guard.py` menerima protokol dan hasil boolean berpasangan,
+dengan komitmen protokol yang diteruskan lewat
+`--expect-protocol-sha256`. `brain_bench.py` mengunci roster kasus,
+rubrik, identitas artefak, dan ambang sampel lewat `--expect-bench-sha256`.
+Bench menerima skor 0–10.000 serta waktu dalam mikrodetik dan peak dalam
+byte, lalu menghitung dua lengan dari observasi yang sama-sama tersedia.
+Untuk persetujuan tempa, jalankan pemeriksa regresi terpisah pada domain
+umum. Kedua program menerima pengukuran yang sudah direkam. Butir 7
+dan 10 dikerjakan sebelum pelatihan agar penerimaan hasil dapat diuji
+tanpa mengaktifkan organ.
