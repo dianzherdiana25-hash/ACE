@@ -1,0 +1,8 @@
+{"id": "ho-01", "query": "kurung seimbang tumpukan parser", "domain": "code", "expected_zero_record_flagged": true, "delivered": false}
+{"id": "ho-02", "query": "dedup csv pertahankan urutan", "domain": "code", "expected_zero_record_flagged": true, "delivered": false}
+{"id": "ho-03", "query": "pajak progresif pembulatan decimal", "domain": "accounting", "expected_zero_record_flagged": true, "delivered": false}
+{"id": "ho-04", "query": "graf bfs lintasan terpendek", "domain": "code", "expected_zero_record_flagged": true, "delivered": false}
+{"id": "ho-05", "query": "backoff eksponensial spool relai", "domain": "ops", "expected_zero_record_flagged": true, "delivered": false}
+{"id": "ho-06", "query": "detektor keamanan rahasia canary", "domain": "security", "expected_zero_record_flagged": false, "delivered": true}
+{"id": "ho-07", "query": "cache lru eviksi kapasitas", "domain": "code", "expected_zero_record_flagged": false, "delivered": true}
+{"id": "ho-08", "query": "astronomi nebula supernova spektroskopi", "domain": "unseen", "expected_zero_record_flagged": false, "delivered": false}
