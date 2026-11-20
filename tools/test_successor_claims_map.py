@@ -99,3 +99,62 @@ class ClaimsMapTests(unittest.TestCase):
                 self.assertEqual(failed.exception.code, 2)
                 self.assertIn("di luar", errors.getvalue())
                 self.assertFalse(self.out.exists())
+
+    def test_chain_verifies_against_git_blob_and_reports_failed_paths(self):
+        self.git("-c", "user.name=fixture", "-c", "user.email=fixture@example.invalid",
+                 "-c", "commit.gpgsign=false", "commit", "-qm", "seed")
+        original = self.evidence.read_bytes()
+        self.evidence.unlink()
+        digest = hashlib.sha256(original).hexdigest()
+
+        def point(source, target):
+            (self.repo / source).write_text(json.dumps({
+                "schema": "ace.successor-relocation.v1", "relocated_to": target,
+            }))
+
+        (self.repo / "valid.md").write_bytes(original)
+        (self.repo / "changed.md").write_bytes(b"changed\n")
+        point("hop.json", "valid.md")
+        point("changed.json", "changed.md")
+        point("cycle.json", "cycle-2.json")
+        point("cycle-2.json", "cycle.json")
+        point("long.json", "long-2.json")
+        point("long-2.json", "long-3.json")
+        point("long-3.json", "valid.md")
+        claims = [("ok", "hop.json", digest), ("changed", "changed.json", digest),
+                  ("cycle", "cycle.json", digest), ("long", "long.json", digest),
+                  ("untrusted", "changed.json", hashlib.sha256(b"changed\n").hexdigest())]
+        self.claims.write_text(json.dumps([
+            {"id": identifier, "evidence": self.evidence.name, "status": "teruji",
+             "relocated_to": target, "sha256": expected} for identifier, target, expected in claims
+        ]))
+        self.assertEqual(main(self.args), 0)
+        report = json.loads((self.out / "inventory.json").read_bytes())["claims"]
+        verified, = report["relocated_verified"]
+        self.assertEqual(verified["relocation_chain"], [self.evidence.name, "hop.json", "valid.md"])
+        self.assertEqual(verified["git_origin"]["state"], "match")
+        self.assertEqual(verified["git_origin"]["sha256"], digest)
+        faults = {item["id"]: item for item in report["relocation_unverified"]}
+        self.assertEqual([item["id"] for item in report["missing_evidence"]],
+                         ["changed", "cycle", "long", "untrusted"])
+        self.assertEqual({key: item["reason"] for key, item in faults.items()}, {
+            "changed": "sha256_mismatch", "cycle": "relocation_cycle",
+            "long": "relocation_hop_limit", "untrusted": "origin_blob_mismatch",
+        })
+        self.assertEqual(faults["cycle"]["relocation_chain"],
+                         [self.evidence.name, "cycle.json", "cycle-2.json", "cycle.json"])
+        self.assertEqual(faults["untrusted"]["git_origin"]["state"], "mismatch")
+
+    def test_intermediate_pointer_obeys_root_guard(self):
+        (self.repo / "hop.json").write_text(json.dumps({
+            "schema": "ace.successor-relocation.v1", "relocated_to": "../outside.md",
+        }))
+        self.claims.write_text(json.dumps([{
+            "id": "outside", "evidence": self.evidence.name, "status": "teruji",
+            "relocated_to": "hop.json", "sha256": "a" * 64,
+        }]))
+        with redirect_stderr(StringIO()) as errors, self.assertRaises(SystemExit) as stopped:
+            main(self.args)
+        self.assertEqual(stopped.exception.code, 2)
+        self.assertIn("di luar", errors.getvalue())
+        self.assertFalse(self.out.exists())

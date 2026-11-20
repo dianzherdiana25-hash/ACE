@@ -5,6 +5,9 @@
 dan status teruji atau belum. Peta membedakan bukti hilang dan klaim belum
 teruji dengan bukti yang tersedia. Klaim yang berpindah dapat memuat
 relocated_to (path relatif repo) dan sha256 bukti asli (64 digit hex).
+Lokasi antara dapat berupa objek JSON dengan schema ace.successor-relocation.v1
+dan relocated_to relatif root. Maksimal tiga lompatan termasuk penunjuk
+pertama. Bila ada, blob terakhir dari riwayat HEAD di path asli ikut diperiksa.
 """
 
 import argparse
@@ -17,11 +20,16 @@ import re
 import subprocess
 
 
+RELOCATION_SCHEMA = "ace.successor-relocation.v1"
+MAX_RELOCATION_HOPS = 3
+
+
 PATTERN = re.compile(r"(?<![A-Za-z0-9])(?:successor-0006|successor_6|s0006)(?![A-Za-z0-9])", re.I)
 
 
-def _git(root, *args):
+def _git(root, *args, quiet=False):
     return subprocess.check_output(["git", "-C", str(root), *args],
+                                   stderr=subprocess.DEVNULL if quiet else None,
                                    env={**os.environ, "GIT_OPTIONAL_LOCKS": "0", "GIT_NO_LAZY_FETCH": "1"})
 
 
@@ -83,6 +91,54 @@ def _claim_path(repo, raw_path, index):
     return rel, path
 
 
+def _relocation_pointer(data):
+    if not data.lstrip().startswith(b"{"):
+        return None
+    try:
+        value = json.loads(data)
+    except (ValueError, UnicodeError):
+        return None
+    if isinstance(value, dict) and value.get("schema") == RELOCATION_SCHEMA:
+        return value
+    return None
+
+
+def _follow_relocation(repo, origin, target, index):
+    rel, path = origin
+    chain = [rel.as_posix()]
+    visited = {path}
+    for hop in range(1, MAX_RELOCATION_HOPS + 1):
+        rel, path = target
+        chain.append(rel.as_posix())
+        if path in visited:
+            return chain, None, "relocation_cycle"
+        visited.add(path)
+        if not path.is_file():
+            return chain, None, "file_missing"
+        data = path.read_bytes()
+        pointer = _relocation_pointer(data)
+        if pointer is None:
+            return chain, hashlib.sha256(data).hexdigest(), None
+        target = _claim_path(repo, pointer.get("relocated_to"), index)
+        if hop == MAX_RELOCATION_HOPS:
+            chain.append(target[0].as_posix())
+            return chain, None, "relocation_hop_limit"
+
+
+def _git_origin(repo, rel, expected):
+    try:
+        revision = _git(repo, "--literal-pathspecs", "log", "-1", "--diff-filter=AMCRT",
+                        "--format=%H", "HEAD", "--", rel.as_posix(), quiet=True).decode().strip()
+        if revision:
+            data = _git(repo, "cat-file", "blob", f"{revision}:{rel.as_posix()}", quiet=True)
+            digest = hashlib.sha256(data).hexdigest()
+            return {"state": "match" if digest == expected else "mismatch",
+                    "commit": revision, "sha256": digest}
+    except subprocess.CalledProcessError:
+        pass
+    return {"state": "unavailable"}
+
+
 def map_claims(repo, claims, result):
     """Periksa path klaim dan hubungkan dengan daftar berkas inventaris."""
     if not isinstance(claims, list):
@@ -105,21 +161,27 @@ def map_claims(repo, claims, result):
         row = {"id": claim_id, "evidence": rel.as_posix(), "status": claim["status"],
                "in_successor_inventory": rel.as_posix() in inventoried}
         if relocated is not None:
-            new_rel, new_path = relocated
             digest = claim.get("sha256")
             if not isinstance(digest, str) or not re.fullmatch(r"[a-fA-F0-9]{64}", digest):
                 raise ValueError(f"SHA-256 bukti asli klaim {index} tidak sah.")
-            relocation = {**row, "relocated_to": new_rel.as_posix(), "sha256": digest.lower()}
-            if not new_path.is_file():
-                unverified.append({**relocation, "reason": "file_missing"})
-            elif hashlib.sha256(new_path.read_bytes()).hexdigest() != digest.lower():
-                unverified.append({**relocation, "reason": "sha256_mismatch"})
+            digest = digest.lower()
+            chain, final_digest, reason = _follow_relocation(repo, (rel, path), relocated, index)
+            origin = _git_origin(repo, rel, digest)
+            relocation = {**row, "relocated_to": chain[-1], "sha256": digest,
+                          "relocation_chain": chain, "git_origin": origin}
+            if reason is None and final_digest != digest:
+                reason = "sha256_mismatch"
+            if reason is None and origin["state"] == "mismatch":
+                reason = "origin_blob_mismatch"
+            if reason is not None:
+                unverified.append({**relocation, "reason": reason})
+                missing.append(row)
             else:
                 verified.append(relocation)
                 if claim["status"] == "belum":
-                    untested.append({**row, "evidence": new_rel.as_posix(),
-                                     "in_successor_inventory": new_rel.as_posix() in inventoried})
-                continue
+                    untested.append({**row, "evidence": chain[-1],
+                                     "in_successor_inventory": chain[-1] in inventoried})
+            continue
         if not path.is_file():
             missing.append(row)
         elif claim["status"] == "belum":
@@ -158,8 +220,9 @@ def markdown(result):
             lines.extend([f"## {heading} ({len(rows)})", ""])
             for row in rows:
                 suffix = f" · {row['reason']}" if "reason" in row else ""
-                lines.append(f"- {escape(row['id'])} · {escape(row['evidence'])} → "
-                             f"{escape(row['relocated_to'])} · `{row['sha256']}`{suffix}")
+                chain = " → ".join(escape(path) for path in row["relocation_chain"])
+                lines.append(f"- {escape(row['id'])} · {chain} · `{row['sha256']}`{suffix}"
+                             f" · blob Git {row['git_origin']['state']}")
             lines.append("")
     return "\n".join(lines)
 
