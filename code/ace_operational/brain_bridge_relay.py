@@ -8,6 +8,7 @@ through the vault connector helpers and spools the answers
 back. Credentials never leave ila's VM.
 """
 import json
+import os
 import threading
 import time
 import uuid
@@ -49,18 +50,22 @@ def spool_fetch(payload):
     REQ.mkdir(parents=True, exist_ok=True)
     RESP.mkdir(parents=True, exist_ok=True)
     call_id = uuid.uuid4().hex
-    (REQ / f"{call_id}.json").write_text(json.dumps(
-        {**payload, "ts": time.time()}), encoding="utf-8")
+    req_tmp = REQ / f".{call_id}.json.tmp"
+    req_target = REQ / f"{call_id}.json"
+    req_tmp.write_text(
+        json.dumps({**payload, "ts": time.time()}), encoding="utf-8"
+    )
+    os.replace(req_tmp, req_target)
     deadline = time.time() + TIMEOUT_S
     target = RESP / f"{call_id}.json"
     while time.time() < deadline:
         if target.exists():
             doc = json.loads(target.read_text(encoding="utf-8"))
             target.unlink(missing_ok=True)
-            (REQ / f"{call_id}.json").unlink(missing_ok=True)
+            req_target.unlink(missing_ok=True)
             return doc
         time.sleep(0.1)
-    (REQ / f"{call_id}.json").unlink(missing_ok=True)
+    req_target.unlink(missing_ok=True)
     return None
 
 
