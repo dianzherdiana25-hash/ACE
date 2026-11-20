@@ -17,10 +17,36 @@ import subprocess
 import sys
 from typing import Any
 
-if __package__:
-    from ._repo_name import canonical_repo_name
-else:
-    from _repo_name import canonical_repo_name
+try:
+    if __package__:
+        from ._repo_name import canonical_repo_name
+    else:
+        from _repo_name import canonical_repo_name
+except ImportError:
+    # Salinan mandiri di luar repo (kontrak refresh_repo_index.sh: hanya
+    # repo_index.py + skrip yang disalin ke repo tiruan) — definisi lokal
+    # dengan semantik identik tools/_repo_name.py.
+    def canonical_repo_name(root: Path) -> str:
+        """Ambil basename remote origin lokal, atau pakai nama direktori."""
+        import re
+        from urllib.parse import urlsplit
+
+        if not (root / ".git").exists():
+            return root.name
+        try:
+            result = subprocess.run(
+                ["git", "-C", str(root), "config", "--local", "--get", "remote.origin.url"],
+                capture_output=True, encoding="utf-8", check=True, timeout=5,
+            )
+            remote = result.stdout.strip()
+            if "://" in remote:
+                path = urlsplit(remote).path
+            else:
+                path = re.sub(r"^[^/:]+:", "", remote, count=1)
+        except (OSError, ValueError, subprocess.SubprocessError):
+            return root.name
+        name = path.rstrip("/").rsplit("/", 1)[-1].removesuffix(".git")
+        return name if name and name not in {".", ".."} and name.isprintable() else root.name
 
 INDEX_SCHEMA = "ace.repo-index.v1"
 
