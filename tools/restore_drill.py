@@ -95,6 +95,15 @@ def run_fixture_restore_drill(
         text=True,
         check=False,
     )
+    if proc.returncode != 0 and "cross-device" in (proc.stderr or ""):
+        # --local memakai hardlink; gagal bila target beda device dari sumber
+        # (mis. scratch di tmpfs). Ulangi dengan clone salinan penuh.
+        proc = subprocess.run(
+            ["git", "clone", "-q", str(repo_source), str(target_repo)],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
     clone_ok = proc.returncode == 0 and (target_repo / ".git").exists()
     phases.append(
         {
