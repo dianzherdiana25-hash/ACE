@@ -685,3 +685,64 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_kbm_produce(engine: Any) -> dict[str, Any]:
+    """Audit dry-run produksi KBM + antrean tinjau terisolasi ke kbm_produce_status.json."""
+    try:
+        import struct
+        from tempfile import TemporaryDirectory
+        from tools.cover_check import PNG_SIGNATURE
+        from tools.kbm_produce import run_production
+        from tools.kbm_production_queue import enqueue, list_items
+
+        with TemporaryDirectory(prefix="ace-kbm-produce-") as tmp:
+            root = Path(tmp)
+            materials = root / "bahan.md"
+            manuscript = root / "naskah.md"
+            cover = root / "cover.png"
+            royalty = root / "royalti.csv"
+            materials.write_text("# Bahan\n- Pola: Pembuka dialog\n", encoding="utf-8")
+            manuscript.write_text(
+                "# Bab 1: Judul Uji\nIsi bab dengan cukup kata untuk validasi.\n",
+                encoding="utf-8",
+            )
+            cover.write_bytes(
+                PNG_SIGNATURE + struct.pack(">I4sII", 13, b"IHDR", 800, 1200) + b"\0" * 1200
+            )
+            royalty.write_text(
+                "serial,date,amount,currency\nFixture,2026-01-05,100.00,IDR\n",
+                encoding="utf-8",
+            )
+            prod = run_production(
+                materials=materials,
+                manuscript=manuscript,
+                cover=cover,
+                bundle_dir=root / "paket",
+                royalty_paths=[royalty],
+                expected_chapters=1,
+                min_words=5,
+                min_bytes=0,
+            )
+            queue_db = root / "review_queue.sqlite"
+            q = enqueue(manuscript, cover, queue_db, min_words=5, min_bytes=0)
+            items = list_items(queue_db)
+        compact = {
+            "schema": prod.get("schema", "ace.kbm-produce.v1"),
+            "passed": bool(prod.get("passed", False)),
+            "failed_stage": prod.get("failed_stage"),
+            "stages": sorted((prod.get("stages") or {}).keys()),
+            "queued": bool(q.get("queued", False)),
+            "queue_count": len(items),
+            "upload_authorized": bool(q.get("upload_authorized", False)),
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "kbm_produce_status.json", compact)
+        return {
+            "status": "ok",
+            "passed": compact["passed"],
+            "queued": compact["queued"],
+            "queue_count": compact["queue_count"],
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}

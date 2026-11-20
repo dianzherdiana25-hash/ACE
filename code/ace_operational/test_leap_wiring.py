@@ -144,6 +144,16 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_kbm_produce_dryrun_and_queue(self):
+        res = leap_wiring.step_kbm_produce(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertTrue(res["passed"])
+        self.assertTrue(res["queued"])
+        self.assertEqual(res["queue_count"], 1)
+        out = json.loads((self.ws / "kbm_produce_status.json").read_text(encoding="utf-8"))
+        self.assertFalse(out["upload_authorized"])
+        self.assertEqual(len(out["stages"]), 5)
+
 
 if __name__ == "__main__":
     unittest.main()
