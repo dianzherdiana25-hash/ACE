@@ -31,6 +31,11 @@ class TransitionTests(unittest.TestCase):
         self.assertEqual(report["findings"], [])
         self.assertEqual(report["violation_count"], 0)
 
+    def test_markdown_accepts_a_legacy_v1_report(self):
+        report = {"sent": 0, "by_day_and_target": {}, "violation_count": 0, "violations": []}
+        self.assertIn("Pelanggaran — 0", markdown(report))
+        self.assertNotIn("Transisi", markdown(report))
+
     def test_sent_for_another_digest_is_a_finding_not_envelope_violation(self):
         self.write_rows(("2026-11-19T23:58:00+00:00", "prepared", "unrelated"),
                         ("2026-11-20T00:02:00+00:00", "sent", "orphan"))

@@ -72,11 +72,13 @@ def markdown(result):
                  for branch, count in targets.items())
     lines.extend(["", "## Lokasi pelanggaran", ""])
     lines.extend(f"- Baris {row['line']} · {row['reason']}" for row in result["violations"])
-    lines.extend(["", "## Transisi prepared → sent", ""])
-    lines.extend(f"- Baris {item['prepared']['line']} → baris {item['sent']['line']}"
-                 for item in result["transitions"])
-    lines.extend(["", "## Temuan audit", ""])
-    lines.extend(f"- Baris {row['line']} · {row['reason']}" for row in result["findings"])
+    if "transitions" in result:
+        lines.extend(["", "## Transisi prepared → sent", ""])
+        lines.extend(f"- Baris {item['prepared']['line']} → baris {item['sent']['line']}"
+                     for item in result["transitions"])
+    if "findings" in result:
+        lines.extend(["", "## Temuan audit", ""])
+        lines.extend(f"- Baris {row['line']} · {row['reason']}" for row in result["findings"])
     return "\n".join(lines) + "\n"
 
 
