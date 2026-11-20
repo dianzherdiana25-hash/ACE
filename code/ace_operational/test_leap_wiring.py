@@ -144,6 +144,38 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_constitution_dilemma_enforces_overridden_article_and_ack(self):
+        ok_res = leap_wiring.step_constitution_dilemma(self.engine)
+        self.assertEqual(ok_res["status"], "ok")
+        self.assertTrue(ok_res["all_valid"])
+        self.assertTrue((self.ws / "constitution_checks.jsonl").is_file())
+
+        (self.ws / "dilemmas.json").write_text(
+            json.dumps([{
+                "dilemma_id": "d-const",
+                "situation": "Dua pasal bersinggungan.",
+                "articles_in_tension": ["p1", "p2"],
+            }]),
+            encoding="utf-8",
+        )
+        (self.ws / "dilemma_decisions.json").write_text(
+            json.dumps([{
+                "dilemma_id": "d-const",
+                "chosen_action": "pilih_p1",
+                "invoked_article": "p1",
+                "invoked_rationale": "Wajib.",
+            }]),
+            encoding="utf-8",
+        )
+        rej = leap_wiring.step_constitution_dilemma(self.engine)
+        self.assertEqual(rej["status"], "ok")
+        self.assertFalse(rej["all_valid"])
+        self.assertEqual(rej["rejected_count"], 1)
+
+    def test_constitution_dilemma_fails_closed_on_malformed_pack(self):
+        (self.ws / "dilemmas.json").write_text("", encoding="utf-8")
+        self.assertEqual(leap_wiring.step_constitution_dilemma(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

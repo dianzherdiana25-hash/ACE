@@ -685,3 +685,54 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_constitution_dilemma(engine: Any) -> dict[str, Any]:
+    """AG164: validate constitutional dilemma decisions (invoked + overridden article + ack)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import constitution_dilemma as cd
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        dil_path = ws / "dilemmas.json"
+        if not dil_path.is_file():
+            dil_path = ws / "dilemmas.jsonl"
+        dec_path = ws / "dilemma_decisions.json"
+
+        if dil_path.is_file():
+            dilemmas = cd.load_dilemma_pack(dil_path)
+            if dec_path.is_file():
+                raw_dec = json.loads(dec_path.read_text(encoding="utf-8"))
+                decisions = [raw_dec] if isinstance(raw_dec, dict) else list(raw_dec)
+            else:
+                decisions = []
+        else:
+            dilemmas = [{
+                "dilemma_id": "const-safety-vs-latency",
+                "title": "Verifikasi sumber vs percepatan siklus",
+                "situation": "Menjalankan pemeriksaan integritas walau menambah latensi siklus.",
+                "articles_in_tension": [
+                    {"article_id": "pasal-verifikasi", "summary": "Setiap klaim butuh verifikasi sumber"},
+                    {"article_id": "pasal-kelincahan", "summary": "Siklus singkat meminimalkan waktu tunggu"},
+                ],
+            }]
+            decisions = [{
+                "dilemma_id": "const-safety-vs-latency",
+                "chosen_action": "jalankan_audit_terlebih_dahulu",
+                "invoked_article": "pasal-verifikasi",
+                "invoked_rationale": "Kebenaran bukti mengungguli pengurangan latensi.",
+                "overridden_article": "pasal-kelincahan",
+                "overridden_acknowledgment": "Durasi siklus bertambah untuk verifikasi sumber.",
+            }]
+
+        report = cd.validate_decision_batch(dilemmas, decisions)
+        entry = {"at": _now_iso(), **report}
+        _append_jsonl(ws / "constitution_checks.jsonl", entry)
+        return {"status": "ok", **entry}
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
