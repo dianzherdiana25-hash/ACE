@@ -24,10 +24,11 @@ def pid_present(pid):
 
 
 def bridge_healthy(url, timeout):
-    parts = urlsplit(url)
-    if parts.scheme not in {"http", "https"} or not parts.hostname or parts.username or parts.query or parts.fragment:
-        return False
     try:
+        parts = urlsplit(url)
+        if (parts.scheme not in {"http", "https"} or not parts.hostname
+                or parts.username or parts.query or parts.fragment):
+            return False
         with urlopen(url.rstrip("/") + "/health", timeout=timeout) as response:
             data = json.loads(response.read(65_537))
         return isinstance(data, dict) and data.get("ok") is True
