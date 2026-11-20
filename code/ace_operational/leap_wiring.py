@@ -685,3 +685,45 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_relay_spool_tools(engine: Any) -> dict[str, Any]:
+    """Audit kesehatan direktori spool relay ke relay_spool_validation.json."""
+    try:
+        from tempfile import TemporaryDirectory
+        from tools.relay_spool_tools import validate_spool_dir
+
+        live_spool = engine.workspace / "bridge_spool"
+        if live_spool.is_dir() and not live_spool.is_symlink():
+            res = validate_spool_dir(live_spool)
+        else:
+            with TemporaryDirectory(prefix="ace-spool-audit-") as tmp:
+                root = Path(tmp)
+                (root / "req").mkdir()
+                (root / "resp").mkdir()
+                (root / "req" / "probe_001.json").write_text(
+                    json.dumps({"path": "/health", "request": {}, "ts": 1.0}),
+                    encoding="utf-8",
+                )
+                (root / "resp" / "probe_001.json").write_text(
+                    json.dumps({"status": 200, "body": {"ok": True}}),
+                    encoding="utf-8",
+                )
+                res = validate_spool_dir(root)
+        compact = {
+            "schema": res.get("schema"),
+            "valid": bool(res.get("valid", False)),
+            "total_files": res.get("total_files", 0),
+            "valid_count": res.get("valid_count", 0),
+            "invalid_count": res.get("invalid_count", 0),
+            "reason_counts": res.get("reason_counts", {}),
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "relay_spool_validation.json", compact)
+        return {
+            "status": "ok",
+            "valid": compact["valid"],
+            "total_files": compact["total_files"],
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}
