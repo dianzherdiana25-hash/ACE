@@ -144,6 +144,14 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_director_screen_audits_git_snapshot(self):
+        res = leap_wiring.step_director_screen(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertIn(res["verdict"], {"LOLOS", "LOLOS-DENGAN-PERBAIKAN", "TOLAK"})
+        out = json.loads((self.ws / "director_screen.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.director-screen.v1")
+        self.assertEqual(out["product"], "README.md")
+
 
 if __name__ == "__main__":
     unittest.main()

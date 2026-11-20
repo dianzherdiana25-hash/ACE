@@ -685,3 +685,29 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_director_screen(engine: Any) -> dict[str, Any]:
+    """Jalankan saringan produk baca-saja terhadap GitSnapshot HEAD ke director_screen.json."""
+    try:
+        from tools._director_sources import GitSnapshot
+        from tools.director_screen import screen_product
+
+        snap = GitSnapshot(_REPO_ROOT)
+        report = screen_product(snap, "README.md", allow_empty=True)
+        compact = {
+            "schema": report.get("schema", "ace.director-screen.v1"),
+            "commit": report.get("commit"),
+            "product": report.get("product"),
+            "verdict": report.get("verdict"),
+            "summary": report.get("summary", {}),
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "director_screen.json", compact)
+        return {
+            "status": "ok",
+            "verdict": compact["verdict"],
+            "assets_verified": (compact.get("summary") or {}).get("assets_verified", 0),
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}
