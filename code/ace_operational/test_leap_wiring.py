@@ -144,6 +144,45 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_memory_decay_builds_plan_without_deleting_records(self) -> None:
+        from tools import memory_decay as md
+
+        log_path = self.ws / "cognitive_memory" / "memory.jsonl"
+        old_entry = json.dumps({
+            "seq": 1, "prev": "GENESIS", "hash": "h1",
+            "event": {"type": "record", "record": {
+                "id": "ep-old", "kind": "episodic", "content": {"text": "catatan lama"},
+                "created_at": "2020-01-01T00:00:00Z",
+            }},
+        })
+        fresh_entry = json.dumps({
+            "seq": 2, "prev": "h1", "hash": "h2",
+            "event": {"type": "record", "record": {
+                "id": "ep-fresh", "kind": "semantic", "content": {"text": "baru"},
+                "created_at": "2099-01-01T00:00:00Z",
+            }},
+        })
+        log_path.write_text(old_entry + "\n" + fresh_entry + "\n", encoding="utf-8")
+        before = log_path.read_bytes()
+
+        self.engine.cycle_count = 50
+        out = leap_wiring.step_memory_decay(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["evaluated"], 2)
+        self.assertEqual(out["archive_candidates"], 1)
+        self.assertEqual(log_path.read_bytes(), before)
+
+        plan = json.loads((self.ws / "memory_decay_plan.json").read_text(encoding="utf-8"))
+        self.assertEqual(plan["schema"], md.SCHEMA)
+        self.assertFalse(plan["policy"]["delete_records"])
+        self.assertEqual([item["record_id"] for item in plan["archive_plan"]], ["ep-old"])
+
+    def test_memory_decay_no_log_fail_closed(self) -> None:
+        (self.ws / "cognitive_memory" / "memory.jsonl").unlink()
+        out = leap_wiring.step_memory_decay(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertTrue((self.ws / "memory_decay_plan.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -685,3 +685,52 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0041 — Mengingat yang hidup (AG102)
+# ------------------------------------------------------------------
+
+def step_memory_decay(engine: Any) -> dict[str, Any]:
+    """Susun daftar kandidat arsip memori basi tanpa menghapus → memory_decay_plan.json."""
+    from tools import memory_decay as md
+
+    ws: Path = engine.workspace
+    now = _now_iso()
+    log_path = ws / "cognitive_memory" / "memory.jsonl"
+    recall_log = ws / "recall_log.jsonl"
+    if not recall_log.is_file():
+        recall_log = ws / "recall_probe.jsonl"
+
+    if not log_path.is_file():
+        plan = {
+            "schema": md.SCHEMA,
+            "as_of": now,
+            "cycle": engine.cycle_count,
+            "policy": {
+                "stale_days": md.DEFAULT_STALE_DAYS,
+                "half_life_days": md.DEFAULT_HALF_LIFE_DAYS,
+                "min_retain_score": md.DEFAULT_MIN_RETAIN_SCORE,
+                "delete_records": False,
+            },
+            "summary": {
+                "total_evaluated": 0,
+                "archive_candidate_count": 0,
+                "retained_active_count": 0,
+            },
+            "archive_plan": [],
+            "retained_records": [],
+        }
+    else:
+        plan = md.build_archive_plan(log_path, recall_log, as_of=now)
+        plan["cycle"] = engine.cycle_count
+
+    _write_json(ws / "memory_decay_plan.json", plan)
+    summary = plan.get("summary") or {}
+    return {
+        "status": "ok",
+        "artifact": "memory_decay_plan.json",
+        "evaluated": int(summary.get("total_evaluated") or 0),
+        "archive_candidates": int(summary.get("archive_candidate_count") or 0),
+    }
+
