@@ -144,6 +144,14 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_drift_quarantine_writes_verdict(self):
+        res = leap_wiring.step_drift_quarantine(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["verdict"], "CONSISTENT")
+        self.assertFalse(res["quarantined"])
+        out = json.loads((self.ws / "drift_quarantine.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.drift-quarantine.v1")
+
 
 if __name__ == "__main__":
     unittest.main()

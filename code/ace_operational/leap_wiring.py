@@ -685,3 +685,30 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_drift_quarantine(engine: Any) -> dict[str, Any]:
+    """Periksa konsistensi distribusi semantik dan status karantina ke drift_quarantine.json."""
+    try:
+        from ace_core_repair.drift_quarantine import SemanticDriftQuarantine
+
+        obs = _read_json(engine.workspace / "drift_observations.json", None)
+        base_obs = obs.get("base", []) if isinstance(obs, dict) else []
+        inc_obs = obs.get("incoming", []) if isinstance(obs, dict) else []
+        verdict, detail = SemanticDriftQuarantine(consistency_threshold=0.95).check_distribution_consistency(
+            base_obs, inc_obs
+        )
+        compact = {
+            "schema": "ace.drift-quarantine.v1",
+            "verdict": verdict,
+            "detail": detail,
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "drift_quarantine.json", compact)
+        return {
+            "status": "ok",
+            "verdict": verdict,
+            "quarantined": bool((detail or {}).get("quarantined", False)),
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}
