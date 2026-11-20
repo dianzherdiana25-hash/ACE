@@ -685,3 +685,81 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0050 — prasyarat luring amplop draf PR (tanpa kirim otomatis)
+# ------------------------------------------------------------------
+
+
+def step_draft_release_preflight(engine: Any) -> dict[str, Any]:
+    """Validasi amplop luring draft PR dengan send_authorized=False secara fail-closed (AG194)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import draft_release_preflight
+
+        cycle = int(getattr(engine, "cycle_count", 0) or 0)
+        out_path = ws / "draft_release_preflight.json"
+        spec_path = ws / "draft_release_spec.json"
+        if not spec_path.is_file():
+            payload = {
+                "at": _now_iso(),
+                "cycle": cycle,
+                "schema": draft_release_preflight.SCHEMA,
+                "mode": "no_pending_draft",
+                "send_authorized": False,
+            }
+            _write_json(out_path, payload)
+            return {
+                "status": "ok",
+                "mode": "no_pending_draft",
+                "send_authorized": False,
+                "report_path": str(out_path),
+            }
+
+        spec = json.loads(spec_path.read_text(encoding="utf-8"))
+        if not isinstance(spec, dict):
+            raise ValueError("draft_release_spec.json wajib objek JSON.")
+        repo_root = Path(str(spec.get("repo_dir") or getattr(engine, "repo_root", None) or _REPO_ROOT))
+        repository = str(spec.get("repository") or "")
+        branch = str(spec.get("branch") or "")
+        base = str(spec.get("base") or "")
+        head = str(spec.get("head") or "")
+
+        envelope = draft_release_preflight.prepare(
+            repo_root,
+            repository=repository,
+            branch=branch,
+            base=base,
+            head=head,
+        )
+        ver = draft_release_preflight.validate(
+            repo_root,
+            envelope,
+            repository=repository,
+            base=base,
+        )
+        payload = {
+            "at": _now_iso(),
+            "cycle": cycle,
+            "mode": "validated",
+            "envelope": envelope,
+            "validation": ver,
+        }
+        _write_json(out_path, payload)
+        return {
+            "status": "ok",
+            "mode": "validated",
+            "ready_for_human_review": bool(ver.get("ready_for_human_review", False)),
+            "send_authorized": bool(ver.get("send_authorized", False)),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

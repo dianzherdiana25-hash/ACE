@@ -144,6 +144,50 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_draft_release_preflight_validates_envelope_and_fails_closed(self) -> None:
+        import subprocess
+
+        repo_dir = self.ws / "preflight_repo"
+        repo_dir.mkdir()
+        env_git = {
+            "GIT_AUTHOR_NAME": "Test",
+            "GIT_AUTHOR_EMAIL": "t@example.com",
+            "GIT_COMMITTER_NAME": "Test",
+            "GIT_COMMITTER_EMAIL": "t@example.com",
+            "PATH": "/usr/bin:/bin",
+        }
+        subprocess.run(["git", "init", "-q"], cwd=repo_dir, check=True, env=env_git)
+        (repo_dir / "handover").mkdir()
+        (repo_dir / "handover" / "note.md").write_text("base\n", encoding="utf-8")
+        subprocess.run(["git", "add", "."], cwd=repo_dir, check=True, env=env_git)
+        subprocess.run(["git", "commit", "-q", "-m", "base"], cwd=repo_dir, check=True, env=env_git)
+        base_oid = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo_dir, text=True).strip()
+        (repo_dir / "handover" / "note.md").write_text("v2\n", encoding="utf-8")
+        subprocess.run(["git", "commit", "-q", "-am", "update"], cwd=repo_dir, check=True, env=env_git)
+        head_oid = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo_dir, text=True).strip()
+
+        (self.ws / "draft_release_spec.json").write_text(
+            json.dumps(
+                {
+                    "repo_dir": str(repo_dir),
+                    "repository": "owner/ACE",
+                    "branch": "ace-auto/20261120-sync",
+                    "base": base_oid,
+                    "head": head_oid,
+                }
+            ),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_draft_release_preflight(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertTrue(res["ready_for_human_review"])
+        self.assertFalse(res["send_authorized"])
+
+        (self.ws / "draft_release_spec.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_draft_release_preflight(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
