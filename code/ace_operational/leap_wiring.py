@@ -685,3 +685,41 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0050 — indeks handover/docs & ekstraktor keputusan
+# ------------------------------------------------------------------
+
+
+def step_handover_index(engine: Any) -> dict[str, Any]:
+    """Bangun indeks handover & ekstraksi keputusan ber-sitasi secara read-only & fail-closed (AG197)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import handover_decision_extractor, handover_index
+
+        repo_root = Path(getattr(engine, "repo_root", None) or _REPO_ROOT)
+        cycle = int(getattr(engine, "cycle_count", 0) or 0)
+        idx = handover_index.build_handover_index(repo_root)
+        decisions = handover_decision_extractor.extract_decisions(repo_root)
+
+        idx_path = ws / "handover_index.json"
+        dec_path = ws / "handover_decisions.json"
+        _write_json(idx_path, {"at": _now_iso(), "cycle": cycle, **idx})
+        _write_json(dec_path, {"at": _now_iso(), "cycle": cycle, **decisions})
+        return {
+            "status": "ok",
+            "total_files": idx["summary"]["total_files"],
+            "decisions_kept": decisions["summary"]["total_items_kept"],
+            "index_path": str(idx_path),
+            "decisions_path": str(dec_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

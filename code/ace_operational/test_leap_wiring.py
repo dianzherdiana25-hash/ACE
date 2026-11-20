@@ -144,6 +144,20 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_handover_index_and_decisions_write_json_and_fail_closed(self) -> None:
+        res = leap_wiring.step_handover_index(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertGreater(res["total_files"], 1)
+        idx_saved = json.loads((self.ws / "handover_index.json").read_text(encoding="utf-8"))
+        dec_saved = json.loads((self.ws / "handover_decisions.json").read_text(encoding="utf-8"))
+        self.assertEqual(idx_saved["schema"], "ace.handover-index.v1")
+        self.assertEqual(dec_saved["schema"], "ace.handover-decisions.v1")
+
+        self.engine.repo_root = self.ws / "missing_repo"
+        bad = leap_wiring.step_handover_index(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
