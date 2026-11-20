@@ -29,7 +29,7 @@ class CutoverFixtureTests(unittest.TestCase):
             return False
 
         plan = plan_home(self.config, bundle_manifest=self.manifest, pid_probe=missing_process)
-        self.assertEqual(seen, [31337])
+        self.assertEqual(seen, [31337, 31337])
         self.assertEqual(plan["preflight"]["pid_file"], {"state": "stale", "safe_to_continue": True})
         self.assertTrue(plan["preflight"]["safe_to_continue"])
         self.assertIn("stale (aman-untuk-lanjut)", markdown(plan))
