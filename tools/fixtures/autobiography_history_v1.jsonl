@@ -1,0 +1,10 @@
+{"decision_id": "dec-01", "date": "2026-11-01", "decision": "aktifkan bridge governor", "reason": "kuota harian front sering habis", "outcome": "lulus"}
+{"decision_id": "dec-02", "date": "2026-11-02", "decision": "tahan deploy rilis 14", "reason": "checksum verify_sources gagal", "outcome": "ditunda"}
+{"decision_id": "dec-03", "date": "2026-11-03", "decision": "pakai mode sqlite ro", "reason": "mencegah tulis tak disengaja", "outcome": "lulus"}
+{"decision_id": "dec-04", "date": "2026-11-04", "decision": "pindah cadangan ke direktori lokal", "reason": "sinkronisasi remote lambat", "outcome": "lulus"}
+{"decision_id": "dec-05", "date": "2026-11-05", "decision": "tolak proposal tanpa pengukur", "reason": "tidak ada metrik pembuktian", "outcome": "ditolak"}
+{"decision_id": "dec-06", "date": "2026-11-06", "decision": "jalankan audit shard ganda", "reason": "rotasi log meninggalkan tumpang tindih", "outcome": "selesai"}
+{"decision_id": "dec-07", "date": "2026-11-07", "decision": "bekukan perubahan kurikulum inti", "reason": "jendela regresi belum ditutup", "outcome": "dibekukan"}
+{"decision_id": "dec-08", "date": "2026-11-08", "decision": "terapkan jeda eksponensial relay", "reason": "upstream mengembalikan 503", "outcome": "pulih"}
+{"decision_id": "dec-09", "date": "2026-11-09", "decision": "karantina entri spool rusak", "reason": "satu baris JSON terpotong", "outcome": "aman"}
+{"decision_id": "dec-10", "date": "2026-11-10", "decision": "arsipkan memori usang tingkat rendah", "reason": "usia melampaui ambang retensi", "outcome": "diarsipkan"}
