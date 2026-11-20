@@ -144,6 +144,20 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_introspect_recall_logs_open_gaps(self) -> None:
+        self._seed_gap()
+        out = leap_wiring.step_introspect_recall(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["probed"], 1)
+        out_path = self.ws / "recall_introspection.jsonl"
+        self.assertTrue(out_path.is_file())
+        row = json.loads(out_path.read_text(encoding="utf-8").strip().splitlines()[-1])
+        self.assertIn("citations", row)
+
+    def test_introspect_recall_no_gaps_skips_cleanly(self) -> None:
+        out = leap_wiring.step_introspect_recall(self.engine)
+        self.assertEqual(out["status"], "skipped")
+
 
 if __name__ == "__main__":
     unittest.main()

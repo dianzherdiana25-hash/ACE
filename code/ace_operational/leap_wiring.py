@@ -685,3 +685,53 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0041 — AG107: introspect recall for open gaps before director (%25)
+# ------------------------------------------------------------------
+
+def step_introspect_recall(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import introspect_recall as ir
+
+        ws = Path(engine.workspace)
+        mem_path = ws / "cognitive_memory" / "memory.jsonl"
+        mem_paths = [mem_path] if mem_path.is_file() else []
+        out_path = ws / "recall_introspection.jsonl"
+        gaps = engine.store.list_gaps(status="OPEN")
+        if not gaps:
+            return {"status": "skipped", "reason": "no open gaps", "probed": 0}
+
+        probed = 0
+        hits_total = 0
+        for gap in gaps[:10]:
+            query = " ".join(str(gap.get(k) or "") for k in (
+                "error_type", "missing_skill_or_tool", "description_id",
+                "gap_type", "skill_name", "title", "description",
+            )).strip()
+            if not query:
+                continue
+            res = ir.query_introspection(
+                query, root=ws, memory_paths=mem_paths, top_k=5
+            )
+            hits = res.get("hits") or []
+            probed += 1
+            hits_total += len(hits)
+            _append_jsonl(out_path, {
+                "at": _now_iso(),
+                "cycle": getattr(engine, "cycle_count", 0),
+                "gap_id": gap.get("gap_id"),
+                "query": query,
+                "status": res.get("status"),
+                "guess_only": res.get("guess_only"),
+                "hit_count": len(hits),
+                "citations": res.get("citations") or [],
+            })
+
+        if probed == 0:
+            return {"status": "skipped", "reason": "empty gap queries", "probed": 0}
+        return {"status": "ok", "probed": probed, "hits_total": hits_total}
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
