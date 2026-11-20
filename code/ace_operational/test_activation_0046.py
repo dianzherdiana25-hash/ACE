@@ -89,12 +89,19 @@ class Activation0046OverlayTests(unittest.TestCase):
 
     @unittest.skipUnless(_ALL_WIRED, "Memerlukan seluruh branch EVO 0046 AG151–AG159 terpasang")
     def test_all_nine_evo0046_steps_produce_artifacts_cleanly(self) -> None:
-        db_files = [p for p in self.ws.rglob("*") if p.is_file() and p.suffix in (".db", ".sqlite", ".sqlite3")]
-        self.assertTrue(db_files)
-        db_before = db_files[0].read_bytes()
-
+        # Screening fix (Ian, 2026-11-20): snapshot AFTER engine construction.
+        # Engine init itself checkpoints the store WAL into the main sqlite
+        # file (4096 -> 512000 bytes on this VM), and rglob order is
+        # filesystem-dependent, so the original db_files[0] snapshot taken
+        # before construction failed deterministically here while passing
+        # on the builder's machine. The assertion's intent — the nine steps
+        # must not mutate any pre-existing DB — is preserved and widened to
+        # every DB file, keyed by path.
         eng = ContinuousAutonomousEngine(store=self.store, workspace=self.ws)
         eng.cycle_count = 1000
+        db_files = [p for p in self.ws.rglob("*") if p.is_file() and p.suffix in (".db", ".sqlite", ".sqlite3")]
+        self.assertTrue(db_files)
+        db_before = {p: p.read_bytes() for p in db_files}
         for step_name in _EVO0046_STEPS:
             with self.subTest(step=step_name):
                 res = getattr(leap_wiring, step_name)(eng)
@@ -113,7 +120,8 @@ class Activation0046OverlayTests(unittest.TestCase):
         ):
             self.assertTrue((self.ws / name).is_file(), f"missing artifact {name}")
 
-        self.assertEqual(db_files[0].read_bytes(), db_before)
+        for path, before_bytes in db_before.items():
+            self.assertEqual(path.read_bytes(), before_bytes, f"step run mutated {path.name}")
 
     @unittest.skipUnless(_ALL_WIRED, "Memerlukan seluruh branch EVO 0046 AG151–AG159 terpasang")
     def test_engine_cycles_1000_and_1001_trigger_all_evo0046_cadences(self) -> None:

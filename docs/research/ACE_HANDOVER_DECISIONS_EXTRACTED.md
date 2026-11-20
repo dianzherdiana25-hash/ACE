@@ -4,8 +4,8 @@
 
 ## 1. Ringkasan Pemindaian
 
-- Berkas `handover/` & `docs/` dipindai: **319**
-- Total baris dipindai: **37452**
+- Berkas `handover/` & `docs/` dipindai: **320**
+- Total baris dipindai: **37609**
 - Total butir tersitasi: **140**
 - Tag asal ringkasan: `gravity-proposal`
 
@@ -20,7 +20,7 @@
 
 ## Aturan Tata Kelola & Kontrak Tetap (`GOVERNANCE_RULE`)
 
-- Kecocokan total: **253** | Ditampilkan: **35**
+- Kecocokan total: **255** | Ditampilkan: **35**
 
 | Sumber & Baris | Aktor Sumber | Asal Ringkasan | Kutipan |
 | --- | --- | --- | --- |
@@ -47,8 +47,8 @@
 | `docs/ACE_SELFMODEL_RESULTS_V1.md:10` | `repo_record` | `gravity-proposal` | ## 1. Mandatory Epistemic & Execution Status Separation |
 | `docs/ACE_SELFMODEL_RESULTS_V1.md:36` | `repo_record` | `gravity-proposal` | - **`H1` State Introspection Fidelity (`PASS`)**: `SelfState` read live SQLite states from `Autonomy` and `ace_runtime` (`staged` vs `unstaged` tasks, missing task IDs, tool allowlists, remaining budgets, mandatory invar… |
 | `docs/ACE_SELFMODEL_RESULTS_V1.md:39` | `repo_record` | `gravity-proposal` | - **`H4` Honest Memory-Drop Uncertainty (`PASS`)**: Purging `36` non-mandatory episodic rows in `I4` reduced recalled episodes from `6` to exact `0` (zero hallucinated history), retained all `4/4` HMAC-signed mandatory s… |
+| `docs/AKTIVASI_INDEX.md:148` | `repo_record` | `gravity-proposal` | ## Pengecualian Wilayah Terlarang (§3) |
 | `docs/research/ACE_B3_CORPUS_GOVERNANCE.md:1` | `repo_record` | `gravity-proposal` | # Garis B3 · Tata Kelola Korpus (Perkakas Baru) |
-| `docs/research/ACE_CONTROL_REGRESSION_DESIGN_DRAFT_20261113.md:199` | `repo_record` | `gravity-proposal` | ## 4. Staged experiment plan |
 | `docs/security/ACE_HOST_BOUNDARY_V2_SPEC_20261107.md:87` | `repo_record` | `gravity-proposal` | \| **5. Rules Tampering** \| `rules.min_gain = 0.0` \| FrozenInstanceError on immutable rules \| **BLOCKED (PASS)** \| |
 | `handover/EVO_0003_STAGING_NOTE.md:48` | `repo_record` | `gravity-proposal` | ## Dialogue corpus (tail) — STAGED v1 |
 | `handover/GOVERNANCE_RULES_20261115.md:1` | `repo_record` | `gravity-proposal` | # Aturan Tata Kelola Tetap — ACE Ω (15 November 2026) |
