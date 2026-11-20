@@ -144,6 +144,37 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_pattern_catalog_builds_and_versions_snapshot(self):
+        rec = {
+            "schema": "ace.pattern-distilled.v1",
+            "event_class": "pattern_distilled",
+            "kind": "semantic",
+            "staging_only": True,
+            "source_episode": "ep-001",
+            "task_shape": {
+                "task_kind": "code",
+                "keywords": ["csv", "dedup"],
+                "constraints_detected": ["O(n)"],
+            },
+            "approach": ["gunakan himpunan untuk pelacakan unik"],
+            "pitfalls": ["lupa strip spasi"],
+            "provenance": {"output_sha256": "a" * 64},
+        }
+        (self.ws / "patterns_distilled.jsonl").write_text(json.dumps(rec) + "\n", encoding="utf-8")
+        res1 = leap_wiring.step_pattern_catalog(self.engine)
+        self.assertEqual(res1["status"], "ok")
+        self.assertEqual(res1["version"], 1)
+        self.assertEqual(res1["pattern_count"], 1)
+
+        res2 = leap_wiring.step_pattern_catalog(self.engine)
+        self.assertEqual(res2["status"], "ok")
+        self.assertEqual(res2["version"], 2)
+
+    def test_pattern_catalog_skips_when_absent_and_fails_closed_on_invalid(self):
+        self.assertEqual(leap_wiring.step_pattern_catalog(self.engine)["status"], "skipped")
+        (self.ws / "patterns_distilled.jsonl").write_text("{broken\n", encoding="utf-8")
+        self.assertEqual(leap_wiring.step_pattern_catalog(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -685,3 +685,56 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_pattern_catalog(engine: Any) -> dict[str, Any]:
+    """AG146: build or bump local versioned pattern catalog from JSONL staging files."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import pattern_catalog as pc
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        out_path = ws / "pattern_catalog.json"
+        inputs: list[Path] = []
+        for candidate in (ws / "patterns_distilled.jsonl", ws / "patterns.jsonl"):
+            if candidate.is_file() and candidate.stat().st_size > 0:
+                inputs.append(candidate)
+        pat_dir = ws / "patterns"
+        if pat_dir.is_dir():
+            for p in sorted(pat_dir.glob("*.jsonl")):
+                if p.is_file() and p.stat().st_size > 0 and p not in inputs:
+                    inputs.append(p)
+        if not inputs:
+            skipped = {
+                "status": "skipped",
+                "reason": "no_pattern_inputs",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        previous = None
+        if out_path.is_file():
+            try:
+                cand_prev = json.loads(out_path.read_text(encoding="utf-8"))
+                if isinstance(cand_prev, dict) and cand_prev.get("schema") in pc.SUPPORTED_CATALOG_SCHEMAS:
+                    previous = cand_prev
+            except Exception:
+                previous = None
+
+        snapshot = pc.build_catalog(inputs, previous=previous, catalog_format="v2")
+        _write_json(out_path, snapshot)
+        return {
+            "status": "ok",
+            "schema": snapshot["schema"],
+            "version": snapshot["version"],
+            "pattern_count": len(snapshot["patterns"]),
+            "conflict_count": len(snapshot["conflicts"]),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
