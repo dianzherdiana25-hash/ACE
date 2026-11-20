@@ -35,9 +35,9 @@ class BundleManifestTests(unittest.TestCase):
                 "schema": secrets_bundle.SCHEMA_BUNDLE, "values": values,
             })
 
-    def run_markers(self, **env):
+    def run_markers(self, *flags, **env):
         return subprocess.run([sys.executable, str(Path(__file__).with_name("bundle_manifest.py")),
-                               "--bundle", str(self.bundle)], env={**self.env, **env},
+                               "--bundle", str(self.bundle), *flags], env={**self.env, **env},
                               capture_output=True, text=True, timeout=10)
 
     def test_complete_and_missing_bundles_flow_through_preflight(self):
@@ -79,3 +79,45 @@ class BundleManifestTests(unittest.TestCase):
         self.assertEqual(run.stdout, "")
         self.assertIn("gagal didekripsi", run.stderr)
         self.assertFalse(any(value in run.stderr for value in (secret, wrong, self.passphrase)))
+
+    def test_diff_and_preflight_agree_on_missing_name(self):
+        names = bridge_secrets._REQUIRED
+        values = {name: secrets.token_hex(24) for name in names}
+        self.write_bundle(values)
+        previous = self.root / "old.json"
+        result = self.run_markers()
+        self.assertEqual(result.returncode, 0)
+        previous.write_text(result.stdout, encoding="utf-8")
+        result = self.run_markers("--diff", str(previous))
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(json.loads(result.stdout), {"added": [], "removed": [], "unchanged": sorted(names)})
+
+        omitted = names[-1]
+        extra = "fixture-extra"
+        extra_value = secrets.token_hex(24)
+        self.write_bundle({**{name: values[name] for name in names[:-1]}, extra: extra_value})
+        diff = self.run_markers("--diff", str(previous))
+        self.assertEqual(diff.returncode, 0)
+        self.assertEqual(diff.stderr, "")
+        self.assertFalse(any(secret in diff.stdout for secret in [*values.values(), extra_value, self.passphrase]))
+        self.assertEqual(json.loads(diff.stdout),
+                         {"added": [extra], "removed": [omitted], "unchanged": sorted(names[:-1])})
+
+        current = self.root / "new.json"
+        result = self.run_markers()
+        self.assertEqual(result.returncode, 0)
+        current.write_text(result.stdout, encoding="utf-8")
+        plan = bridge_home.plan_home(json.loads(self.config.read_text()), bundle_manifest=current)
+        self.assertFalse(plan["preflight"]["safe_to_continue"])
+        self.assertEqual(plan["preflight"]["credential_markers"]["missing_names"],
+                         json.loads(diff.stdout)["removed"])
+
+    def test_malformed_old_manifest_returns_generic_error(self):
+        self.write_bundle({})
+        old = self.root / "old.json"
+        marker = secrets.token_hex(24)
+        old.write_text(marker, encoding="utf-8")
+        run = self.run_markers("--diff", str(old))
+        self.assertEqual(run.returncode, 2)
+        self.assertEqual(run.stdout, "")
+        self.assertFalse(marker in run.stderr)
