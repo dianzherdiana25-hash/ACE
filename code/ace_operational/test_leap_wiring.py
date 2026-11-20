@@ -144,6 +144,14 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_redteam_rotation_writes_summary(self):
+        res = leap_wiring.step_redteam_rotation(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["total_attacks"], 2)
+        out = json.loads((self.ws / "redteam_rotation.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.redteam-rotation.v1")
+        self.assertEqual(out["regression_gate_candidates"], [])
+
 
 if __name__ == "__main__":
     unittest.main()
