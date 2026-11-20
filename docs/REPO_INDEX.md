@@ -1,9 +1,9 @@
 # Indeks Repositori — ACE
 
 - Schema: `ace.repo-index.v1`
-- Total direktori: 205
-- Total berkas: 2342
-- Total modul Python: 1128
+- Total direktori: 209
+- Total berkas: 2352
+- Total modul Python: 1129
 
 ## Daftar Berkas per Direktori
 
@@ -1490,6 +1490,14 @@
 - `runner_frozen.sha` (other)
 - `selection.json` (data)
 
+### `evidence/evo0017-m3/anchored` (2 berkas)
+- `results.jsonl` (data)
+- `summary.json` (data)
+
+### `evidence/evo0017-m3/plain` (2 berkas)
+- `results.jsonl` (data)
+- `summary.json` (data)
+
 ### `evidence/f12` (1 berkas)
 - `ace_f12_causal_research_v1.json.gz` (other)
 
@@ -1534,6 +1542,15 @@
 - `dossier.json` (data)
 - `evaluation_report.json` (data)
 - `lineage_record.json` (data)
+
+### `evidence/g5-harvest-202611` (1 berkas)
+- `HARVEST_NOTES.md` (docs)
+
+### `evidence/g5-harvest-202611/dossier` (4 berkas)
+- `dossier.json` (data)
+- `harvest_report.json` (data)
+- `units.json` (data)
+- `use_events.json` (data)
 
 ### `evidence/generations` (2 berkas)
 - `ace_g0_g2_v1.json.gz` (other)
@@ -2318,7 +2335,7 @@
 - `test_sandbox_ast_gate.py` (python)
 - `test_zero_cost_governance.py` (python)
 
-### `tools` (430 berkas)
+### `tools` (431 berkas)
 - `FUZZ_STANDARD.md` (docs)
 - `__init__.py` (python)
 - `_director_sources.py` (python)
@@ -2676,6 +2693,7 @@
 - `test_recall_delivery_probe.py` (python)
 - `test_recall_pool_cleanup.py` (python)
 - `test_recall_precision_probe.py` (python)
+- `test_recall_semantic_m3.py` (python)
 - `test_receipt_chain_verify.py` (python)
 - `test_redteam_rotation.py` (python)
 - `test_regression_anchor_e3.py` (python)
@@ -3818,6 +3836,7 @@
 | `tools.test_recall_delivery_probe` | `tools/test_recall_delivery_probe.py` | Tes probe keteririman recall pada 8 tugas held-out (7 bertetangga + 1 benar-benar kosong) — AG27. | `tools.recall_delivery_probe` |
 | `tools.test_recall_pool_cleanup` | `tools/test_recall_pool_cleanup.py` | Regresi EVO 0017 M2: pool_cleanup mengeluarkan kandidat riwayat | `tools.recall_ablation` |
 | `tools.test_recall_precision_probe` | `tools/test_recall_precision_probe.py` | Tes regresi fixture-only untuk tools.recall_precision_probe (AG43). | `ace_operational.cognitive_memory`, `tools.recall_precision_probe` |
+| `tools.test_recall_semantic_m3` | `tools/test_recall_semantic_m3.py` | Tes EVO 0017 M3 — lengan semantik recall_ablation (top-k kosinus). | `tools.recall_ablation` |
 | `tools.test_receipt_chain_verify` | `tools/test_receipt_chain_verify.py` | Tes regresi fixture-only untuk tools.receipt_chain_verify (AG53). | `tools.receipt_chain_verify` |
 | `tools.test_redteam_rotation` | `tools/test_redteam_rotation.py` | Tes pelari rotasi red team: semua tertahan kecuali satu lolos sebagai kandidat gerbang regresi (AG73). | `tools.director_injection_fixtures`, `tools.redteam_rotation` |
 | `tools.test_regression_anchor_e3` | `tools/test_regression_anchor_e3.py` | E3 thick edge tests for tools/regression_anchor.py (tests only, 0/10 -> 10/10 symbols). | `tools.regression_anchor` |

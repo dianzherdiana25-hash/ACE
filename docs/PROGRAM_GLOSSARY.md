@@ -26,7 +26,7 @@
 | `_CycleMonitorScope` | `ast_class` | `code/ace_host_controller/resilient_watchdog.py:838` | Context manager scope for cycle monitoring. |
 | `_DaemonThreadWorker` | `ast_class` | `code/ace_host_controller/resilient_watchdog.py:414` | Runs a callable in an isolated daemon thread to guarantee non-blocking timeout handling. |
 | `_InequalityNode` | `ast_class` | `code/ace_smt/dpllt_solver.py:154` | Internal inequality node tracking origin literals for conflict clause generation. |
-| `_ProjectFileStore` | `ast_class` | `code/ace_operational/leap_wiring.py:453` | Adapter ProjectStore di atas berkas JSON per proyek. |
+| `_ProjectFileStore` | `ast_class` | `code/ace_operational/leap_wiring.py:506` | Adapter ProjectStore di atas berkas JSON per proyek. |
 | `_StopTriggered` | `ast_class` | `code/ace_operational/proposer_stage2.py:120` | Internal control-flow signal raised cleanly inside a run when stopped. |
 | `_ThinkingBudgetExhausted` | `ast_class` | `code/ace_operational/models_backend.py:227` | The server spent the whole token budget inside reasoning and produced no final content. |
 | `_WorkerInterrupted` | `ast_class` | `code/ace_operational/proposer_stage2.py:136` | Supervisor unwind signal injected when a blocked worker exceeds stop/wall deadlines. |

@@ -6,8 +6,8 @@
 
 - Schema: `ace.repo-cartography.v1`
 - Total subsistem: **68** (termasuk `4` subsistem zona terlindung/beku)
-- Total berkas terpetakan: **2341**
-- Modul Python produksi: **651** | Modul tes: **477**
+- Total berkas terpetakan: **2351**
+- Modul Python produksi: **651** | Modul tes: **478**
 - Tepi dependensi lintas subsistem (produksi): **118**
 - Siklus SCC lintas subsistem: **1**
 
@@ -146,14 +146,14 @@ flowchart LR
 | `code/checkpoints` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `data` | `SAFE_WORKSPACE` | 1 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `docs` | `SAFE_WORKSPACE` | 273 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `evidence` | `SAFE_WORKSPACE` | 722 | 29 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
+| `evidence` | `SAFE_WORKSPACE` | 731 | 29 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `examples` | `SAFE_WORKSPACE` | 5 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `handover` | `FROZEN_CORPUS_SPEC` | 159 | 23 | 0 | 0 | 1 | Corpus beku, preregistrasi, & custody spec (read-only) |
 | `projects` | `SAFE_WORKSPACE` | 12 | 3 | 2 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `root` | `SAFE_WORKSPACE` | 20 | 4 | 0 | 0 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
 | `secrets` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `tests` | `SAFE_WORKSPACE` | 19 | 0 | 19 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `tools` | `MIXED_PROTECTED` | 437 | 205 | 223 | 2 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `tools` | `MIXED_PROTECTED` | 438 | 205 | 224 | 2 | 28 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 
 ## 4. Tepi Ketergantungan Lintas Subsistem (Semua)
 
