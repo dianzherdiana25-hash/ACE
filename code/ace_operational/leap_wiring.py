@@ -685,3 +685,42 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_engine_idle_report(engine: Any) -> dict[str, Any]:
+    """AG155: summarize daily engine idle minutes and role quota exhaustion times."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import engine_idle_report as eir
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        logs: list[dict[str, Any]] = []
+        for cand in (ws / "engine_events.jsonl", ws / "engine_log.jsonl"):
+            if cand.is_file():
+                logs.extend(eir._load_records(cand))
+        snaps: list[dict[str, Any]] = []
+        for cand in (ws / "engine_snapshots.json", ws / "engine_snapshots.jsonl", ws / "runtime_status.json"):
+            if cand.is_file() or cand.is_dir():
+                snaps.extend(eir._load_records(cand))
+        if not logs and not snaps:
+            snaps = [{
+                "at": _now_iso(),
+                "state": "idle" if int(getattr(engine, "_bridge_transport_failures", 0) or 0) > 0 else "active",
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                "cycle_seconds": 0.0,
+            }]
+        report = eir.build_idle_report(logs, snaps)
+        out = {
+            "status": "ok",
+            **report,
+            "checked_at": _now_iso(),
+        }
+        _write_json(ws / "engine_idle.json", out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+

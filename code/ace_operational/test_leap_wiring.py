@@ -144,6 +144,27 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_engine_idle_report_tracks_idle_minutes_and_exhaustion(self):
+        rows = [
+            {"ts": "2026-11-20T01:00:00Z", "state": "active", "cycle_seconds": 1.0},
+            {"ts": "2026-11-20T01:05:00Z", "event": "budget_exhausted", "state": "budget_exhausted", "role": "coder", "idle_seconds": 120.0, "cycle_seconds": 3.0},
+        ]
+        (self.ws / "engine_events.jsonl").write_text(
+            "\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8",
+        )
+        res = leap_wiring.step_engine_idle_report(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["summary"]["days_analyzed"], 1)
+        self.assertAlmostEqual(res["summary"]["total_idle_minutes"], 2.0)
+        self.assertIn("coder", res["summary"]["first_exhaustion_per_role"])
+        self.assertTrue((self.ws / "engine_idle.json").is_file())
+
+    def test_engine_idle_report_baseline_and_fails_closed(self):
+        base = leap_wiring.step_engine_idle_report(self.engine)
+        self.assertEqual(base["status"], "ok")
+        (self.ws / "engine_events.jsonl").write_text("{corrupt\n", encoding="utf-8")
+        self.assertEqual(leap_wiring.step_engine_idle_report(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()
