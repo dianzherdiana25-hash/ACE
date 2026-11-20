@@ -685,3 +685,80 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0048 — audit objek Git lokal untuk branch self-dev
+# ------------------------------------------------------------------
+
+
+def step_self_dev_git_audit(engine: Any) -> dict[str, Any]:
+    """Audit integritas branch/checkpoint pada objek Git lokal secara fail-closed (AG177)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import self_dev_git_audit
+
+        spec_path = ws / "self_dev_audit_spec.json"
+        base = "HEAD"
+        tip = "HEAD"
+        expected: list[str] = []
+        repo_root = Path(getattr(engine, "repo_root", None) or _REPO_ROOT)
+
+        if spec_path.is_file():
+            spec = json.loads(spec_path.read_text(encoding="utf-8"))
+            if not isinstance(spec, dict):
+                raise ValueError("self_dev_audit_spec.json wajib objek JSON.")
+            if spec.get("repo_dir"):
+                repo_root = Path(str(spec["repo_dir"]))
+            base = str(spec.get("base") or "HEAD")
+            tip = str(spec.get("tip") or "HEAD")
+            raw_exp = spec.get("expected") or []
+            if not isinstance(raw_exp, list):
+                raise ValueError("Field expected wajib berupa daftar ID commit.")
+            expected = [str(x) for x in raw_exp]
+
+        repo = self_dev_git_audit.GitRepository(repo_root)
+        is_shallow = repo.run("rev-parse", "--is-shallow-repository").stdout.strip() == b"true"
+        out_path = ws / "self_dev_git_audit.json"
+        if is_shallow and not spec_path.is_file():
+            head_oid = repo.commit("HEAD")
+            payload = {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                "status": "shallow_repository",
+                "head": head_oid,
+                "clean": None,
+            }
+            _write_json(out_path, payload)
+            return {
+                "status": "ok",
+                "mode": "shallow_head_check",
+                "head": head_oid,
+                "report_path": str(out_path),
+            }
+
+        report = self_dev_git_audit.guard_branch(repo, base, tip, expected)
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                **report,
+            },
+        )
+        return {
+            "status": "ok",
+            "mode": "guard_branch",
+            "clean": bool(report["clean"]),
+            "commit_count": report["commit_count"],
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

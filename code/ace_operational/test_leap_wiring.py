@@ -144,6 +144,43 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_self_dev_git_audit_guards_local_repo_and_fails_closed(self) -> None:
+        import subprocess
+
+        repo_dir = self.ws / "mini_repo"
+        repo_dir.mkdir()
+        env_git = {
+            "GIT_AUTHOR_NAME": "Test",
+            "GIT_AUTHOR_EMAIL": "t@example.com",
+            "GIT_COMMITTER_NAME": "Test",
+            "GIT_COMMITTER_EMAIL": "t@example.com",
+            "PATH": "/usr/bin:/bin",
+        }
+        subprocess.run(["git", "init", "-q"], cwd=repo_dir, check=True, env=env_git)
+        (repo_dir / "a.txt").write_text("base\n", encoding="utf-8")
+        subprocess.run(["git", "add", "a.txt"], cwd=repo_dir, check=True, env=env_git)
+        subprocess.run(["git", "commit", "-q", "-m", "base"], cwd=repo_dir, check=True, env=env_git)
+        base_oid = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo_dir, text=True).strip()
+        (repo_dir / "a.txt").write_text("work\n", encoding="utf-8")
+        subprocess.run(["git", "commit", "-q", "-am", "work"], cwd=repo_dir, check=True, env=env_git)
+        tip_oid = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo_dir, text=True).strip()
+
+        (self.ws / "self_dev_audit_spec.json").write_text(
+            json.dumps({"repo_dir": str(repo_dir), "base": base_oid, "tip": tip_oid, "expected": [tip_oid]}),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_self_dev_git_audit(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["mode"], "guard_branch")
+        self.assertTrue(res["clean"])
+        saved = json.loads((self.ws / "self_dev_git_audit.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.self-dev-branch-guard.v1")
+
+        (self.ws / "self_dev_audit_spec.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_self_dev_git_audit(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
