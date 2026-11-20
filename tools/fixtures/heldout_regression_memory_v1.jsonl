@@ -1,0 +1,7 @@
+{"id": "mem-ho-01", "kind": "procedural", "domain": "code", "text": "Pola tumpukan LIFO memeriksa kurung seimbang pada parser ekspresi."}
+{"id": "mem-ho-02", "kind": "procedural", "domain": "code", "text": "Fungsi dedup baris csv menjaga urutan kemunculan pertama."}
+{"id": "mem-ho-03", "kind": "semantic", "domain": "accounting", "text": "Tarif pajak progresif wajib pembulatan Decimal ROUND_HALF_UP."}
+{"id": "mem-ho-04", "kind": "procedural", "domain": "code", "text": "Penelusuran graf bfs memakai antrean untuk lintasan terpendek."}
+{"id": "mem-ho-05", "kind": "episodic", "domain": "ops", "text": "Pengurasan spool relai menerapkan backoff eksponensial agar tidak busy-loop."}
+{"id": "mem-ho-06", "kind": "semantic", "domain": "security", "text": "Detektor keamanan menolak token canary dan rahasia di keluaran."}
+{"id": "mem-ho-07", "kind": "procedural", "domain": "code", "text": "Struktur cache lru membuang entri terlama saat kapasitas penuh."}
