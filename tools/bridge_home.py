@@ -53,7 +53,20 @@ def _pid_starttime(pid):
     return int(fields[19])
 
 
-def _observe_pid(path, probe, expected_name, identity_probe, expected_start, starttime_probe):
+def _pid_boot_id():
+    return Path("/proc/sys/kernel/random/boot_id").read_text(encoding="utf-8").strip()
+
+
+def _observe_pid(
+    path,
+    probe,
+    expected_name,
+    identity_probe,
+    expected_start,
+    starttime_probe,
+    expected_boot_id=None,
+    boot_id_probe=None,
+):
     try:
         pid = int(path.read_text(encoding="utf-8").strip())
     except FileNotFoundError:
@@ -79,21 +92,56 @@ def _observe_pid(path, probe, expected_name, identity_probe, expected_start, sta
             value = None
         if type(value) is int and value >= 0:
             starttime = value
-    return pid, running, identity, starttime
+    boot_id = None
+    if running and expected_boot_id is not None and boot_id_probe is not None:
+        try:
+            raw_boot = boot_id_probe()
+        except (OSError, UnicodeError, ValueError):
+            raw_boot = None
+        if isinstance(raw_boot, str):
+            boot_id = raw_boot.strip() or None
+    return pid, running, identity, starttime, boot_id
 
 
-def _check_pid_file(path, probe, expected_name, identity_probe, expected_start, starttime_probe):
+def _check_pid_file(
+    path,
+    probe,
+    expected_name,
+    identity_probe,
+    expected_start,
+    starttime_probe,
+    expected_boot_id=None,
+    boot_id_probe=None,
+):
     unverified = {"state": "unverified", "safe_to_continue": False}
     try:
-        first = _observe_pid(path, probe, expected_name, identity_probe, expected_start, starttime_probe)
-        second = _observe_pid(path, probe, expected_name, identity_probe, expected_start, starttime_probe)
+        first = _observe_pid(
+            path,
+            probe,
+            expected_name,
+            identity_probe,
+            expected_start,
+            starttime_probe,
+            expected_boot_id,
+            boot_id_probe,
+        )
+        second = _observe_pid(
+            path,
+            probe,
+            expected_name,
+            identity_probe,
+            expected_start,
+            starttime_probe,
+            expected_boot_id,
+            boot_id_probe,
+        )
     except (OSError, ValueError):
         return unverified
     if first is None and second is None:
         return {"state": "missing", "safe_to_continue": True}
     if first != second:
         return {**unverified, "reason": "pid_probe_inconsistent"}
-    _, running, observed, starttime = second
+    _, running, observed, starttime, boot_id = second
     if not running:
         return {"state": "stale", "safe_to_continue": True}
     if expected_name is None:
@@ -102,6 +150,11 @@ def _check_pid_file(path, probe, expected_name, identity_probe, expected_start, 
         return {**unverified, "reason": "identity_unverified"}
     if observed != expected_name:
         return {"state": "identity_mismatch", "safe_to_continue": False}
+    if expected_boot_id is not None:
+        if boot_id is None:
+            return {**unverified, "reason": "boot_id_unverified"}
+        if boot_id != expected_boot_id:
+            return {**unverified, "reason": "boot_id_mismatch"}
     if expected_start is not None:
         if starttime is None:
             return {**unverified, "reason": "starttime_unverified"}
@@ -180,7 +233,7 @@ def _check_engine_status(path, *, max_age_seconds, now):
 
 
 def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running, identity_probe=_pid_identity,
-              starttime_probe=_pid_starttime, now=None):
+              starttime_probe=_pid_starttime, boot_id_probe=_pid_boot_id, now=None):
     if not isinstance(config, dict):
         raise ValueError("Konfigurasi wajib berupa objek JSON.")
     paths = {}
@@ -208,9 +261,23 @@ def plan_home(config, *, bundle_manifest=None, pid_probe=_pid_running, identity_
     expected_start = config.get("expected_process_starttime")
     if expected_start is not None and (type(expected_start) is not int or expected_start < 0):
         raise ValueError("expected_process_starttime wajib berupa tick Linux nonnegatif.")
-    pid_check = _check_pid_file(Path(paths["pid_file"]), pid_probe,
-                               expected_name.strip() if expected_name is not None else None,
-                               identity_probe, expected_start, starttime_probe)
+    expected_boot_id = config.get("expected_boot_id")
+    if expected_boot_id is not None and (
+        not isinstance(expected_boot_id, str)
+        or not expected_boot_id.strip()
+        or not expected_boot_id.isprintable()
+    ):
+        raise ValueError("expected_boot_id wajib berupa string penanda boot tak-kosong.")
+    pid_check = _check_pid_file(
+        Path(paths["pid_file"]),
+        pid_probe,
+        expected_name.strip() if expected_name is not None else None,
+        identity_probe,
+        expected_start,
+        starttime_probe,
+        expected_boot_id.strip() if expected_boot_id is not None else None,
+        boot_id_probe,
+    )
     credentials = _check_bundle_markers(bundle_manifest)
     engine_status = None
     status_file = config.get("engine_status_file")
