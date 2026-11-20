@@ -685,3 +685,63 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0048 — inventaris & perunutan klaim successor
+# ------------------------------------------------------------------
+
+
+def step_successor_inventory(engine: Any) -> dict[str, Any]:
+    """Kumpulkan inventaris successor & peta klaim bukti secara fail-closed (AG178)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        import shutil
+        import tempfile
+        from tools import successor_inventory
+
+        repo_root = Path(getattr(engine, "repo_root", None) or _REPO_ROOT)
+        with tempfile.TemporaryDirectory(prefix="ace-succ-inv-", dir="/tmp") as td:
+            snap = Path(td)
+            mem_file = ws / "cognitive_memory" / "memory.jsonl"
+            if mem_file.is_file():
+                (snap / "cognitive_memory").mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(mem_file, snap / "cognitive_memory" / "memory.jsonl")
+            succ_dir = ws / "successor_snapshot"
+            if succ_dir.is_dir():
+                for p in succ_dir.iterdir():
+                    if p.is_file() and p.suffix in {".json", ".jsonl"}:
+                        shutil.copyfile(p, snap / p.name)
+            result = successor_inventory.inventory(repo_root, snap)
+
+        claims_path = ws / "successor_claims.json"
+        if claims_path.is_file():
+            claims = json.loads(claims_path.read_text(encoding="utf-8"))
+            result["claims"] = successor_inventory.map_claims(repo_root, claims, result)
+
+        out_path = ws / "successor_inventory.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                **result,
+            },
+        )
+        counts = result.get("counts") or {}
+        return {
+            "status": "ok",
+            "branches": counts.get("branches", 0),
+            "files": counts.get("files", 0),
+            "records": counts.get("records", 0),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

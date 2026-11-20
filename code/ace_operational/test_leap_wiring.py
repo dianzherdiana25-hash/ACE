@@ -144,6 +144,23 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_successor_inventory_scans_and_fails_closed(self) -> None:
+        (self.ws / "successor_snapshot").mkdir(exist_ok=True)
+        (self.ws / "successor_snapshot" / "sample.jsonl").write_text(
+            json.dumps({"tag": "successor-0006", "status": "verified"}) + "\n",
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_successor_inventory(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertGreaterEqual(res["records"], 1)
+        saved = json.loads((self.ws / "successor_inventory.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.successor-inventory.v1")
+
+        (self.ws / "successor_claims.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_successor_inventory(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
