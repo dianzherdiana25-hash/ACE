@@ -68,30 +68,56 @@ def _today():
     return time.strftime("%Y-%m-%d", time.localtime())
 
 
+def _write_log_unlocked(record):
+    try:
+        Path(LOG).parent.mkdir(parents=True, exist_ok=True)
+        with open(LOG, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(record, ensure_ascii=False) + "\n")
+    except OSError:
+        pass
+
+
+def _is_valid_budget_state(state):
+    if not isinstance(state, dict):
+        return False
+    day = state.get("day")
+    counts = state.get("counts")
+    if not isinstance(day, str) or not day.strip() or not isinstance(counts, dict):
+        return False
+    return all(isinstance(k, str) and type(v) is int and v >= 0 for k, v in counts.items())
+
+
 def _budget_check(role):
     with _lock:
-        state = {}
+        today = _today()
+        state = {"day": today, "counts": {}}
         if STATE.exists():
+            corrupt_reason = None
             try:
-                state = json.loads(STATE.read_text())
+                loaded = json.loads(STATE.read_text(encoding="utf-8"))
             except (OSError, ValueError):
-                # Fail-closed: state rusak tidak boleh mereset jatah
-                # (risiko boros kuota) dan tidak boleh menjatuhkan handler.
-                return False, BUDGETS[role]
-            if not isinstance(state, dict):
-                return False, BUDGETS[role]
-        if state.get("day") != _today():
-            state = {"day": _today(), "counts": {}}
-        counts = state.get("counts")
-        if not isinstance(counts, dict):
-            return False, BUDGETS[role]
-        used = counts.get(role, 0)
-        if type(used) is not int or used < 0:
-            return False, BUDGETS[role]
+                corrupt_reason = "invalid_or_truncated_json"
+                loaded = None
+            else:
+                if not _is_valid_budget_state(loaded):
+                    corrupt_reason = "invalid_schema_or_negative_count"
+            if corrupt_reason is not None:
+                _write_log_unlocked({
+                    "ts": time.time(),
+                    "role": role,
+                    "level": "warning",
+                    "warning": "corrupt_budget_state_reset",
+                    "reason": corrupt_reason,
+                    "result": "state_reset_from_corrupt",
+                })
+                state = {"day": today, "counts": {}}
+            elif loaded.get("day") == today:
+                state = loaded
+        used = state["counts"].get(role, 0)
         if used >= BUDGETS[role]:
             return False, used
         state["counts"][role] = used + 1
-        STATE.write_text(json.dumps(state))
+        STATE.write_text(json.dumps(state), encoding="utf-8")
         return True, used + 1
 
 
@@ -129,8 +155,7 @@ def _budget_unavailable():
 
 def _log(record):
     with _lock:
-        with open(LOG, "a", encoding="utf-8") as fh:
-            fh.write(json.dumps(record, ensure_ascii=False) + "\n")
+        _write_log_unlocked(record)
 
 
 def _is_quota(text):
