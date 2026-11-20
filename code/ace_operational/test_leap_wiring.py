@@ -144,6 +144,23 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_self_assessment_builds_verified_hash_chain_and_fails_on_tamper(self) -> None:
+        r1 = leap_wiring.step_self_assessment(self.engine)
+        self.assertEqual(r1["status"], "ok")
+        self.assertEqual(r1["version"], 1)
+        self.engine.cycle_count += 200
+        r2 = leap_wiring.step_self_assessment(self.engine)
+        self.assertEqual(r2["status"], "ok")
+        self.assertEqual(r2["version"], 2)
+        saved = json.loads((self.ws / "self_assessment_latest.json").read_text(encoding="utf-8"))
+        self.assertTrue(saved["chain_verify"]["valid"])
+
+        chain_file = self.ws / "self_assessment_chain.jsonl"
+        chain_file.write_text('{"schema": "bad", "version": 99}\n', encoding="utf-8")
+        tampered = leap_wiring.step_self_assessment(self.engine)
+        self.assertEqual(tampered["status"], "skipped")
+        self.assertIn("error", tampered)
+
 
 if __name__ == "__main__":
     unittest.main()

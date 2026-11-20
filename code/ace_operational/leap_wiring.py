@@ -685,3 +685,85 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0048 — penilaian-diri tersegel berantai hash
+# ------------------------------------------------------------------
+
+
+def step_self_assessment(engine: Any) -> dict[str, Any]:
+    """Susun & verifikasi rantai penilaian-diri tersegel secara fail-closed (AG171)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import self_assessment
+
+        chain_path = ws / "self_assessment_chain.jsonl"
+        cycle = int(getattr(engine, "cycle_count", 0) or 0)
+
+        mem_present = (ws / "cognitive_memory" / "memory.jsonl").is_file()
+        ckpt_present = (ws / "step_checkpoints.jsonl").is_file()
+        capabilities = [
+            {
+                "capability_id": "cognitive_memory_log",
+                "status_claim": "sebagian" if mem_present else "belum",
+                "predicted_measurement_score": 0.65 if mem_present else 0.15,
+                "evidence_pointer": "cognitive_memory/memory.jsonl" if mem_present else "workspace:pending_memory",
+            },
+            {
+                "capability_id": "step_checkpoint_chain",
+                "status_claim": "sebagian" if ckpt_present else "belum",
+                "predicted_measurement_score": 0.75 if ckpt_present else 0.2,
+                "evidence_pointer": "step_checkpoints.jsonl" if ckpt_present else "workspace:pending_checkpoint",
+            },
+        ]
+
+        spec_path = ws / "self_assessment_input.json"
+        if spec_path.is_file():
+            raw_spec = json.loads(spec_path.read_text(encoding="utf-8"))
+            if isinstance(raw_spec, dict) and isinstance(raw_spec.get("capabilities"), list):
+                capabilities = raw_spec["capabilities"]
+
+        sealed = self_assessment.append_sealed_assessment(
+            chain_path,
+            assessment_id=f"cycle-{cycle}",
+            created_at=_now_iso(),
+            capabilities=capabilities,
+            notes=f"engine_cycle={cycle}",
+        )
+        versions = self_assessment.load_assessment_chain(chain_path)
+        chain_verify = self_assessment.verify_assessment_chain(versions, strict=True)
+
+        comparison = None
+        eval_path = ws / "evaluator_scores.json"
+        if eval_path.is_file():
+            eval_scores = json.loads(eval_path.read_text(encoding="utf-8"))
+            if isinstance(eval_scores, dict):
+                comparison = self_assessment.compare_with_evaluator(sealed, eval_scores)
+
+        out_path = ws / "self_assessment_latest.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": cycle,
+                "sealed": sealed,
+                "chain_verify": chain_verify,
+                "comparison": comparison,
+            },
+        )
+        return {
+            "status": "ok",
+            "version": sealed["version"],
+            "head_hash": chain_verify["head_hash"],
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+
