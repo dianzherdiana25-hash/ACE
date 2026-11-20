@@ -1,0 +1,20 @@
+{
+  "store": {"changed-clean": ["accept"], "changed-dangling": ["accept"], "unchanged": ["keep"]},
+  "verified_refs": ["receipt-clean", "receipt-partial"],
+  "tasks": [
+    {"id": "clean", "query": "changed-clean", "cold_decision": "wait", "expected": "accept", "based_on": ["receipt-clean"]},
+    {"id": "partial", "query": "changed-dangling", "cold_decision": "wait", "expected": "accept", "based_on": ["receipt-partial", "receipt-missing"]},
+    {"id": "unchanged", "query": "unchanged", "cold_decision": "keep", "expected": "keep", "based_on": ["not-audited"]}
+  ],
+  "expected": {
+    "changed_decisions": [
+      {"task_id": "clean", "active": "accept", "off": "wait", "anchor": {
+        "refs": [{"ref": "receipt-clean", "status": "retrievable"}], "score": 1.0, "status": "anchored"
+      }},
+      {"task_id": "partial", "active": "accept", "off": "wait", "anchor": {
+        "refs": [{"ref": "receipt-partial", "status": "retrievable"}, {"ref": "receipt-missing", "status": "dangling"}],
+        "score": 0.5, "status": "partial"
+      }}
+    ]
+  }
+}
