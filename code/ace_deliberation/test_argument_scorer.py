@@ -133,3 +133,9 @@ class ScorerTests(unittest.TestCase):
         raw["arguments"][0]["source_ref"] = raw["rubric"][0]["source_ref"]
         with self.assertRaisesRegex(scorer.RubricError, "telah digunakan"):
             scorer.score(raw)
+
+    def test_zero_score_remains_a_measured_point(self):
+        raw = fixture()
+        for entry in raw["reviews"]:
+            entry["points"] = 0
+        self.assertEqual(scorer.score(raw)["arguments"][0]["weighted_score"], q(0))

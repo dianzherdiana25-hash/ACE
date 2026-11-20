@@ -43,8 +43,12 @@ yang ada di paket ini. Angka butir mengikuti rancangan EVO 0051.
 | 36 | `worst_case_test.py` | Payoff worst-case, maximin, regret dan dominasi |
 | 37 | `argument_scorer.py` | Median rubrik, rentang observasi, kuorum dan kriteria kritis |
 | 38 | `circular_detector.py` | Fondasi independen, aturan multipremis dan saksi siklus residual |
+| 39 | `deadlock_breaker.py` | Pola distribusi berulang, jeda, pemulihan dan provenance |
+| 40 | `expert_witness.py` | Undangan lokal terikat hash dan testimoni dalam jendela |
+| 41 | `claim_timeline.py` | Versi klaim bertanggal dan diff yang menyertakan perubahan antara |
+| 42 | `position_drift.py` | Drift individu, variasi distribusi dan peserta pembanding |
 
-Butir tersisa pada 0051 mencakup 39–60. Pengukuran
+Butir tersisa pada 0051 mencakup 43–60. Pengukuran
 di paket ini memakai fixture sintetis. Pasangan program dan tes yang
 tercantum dihitung bersama untuk rentang baris per kemampuan. Verifier
 ambang dan langkah integrasi berada di luar hitungan kemampuan.
