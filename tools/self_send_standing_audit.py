@@ -24,6 +24,17 @@ def _shard_stem_for_order(source_name: str) -> str:
     return source_name[:-3] if source_name.endswith(".gz") else source_name
 
 
+def _source_pointer(row):
+    explicit = row.get("source") or row.get("source_pointer") or row.get("ref") or ""
+    branch = row.get("branch") or ""
+    digest = row.get("content_digest") or ""
+    return (str(explicit), str(branch), str(digest))
+
+
+def _event_status(row):
+    return str(row.get("status") if row.get("status") is not None else row.get("outcome") or "")
+
+
 def standing_audit(directory):
     if not directory.is_dir():
         raise ValueError("Direktori log tidak tersedia.")
@@ -49,13 +60,87 @@ def standing_audit(directory):
             except (OverflowError, ValueError):
                 undated += 1
                 continue
-            rows.append((utc, _shard_stem_for_order(path.name), row["_line"], row))
+            rows.append((utc, _shard_stem_for_order(path.name), row["_line"], path.name, row))
+
+    seen_shard_events = {}
+    deduped_count = 0
+    shard_conflicts = []
+    deduped_rows = []
+    conflicted_slot_keys = set()
+
+    for utc, order_stem, line, shard_name, row in sorted(rows, key=lambda event: event[:3]):
+        task_val = row.get("task_id")
+        task_key = task_val.strip() if isinstance(task_val, str) and task_val.strip() else None
+        status_val = _event_status(row)
+        src_ptr = _source_pointer(row)
+        utc_iso = utc.isoformat()
+
+        slot_key = (utc_iso, task_key, src_ptr) if task_key is not None else (utc_iso, None, src_ptr)
+        exact_key = (task_key, status_val, utc_iso, src_ptr)
+
+        if slot_key in seen_shard_events:
+            prev_shard, prev_status, prev_src, prev_row = seen_shard_events[slot_key]
+            if prev_shard != shard_name:
+                if exact_key == (
+                    prev_row.get("task_id").strip()
+                    if isinstance(prev_row.get("task_id"), str) and prev_row.get("task_id").strip()
+                    else None,
+                    prev_status,
+                    utc_iso,
+                    prev_src,
+                ):
+                    deduped_count += 1
+                    continue
+                conflicted_slot_keys.add(slot_key)
+                shard_conflicts.append({
+                    "task_id": task_key,
+                    "ts_utc": utc_iso,
+                    "source_pointer": src_ptr[0] or f"{src_ptr[1]}@{src_ptr[2]}",
+                    "reason": "cross_shard_conflicting_event",
+                    "entries": [
+                        {"shard": prev_shard, "status": prev_status},
+                        {"shard": shard_name, "status": status_val},
+                    ],
+                })
+                continue
+        seen_shard_events[slot_key] = (shard_name, status_val, src_ptr, row)
+        deduped_rows.append((utc, order_stem, line, row, slot_key))
+
+    # Tangkap konflik beda source_pointer atau status untuk task_id + ts_utc yang sama antar shard
+    by_task_ts = {}
+    for utc, order_stem, line, shard_name, row in sorted(rows, key=lambda event: event[:3]):
+        task_val = row.get("task_id")
+        if not isinstance(task_val, str) or not task_val.strip():
+            continue
+        tkey = (task_val.strip(), utc.isoformat())
+        status_val = _event_status(row)
+        src_ptr = _source_pointer(row)
+        if tkey in by_task_ts:
+            prev_shard, prev_status, prev_ptr = by_task_ts[tkey]
+            if prev_shard != shard_name and (prev_status != status_val or prev_ptr != src_ptr):
+                slot_a = (tkey[1], tkey[0], prev_ptr)
+                slot_b = (tkey[1], tkey[0], src_ptr)
+                if slot_a not in conflicted_slot_keys and slot_b not in conflicted_slot_keys:
+                    conflicted_slot_keys.update({slot_a, slot_b})
+                    shard_conflicts.append({
+                        "task_id": tkey[0],
+                        "ts_utc": tkey[1],
+                        "reason": "cross_shard_conflicting_event",
+                        "entries": [
+                            {"shard": prev_shard, "status": prev_status, "source_pointer": prev_ptr},
+                            {"shard": shard_name, "status": status_val, "source_pointer": src_ptr},
+                        ],
+                    })
+        else:
+            by_task_ts[tkey] = (shard_name, status_val, src_ptr)
 
     current = None
     days = []
     pending = defaultdict(deque)
     open_count = 0
-    for stamp, source, line, row in sorted(rows, key=lambda event: event[:3]):
+    for stamp, source, line, row, slot_key in deduped_rows:
+        if slot_key in conflicted_slot_keys:
+            continue
         day = stamp.date().isoformat()
         if current is None or current["day_utc"] != day:
             current = {"day_utc": day, "prepared": 0, "sent": 0, "orphans": open_count,
@@ -89,6 +174,10 @@ def standing_audit(directory):
               "undated_violations": undated}
     if corrupt_shards:
         report["corrupt_shards"] = corrupt_shards
+    if deduped_count:
+        report["deduped_events"] = deduped_count
+    if shard_conflicts:
+        report["shard_conflicts"] = shard_conflicts
     return report
 
 
@@ -113,6 +202,7 @@ def main(argv=None):
     print(json.dumps(report, indent=2, ensure_ascii=False)
           if args.format == "json" else text_summary(report))
     return int(bool(report["undated_violations"]
+                    or report.get("shard_conflicts")
                     or any(day["envelope_violations"] for day in report["days"])))
 
 
