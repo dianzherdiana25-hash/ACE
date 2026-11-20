@@ -24,6 +24,29 @@ from tempfile import TemporaryDirectory
 PROVENANCE_SCHEMA = "ace.inheritance-provenance.v1"
 
 
+def _task_set_provenance(tasks_path: Path, tasks_bytes: bytes) -> dict:
+    resolved = tasks_path.resolve()
+    provenance = {
+        "path": str(resolved),
+        "sha256": hashlib.sha256(tasks_bytes).hexdigest(),
+        "size_bytes": len(tasks_bytes),
+        "task_sha256s": {},
+    }
+    try:
+        parsed = json.loads(tasks_bytes.decode("utf-8"))
+    except (ValueError, UnicodeDecodeError):
+        return provenance
+    if isinstance(parsed, list):
+        task_hashes = {}
+        for idx, item in enumerate(parsed):
+            key = item.get("id") if isinstance(item, dict) and isinstance(item.get("id"), str) else f"#{idx}"
+            canonical = json.dumps(item, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+            task_hashes[key] = hashlib.sha256(canonical).hexdigest()
+        provenance["task_count"] = len(parsed)
+        provenance["task_sha256s"] = task_hashes
+    return provenance
+
+
 def _prepare_inputs(paths):
     inputs = {}
     contents = {}
@@ -36,7 +59,10 @@ def _prepare_inputs(paths):
         contents[label] = data
         inputs[label] = {"path": str(resolved), "sha256": hashlib.sha256(data).hexdigest(),
                          "size_bytes": len(data)}
-    return {"schema": PROVENANCE_SCHEMA, "inputs": inputs}, contents
+    tasks_path = paths.get("task_set") or paths.get("tasks")
+    tasks_bytes = contents.get("task_set") if "task_set" in contents else contents.get("tasks", b"")
+    task_set = _task_set_provenance(tasks_path, tasks_bytes) if tasks_path is not None else None
+    return {"schema": PROVENANCE_SCHEMA, "inputs": inputs, "task_set": task_set}, contents
 
 
 def _verify_manifest(expected, observed):
@@ -51,6 +77,11 @@ def _verify_manifest(expected, observed):
         if checked[label] != current:
             name = Path(current["path"]).name if current else label
             raise ValueError(f"Manifest tidak cocok untuk {label} ({name}).")
+    expected_task_set = expected.get("task_set")
+    observed_task_set = observed.get("task_set")
+    if observed_task_set is not None and expected_task_set != observed_task_set:
+        name = Path(observed_task_set["path"]).name
+        raise ValueError(f"Manifest tidak cocok untuk set tugas ({name}).")
 
 
 def _check_results(result, ids):
