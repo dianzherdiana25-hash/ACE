@@ -646,6 +646,7 @@ def step_self(engine: Any) -> dict[str, Any]:
         asked.extend(str(q.get("question") or q) for q in new_q)
         _write_json(asked_path, asked[-200:])
     out["curiosity_new"] = len(new_q)
+    out["corpus_novelty"] = step_corpus_novelty(engine)
     return out
 
 
@@ -685,3 +686,61 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0049 — pengukur kebaruan leksikal & struktural korpus
+# ------------------------------------------------------------------
+
+
+def step_corpus_novelty(engine: Any) -> dict[str, Any]:
+    """Ukur jarak kebaruan karya/catatan workspace secara deterministik & fail-closed (AG182)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import corpus_novelty
+
+        in_path = ws / "corpus_novelty_input.json"
+        if in_path.is_file():
+            raw = json.loads(in_path.read_text(encoding="utf-8"))
+            if not isinstance(raw, dict):
+                raise ValueError("corpus_novelty_input.json wajib objek JSON.")
+            corpus = raw.get("corpus")
+            candidates = raw.get("candidates")
+            if not isinstance(corpus, list) or not isinstance(candidates, list):
+                raise ValueError("corpus dan candidates wajib berupa daftar.")
+        else:
+            auto_path = ws / "autobiography.md"
+            cand_text = (
+                auto_path.read_text(encoding="utf-8")
+                if auto_path.is_file()
+                else "Catatan siklus otonom ACE berjalan bersih."
+            )
+            corpus = [{"work_id": "baseline-0", "text": "Sistem ACE memulai siklus pengawasan awal."}]
+            candidates = [{"work_id": f"cycle-{getattr(engine, 'cycle_count', 0)}", "text": cand_text}]
+
+        report = corpus_novelty.score_corpus_novelty(corpus, candidates)
+        out_path = ws / "corpus_novelty.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                **report,
+            },
+        )
+        summary = report.get("summary") or {}
+        return {
+            "status": "ok",
+            "candidate_count": summary.get("candidate_count", 0),
+            "mean_novelty": summary.get("mean_novelty", 0.0),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

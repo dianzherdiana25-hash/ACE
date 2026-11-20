@@ -144,6 +144,28 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_corpus_novelty_runs_via_step_self_and_fails_closed(self) -> None:
+        (self.ws / "corpus_novelty_input.json").write_text(
+            json.dumps(
+                {
+                    "corpus": [{"work_id": "ref-1", "text": "Hujan turun pelan di kota lama."}],
+                    "candidates": [{"work_id": "cand-1", "text": "Mesin merakit puisi eksperimental.\n\nParagraf kedua."}],
+                }
+            ),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_self(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["corpus_novelty"]["status"], "ok")
+        self.assertGreater(res["corpus_novelty"]["mean_novelty"], 0.0)
+        saved = json.loads((self.ws / "corpus_novelty.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.corpus-novelty.v1")
+
+        (self.ws / "corpus_novelty_input.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_corpus_novelty(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
