@@ -685,3 +685,27 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_environment_probe(engine: Any) -> dict[str, Any]:
+    """AG165: capture read-only hardware/cgroup/disk environment snapshot."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import omega_environment_probe as oep
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        snap = oep.probe(ws, model_paths=[], hash_artifacts=False)
+        out = {
+            **snap,
+            "probe_status": snap.get("status"),
+            "status": "ok",
+        }
+        _write_json(ws / "environment_probe.json", out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+

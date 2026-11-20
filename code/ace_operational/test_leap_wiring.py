@@ -144,6 +144,19 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_environment_probe_writes_attested_snapshot(self):
+        res = leap_wiring.step_environment_probe(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["schema"], "ace.omega.environment_snapshot.v1")
+        self.assertEqual(res["model_readiness"], "NOT_ASSESSED_REQUIRES_ACTUAL_INFERENCE")
+        saved = json.loads((self.ws / "environment_probe.json").read_text())
+        self.assertEqual(saved["scientific_status"], "NOT_ASSESSED")
+
+    def test_environment_probe_fails_closed_on_error(self):
+        from unittest import mock
+        with mock.patch("tools.omega_environment_probe.probe", side_effect=OSError("io")):
+            self.assertEqual(leap_wiring.step_environment_probe(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()
