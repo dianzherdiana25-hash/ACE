@@ -144,6 +144,24 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_behavior_fingerprint_captures_and_diffs_snapshots(self):
+        res1 = leap_wiring.step_behavior_fingerprint(self.engine)
+        self.assertEqual(res1["status"], "ok")
+        self.assertEqual(res1["diff"]["berubah"], 0)
+        self.assertEqual(res1["diff"]["bertahan"], 3)
+
+        (self.ws / "fingerprint_answers.json").write_text(
+            json.dumps({"fp-dec-1": "berubah total"}), encoding="utf-8",
+        )
+        res2 = leap_wiring.step_behavior_fingerprint(self.engine)
+        self.assertEqual(res2["status"], "ok")
+        self.assertEqual(res2["diff"]["berubah"], 1)
+        self.assertTrue((self.ws / "behavior_fingerprint.json").is_file())
+
+    def test_behavior_fingerprint_fails_closed_on_corrupt_pack(self):
+        (self.ws / "fingerprint_pack.jsonl").write_text("{broken\n", encoding="utf-8")
+        self.assertEqual(leap_wiring.step_behavior_fingerprint(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

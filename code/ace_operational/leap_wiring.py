@@ -685,3 +685,69 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_behavior_fingerprint(engine: Any) -> dict[str, Any]:
+    """AG162: capture behavioral fingerprint snapshot and diff against prior baseline."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import behavior_fingerprint as bf
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        pack_path = ws / "fingerprint_pack.jsonl"
+        if pack_path.is_file():
+            pack = bf.load_prompt_pack(pack_path)
+        else:
+            pack = [
+                {"prompt_id": "fp-dec-1", "category": "keputusan", "prompt": "Prinsip utama gerbang perubahan?"},
+                {"prompt_id": "fp-sty-1", "category": "gaya", "prompt": "Bahasa jawaban teknis utama?"},
+                {"prompt_id": "fp-self-1", "category": "pengetahuan_diri", "prompt": "Status kustodi saat ini?"},
+            ]
+
+        overrides_path = ws / "fingerprint_answers.json"
+        overrides = (
+            json.loads(overrides_path.read_text(encoding="utf-8"))
+            if overrides_path.is_file()
+            else {}
+        )
+        cycle = int(getattr(engine, "cycle_count", 0) or 0)
+        defaults = {
+            "fp-dec-1": "fail-closed dan terverifikasi bukti",
+            "fp-sty-1": "ringkas bahasa indonesia",
+            "fp-self-1": f"siklus={cycle}",
+        }
+
+        def answerer(item: dict[str, Any]) -> str:
+            pid = str(item["prompt_id"])
+            if pid in overrides:
+                return str(overrides[pid])
+            return defaults.get(pid, "tidak tahu")
+
+        snap = bf.run_fingerprint_snapshot(pack, answerer, snapshot_id=f"cycle-{cycle}")
+        prev_path = ws / "behavior_fingerprint_prev.json"
+        prev = None
+        if prev_path.is_file():
+            try:
+                cand_prev = json.loads(prev_path.read_text(encoding="utf-8"))
+                if {r["prompt_id"] for r in cand_prev.get("responses", [])} == {r["prompt_id"] for r in snap["responses"]}:
+                    prev = cand_prev
+            except Exception:
+                prev = None
+
+        diff = bf.diff_fingerprint_snapshots(prev or snap, snap)
+        _write_json(prev_path, snap)
+        out = {
+            "status": "ok",
+            "snapshot": snap,
+            "diff": diff,
+            "checked_at": _now_iso(),
+        }
+        _write_json(ws / "behavior_fingerprint.json", out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
