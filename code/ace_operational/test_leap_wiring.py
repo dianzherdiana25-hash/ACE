@@ -144,6 +144,16 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_seal_run_seals_and_verifies_isolated_bundle(self):
+        res = leap_wiring.step_seal_run(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertTrue(res["valid"])
+        self.assertTrue(res["manifest_pinned"])
+        out = json.loads((self.ws / "seal_run_status.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.seal-run-step.v1")
+        self.assertTrue(out["valid"])
+        self.assertEqual(len(out["manifest_sha256"]), 64)
+
 
 if __name__ == "__main__":
     unittest.main()

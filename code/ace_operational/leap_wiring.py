@@ -685,3 +685,37 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_seal_run(engine: Any) -> dict[str, Any]:
+    """Audit penyegelan dan verifikasi bundel mini terisolasi ke seal_run_status.json."""
+    try:
+        from tempfile import TemporaryDirectory
+        from tools.seal_run import seal_run, verify_run
+
+        with TemporaryDirectory(prefix="ace-seal-run-") as tmp:
+            root = Path(tmp)
+            src = root / "source"
+            src.mkdir()
+            (src / "cycle_probe.json").write_text(
+                json.dumps({"cycle": getattr(engine, "cycle_count", 0)}),
+                encoding="utf-8",
+            )
+            bundle = root / "sealed"
+            sealed = seal_run(src, bundle)
+            verified = verify_run(bundle, manifest_sha256=sealed["manifest_sha256"])
+        report = {
+            "schema": "ace.seal-run-step.v1",
+            "valid": bool(verified.get("valid", False)),
+            "manifest_pinned": bool(verified.get("manifest_pinned", False)),
+            "manifest_sha256": verified.get("manifest_sha256"),
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "seal_run_status.json", report)
+        return {
+            "status": "ok",
+            "valid": report["valid"],
+            "manifest_pinned": report["manifest_pinned"],
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}
