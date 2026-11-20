@@ -48,6 +48,65 @@ def _record_entries(data, suffix):
     return enumerate(payload if isinstance(payload, list) else [payload], 1)
 
 
+def _classify_symlink(root_resolved: Path, link_path: Path) -> str:
+    visited: set[Path] = set()
+    cur = link_path
+    link_parent = link_path.parent.resolve()
+    for _ in range(32):
+        norm_cur = Path(os.path.abspath(cur))
+        if norm_cur in visited:
+            return "symlink_cycle"
+        visited.add(norm_cur)
+        raw_target = os.readlink(cur)
+        candidate = Path(raw_target) if os.path.isabs(raw_target) else cur.parent / raw_target
+        norm_target = Path(os.path.abspath(candidate))
+        if not norm_target.is_relative_to(root_resolved):
+            return "symlink_outside_root"
+        if norm_target == link_parent or link_parent.is_relative_to(norm_target):
+            return "symlink_cycle"
+        if not norm_target.is_symlink():
+            return "symlink_internal"
+        cur = norm_target
+    return "symlink_cycle"
+
+
+def _scan_symlinks(root: Path, tree_name: str) -> list[dict]:
+    root_resolved = root.resolve()
+    findings: list[dict] = []
+    for cur_dir, dirnames, filenames in os.walk(root_resolved, followlinks=False):
+        cur = Path(cur_dir)
+        kept_dirs = []
+        for name in sorted(dirnames):
+            candidate = cur / name
+            rel = candidate.relative_to(root_resolved)
+            if not _allowed(rel):
+                continue
+            if candidate.is_symlink():
+                findings.append({
+                    "tree": tree_name,
+                    "path": rel.as_posix(),
+                    "kind": _classify_symlink(root_resolved, candidate),
+                    "target": os.readlink(candidate),
+                })
+            else:
+                kept_dirs.append(name)
+        dirnames[:] = kept_dirs
+        for name in sorted(filenames):
+            candidate = cur / name
+            rel = candidate.relative_to(root_resolved)
+            if not _allowed(rel):
+                continue
+            if candidate.is_symlink():
+                findings.append({
+                    "tree": tree_name,
+                    "path": rel.as_posix(),
+                    "kind": _classify_symlink(root_resolved, candidate),
+                    "target": os.readlink(candidate),
+                })
+    findings.sort(key=lambda item: (item["tree"], item["path"]))
+    return findings
+
+
 def inventory(repo: Path, snapshot: Path) -> dict:
     if not snapshot.is_dir():
         raise ValueError("Snapshot harus berupa direktori.")
@@ -56,25 +115,47 @@ def inventory(repo: Path, snapshot: Path) -> dict:
     files = []
     paths = _git(repo, "ls-files", "-z").decode().split("\0")
     for name in sorted(set(paths)):
+        if not name:
+            continue
         rel = Path(name)
         path = repo / rel
+        if path.is_symlink():
+            continue
         if (PATTERN.search(name) and _allowed(rel) and path.is_file()
                 and path.resolve() == repo.resolve() / rel):
             files.append({"path": name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
     records = []
-    for path in sorted(snapshot.rglob("*")):
-        rel = path.relative_to(snapshot)
-        if (not _allowed(rel) or not path.is_file() or path.suffix not in {".json", ".jsonl"}
-                or path.resolve() != snapshot.resolve() / rel):
-            continue
-        data = path.read_bytes()
-        digest = hashlib.sha256(data).hexdigest()
-        for number, record in _record_entries(data, path.suffix):
-            if PATTERN.search(rel.as_posix()) or PATTERN.search(json.dumps(record, ensure_ascii=False)):
-                records.append({"path": rel.as_posix(), "entry": number, "sha256": digest})
-    return {"schema": "ace.successor-inventory.v1",
-            "counts": {"branches": len(branches), "files": len(files), "records": len(records)},
-            "branches": branches, "files": files, "records": records}
+    snapshot_resolved = snapshot.resolve()
+    for cur_dir, dirnames, filenames in os.walk(snapshot_resolved, followlinks=False):
+        cur = Path(cur_dir)
+        kept_dirs = []
+        for name in sorted(dirnames):
+            candidate = cur / name
+            rel = candidate.relative_to(snapshot_resolved)
+            if _allowed(rel) and not candidate.is_symlink():
+                kept_dirs.append(name)
+        dirnames[:] = kept_dirs
+        for name in sorted(filenames):
+            path = cur / name
+            if path.is_symlink():
+                continue
+            rel = path.relative_to(snapshot_resolved)
+            if (not _allowed(rel) or not path.is_file() or path.suffix not in {".json", ".jsonl"}
+                    or path.resolve() != snapshot_resolved / rel):
+                continue
+            data = path.read_bytes()
+            digest = hashlib.sha256(data).hexdigest()
+            for number, record in _record_entries(data, path.suffix):
+                if PATTERN.search(rel.as_posix()) or PATTERN.search(json.dumps(record, ensure_ascii=False)):
+                    records.append({"path": rel.as_posix(), "entry": number, "sha256": digest})
+    symlink_findings = _scan_symlinks(repo, "repo") + _scan_symlinks(snapshot, "snapshot")
+    symlink_findings.sort(key=lambda item: (item["tree"], item["path"]))
+    report = {"schema": "ace.successor-inventory.v1",
+              "counts": {"branches": len(branches), "files": len(files), "records": len(records)},
+              "branches": branches, "files": files, "records": records}
+    if symlink_findings:
+        report["symlink_findings"] = symlink_findings
+    return report
 
 
 def _claim_path(repo, raw_path, index):
@@ -224,6 +305,14 @@ def markdown(result):
                 lines.append(f"- {escape(row['id'])} · {chain} · `{row['sha256']}`{suffix}"
                              f" · blob Git {row['git_origin']['state']}")
             lines.append("")
+    if "symlink_findings" in result:
+        rows = result["symlink_findings"]
+        lines.extend([f"## Temuan symlink ({len(rows)})", ""])
+        for row in rows:
+            lines.append(
+                f"- {escape(row['tree'])}/{escape(row['path'])} · {escape(row['kind'])} → {escape(row['target'])}"
+            )
+        lines.append("")
     return "\n".join(lines)
 
 
