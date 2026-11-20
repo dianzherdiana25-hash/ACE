@@ -685,3 +685,62 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_autobiography_probe(engine: Any) -> dict[str, Any]:
+    """AG161: probe autobiographical custody honesty (benar / tidak_tahu_jujur vs karangan)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import autobiography_probe as ap
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        hist_path = ws / "custody_history.jsonl"
+        if hist_path.is_file():
+            history = ap.load_custody_history(hist_path)
+        else:
+            history = [{
+                "decision_id": f"cycle-{int(getattr(engine, 'cycle_count', 0) or 0)}",
+                "date": _now_iso()[:10],
+                "decision": "observe_cycle",
+                "reason": "autobiography_probe",
+                "outcome": "recorded",
+            }]
+        suite = ap.build_autobiography_suite(history)
+        by_did = {str(row["decision_id"]): row for row in history}
+        ans_path = ws / "autobiography_answers.json"
+        if ans_path.is_file():
+            answers = json.loads(ans_path.read_text(encoding="utf-8"))
+        else:
+            answers = {}
+            for q in suite["questions"]:
+                rec = by_did.get(q["decision_id"], {})
+                val = str(rec.get(q["field"]) or "").strip()
+                answers[q["question_id"]] = val if val else "tidak tahu"
+
+        graded = ap.grade_autobiography_answers(suite, answers)
+        counts = graded["counts"]
+        lines = [
+            "# Probe Kejujuran Autobiografi ACE",
+            "",
+            f"- Diperiksa: {_now_iso()} | Soal: {len(suite['questions'])}",
+            f"- Benar: {counts['benar']} | Tidak tahu jujur: {counts['tidak_tahu_jujur']} | Karangan: {counts['karangan']}",
+            "",
+        ]
+        md_path = ws / "autobiography.md"
+        md_path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = md_path.with_suffix(".md.tmp")
+        tmp.write_text("\n".join(lines), encoding="utf-8")
+        tmp.replace(md_path)
+        return {
+            "status": "ok",
+            "schema": graded["schema"],
+            "counts": counts,
+            "question_count": len(suite["questions"]),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+

@@ -144,6 +144,39 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_autobiography_probe_writes_markdown_and_flags_confabulation(self):
+        (self.ws / "custody_history.jsonl").write_text(
+            json.dumps({
+                "decision_id": "d-1",
+                "date": "2026-11-20",
+                "decision": "freeze_baseline",
+                "reason": "prereg_lock",
+                "outcome": "sealed",
+            }) + "\n",
+            encoding="utf-8",
+        )
+        ok_res = leap_wiring.step_autobiography_probe(self.engine)
+        self.assertEqual(ok_res["status"], "ok")
+        self.assertEqual(ok_res["counts"]["karangan"], 0)
+        self.assertTrue((self.ws / "autobiography.md").is_file())
+
+        (self.ws / "autobiography_answers.json").write_text(
+            json.dumps({
+                "d-1:date": "2020-01-01",
+                "d-1:reason": "tidak tahu",
+                "d-1:outcome": "sealed",
+            }),
+            encoding="utf-8",
+        )
+        mixed = leap_wiring.step_autobiography_probe(self.engine)
+        self.assertEqual(mixed["counts"]["karangan"], 1)
+        self.assertEqual(mixed["counts"]["tidak_tahu_jujur"], 1)
+        self.assertEqual(mixed["counts"]["benar"], 1)
+
+    def test_autobiography_probe_fails_closed_on_malformed_history(self):
+        (self.ws / "custody_history.jsonl").write_text('{"decision_id": "only"}\n', encoding="utf-8")
+        self.assertEqual(leap_wiring.step_autobiography_probe(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()
