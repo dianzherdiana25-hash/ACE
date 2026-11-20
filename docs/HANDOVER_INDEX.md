@@ -6,8 +6,8 @@
 
 - Schema: `ace.handover-index.v1`
 - Total berkas terindeks: **432** (`handover/`: **159**, `docs/`: **273**)
-- Total baris teks UTF-8: **82285**
-- Total ukuran: **4835594** byte
+- Total baris teks UTF-8: **82287**
+- Total ukuran: **4835863** byte
 - Symlink dilewati: **0**
 
 ### Distribusi Kategori
@@ -243,8 +243,8 @@
 | `docs/LAPORAN_HASIL_RISET_HP.md` | `reference_doc` | 63 | 5202 | `4e5fe567d704` | 📱 Laporan Hasil Riset ACE (Terbaca di Layar HP) |
 | `docs/PRD_ACE_v0.1.md` | `reference_doc` | 190 | 18816 | `03887aef928b` | PRODUCT REQUIREMENTS DOCUMENT (PRD) |
 | `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54864 | `d9373e6d1c63` | Glosarium Istilah Teknis ACE — ACE |
-| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23894 | `46dcff166697` | Kartografi Repositori ACE — ACE |
-| `docs/REPO_INDEX.md` | `reference_doc` | 3891 | 331721 | `3b2cf4eae93d` | Indeks Repositori — ACE |
+| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23894 | `22c0debcaa74` | Kartografi Repositori ACE — ACE |
+| `docs/REPO_INDEX.md` | `reference_doc` | 3893 | 331990 | `7323c7278a2c` | Indeks Repositori — ACE |
 | `docs/SENSUS_KANDIDAT.json` | `manifest_json` | 837 | 23986 | `94922b9f71e0` | schema: ace.candidate-census.v1 |
 | `docs/SENSUS_KANDIDAT.md` | `reference_doc` | 50 | 2531 | `65e4889ef370` | Sensus Kandidat Corpus ACE |
 | `docs/UPSTREAM_SOURCES.json` | `manifest_json` | 106 | 4914 | `cf6ffc77386a` | schema: ace.source-integration.v1 |

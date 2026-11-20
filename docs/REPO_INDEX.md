@@ -2,8 +2,8 @@
 
 - Schema: `ace.repo-index.v1`
 - Total direktori: 205
-- Total berkas: 2341
-- Total modul Python: 1127
+- Total berkas: 2342
+- Total modul Python: 1128
 
 ## Daftar Berkas per Direktori
 
@@ -397,7 +397,7 @@
 - `test_neural_guided_search.py` (python)
 - `test_sketch_synthesizer.py` (python)
 
-### `code/ace_operational` (242 berkas)
+### `code/ace_operational` (243 berkas)
 - `__init__.py` (python)
 - `abc_v3_scorer.py` (python)
 - `abstraction_engine.py` (python)
@@ -565,6 +565,7 @@
 - `test_g3_instrument.py` (python)
 - `test_g4_instrument.py` (python)
 - `test_g5_instrument.py` (python)
+- `test_gap_mechanics_evo0018.py` (python)
 - `test_gemini_key_failover.py` (python)
 - `test_gen_context.py` (python)
 - `test_gguf_integrity.py` (python)
@@ -3140,6 +3141,7 @@
 | `ace_operational.test_g3_instrument` | `code/ace_operational/test_g3_instrument.py` | Tests for g3_instrument (design: PR #135). | `ace_operational.g3_instrument` |
 | `ace_operational.test_g4_instrument` | `code/ace_operational/test_g4_instrument.py` | Tests for g4_instrument (design: PR #136 Part I; | `ace_operational.g4_instrument` |
 | `ace_operational.test_g5_instrument` | `code/ace_operational/test_g5_instrument.py` | Synthetic tests for the G5 instrument | `ace_operational.g5_instrument` |
+| `ace_operational.test_gap_mechanics_evo0018` | `code/ace_operational/test_gap_mechanics_evo0018.py` | Tes mekanisme gap EVO 0018 M2: hitung kegagalan berbeda, | `ace_operational.autonomous_engine`, `ace_operational.store` |
 | `ace_operational.test_gemini_key_failover` | `code/ace_operational/test_gemini_key_failover.py` | Tes fixture failover 3 kunci Gemini tanpa jaringan untuk brain_bridge (AG3). | `ace_operational.brain_bridge` |
 | `ace_operational.test_gen_context` | `code/ace_operational/test_gen_context.py` | Differential tests for the per-round generation context. | `ace_operational.gen_context_bench`, `ace_operational.pilot_abc` |
 | `ace_operational.test_gguf_integrity` | `code/ace_operational/test_gguf_integrity.py` | Structural GGUF admission + thinking-budget failure truthfulness. | `ace_operational.models_backend`, `ace_operational.store` |

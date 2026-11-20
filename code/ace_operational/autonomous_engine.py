@@ -844,6 +844,22 @@ class ContinuousAutonomousEngine:
             )
             writeback_id = self._writeback_skill_verified(
                 item=item, receipt=receipt, learning_kind=learning_kind)
+            # EVO 0018 M2 — resolve-on-pass: lulusnya verifikasi skill
+            # menutup gap verifikasi yang cocok (sebelumnya gap tetap
+            # OPEN selamanya walau skill-nya sudah ACTIVE terverifikasi
+            # — kasus gap_72e9344d4f). Tugas yang membuktikan lulus
+            # menjadi linked_learning_task_id gap itu.
+            try:
+                wanted_type = f"{learning_kind.upper()}_VERIFICATION_FAILED"
+                for gap in self.store.list_gaps(status="OPEN"):
+                    if (gap.get("error_type") == wanted_type
+                            and gap.get("missing_skill_or_tool") == skill_name):
+                        self.store.update_gap(
+                            gap["gap_id"], status="RESOLVED",
+                            linked_learning_task_id=task["task_id"])
+            except Exception:
+                logger.warning(
+                    "resolve-on-pass gagal untuk %s", skill_name, exc_info=True)
             logger.info(f"Verified skill '{skill_name}' with receipt {receipt['receipt_id']}")
             return {"skill": skill_name, "receipt": receipt["receipt_id"],
                     "passed": True, "writeback_id": writeback_id}

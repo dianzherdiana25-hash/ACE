@@ -1199,11 +1199,32 @@ class OperationalStore:
                 (fingerprint,),
             ).fetchone()
             if existing:
-                new_count = int(existing["occurrence_count"]) + 1
-                self._conn.execute(
-                    "UPDATE gaps SET occurrence_count = ?, updated_at = ?, source_task_id = ? WHERE fingerprint = ?",
-                    (new_count, now, source_task_id, fingerprint),
-                )
+                # EVO 0018 M2 — hitung kegagalan BERBEDA, bukan lari-ulang:
+                # (a) gap non-OPEN yang gagal lagi DIBUKA ULANG dengan
+                # hitungan 1; (b) observasi ulang kegagalan yang sama
+                # (fingerprint + reproduction_ref sama) pada gap OPEN
+                # hanya menyegarkan updated_at — occurrence hanya naik
+                # untuk reproduksi yang benar-benar berbeda. Sebelumnya
+                # setiap verifikasi ulang kurikulum menaikkan hitungan
+                # (gap morfologi mencapai 1526 dari satu kegagalan).
+                if existing["status"] != "OPEN":
+                    self._conn.execute(
+                        "UPDATE gaps SET status = 'OPEN', occurrence_count = 1, "
+                        "updated_at = ?, source_task_id = ?, reproduction_ref = ?, "
+                        "description_id = ? WHERE fingerprint = ?",
+                        (now, source_task_id, reproduction_ref, description_id, fingerprint),
+                    )
+                elif (existing["reproduction_ref"] or "") == (reproduction_ref or ""):
+                    self._conn.execute(
+                        "UPDATE gaps SET updated_at = ?, source_task_id = ? WHERE fingerprint = ?",
+                        (now, source_task_id, fingerprint),
+                    )
+                else:
+                    new_count = int(existing["occurrence_count"]) + 1
+                    self._conn.execute(
+                        "UPDATE gaps SET occurrence_count = ?, updated_at = ?, source_task_id = ?, reproduction_ref = ? WHERE fingerprint = ?",
+                        (new_count, now, source_task_id, reproduction_ref, fingerprint),
+                    )
                 self._conn.commit()
                 row = self._conn.execute("SELECT * FROM gaps WHERE fingerprint = ?", (fingerprint,)).fetchone()
                 return self._row_to_gap(row), False
