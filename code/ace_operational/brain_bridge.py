@@ -65,7 +65,7 @@ LAST_KEY = None
 
 
 def _today():
-    return time.strftime("%Y-%m-%d", time.localtime())
+    return time.strftime("%Y-%m-%d", time.gmtime())
 
 
 def _write_log_unlocked(record):
