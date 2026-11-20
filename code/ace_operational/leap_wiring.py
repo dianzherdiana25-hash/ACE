@@ -685,3 +685,37 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_repo_arena(engine: Any) -> dict[str, Any]:
+    """AG144: execute multi-file repo arena verification in isolated temp copy."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import repo_arena as ra
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        spec_path = ws / "repo_arena_spec.json"
+        if spec_path.is_file():
+            spec = json.loads(spec_path.read_text(encoding="utf-8"))
+        else:
+            spec = ra.default_arena_spec()
+        report = ra.run_arena(spec, apply_patch=True, timeout_s=15)
+        out = {
+            "status": "ok",
+            "schema": report["schema"],
+            "arena_id": report["arena_id"],
+            "mode": report["mode"],
+            "all_passed": report["all_passed"],
+            "summary": report["summary"],
+            "test_files": report["test_files"],
+            "checked_at": _now_iso(),
+        }
+        _write_json(ws / "repo_arena_report.json", out)
+        return out
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+

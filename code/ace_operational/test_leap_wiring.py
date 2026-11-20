@@ -144,6 +144,19 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_repo_arena_runs_default_fixture_and_writes_report(self):
+        res = leap_wiring.step_repo_arena(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["mode"], "verify")
+        self.assertTrue(res["all_passed"])
+        saved = json.loads((self.ws / "repo_arena_report.json").read_text())
+        self.assertEqual(saved["summary"]["passed_files"], saved["summary"]["total_test_files"])
+
+    def test_repo_arena_fails_closed_on_invalid_spec(self):
+        (self.ws / "repo_arena_spec.json").write_text("{bad", encoding="utf-8")
+        res = leap_wiring.step_repo_arena(self.engine)
+        self.assertEqual(res["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()
