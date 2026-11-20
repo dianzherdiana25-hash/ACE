@@ -15,8 +15,9 @@ from pathlib import Path
 import sys
 from typing import Any
 
-if __package__ in (None, ""):
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "code"))
+_CODE_DIR = str(Path(__file__).resolve().parents[1] / "code")
+if _CODE_DIR not in sys.path:
+    sys.path.insert(0, _CODE_DIR)
 from ace_operational.memory_anchor import check_anchors
 
 
