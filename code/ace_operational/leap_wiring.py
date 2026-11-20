@@ -34,7 +34,9 @@ Peta step → lompatan:
 from __future__ import annotations
 
 import json
+import os
 import sys
+import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -107,6 +109,33 @@ def step_checkpoint(engine: Any) -> dict[str, Any]:
 # EVO 0031 + 0017 — konsolidasi memori + probe recall live
 # ------------------------------------------------------------------
 
+def _bridge_embedder():
+    """Embedder semantik via bridge (POST /v1/embeddings) — EVO 0017 M3.
+
+    Mengembalikan None bila ACE_BRAIN_BRIDGE_URL tak terkonfigurasi;
+    pemanggil wajib fail-closed ke kanal leksikal saat embedder None
+    atau panggilannya gagal (mis. anggaran embedding harian habis).
+    Cache per instance: satu teks unik = satu panggilan bridge.
+    """
+    base = os.environ.get("ACE_BRAIN_BRIDGE_URL", "").rstrip("/")
+    if not base:
+        return None
+    cache: dict[str, list[float]] = {}
+
+    def embed(text: str) -> list[float]:
+        if text not in cache:
+            req = urllib.request.Request(
+                base + "/v1/embeddings",
+                data=json.dumps({"input": text}).encode("utf-8"),
+                headers={"Content-Type": "application/json"}, method="POST")
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                payload = json.loads(resp.read().decode("utf-8"))
+            cache[text] = [float(v) for v in payload["data"][0]["embedding"]]
+        return cache[text]
+
+    return embed
+
+
 def step_recall(engine: Any) -> dict[str, Any]:
     from ace_operational import memory_consolidation as mc
     from ace_operational import recall_candidates as rc
@@ -125,13 +154,21 @@ def step_recall(engine: Any) -> dict[str, Any]:
         episodes, _ = mc.load_active_episodes(log_path)
 
     # Probe pengantaran: query = tema gap OPEN; kandidat dari episode
-    # memori lewat jalur hybrid (leksikal + provenance) lalu reranker.
+    # memori lewat jalur hybrid (leksikal + provenance + semantik bila
+    # embedder bridge tersedia — EVO 0017 M3) lalu reranker.
     gaps = engine.store.list_gaps(status="OPEN")
     delivered = 0
     probed = 0
+    semantic_hits = 0
+    embedder = _bridge_embedder()
     for gap in gaps[:10]:
+        # Kunci nyata baris gaps: error_type/missing_skill_or_tool/
+        # description_id (kunci lama gap_type/skill_name/title tidak
+        # pernah ada di store — query probe selalu kosong sebelum ini).
         query = " ".join(str(gap.get(k) or "") for k in
-                         ("gap_type", "skill_name", "title", "description"))
+                         ("error_type", "missing_skill_or_tool",
+                          "description_id", "gap_type", "skill_name",
+                          "title", "description"))
         if not query.strip():
             continue
         probed += 1
@@ -144,6 +181,20 @@ def step_recall(engine: Any) -> dict[str, Any]:
             "lexical": rc.lexical_candidates(query, _Store(), limit=10),
             "provenance": rc.provenance_candidates(query, _Store(), limit=10),
         }
+        if embedder is not None:
+            try:
+                # Batas 60 rekaman: mengikat biaya embedding per probe
+                # (anggaran peran embedding harian terbatas).
+                class _EmbStore:
+                    def list_records(self_inner):  # noqa: N805
+                        return episodes[:60]
+
+                emb = rc.embedding_candidates(query, _EmbStore(), embedder, limit=10)
+                if emb:
+                    channels["embedding"] = emb
+                    semantic_hits += 1
+            except Exception:
+                pass  # fail-closed: kanal leksikal+provenance tetap jalan
         merged = rc.merge_candidates(channels, limit=10)
         ranked = rr.rerank_candidates(merged, {}, limit=5)
         if ranked and float(ranked[0].get("score") or 0) > 0:
@@ -151,8 +202,10 @@ def step_recall(engine: Any) -> dict[str, Any]:
     rate = (delivered / probed) if probed else None
     _append_jsonl(ws / "recall_probe.jsonl", {
         "at": _now_iso(), "cycle": engine.cycle_count,
-        "probed_gaps": probed, "delivered": delivered, "rate": rate})
-    out["probe"] = {"probed": probed, "delivered": delivered, "rate": rate}
+        "probed_gaps": probed, "delivered": delivered, "rate": rate,
+        "semantic_probes": semantic_hits})
+    out["probe"] = {"probed": probed, "delivered": delivered, "rate": rate,
+                    "semantic_probes": semantic_hits}
     return out
 
 

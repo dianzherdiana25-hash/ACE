@@ -59,6 +59,43 @@ class LeapWiringTests(unittest.TestCase):
         self.assertTrue((self.ws / "recall_probe.jsonl").is_file())
         self.assertIn("probe", out)
 
+    def _seed_gap(self) -> None:
+        self.engine.store.record_gap(
+            source_task_id="t-gap", error_type="skill_missing",
+            missing_skill_or_tool="morfologi imbuhan",
+            description_id="morfologi imbuhan berlari menulis",
+            reproduction_ref="probe:morfologi")
+
+    def test_recall_semantic_channel_when_embedder_available(self) -> None:
+        self._seed_gap()
+
+        def stub_embedder(text: str):
+            return [1.0, 0.1] if "morfologi" in text else [0.0, 1.0]
+
+        orig = leap_wiring._bridge_embedder
+        leap_wiring._bridge_embedder = lambda: stub_embedder
+        try:
+            out = leap_wiring.step_recall(self.engine)
+        finally:
+            leap_wiring._bridge_embedder = orig
+        self.assertEqual(out["status"], "ok")
+        self.assertGreaterEqual(out["probe"]["semantic_probes"], 1)
+
+    def test_recall_semantic_failure_fails_closed(self) -> None:
+        self._seed_gap()
+
+        def bad_embedder(text: str):
+            raise RuntimeError("embedding budget exhausted")
+
+        orig = leap_wiring._bridge_embedder
+        leap_wiring._bridge_embedder = lambda: bad_embedder
+        try:
+            out = leap_wiring.step_recall(self.engine)
+        finally:
+            leap_wiring._bridge_embedder = orig
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["probe"]["semantic_probes"], 0)
+
     def test_house_model_and_plan_written(self) -> None:
         out = leap_wiring.step_house(self.engine)
         self.assertEqual(out["status"], "ok")
