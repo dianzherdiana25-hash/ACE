@@ -19,6 +19,7 @@ import sys
 from typing import Any
 
 HANDOVER_INDEX_SCHEMA = "ace.handover-index.v1"
+REPO_NAME = "ACE"  # nama kanonis repo — deterministik, tidak memakai nama direktori checkout (nama direktori membuat dokumen turunan berbeda di setiap rumah dan menggagalkan uji kesegaran)
 REPO_ROOT = Path(__file__).resolve().parents[1]
 IGNORED_DIRS = frozenset({".git", "__pycache__", ".pytest_cache", ".mypy_cache", ".venv", "venv"})
 DEFAULT_OUTPUT_REL = "docs/HANDOVER_INDEX.md"
@@ -183,7 +184,7 @@ def build_handover_index(
 
     return {
         "schema": HANDOVER_INDEX_SCHEMA,
-        "repo_name": root.name,
+        "repo_name": REPO_NAME,
         "areas_scanned": list(areas),
         "missing_areas": sorted(missing_areas),
         "summary": {

@@ -1,12 +1,12 @@
-# Glosarium Istilah Teknis ACE — merge-antigravity
+# Glosarium Istilah Teknis ACE — ACE
 
 > Dibangun otomatis dari definisi Markdown & AST Python statis oleh `tools/program_glossary.py` (`ace.program-glossary.v1`). Seluruh definisi bersumber langsung dari berkas repositori (nol definisi rekaan).
 
 ## 1. Ringkasan Sumber
 
 - Berkas Markdown dipindai: **330**
-- Berkas Python AST dipindai (non-test): **488**
-- Total istilah terindeks: **336** (dari 1439 kandidat unik)
+- Berkas Python AST dipindai (non-test): **502**
+- Total istilah terindeks: **336** (dari 1455 kandidat unik)
 
 ### Komposisi Sumber
 
@@ -198,6 +198,7 @@
 | `BrainContractAdapter` | `ast_class` | `code/ace_operational/oaie_unlimited.py:121` | Wraps any AI model or symbolic solver behind a zero-trust hypothesis interface. |
 | `BrainGovernanceError` | `ast_class` | `code/ace_operational/oaie_unlimited.py:111` | Raised when all candidate brains fail verification or a dismissed brain is invoked. |
 | `BrainUnavailable` | `ast_class` | `code/ace_operational/brain_endpoints.py:114` | An organ is unreachable or unhealthy. Fail-closed: never faked. |
+| `BridgeSecretsError` | `ast_class` | `tools/bridge_secrets.py:27` | Galat tetap tanpa isi credential. |
 | `Budget` | `ast_class` | `code/ace_operational/reasoning_lab.py:57` | Shown-case fitness with a hard evaluation cap. |
 | `Budget Preservation` | `markdown_def` | `docs/research/self_dev/ACE_ANTI_STAGNATION_SELF_REPAIR_REPORT_20261107.md:66` | When stagnation is flagged, `should_evaluate=False` and `should_commit=False`, completely bypassing holdout evaluation and suppressing commit spam. |
 | `BudgetController` | `ast_class` | `code/ace_autonomy/budget.py:59` | Enforces declared step, candidate, retry, wall-time, and CPU-time ceilings. |
@@ -226,7 +227,6 @@
 | `Catalog artifact` | `markdown_def` | `docs/research/ACE_CATALOG_GAP_DESIGN_20261113.md:48` | the `operator_catalog_v*` |
 | `catalog_only` | `markdown_def` | `docs/research/ACE_CATALOG_GAP_DESIGN_20261113.md:105` | present in the catalog, never |
 | `CatalogGapError` | `ast_class` | `code/ace_operational/catalog_gap.py:58` | Raised when a discovery record or catalog |
-| `CausalEdge` | `ast_class` | `code/ace_causal/causal_miner.py:29` | Directed causal edge: source -> target (source causes target). |
 | `code.ace_abstract_interp.__init__` | `ast_module` | `code/ace_abstract_interp/__init__.py:1` | ACE Abstract Interpretation & Invariant Synthesis Module. |
 | `code.ace_abstract_interp.disjunctive_domain` | `ast_module` | `code/ace_abstract_interp/disjunctive_domain.py:1` | Disjunctive Abstract Interpretation via Semantic Trace Partitioning. |
 | `code.ace_abstract_interp.invariants` | `ast_module` | `code/ace_abstract_interp/invariants.py:1` | Abstract Interpretation Invariant Analyzer & Invariant Synthesizer. |

@@ -1,9 +1,9 @@
-# Indeks Repositori — merge-antigravity
+# Indeks Repositori — ACE
 
 - Schema: `ace.repo-index.v1`
 - Total direktori: 204
-- Total berkas: 2110
-- Total modul Python: 903
+- Total berkas: 2137
+- Total modul Python: 930
 
 ## Daftar Berkas per Direktori
 
@@ -397,7 +397,7 @@
 - `test_neural_guided_search.py` (python)
 - `test_sketch_synthesizer.py` (python)
 
-### `code/ace_operational` (200 berkas)
+### `code/ace_operational` (208 berkas)
 - `__init__.py` (python)
 - `abc_v3_scorer.py` (python)
 - `abstraction_engine.py` (python)
@@ -423,6 +423,9 @@
 - `curriculum_generator.py` (python)
 - `curriculum_lab.py` (python)
 - `curriculum_wave2.py` (python)
+- `director_actions.py` (python)
+- `director_classes.py` (python)
+- `director_executor.py` (python)
 - `director_loop.py` (python)
 - `director_strong.py` (python)
 - `distractor_inoculation.py` (python)
@@ -446,6 +449,7 @@
 - `local_sandbox.py` (python)
 - `local_sandbox_v2.py` (python)
 - `massive_skills_expansion.py` (python)
+- `memory_anchor.py` (python)
 - `memory_bridge.py` (python)
 - `memory_snapshot.py` (python)
 - `memory_writeback.py` (python)
@@ -520,6 +524,9 @@
 - `test_curriculum_generator.py` (python)
 - `test_curriculum_integrity.py` (python)
 - `test_curriculum_lab.py` (python)
+- `test_director_actions.py` (python)
+- `test_director_classes.py` (python)
+- `test_director_executor.py` (python)
 - `test_director_loop.py` (python)
 - `test_director_strong.py` (python)
 - `test_distractor_inoculation.py` (python)
@@ -548,6 +555,7 @@
 - `test_local_sandbox_v2.py` (python)
 - `test_loop_boundary_wave.py` (python)
 - `test_massive_skills_expansion.py` (python)
+- `test_memory_anchor.py` (python)
 - `test_memory_bridge.py` (python)
 - `test_memory_snapshot_fuzz_regression.py` (python)
 - `test_memory_writeback.py` (python)
@@ -2275,7 +2283,7 @@
 - `test_sandbox_ast_gate.py` (python)
 - `test_zero_cost_governance.py` (python)
 
-### `tools` (248 berkas)
+### `tools` (267 berkas)
 - `FUZZ_STANDARD.md` (docs)
 - `__init__.py` (python)
 - `_director_sources.py` (python)
@@ -2300,6 +2308,10 @@
 - `bakeoff_b.py` (python)
 - `bakeoff_c.py` (python)
 - `bench_table.py` (python)
+- `brain_bridge.py` (python)
+- `bridge_home.py` (python)
+- `bridge_relay.py` (python)
+- `bridge_secrets.py` (python)
 - `builder_onboarding_pack.py` (python)
 - `candidate_census.py` (python)
 - `candidate_corpus_batch.py` (python)
@@ -2340,8 +2352,10 @@
 - `fuzz_wseh.py` (python)
 - `handover_decision_extractor.py` (python)
 - `handover_index.py` (python)
+- `house_check.py` (python)
 - `income_report.py` (python)
 - `income_verify.py` (python)
+- `inheritance_probe.py` (python)
 - `inoculation_demo.py` (python)
 - `instance_kit.py` (python)
 - `introspect_recall.py` (python)
@@ -2373,6 +2387,7 @@
 - `pr_pack.py` (python)
 - `program_glossary.py` (python)
 - `ram_window.py` (python)
+- `recall_ablation.py` (python)
 - `refresh_repo_index.sh` (scripts)
 - `regression_anchor.py` (python)
 - `relay_spool_tools.py` (python)
@@ -2396,9 +2411,12 @@
 - `secrets_bundle.py` (python)
 - `self_dev_git_audit.py` (python)
 - `self_model_continuity_probe.py` (python)
+- `self_send.py` (python)
+- `self_send_audit.py` (python)
 - `self_send_audit_view.py` (python)
 - `stage_verify.py` (python)
 - `storage_debt.py` (python)
+- `successor_inventory.py` (python)
 - `test_ace_autonomous_daemon_e3.py` (python)
 - `test_ace_mission_worker_e3.py` (python)
 - `test_ace_reasoning_benchmark_e3.py` (python)
@@ -2407,6 +2425,8 @@
 - `test_agenda_candidates.py` (python)
 - `test_agenda_closure.py` (python)
 - `test_bench_table.py` (python)
+- `test_bridge_home.py` (python)
+- `test_bridge_secrets.py` (python)
 - `test_builder_onboarding_pack.py` (python)
 - `test_candidate_census.py` (python)
 - `test_candidate_corpus_batch.py` (python)
@@ -2446,8 +2466,10 @@
 - `test_governor_ledger.py` (python)
 - `test_handover_decision_extractor.py` (python)
 - `test_handover_index.py` (python)
+- `test_house_check.py` (python)
 - `test_income_report.py` (python)
 - `test_income_verify.py` (python)
+- `test_inheritance_probe.py` (python)
 - `test_instance_kit.py` (python)
 - `test_introspect_recall.py` (python)
 - `test_kbm_cover_wiring.py` (python)
@@ -2481,10 +2503,12 @@
 - `test_pr_pack.py` (python)
 - `test_program_glossary.py` (python)
 - `test_ram_window.py` (python)
+- `test_recall_ablation.py` (python)
 - `test_regression_anchor_e3.py` (python)
 - `test_relay_spool_tools.py` (python)
 - `test_release_manifest.py` (python)
 - `test_repair_v2_probe_e3.py` (python)
+- `test_repo_brain_bridge.py` (python)
 - `test_repo_cartography.py` (python)
 - `test_repo_index.py` (python)
 - `test_repo_index_doc.py` (python)
@@ -2503,10 +2527,13 @@
 - `test_self_dev_git_audit.py` (python)
 - `test_self_dev_prereview.py` (python)
 - `test_self_model_continuity_probe.py` (python)
+- `test_self_send_audit.py` (python)
 - `test_self_send_audit_view.py` (python)
+- `test_self_send_dryrun.py` (python)
 - `test_sensus_kandidat_e1.py` (python)
 - `test_stage_verify.py` (python)
 - `test_storage_debt.py` (python)
+- `test_successor_inventory.py` (python)
 - `test_tools_scripts_edge.py` (python)
 - `test_verify_repair_v2.py` (python)
 - `test_verify_runtime_demo_v2.py` (python)
@@ -2769,6 +2796,9 @@
 | `ace_operational.curriculum_generator` | `code/ace_operational/curriculum_generator.py` | Weakness-targeting curriculum generator (design: | `ace_operational.catalog_gap` |
 | `ace_operational.curriculum_lab` | `code/ace_operational/curriculum_lab.py` | OMEGA-10 — Environment and Curriculum Co-Evolution (task laboratory). | - |
 | `ace_operational.curriculum_wave2` | `code/ace_operational/curriculum_wave2.py` | Latihan gelombang kedua dipisah agar modul mandiri mudah ditelaah dan diuji. | - |
+| `ace_operational.director_actions` | `code/ace_operational/director_actions.py` | Tutup gap hanya ketika bukti usulan dapat diverifikasi oleh pemanggil. | - |
+| `ace_operational.director_classes` | `code/ace_operational/director_classes.py` | Kelompokkan proposal sebelum operator dapat mempertimbangkan eksekusi. | - |
+| `ace_operational.director_executor` | `code/ace_operational/director_executor.py` | Batasi eksekusi proposal lokal dan sisakan jejak bila proses terputus. | `ace_operational.director_classes` |
 | `ace_operational.director_loop` | `code/ace_operational/director_loop.py` | Phase 2 — the local Research Director loop (observe → prioritise → assign). | - |
 | `ace_operational.director_strong` | `code/ace_operational/director_strong.py` | Director-strong organs — Stage 1 of RANCANGAN TAHAPAN OTAK KUAT. | `ace_operational.brain_registry` |
 | `ace_operational.distractor_inoculation` | `code/ace_operational/distractor_inoculation.py` | Distractor-inoculation battery for the regression | - |
@@ -2790,6 +2820,7 @@
 | `ace_operational.local_sandbox` | `code/ace_operational/local_sandbox.py` | Least-privilege local Python test runner for experimental code candidates. | - |
 | `ace_operational.local_sandbox_v2` | `code/ace_operational/local_sandbox_v2.py` | OMEGA-05 v2 — sandbox backend for hosts without bubblewrap. | `ace_operational.local_sandbox` |
 | `ace_operational.massive_skills_expansion` | `code/ace_operational/massive_skills_expansion.py` | Massive Capability & Skill Expansion Engine for ACE (PRD & OAIE Vision). | `ace_operational.memory_writeback`, `ace_operational.store` |
+| `ace_operational.memory_anchor` | `code/ace_operational/memory_anchor.py` | Ukur tambatan proposal agar ref yang hilang terlihat sebelum dipakai. | - |
 | `ace_operational.memory_bridge` | `code/ace_operational/memory_bridge.py` | Conversational & Operational Bridge for Persistent Cognitive Memory (`memory_bridge.py`). | `ace_operational.cognitive_memory`, `ace_operational.store` |
 | `ace_operational.memory_snapshot` | `code/ace_operational/memory_snapshot.py` | Portable Git-backed memory, lexicon, and dialogue corpus snapshot for ACE. | `ace_operational.memory_bridge`, `ace_operational.speech_acquisition`, `ace_operational.store` |
 | `ace_operational.memory_writeback` | `code/ace_operational/memory_writeback.py` | Event-time write-back of verified events into cognitive memory. | `ace_operational.cognitive_memory` |
@@ -2862,6 +2893,9 @@
 | `ace_operational.test_curriculum_generator` | `code/ace_operational/test_curriculum_generator.py` | Weakness-targeting curriculum generator: targeting | `ace_operational.curriculum_generator` |
 | `ace_operational.test_curriculum_integrity` | `code/ace_operational/test_curriculum_integrity.py` | Jalankan semua latihan tetap agar satu modul gagal tidak menyumbat trek belajar. | `ace_operational.autonomous_engine` |
 | `ace_operational.test_curriculum_lab` | `code/ace_operational/test_curriculum_lab.py` | OMEGA-10 tests for the Environment and Curriculum Co-Evolution lab. | `ace_operational.curriculum_lab` |
+| `ace_operational.test_director_actions` | `code/ace_operational/test_director_actions.py` | Uji perubahan gap dengan store fixture. | `ace_operational.director_actions` |
+| `ace_operational.test_director_classes` | `code/ace_operational/test_director_classes.py` | Jaga batas bukti dan efek samping klasifikasi director. | `ace_operational.director_classes` |
+| `ace_operational.test_director_executor` | `code/ace_operational/test_director_executor.py` | Pastikan hanya percobaan A berkuota yang mencapai aksi. | `ace_operational.director_executor` |
 | `ace_operational.test_director_loop` | `code/ace_operational/test_director_loop.py` | Phase 2 tests for the local Research Director loop. | `ace_operational.cognitive_memory`, `ace_operational.director_loop` |
 | `ace_operational.test_director_strong` | `code/ace_operational/test_director_strong.py` | Stage-1 evidence: director-strong registration + origin discipline. | `ace_operational.brain_registry`, `ace_operational.director_strong` |
 | `ace_operational.test_distractor_inoculation` | `code/ace_operational/test_distractor_inoculation.py` | - | `ace_operational.distractor_inoculation` |
@@ -2890,6 +2924,7 @@
 | `ace_operational.test_local_sandbox_v2` | `code/ace_operational/test_local_sandbox_v2.py` | OMEGA-05 v2 tests: the v1 live acceptance list, run against the | `ace_operational.local_sandbox_v2` |
 | `ace_operational.test_loop_boundary_wave` | `code/ace_operational/test_loop_boundary_wave.py` | Offline edge cases for cycle orchestration and ratification custody. | `ace_operational.autonomous_engine`, `ace_operational.memory_writeback`, `ace_operational.ratification_loop`, `ace_operational.test_ratification_loop`, `ace_self_dev.agenda_engine`, `ace_self_dev.models` |
 | `ace_operational.test_massive_skills_expansion` | `code/ace_operational/test_massive_skills_expansion.py` | Unit tests for Massive Skills Expansion Engine. | `ace_operational.massive_skills_expansion`, `ace_operational.store` |
+| `ace_operational.test_memory_anchor` | `code/ace_operational/test_memory_anchor.py` | Uji status tambatan tanpa menulis ke store. | `ace_operational.memory_anchor` |
 | `ace_operational.test_memory_bridge` | `code/ace_operational/test_memory_bridge.py` | End-to-end verification tests for ACE Mission 0002 Long-Term Cognitive Memory Bridge. | `ace_operational.language`, `ace_operational.memory_bridge`, `ace_operational.store`, `ace_operational.story_projector`, `ace_operational.web_server` |
 | `ace_operational.test_memory_snapshot_fuzz_regression` | `code/ace_operational/test_memory_snapshot_fuzz_regression.py` | Regression and fuzz tests for D6 non-dict root & malformed entry crashes in memory_snapshot. | `ace_operational.memory_bridge`, `ace_operational.memory_snapshot`, `ace_operational.speech_acquisition`, `ace_operational.store` |
 | `ace_operational.test_memory_writeback` | `code/ace_operational/test_memory_writeback.py` | Acceptance tests for the cognitive-memory write path (v1). | `ace_operational.cognitive_memory`, `ace_operational.evolution_mission_loop`, `ace_operational.memory_writeback`, `ace_operational.test_evolution_mission_loop` |
@@ -3209,6 +3244,10 @@
 | `tools.bakeoff_b` | `tools/bakeoff_b.py` | Bake-off instrument B (B2A-02 dossier, Qwen3-4B candidate) — live run (2026-11-13). Same market, | `ace_operational.attested_server`, `ace_operational.b2a_market`, `ace_operational.experiment_kernel`, `ace_operational.models_backend`, `ace_operational.store` |
 | `tools.bakeoff_c` | `tools/bakeoff_c.py` | Bake-off instrument C (2026-11-13): the Uji | `ace_operational.attested_server`, `ace_operational.local_repo_workflow`, `ace_operational.models_backend`, `ace_operational.store` |
 | `tools.bench_table` | `tools/bench_table.py` | Tabulator hasil benchmark JSONL menjadi tabel Markdown `mean ± stdev` per label. | - |
+| `tools.brain_bridge` | `tools/brain_bridge.py` | Jalankan protokol bridge yang sudah ada dengan jalur rumah yang eksplisit. | `ace_operational.brain_bridge` |
+| `tools.bridge_home` | `tools/bridge_home.py` | Buat rencana cutover yang bisa ditelaah sebelum alamat engine berubah. | - |
+| `tools.bridge_relay` | `tools/bridge_relay.py` | Jalankan relay protokol bridge dengan spool yang dipilih operator. | `ace_operational.brain_bridge_relay` |
+| `tools.bridge_secrets` | `tools/bridge_secrets.py` | Siapkan env anak bridge agar credential tidak perlu masuk berkas plaintext. | `tools.secrets_bundle` |
 | `tools.builder_onboarding_pack` | `tools/builder_onboarding_pack.py` | Perakit paket onboarding kontributor ACE berbasis berkas kontrak aktual (`ace.builder-onboarding-pack.v1`). | - |
 | `tools.candidate_census` | `tools/candidate_census.py` | Sensus kandidat corpus JSONL untuk menilai kesiapan pembekuan secara objektif. | `tools.corpus_lint` |
 | `tools.candidate_corpus_batch` | `tools/candidate_corpus_batch.py` | Build and check a local batch of future candidate episodes. | `tools.corpus_factory_code`, `tools.corpus_factory_lang`, `tools.corpus_lint` |
@@ -3249,8 +3288,10 @@
 | `tools.fuzz_wseh` | `tools/fuzz_wseh.py` | Adapter fuzz parser untuk deliverable WS-E s.d. WS-H (M5). | - |
 | `tools.handover_decision_extractor` | `tools/handover_decision_extractor.py` | Ekstraktor keputusan pemilik/hub, verdit, aturan tata kelola, & usulan terbuka (`ace.handover-decisions.v1`). | - |
 | `tools.handover_index` | `tools/handover_index.py` | Indeksator deterministik untuk dokumen handover/ dan docs/ repositori ACE. | - |
+| `tools.house_check` | `tools/house_check.py` | Baca tiga sinyal watchdog dalam satu proses agar kegagalan terlokalisasi. | - |
 | `tools.income_report` | `tools/income_report.py` | Pisahkan arus kas terverifikasi per periode dari posisi kumulatif program. | `tools.revenue_report`, `tools.revenue_verify` |
 | `tools.income_verify` | `tools/income_verify.py` | Gabungkan tiga berkas bukti lokal agar nominal tak dinilai dari satu sumber. | `tools.revenue_verify` |
+| `tools.inheritance_probe` | `tools/inheritance_probe.py` | Bandingkan hasil fixture warisan dan dingin dengan tugas yang sama. | - |
 | `tools.inoculation_demo` | `tools/inoculation_demo.py` | Demonstration of the distractor-inoculation | - |
 | `tools.instance_kit` | `tools/instance_kit.py` | Kit isolasi multi-instans ACE — skema + validator tumpang-tindih (WS-H #21). | - |
 | `tools.introspect_recall` | `tools/introspect_recall.py` | C4 — Permukaan CLI Recall & Introspeksi Lapis 3 (strictly read-only). | - |
@@ -3282,6 +3323,7 @@
 | `tools.pr_pack` | `tools/pr_pack.py` | Pengemas deskripsi draft PR dry-run dari manifest rilis C5 + templat rumah ACE. | - |
 | `tools.program_glossary` | `tools/program_glossary.py` | Pembangkit glosarium istilah teknis program ACE berbasis Markdown & AST statis (`ace.program-glossary.v1`). | - |
 | `tools.ram_window` | `tools/ram_window.py` | Perencana jendela RAM deterministik berbasis berkas untuk menjadwalkan beban organ ACE. | - |
+| `tools.recall_ablation` | `tools/recall_ablation.py` | Bandingkan dua lengan fixture agar kontribusi recall bisa dihitung ulang. | - |
 | `tools.regression_anchor` | `tools/regression_anchor.py` | Regression anchor (HARNESS, not repo code). | `ace_operational.grid_adapter`, `ace_operational.grid_generalization`, `ace_operational.operator_discovery` |
 | `tools.relay_spool_tools` | `tools/relay_spool_tools.py` | Perkakas mandiri validator dan pembersih spool relai brain bridge (D8). | - |
 | `tools.release_manifest` | `tools/release_manifest.py` | Perakit manifest rilis JSON luring untuk cabang/PR terhadap `main`. | - |
@@ -3304,9 +3346,12 @@
 | `tools.secrets_bundle` | `tools/secrets_bundle.py` | Bundel rahasia terenkripsi ACE — kredensial yang bisa bepergian antar-rumah | - |
 | `tools.self_dev_git_audit` | `tools/self_dev_git_audit.py` | Audit checkpoint JSON dan riwayat branch dari objek Git lokal. | - |
 | `tools.self_model_continuity_probe` | `tools/self_model_continuity_probe.py` | C2 — Probe Kontinuitas Model-Diri Lintas Label Organ (Lapis 3). | `tools.narrative_self_model` |
+| `tools.self_send` | `tools/self_send.py` | Periksa amplop self-send secara lokal sebelum operator memakai jalur kirim. | `ace_operational.self_send` |
+| `tools.self_send_audit` | `tools/self_send_audit.py` | Ringkas kiriman yang tercatat dan tunjukkan pelanggaran amplop per baris. | `tools.self_send_audit_view` |
 | `tools.self_send_audit_view` | `tools/self_send_audit_view.py` | Read-only viewer untuk audit JSONL self-send ACE (WS-F #17). | - |
 | `tools.stage_verify` | `tools/stage_verify.py` | Verifikator direktori staging terhadap manifest berkas (sha256 + ukuran). | - |
 | `tools.storage_debt` | `tools/storage_debt.py` | Pemindai utang penyimpanan / artefak belum tersinkron ke Git (WS-E #14). | - |
+| `tools.successor_inventory` | `tools/successor_inventory.py` | Buat inventaris successor dari path Git dan snapshot JSON yang ditunjuk. | - |
 | `tools.test_ace_autonomous_daemon_e3` | `tools/test_ace_autonomous_daemon_e3.py` | Tes tepi luring untuk tools/ace_autonomous_daemon.py (E3 #3, TESTS ONLY). | `tools.ace_autonomous_daemon` |
 | `tools.test_ace_mission_worker_e3` | `tools/test_ace_mission_worker_e3.py` | Tes tepi luring untuk tools/ace_mission_worker.py (E3 #5, TESTS ONLY). | `tools.ace_mission_worker`, `tools.ace_reasoning_benchmark` |
 | `tools.test_ace_reasoning_benchmark_e3` | `tools/test_ace_reasoning_benchmark_e3.py` | Tes tepi luring untuk tools/ace_reasoning_benchmark.py (E3 #2, TESTS ONLY). | `tools.ace_reasoning_benchmark` |
@@ -3315,6 +3360,8 @@
 | `tools.test_agenda_candidates` | `tools/test_agenda_candidates.py` | Fixture sintetik untuk agenda dari aset, verdict, dan prioritas. | `tools.agenda_candidates` |
 | `tools.test_agenda_closure` | `tools/test_agenda_closure.py` | Fixture sintetik & verifikasi pointer untuk laporan penutupan kandidat agenda (Garis A2 Tranche 2). | `tools.agenda_candidates` |
 | `tools.test_bench_table` | `tools/test_bench_table.py` | Uji unit untuk tabulator benchmark tools/bench_table.py. | `tools.bench_table` |
+| `tools.test_bridge_home` | `tools/test_bridge_home.py` | Uji rencana cutover dan rollback dengan konfigurasi sintetis. | `tools.bridge_home` |
+| `tools.test_bridge_secrets` | `tools/test_bridge_secrets.py` | Periksa pemuatan GPG memakai nilai sintetis yang dibuat saat tes. | `tools.bridge_secrets`, `tools.secrets_bundle` |
 | `tools.test_builder_onboarding_pack` | `tools/test_builder_onboarding_pack.py` | Unit & adversarial tests untuk tools/builder_onboarding_pack.py (I3). | `tools.builder_onboarding_pack` |
 | `tools.test_candidate_census` | `tools/test_candidate_census.py` | Tes unit untuk `tools/candidate_census.py` (Gelombang C1). | `tools.candidate_census` |
 | `tools.test_candidate_corpus_batch` | `tools/test_candidate_corpus_batch.py` | - | `tools.candidate_corpus_batch` |
@@ -3354,8 +3401,10 @@
 | `tools.test_governor_ledger` | `tools/test_governor_ledger.py` | Tes unit buku anggaran governor per rute/peran (D7 — tes saja, offline). | `ace_operational.brain_bridge`, `tools.organ_quota_ledger` |
 | `tools.test_handover_decision_extractor` | `tools/test_handover_decision_extractor.py` | Unit & adversarial tests untuk tools/handover_decision_extractor.py (I1). | `tools.handover_decision_extractor` |
 | `tools.test_handover_index` | `tools/test_handover_index.py` | Unit & adversarial tests untuk tools/handover_index.py (G2). | `tools.handover_index` |
+| `tools.test_house_check` | `tools/test_house_check.py` | Jalankan watchdog pada HTTP loopback dan berkas status fixture. | `tools.house_check` |
 | `tools.test_income_report` | `tools/test_income_report.py` | Pastikan ringkasan periode dan posisi ledger memakai bukti yang tepat. | `tools.income_report` |
 | `tools.test_income_verify` | `tools/test_income_verify.py` | Pastikan tiga berkas bukti menghasilkan verdict sesuai kebijakan WS-2. | `tools.income_verify` |
+| `tools.test_inheritance_probe` | `tools/test_inheritance_probe.py` | Uji delta fixture, data cacat, dan protokol subprocess lokal. | `tools.inheritance_probe` |
 | `tools.test_instance_kit` | `tools/test_instance_kit.py` | Unit tests untuk tools/instance_kit.py (WS-H #21). | `tools.instance_kit` |
 | `tools.test_introspect_recall` | `tools/test_introspect_recall.py` | Unit tests for C4: Introspect & Recall Q&A CLI (strictly read-only). | `tools.introspect_recall` |
 | `tools.test_kbm_cover_wiring` | `tools/test_kbm_cover_wiring.py` | - | `tools.kbm_pack_check`, `tools.test_cover_check` |
@@ -3389,10 +3438,12 @@
 | `tools.test_pr_pack` | `tools/test_pr_pack.py` | Tes unit untuk `tools/pr_pack.py` (Gelombang C6). | `tools.pr_pack` |
 | `tools.test_program_glossary` | `tools/test_program_glossary.py` | Unit & adversarial tests untuk tools/program_glossary.py (I2). | `tools.program_glossary` |
 | `tools.test_ram_window` | `tools/test_ram_window.py` | Tes unit untuk `tools/ram_window.py` (Gelombang C3). | `tools.ram_window` |
+| `tools.test_recall_ablation` | `tools/test_recall_ablation.py` | Uji selisih recall dan hash hasil pada fixture yang diketahui. | `tools.recall_ablation` |
 | `tools.test_regression_anchor_e3` | `tools/test_regression_anchor_e3.py` | E3 thick edge tests for tools/regression_anchor.py (tests only, 0/10 -> 10/10 symbols). | `tools.regression_anchor` |
 | `tools.test_relay_spool_tools` | `tools/test_relay_spool_tools.py` | Tes fixture untuk tools/relay_spool_tools.py (D8 — mandiri, tanpa relai hidup). | `tools.relay_spool_tools` |
 | `tools.test_release_manifest` | `tools/test_release_manifest.py` | Tes unit untuk `tools/release_manifest.py` (Gelombang C5). | `tools.release_manifest` |
 | `tools.test_repair_v2_probe_e3` | `tools/test_repair_v2_probe_e3.py` | Tes tepi luring untuk tools/repair_v2_probe.py (E3 #10, TESTS ONLY). | `tools.repair_v2_probe` |
+| `tools.test_repo_brain_bridge` | `tools/test_repo_brain_bridge.py` | Kontrak byte JSON bridge pada proses fixture dan restart governor. | - |
 | `tools.test_repo_cartography` | `tools/test_repo_cartography.py` | Unit & adversarial tests untuk tools/repo_cartography.py (G3). | `tools.repo_cartography` |
 | `tools.test_repo_index` | `tools/test_repo_index.py` | Uji unit untuk generator indeks repo otomatis tools/repo_index.py. | `tools.repo_index` |
 | `tools.test_repo_index_doc` | `tools/test_repo_index_doc.py` | Uji unit untuk skrip pembangkit indeks docs/REPO_INDEX.md dan tools/refresh_repo_index.sh. | `tools.repo_index` |
@@ -3411,10 +3462,13 @@
 | `tools.test_self_dev_git_audit` | `tools/test_self_dev_git_audit.py` | Tes audit checkpoint dan branch dengan repositori Git sintetis. | `tools.self_dev_git_audit` |
 | `tools.test_self_dev_prereview` | `tools/test_self_dev_prereview.py` | Uji laporan pra-review branch terpin operator termasuk cherry-pick & merge commit di repo fixture. | `tools.self_dev_git_audit` |
 | `tools.test_self_model_continuity_probe` | `tools/test_self_model_continuity_probe.py` | Unit tests for C2: Self-Model Continuity Probe across organ-label swaps. | `tools.narrative_self_model`, `tools.self_model_continuity_probe` |
+| `tools.test_self_send_audit` | `tools/test_self_send_audit.py` | Uji hitungan kirim dan rujukan baris pelanggaran. | `tools.self_send_audit` |
 | `tools.test_self_send_audit_view` | `tools/test_self_send_audit_view.py` | Unit tests untuk tools/self_send_audit_view.py (WS-F #17). | `tools.self_send_audit_view` |
+| `tools.test_self_send_dryrun` | `tools/test_self_send_dryrun.py` | Jaga agar preflight tidak mencapai jaringan atau membaca nilai token. | `tools.self_send` |
 | `tools.test_sensus_kandidat_e1` | `tools/test_sensus_kandidat_e1.py` | Verifikasi integritas artefak sensus kandidat E1 (docs/SENSUS_KANDIDAT.*). | - |
 | `tools.test_stage_verify` | `tools/test_stage_verify.py` | Uji unit untuk verifikator direktori staging tools/stage_verify.py. | `tools.stage_verify` |
 | `tools.test_storage_debt` | `tools/test_storage_debt.py` | Unit tests untuk tools/storage_debt.py (WS-E #14). | `tools.storage_debt` |
+| `tools.test_successor_inventory` | `tools/test_successor_inventory.py` | Uji semua jenis pointer inventaris di pohon fixture. | `tools.successor_inventory` |
 | `tools.test_tools_scripts_edge` | `tools/test_tools_scripts_edge.py` | Uji kasus tepi untuk skrip utilitas non-verdict di tools/ (>=25 kasus): | `tools.ace_ai_diagnostic`, `tools.ace_reasoning_audit`, `tools.verify_sources` |
 | `tools.test_verify_repair_v2` | `tools/test_verify_repair_v2.py` | Tamper and historical-custody regression tests for public repair v2 replay. | `tools.verify_repair_v2` |
 | `tools.test_verify_runtime_demo_v2` | `tools/test_verify_runtime_demo_v2.py` | Tamper, source-version and replay checks for the public v2 runtime demo. | `tools.verify_runtime_demo_v2` |

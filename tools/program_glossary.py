@@ -19,6 +19,7 @@ from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 GLOSSARY_SCHEMA = "ace.program-glossary.v1"
+REPO_NAME = "ACE"  # nama kanonis repo — deterministik, tidak memakai nama direktori checkout (nama direktori membuat dokumen turunan berbeda di setiap rumah dan menggagalkan uji kesegaran)
 DEFAULT_OUTPUT_REL = "docs/PROGRAM_GLOSSARY.md"
 IGNORED_DIRS = frozenset({".git", "__pycache__", ".pytest_cache", ".mypy_cache", ".venv", "venv"})
 DERIVED_DOC_NAMES = frozenset(
@@ -199,7 +200,7 @@ def build_glossary(
 
     return {
         "schema": GLOSSARY_SCHEMA,
-        "repo_name": root.name,
+        "repo_name": REPO_NAME,
         "summary": {
             "markdown_files_scanned": len(md_files),
             "python_files_scanned": len(py_files),

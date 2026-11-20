@@ -17,6 +17,7 @@ import sys
 from typing import Any
 
 INDEX_SCHEMA = "ace.repo-index.v1"
+REPO_NAME = "ACE"  # nama kanonis repo — deterministik, tidak memakai nama direktori checkout (nama direktori membuat dokumen turunan berbeda di setiap rumah dan menggagalkan uji kesegaran)
 REPO_ROOT = Path(__file__).resolve().parents[1]
 IGNORED_DIRS = frozenset({".git", "__pycache__", ".pytest_cache", ".mypy_cache", ".venv", "venv"})
 
@@ -182,7 +183,7 @@ def build_repo_index(repo_root: Path) -> dict[str, Any]:
 
     return {
         "schema": INDEX_SCHEMA,
-        "repo_name": root.name,
+        "repo_name": REPO_NAME,
         "directory_count": len(directories),
         "file_count": sum(d["file_count"] for d in directories),
         "module_count": len(modules),
