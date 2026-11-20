@@ -685,3 +685,60 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0043 — AG125: candidate census over workspace candidate packs (%25)
+# ------------------------------------------------------------------
+
+def step_candidate_census(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import candidate_census as cc
+
+        ws = Path(engine.workspace)
+        out_path = ws / "candidate_census.json"
+        files: list[Path] = []
+        for fname in ("candidates.jsonl", "candidate_intake.jsonl", "discriminating_intake.jsonl"):
+            p = ws / fname
+            if p.is_file():
+                files.append(p)
+        cand_dir = ws / "candidates"
+        if cand_dir.is_dir():
+            for p in sorted(cand_dir.glob("*.jsonl")):
+                if p not in files:
+                    files.append(p)
+
+        if not files:
+            skipped = {
+                "status": "skipped",
+                "reason": "no candidate files in workspace",
+                "checked_at": _now_iso(),
+            }
+            _write_json(out_path, skipped)
+            return skipped
+
+        reports: list[dict[str, Any]] = []
+        ready_count = 0
+        for f in files:
+            rep = cc.census_file(f)
+            if (rep.get("readiness") or {}).get("ready"):
+                ready_count += 1
+            reports.append(rep)
+
+        payload = {
+            "status": "ok",
+            "checked_at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "files_audited": len(reports),
+            "ready_files": ready_count,
+            "reports": reports,
+        }
+        _write_json(out_path, payload)
+        return {
+            "status": "ok",
+            "files_audited": len(reports),
+            "ready_files": ready_count,
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+

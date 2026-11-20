@@ -144,6 +144,43 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_candidate_census_reports_readiness(self) -> None:
+        rows = [
+            {
+                "id": "cand-lang-001",
+                "kind": "episode",
+                "task_kind": "language",
+                "instruction": (
+                    "Tulis ringkasan tepat 40 kata dalam tiga kalimat Bahasa Indonesia "
+                    "yang wajib memuat frasa 'audit berjenjang', dilarang memakai kata 'mungkin', "
+                    "dan menempatkan fakta anggaran sebelum fakta jadwal."
+                ),
+            },
+            {
+                "id": "cand-code-001",
+                "kind": "episode",
+                "task_kind": "code",
+                "instruction": (
+                    "Tulis fungsi Python `gabung_interval(intervals)` dengan kompleksitas waktu O(n log n), "
+                    "tanpa rekursi, menangani input kosong dan interval bersentuhan, serta sertakan docstring Bahasa Indonesia."
+                ),
+            },
+        ]
+        (self.ws / "candidates.jsonl").write_text(
+            "\n".join(json.dumps(r, ensure_ascii=False) for r in rows) + "\n",
+            encoding="utf-8",
+        )
+        out = leap_wiring.step_candidate_census(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["files_audited"], 1)
+        self.assertEqual(out["ready_files"], 1)
+        self.assertTrue((self.ws / "candidate_census.json").is_file())
+
+    def test_candidate_census_empty_skips_cleanly(self) -> None:
+        out = leap_wiring.step_candidate_census(self.engine)
+        self.assertEqual(out["status"], "skipped")
+        self.assertTrue((self.ws / "candidate_census.json").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()
