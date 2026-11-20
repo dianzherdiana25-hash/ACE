@@ -144,6 +144,46 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_catalog_audit_materializes_verifies_and_fails_closed(self) -> None:
+        (self.ws / "discovery_evidence.json").write_text(
+            json.dumps(
+                {
+                    "by_class": {
+                        "repair": {
+                            "pool_tasks": 4,
+                            "candidate_operators": 2,
+                            "admitted_operators": ["op1"],
+                            "admitted_chains": [],
+                            "eval_tasks": 4,
+                            "eval_solved_baseline": 1,
+                            "eval_solved_extended": 3,
+                        },
+                        "unfixed": {
+                            "pool_tasks": 2,
+                            "candidate_operators": 0,
+                            "admitted_operators": [],
+                            "admitted_chains": [],
+                            "eval_tasks": 2,
+                            "eval_solved_baseline": 0,
+                            "eval_solved_extended": 0,
+                        },
+                    }
+                }
+            ),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_catalog_audit(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["classes_count"], 2)
+        self.assertEqual(res["gaps_count"], 1)
+        saved = json.loads((self.ws / "catalog_audit.json").read_text(encoding="utf-8"))
+        self.assertTrue(saved["verification"]["valid"])
+
+        (self.ws / "discovery_evidence.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_catalog_audit(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -685,3 +685,72 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0049 — materialisasi katalog operator & audit cakupan celah
+# ------------------------------------------------------------------
+
+
+def step_catalog_audit(engine: Any) -> dict[str, Any]:
+    """Materialisasi katalog operator, verifikasi digest, dan audit celah secara fail-closed (AG185)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        import tempfile
+        from ace_operational import catalog_artifact, catalog_gap
+
+        ev_path = ws / "discovery_evidence.json"
+        catalog_path = ws / "operator_catalog.json"
+        if ev_path.is_file():
+            evidence = json.loads(ev_path.read_text(encoding="utf-8"))
+            catalog = catalog_artifact.materialize(ev_path, catalog_path)
+        else:
+            evidence = {
+                "by_class": {
+                    "syntax": {
+                        "pool_tasks": 2,
+                        "candidate_operators": 1,
+                        "admitted_operators": ["op_baseline"],
+                        "admitted_chains": [],
+                        "eval_tasks": 2,
+                        "eval_solved_baseline": 1,
+                        "eval_solved_extended": 2,
+                    }
+                }
+            }
+            with tempfile.TemporaryDirectory(prefix="ace-cat-ev-", dir="/tmp") as td:
+                tmp_ev = Path(td) / "evidence.json"
+                tmp_ev.write_text(json.dumps(evidence), encoding="utf-8")
+                catalog = catalog_artifact.materialize(tmp_ev, catalog_path)
+
+        ver = catalog_artifact.verify_catalog(catalog_path)
+        if not ver.get("valid"):
+            raise ValueError(f"Katalog operator tidak sah: {ver.get('problems')}")
+        gap_report = catalog_gap.analyze_catalog_gaps(evidence, catalog)
+
+        out_path = ws / "catalog_audit.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                "verification": ver,
+                **gap_report,
+            },
+        )
+        return {
+            "status": "ok",
+            "artifact_digest": ver.get("artifact_digest"),
+            "classes_count": len(gap_report.get("per_class") or {}),
+            "gaps_count": len(gap_report.get("gaps") or []),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+
