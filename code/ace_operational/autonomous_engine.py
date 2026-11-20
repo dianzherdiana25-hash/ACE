@@ -1808,6 +1808,18 @@ class ContinuousAutonomousEngine:
             except Exception as exc:
                 director_res = {"status": "error", "error": type(exc).__name__}
 
+        # Step 3c: Eksekusi director Kelas A (EVO 0012 M2) — env-gated
+        # ACE_DIRECTOR_EXEC_A; tanpa flag, perilaku live tidak berubah.
+        director_exec_res = None
+        if os.environ.get("ACE_DIRECTOR_EXEC_A") == "1":
+            self.update_status_file("director_execution")
+            try:
+                from ace_operational import director_execution
+                director_exec_res = director_execution.run_execution_step(
+                    self.store, self.workspace)
+            except Exception as exc:
+                director_exec_res = {"status": "error", "error": type(exc).__name__}
+
         # Step 4: Periodic AST self-audit
         audit_summary: dict[str, Any] | None = None
         if self.cycle_count % 10 == 0:
@@ -1831,6 +1843,8 @@ class ContinuousAutonomousEngine:
         }
         if director_res is not None:
             summary["director"] = director_res
+        if director_exec_res is not None:
+            summary["director_execution"] = director_exec_res
         slowest_name, slowest_seconds = max(step_durations, key=lambda step: step[1])
         self._last_cycle_duration_seconds = time.monotonic() - cycle_started_at
         self._slowest_step = {"name": slowest_name, "seconds": slowest_seconds}
