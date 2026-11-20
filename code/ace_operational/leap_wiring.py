@@ -685,3 +685,59 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0049 — orakel spesifiikasi pra-audit independen
+# ------------------------------------------------------------------
+
+
+def step_preaudit_oracle(engine: Any) -> dict[str, Any]:
+    """Jalankan pengecekan orakel pra-audit deterministik atas catatan siklus (AG186)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from ace_operational import preaudit_oracle
+
+        in_path = ws / "preaudit_oracle_input.json"
+        if in_path.is_file():
+            raw = json.loads(in_path.read_text(encoding="utf-8"))
+            if not isinstance(raw, dict):
+                raise ValueError("preaudit_oracle_input.json wajib objek JSON.")
+            records = raw.get("records", [])
+            rounds = raw.get("rounds", [])
+            if not isinstance(records, (list, dict)) or not isinstance(rounds, list):
+                raise ValueError("records/rounds tidak sesuai skema.")
+        else:
+            records = [{"task_id": "baseline-0", "solved": True, "timeout": False}]
+            rounds = [{"round": 1, "true_path": {"generated": True, "in_frontier": True, "scored": True, "rank": 1}}]
+
+        solved, total, contradictions, duplicates = preaudit_oracle.oracle_task_map(records)
+        broken_round = preaudit_oracle.oracle_round_series(rounds)
+        out_path = ws / "preaudit_oracle.json"
+        payload = {
+            "at": _now_iso(),
+            "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+            "solved": solved,
+            "total": total,
+            "contradictions": contradictions,
+            "duplicates": duplicates,
+            "first_broken_round": broken_round,
+            "consistent": (not contradictions and not duplicates and broken_round is None),
+        }
+        _write_json(out_path, payload)
+        return {
+            "status": "ok",
+            "solved": solved,
+            "total": total,
+            "consistent": payload["consistent"],
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

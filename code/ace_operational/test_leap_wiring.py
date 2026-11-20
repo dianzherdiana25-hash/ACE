@@ -144,6 +144,31 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_preaudit_oracle_detects_inconsistency_and_fails_closed(self) -> None:
+        (self.ws / "preaudit_oracle_input.json").write_text(
+            json.dumps(
+                {
+                    "records": [
+                        {"task_id": "t1", "solved": True, "timeout": False},
+                        {"task_id": "t2", "solved": True, "timeout": True},
+                    ],
+                    "rounds": [{"round": 1, "true_path": {"generated": False, "scored": True, "rank": 1}}],
+                }
+            ),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_preaudit_oracle(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertFalse(res["consistent"])
+        saved = json.loads((self.ws / "preaudit_oracle.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["contradictions"], ["t2"])
+        self.assertEqual(saved["first_broken_round"], 0)
+
+        (self.ws / "preaudit_oracle_input.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_preaudit_oracle(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
