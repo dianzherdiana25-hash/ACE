@@ -685,3 +685,33 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_narrative_consistency_gate(engine: Any) -> dict[str, Any]:
+    """AG163: gate engine-generated narrative drafts via story_consistency_gate (never touches story_state.py)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import story_consistency_gate as scg
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        draft_path = ws / "narrative_draft.json"
+        state_path = ws / "narrative_state.json"
+        if not draft_path.is_file():
+            return {"status": "skipped", "reason": "no_narrative_draft"}
+        draft = json.loads(draft_path.read_text(encoding="utf-8"))
+        state = (
+            json.loads(state_path.read_text(encoding="utf-8"))
+            if state_path.is_file()
+            else {"characters": {}, "timeline": [], "facts": [], "promises": []}
+        )
+        verdict = scg.check_chapter_consistency(state, draft)
+        entry = {"at": _now_iso(), **verdict}
+        _append_jsonl(ws / "narrative_consistency.jsonl", entry)
+        return {"status": "ok", **entry}
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+

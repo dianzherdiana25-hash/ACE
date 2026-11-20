@@ -144,6 +144,47 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_narrative_consistency_gate_checks_engine_draft_without_story_state(self):
+        (self.ws / "narrative_state.json").write_text(
+            json.dumps({
+                "characters": {"nara": {"status": "alive", "status_tick": 0}},
+                "timeline": [{"event_id": "e1", "tick": 1}],
+                "facts": [],
+                "promises": [],
+            }),
+            encoding="utf-8",
+        )
+        (self.ws / "narrative_draft.json").write_text(
+            json.dumps({
+                "chapter_id": "log-1",
+                "tick": 2,
+                "active_characters": ["nara"],
+                "fact_claims": [],
+                "timeline_markers": [{"marker_id": "m1", "tick": 2, "after_event_id": "e1"}],
+            }),
+            encoding="utf-8",
+        )
+        ok_res = leap_wiring.step_narrative_consistency_gate(self.engine)
+        self.assertEqual(ok_res["status"], "ok")
+        self.assertEqual(ok_res["verdict"], "lolos")
+        self.assertTrue((self.ws / "narrative_consistency.jsonl").is_file())
+
+        (self.ws / "narrative_draft.json").write_text(
+            json.dumps({
+                "chapter_id": "log-2",
+                "tick": 2,
+                "active_characters": ["ghost"],
+            }),
+            encoding="utf-8",
+        )
+        bad_res = leap_wiring.step_narrative_consistency_gate(self.engine)
+        self.assertEqual(bad_res["verdict"], "konflik")
+
+    def test_narrative_consistency_gate_skips_when_absent_and_fails_closed(self):
+        self.assertEqual(leap_wiring.step_narrative_consistency_gate(self.engine)["status"], "skipped")
+        (self.ws / "narrative_draft.json").write_text("{corrupt", encoding="utf-8")
+        self.assertEqual(leap_wiring.step_narrative_consistency_gate(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()
