@@ -39,6 +39,73 @@ class DirectorClassTests(unittest.TestCase):
         self.assertEqual(classify_proposal(task, rules=rules),
                          {"class": "B", "reasons": ["operator_review"]})
 
+    def test_malformed_checkpoint_matrix_never_a_ambiguous_b_and_c_wins(self):
+        ambiguous_cases = [
+            ("task_none", None, "B"),
+            ("task_not_mapping", ["not", "a", "dict"], "B"),
+            ("checkpoint_missing", {"kind": "director_proposal"}, "B"),
+            ("checkpoint_none", {"kind": "director_proposal", "checkpoint": None}, "B"),
+            ("checkpoint_string", {"kind": "director_proposal", "checkpoint": "invalid"}, "B"),
+            ("checkpoint_list", {"kind": "director_proposal", "checkpoint": ["receipt-1"]}, "B"),
+            ("missing_kind", {"checkpoint": proposal()["checkpoint"]}, "B"),
+            ("missing_based_on", {"kind": "director_proposal", "checkpoint": {
+                k: v for k, v in proposal()["checkpoint"].items() if k != "based_on"
+            }}, "B"),
+            ("missing_evidence_refs", {"kind": "director_proposal", "checkpoint": {
+                k: v for k, v in proposal()["checkpoint"].items() if k != "evidence_refs"
+            }}, "B"),
+            ("empty_evidence_refs", proposal(evidence_refs=[]), "B"),
+            ("missing_reversible", {"kind": "director_proposal", "checkpoint": {
+                k: v for k, v in proposal()["checkpoint"].items() if k != "reversible"
+            }}, "B"),
+            ("missing_touches_money", {"kind": "director_proposal", "checkpoint": {
+                k: v for k, v in proposal()["checkpoint"].items() if k != "touches_money"
+            }}, "B"),
+            ("missing_touches_publication", {"kind": "director_proposal", "checkpoint": {
+                k: v for k, v in proposal()["checkpoint"].items() if k != "touches_publication"
+            }}, "B"),
+            ("missing_touches_external", {"kind": "director_proposal", "checkpoint": {
+                k: v for k, v in proposal()["checkpoint"].items() if k != "touches_external"
+            }}, "B"),
+            ("reversible_string_true", proposal(reversible="true"), "B"),
+            ("reversible_string_false", proposal(reversible="false"), "B"),
+            ("evidence_refs_string", proposal(evidence_refs="receipt-1"), "B"),
+            ("based_on_string", proposal(based_on="gap-1"), "B"),
+            ("touches_money_string", proposal(touches_money="false"), "B"),
+        ]
+        for label, payload, expected_class in ambiguous_cases:
+            with self.subTest(case=label):
+                result = classify_proposal(payload)
+                self.assertNotEqual(result["class"], "A")
+                self.assertEqual(result["class"], expected_class)
+
+        # Bukti kosong vs hilang sama-sama memicu alasan evidence_refs_missing -> kelas B
+        missing_ev = classify_proposal({"kind": "director_proposal", "checkpoint": {
+            k: v for k, v in proposal()["checkpoint"].items() if k != "evidence_refs"
+        }})
+        empty_ev = classify_proposal(proposal(evidence_refs=[]))
+        self.assertEqual(missing_ev["class"], "B")
+        self.assertEqual(empty_ev["class"], "B")
+        self.assertIn("evidence_refs_missing", missing_ev["reasons"])
+        self.assertIn("evidence_refs_missing", empty_ev["reasons"])
+
+        # Menyentuh uang/publikasi/eksternal -> C berapa pun bentuk cacat field lainnya
+        c_flags = ("touches_money", "touches_publication", "touches_external")
+        malformed_shapes = [
+            {},
+            {"based_on": "bukan-list", "evidence_refs": "bukan-list", "reversible": "yes"},
+            {"based_on": [], "evidence_refs": [], "reversible": None},
+            {"proposal": "bukan-mapping"},
+        ]
+        for flag in c_flags:
+            for idx, shape in enumerate(malformed_shapes):
+                for kind in ("director_proposal", "unknown", None):
+                    with self.subTest(flag=flag, shape_idx=idx, kind=kind):
+                        task_obj = {"kind": kind, "checkpoint": {**shape, flag: True}}
+                        res = classify_proposal(task_obj)
+                        self.assertEqual(res["class"], "C")
+                        self.assertIn(flag, res["reasons"])
+
 
 if __name__ == "__main__":
     unittest.main()
