@@ -331,9 +331,137 @@ def render_markdown(report: dict[str, Any], *, max_rows: int = 100) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _validate_snapshot_report(report: Any, label: str) -> dict[str, str]:
+    if (
+        not isinstance(report, dict)
+        or report.get("schema") != WIRING_SCHEMA
+        or not isinstance(report.get("modules"), list)
+    ):
+        raise ValueError(f"Snapshot audit wiring '{label}' tidak sah (wajib schema {WIRING_SCHEMA}).")
+    by_path: dict[str, str] = {}
+    for idx, entry in enumerate(report["modules"], 1):
+        if (
+            not isinstance(entry, dict)
+            or not isinstance(entry.get("path"), str)
+            or not entry["path"].strip()
+            or not isinstance(entry.get("status"), str)
+            or not entry["status"].strip()
+        ):
+            raise ValueError(f"Entri modul ke-{idx} di snapshot '{label}' tidak sah.")
+        if entry["path"] in by_path:
+            raise ValueError(f"Path modul ganda '{entry['path']}' di snapshot '{label}'.")
+        by_path[entry["path"]] = entry["status"]
+    return by_path
+
+
+WIRING_DIFF_SCHEMA = "ace.wiring-audit-diff.v1"
+
+
+def diff_wiring_snapshots(old_report: dict[str, Any], new_report: dict[str, Any]) -> dict[str, Any]:
+    """Bandingkan dua snapshot audit wiring JSON dan laporkan delta perubahan status modul."""
+    old_by_path = _validate_snapshot_report(old_report, "lama")
+    new_by_path = _validate_snapshot_report(new_report, "baru")
+
+    newly_orphan: list[dict[str, Any]] = []
+    newly_wired: list[dict[str, Any]] = []
+    unchanged_paths: list[str] = []
+    transitions: list[dict[str, Any]] = []
+    added_only: list[dict[str, Any]] = []
+    removed_only: list[dict[str, Any]] = []
+
+    for path in sorted(old_by_path.keys() | new_by_path.keys()):
+        old_status = old_by_path.get(path)
+        new_status = new_by_path.get(path)
+        if old_status == new_status:
+            unchanged_paths.append(path)
+            continue
+        if new_status == "ORPHAN":
+            newly_orphan.append({"path": path, "old_status": old_status, "new_status": new_status})
+        if new_status == "WIRED":
+            newly_wired.append({"path": path, "old_status": old_status, "new_status": new_status})
+        if old_status is None:
+            added_only.append({"path": path, "status": new_status})
+        elif new_status is None:
+            removed_only.append({"path": path, "status": old_status})
+        else:
+            transitions.append({"path": path, "old_status": old_status, "new_status": new_status})
+
+    old_summary = old_report.get("summary") if isinstance(old_report.get("summary"), dict) else {}
+    new_summary = new_report.get("summary") if isinstance(new_report.get("summary"), dict) else {}
+    summary_keys = sorted(old_summary.keys() | new_summary.keys())
+    summary_delta = {
+        k: (new_summary.get(k, 0) - old_summary.get(k, 0))
+        for k in summary_keys
+        if isinstance(old_summary.get(k, 0), int) and isinstance(new_summary.get(k, 0), int)
+    }
+
+    return {
+        "schema": WIRING_DIFF_SCHEMA,
+        "repo_name": new_report.get("repo_name") or old_report.get("repo_name") or "",
+        "summary": {
+            "old_total_modules": len(old_by_path),
+            "new_total_modules": len(new_by_path),
+            "newly_orphan_count": len(newly_orphan),
+            "newly_wired_count": len(newly_wired),
+            "unchanged_count": len(unchanged_paths),
+            "transition_count": len(transitions),
+            "added_count": len(added_only),
+            "removed_count": len(removed_only),
+        },
+        "summary_delta": summary_delta,
+        "newly_orphan": newly_orphan,
+        "newly_wired": newly_wired,
+        "unchanged_modules": unchanged_paths,
+        "transitions": transitions,
+        "added_only": added_only,
+        "removed_only": removed_only,
+    }
+
+
+def render_diff_markdown(diff_report: dict[str, Any]) -> str:
+    s = diff_report["summary"]
+    lines = [
+        f"# Diff Snapshot Audit Keterhubungan Modul — {diff_report['repo_name'] or 'ACE'}",
+        "",
+        f"- Schema: `{diff_report['schema']}`",
+        f"- Total modul (lama → baru): {s['old_total_modules']} → {s['new_total_modules']}",
+        f"- Baru yatim (`newly_orphan`): **{s['newly_orphan_count']}**",
+        f"- Baru terhubung (`newly_wired`): **{s['newly_wired_count']}**",
+        f"- Hitungan tak berubah (`unchanged_count`): **{s['unchanged_count']}**",
+        "",
+        f"## Modul Baru Yatim ({s['newly_orphan_count']})",
+        "",
+    ]
+    if diff_report["newly_orphan"]:
+        for item in diff_report["newly_orphan"]:
+            old_lbl = item["old_status"] or "(modul baru)"
+            lines.append(f"- `{item['path']}` (`{old_lbl}` → `{item['new_status']}`)")
+    else:
+        lines.append("- (tidak ada)")
+
+    lines.extend(["", f"## Modul Baru Terhubung ({s['newly_wired_count']})", ""])
+    if diff_report["newly_wired"]:
+        for item in diff_report["newly_wired"]:
+            old_lbl = item["old_status"] or "(modul baru)"
+            lines.append(f"- `{item['path']}` (`{old_lbl}` → `{item['new_status']}`)")
+    else:
+        lines.append("- (tidak ada)")
+
+    lines.extend(["", f"## Transisi Status Lain & Modul Tambah/Hapus ({s['transition_count']} transisi, +{s['added_count']} / -{s['removed_count']})", ""])
+    for item in diff_report["transitions"]:
+        lines.append(f"- `{item['path']}` (`{item['old_status']}` → `{item['new_status']}`)")
+    for item in diff_report["added_only"]:
+        lines.append(f"- `+ {item['path']}` (`{item['status']}`)")
+    for item in diff_report["removed_only"]:
+        lines.append(f"- `- {item['path']}` (`{item['status']}`)")
+    return "\n".join(lines) + "\n"
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Audit keterhubungan modul (wiring vs orphan vs menunggu engineer utama).")
     parser.add_argument("--root", type=Path, default=REPO_ROOT, help="Direktori akar repo target.")
+    parser.add_argument("--diff", type=Path, default=None, help="Bandingkan snapshot audit JSON lama dengan audit terbaru / --new.")
+    parser.add_argument("--new", type=Path, default=None, help="Snapshot audit JSON baru (opsional, dipakai bersama --diff).")
     parser.add_argument("--format", choices=("json", "markdown"), default="markdown", help="Format keluaran.")
     parser.add_argument("--output", type=Path, default=None, help="Tulis keluaran ke berkas.")
     return parser
@@ -343,12 +471,28 @@ def main(argv: list[str] | None = None) -> int:
     parser = _build_parser()
     try:
         args = parser.parse_args(argv)
-        report = audit_wiring(args.root)
-        rendered = (
-            json.dumps(report, indent=2, ensure_ascii=False) + "\n"
-            if args.format == "json"
-            else render_markdown(report)
-        )
+        if args.new is not None and args.diff is None:
+            raise ValueError("--new hanya dapat dipakai bersama --diff.")
+        if args.diff is not None:
+            old_report = json.loads(args.diff.read_text(encoding="utf-8"))
+            new_report = (
+                json.loads(args.new.read_text(encoding="utf-8"))
+                if args.new is not None
+                else audit_wiring(args.root)
+            )
+            diff_rep = diff_wiring_snapshots(old_report, new_report)
+            rendered = (
+                json.dumps(diff_rep, indent=2, ensure_ascii=False) + "\n"
+                if args.format == "json"
+                else render_diff_markdown(diff_rep)
+            )
+        else:
+            report = audit_wiring(args.root)
+            rendered = (
+                json.dumps(report, indent=2, ensure_ascii=False) + "\n"
+                if args.format == "json"
+                else render_markdown(report)
+            )
         if args.output is not None:
             out_path = args.output.resolve()
             out_path.parent.mkdir(parents=True, exist_ok=True)

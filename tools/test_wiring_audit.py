@@ -105,6 +105,80 @@ class TestWiringAudit(unittest.TestCase):
             rc_err = wa.main(["--root", str(self.root / "missing_dir")])
         self.assertEqual(rc_err, 1)
 
+    def test_05_diff_snapshots_reports_exact_newly_orphan_newly_wired_and_unchanged(self):
+        old_snap = {
+            "schema": wa.WIRING_SCHEMA,
+            "repo_name": "fixture-repo",
+            "summary": {
+                "total_modules": 5, "wired": 2, "cli_standalone": 0,
+                "orphan": 2, "menunggu_engineer_utama": 1,
+                "tools_unwired_safe": 1, "code_orphans_safe": 1,
+            },
+            "modules": [
+                {"path": "code/keep_wired.py", "status": "WIRED"},
+                {"path": "code/keep_orphan.py", "status": "ORPHAN"},
+                {"path": "code/became_orphan.py", "status": "WIRED"},
+                {"path": "tools/became_wired.py", "status": "ORPHAN"},
+                {"path": "tools/removed_mod.py", "status": "MENUNGGU_ENGINEER_UTAMA"},
+            ],
+        }
+        new_snap = {
+            "schema": wa.WIRING_SCHEMA,
+            "repo_name": "fixture-repo",
+            "summary": {
+                "total_modules": 5, "wired": 2, "cli_standalone": 0,
+                "orphan": 3, "menunggu_engineer_utama": 0,
+                "tools_unwired_safe": 1, "code_orphans_safe": 2,
+            },
+            "modules": [
+                {"path": "code/keep_wired.py", "status": "WIRED"},
+                {"path": "code/keep_orphan.py", "status": "ORPHAN"},
+                {"path": "code/became_orphan.py", "status": "ORPHAN"},
+                {"path": "tools/became_wired.py", "status": "WIRED"},
+                {"path": "tools/brand_new_orphan.py", "status": "ORPHAN"},
+            ],
+        }
+        old_path = self.root / "old_audit.json"
+        new_path = self.root / "new_audit.json"
+        _write(old_path, json.dumps(old_snap))
+        _write(new_path, json.dumps(new_snap))
+
+        out_json = io.StringIO()
+        with contextlib.redirect_stdout(out_json):
+            rc = wa.main(["--diff", str(old_path), "--new", str(new_path), "--format", "json"])
+        self.assertEqual(rc, 0)
+        diff = json.loads(out_json.getvalue())
+        self.assertEqual(diff["schema"], wa.WIRING_DIFF_SCHEMA)
+        self.assertEqual(diff["summary"]["unchanged_count"], 2)
+        self.assertEqual(diff["unchanged_modules"], ["code/keep_orphan.py", "code/keep_wired.py"])
+        self.assertEqual(
+            diff["newly_orphan"],
+            [
+                {"path": "code/became_orphan.py", "old_status": "WIRED", "new_status": "ORPHAN"},
+                {"path": "tools/brand_new_orphan.py", "old_status": None, "new_status": "ORPHAN"},
+            ],
+        )
+        self.assertEqual(
+            diff["newly_wired"],
+            [{"path": "tools/became_wired.py", "old_status": "ORPHAN", "new_status": "WIRED"}],
+        )
+        self.assertEqual(diff["removed_only"], [{"path": "tools/removed_mod.py", "status": "MENUNGGU_ENGINEER_UTAMA"}])
+        self.assertEqual(diff["summary_delta"]["orphan"], 1)
+
+        # Juga uji --diff <snapshot-lama> langsung terhadap --root repo nyata
+        self._seed_repo()
+        live_old_path = self.root / "live_old.json"
+        self.assertEqual(wa.main(["--root", str(self.root), "--format", "json", "--output", str(live_old_path)]), 0)
+        # Sambungkan orphan_mod ke ace.py sehingga berubah dari ORPHAN -> WIRED
+        _write(self.root / "ace.py", "from code.pkg_ok.wired_lib import run\nfrom code.pkg_ok.orphan_mod import unused\n")
+        live_diff_buf = io.StringIO()
+        with contextlib.redirect_stdout(live_diff_buf):
+            rc_live = wa.main(["--root", str(self.root), "--diff", str(live_old_path), "--format", "markdown"])
+        self.assertEqual(rc_live, 0)
+        md_out = live_diff_buf.getvalue()
+        self.assertIn("Baru terhubung (`newly_wired`): **1**", md_out)
+        self.assertIn("`code/pkg_ok/orphan_mod.py` (`ORPHAN` → `WIRED`)", md_out)
+
 
 if __name__ == "__main__":
     unittest.main()
