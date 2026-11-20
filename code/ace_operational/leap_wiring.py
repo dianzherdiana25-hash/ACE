@@ -496,6 +496,36 @@ def step_practice(engine: Any) -> dict[str, Any]:
         g["gap_id"]: int(g.get("occurrence_count") or 0) for g in gaps}
     _save_state(engine, state)
     out["practice_tasks_created"] = created
+
+    # EVO 0042 — AG112: analisis pola gap & proposal yatim
+    try:
+        from tools import gap_pattern_report as gpr
+
+        gap_rows = [
+            {
+                "gap_id": g["gap_id"],
+                "kind": g.get("error_type") or g.get("gap_type") or "UNKNOWN",
+                "occurrence": int(g.get("occurrence_count") or g.get("occurrence") or 1),
+                "status": g.get("status") or "OPEN",
+            }
+            for g in gaps
+        ]
+        proposal_rows = [
+            {
+                "proposal_id": t["task_id"],
+                "checkpoint": t.get("checkpoint") if isinstance(t.get("checkpoint"), dict) else {},
+            }
+            for t in engine.store.list_tasks(limit=200)
+            if t.get("kind") == "director_proposal"
+        ]
+        pat_report = gpr.analyze_gap_patterns(gap_rows, proposal_rows)
+        pat_report["generated_at"] = _now_iso()
+        pat_report["cycle"] = getattr(engine, "cycle_count", 0)
+        _write_json(ws / "gap_patterns.json", pat_report)
+        out["gap_patterns"] = pat_report.get("summary")
+    except Exception as exc:
+        out["gap_patterns"] = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
     return out
 
 

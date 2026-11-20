@@ -144,6 +144,24 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_practice_writes_gap_patterns(self) -> None:
+        self._seed_gap()
+        self.engine.store.create_task(
+            kind="director_proposal", title_id="Orphan Gap Prop",
+            user_request="uji orphan", normalized_goal="Orphan Gap Prop",
+            model_backend="groq/openai/gpt-oss-120b", priority=5,
+            checkpoint={"gap_id": "gap-missing-999"},
+            hold_for_review=True,
+        )
+        out = leap_wiring.step_practice(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertIn("gap_patterns", out)
+        pat_path = self.ws / "gap_patterns.json"
+        self.assertTrue(pat_path.is_file())
+        data = json.loads(pat_path.read_text(encoding="utf-8"))
+        self.assertGreaterEqual(data["summary"]["total_gaps"], 1)
+        self.assertEqual(data["summary"]["orphan_gap_count"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()
