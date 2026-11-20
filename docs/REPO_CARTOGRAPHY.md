@@ -6,17 +6,17 @@
 
 - Schema: `ace.repo-cartography.v1`
 - Total subsistem: **68** (termasuk `4` subsistem zona terlindung/beku)
-- Total berkas terpetakan: **2351**
-- Modul Python produksi: **651** | Modul tes: **478**
-- Tepi dependensi lintas subsistem (produksi): **118**
+- Total berkas terpetakan: **2363**
+- Modul Python produksi: **651** | Modul tes: **489**
+- Tepi dependensi lintas subsistem (produksi): **120**
 - Siklus SCC lintas subsistem: **1**
 
 ## 2. Diagram Dependensi Lintas Subsistem (Top Bobot Impor)
 
 ```mermaid
 flowchart LR
-    tools["tools (MIXED_PROTECTED)"]
     code_ace_operational["code/ace_operational (MIXED_PROTECTED)"]
+    tools["tools (MIXED_PROTECTED)"]
     evidence["evidence (SAFE)"]
     code_ace_mission["code/ace_mission (SAFE)"]
     code_ace_capability_evolution["code/ace_capability_evolution (SAFE)"]
@@ -45,10 +45,10 @@ flowchart LR
     code_ace_integration_redteam["code/ace_integration_redteam (SAFE)"]
     code_ace_research_f13["code/ace_research_f13 (SAFE)"]
     code_ace_research_reptransfer["code/ace_research_reptransfer (SAFE)"]
+    code_ace_operational -->|113| tools
     tools -->|65| code_ace_operational
     evidence -->|25| code_ace_operational
-    code_ace_operational -->|9| tools
-    code_ace_operational -->|8| code_ace_mission
+    code_ace_operational -->|9| code_ace_mission
     code_ace_capability_evolution -->|7| code_ace_candidate_search
     code_ace_self_dev -->|7| code_ace_loop
     tools -->|7| code_ace_real_world
@@ -59,6 +59,7 @@ flowchart LR
     tools -->|6| code_ace_mission
     code_ace_capability_evolution -->|5| code_ace_research_primitives
     code_ace_operational -->|5| code_ace_indo_nlp
+    code_ace_operational -->|5| code_ace_self_dev
     tools -->|5| code_ace_cognition
     code_ace_neurosymbolic -->|4| code_ace_evolution
     code_ace_operational -->|4| code_ace_component_synthesis
@@ -75,7 +76,6 @@ flowchart LR
     code_ace_chat -->|2| code_ace_runtime
     code_ace_integration_redteam -->|2| code_ace_runtime
     code_ace_mission -->|2| code_ace_cognition
-    code_ace_operational -->|2| code_ace_self_dev
     code_ace_research_agenda -->|2| code_ace_autonomy
     code_ace_research_agenda -->|2| code_ace_research_repair
     code_ace_research_f13 -->|2| code_ace_host_controller
@@ -102,7 +102,7 @@ flowchart LR
 | `code/ace_cognition` | `SAFE_WORKSPACE` | 9 | 6 | 3 | 3 | 3 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_component_synthesis` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 3 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_conformal` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_core_repair` | `SAFE_WORKSPACE` | 8 | 5 | 3 | 2 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
+| `code/ace_core_repair` | `SAFE_WORKSPACE` | 8 | 5 | 3 | 3 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_dsl_growth` | `SAFE_WORKSPACE` | 5 | 4 | 1 | 2 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_egraph` | `SAFE_WORKSPACE` | 4 | 2 | 2 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_epistemic` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
@@ -122,11 +122,11 @@ flowchart LR
 | `code/ace_mcts` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_mission` | `SAFE_WORKSPACE` | 9 | 6 | 3 | 5 | 3 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_neurosymbolic` | `SAFE_WORKSPACE` | 9 | 5 | 4 | 0 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_operational` | `MIXED_PROTECTED` | 243 | 112 | 127 | 5 | 15 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
+| `code/ace_operational` | `MIXED_PROTECTED` | 254 | 112 | 138 | 5 | 17 | Memuat instrumen/scorer/memory-write terlindung + modul lain |
 | `code/ace_pac_bayes` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_real_world` | `SAFE_WORKSPACE` | 12 | 8 | 4 | 1 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_red_team` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `code/ace_report` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
+| `code/ace_report` | `SAFE_WORKSPACE` | 3 | 2 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_research_agenda` | `SAFE_WORKSPACE` | 6 | 4 | 2 | 2 | 5 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_research_discovery` | `SAFE_WORKSPACE` | 10 | 9 | 1 | 1 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/ace_research_f12` | `SAFE_WORKSPACE` | 7 | 6 | 1 | 1 | 2 | Wilayah kerja aman (read-only AST / build tooling) |
@@ -145,7 +145,7 @@ flowchart LR
 | `code/ace_visual_bridge` | `SAFE_WORKSPACE` | 4 | 3 | 1 | 1 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `code/checkpoints` | `SAFE_WORKSPACE` | 3 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `data` | `SAFE_WORKSPACE` | 1 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
-| `docs` | `SAFE_WORKSPACE` | 273 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
+| `docs` | `SAFE_WORKSPACE` | 274 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `evidence` | `SAFE_WORKSPACE` | 731 | 29 | 1 | 0 | 1 | Wilayah kerja aman (read-only AST / build tooling) |
 | `examples` | `SAFE_WORKSPACE` | 5 | 0 | 0 | 0 | 0 | Wilayah kerja aman (read-only AST / build tooling) |
 | `handover` | `FROZEN_CORPUS_SPEC` | 159 | 23 | 0 | 0 | 1 | Corpus beku, preregistrasi, & custody spec (read-only) |
@@ -159,10 +159,10 @@ flowchart LR
 
 | Asal | Tujuan | Bobot Impor | Contoh Target Modul |
 | --- | --- | ---: | --- |
+| `code/ace_operational` | `tools` | 113 | `tools._director_sources`, `tools.agenda_candidates`, `tools.arc_rubric` |
 | `tools` | `code/ace_operational` | 65 | `ace_operational.abc_v3_scorer`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization` |
 | `evidence` | `code/ace_operational` | 25 | `ace_operational.experiment_kernel`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization` |
-| `code/ace_operational` | `tools` | 9 | `tools.curiosity_questions`, `tools.cycle_planner_sim`, `tools.director_challenger` |
-| `code/ace_operational` | `code/ace_mission` | 8 | `ace_mission.bus`, `ace_mission.schema` |
+| `code/ace_operational` | `code/ace_mission` | 9 | `ace_mission.bus`, `ace_mission.proposers`, `ace_mission.schema` |
 | `code/ace_capability_evolution` | `code/ace_candidate_search` | 7 | `ace_candidate_search.model`, `ace_candidate_search.search` |
 | `code/ace_self_dev` | `code/ace_loop` | 7 | `ace_loop.source_evolution` |
 | `tools` | `code/ace_real_world` | 7 | `ace_real_world.data_wrangler_synth`, `ace_real_world.git_analyzer_synth`, `ace_real_world.log_parser_synth` |
@@ -173,6 +173,7 @@ flowchart LR
 | `tools` | `code/ace_mission` | 6 | `ace_mission.admission`, `ace_mission.bus`, `ace_mission.generator` |
 | `code/ace_capability_evolution` | `code/ace_research_primitives` | 5 | `ace_research_primitives.primitive_discovery` |
 | `code/ace_operational` | `code/ace_indo_nlp` | 5 | `ace_indo_nlp.discourse`, `ace_indo_nlp.lexicon_kb`, `ace_indo_nlp.morphology` |
+| `code/ace_operational` | `code/ace_self_dev` | 5 | `ace_self_dev.atomic_lease`, `ace_self_dev.evidence_archiver`, `ace_self_dev.stagnation_detector` |
 | `tools` | `code/ace_cognition` | 5 | `ace_cognition.reasoning`, `ace_cognition.substrate_guardian` |
 | `code/ace_neurosymbolic` | `code/ace_evolution` | 4 | `ace_evolution.island_search` |
 | `code/ace_operational` | `code/ace_component_synthesis` | 4 | `ace_component_synthesis.component_synthesizer` |
@@ -189,7 +190,6 @@ flowchart LR
 | `code/ace_chat` | `code/ace_runtime` | 2 | `ace_runtime.cli`, `ace_runtime.engine` |
 | `code/ace_integration_redteam` | `code/ace_runtime` | 2 | `ace_runtime.cli`, `ace_runtime.engine` |
 | `code/ace_mission` | `code/ace_cognition` | 2 | `ace_cognition.reasoning` |
-| `code/ace_operational` | `code/ace_self_dev` | 2 | `ace_self_dev.fenced_store`, `ace_self_dev.stagnation_detector` |
 | `code/ace_research_agenda` | `code/ace_autonomy` | 2 | `ace_autonomy` |
 | `code/ace_research_agenda` | `code/ace_research_repair` | 2 | `ace_research_repair`, `ace_research_repair.evaluator` |
 | `code/ace_research_f13` | `code/ace_host_controller` | 2 | `ace_host_controller` |
@@ -235,11 +235,13 @@ flowchart LR
 | `code/ace_operational` | `code/ace_causal` | 1 | `ace_causal.causal_miner` |
 | `code/ace_operational` | `code/ace_code_agent` | 1 | `ace_code_agent.repo_retrieval` |
 | `code/ace_operational` | `code/ace_conformal` | 1 | `ace_conformal.conformal_risk` |
+| `code/ace_operational` | `code/ace_core_repair` | 1 | `ace_core_repair.drift_quarantine` |
 | `code/ace_operational` | `code/ace_egraph` | 1 | `ace_egraph.equality_saturation` |
 | `code/ace_operational` | `code/ace_game_theory` | 1 | `ace_game_theory.minimax_synthesizer` |
 | `code/ace_operational` | `code/ace_interpolation` | 1 | `ace_interpolation.craig_interpolator` |
 | `code/ace_operational` | `code/ace_pac_bayes` | 1 | `ace_pac_bayes.pac_bounds` |
 | `code/ace_operational` | `code/ace_red_team` | 1 | `ace_red_team.adversarial_suite` |
+| `code/ace_operational` | `code/ace_report` | 1 | `ace_report.mobile_report` |
 | `code/ace_operational` | `code/ace_smt` | 1 | `ace_smt.dpllt_solver` |
 | `code/ace_operational` | `code/ace_synthesis` | 1 | `ace_synthesis.cegis` |
 | `code/ace_real_world` | `code/ace_mission` | 1 | `ace_mission.bus` |

@@ -2,8 +2,8 @@
 
 - Schema: `ace.repo-index.v1`
 - Total direktori: 209
-- Total berkas: 2352
-- Total modul Python: 1129
+- Total berkas: 2364
+- Total modul Python: 1140
 
 ## Daftar Berkas per Direktori
 
@@ -397,7 +397,7 @@
 - `test_neural_guided_search.py` (python)
 - `test_sketch_synthesizer.py` (python)
 
-### `code/ace_operational` (243 berkas)
+### `code/ace_operational` (254 berkas)
 - `__init__.py` (python)
 - `abc_v3_scorer.py` (python)
 - `abstraction_engine.py` (python)
@@ -515,6 +515,17 @@
 - `terminal_chart_visualizer.py` (python)
 - `test_abc_v3_scorer.py` (python)
 - `test_abstraction_engine.py` (python)
+- `test_activation_0041.py` (python)
+- `test_activation_0042.py` (python)
+- `test_activation_0043.py` (python)
+- `test_activation_0044.py` (python)
+- `test_activation_0045.py` (python)
+- `test_activation_0046.py` (python)
+- `test_activation_0047.py` (python)
+- `test_activation_0048.py` (python)
+- `test_activation_0049.py` (python)
+- `test_activation_full.py` (python)
+- `test_activation_wave2.py` (python)
 - `test_admission_hygiene.py` (python)
 - `test_attested_server.py` (python)
 - `test_autonomous_engine.py` (python)
@@ -856,7 +867,7 @@
 ### `data` (1 berkas)
 - `ace_seed_snapshot.json` (data)
 
-### `docs` (55 berkas)
+### `docs` (56 berkas)
 - `ACE_AUTONOMOUS_RUNTIME_DEEP_RESEARCH_20261107.md` (docs)
 - `ACE_AUTONOMY_CORE_PRESCORE_V01.md` (docs)
 - `ACE_AUTONOMY_IMPLEMENTATION_GATES_20261107.md` (docs)
@@ -895,6 +906,7 @@
 - `ACE_SELFMODEL_PRESCORE_V1.md` (docs)
 - `ACE_SELFMODEL_RESULTS_V1.md` (docs)
 - `ACE_VISION_ALIGNMENT_CURRENT.md` (docs)
+- `AKTIVASI_INDEX.md` (docs)
 - `AKTIVASI_SELF_SEND.md` (docs)
 - `ARSITEKTUR_ENGINE.md` (docs)
 - `AUDIT_REMEDIATION_STATUS.md` (docs)
@@ -3046,7 +3058,7 @@
 | `ace_operational.house_model` | `code/ace_operational/house_model.py` | Pembangun model dunia rumah ACE dari telemetri JSON dengan aturan kebaruan (AG76). | - |
 | `ace_operational.hypothesis_book` | `code/ace_operational/hypothesis_book.py` | Buku registri hipotesis terstruktur dengan transisi status ketat (AG94). | - |
 | `ace_operational.language` | `code/ace_operational/language.py` | Indonesian Conversational Intake, Intent Frame Classifier, and Dialogue Controller (Sections 10-12, Appendix A). | `ace_operational.autonomy_loop`, `ace_operational.coding_loop`, `ace_operational.memory_bridge`, `ace_operational.memory_snapshot`, `ace_operational.models_backend`, `ace_operational.speech_acquisition`, `ace_operational.store` |
-| `ace_operational.leap_wiring` | `code/ace_operational/leap_wiring.py` | Wiring live lompatan EVO 0031–0040 ke siklus engine. | `ace_operational.brain_endpoints`, `ace_operational.director_receipt_context`, `ace_operational.evolution_proposals`, `ace_operational.house_model`, `ace_operational.hypothesis_book`, `ace_operational.memory_consolidation`, `ace_operational.practice_scheduler`, `ace_operational.project_layer`, `ace_operational.recall_candidates`, `ace_operational.recall_reranker`, `ace_operational.self_model`, `ace_operational.step_checkpoint`, `tools.curiosity_questions`, `tools.cycle_planner_sim`, `tools.director_challenger`, `tools.director_fold`, `tools.execution_invariants`, `tools.failure_taskgen`, `tools.incident_book`, `tools.organ_smoke`, `tools.regression_probe` |
+| `ace_operational.leap_wiring` | `code/ace_operational/leap_wiring.py` | Wiring live lompatan EVO 0031–0040 ke siklus engine. | `ace_core_repair.drift_quarantine`, `ace_mission.proposers`, `ace_operational.brain_endpoints`, `ace_operational.brain_registry`, `ace_operational.catalog_artifact`, `ace_operational.catalog_gap`, `ace_operational.citation_validator`, `ace_operational.curriculum_wave2`, `ace_operational.director_actions_wave2`, `ace_operational.director_receipt_context`, `ace_operational.evolution_proposals`, `ace_operational.house_model`, `ace_operational.hypothesis_book`, `ace_operational.memory_consolidation`, `ace_operational.mutation_engine`, `ace_operational.practice_scheduler`, `ace_operational.preaudit_oracle`, `ace_operational.project_layer`, `ace_operational.proposer_stage1_v2`, `ace_operational.recall_candidates`, `ace_operational.recall_reranker`, `ace_operational.self_model`, `ace_operational.software_factory`, `ace_operational.step_checkpoint`, `ace_report.mobile_report`, `ace_self_dev.atomic_lease`, `ace_self_dev.evidence_archiver`, `ace_self_dev.generational_ladder`, `tools._director_sources`, `tools.agenda_candidates`, `tools.arc_rubric`, `tools.autobiography_probe`, `tools.behavior_fingerprint`, `tools.bridge_self_check`, `tools.builder_onboarding_pack`, `tools.bundle_manifest`, `tools.bundle_manifest_check`, `tools.candidate_census`, `tools.candidate_factory_v2`, `tools.capability_report`, `tools.constitution_dilemma`, `tools.corpus_freeze_packer`, `tools.corpus_novelty`, `tools.cover_check`, `tools.coverage_and_flaky_audit`, `tools.cross_organ_agreement`, `tools.curiosity_questions`, `tools.curriculum_ab_report`, `tools.curriculum_lab`, `tools.custody_manifest_check`, `tools.cycle_planner_sim`, `tools.daily_digest`, `tools.director_cap_simulator`, `tools.director_challenger`, `tools.director_fold`, `tools.director_grounding_check`, `tools.director_injection_fixtures`, `tools.director_prose_audit`, `tools.director_queue_router`, `tools.director_screen`, `tools.discriminating_candidate_factory`, `tools.draft_release_preflight`, `tools.embedding_index`, `tools.engine_idle_report`, `tools.eval_bench`, `tools.evo_range_audit`, `tools.evo_results`, `tools.evo_scaffold`, `tools.execution_invariants`, `tools.experiment_designer`, `tools.failover_drill`, `tools.failure_taskgen`, `tools.failure_to_agenda`, `tools.gap_pattern_report`, `tools.gap_root_cause_report`, `tools.handover_decision_extractor`, `tools.handover_index`, `tools.home_replication_pack`, `tools.incident_book`, `tools.inheritance_probe`, `tools.instance_kit`, `tools.introspect_recall`, `tools.kbm_produce`, `tools.kbm_production_queue`, `tools.kbm_titles`, `tools.mastery_board`, `tools.memory_anchor_audit`, `tools.memory_chain_compare`, `tools.memory_decay`, `tools.memory_hygiene_audit`, `tools.metacog_memory_consolidate`, `tools.migration_rehearsal`, `tools.occurrence_outlier_scan`, `tools.omega_environment_probe`, `tools.organ_forensics`, `tools.organ_quality_board`, `tools.organ_registry_validate`, `tools.organ_smoke`, `tools.owner_benchmark`, `tools.pattern_catalog`, `tools.periodic_self_report`, `tools.platform_requirements_summary`, `tools.portability_pack`, `tools.pr_pack`, `tools.practice_task_lint`, `tools.program_glossary`, `tools.quota_failover_sim`, `tools.ram_window`, `tools.recall_ablation`, `tools.recall_delivery_probe`, `tools.recall_precision_probe`, `tools.receipt_chain_verify`, `tools.redteam_rotation`, `tools.regression_probe`, `tools.relay_spool_tools`, `tools.release_manifest`, `tools.repo_arena`, `tools.repo_cartography`, `tools.repo_status_dashboard_v3`, `tools.restore_drill`, `tools.run_evidence_pack`, `tools.saturation_scan`, `tools.seal_run`, `tools.second_home`, `tools.self_assessment`, `tools.self_dev_git_audit`, `tools.self_model_continuity_probe`, `tools.self_send_standing_audit`, `tools.specialization_delta`, `tools.story_consistency_gate`, `tools.successor_inventory`, `tools.successor_variant`, `tools.teaching_program`, `tools.tool_forge`, `tools.tool_registry`, `tools.transfer_probe`, `tools.verdict_board`, `tools.verify_self_dev`, `tools.verify_sources`, `tools.wiring_audit`, `tools.writeback_diagnose` |
 | `ace_operational.lexical_ops` | `code/ace_operational/lexical_ops.py` | Lexical, method, wrapper, and argument AST operators for multi-family discovery. | `ace_operational.curriculum_lab`, `ace_operational.operator_discovery`, `ace_operational.reasoning_lab` |
 | `ace_operational.local_repo_workflow` | `code/ace_operational/local_repo_workflow.py` | Bounded local-model repo repair, composed from ACE's existing components. | `ace_code_agent.repo_retrieval`, `ace_operational.coding_loop`, `ace_operational.local_sandbox`, `ace_operational.local_sandbox_v2`, `ace_operational.models_backend`, `ace_operational.store` |
 | `ace_operational.local_sandbox` | `code/ace_operational/local_sandbox.py` | Least-privilege local Python test runner for experimental code candidates. | - |
@@ -3109,6 +3121,17 @@
 | `ace_operational.terminal_chart_visualizer` | `code/ace_operational/terminal_chart_visualizer.py` | Modul Visualisasi Grafik & Data Terminal Berbahasa Indonesia (F17, F18, Section 28). | - |
 | `ace_operational.test_abc_v3_scorer` | `code/ace_operational/test_abc_v3_scorer.py` | A/B/C v3 DI scorer tests (midday track (a)). | `ace_operational.abc_v3_scorer` |
 | `ace_operational.test_abstraction_engine` | `code/ace_operational/test_abstraction_engine.py` | Tests for E4 Cross-Family AST & Operator Macro Abstraction Engine. | `ace_operational.abstraction_engine`, `ace_operational.family3_prototype`, `ace_operational.lexical_ops`, `ace_operational.pricing_adapter`, `ace_operational.reasoning_lab` |
+| `ace_operational.test_activation_0041` | `code/ace_operational/test_activation_0041.py` | Tes integrasi paket EVO 0041 (AG101–AG109: Memori & Recall). | `ace_operational.autonomous_engine`, `ace_operational.cognitive_memory`, `ace_operational.leap_wiring`, `ace_operational.store` |
+| `ace_operational.test_activation_0042` | `code/ace_operational/test_activation_0042.py` | Tes integrasi paket EVO 0042 (AG111–AG119: Kurikulum & Praktik). | `ace_operational.autonomous_engine`, `ace_operational.curriculum_wave2`, `ace_operational.leap_wiring`, `ace_operational.store` |
+| `ace_operational.test_activation_0043` | `code/ace_operational/test_activation_0043.py` | Tes integrasi paket EVO 0043 (AG121–AG129: Director & Kandidat). | `ace_operational.autonomous_engine`, `ace_operational.leap_wiring`, `ace_operational.store` |
+| `ace_operational.test_activation_0044` | `code/ace_operational/test_activation_0044.py` | Tes integrasi paket EVO 0044 (AG131–AG139: Rumah, Kustodi & Ketangguhan). | `ace_operational.autonomous_engine`, `ace_operational.leap_wiring`, `ace_operational.store`, `tools.bridge_home` |
+| `ace_operational.test_activation_0045` | `code/ace_operational/test_activation_0045.py` | Tes integrasi paket EVO 0045 (AG141–AG149: Perkakas & Proyek). | `ace_operational.autonomous_engine`, `ace_operational.leap_wiring`, `ace_operational.store` |
+| `ace_operational.test_activation_0046` | `code/ace_operational/test_activation_0046.py` | Tes integrasi paket EVO 0046 (AG151–AG159: Organ Jembatan & Replikasi). | `ace_operational.autonomous_engine`, `ace_operational.brain_registry`, `ace_operational.leap_wiring`, `ace_operational.store` |
+| `ace_operational.test_activation_0047` | `code/ace_operational/test_activation_0047.py` | Tes integrasi & kontrak cadangan aktivasi EVO 0047 (Identitas, Evaluasi, Benchmarking). | `ace_operational.leap_wiring`, `ace_operational.test_leap_wiring` |
+| `ace_operational.test_activation_0048` | `code/ace_operational/test_activation_0048.py` | Tes integrasi & cadangan aktivasi EVO 0048 (Kesadaran Diri & Metakognisi). | `ace_operational.cognitive_memory`, `ace_operational.leap_wiring`, `ace_operational.test_leap_wiring` |
+| `ace_operational.test_activation_0049` | `code/ace_operational/test_activation_0049.py` | Tes integrasi & cadangan aktivasi EVO 0049 (Ilmu, Sitasi, Software Factory). | `ace_operational.leap_wiring`, `ace_operational.test_leap_wiring` |
+| `ace_operational.test_activation_full` | `code/ace_operational/test_activation_full.py` | Tes integrasi penuh EVO 0050 & lintas seluruh 10 paket AKTIVASI (EVO 0041–0050). | `ace_operational.leap_wiring`, `ace_operational.test_leap_wiring` |
+| `ace_operational.test_activation_wave2` | `code/ace_operational/test_activation_wave2.py` | Tes integrasi penuh Wave-2 Refill (AG201-AG223) & lintas seluruh AKTIVASI (EVO 0041-0051). | `ace_operational.leap_wiring`, `ace_operational.test_leap_wiring` |
 | `ace_operational.test_admission_hygiene` | `code/ace_operational/test_admission_hygiene.py` | Tests for admission_hygiene: distractor pruning, Pareto set-cover, Lineage-Guard G2, and inoculation. | `ace_operational.admission_hygiene`, `ace_operational.curriculum_lab`, `ace_operational.distractor_inoculation`, `ace_operational.family3_prototype`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization`, `ace_operational.lexical_ops` |
 | `ace_operational.test_attested_server` | `code/ace_operational/test_attested_server.py` | Stage E evidence: harness-attested server identity, fail-closed. | `ace_operational.attested_server`, `ace_operational.models_backend`, `ace_operational.store` |
 | `ace_operational.test_autonomous_engine` | `code/ace_operational/test_autonomous_engine.py` | Tests for mixed technical+language autonomous engine, loopback auth, and honest story projection. | `ace_operational.autonomous_engine`, `ace_operational.models_backend`, `ace_operational.speech_acquisition`, `ace_operational.store`, `ace_operational.story_projector` |
@@ -3168,7 +3191,7 @@
 | `ace_operational.test_house_model` | `code/ace_operational/test_house_model.py` | Tes tiga keadaan model dunia rumah + aturan kebaruan telemetri (AG76). | `ace_operational.house_model` |
 | `ace_operational.test_hybrid_routing` | `code/ace_operational/test_hybrid_routing.py` | Unit tests for Dynamic Hybrid Routing in ModelRouter. | `ace_operational.models_backend`, `ace_operational.store` |
 | `ace_operational.test_hypothesis_book` | `code/ace_operational/test_hypothesis_book.py` | Tes unit untuk code/ace_operational/hypothesis_book.py (AG94). | `ace_operational.hypothesis_book` |
-| `ace_operational.test_leap_wiring` | `code/ace_operational/test_leap_wiring.py` | Tes wiring lompatan EVO 0031–0040 (leap_wiring) pada stub engine | `ace_operational.leap_wiring`, `ace_operational.store` |
+| `ace_operational.test_leap_wiring` | `code/ace_operational/test_leap_wiring.py` | Tes wiring lompatan EVO 0031–0040 (leap_wiring) pada stub engine | `ace_operational.brain_registry`, `ace_operational.cognitive_memory`, `ace_operational.leap_wiring`, `ace_operational.store`, `tools.bridge_home`, `tools.memory_decay`, `tools.memory_hygiene_audit`, `tools.self_send_rehearsal` |
 | `ace_operational.test_lexical_ops` | `code/ace_operational/test_lexical_ops.py` | Tests for generic AST lexical/method/wrapper/arg discovery and Family 3/4 transfer. | `ace_operational.catalog_gap`, `ace_operational.curriculum_generator`, `ace_operational.family3_prototype`, `ace_operational.lexical_ops` |
 | `ace_operational.test_lineage_guard_default` | `code/ace_operational/test_lineage_guard_default.py` | Lineage-Guard default-on regression tests. | `ace_operational.distractor_inoculation`, `ace_operational.grid_adapter`, `ace_operational.grid_generalization`, `ace_operational.operator_discovery` |
 | `ace_operational.test_local_repo_workflow` | `code/ace_operational/test_local_repo_workflow.py` | Control-plane tests; mocked inference is never counted as model ability. | `ace_operational.coding_loop`, `ace_operational.local_repo_workflow`, `ace_operational.local_sandbox_v2`, `ace_operational.store` |

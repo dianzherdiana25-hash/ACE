@@ -5,9 +5,9 @@
 ## 1. Ringkasan
 
 - Schema: `ace.handover-index.v1`
-- Total berkas terindeks: **432** (`handover/`: **159**, `docs/`: **273**)
-- Total baris teks UTF-8: **82306**
-- Total ukuran: **4836492** byte
+- Total berkas terindeks: **433** (`handover/`: **159**, `docs/`: **274**)
+- Total baris teks UTF-8: **82488**
+- Total ukuran: **4855215** byte
 - Symlink dilewati: **0**
 
 ### Distribusi Kategori
@@ -20,7 +20,7 @@
 | `helper_script` | 22 |
 | `manifest_json` | 46 |
 | `preregistration` | 17 |
-| `reference_doc` | 68 |
+| `reference_doc` | 69 |
 | `research_report` | 143 |
 | `slate_serving` | 13 |
 | `spec_governance` | 46 |
@@ -190,7 +190,7 @@
 | `handover/sqlite-vec-trial/trial.py` | `helper_script` | 155 | 7400 | `9bbd2936d744` | sqlite-vec trial — ECOSYSTEM INTAKE #01 candidate #4 protocol. |
 | `handover/stack_intake/INTAKE_V2_20261116.json` | `consolidation_ops` | 1 | 1731 | `5809f86998c3` | status: INTAKEN_AND_VERIFIED — not loaded, not served; bench stage follows |
 
-## 3. Inventaris `docs/` (273 berkas)
+## 3. Inventaris `docs/` (274 berkas)
 
 | Berkas | Kategori | Baris | Byte | SHA-256 | Judul / Ringkasan |
 | --- | --- | ---: | ---: | --- | --- |
@@ -232,6 +232,7 @@
 | `docs/ACE_SELFMODEL_PRESCORE_V1.md` | `reference_doc` | 58 | 5888 | `0a9d1fdecfcd` | ACE Fase 4 — Functional Self-Model & Metacognition: PRE-REGISTRATION |
 | `docs/ACE_SELFMODEL_RESULTS_V1.md` | `reference_doc` | 40 | 4108 | `74cce49f7873` | ACE Fase 4 — Functional Self-Model & Metacognition: Results & Verification |
 | `docs/ACE_VISION_ALIGNMENT_CURRENT.md` | `reference_doc` | 122 | 22945 | `3e7934850d77` | ACE Vision Alignment, Historical Reconstruction, and Capability Matrix (2026-11-07) |
+| `docs/AKTIVASI_INDEX.md` | `reference_doc` | 157 | 11553 | `264141685a4a` | Indeks Program AKTIVASI — EVO 0041–0050 (`AG101–AG200`) |
 | `docs/AKTIVASI_SELF_SEND.md` | `reference_doc` | 57 | 2599 | `5b4c53fcf022` | Aktivasi Self-Send ACE (khusus operator) |
 | `docs/ARSITEKTUR_ENGINE.md` | `reference_doc` | 145 | 12430 | `8a0c17b62b05` | Arsitektur engine ACE |
 | `docs/AUDIT_REMEDIATION_STATUS.md` | `audit_accounting` | 61 | 4154 | `d81457b60b88` | Audit remediation status |
@@ -242,9 +243,9 @@
 | `docs/DOCS_INDEX_MAINTENANCE_20261119.md` | `reference_doc` | 28 | 1980 | `bab2a8c0f519` | Pemeliharaan Indeks Dokumen — 2026-11-19 (E8) |
 | `docs/LAPORAN_HASIL_RISET_HP.md` | `reference_doc` | 63 | 5202 | `4e5fe567d704` | 📱 Laporan Hasil Riset ACE (Terbaca di Layar HP) |
 | `docs/PRD_ACE_v0.1.md` | `reference_doc` | 190 | 18816 | `03887aef928b` | PRODUCT REQUIREMENTS DOCUMENT (PRD) |
-| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54864 | `32749044b24b` | Glosarium Istilah Teknis ACE — ACE |
-| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 283 | 23894 | `54e4cbc737a6` | Kartografi Repositori ACE — ACE |
-| `docs/REPO_INDEX.md` | `reference_doc` | 3912 | 332619 | `233fdb629d66` | Indeks Repositori — ACE |
+| `docs/PROGRAM_GLOSSARY.md` | `reference_doc` | 360 | 54865 | `722b4161ee5c` | Glosarium Istilah Teknis ACE — ACE |
+| `docs/REPO_CARTOGRAPHY.md` | `reference_doc` | 285 | 24119 | `3b3447256db1` | Kartografi Repositori ACE — ACE |
+| `docs/REPO_INDEX.md` | `reference_doc` | 3935 | 339563 | `31ed32f53bb6` | Indeks Repositori — ACE |
 | `docs/SENSUS_KANDIDAT.json` | `manifest_json` | 837 | 23986 | `94922b9f71e0` | schema: ace.candidate-census.v1 |
 | `docs/SENSUS_KANDIDAT.md` | `reference_doc` | 50 | 2531 | `65e4889ef370` | Sensus Kandidat Corpus ACE |
 | `docs/UPSTREAM_SOURCES.json` | `manifest_json` | 106 | 4914 | `cf6ffc77386a` | schema: ace.source-integration.v1 |
