@@ -1,6 +1,6 @@
 # EVO 0051 · Deliberasi dan ramalan
 
-Draf parsial dari `main` `42f0102`. Tabel memuat pasangan program dan verifier
+Draf dari `main` `42f0102`. Tabel memuat pasangan program dan verifier
 yang ada di paket ini. Angka butir mengikuti rancangan EVO 0051.
 
 | Butir | Program | Pemeriksaan fixture |
@@ -65,8 +65,12 @@ yang ada di paket ini. Angka butir mengikuti rancangan EVO 0051.
 | 55 | `question_portfolio.py` | Optimasi eksak dan batas kapasitas untuk kategori tumpang tindih |
 | 56 | `calibration_report.py` | Cakupan per domain, bin, delta antarperiode dan ekspor Markdown |
 
-Butir tersisa pada 0051 mencakup 57–60. Pengukuran
-di paket ini memakai fixture sintetis. Pasangan program dan tes yang
+| 57 | `dissent_forecast_link.py` | Ramalan alternatif tertambat transcript, ambang, dan resolusi biner |
+| 58 | `fast_track.py` | Satu ronde, batas waktu dan biaya, independensi peran, dan disposisi |
+| 59 | `deep_track.py` | Lima ronde berantai hash dengan riwayat tanggapan atas dissent |
+| 60 | `deliberation_roi.py` | Delta kualitas dan biaya berpasangan, titik impas dan sampel kurang |
+
+Pengukuran di paket ini memakai fixture sintetis. Pasangan program dan tes yang
 tercantum dihitung bersama untuk rentang baris per kemampuan. Verifier
 ambang dan langkah integrasi berada di luar hitungan kemampuan.
 
