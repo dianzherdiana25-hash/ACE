@@ -5,8 +5,8 @@
 ## 1. Ringkasan Sumber
 
 - Berkas Markdown dipindai: **330**
-- Berkas Python AST dipindai (non-test): **503**
-- Total istilah terindeks: **336** (dari 1458 kandidat unik)
+- Berkas Python AST dipindai (non-test): **505**
+- Total istilah terindeks: **336** (dari 1460 kandidat unik)
 
 ### Komposisi Sumber
 
@@ -81,7 +81,7 @@
 | `ace.handover-index.v1` | `ast_schema` | `tools/handover_index.py:22` | Skema JSON `HANDOVER_INDEX_SCHEMA` pada `tools/handover_index.py` |
 | `ace.income-ledger.v1` | `ast_schema` | `tools/income_report.py:46` | Skema JSON `LEDGER_SCHEMA` pada `tools/income_report.py` |
 | `ace.income-verification.v1` | `ast_schema` | `tools/income_report.py:45` | Skema JSON `INCOME_SCHEMA` pada `tools/income_report.py` |
-| `ace.inheritance-provenance.v1` | `ast_schema` | `tools/inheritance_probe.py:20` | Skema JSON `PROVENANCE_SCHEMA` pada `tools/inheritance_probe.py` |
+| `ace.inheritance-provenance.v1` | `ast_schema` | `tools/inheritance_probe.py:24` | Skema JSON `PROVENANCE_SCHEMA` pada `tools/inheritance_probe.py` |
 | `ace.introspect-recall.v1` | `ast_schema` | `tools/introspect_recall.py:28` | Skema JSON `SCHEMA` pada `tools/introspect_recall.py` |
 | `ace.judge-saturation-scan.v1` | `ast_schema` | `tools/saturation_scan.py:29` | Skema JSON `SATURATION_SCHEMA` pada `tools/saturation_scan.py` |
 | `ace.kbm-manuscript-check.v1` | `ast_schema` | `tools/kbm_pack_check.py:30` | Skema JSON `MANUSCRIPT_CHECK_SCHEMA` pada `tools/kbm_pack_check.py` |

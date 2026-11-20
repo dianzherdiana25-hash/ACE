@@ -2,8 +2,8 @@
 
 - Schema: `ace.repo-index.v1`
 - Total direktori: 205
-- Total berkas: 2146
-- Total modul Python: 938
+- Total berkas: 2156
+- Total modul Python: 948
 
 ## Daftar Berkas per Direktori
 
@@ -2284,7 +2284,7 @@
 - `test_sandbox_ast_gate.py` (python)
 - `test_zero_cost_governance.py` (python)
 
-### `tools` (274 berkas)
+### `tools` (284 berkas)
 - `FUZZ_STANDARD.md` (docs)
 - `__init__.py` (python)
 - `_director_sources.py` (python)
@@ -2338,6 +2338,7 @@
 - `dashboard_state_build.py` (python)
 - `director_asset_check.py` (python)
 - `director_cycle_record.py` (python)
+- `director_fold.py` (python)
 - `director_prose_audit.py` (python)
 - `director_screen.py` (python)
 - `director_value_check.py` (python)
@@ -2416,6 +2417,7 @@
 - `self_send.py` (python)
 - `self_send_audit.py` (python)
 - `self_send_audit_view.py` (python)
+- `self_send_rehearsal.py` (python)
 - `stage_verify.py` (python)
 - `storage_debt.py` (python)
 - `successor_inventory.py` (python)
@@ -2428,7 +2430,9 @@
 - `test_agenda_closure.py` (python)
 - `test_bench_table.py` (python)
 - `test_bridge_home.py` (python)
+- `test_bridge_home_cutover_e2e.py` (python)
 - `test_bridge_home_cutover_fixture.py` (python)
+- `test_bridge_home_pid_reuse.py` (python)
 - `test_bridge_secrets.py` (python)
 - `test_builder_onboarding_pack.py` (python)
 - `test_candidate_census.py` (python)
@@ -2451,7 +2455,9 @@
 - `test_curriculum_propose.py` (python)
 - `test_daily_digest.py` (python)
 - `test_dashboard_utils_edge.py` (python)
+- `test_derived_docs_two_checkout.py` (python)
 - `test_director_audit.py` (python)
+- `test_director_fold.py` (python)
 - `test_director_historical_shapes.py` (python)
 - `test_director_screen.py` (python)
 - `test_discriminating_candidate_factory.py` (python)
@@ -2475,6 +2481,7 @@
 - `test_income_report.py` (python)
 - `test_income_verify.py` (python)
 - `test_inheritance_probe.py` (python)
+- `test_inheritance_probe_two_instance.py` (python)
 - `test_inheritance_provenance.py` (python)
 - `test_instance_kit.py` (python)
 - `test_introspect_recall.py` (python)
@@ -2510,6 +2517,7 @@
 - `test_program_glossary.py` (python)
 - `test_ram_window.py` (python)
 - `test_recall_ablation.py` (python)
+- `test_recall_ablation_anchored.py` (python)
 - `test_recall_anchor_audit.py` (python)
 - `test_regression_anchor_e3.py` (python)
 - `test_relay_spool_tools.py` (python)
@@ -2538,9 +2546,11 @@
 - `test_self_send_audit_transitions.py` (python)
 - `test_self_send_audit_view.py` (python)
 - `test_self_send_dryrun.py` (python)
+- `test_self_send_rehearsal.py` (python)
 - `test_sensus_kandidat_e1.py` (python)
 - `test_stage_verify.py` (python)
 - `test_storage_debt.py` (python)
+- `test_successor_claims_map.py` (python)
 - `test_successor_inventory.py` (python)
 - `test_tools_scripts_edge.py` (python)
 - `test_verify_repair_v2.py` (python)
@@ -3285,6 +3295,7 @@
 | `tools.dashboard_state_build` | `tools/dashboard_state_build.py` | Build ace_dashboard_state.json — the Ω-program feed for the ACE mobile dashboard. | - |
 | `tools.director_asset_check` | `tools/director_asset_check.py` | Audit klaim aset pada produk direktur terhadap snapshot Git lokal. | `tools._director_sources` |
 | `tools.director_cycle_record` | `tools/director_cycle_record.py` | Ekspor catatan siklus direktur dari berkas JSON yang tercatat di Git. | `tools._director_sources` |
+| `tools.director_fold` | `tools/director_fold.py` | Rencanakan lipatan ekspor proposal supaya duplikat bisa ditelaah lokal. | `ace_operational.director_classes` |
 | `tools.director_prose_audit` | `tools/director_prose_audit.py` | Audit dan petakan bentuk klaim prosa historis pada artefak direktur ACE. | `tools._director_sources`, `tools.director_asset_check` |
 | `tools.director_screen` | `tools/director_screen.py` | Orkestrator saringan direktur (director screen) terpadu berbasis snapshot Git (E2). | `tools._director_sources`, `tools.director_asset_check`, `tools.director_cycle_record`, `tools.director_value_check` |
 | `tools.director_value_check` | `tools/director_value_check.py` | Cocokkan klaim angka direktur dengan field JSON pada snapshot Git lokal. | `tools._director_sources` |
@@ -3336,7 +3347,7 @@
 | `tools.pr_pack` | `tools/pr_pack.py` | Pengemas deskripsi draft PR dry-run dari manifest rilis C5 + templat rumah ACE. | - |
 | `tools.program_glossary` | `tools/program_glossary.py` | Pembangkit glosarium istilah teknis program ACE berbasis Markdown & AST statis (`ace.program-glossary.v1`). | - |
 | `tools.ram_window` | `tools/ram_window.py` | Perencana jendela RAM deterministik berbasis berkas untuk menjadwalkan beban organ ACE. | - |
-| `tools.recall_ablation` | `tools/recall_ablation.py` | Bandingkan dua lengan fixture agar kontribusi recall bisa dihitung ulang. | - |
+| `tools.recall_ablation` | `tools/recall_ablation.py` | Bandingkan dua lengan fixture agar kontribusi recall bisa dihitung ulang. | `ace_operational.memory_anchor` |
 | `tools.regression_anchor` | `tools/regression_anchor.py` | Regression anchor (HARNESS, not repo code). | `ace_operational.grid_adapter`, `ace_operational.grid_generalization`, `ace_operational.operator_discovery` |
 | `tools.relay_spool_tools` | `tools/relay_spool_tools.py` | Perkakas mandiri validator dan pembersih spool relai brain bridge (D8). | - |
 | `tools.release_manifest` | `tools/release_manifest.py` | Perakit manifest rilis JSON luring untuk cabang/PR terhadap `main`. | - |
@@ -3362,9 +3373,10 @@
 | `tools.self_send` | `tools/self_send.py` | Periksa amplop self-send secara lokal sebelum operator memakai jalur kirim. | `ace_operational.self_send` |
 | `tools.self_send_audit` | `tools/self_send_audit.py` | Ringkas kiriman yang tercatat dan tunjukkan pelanggaran amplop per baris. | `tools.self_send_audit_view` |
 | `tools.self_send_audit_view` | `tools/self_send_audit_view.py` | Read-only viewer untuk audit JSONL self-send ACE (WS-F #17). | - |
+| `tools.self_send_rehearsal` | `tools/self_send_rehearsal.py` | Latih amplop self-send dengan repo bare dan proses gh palsu di fixture. | `tools.self_send`, `tools.self_send_audit` |
 | `tools.stage_verify` | `tools/stage_verify.py` | Verifikator direktori staging terhadap manifest berkas (sha256 + ukuran). | - |
 | `tools.storage_debt` | `tools/storage_debt.py` | Pemindai utang penyimpanan / artefak belum tersinkron ke Git (WS-E #14). | - |
-| `tools.successor_inventory` | `tools/successor_inventory.py` | Buat inventaris successor dari path Git dan snapshot JSON yang ditunjuk. | - |
+| `tools.successor_inventory` | `tools/successor_inventory.py` | Buat inventaris successor agar klaim dapat dirunut ke berkas repo. | - |
 | `tools.test_ace_autonomous_daemon_e3` | `tools/test_ace_autonomous_daemon_e3.py` | Tes tepi luring untuk tools/ace_autonomous_daemon.py (E3 #3, TESTS ONLY). | `tools.ace_autonomous_daemon` |
 | `tools.test_ace_mission_worker_e3` | `tools/test_ace_mission_worker_e3.py` | Tes tepi luring untuk tools/ace_mission_worker.py (E3 #5, TESTS ONLY). | `tools.ace_mission_worker`, `tools.ace_reasoning_benchmark` |
 | `tools.test_ace_reasoning_benchmark_e3` | `tools/test_ace_reasoning_benchmark_e3.py` | Tes tepi luring untuk tools/ace_reasoning_benchmark.py (E3 #2, TESTS ONLY). | `tools.ace_reasoning_benchmark` |
@@ -3374,7 +3386,9 @@
 | `tools.test_agenda_closure` | `tools/test_agenda_closure.py` | Fixture sintetik & verifikasi pointer untuk laporan penutupan kandidat agenda (Garis A2 Tranche 2). | `tools.agenda_candidates` |
 | `tools.test_bench_table` | `tools/test_bench_table.py` | Uji unit untuk tabulator benchmark tools/bench_table.py. | `tools.bench_table` |
 | `tools.test_bridge_home` | `tools/test_bridge_home.py` | Uji rencana cutover dan rollback dengan konfigurasi sintetis. | `tools.bridge_home` |
+| `tools.test_bridge_home_cutover_e2e` | `tools/test_bridge_home_cutover_e2e.py` | Latih urutan cutover dan rollback tanpa menjalankan perintah rencana. | `tools.bridge_home`, `tools.test_bridge_home` |
 | `tools.test_bridge_home_cutover_fixture` | `tools/test_bridge_home_cutover_fixture.py` | Uji preflight cutover tanpa meluncurkan proses atau membuka bundle. | `tools.bridge_home`, `tools.test_bridge_home` |
+| `tools.test_bridge_home_pid_reuse` | `tools/test_bridge_home_pid_reuse.py` | Cegah PID daur ulang dianggap milik bridge tanpa identitas yang cocok. | `tools.bridge_home`, `tools.test_bridge_home` |
 | `tools.test_bridge_secrets` | `tools/test_bridge_secrets.py` | Periksa pemuatan GPG memakai nilai sintetis yang dibuat saat tes. | `tools.bridge_secrets`, `tools.secrets_bundle` |
 | `tools.test_builder_onboarding_pack` | `tools/test_builder_onboarding_pack.py` | Unit & adversarial tests untuk tools/builder_onboarding_pack.py (I3). | `tools.builder_onboarding_pack` |
 | `tools.test_candidate_census` | `tools/test_candidate_census.py` | Tes unit untuk `tools/candidate_census.py` (Gelombang C1). | `tools.candidate_census` |
@@ -3397,7 +3411,9 @@
 | `tools.test_curriculum_propose` | `tools/test_curriculum_propose.py` | Fixture usulan kurikulum mandiri; katalog dibuat lewat distiler repo. | `tools.curriculum_propose`, `tools.pattern_distill` |
 | `tools.test_daily_digest` | `tools/test_daily_digest.py` | Unit tests untuk tools/daily_digest.py (WS-E #15). | `ace_operational.memory_writeback`, `ace_operational.store`, `tools.daily_digest`, `tools.organ_quota_ledger`, `tools.wiring_audit` |
 | `tools.test_dashboard_utils_edge` | `tools/test_dashboard_utils_edge.py` | Uji kasus tepi untuk utilitas dashboard: dashboard_state_build dan ace_mobile_dashboard (>=25 kasus). | `tools.ace_mobile_dashboard`, `tools.dashboard_state_build` |
+| `tools.test_derived_docs_two_checkout` | `tools/test_derived_docs_two_checkout.py` | Jaga nama repo dan fixpoint renderer saat lokasi checkout berbeda. | `tools.program_glossary`, `tools.repo_cartography`, `tools.repo_index` |
 | `tools.test_director_audit` | `tools/test_director_audit.py` | Fixture audit direktur pada snapshot Git sintetis. | `tools._director_sources`, `tools.director_asset_check`, `tools.director_cycle_record`, `tools.director_value_check` |
+| `tools.test_director_fold` | `tools/test_director_fold.py` | Uji lipatan 38 proposal dan kelas konservatif untuk multi-gap. | `tools.director_fold` |
 | `tools.test_director_historical_shapes` | `tools/test_director_historical_shapes.py` | Fixture per bentuk klaim prosa yang disetujui & audit dokumen historis (Garis A3 Tranche 2). | `tools._director_sources`, `tools.director_asset_check`, `tools.director_prose_audit` |
 | `tools.test_director_screen` | `tools/test_director_screen.py` | Tes fixture untuk tools/director_screen.py (E2 — saringan direktur terpadu). | `tools._director_sources`, `tools.director_screen`, `tools.wiring_audit` |
 | `tools.test_discriminating_candidate_factory` | `tools/test_discriminating_candidate_factory.py` | Tes fixture untuk tools/discriminating_candidate_factory.py (D9). | `tools.corpus_factory_lang`, `tools.corpus_lint`, `tools.discriminating_candidate_factory` |
@@ -3421,6 +3437,7 @@
 | `tools.test_income_report` | `tools/test_income_report.py` | Pastikan ringkasan periode dan posisi ledger memakai bukti yang tepat. | `tools.income_report` |
 | `tools.test_income_verify` | `tools/test_income_verify.py` | Pastikan tiga berkas bukti menghasilkan verdict sesuai kebijakan WS-2. | `tools.income_verify` |
 | `tools.test_inheritance_probe` | `tools/test_inheritance_probe.py` | Uji delta fixture, data cacat, dan protokol subprocess lokal. | `tools.inheritance_probe` |
+| `tools.test_inheritance_probe_two_instance` | `tools/test_inheritance_probe_two_instance.py` | Uji skor dua-instance dari fixture dan ikatan manifest sebelum lari. | `tools.inheritance_probe` |
 | `tools.test_inheritance_provenance` | `tools/test_inheritance_provenance.py` | Uji bahwa manifest mengikat byte masukan sebelum runner dipanggil. | `tools.inheritance_probe` |
 | `tools.test_instance_kit` | `tools/test_instance_kit.py` | Unit tests untuk tools/instance_kit.py (WS-H #21). | `tools.instance_kit` |
 | `tools.test_introspect_recall` | `tools/test_introspect_recall.py` | Unit tests for C4: Introspect & Recall Q&A CLI (strictly read-only). | `tools.introspect_recall` |
@@ -3456,6 +3473,7 @@
 | `tools.test_program_glossary` | `tools/test_program_glossary.py` | Unit & adversarial tests untuk tools/program_glossary.py (I2). | `tools.program_glossary` |
 | `tools.test_ram_window` | `tools/test_ram_window.py` | Tes unit untuk `tools/ram_window.py` (Gelombang C3). | `tools.ram_window` |
 | `tools.test_recall_ablation` | `tools/test_recall_ablation.py` | Uji selisih recall dan hash hasil pada fixture yang diketahui. | `tools.recall_ablation` |
+| `tools.test_recall_ablation_anchored` | `tools/test_recall_ablation_anchored.py` | Bandingkan lengan anchored dan kunci byte keluaran ablation asli. | `tools.recall_ablation`, `tools.test_recall_ablation` |
 | `tools.test_recall_anchor_audit` | `tools/test_recall_anchor_audit.py` | Audit ref pada keputusan yang berubah lewat modul recall dan anchor asli. | `ace_operational.memory_anchor`, `tools.recall_ablation` |
 | `tools.test_regression_anchor_e3` | `tools/test_regression_anchor_e3.py` | E3 thick edge tests for tools/regression_anchor.py (tests only, 0/10 -> 10/10 symbols). | `tools.regression_anchor` |
 | `tools.test_relay_spool_tools` | `tools/test_relay_spool_tools.py` | Tes fixture untuk tools/relay_spool_tools.py (D8 — mandiri, tanpa relai hidup). | `tools.relay_spool_tools` |
@@ -3484,9 +3502,11 @@
 | `tools.test_self_send_audit_transitions` | `tools/test_self_send_audit_transitions.py` | Kunci hari kirim UTC dan penunjuk sumber transisi log. | `tools.self_send_audit` |
 | `tools.test_self_send_audit_view` | `tools/test_self_send_audit_view.py` | Unit tests untuk tools/self_send_audit_view.py (WS-F #17). | `tools.self_send_audit_view` |
 | `tools.test_self_send_dryrun` | `tools/test_self_send_dryrun.py` | Jaga agar preflight tidak mencapai jaringan atau membaca nilai token. | `tools.self_send` |
+| `tools.test_self_send_rehearsal` | `tools/test_self_send_rehearsal.py` | Buktikan mock sukses dan gagal dapat diperiksa dari log rehearsal. | `tools.self_send_rehearsal` |
 | `tools.test_sensus_kandidat_e1` | `tools/test_sensus_kandidat_e1.py` | Verifikasi integritas artefak sensus kandidat E1 (docs/SENSUS_KANDIDAT.*). | - |
 | `tools.test_stage_verify` | `tools/test_stage_verify.py` | Uji unit untuk verifikator direktori staging tools/stage_verify.py. | `tools.stage_verify` |
 | `tools.test_storage_debt` | `tools/test_storage_debt.py` | Unit tests untuk tools/storage_debt.py (WS-E #14). | `tools.storage_debt` |
+| `tools.test_successor_claims_map` | `tools/test_successor_claims_map.py` | Uji peta klaim sekaligus batas root bukti. | `tools.successor_inventory` |
 | `tools.test_successor_inventory` | `tools/test_successor_inventory.py` | Uji semua jenis pointer inventaris di pohon fixture. | `tools.successor_inventory` |
 | `tools.test_tools_scripts_edge` | `tools/test_tools_scripts_edge.py` | Uji kasus tepi untuk skrip utilitas non-verdict di tools/ (>=25 kasus): | `tools.ace_ai_diagnostic`, `tools.ace_reasoning_audit`, `tools.verify_sources` |
 | `tools.test_verify_repair_v2` | `tools/test_verify_repair_v2.py` | Tamper and historical-custody regression tests for public repair v2 replay. | `tools.verify_repair_v2` |
