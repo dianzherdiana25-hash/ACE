@@ -8,6 +8,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 2 | `dataset_custody.py` | SHA-256 per baris dan rantai provenance, penolakan perubahan relatif terhadap anchor eksternal |
 | 3 | `synthetic_data_generator.py` | Tiga keluarga tugas berseed, cek mekanis mandiri, dan laporan shortfall |
 | 4 | `curriculum_distiller.py` | Distilasi urutan dari demonstrasi berkustodi, konflik, dan isolasi held-out |
+| 5 | `lora_trainer.py` | Optimasi dua faktor pada aktivasi dense beku, gradien numerik, dan loss train |
+| 6 | `preference_trainer.py` | DPO readout fitur tetap, log-ratio relatif referensi, dan gradien |
 | 7 | `forgetting_guard.py` | Akurasi berpasangan per domain, penurunan kritis, dan bukti yang kurang |
 | 10 | `brain_bench.py` | Perbandingan kualitas dan sumber daya, hash artefak, dan diagnosis per kasus |
 
@@ -54,3 +56,12 @@ Untuk persetujuan tempa, jalankan pemeriksa regresi terpisah pada domain
 umum. Kedua program menerima pengukuran yang sudah direkam. Butir 7
 dan 10 dikerjakan sebelum pelatihan agar penerimaan hasil dapat diuji
 tanpa mengaktifkan organ.
+
+`lora_trainer.py` menerima resep dan snapshot aktivasi dense dari
+artefak asal, beserta anchor `--expect-dataset-sha256`. Keluaran berisi
+matriks A/B dan jejak MSE train. `preference_trainer.py` menerima pasangan
+pilihan dengan fitur tetap dan log-probabilitas baseline serta referensi.
+Anchor dimasukkan lewat `--expect-pairs-sha256`. Hasilnya adalah delta
+linear pada fitur tersebut dan trace loss DPO. Keduanya menguji optimizer
+dengan fixture numerik. Ekstraksi aktivasi, fitting model penuh, integrasi
+runtime, dan gain held-out memerlukan proses atau bukti terpisah.
