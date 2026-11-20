@@ -685,3 +685,39 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# Wave 2 — kartografi AST statis zona aman/terlindung
+# ------------------------------------------------------------------
+
+
+def step_repo_cartography(engine: Any) -> dict[str, Any]:
+    """Bangun peta kartografi AST statis secara read-only & fail-closed (AG203)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import repo_cartography
+
+        repo_root = Path(getattr(engine, "repo_root", None) or _REPO_ROOT)
+        carto = repo_cartography.build_cartography(repo_root)
+        out_path = ws / "repo_cartography.json"
+        _write_json(
+            out_path,
+            {"at": _now_iso(), "cycle": int(getattr(engine, "cycle_count", 0) or 0), **carto},
+        )
+        summary = carto.get("summary") or {}
+        return {
+            "status": "ok",
+            "subsystem_count": summary.get("subsystem_count", 0),
+            "protected_zone_subsystems": summary.get("protected_zone_subsystems", 0),
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

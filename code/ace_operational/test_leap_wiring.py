@@ -144,6 +144,18 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_repo_cartography_builds_json_and_fails_closed(self) -> None:
+        res = leap_wiring.step_repo_cartography(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertGreater(res["subsystem_count"], 3)
+        saved = json.loads((self.ws / "repo_cartography.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["schema"], "ace.repo-cartography.v1")
+
+        self.engine.repo_root = self.ws / "missing_repo"
+        bad = leap_wiring.step_repo_cartography(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
