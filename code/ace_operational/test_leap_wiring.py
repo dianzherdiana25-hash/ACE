@@ -144,6 +144,16 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_coverage_and_flaky_audit_writes_test_health(self) -> None:
+        out = leap_wiring.step_coverage_and_flaky_audit(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertGreater(out["symbol_coverage_pct"], 0)
+        self.assertGreater(out["total_source_modules"], 100)
+        health_path = self.ws / "test_health.json"
+        self.assertTrue(health_path.is_file())
+        data = json.loads(health_path.read_text(encoding="utf-8"))
+        self.assertEqual(data["flaky_audit"]["status"], "skipped")
+
 
 if __name__ == "__main__":
     unittest.main()

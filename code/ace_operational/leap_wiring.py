@@ -685,3 +685,40 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0044 — AG136: static AST symbol coverage & health audit (%200)
+# ------------------------------------------------------------------
+
+def step_coverage_and_flaky_audit(engine: Any) -> dict[str, Any]:
+    try:
+        from tools import coverage_and_flaky_audit as cfa
+
+        ws = Path(engine.workspace)
+        cov = cfa.audit_symbol_coverage(_REPO_ROOT)
+        payload: dict[str, Any] = {
+            "status": "ok",
+            "checked_at": _now_iso(),
+            "cycle": getattr(engine, "cycle_count", 0),
+            "summary": cov.get("summary", {}),
+            "package_summary": cov.get("package_summary", {}),
+            "uncovered_modules_top": (cov.get("uncovered_modules") or [])[:25],
+            "forbidden_skipped": len(cov.get("skipped_forbidden") or []),
+            "flaky_audit": {"status": "skipped", "reason": "ACE_FLAKY_AUDIT!=1"},
+        }
+        if os.environ.get("ACE_FLAKY_AUDIT", "0") == "1":
+            payload["flaky_audit"] = cfa.run_flaky_audit(
+                _REPO_ROOT, targets=["ace_operational.test_leap_wiring"], runs=2, timeout_sec=20.0
+            )
+        _write_json(ws / "test_health.json", payload)
+        summary = cov.get("summary") or {}
+        return {
+            "status": "ok",
+            "symbol_coverage_pct": summary.get("symbol_coverage_pct"),
+            "modules_without_tests": summary.get("modules_without_tests"),
+            "total_source_modules": summary.get("total_source_modules"),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
