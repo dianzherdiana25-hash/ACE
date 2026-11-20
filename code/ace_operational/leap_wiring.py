@@ -685,3 +685,51 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_capability_report(engine: Any) -> dict[str, Any]:
+    """AG166: build honest one-page Markdown capability report into capability_report.md."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import capability_report as cr
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        gate_board: dict[str, Any] = {}
+        gb_path = ws / "gate_board.json"
+        if gb_path.is_file():
+            gate_board = json.loads(gb_path.read_text(encoding="utf-8"))
+
+        store_stats: dict[str, Any] = {"subject": "ACE", "measured_at": _now_iso()}
+        store = getattr(engine, "store", None)
+        if store is not None and hasattr(store, "list_gaps"):
+            all_gaps = store.list_gaps() or []
+            open_gaps = sum(1 for g in all_gaps if g.get("status") == "OPEN")
+            closed_gaps = sum(1 for g in all_gaps if g.get("status") != "OPEN")
+            store_stats["gaps"] = {"open": open_gaps, "closed": closed_gaps, "total": len(all_gaps)}
+
+        stats_path = ws / "store_stats.json"
+        if stats_path.is_file():
+            file_stats = json.loads(stats_path.read_text(encoding="utf-8"))
+            if isinstance(file_stats, dict):
+                store_stats.update(file_stats)
+
+        report = cr.build_capability_report(gate_board, store_stats)
+        md = cr.render_markdown(report)
+        out_path = ws / "capability_report.md"
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = out_path.with_suffix(".md.tmp")
+        tmp.write_text(md, encoding="utf-8")
+        tmp.replace(out_path)
+        return {
+            "status": "ok",
+            "schema": report["schema"],
+            "completeness": report["completeness"],
+            "gaps": report["gaps"],
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
