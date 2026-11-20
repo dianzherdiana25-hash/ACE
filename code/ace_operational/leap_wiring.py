@@ -685,3 +685,86 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0049 — penyusun program ajar bertingkat & penilai peningkatan
+# ------------------------------------------------------------------
+
+
+def step_teaching_program(engine: Any) -> dict[str, Any]:
+    """Susun paket ajar bertingkat & evaluasi peningkatan murid secara fail-closed (AG183)."""
+    raw_ws = getattr(engine, "workspace", None)
+    if not raw_ws:
+        return {"status": "skipped", "reason": "no workspace"}
+    ws = Path(raw_ws)
+    if not ws.is_dir():
+        return {"status": "skipped", "reason": "workspace missing"}
+
+    try:
+        from tools import teaching_program
+
+        spec_path = ws / "teaching_spec.json"
+        if spec_path.is_file():
+            raw = json.loads(spec_path.read_text(encoding="utf-8"))
+            if not isinstance(raw, dict):
+                raise ValueError("teaching_spec.json wajib objek JSON.")
+            skill_spec = raw.get("skill_spec", raw)
+            students = raw.get("students") if isinstance(raw.get("students"), list) else []
+        else:
+            skill_spec = {
+                "skill_id": "ace-verification-basics",
+                "title": "Dasar Verifikasi ACE",
+                "concepts": [
+                    {
+                        "concept_id": "v1",
+                        "tier": "dasar",
+                        "explanation": "Klaim butuh bukti.",
+                        "exercise_prompt": "Apa syarat klaim valid?",
+                        "expected_answer": "bukti terverifikasi",
+                    },
+                    {
+                        "concept_id": "v2",
+                        "tier": "menengah",
+                        "explanation": "Snapshot read-only mencegah mutasi.",
+                        "exercise_prompt": "Mode SQLite read-only?",
+                        "expected_answer": "mode=ro",
+                    },
+                    {
+                        "concept_id": "v3",
+                        "tier": "lanjut",
+                        "explanation": "Fail-closed menolak input cacat.",
+                        "exercise_prompt": "Perilaku saat skema rusak?",
+                        "expected_answer": "fail closed",
+                    },
+                ],
+            }
+            students = []
+
+        plan = teaching_program.build_lesson_plan(skill_spec)
+        gain_report = (
+            teaching_program.evaluate_student_gains(plan, students)
+            if students
+            else None
+        )
+        out_path = ws / "teaching_program.json"
+        _write_json(
+            out_path,
+            {
+                "at": _now_iso(),
+                "cycle": int(getattr(engine, "cycle_count", 0) or 0),
+                "plan": plan,
+                "gain_report": gain_report,
+            },
+        )
+        return {
+            "status": "ok",
+            "skill_id": plan["skill_id"],
+            "plan_hash": plan["plan_hash"],
+            "exercise_count": len(plan["exercises"]),
+            "mean_gain": gain_report["mean_gain"] if gain_report else None,
+            "report_path": str(out_path),
+        }
+    except Exception as exc:
+        return {"status": "skipped", "error": str(exc)}
+

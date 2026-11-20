@@ -144,6 +144,46 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_teaching_program_builds_plan_scores_gains_and_fails_closed(self) -> None:
+        (self.ws / "teaching_spec.json").write_text(
+            json.dumps(
+                {
+                    "skill_spec": {
+                        "skill_id": "s1",
+                        "concepts": [
+                            {
+                                "concept_id": "c1",
+                                "tier": "dasar",
+                                "explanation": "A",
+                                "exercise_prompt": "Q1",
+                                "expected_answer": "jawaban tepat",
+                            }
+                        ],
+                    },
+                    "students": [
+                        {
+                            "student_id": "stu-1",
+                            "pre_answers": {"ex:c1": "tidak tahu"},
+                            "post_answers": {"ex:c1": "jawaban tepat"},
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        res = leap_wiring.step_teaching_program(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["skill_id"], "s1")
+        self.assertEqual(res["mean_gain"], 1.0)
+        saved = json.loads((self.ws / "teaching_program.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["plan"]["schema"], "ace.teaching-lesson-plan.v1")
+        self.assertEqual(saved["gain_report"]["improving_count"], 1)
+
+        (self.ws / "teaching_spec.json").write_text("{corrupt", encoding="utf-8")
+        bad = leap_wiring.step_teaching_program(self.engine)
+        self.assertEqual(bad["status"], "skipped")
+        self.assertIn("error", bad)
+
 
 if __name__ == "__main__":
     unittest.main()
