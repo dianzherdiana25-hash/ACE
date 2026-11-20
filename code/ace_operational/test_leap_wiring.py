@@ -144,6 +144,44 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_practice_task_lint_gates_valid_and_invalid_tasks(self) -> None:
+        valid_task = {
+            "id": "t-dedup-ok",
+            "family": "dedup_csv",
+            "prompt": "Tulis `dedup_csv(rows)` menjaga urutan awal baris CSV.",
+            "reference_solution": "def dedup_csv(rows):\n    return list(dict.fromkeys(rows))\n",
+            "evaluator_code": (
+                "def evaluate(solution, test_cases=None):\n"
+                "    ns = {}\n"
+                "    exec(solution, ns, ns)\n"
+                "    fn = ns.get('dedup_csv')\n"
+                "    if not callable(fn):\n"
+                "        return {'passed': False}\n"
+                "    for args, expected in test_cases:\n"
+                "        if fn(*args) != expected:\n"
+                "            return {'passed': False}\n"
+                "    return {'passed': True, 'score': 1.0}\n"
+            ),
+            "test_cases": [([["a,1", "b,2", "a,1"]], ["a,1", "b,2"])],
+        }
+        bad_task = {"id": "t-bad-missing", "family": "dedup_csv"}
+        (self.ws / "practice_tasks.jsonl").write_text(
+            json.dumps(valid_task) + "\n" + json.dumps(bad_task) + "\n",
+            encoding="utf-8",
+        )
+        accepted, _ = leap_wiring.lint_and_gate_practice_tasks(self.ws, [valid_task, bad_task])
+        self.assertEqual([t["id"] for t in accepted], ["t-dedup-ok"])
+
+        out = leap_wiring.step_practice_task_lint(self.engine)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["valid"], 1)
+        self.assertEqual(out["invalid"], 1)
+        self.assertTrue((self.ws / "practice_lint.jsonl").is_file())
+
+    def test_practice_task_lint_empty_skips_cleanly(self) -> None:
+        out = leap_wiring.step_practice_task_lint(self.engine)
+        self.assertEqual(out["status"], "skipped")
+
 
 if __name__ == "__main__":
     unittest.main()

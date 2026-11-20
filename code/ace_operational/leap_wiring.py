@@ -685,3 +685,70 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+# ------------------------------------------------------------------
+# EVO 0042 — AG116: practice task lint & intake gate (%25)
+# ------------------------------------------------------------------
+
+def lint_and_gate_practice_tasks(ws: Path, tasks: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    from tools import practice_task_lint as ptl
+
+    if not tasks:
+        return [], {"status": "skipped", "reason": "no practice tasks", "scanned": 0}
+
+    normalized = [
+        {**t, "id": t.get("id") or t.get("task_id") or f"task-{idx}"}
+        for idx, t in enumerate(tasks)
+    ]
+    report = ptl.lint_practice_tasks(normalized)
+    rows = report.get("tasks") or report.get("results") or []
+    valid_ids = {r["task_id"] for r in rows if r.get("valid")}
+    accepted = [t for idx, t in enumerate(tasks) if str(normalized[idx]["id"]) in valid_ids]
+    _append_jsonl(ws / "practice_lint.jsonl", {
+        "at": _now_iso(),
+        "summary": report.get("summary", {}),
+        "tasks": rows,
+    })
+    return accepted, report
+
+
+def step_practice_task_lint(engine: Any) -> dict[str, Any]:
+    try:
+        ws = Path(engine.workspace)
+        tasks: list[dict[str, Any]] = []
+        cand_path = ws / "practice_tasks.jsonl"
+        if cand_path.is_file():
+            for raw in cand_path.read_text(encoding="utf-8", errors="ignore").splitlines():
+                raw = raw.strip()
+                if not raw:
+                    continue
+                try:
+                    row = json.loads(raw)
+                    if isinstance(row, dict):
+                        tasks.append(row)
+                except Exception:
+                    continue
+
+        for t in engine.store.list_tasks(limit=100):
+            if t.get("kind") != "learning_practice":
+                continue
+            ckpt = t.get("checkpoint") if isinstance(t.get("checkpoint"), dict) else {}
+            td = ckpt.get("task")
+            if isinstance(td, dict) and td:
+                tasks.append({"id": t.get("task_id"), **td})
+
+        if not tasks:
+            return {"status": "skipped", "reason": "no practice tasks", "scanned": 0}
+
+        accepted, report = lint_and_gate_practice_tasks(ws, tasks)
+        summary = report.get("summary", {})
+        return {
+            "status": "ok",
+            "scanned": summary.get("total_tasks", len(tasks)),
+            "valid": summary.get("valid_tasks", len(accepted)),
+            "invalid": summary.get("invalid_tasks", 0),
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
