@@ -144,6 +144,14 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_mission_proposers_creates_isolated_artifact(self):
+        res = leap_wiring.step_mission_proposers(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["provenance"], "ADVISOR_AGENT")
+        out = json.loads((self.ws / "mission_proposer.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.mission-proposer-step.v1")
+        self.assertTrue((self.ws / "mission_proposals").is_dir())
+
 
 if __name__ == "__main__":
     unittest.main()

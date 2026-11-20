@@ -685,3 +685,37 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_mission_proposers(engine: Any) -> dict[str, Any]:
+    """Hasilkan draf artefak misi terisolasi ke mission_proposals/ dan mission_proposer.json."""
+    try:
+        from ace_mission.proposers import ManualAdvisorProposer, TemplateProposer
+
+        out_dir = engine.workspace / "mission_proposals"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        cycle = int(getattr(engine, "cycle_count", 0))
+        custom = _read_json(engine.workspace / "active_mission.json", None)
+        mission = (
+            custom
+            if isinstance(custom, dict) and isinstance(custom.get("id"), str)
+            else {"id": f"cycle_{cycle}", "goal": "audit-mission-probe", "hypothesis": "keep-safe"}
+        )
+        res = ManualAdvisorProposer().propose(mission, out_dir)
+        compact = {
+            "schema": "ace.mission-proposer-step.v1",
+            "mission_id": res.get("mission_id"),
+            "provenance": res.get("provenance"),
+            "artifact_sha": res.get("artifact_sha"),
+            "proposer_class": "ManualAdvisorProposer",
+            "available_proposers": ["ManualAdvisorProposer", TemplateProposer.__name__],
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "mission_proposer.json", compact)
+        return {
+            "status": "ok",
+            "mission_id": compact["mission_id"],
+            "provenance": compact["provenance"],
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}
