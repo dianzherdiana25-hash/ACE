@@ -1,6 +1,7 @@
 """Pastikan rollover log mempertahankan pasangan kirim dan yatim yang terbuka."""
 from contextlib import redirect_stdout
 from io import StringIO
+import gzip
 import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -80,3 +81,39 @@ class StandingAuditTests(unittest.TestCase):
         )]
         (self.root / "events.jsonl").write_text("".join(json.dumps(row) + "\n" for row in rows))
         self.assertEqual(standing_audit(self.root)["open_orphan_task_ids"], ["first"])
+
+    def test_mixed_gzip_directory_matches_uncompressed_and_marks_corrupt_gzip(self):
+        first, second, third = rehearse_batch(4)["log"][::2]
+        plain = self.root / "plain"
+        mixed = self.root / "mixed"
+        plain.mkdir()
+        mixed.mkdir()
+        shards = {
+            "01.jsonl": [
+                {**first, "ts": "2026-11-20T23:59:00Z"},
+                {**second, "ts": "2026-11-20T23:59:30Z", "task_id": "unclosed"},
+            ],
+            "02.jsonl": [
+                {**first, "ts": "2026-11-21T01:00:00Z", "outcome": "sent"},
+                {**third, "ts": "2026-11-21T09:00:00Z"},
+            ],
+        }
+        for name, events in shards.items():
+            raw = "".join(json.dumps(event) + "\n" for event in events)
+            (plain / name).write_text(raw, encoding="utf-8")
+            if name == "02.jsonl":
+                (mixed / f"{name}.gz").write_bytes(gzip.compress(raw.encode("utf-8")))
+            else:
+                (mixed / name).write_text(raw, encoding="utf-8")
+
+        self.assertEqual(standing_audit(mixed), standing_audit(plain))
+
+        corrupt = mixed / "03-corrupt.jsonl.gz"
+        corrupt.write_bytes(b"corrupt-gz-bytes")
+        report = standing_audit(mixed)
+        self.assertEqual(report["undated_violations"], 1)
+        self.assertEqual(len(report["corrupt_shards"]), 1)
+        self.assertEqual(report["corrupt_shards"][0]["reason"], "corrupt_gzip_shard")
+        self.assertEqual(report["corrupt_shards"][0]["source"], str(corrupt))
+        with redirect_stdout(StringIO()):
+            self.assertEqual(main([str(mixed)]), 1)

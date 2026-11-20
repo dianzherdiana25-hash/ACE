@@ -11,8 +11,10 @@ mendeteksi anomali integritas rantai audit.
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
 import sys
+import zlib
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
@@ -40,16 +42,31 @@ def classify_outcome(outcome: str) -> Tuple[str, Optional[str]]:
 
 
 def parse_audit_jsonl(path: Path) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
-    """Parse satu berkas JSONL audit menjadi (rows, parse_anomalies)."""
+    """Parse satu berkas JSONL audit (polos atau .gz) menjadi (rows, parse_anomalies)."""
     if not path.exists() or not path.is_file():
         raise AuditViewError(f"Berkas audit tidak ditemukan: {path}")
 
     rows: List[Dict[str, Any]] = []
     anomalies: List[Dict[str, Any]] = []
-    try:
-        raw_lines = path.read_text(encoding="utf-8").splitlines()
-    except (OSError, UnicodeDecodeError) as exc:
-        raise AuditViewError(f"Gagal membaca berkas audit '{path}': {exc}") from exc
+    if path.name.endswith(".gz"):
+        try:
+            raw_bytes = gzip.decompress(path.read_bytes())
+            raw_lines = raw_bytes.decode("utf-8").splitlines()
+        except (OSError, EOFError, zlib.error, UnicodeDecodeError) as exc:
+            anomalies.append(
+                {
+                    "kind": "corrupt_gzip_shard",
+                    "source": str(path),
+                    "line": 0,
+                    "detail": f"Shard .gz rusak ({type(exc).__name__}): {exc}",
+                }
+            )
+            return rows, anomalies
+    else:
+        try:
+            raw_lines = path.read_text(encoding="utf-8").splitlines()
+        except (OSError, UnicodeDecodeError) as exc:
+            raise AuditViewError(f"Gagal membaca berkas audit '{path}': {exc}") from exc
 
     for idx, line in enumerate(raw_lines, start=1):
         stripped = line.strip()
