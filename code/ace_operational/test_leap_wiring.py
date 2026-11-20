@@ -144,6 +144,15 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_step_arc_rubric_writes_scores(self):
+        res = leap_wiring.step_arc_rubric(self.engine)
+        self.assertEqual(res["status"], "ok")
+        self.assertGreater(res["overall"], 0.0)
+        self.assertEqual(res["chapter_count"], 1)
+        out = json.loads((self.ws / "arc_rubric.json").read_text(encoding="utf-8"))
+        self.assertEqual(out["schema"], "ace.arc-rubric.v1")
+        self.assertIn("overall", out)
+
 
 if __name__ == "__main__":
     unittest.main()

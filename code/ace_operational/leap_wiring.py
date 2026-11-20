@@ -685,3 +685,43 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_arc_rubric(engine: Any) -> dict[str, Any]:
+    """Audit skor rubrik alur cerita deterministik ke arc_rubric.json."""
+    try:
+        from tools.arc_rubric import score_chapter_pack
+
+        src = engine.workspace / "arc_chapters.json"
+        pack = _read_json(src, None) if src.exists() else None
+        if not isinstance(pack, dict) or not pack.get("chapters"):
+            pack = {
+                "pack_id": f"cycle_{getattr(engine, 'cycle_count', 0)}",
+                "chapters": [
+                    {
+                        "chapter_id": "ch_01",
+                        "text": (
+                            '"Mengapa pintu ini masih terbuka?" tanya Raka pelan.\n\n'
+                            "Angin malam membawa rahasia lama ke tengah halaman, namun "
+                            "Sinta memilih melangkah maju sebelum fajar tiba!"
+                        ),
+                    }
+                ],
+            }
+        result = score_chapter_pack(pack)
+        compact = {
+            "schema": result.get("schema", "ace.arc-rubric.v1"),
+            "pack_id": result.get("pack_id"),
+            "chapter_count": result.get("chapter_count", 0),
+            "overall": result.get("overall", 0.0),
+            "dimensions": result.get("dimensions", {}),
+            "ts": _now_iso(),
+        }
+        _write_json(engine.workspace / "arc_rubric.json", compact)
+        return {
+            "status": "ok",
+            "overall": compact["overall"],
+            "chapter_count": compact["chapter_count"],
+        }
+    except Exception as exc:
+        return {"status": "error", "reason": str(exc)}
