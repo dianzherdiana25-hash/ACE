@@ -144,6 +144,29 @@ class LeapWiringTests(unittest.TestCase):
         hyps = json.loads((self.ws / "hypotheses.json").read_text())
         self.assertIn("recall-pool-cleanup", hyps)
 
+    def test_ram_window_checks_ceiling_and_blocks_oversized_preload(self):
+        ok_res = leap_wiring.step_ram_window(self.engine)
+        self.assertEqual(ok_res["status"], "ok")
+        self.assertTrue(ok_res["all_fit"])
+        self.assertTrue(ok_res["invariant_never_exceeds_margin"])
+        self.assertTrue((self.ws / "ram_window_log.jsonl").is_file())
+
+        (self.ws / "ram_workloads.json").write_text(
+            json.dumps({
+                "total_ram_gib": "12",
+                "margin_gib": "2",
+                "workloads": [{"name": "huge_organ", "gib": "11.5", "duration": "5"}],
+            }),
+            encoding="utf-8",
+        )
+        blocked_out = leap_wiring.step_organs(self.engine)
+        self.assertEqual(blocked_out["status"], "blocked")
+        self.assertEqual(blocked_out["reason"], "ram_window_exceeded")
+
+    def test_ram_window_fails_closed_on_corrupt_config(self):
+        (self.ws / "ram_workloads.json").write_text("{bad", encoding="utf-8")
+        self.assertEqual(leap_wiring.step_ram_window(self.engine)["status"], "error")
+
 
 if __name__ == "__main__":
     unittest.main()

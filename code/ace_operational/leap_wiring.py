@@ -658,6 +658,13 @@ def step_organs(engine: Any) -> dict[str, Any]:
     from tools import organ_smoke as osm
 
     ws: Path = engine.workspace
+    ram_guard = step_ram_window(engine)
+    if ram_guard.get("status") == "ok" and not ram_guard.get("all_fit", True):
+        return {
+            "status": "blocked",
+            "reason": "ram_window_exceeded",
+            "ram_guard": ram_guard,
+        }
     pack = osm.default_smoke_pack()[:3]
 
     def transport(organ: str, task: dict[str, Any]) -> dict[str, Any]:
@@ -685,3 +692,48 @@ def step_organs(engine: Any) -> dict[str, Any]:
             "scores": scores})
     return {"status": "ok", "smoked_organs": ["front", "coder"],
             "best": best}
+
+
+def step_ram_window(engine: Any) -> dict[str, Any]:
+    """AG157: run Decimal RAM-window preload guard and append to ram_window_log.jsonl."""
+    raw_ws = getattr(engine, "workspace", None)
+    if raw_ws is None:
+        return {"status": "skipped", "reason": "no_workspace"}
+    ws = Path(raw_ws)
+    try:
+        from tools import ram_window as rw
+    except Exception as exc:
+        return {"status": "error", "error": f"import:{type(exc).__name__}:{exc}"}
+    try:
+        cfg_path = ws / "ram_workloads.json"
+        if cfg_path.is_file():
+            cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
+            total_ram = cfg.get("total_ram_gib", "16")
+            margin = cfg.get("margin_gib", "2")
+            raw_wl = cfg.get("workloads", cfg)
+        else:
+            total_ram = "16"
+            margin = "2"
+            raw_wl = [
+                {"name": "front", "gib": "5.5", "duration": "2"},
+                {"name": "coder", "gib": "6.0", "duration": "3"},
+            ]
+        workloads = rw.parse_workloads(raw_wl)
+        plan = rw.plan_ram_windows(
+            workloads, total_ram_gib=total_ram, margin_gib=margin,
+        )
+        entry = {
+            "at": _now_iso(),
+            "schema": plan["schema"],
+            "total_ram_gib": plan["total_ram_gib"],
+            "safe_ceiling_gib": plan["safe_ceiling_gib"],
+            "peak_ram_gib": plan["peak_ram_gib"],
+            "all_fit": plan["all_fit"],
+            "invariant_never_exceeds_margin": plan["invariant_never_exceeds_margin"],
+            "oversized_count": plan["oversized_count"],
+        }
+        _append_jsonl(ws / "ram_window_log.jsonl", entry)
+        return {"status": "ok", **entry}
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
