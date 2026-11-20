@@ -76,6 +76,35 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(self.path.read_bytes(), before)
         self.assertEqual(store.status, "OPEN")
 
+    def test_torn_last_line_after_completed_pair_refuses_as_pending(self):
+        started = {"task_id": "done-1", "action": "close_gap", "evidence_refs": ["receipt-1"],
+                   "status": "started", "at": "2026-11-19T10:00:00+00:00", "undo": None}
+        completed = {"task_id": "done-1", "action": "close_gap", "evidence_refs": ["receipt-1"],
+                     "status": "completed", "at": "2026-11-19T10:00:01+00:00", "undo": {"gap_id": "gap-1"}}
+        torn = b'{"task_id":"torn-2","action":"close_gap","status":"star'
+        raw = (json.dumps(started) + "\n" + json.dumps(completed) + "\n").encode() + torn
+        self.path.write_bytes(raw)
+        action = Mock()
+        result = execute_proposal(proposal("next-task"), actions={"close_gap": action},
+                                  receipt_path=self.path, daily_cap=3,
+                                  classifier=lambda task: {"class": "A"})
+        self.assertEqual(result, {"status": "refused", "reason": "pending_receipt"})
+        self.assertEqual(self.path.read_bytes(), raw)
+        action.execute.assert_not_called()
+
+    def test_torn_terminal_line_with_newline_still_refuses_as_pending(self):
+        started = {"task_id": "in-flight", "action": "close_gap", "evidence_refs": ["receipt-1"],
+                   "status": "started", "at": "2026-11-19T10:00:00+00:00", "undo": None}
+        raw = (json.dumps(started) + "\n" + '{"task_id":"in-flight","status":"comp\n').encode()
+        self.path.write_bytes(raw)
+        action = Mock()
+        result = execute_proposal(proposal("next-task"), actions={"close_gap": action},
+                                  receipt_path=self.path, daily_cap=3,
+                                  classifier=lambda task: {"class": "A"})
+        self.assertEqual(result, {"status": "refused", "reason": "pending_receipt"})
+        self.assertEqual(self.path.read_bytes(), raw)
+        action.execute.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()
