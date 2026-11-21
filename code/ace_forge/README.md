@@ -24,6 +24,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 18 | `token_budgeter.py` | Token per batch dan pengulangan, cadangan bertarif eksak, serta ambang |
 | 19 | `experiment_tracker.py` | Replay receipt, pause/resume, checkpoint, dan overspend internal |
 | 20 | `safety_data_filter.py` | Aturan berbasis bidang, penanda sensitif, dan saringan tanpa kutipan |
+| 21 | `license_guard.py` | Cabang ekspresi lisensi, kebijakan izin, kewajiban notice, dan provenance |
+| 22 | `model_card_writer.py` | Kartu Markdown/JSON dari receipt dan bench tertambat, termasuk gap |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -137,3 +139,14 @@ aturan, dan bidang. Mode `--filtered` menghasilkan calon yang lolos
 pemeriksaan mekanis untuk diproses oleh `dataset_forge`. Byte payload yang dipertahankan tetap cocok
 dengan hash verifier asal. Cakupan aturan dan bahasa bergantung
 pada kebijakan.
+
+`license_guard.py` membaca dataset berkustodi, katalog izin
+terikat, serta indeks sumber dengan pointer notice/atribusi. AND
+menggabungkan kewajiban, OR mengevaluasi alternatif, dan WITH memerlukan
+aturan pengecualian eksplisit. Report mencerminkan kebijakan yang
+diberikan pemanggil.
+
+`model_card_writer.py` membuat Markdown atau JSON dari profil artefak,
+receipt, dan input bench terikat `--expect-input-sha256`. Angka bench
+diputar ulang lewat pemeriksa pasangan. Bagian yang belum punya
+bukti tercatat sebagai TIDAK TAHU.
