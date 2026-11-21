@@ -1,0 +1,385 @@
+{
+  "schema": "ace.web.operator-bench-plan.v1",
+  "source_ref": "fixture/closed-loopback",
+  "target_bp": 8500,
+  "pages": [
+    {
+      "path": "/favicon.ico",
+      "media_type": "text/plain",
+      "body": "favicon",
+      "source_ref": "fixture/closed-loopback/pages/favicon.ico"
+    },
+    {
+      "path": "/welcome",
+      "media_type": "text/html",
+      "body": "<title>Operator fixture</title><a data-testid=\"catalog\" href=\"/products\">Produk</a>",
+      "source_ref": "fixture/closed-loopback/pages/welcome"
+    },
+    {
+      "path": "/products",
+      "media_type": "text/html",
+      "body": "<title>Produk</title><h1 data-testid=\"item\">Katalog Produk</h1>",
+      "source_ref": "fixture/closed-loopback/pages/products"
+    },
+    {
+      "path": "/values",
+      "media_type": "text/html",
+      "body": "<label>Input <input data-testid=\"field\"></label>",
+      "source_ref": "fixture/closed-loopback/pages/values"
+    },
+    {
+      "path": "/dashboard",
+      "media_type": "text/html",
+      "body": "<script>function show(){document.querySelector('[data-testid=total]').textContent='Total 7'}</script>\n<button data-testid=\"tab\" onclick=\"show()\">Pilih tab</button><p data-testid=\"total\">Total 0</p>",
+      "source_ref": "fixture/closed-loopback/pages/dashboard"
+    },
+    {
+      "path": "/choices",
+      "media_type": "text/html",
+      "body": "<select data-testid=\"colors\"><option value=\"red\">Merah</option><option value=\"blue\">Biru</option></select>",
+      "source_ref": "fixture/closed-loopback/pages/choices"
+    },
+    {
+      "path": "/options",
+      "media_type": "text/html",
+      "body": "<label><input type=\"checkbox\" data-testid=\"option\" onchange=\"document.querySelector('[data-testid=status]').textContent=this.checked?'Aktif':'Mati'\">Pilihan</label><p data-testid=\"status\">Mati</p>",
+      "source_ref": "fixture/closed-loopback/pages/options"
+    },
+    {
+      "path": "/cookies",
+      "media_type": "text/html",
+      "body": "<dialog open data-consent=\"prefs\" data-kind=\"cookie_preferences\">\n<button type=\"button\" data-testid=\"deny\" data-consent-choice=\"deny_optional\"\nonclick=\"this.closest('dialog').close();document.querySelector('[data-testid=status]').textContent='Opsional ditolak'\">Tolak</button>\n</dialog><p data-testid=\"status\">Menunggu</p>",
+      "source_ref": "fixture/closed-loopback/pages/cookies"
+    },
+    {
+      "path": "/known",
+      "media_type": "text/html",
+      "body": "<title>Lokasi terkini</title><article data-testid=\"record\">Baris tujuh</article>",
+      "source_ref": "fixture/closed-loopback/pages/known"
+    }
+  ],
+  "cases": [
+    {
+      "id": "navigation",
+      "source_ref": "fixture/closed-loopback/cases/navigation",
+      "timeout_ms": 1400,
+      "request_limit": 12,
+      "allow_paths": [
+        "/welcome",
+        "/favicon.ico",
+        "/products"
+      ],
+      "stages": [
+        {
+          "id": "open_page",
+          "requires": [],
+          "source_ref": "fixture/closed-loopback/cases/navigation/open",
+          "steps": [
+            {
+              "id": "open",
+              "op": "navigate",
+              "path": "/welcome"
+            }
+          ]
+        },
+        {
+          "id": "witness",
+          "requires": [
+            "open_page"
+          ],
+          "source_ref": "fixture/closed-loopback/cases/navigation/witness",
+          "steps": [
+            {
+              "id": "go",
+              "op": "click",
+              "test_id": "catalog"
+            },
+            {
+              "id": "target",
+              "op": "expect_url",
+              "path": "/products"
+            },
+            {
+              "id": "item",
+              "op": "expect_text",
+              "test_id": "item",
+              "expected": "Katalog Produk"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "source_ref": "fixture/closed-loopback/cases/form",
+      "timeout_ms": 1400,
+      "request_limit": 12,
+      "allow_paths": [
+        "/values",
+        "/favicon.ico"
+      ],
+      "stages": [
+        {
+          "id": "open_page",
+          "requires": [],
+          "source_ref": "fixture/closed-loopback/cases/form/open",
+          "steps": [
+            {
+              "id": "open",
+              "op": "navigate",
+              "path": "/values"
+            }
+          ]
+        },
+        {
+          "id": "witness",
+          "requires": [
+            "open_page"
+          ],
+          "source_ref": "fixture/closed-loopback/cases/form/witness",
+          "steps": [
+            {
+              "id": "fill",
+              "op": "fill",
+              "test_id": "field",
+              "value": "Contoh"
+            },
+            {
+              "id": "verify",
+              "op": "expect_value",
+              "test_id": "field",
+              "expected": "Contoh"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "source_ref": "fixture/closed-loopback/cases/dashboard",
+      "timeout_ms": 1400,
+      "request_limit": 12,
+      "allow_paths": [
+        "/dashboard",
+        "/favicon.ico"
+      ],
+      "stages": [
+        {
+          "id": "open_page",
+          "requires": [],
+          "source_ref": "fixture/closed-loopback/cases/dashboard/open",
+          "steps": [
+            {
+              "id": "open",
+              "op": "navigate",
+              "path": "/dashboard"
+            }
+          ]
+        },
+        {
+          "id": "witness",
+          "requires": [
+            "open_page"
+          ],
+          "source_ref": "fixture/closed-loopback/cases/dashboard/witness",
+          "steps": [
+            {
+              "id": "tab",
+              "op": "click",
+              "test_id": "tab"
+            },
+            {
+              "id": "total",
+              "op": "expect_text",
+              "test_id": "total",
+              "expected": "Total 7"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "select",
+      "source_ref": "fixture/closed-loopback/cases/select",
+      "timeout_ms": 1400,
+      "request_limit": 12,
+      "allow_paths": [
+        "/choices",
+        "/favicon.ico"
+      ],
+      "stages": [
+        {
+          "id": "open_page",
+          "requires": [],
+          "source_ref": "fixture/closed-loopback/cases/select/open",
+          "steps": [
+            {
+              "id": "open",
+              "op": "navigate",
+              "path": "/choices"
+            }
+          ]
+        },
+        {
+          "id": "witness",
+          "requires": [
+            "open_page"
+          ],
+          "source_ref": "fixture/closed-loopback/cases/select/witness",
+          "steps": [
+            {
+              "id": "change",
+              "op": "select",
+              "test_id": "colors",
+              "value": "blue"
+            },
+            {
+              "id": "verify",
+              "op": "expect_value",
+              "test_id": "colors",
+              "expected": "blue"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "checkbox",
+      "source_ref": "fixture/closed-loopback/cases/checkbox",
+      "timeout_ms": 1400,
+      "request_limit": 12,
+      "allow_paths": [
+        "/options",
+        "/favicon.ico"
+      ],
+      "stages": [
+        {
+          "id": "open_page",
+          "requires": [],
+          "source_ref": "fixture/closed-loopback/cases/checkbox/open",
+          "steps": [
+            {
+              "id": "open",
+              "op": "navigate",
+              "path": "/options"
+            }
+          ]
+        },
+        {
+          "id": "witness",
+          "requires": [
+            "open_page"
+          ],
+          "source_ref": "fixture/closed-loopback/cases/checkbox/witness",
+          "steps": [
+            {
+              "id": "change",
+              "op": "check",
+              "test_id": "option",
+              "state": true
+            },
+            {
+              "id": "verify",
+              "op": "expect_text",
+              "test_id": "status",
+              "expected": "Aktif"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "consent",
+      "source_ref": "fixture/closed-loopback/cases/consent",
+      "timeout_ms": 1400,
+      "request_limit": 12,
+      "allow_paths": [
+        "/cookies",
+        "/favicon.ico"
+      ],
+      "stages": [
+        {
+          "id": "open_page",
+          "requires": [],
+          "source_ref": "fixture/closed-loopback/cases/consent/open",
+          "steps": [
+            {
+              "id": "open",
+              "op": "navigate",
+              "path": "/cookies"
+            }
+          ]
+        },
+        {
+          "id": "witness",
+          "requires": [
+            "open_page"
+          ],
+          "source_ref": "fixture/closed-loopback/cases/consent/witness",
+          "steps": [
+            {
+              "id": "choose",
+              "op": "click",
+              "test_id": "deny"
+            },
+            {
+              "id": "verify",
+              "op": "expect_text",
+              "test_id": "status",
+              "expected": "Opsional ditolak"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "anchored_read",
+      "source_ref": "fixture/closed-loopback/cases/anchored_read",
+      "timeout_ms": 1400,
+      "request_limit": 12,
+      "allow_paths": [
+        "/known",
+        "/favicon.ico"
+      ],
+      "stages": [
+        {
+          "id": "open_page",
+          "requires": [],
+          "source_ref": "fixture/closed-loopback/cases/anchored_read/open",
+          "steps": [
+            {
+              "id": "open",
+              "op": "navigate",
+              "path": "/known"
+            }
+          ]
+        },
+        {
+          "id": "witness",
+          "requires": [
+            "open_page"
+          ],
+          "source_ref": "fixture/closed-loopback/cases/anchored_read/witness",
+          "steps": [
+            {
+              "id": "verify",
+              "op": "expect_title",
+              "expected": "Lokasi terkini"
+            },
+            {
+              "id": "read",
+              "op": "expect_text",
+              "test_id": "record",
+              "expected": "Baris tujuh"
+            },
+            {
+              "id": "read_hash",
+              "op": "read_text",
+              "test_id": "record"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
