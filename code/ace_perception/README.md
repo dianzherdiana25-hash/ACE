@@ -28,6 +28,9 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 22 | `video_frame_sampler.py` | Keyframe video lokal dengan cap waktu probe dan render yang saling dicek |
 | 23 | `media_redactor.py` | Redaksi opak raster berdasarkan anotasi wajib tertambat dan verifikasi |
 | 24 | `media_forensics.py` | Statistik seam, blok berulang, dan delta piksel terhadap referensi |
+| 25 | `ocr_confidence_map.py` | Peta tile dari jarak vote, margin, dan cakupan boks glyph |
+| 26 | `perception_cache.py` | Cache imutabel media/config, checksum entry, dan pemeriksaan umur |
+| 27 | `batch_perception_runner.py` | Antrean OCR/adegan/hening dengan anggaran, hash input, dan kegagalan per tugas |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -154,3 +157,15 @@ wajah dan plat tetap memerlukan penghasil anotasi tersendiri.
 `media_forensics.py` menghitung gejala statistik raster dan perbedaan
 terhadap referensi ber-hash. Angka tersebut hanya menyatakan apa yang
 terlihat di piksel, dengan provenance tetap unknown.
+
+`ocr_confidence_map.py` memetakan jarak geometris vote OCR ke tile.
+Area glyph yang tak sepakat tetap tanpa skor. Opsi preview menghasilkan
+PGM dengan warna abu-abu yang dibedakan dari tile kosong.
+
+`perception_cache.py` memakai hash isi media, revisi algoritme, serta
+konfigurasi kanonis. Cache memverifikasi hasil dan entry saat membaca.
+Cap waktu dari pemanggil memungkinkan pemeriksaan umur yang deterministik.
+
+`batch_perception_runner.py` menjalankan daftar operasi tetap dengan
+anggaran jumlah usaha dan byte. Pembacaan input relatif root menolak
+symlink. Sumber harus cocok ukuran dan checksum sebelum decode.
