@@ -31,6 +31,10 @@ tersedia lokal.
 | 22 | `search_reader.py` | Ekstrak serta ringkas hasil pencarian tersimpan dengan pointer |
 | 23 | `fact_verifier_web.py` | Cocokkan nilai dan grup sumber independen dari registry serta snapshot |
 | 24 | `page_proof_keeper.py` | Bekukan HTML dan locator, lalu periksa hash manifest serta isi |
+| 25 | `phishing_detector.py` | Indikator defensif dari snapshot dengan posisi dan redaksi URL |
+| 26 | `politeness_guard.py` | Gerbang robots, interval, kuota per jam dan Retry-After sebelum transport |
+| 27 | `dashboard_operator.py` | Inspeksi tab atau filter yang terdaftar serta verifikasi tampilan |
+| 28 | `web_sheet_filler.py` | Pemetaan matriks ke alamat A1 dan verifikasi isi grid tanpa submit |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q
