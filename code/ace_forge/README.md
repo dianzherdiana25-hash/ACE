@@ -20,6 +20,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 14 | `train_runner.py` | Orkestrasi optimizer fixture dan kelanjutan pada batas checkpoint pekerjaan |
 | 15 | `hyperparam_searcher.py` | Successive halving dari receipt, reservasi kredit, dan cutoff per rung |
 | 16 | `eval_harness.py` | Protokol bersama, gerbang target/regresi, dan frontier kualitas/sumber daya |
+| 17 | `regression_diff.py` | Transisi per kontrak, regresi bernama, serta kehilangan cakupan |
+| 18 | `token_budgeter.py` | Token per batch dan pengulangan, cadangan bertarif eksak, serta ambang |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -110,3 +112,13 @@ Artefak dinilai dari paket bench dan guard yang masuk, dengan rubrik
 dan roster kasus tetap serta domain target dan umum yang terpisah.
 Frontier mempertahankan kandidat yang tidak dikalahkan di gabungan
 kualitas, durasi, dan peak byte. Pemeriksa tidak mengaktifkan artefak.
+
+`regression_diff.py` memakai dua snapshot terikat `--expect-before`
+dan `--expect-after`. Pemeriksaan dipasangkan hanya ketika hash kontraknya
+sama dan kedua rujukan observasi terpisah. Kehilangan cakupan dilacak
+termasuk hasil yang belum dijalankan.
+
+`token_budgeter.py` membaca ukuran contoh yang sudah dicatat beserta
+resep batch dan tarif unit internal lewat `--expect-input-sha256`. Report
+memisahkan token nyata, padding, dan cadangan yang dibulatkan per tahap.
+Anggaran dihitung dari data masukan tanpa akses rekening atau layanan.
