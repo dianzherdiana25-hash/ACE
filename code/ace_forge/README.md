@@ -52,6 +52,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 46 | `quant_matrix.py` | Roster dan baseline bersama, loss per tugas, serta frontier ukuran dan waktu |
 | 47 | `trap_bench.py` | Trap berpasangan dengan kontrol, abstain, dan kesalahan confidence tinggi |
 | 48 | `forge_report.py` | Laporan per eksperimen dari ledger, prefix checkpoint, dan bench held-out |
+| 49 | `forge_priority_queue.py` | Admit berdasar prioritas bertambah karena usia, tenggat, dependensi, dan kapasitas |
+| 50 | `failure_archive.py` | Arsip terminal terdeduplikasi, hash per catatan, dan konflik klasifikasi |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -292,3 +294,12 @@ pada pasangan tidak lengkap.
 `forge_report.py` memvalidasi replay ledger dan prefix checkpoint.
 Bench wajib menunjuk artefak yang muncul pada checkpoint run.
 Laporan Markdown dan JSON membawa rujukan dan gap yang masih terbuka.
+
+`forge_priority_queue.py` merekomendasikan satu batch dengan anggaran
+RAM, slot, dan unit yang tersisa. Aging bertambah dalam jendela penuh.
+Tenggat, waktu daftar, dan ID memecah skor seri. Receipt selesai dalam
+snapshot membuka pekerjaan dependen pada keputusan berikutnya.
+
+`failure_archive.py` mengambil event terminal gagal dari ledger
+yang sudah disegel. Snapshot berulang menambah pointer asal pada
+kegagalan yang sama. Konflik kategori tercatat beserta kedua anotasi.
