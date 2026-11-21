@@ -17,6 +17,10 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 10 | `debt_detector.py` | Kompleksitas fungsi dan siklus graf impor internal |
 | 11 | `ci_builder.py` | Workflow PR dengan checkout terikat commit dan smoke lokal |
 | 12 | `release_packager.py` | ZIP byte-identik dan verifier tiap anggota |
+| 13 | `docs_writer.py` | Panduan per antarmuka dengan rujukan spesifikasi dan receipt |
+| 14 | `deploy_guide_writer.py` | Topologi deploy, pemeriksaan tahap, dan urutan rollback yang bersumber |
+| 15 | `cli_builder.py` | CLI produk mandiri dengan proyeksi, agregasi dan validasi JSON |
+| 16 | `service_builder.py` | Worker background SQLite, FIFO, idempotensi, dan penghentian terbatas |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q
