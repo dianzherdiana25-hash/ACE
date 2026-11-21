@@ -133,3 +133,14 @@ class ScreenUnderstandingTests(unittest.TestCase):
         page = board()
         label(page, "HOT", 5, 5)
         self.assertEqual(model.inspect(raster(page), font())["elements"], [])
+
+    def test_shared_area_bridge_keeps_exact_absolute_box_after_cropping(self):
+        from ace_perception import _raster, ocr_engine
+
+        image = _raster.decode(fixture())
+        read = ocr_engine.read_area(image, (6, 8, 29, 19), font())
+        self.assertEqual(read["text"], "HA")
+        self.assertEqual(read["glyphs"][1]["box"], [16, 10, 21, 17])
+        self.assertEqual(read["glyphs"][1]["status"], "agreed")
+        with self.assertRaisesRegex(ValueError, "di luar"):
+            ocr_engine.read_area(image, (6, 8, 65, 19), font())

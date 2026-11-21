@@ -240,6 +240,22 @@ def recognize(image_data, font_data, *, light_ink=False, limit_bp=2000, word_gap
             "status": "empty" if not count else "partial" if unresolved else "read", "lines": lines}
 
 
+def read_area(image, interior, font, *, light_ink=False, word_gap=4):
+    """Baca interior dan petakan kotak glyph ke koordinat gambar asli."""
+    x0, y0, x1, y1 = interior
+    width, height = x1-x0, y1-y0
+    crop = f"P5\n{width} {height}\n{image.maximum}\n".encode() + bytes(image.rectangle(interior))
+    product = recognize(crop, font, light_ink=light_ink, word_gap=word_gap, limit_bp=0)
+    glyphs = []
+    for row in product["lines"]:
+        for glyph in row["glyphs"]:
+            u0, v0, u1, v1 = glyph["box"]
+            glyphs.append({"box": [x0+u0, y0+v0, x0+u1, y0+v1], "character": glyph["character"],
+                           "status": glyph["status"]})
+    return {"text": product["text"] if product["status"] == "read" else None,
+            "status": product["status"], "glyphs": glyphs}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("image", type=Path)

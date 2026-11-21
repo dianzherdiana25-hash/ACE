@@ -92,21 +92,6 @@ def _area(box):
     return (box[2]-box[0])*(box[3]-box[1])
 
 
-def _label(image, interior, font, light_ink, gap):
-    x0, y0, x1, y1 = interior
-    width, height = x1-x0, y1-y0
-    crop = f"P5\n{width} {height}\n{image.maximum}\n".encode() + bytes(image.rectangle(interior))
-    product = ocr_engine.recognize(crop, font, light_ink=light_ink, word_gap=gap, limit_bp=0)
-    glyphs = []
-    for row in product["lines"]:
-        for glyph in row["glyphs"]:
-            u0, v0, u1, v1 = glyph["box"]
-            glyphs.append({"box": [x0+u0, y0+v0, x0+u1, y0+v1], "character": glyph["character"],
-                           "status": glyph["status"]})
-    return {"text": product["text"] if product["status"] == "read" else None,
-            "status": product["status"], "glyphs": glyphs}
-
-
 def inspect(image_data, font_data, *, light_ink=False, min_span=9, min_border_bp=9500, word_gap=4):
     if (type(light_ink) is not bool or type(min_span) is not int or not 3 <= min_span <= 1024
             or type(min_border_bp) is not int or not 1 <= min_border_bp <= 10_000
@@ -136,7 +121,7 @@ def inspect(image_data, font_data, *, light_ink=False, min_span=9, min_border_bp
             budget += _area(interior)
             if budget > MAX_INTERIOR_PIXELS:
                 raise ValueError("Jumlah interior frame melampaui batas OCR.")
-            result = _label(image, interior, font_data, light_ink, word_gap)
+            result = ocr_engine.read_area(image, interior, font_data, light_ink=light_ink, word_gap=word_gap)
         kind = "container" if inner else "labeled_control_candidate" if result["status"] == "read" else "frame"
         output.append({"id": names[index], "parent": names[parent] if parent is not None else None, "box": list(box),
                        "kind": kind, "border_pixels": ink, "perimeter_pixels": perimeter,

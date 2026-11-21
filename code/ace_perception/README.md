@@ -14,6 +14,8 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 8 | `confidence_calibrator.py` | Kalibrasi per pita dan modalitas dengan ECE/Brier pada keluarga held-out |
 | 9 | `image_classifier.py` | Voting gambar dari receipt organ, kuorum, coverage, dan margin |
 | 10 | `handwriting_reader.py` | Jarak bentuk cetakan tangan per kotak dan dukungan lintas penulis |
+| 11 | `table_extractor.py` | Grid bergaris, pemeriksaan perpotongan, OCR per sel, dan koordinat sumber |
+| 12 | `form_reader.py` | OCR label/nilai terpisah serta verifikasi jenis dan outline checkbox |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -79,3 +81,13 @@ dan absen muncul terpisah. Seri menahan putusan.
 contoh berkode penulis. Jarak mencakup silhouette, profil elastis,
 dan aspek. Kata dibentuk sesuai urutan kotak. Pemanggil dapat
 mengeluarkan satu penulis dari sumber contoh sebelum ranking.
+
+`table_extractor.py` menerima zona tabel dan density minimum untuk
+pemisah serta jumlah baris dan kolom opsional. Jumlah yang meleset
+atau pemisah yang tidak bertemu menahan seluruh grid. Sel kosong
+tetap memiliki posisi. Sel dengan glyph tak yakin berstatus partial.
+
+`form_reader.py` mengecek label yang terbaca sebelum menerbitkan
+nilai. Kotak label dan nilai harus terpisah. Nilai digits
+mempertahankan nol awal. Checkbox membutuhkan outline, lalu
+mengklasifikasikan kepadatan tanda dalam interior.
