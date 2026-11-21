@@ -59,6 +59,10 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 52 | `feature_cloner.py` | State machine dari deskripsi perilaku dengan sumber per transisi |
 | 53 | `internal_tool_builder.py` | Panel lokal satu halaman untuk menyiapkan dan mengekspor usulan transisi |
 | 54 | `webhook_builder.py` | Amplop HMAC dua arah dengan TTL, replay ledger dan payload bertipe |
+| 55 | `mail_queue_builder.py` | Antrean rehearsal dengan MIME nyata, fixture .invalid, dan spool SQLite |
+| 56 | `a11y_checker.py` | Audit dasar HTML untuk landmark, label, fokus, dan heading |
+| 57 | `bundle_profiler.py` | Graf aset dan estimasi transfer dalam anggaran byte |
+| 58 | `changelog_writer.py` | Catatan rilis dari rentang commit dan penanda perubahan breaking |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q
