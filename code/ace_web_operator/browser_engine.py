@@ -22,6 +22,7 @@ SUPPORTED = {
     "select": ("test_id", "value"),
     "check": ("test_id", "state"),
     "expect_text": ("test_id", "expected"),
+    "expect_value": ("test_id", "expected"),
     "read_text": ("test_id",),
     "screenshot": ("test_id",),
 }

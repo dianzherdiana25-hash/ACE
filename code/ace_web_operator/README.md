@@ -23,6 +23,10 @@ tersedia lokal.
 | 14 | `evidence_shooter.py` | Capture PNG Chromium setelah assertion, dengan hash dan dimensi |
 | 15 | `cross_site_comparator.py` | Bandingkan SKU tersesuaikan dan laporkan stok, umur serta biaya yang tidak lengkap |
 | 16 | `cart_preparer.py` | Simulasi kontrol keranjang loopback, anggaran dan pagar checkout |
+| 17 | `booking_agent.py` | Seleksi slot reversible dan undo fixture berbasis hash |
+| 18 | `web_messenger.py` | Draf di thread loopback, izin terikat isi, dan verifier nilai tanpa send |
+| 19 | `web_task_queue.py` | Transaksi antrean banyak situs dengan lease dan penahanan setelah expiry |
+| 20 | `site_reliability_tracker.py` | Keandalan per situs dengan denominator yang memisahkan receipt absen |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q

@@ -75,7 +75,7 @@ async function main() {
                 const needsPath = ["navigate","expect_url"].includes(step.op);
                 if (needsPath && !paths.has(step.path)) throw Error("path_invalid");
                 let control;
-                if (["click","fill","select","check","expect_text","read_text","screenshot"].includes(step.op)) {
+                if (["click","fill","select","check","expect_text","read_text","screenshot","expect_value"].includes(step.op)) {
                     if (typeof step.test_id !== "string" || !/^[a-z][a-z0-9_]{0,63}$/.test(step.test_id))
                         throw Error("selector_invalid");
                     control = page.getByTestId(step.test_id);
@@ -101,6 +101,12 @@ async function main() {
                 case "fill": await control.fill(step.value,timing); break;
                 case "select": await control.selectOption(step.value,timing); break;
                 case "check": await control.setChecked(step.state,timing); break;
+                case "expect_value": {
+                    const typed = await control.inputValue(timing);
+                    if (typed !== step.expected) throw Error("assertion_failed");
+                    evidence = proof(typed);
+                    break;
+                }
                 case "expect_text":
                 case "read_text": {
                     const value = await control.innerText(timing);
