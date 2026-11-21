@@ -61,6 +61,9 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 55 | `ocr_stress_bench.py` | CER pada clean, kontras, noise dan oklusi yang dapat direplay |
 | 56 | `diarization_bench.py` | DER dari pemetaan label global serta durasi miss, false alarm dan confusion |
 | 57 | `stamp_reader.py` | Pencocokan silhouette stempel/watermark dengan IoU dan margin |
+| 58 | `infographic_extractor.py` | Ekstraksi region teks/metrik/tabel/gambar dan tautan caption geometris |
+| 59 | `voice_note_structurer.py` | Catatan bertipe dari prefiks yang benar-benar ada pada receipt |
+| 60 | `perception_monthly.py` | Agregasi mikro bulanan per kelas, sesi tidak lengkap, dan delta |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -319,3 +322,24 @@ diarization. Percakapan bertumpuk belum tercakup protokol interval tunggal.
 
 `stamp_reader.py` membandingkan silhouette dengan pola bersumber
 serta mencatat posisi relatif, margin, dan kondisi seri.
+
+`infographic_extractor.py` mempertahankan boks asli saat membaca
+zona tata letak. Caption dipasangkan ketika target geometris
+terdekat unik, dengan kandidat seri tetap terlihat.
+
+`voice_note_structurer.py` mengutip kata setelah prefiks yang
+terdaftar. Nilai tanggal, jam dan desimal diperiksa sebelum
+diterbitkan, dengan rujukan dan cap waktu dari receipt.
+
+`perception_monthly.py` membaca sesi pada bulan UTC dengan protokol
+yang sama. Nilai penuh memerlukan cakupan sesi yang diatur dan
+seluruh denominator terkait. Tabel Markdown memakai TIDAK TAHU saat
+bukti belum lengkap.
+
+Gerbang EVO 0053 di `ace_operational/leap_wiring.py` perlu
+`ACE_EVO0053_PERCEPTION=1`, hash `ACE_EVO0053_PLAN_SHA256` dan
+`workspace/evo0053_perception/batch.json` beserta file sumbernya.
+Pemanggilan berasal dari laporan-diri berkala yang sudah ada.
+Runner hanya membaca masukan dengan batas delapan pekerjaan dan
+anggaran reservasi empat juta byte per pemanggilan. Ringkasan ada
+di hasil langkah. Gerbang default mati.

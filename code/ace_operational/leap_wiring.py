@@ -4348,6 +4348,44 @@ def step_continuity_probe(engine: Any) -> dict[str, Any]:
 # ------------------------------------------------------------------
 
 
+def step_evo0053_perception(engine: Any) -> dict[str, Any]:
+    """Jalankan satu batch lokal tertambat dengan gerbang per nomor default mati."""
+    if os.environ.get("ACE_EVO0053_PERCEPTION") != "1":
+        return {"status": "disabled"}
+
+    from ace_perception import batch_perception_runner
+    from ace_perception._perception_io import read_relative
+    from ace_perception.perceptual_memory import _digest
+
+    workspace = getattr(engine, "workspace", None)
+    if workspace is None:
+        return {"status": "hold", "reason": "workspace_missing"}
+    try:
+        expected = _digest(os.environ.get("ACE_EVO0053_PLAN_SHA256"))
+    except ValueError:
+        return {"status": "hold", "reason": "plan_anchor_missing_or_invalid"}
+    try:
+        root = Path(workspace)
+        plan = read_relative(root, "evo0053_perception/batch.json", 128_000, expected)
+        _, attempts, maximum_bytes, jobs = batch_perception_runner._plan(plan)
+        if attempts > 8 or len(jobs) > 8 or maximum_bytes > 4_000_000:
+            return {"status": "hold", "reason": "cycle_batch_limits"}
+        report = batch_perception_runner.run(root / "evo0053_perception", plan)
+    except FileNotFoundError:
+        return {"status": "hold", "reason": "plan_missing"}
+    except (OSError, OverflowError, RecursionError, TypeError, ValueError):
+        return {"status": "hold", "reason": "plan_unreadable_or_invalid"}
+    counts = report["counts"]
+    complete = bool(jobs) and counts.get("reported") == len(jobs)
+    return {
+        "status": "reported" if complete else "hold",
+        "plan_sha256": report["plan_sha256"],
+        "counts": counts,
+        "attempted": report["attempted"],
+        "reserved_bytes": report["reserved_bytes"],
+    }
+
+
 def step_periodic_self_report(engine: Any) -> dict[str, Any]:
     """Bangun laporan-diri berkala read-only dengan kejujuran SOURCE_NOT_PRESENT (AG173)."""
     raw_ws = getattr(engine, "workspace", None)
@@ -4376,12 +4414,15 @@ def step_periodic_self_report(engine: Any) -> dict[str, Any]:
                 **report,
             },
         )
-        return {
+        result = {
             "status": "ok",
             "gates_count": len(report.get("gates") or []),
             "debts_count": len(report.get("named_evidence_debt") or []),
             "report_path": str(out_path),
         }
+        if os.environ.get("ACE_EVO0053_PERCEPTION") == "1":
+            result["perception"] = step_evo0053_perception(engine)
+        return result
     except Exception as exc:
         return {"status": "skipped", "error": str(exc)}
 
