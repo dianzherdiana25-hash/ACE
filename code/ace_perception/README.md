@@ -47,6 +47,9 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 41 | `photo_sequencer.py` | Urutan parsial waktu dan presedensi, pilihan ambigu, serta siklus |
 | 42 | `codeswitch_transcriber.py` | Bahasa per kata pada transkrip tertambat dan cap waktu peralihan |
 | 43 | `keyword_spotter.py` | Kecocokan contoh WAV berbasis spektrum dengan jendela dan skor |
+| 44 | `meeting_summarizer.py` | Kutipan rapat berbukti untuk frasa keputusan, tugas dan topik |
+| 45 | `audio_quality_gate.py` | Cek RMS, clip, DC, hening dan rasio energi terhadap profil noise |
+| 46 | `media_sync.py` | Penjajaran transkrip dan frame dengan drift serta cap waktu tertambat |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -252,3 +255,15 @@ tetap ditahan.
 `keyword_spotter.py` menilai deret spektral terhadap contoh WAV
 yang disediakan. Kecocokan adalah kandidat dengan jarak dan waktu.
 Verifier memakai nada sintetis yang mempunyai pola terukur.
+
+`meeting_summarizer.py` memakai aturan frasa eksplisit untuk memilih
+kutipan yang sudah ada. Catatan menyimpan segmen, jendela kata, cap
+waktu, dan jumlah kutipan yang terkena batas keluaran.
+
+`audio_quality_gate.py` mengukur PCM mono hasil decode. Rasio energi
+membandingkan interval noise dengan sisa audio. Noise nol menghasilkan
+status tak terdefinisi yang terpisah dari kegagalan ambang.
+
+`media_sync.py` menguji drift dan residual anchor sebelum memilih
+frame yang terdekat dengan tengah kata. Byte frame diverifikasi
+terhadap manifest dan gap berlebihan menahan pasangan.
