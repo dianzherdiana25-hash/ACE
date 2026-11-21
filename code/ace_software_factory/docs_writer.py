@@ -10,6 +10,7 @@ from pathlib import Path
 import re
 import sys
 
+from ._artifact_io import read_relative
 from ._contracts import ContractError, canonical, checked, decode, digest, entries, identifier, obj, read, schema, text
 
 
@@ -27,7 +28,7 @@ def _index(items, column):
     return records
 
 
-def _verified_evidence(raw, spec, arch):
+def _verified_evidence(raw, spec, arch, root):
     schema(raw, "ace.factory-doc-examples.v1", ("spec_sha256", "architecture_sha256", "examples"))
     checked(spec, raw["spec_sha256"])
     checked(arch, raw["architecture_sha256"])
@@ -48,22 +49,30 @@ def _verified_evidence(raw, spec, arch):
         receipt = obj(row["receipt"], ("status", "path", "sha256"))
         if receipt["status"] != "passed":
             raise ContractError("Dokumentasi contoh membutuhkan verifier yang lulus.")
+        path = text(receipt["path"], "Path receipt", 300)
+        anchor = digest(receipt["sha256"])
+        observed = decode(read_relative(root, path, 20_000, anchor))
+        schema(observed, "ace.factory-doc-example-proof.v1",
+               ("status", "spec_sha256", "interface", "acceptance_ref", "command", "observed_output"))
+        command = text(row["command"], "Contoh perintah", 400)
+        output = text(row["observed_output"], "Keluaran teramati", 500)
+        if observed != {"schema": "ace.factory-doc-example-proof.v1", "status": "passed",
+                        "spec_sha256": raw["spec_sha256"], "interface": interface,
+                        "acceptance_ref": pointer, "command": command, "observed_output": output}:
+            raise ContractError("Byte receipt tidak menambatkan contoh antarmuka.")
         examples[key] = {"id": key, "interface": interface, "acceptance_ref": pointer,
-                         "command": text(row["command"], "Contoh perintah", 400),
-                         "observed_output": text(row["observed_output"], "Keluaran teramati", 500),
-                         "receipt": {"path": text(receipt["path"], "Path receipt", 300),
-                                     "sha256": digest(receipt["sha256"])}}
+                         "command": command, "observed_output": output, "receipt": {"path": path, "sha256": anchor}}
     return by_interface, by_requirement, examples
 
 
-def build(spec, architecture, examples, expected):
+def build(spec, architecture, examples, expected, *, root):
     checked(examples, expected)
     if spec.get("status") != "ready" or architecture.get("status") != "ready":
         raise ContractError("Kontrak produk belum siap.")
     checked(spec, architecture["spec_sha256"])
     if spec["product_id"] != architecture["product_id"]:
         raise ContractError("Spesifikasi dan arsitektur memiliki produk berbeda.")
-    interfaces, requirements, evidence = _verified_evidence(examples, spec, architecture)
+    interfaces, requirements, evidence = _verified_evidence(examples, spec, architecture, root)
     groups = []
     missing = []
     lines = [f"# {escape(text(spec['name'], 'Nama produk', 120))}", "", escape(spec["objective"]),
@@ -103,12 +112,13 @@ def main(argv=None):
     parser.add_argument("spec", type=Path)
     parser.add_argument("architecture", type=Path)
     parser.add_argument("examples", type=Path)
+    parser.add_argument("--root", type=Path, required=True)
     parser.add_argument("--expect-sha256", required=True)
     parser.add_argument("--index", action="store_true")
     args = parser.parse_args(argv)
     try:
         document, report = build(decode(read(args.spec)), decode(read(args.architecture)),
-                                 decode(read(args.examples)), args.expect_sha256)
+                                 decode(read(args.examples)), args.expect_sha256, root=args.root)
         output = canonical(report) + b"\n" if args.index else document.encode()
         sys.stdout.buffer.write(output)
     except (OSError, KeyError, ValueError, RecursionError) as error:

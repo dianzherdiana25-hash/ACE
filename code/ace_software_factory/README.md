@@ -94,7 +94,8 @@ diterapkan pada salinan ketika head dan checksum byte lama cocok.
 ## Bench produk
 
 `fixtures/factory_product_bench.json` menetapkan tiga spesifikasi,
-input probe, dan nilai harapan per kriteria. Jalankan bench di mode
+input probe, dan nilai harapan per kriteria. Hasil yang direproduksi
+byte-identik disimpan di `fixtures/bench_evidence/`. Jalankan bench di mode
 offline dan beri direktori keluaran baru untuk menyimpan ringkasan,
 observasi dan verdict bertaut SHA-256 setiap produk.
 

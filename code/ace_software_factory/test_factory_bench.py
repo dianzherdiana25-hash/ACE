@@ -16,6 +16,11 @@ class FactoryBenchTests(unittest.TestCase):
     def test_three_generated_products_cover_every_acceptance_criterion(self):
         evidence, report = factory_bench.run(self.raw, identity(self.raw))
         self.assertEqual((report["product_count"], report["passed"]), (3, 3), report)
+        committed = FIXTURE.parent / "bench_evidence"
+        self.assertEqual(set(evidence), {path.relative_to(committed).as_posix()
+                                        for path in committed.rglob("*.json")})
+        for path, payload in evidence.items():
+            self.assertEqual(payload, (committed / path).read_bytes())
         self.assertEqual({row["surface"] for row in report["products"]}, {"web", "cli", "service"})
         for row in report["products"]:
             with self.subTest(surface=row["surface"]):

@@ -1,13 +1,17 @@
 """Verifier panduan produk, rujukan lintas spesifikasi, dan contoh absen."""
+from hashlib import sha256
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
 
 from ace_software_factory import architecture_designer, docs_writer, spec_writer
-from ace_software_factory._contracts import ContractError, identity
+from ace_software_factory._contracts import ContractError, canonical, identity
 from ace_software_factory.test_spec_writer import brief
 
 
 class DocsTests(unittest.TestCase):
     def setUp(self):
+        self.root = Path(self.enterContext(TemporaryDirectory()))
         self.spec = spec_writer.write(brief())
         self.arch = architecture_designer.design(self.spec, {
             "spec_sha256": identity(self.spec), "data_retention": "none", "storage_ref": "fixture/storage",
@@ -18,18 +22,28 @@ class DocsTests(unittest.TestCase):
                      "architecture_sha256": identity(self.arch), "examples": []}
 
     def test_attaches_observed_output_and_escapes_html(self):
+        record = {"schema": "ace.factory-doc-example-proof.v1", "status": "passed",
+                  "spec_sha256": identity(self.spec), "interface": "show_items", "acceptance_ref": "fixture/brief/1",
+                  "command": "python3 -m sample", "observed_output": "<items> dua"}
+        raw = canonical(record)
+        (self.root / "receipts").mkdir()
+        (self.root / "receipts/test.json").write_bytes(raw)
         self.data["examples"].append({"id": "normal", "interface": "show_items", "acceptance_ref": "fixture/brief/1",
                                       "command": "python3 -m sample", "observed_output": "<items> dua",
-                                      "receipt": {"status": "passed", "path": "receipts/test.json", "sha256": "0" * 64}})
-        guide, report = docs_writer.build(self.spec, self.arch, self.data, identity(self.data))
+                                      "receipt": {"status": "passed", "path": "receipts/test.json",
+                                                  "sha256": sha256(raw).hexdigest()}})
+        guide, report = docs_writer.build(self.spec, self.arch, self.data, identity(self.data), root=self.root)
         self.assertIn("JSON &lt;items&gt;", guide)
         self.assertIn("&lt;items&gt; dua", guide)
         self.assertIn("receipts/test.json", guide)
         self.assertIn("fixture/brief/1", guide)
         self.assertEqual(report["status"], "documented")
+        (self.root / "receipts/test.json").write_bytes(raw + b" ")
+        with self.assertRaisesRegex(ContractError, "SHA-256"):
+            docs_writer.build(self.spec, self.arch, self.data, identity(self.data), root=self.root)
 
     def test_uncovered_surface_is_explicit(self):
-        guide, report = docs_writer.build(self.spec, self.arch, self.data, identity(self.data))
+        guide, report = docs_writer.build(self.spec, self.arch, self.data, identity(self.data), root=self.root)
         self.assertEqual(report["missing_examples"], ["show_items"])
         self.assertIn("menunggu receipt", guide)
 
@@ -38,4 +52,4 @@ class DocsTests(unittest.TestCase):
                                       "command": "sample", "observed_output": "dua",
                                       "receipt": {"status": "passed", "path": "receipt.json", "sha256": "0" * 64}})
         with self.assertRaisesRegex(ContractError, "berbeda"):
-            docs_writer.build(self.spec, self.arch, self.data, identity(self.data))
+            docs_writer.build(self.spec, self.arch, self.data, identity(self.data), root=self.root)
