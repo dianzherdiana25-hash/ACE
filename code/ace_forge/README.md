@@ -56,6 +56,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 50 | `failure_archive.py` | Arsip terminal terdeduplikasi, hash per catatan, dan konflik klasifikasi |
 | 51 | `adapter_zoo.py` | Katalog LoRA dense, versi, bentuk matematis, lineage dan review per artefak |
 | 52 | `adapter_router.py` | Routing kompatibel basis/layout dengan ranking, fallback eksplisit, dan cakupan |
+| 53 | `active_drift_check.py` | Audit selector, review registry, hash byte, usia receipt dan drift runtime |
+| 54 | `smoke_test_model.py` | Verifikasi roster smoke, tiga aturan jawaban, dan jendela maksimal 60 detik |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -314,3 +316,11 @@ versi terbaru dan versi qualified terbaru secara terpisah.
 status review, dan batas rank. Urutan memilih domain, lebih sedikit
 label di luar kebutuhan, rank lebih kecil, nama, lalu versi terbaru
 dengan nama itu. Fallback domain umum memerlukan izin dari query.
+
+`active_drift_check.py` mencocokkan selector tertambat dengan
+registry, byte artefak, dan snapshot runtime. Masing-masing sisi
+punya diagnosis sendiri. Mode ini membaca sumber yang disediakan.
+
+`smoke_test_model.py` memeriksa hasil smoke yang sudah direkam.
+Satu batch memakai waktu mulai bersama dan ambang sampai 60 detik.
+Aturan terdaftar ialah teks eksak, integer, atau hash JSON kanonis.
