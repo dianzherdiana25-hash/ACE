@@ -50,6 +50,10 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 44 | `meeting_summarizer.py` | Kutipan rapat berbukti untuk frasa keputusan, tugas dan topik |
 | 45 | `audio_quality_gate.py` | Cek RMS, clip, DC, hening dan rasio energi terhadap profil noise |
 | 46 | `media_sync.py` | Penjajaran transkrip dan frame dengan drift serta cap waktu tertambat |
+| 47 | `audio_describer.py` | Jadwal narasi aksesibilitas dan penyusunan PCM dari klip yang ditambatkan |
+| 48 | `alt_text_writer.py` | Alt text geometri berbatas karakter dan rujukan wilayah |
+| 49 | `visual_fact_check.py` | Pemeriksaan bukti visual lintas asal dan hash, termasuk sanggahan |
+| 50 | `near_dup_image.py` | Perbandingan gradien raster dengan guard intensitas dan rotasi |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -267,3 +271,18 @@ status tak terdefinisi yang terpisah dari kegagalan ambang.
 `media_sync.py` menguji drift dan residual anchor sebelum memilih
 frame yang terdekat dengan tengah kata. Byte frame diverifikasi
 terhadap manifest dan gap berlebihan menahan pasangan.
+
+`audio_describer.py` menempatkan narasi di jendela hening bersumber.
+Track WAV dibuat bila seluruh cue muat dan setiap klip terikat ke
+kutipan tertulis. Teks yang belum mempunyai rekaman tetap rencana.
+
+`alt_text_writer.py` menulis deskripsi dalam batas karakter dari
+atribut geometri yang terukur. Wilayah yang tidak muat dihitung.
+
+`visual_fact_check.py` membutuhkan kelompok asal dan hash media
+yang berbeda untuk tiap dukungan. Sanggahan tetap tampil bersama
+dukungan. Kelompok asal berasal dari receipt.
+
+`near_dup_image.py` menyimpan skor Hamming gradien dan selisih
+intensitas grid. Kandidat melaporkan orientasi terbaik dari yang
+dipertimbangkan, dan hash byte identik mendapat status tersendiri.
