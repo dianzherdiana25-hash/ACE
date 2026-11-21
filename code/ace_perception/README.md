@@ -34,6 +34,9 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 28 | `media_intake.py` | Jendela izin, tujuan, hash dan arsip media lokal berbasis isi |
 | 29 | `perception_bench.py` | Akurasi bidang/sel dan WER dari roster held-out yang ditambatkan |
 | 30 | `perception_eval_runner.py` | Putaran eval berkala dari receipt dengan ambang, delta, dan kalender |
+| 31 | `code_reader.py` | Decode barcode dan QR lewat libzbar lokal dengan mode hash-only |
+| 32 | `plate_reader.py` | OCR plat terlokalisasi, pembuktian format, dan penyembunyian default |
+| 33 | `gauge_reader.py` | Estimasi jarum annulus dalam sweep terkalibrasi dengan ambiguitas |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -185,3 +188,16 @@ gold. Receipt kosong dan hasil salah tetap dibedakan.
 jendela UTC. Putaran yang hilang, rusak, atau kurang cakupan tetap
 terlihat. Delta hanya diterbitkan antarjendela bersebelahan yang
 masing-masing mempunyai metrik.
+
+`code_reader.py` menggunakan libzbar lokal. Format harus terdaftar.
+Payload hasil decode diperlakukan sebagai teks atau byte dan dapat
+diganti hash saja. Verifier memakai EAN13 dan QR versi 1 yang dibuat
+dengan fixture mandiri.
+
+`plate_reader.py` menerapkan OCR ke boks yang sudah ditandai dan
+memeriksa panjang grup huruf atau angka. Nilai teks tersembunyi
+secara default. Verifier memakai raster dan grammar sintetis.
+
+`gauge_reader.py` mengukur jarum dari piksel di antara dua radius.
+Sumber kalibrasi menetapkan sudut, arah, dan satuan. Puncak ganda atau
+dukungan rendah menahan nilai.
