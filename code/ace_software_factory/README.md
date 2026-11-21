@@ -51,6 +51,10 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 44 | `load_test_builder.py` | Pengujian HTTP loopback dengan laju serta anggaran dan pengukuran p95 |
 | 45 | `uptime_builder.py` | Probe health dan laporan slot teramati beserta batas bawah uptime |
 | 46 | `flag_builder.py` | Feature flag dengan segmentasi, masa berlaku dan rollout berbasis hash |
+| 47 | `api_docs_builder.py` | OpenAPI 3.1 dan penjelajah GET same-origin dari kontrak backend |
+| 48 | `feedback_fixer.py` | Terapkan koreksi bersumber pada konfigurasi CLI/mobile dan verifikasi rebuild |
+| 49 | `coverage_tracker.py` | Ukur eksekusi baris Python per modul pada suite yang diisolasi |
+| 50 | `release_gate.py` | Gerbang kesiapan dengan acceptance, coverage, scan dan verifikasi ZIP |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q

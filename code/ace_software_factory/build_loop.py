@@ -108,18 +108,17 @@ def _apply(files, repairs):
     return fixed,{"source_ref":patch_ref,"changes":edited}
 
 
-def _runner(directory, timeout):
+def _sandbox_process(directory, timeout, arguments):
     bubblewrap=shutil.which("bwrap")
     if bubblewrap is None or not all(Path(name).is_file() for name in ("/usr/bin/python3","/usr/bin/prlimit")):
-        return {"status":"sandbox_unavailable","tests":None,"exit_code":None,
-                "stdout_sha256":None,"stderr_sha256":None,"failures":[],"skipped":None}
+        return None, b"", b"", False
 
     command=[bubblewrap,"--unshare-all","--die-with-parent","--cap-drop","ALL","--clearenv",
              "--ro-bind","/usr","/usr","--symlink","usr/lib","/lib","--symlink","usr/lib64","/lib64",
              "--dev","/dev","--proc","/proc","--tmpfs","/tmp","--ro-bind",str(directory),"/work","--chdir","/work",
              "--setenv","PATH","/usr/bin","--setenv","PYTHONDONTWRITEBYTECODE","1","--setenv","LANG","C.UTF-8",
              "--","/usr/bin/prlimit","--as=536870912","--cpu="+str(timeout),"--fsize="+str(MAX_TRANSCRIPT),
-             "--","/usr/bin/python3","-m","unittest","discover","-s","tests","-v"]
+             "--","/usr/bin/python3",*arguments]
     code=None
     expired=False
     with TemporaryDirectory(prefix="ace-factory-test-log-") as folder:
@@ -132,9 +131,16 @@ def _runner(directory, timeout):
             except subprocess.TimeoutExpired:
                 expired=True
             except OSError:
-                return {"status":"sandbox_unavailable","tests":None,"exit_code":None,
-                        "stdout_sha256":None,"stderr_sha256":None,"failures":[],"skipped":None}
+                return None, b"", b"", False
         stdout,stderr=(read(path,MAX_TRANSCRIPT) for path in files)
+    return code, stdout, stderr, expired
+
+
+def _runner(directory, timeout):
+    code,stdout,stderr,expired=_sandbox_process(directory,timeout,["-m","unittest","discover","-s","tests","-v"])
+    if code is None and not expired:
+        return {"status":"sandbox_unavailable","tests":None,"exit_code":None,
+                "stdout_sha256":None,"stderr_sha256":None,"failures":[],"skipped":None}
     parsed=TESTS.findall(stderr)
     count=int(parsed[-1]) if parsed else None
     skipped_match=SKIPPED.findall(stderr) if count else []
