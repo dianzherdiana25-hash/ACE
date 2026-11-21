@@ -19,6 +19,10 @@ tersedia lokal.
 | 10 | `connector_sandbox.py` | Exchange fixture offline dan pengujian bentuk respons |
 | 11 | `web_scheduler.py` | Slot UTC dan catch-up dengan receipt terminal |
 | 12 | `consent_handler.py` | Rencana kontrol consent opsional yang bertumpu pada pilihan operator |
+| 13 | `captcha_escalator.py` | Deteksi penanda challenge, posisi bukti, dan handoff operator |
+| 14 | `evidence_shooter.py` | Capture PNG Chromium setelah assertion, dengan hash dan dimensi |
+| 15 | `cross_site_comparator.py` | Bandingkan SKU tersesuaikan dan laporkan stok, umur serta biaya yang tidak lengkap |
+| 16 | `cart_preparer.py` | Simulasi kontrol keranjang loopback, anggaran dan pagar checkout |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q

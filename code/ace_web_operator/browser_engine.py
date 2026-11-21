@@ -23,9 +23,10 @@ SUPPORTED = {
     "check": ("test_id", "state"),
     "expect_text": ("test_id", "expected"),
     "read_text": ("test_id",),
+    "screenshot": ("test_id",),
 }
 MAX_OPERATIONS = 40
-MAX_RESPONSE = 200_000
+MAX_RESPONSE = 900_000
 RUNTIME = Path(__file__).with_name("_browser_runtime.cjs")
 
 
@@ -64,6 +65,8 @@ def compile_plan(plan, expected):
     if len(paths) != len(set(paths)):
         raise ContractError("Rute browser ganda.")
     steps = [_step(row, paths) for row in entries(plan["steps"], MAX_OPERATIONS, 1)]
+    if sum(row["op"] == "screenshot" for row in steps)>1:
+        raise ContractError("Satu rencana hanya boleh memuat satu capture.")
     if steps[0]["op"] != "navigate" or len({row["id"] for row in steps}) != len(steps):
         raise ContractError("Alur perlu navigasi awal dan ID tahap unik.")
     return {"schema": "ace.web.browser-runtime.v1", "origin": allowed_origin, "paths": sorted(paths),

@@ -30,7 +30,8 @@ async function main() {
                "--force-webrtc-ip-handling-policy=disable_non_proxied_udp"],
     });
     try {
-        const context = await browser.newContext({serviceWorkers:"block", acceptDownloads:false});
+        const context = await browser.newContext({serviceWorkers:"block", acceptDownloads:false, deviceScaleFactor:1,
+                                                     viewport:{width:1024,height:768}});
         let requests = 0, blocked = 0;
         await context.route("**/*", async route => {
             const request = route.request(), target = new URL(request.url());
@@ -74,7 +75,7 @@ async function main() {
                 const needsPath = ["navigate","expect_url"].includes(step.op);
                 if (needsPath && !paths.has(step.path)) throw Error("path_invalid");
                 let control;
-                if (["click","fill","select","check","expect_text","read_text"].includes(step.op)) {
+                if (["click","fill","select","check","expect_text","read_text","screenshot"].includes(step.op)) {
                     if (typeof step.test_id !== "string" || !/^[a-z][a-z0-9_]{0,63}$/.test(step.test_id))
                         throw Error("selector_invalid");
                     control = page.getByTestId(step.test_id);
@@ -107,6 +108,16 @@ async function main() {
                     evidence = proof(value);
                     if (step.op === "expect_text" && evidence.text_sha256 !== proof(step.expected).text_sha256)
                         throw Error("assertion_failed");
+                    break;
+                }
+                case "screenshot": {
+                    const geometry = await control.boundingBox(timing);
+                    if (!geometry || geometry.width < 1 || geometry.height < 1 ||
+                        geometry.width > 1100 || geometry.height > 800) throw Error("capture_geometry");
+                    const png = await control.screenshot({type:"png",animations:"disabled",scale:"css",...timing});
+                    if (png.length > 600000) throw Error("capture_size");
+                    evidence = {png_base64:png.toString("base64"),bytes:png.length,
+                                sha256:createHash("sha256").update(png).digest("hex")};
                     break;
                 }
                 default: throw Error("operation_invalid");
