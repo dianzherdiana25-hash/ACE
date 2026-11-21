@@ -54,6 +54,10 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 48 | `alt_text_writer.py` | Alt text geometri berbatas karakter dan rujukan wilayah |
 | 49 | `visual_fact_check.py` | Pemeriksaan bukti visual lintas asal dan hash, termasuk sanggahan |
 | 50 | `near_dup_image.py` | Perbandingan gradien raster dengan guard intensitas dan rotasi |
+| 51 | `perception_priority.py` | Ranking aging, deadline kumulatif, deduplikasi, dan kuota kelas |
+| 52 | `perception_costing.py` | Biaya unit internal per receipt dan status cakupan tarif |
+| 53 | `lean_perception.py` | Raster beranggaran dengan averaging area dan gerbang OCR opsional |
+| 54 | `perception_evidence.py` | Bundel artefak lokal dengan DAG provenance, head eksternal, dan hash |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -286,3 +290,18 @@ dukungan. Kelompok asal berasal dari receipt.
 `near_dup_image.py` menyimpan skor Hamming gradien dan selisih
 intensitas grid. Kandidat melaporkan orientasi terbaik dari yang
 dipertimbangkan, dan hash byte identik mendapat status tersendiri.
+
+`perception_priority.py` menyusun daftar dari cap waktu, aging,
+kuota kelas, anggaran, dan deadline yang dinilai atas antrean serial.
+
+`perception_costing.py` memakai unit internal yang ditetapkan di
+rencana. Total lengkap hanya tersedia jika semua receipt dalam
+jendela punya tarif dan metrik yang diperlukan.
+
+`lean_perception.py` memperkecil raster dengan rata-rata area di
+bawah batas sisi dan piksel. Font dan batas edit dapat mengaktifkan
+probe retensi OCR lokal.
+
+`perception_evidence.py` menyegel artefak dalam urutan DAG. Mode
+verifikasi membaca semua byte kembali dengan head eksternal dan
+membedakan file hilang serta file yang tidak cocok.
