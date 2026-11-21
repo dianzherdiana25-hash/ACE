@@ -62,6 +62,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 56 | `owner_correction_forge.py` | Readout koreksi kategoris dan evaluasi keluarga held-out terpisah |
 | 57 | `receipt_preference_miner.py` | Pasangan DPO dari receipt verified, margin runner-up, dan isolasi held-out |
 | 58 | `long_forgetting_probe.py` | Retensi per checkpoint dengan baseline sama, kehilangan tertunda dan pemulihan |
+| 59 | `weekly_regression.py` | Jendela pekan UTC, baseline tetap, regresi kritis dan interval tanpa bukti |
+| 60 | `model_dossier.py` | Replay registry, bench, guard, smoke dan persetujuan untuk artefak yang sama |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -344,3 +346,18 @@ mengeluarkan pasangan berformat `preference_trainer.py` dari train.
 `long_forgetting_probe.py` memakai baseline yang sama untuk semua
 checkpoint. Rentetan penurunan putus saat coverage hilang. Keluaran
 membawa pointer kasus, penilaian, dan checkpoint.
+
+`weekly_regression.py` menempatkan satu snapshot aktif per minggu
+UTC. Jendela Senin hingga Senin dengan akhir eksklusif. Interval
+berakhir tanpa observasi tetap tercatat sebagai missing.
+
+`model_dossier.py` menjalankan ulang pemeriksaan dari sumber
+tertambat. Bukti lengkap untuk telaah memerlukan gain terdaftar pada
+domain sasaran, guard lolos, smoke lengkap, lineage, dan semua
+receipt persetujuan terkait. Status review tidak mengaktifkan model.
+
+`code/ace_operational/leap_wiring.py:step_evo0052_forge` menyediakan
+entry point baca-saja. Gerbang `ACE_EVO0052_FORGE=1` memerlukan
+hash `ACE_EVO0052_DOSSIER_SHA256` dan dossier reguler
+`workspace/evo0052_dossier.json`. Draf hanya mendaftarkan entry point.
+Engine yang menjadwalkan langkah ini di luar cakupan draf.

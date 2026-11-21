@@ -6565,3 +6565,41 @@ def step_mission_proposers(engine: Any) -> dict[str, Any]:
         }
     except Exception as exc:
         return {"status": "error", "reason": str(exc)}
+
+
+def step_evo0052_forge(engine: Any) -> dict[str, Any]:
+    """Periksa dossier tempa tertambat melalui gerbang per nomor, default mati."""
+    if os.environ.get("ACE_EVO0052_FORGE") != "1":
+        return {"status": "disabled"}
+
+    import stat
+
+    from ace_forge import model_dossier
+    from ace_forge._forge_io import decode, digest
+    from ace_forge.dataset_forge import MAX_BYTES
+
+    workspace = getattr(engine, "workspace", None)
+    if workspace is None:
+        return {"status": "hold", "reason": "workspace_missing"}
+    try:
+        anchor = digest(os.environ.get("ACE_EVO0052_DOSSIER_SHA256"))
+    except ValueError:
+        return {"status": "hold", "reason": "dossier_anchor_missing_or_invalid"}
+    try:
+        path = Path(workspace) / "evo0052_dossier.json"
+        flags = os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW
+        with os.fdopen(os.open(path, flags), "rb") as stream:
+            info = os.fstat(stream.fileno())
+            if not stat.S_ISREG(info.st_mode) or info.st_size > MAX_BYTES:
+                return {"status": "hold", "reason": "dossier_type_or_size"}
+            payload = stream.read(MAX_BYTES + 1)
+        if len(payload) > MAX_BYTES:
+            return {"status": "hold", "reason": "dossier_type_or_size"}
+        report = model_dossier.assemble(decode(payload), anchor)
+    except FileNotFoundError:
+        return {"status": "hold", "reason": "dossier_missing"}
+    except (OSError, TypeError, ValueError, OverflowError, RecursionError):
+        return {"status": "hold", "reason": "dossier_unreadable_or_invalid"}
+    return {"status": report["status"], "candidate_sha256": report["candidate_sha256"],
+            "dossier_sha256": report["input_sha256"], "missing": report["missing"],
+            "blockers": report["blockers"]}
