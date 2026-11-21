@@ -25,6 +25,8 @@ MAX_ARTIFACT = 2_000_000
 MAX_TREE = 12_000_000
 MAX_TRANSCRIPT = 524_288
 TESTS = re.compile(rb"^Ran ([0-9]{1,8}) tests?\b", re.MULTILINE)
+SKIPPED = re.compile(rb"^OK \(skipped=([0-9]{1,8})\)$", re.MULTILINE)
+FAILED_TEST = re.compile(rb"^(?:FAIL|ERROR): ([A-Za-z_][A-Za-z_0-9.]*) \(([A-Za-z_][A-Za-z_0-9.]*)\)$", re.MULTILINE)
 
 
 def _path(value):
@@ -110,7 +112,7 @@ def _runner(directory, timeout):
     bubblewrap=shutil.which("bwrap")
     if bubblewrap is None or not all(Path(name).is_file() for name in ("/usr/bin/python3","/usr/bin/prlimit")):
         return {"status":"sandbox_unavailable","tests":None,"exit_code":None,
-                "stdout_sha256":None,"stderr_sha256":None}
+                "stdout_sha256":None,"stderr_sha256":None,"failures":[],"skipped":None}
 
     command=[bubblewrap,"--unshare-all","--die-with-parent","--cap-drop","ALL","--clearenv",
              "--ro-bind","/usr","/usr","--symlink","usr/lib","/lib","--symlink","usr/lib64","/lib64",
@@ -131,13 +133,16 @@ def _runner(directory, timeout):
                 expired=True
             except OSError:
                 return {"status":"sandbox_unavailable","tests":None,"exit_code":None,
-                        "stdout_sha256":None,"stderr_sha256":None}
+                        "stdout_sha256":None,"stderr_sha256":None,"failures":[],"skipped":None}
         stdout,stderr=(read(path,MAX_TRANSCRIPT) for path in files)
     parsed=TESTS.findall(stderr)
     count=int(parsed[-1]) if parsed else None
+    skipped_match=SKIPPED.findall(stderr) if count else []
+    skipped=int(skipped_match[-1]) if skipped_match else (0 if count else None)
+    failures=sorted({qualified.decode("ascii") for _,qualified in FAILED_TEST.findall(stderr)})
     if expired:
         status="timeout"
-    elif code==0 and count:
+    elif code==0 and count and skipped<count:
         status="passed"
     elif code==0:
         status="no_tests"
@@ -146,7 +151,7 @@ def _runner(directory, timeout):
     else:
         status="failed"
     return {"status":status,"tests":count,"exit_code":code,"stdout_sha256":sha256(stdout).hexdigest(),
-            "stderr_sha256":sha256(stderr).hexdigest()}
+            "stderr_sha256":sha256(stderr).hexdigest(),"failures":failures,"skipped":skipped}
 
 
 def run(root, plan, expected):

@@ -21,6 +21,10 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 14 | `deploy_guide_writer.py` | Topologi deploy, pemeriksaan tahap, dan urutan rollback yang bersumber |
 | 15 | `cli_builder.py` | CLI produk mandiri dengan proyeksi, agregasi dan validasi JSON |
 | 16 | `service_builder.py` | Worker background SQLite, FIFO, idempotensi, dan penghentian terbatas |
+| 17 | `etl_builder.py` | Konversi CSV ke JSONL dari pemetaan, dengan reject per record |
+| 18 | `security_scanner.py` | Temuan AST berbasis koordinat dengan nilai kandidat rahasia disembunyikan |
+| 19 | `perf_profiler.py` | Wall-time pengujian beban sandbox dengan warm-up dan p95 |
+| 20 | `bug_fixer.py` | Koreksi satu literal yang sudah disetujui dengan verifikasi red–green |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q
