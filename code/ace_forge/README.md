@@ -36,6 +36,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 30 | `checkpoint_keeper.py` | Manifest rantai SHA-256, ukuran file, dan verifikasi terhadap head eksternal |
 | 31 | `bilingual_balance.py` | Paritas ID–EN per keluarga, jenis tugas, dan split pada data berkustodi |
 | 32 | `code_reasoner_forge.py` | Ranker preferensi AST dan evaluasi pada keluarga held-out |
+| 33 | `judge_forge.py` | Kalibrasi isotonic per domain dan rubrik, MAE berpasangan |
+| 34 | `summarizer_forge.py` | Pelatihan ekstraksi, urutan sumber, anggaran karakter, dan precision/recall |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -209,3 +211,12 @@ record kanonis ketika semua kuota terpenuhi.
 dan preferensi yang sudah direkam. Mode `--adapter` menilai kandidat
 pada query tak berlabel. Sumber kandidat diparse sebagai data. Penilaian
 fungsional tetap berasal dari receipt terpisah.
+
+`judge_forge.py` mengkalibrasi skor yang sudah direkam per domain
+dan rubrik. Interpolasi terbatas pada rentang train. MAE membandingkan
+kedua lengan pada kasus held-out yang tercakup.
+
+`summarizer_forge.py` mempelajari bobot token dari anotasi kalimat.
+Mode `--adapter` mengekspor kalimat persis dalam urutan sumber
+dan menyimpan rujukan per kalimat. Skor held-out mengikuti anotasi
+ekstraktif yang dirujuk.
