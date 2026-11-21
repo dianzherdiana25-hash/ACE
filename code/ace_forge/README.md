@@ -34,6 +34,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 28 | `distill_bench.py` | Held-out bebas overlap dan retensi keberhasilan guru pada pasangan |
 | 29 | `forge_scheduler.py` | Cek horizon, reserve RAM, urutan prioritas, dan alokasi kontigu |
 | 30 | `checkpoint_keeper.py` | Manifest rantai SHA-256, ukuran file, dan verifikasi terhadap head eksternal |
+| 31 | `bilingual_balance.py` | Paritas ID–EN per keluarga, jenis tugas, dan split pada data berkustodi |
+| 32 | `code_reasoner_forge.py` | Ranker preferensi AST dan evaluasi pada keluarga held-out |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -197,3 +199,13 @@ kapasitas rencana per jendela.
 mencetak manifest SHA-256. Mode verify memerlukan manifest dan head
 eksternal. File checkpoint dan selector rollback dibaca di bawah root
 yang disediakan dengan path relatif, tanpa mengikuti symlink.
+
+`bilingual_balance.py` membaca dataset berkustodi serta kuota pasangan
+ID–EN per jenis dan partisi. Keluarga yang memenuhi syarat dipilih secara
+round robin dengan urutan dari seed. Mode `--export` mengekspor byte
+record kanonis ketika semua kuota terpenuhi.
+
+`code_reasoner_forge.py` mempelajari readout ranking dari fitur AST
+dan preferensi yang sudah direkam. Mode `--adapter` menilai kandidat
+pada query tak berlabel. Sumber kandidat diparse sebagai data. Penilaian
+fungsional tetap berasal dari receipt terpisah.
