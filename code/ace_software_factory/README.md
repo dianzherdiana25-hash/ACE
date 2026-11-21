@@ -29,6 +29,10 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 22 | `dependency_manager.py` | Perbandingan pin dan usulan versi memakai katalog serta advisori offline |
 | 23 | `landing_builder.py` | HTML statis responsif dengan CTA terdaftar dan bukti per klaim |
 | 24 | `auth_builder.py` | Login lokal ber-role, verifikasi password, dan expiry serta revokasi sesi |
+| 25 | `payment_sandbox_builder.py` | Simulasi hold, capture, void dan refund memakai unit fixture |
+| 26 | `notifier_builder.py` | Draf notifikasi lokal ber-template, batas field dan idempotency |
+| 27 | `admin_builder.py` | Panel tabel dan dispatch yang memeriksa izin serta CSRF |
+| 28 | `seed_builder.py` | Snapshot SQLite baru dari data seed dengan verifikasi FK dalam transaksi |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q
