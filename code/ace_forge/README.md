@@ -30,6 +30,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 24 | `inference_profiler.py` | Latensi, throughput, peak byte, dan coverage penilaian per pita konteks |
 | 25 | `organ_ab_router.py` | Alokasi A/B deterministik per strata dan audit receipt |
 | 26 | `model_rollback.py` | Kandidat rollback berdasarkan riwayat, registry, domain, dan hash byte |
+| 27 | `knowledge_probe.py` | Verdict per soal, aturan jawaban, coverage, dan ringkasan per domain |
+| 28 | `distill_bench.py` | Held-out bebas overlap dan retensi keberhasilan guru pada pasangan |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -173,3 +175,13 @@ diperiksa ulang dengan `--verify`. Alokasi adalah rencana offline.
 artefak. Head registry dan hash selector ditambatkan lewat argumen.
 Versi terdahulu yang memenuhi domain dan status diperiksa terhadap
 SHA-256 byte artefak, lalu usulan selector dicetak ke stdout.
+
+`knowledge_probe.py` memakai kunci dan roster terikat
+`--expect-protocol-sha256`. Receipt jawaban dinilai secara eksak,
+normalisasi teks, atau integer kanonis sesuai tipe pertanyaan.
+Output memuat hasil dan rujukan.
+
+`distill_bench.py` memakai roster bahan distilasi dan held-out agar
+tabrakan ID, prompt, rujukan, dan keluarga bisa diperiksa. Retensi,
+akurasi dua lengan, dan uji tanda eksak dari pasangan diskordan
+membawa jumlah sampel dan sumber observasi masing-masing.
