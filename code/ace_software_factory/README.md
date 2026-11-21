@@ -25,6 +25,10 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 18 | `security_scanner.py` | Temuan AST berbasis koordinat dengan nilai kandidat rahasia disembunyikan |
 | 19 | `perf_profiler.py` | Wall-time pengujian beban sandbox dengan warm-up dan p95 |
 | 20 | `bug_fixer.py` | Koreksi satu literal yang sudah disetujui dengan verifikasi red–green |
+| 21 | `safe_refactorer.py` | Rename helper privat terikat AST dengan dua suite sandbox |
+| 22 | `dependency_manager.py` | Perbandingan pin dan usulan versi memakai katalog serta advisori offline |
+| 23 | `landing_builder.py` | HTML statis responsif dengan CTA terdaftar dan bukti per klaim |
+| 24 | `auth_builder.py` | Login lokal ber-role, verifikasi password, dan expiry serta revokasi sesi |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q
