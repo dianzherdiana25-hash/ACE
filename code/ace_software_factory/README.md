@@ -55,6 +55,10 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 48 | `feedback_fixer.py` | Terapkan koreksi bersumber pada konfigurasi CLI/mobile dan verifikasi rebuild |
 | 49 | `coverage_tracker.py` | Ukur eksekusi baris Python per modul pada suite yang diisolasi |
 | 50 | `release_gate.py` | Gerbang kesiapan dengan acceptance, coverage, scan dan verifikasi ZIP |
+| 51 | `product_templater.py` | Templat artefak yang dapat dipakai ulang dengan interpolasi bertipe |
+| 52 | `feature_cloner.py` | State machine dari deskripsi perilaku dengan sumber per transisi |
+| 53 | `internal_tool_builder.py` | Panel lokal satu halaman untuk menyiapkan dan mengekspor usulan transisi |
+| 54 | `webhook_builder.py` | Amplop HMAC dua arah dengan TTL, replay ledger dan payload bertipe |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q
