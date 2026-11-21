@@ -6,63 +6,25 @@ cocok dengan SHA-256. Program menghasilkan selector usulan serta
 receipt diagnostik. Penggantian selector live tetap pada pemanggil.
 """
 import argparse
-import hashlib
-import os
 from pathlib import Path
-import stat
 import sys
 
 from . import model_registry_v2
+from ._artifact_io import inspect_file
 from ._forge_io import InputError, canonical, decode, digest, entries, identity, integer, object_fields, read_bytes, string
 from ._numeric import reference
 from .dataset_forge import MAX_BYTES
 
 
 MAX_STEPS = 25_000
-MAX_ARTIFACT_BYTES = 32 * 2**30
 
-
-def _hash_identity(info):
-    return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
 
 
 def _verify_bytes(root, relative, expected):
-    parts = relative.split("/")
-    if not all(part and part not in (".", "..") and "\\" not in part for part in parts):
-        return "invalid_artifact_path"
-    parent = descriptor = None
-    try:
-        directory_flags = os.O_NOFOLLOW | os.O_RDONLY | os.O_DIRECTORY
-        parent = os.open(root, directory_flags)
-        for part in parts[:-1]:
-            next_fd = os.open(part, directory_flags, dir_fd=parent)
-            os.close(parent)
-            parent = next_fd
-        descriptor = os.open(parts[-1], os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent)
-        before = os.fstat(descriptor)
-        if not stat.S_ISREG(before.st_mode) or not 0 < before.st_size <= MAX_ARTIFACT_BYTES:
-            return "artifact_type_or_size"
-        hasher = hashlib.sha256()
-        observed = 0
-        while chunk := os.read(descriptor, 1024 * 1024):
-            observed += len(chunk)
-            if observed > before.st_size:
-                return "artifact_read_changed"
-            hasher.update(chunk)
-        after = os.fstat(descriptor)
-        named = os.stat(parts[-1], dir_fd=parent, follow_symlinks=False)
-        if observed != before.st_size or _hash_identity(before) != _hash_identity(after) or _hash_identity(after) != _hash_identity(named):
-            return "artifact_read_changed"
-        return None if hasher.hexdigest() == expected else "artifact_sha256_mismatch"
-    except FileNotFoundError:
-        return "artifact_missing"
-    except OSError:
-        return "artifact_unreadable_or_unsafe"
-    finally:
-        if descriptor is not None:
-            os.close(descriptor)
-        if parent is not None:
-            os.close(parent)
+    observed, failure = inspect_file(root, relative)
+    if failure is not None:
+        return failure
+    return None if observed["sha256"] == expected else "artifact_sha256_mismatch"
 
 
 def _selector(raw, expected):

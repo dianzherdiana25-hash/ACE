@@ -32,6 +32,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 26 | `model_rollback.py` | Kandidat rollback berdasarkan riwayat, registry, domain, dan hash byte |
 | 27 | `knowledge_probe.py` | Verdict per soal, aturan jawaban, coverage, dan ringkasan per domain |
 | 28 | `distill_bench.py` | Held-out bebas overlap dan retensi keberhasilan guru pada pasangan |
+| 29 | `forge_scheduler.py` | Cek horizon, reserve RAM, urutan prioritas, dan alokasi kontigu |
+| 30 | `checkpoint_keeper.py` | Manifest rantai SHA-256, ukuran file, dan verifikasi terhadap head eksternal |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -185,3 +187,13 @@ Output memuat hasil dan rujukan.
 tabrakan ID, prompt, rujukan, dan keluarga bisa diperiksa. Retensi,
 akurasi dua lengan, dan uji tanda eksak dari pasangan diskordan
 membawa jumlah sampel dan sumber observasi masing-masing.
+
+`forge_scheduler.py` mengalokasikan pekerjaan pada slot pertama
+yang memenuhi kebutuhan RAM bersamaan dengan tenggat. Ketersediaan
+berasal dari kalender yang didaftarkan. Hasil menggunakan alokasi greedy berdasarkan prioritas dan mencatat
+kapasitas rencana per jendela.
+
+`checkpoint_keeper.py` membaca rencana artefak yang ditambatkan dan
+mencetak manifest SHA-256. Mode verify memerlukan manifest dan head
+eksternal. File checkpoint dan selector rollback dibaca di bawah root
+yang disediakan dengan path relatif, tanpa mengikuti symlink.

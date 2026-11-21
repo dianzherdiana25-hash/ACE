@@ -143,3 +143,43 @@ class RollbackTests(unittest.TestCase):
         report = model.plan(*args[:-1], link)
         self.assertEqual(report["status"], "hold")
         self.assertTrue(all(item["blocker"] == "artifact_unreadable_or_unsafe" for item in report["candidates_checked"]))
+
+    def test_large_fixture_is_streamed_with_a_stable_byte_count(self):
+        root = Path(self.enterContext(TemporaryDirectory()))
+        blob = b"fixture" * 400_001
+        (root / "large.bin").write_bytes(blob)
+        expected = hashlib.sha256(blob).hexdigest()
+        self.assertIsNone(model._verify_bytes(root, "large.bin", expected))
+        glance, problem = model.inspect_file(root, "large.bin")
+        self.assertIsNone(problem)
+        self.assertEqual(glance["sha256"], expected)
+        self.assertEqual(glance["bytes"], len(blob))
+
+    def test_empty_weight_file_is_distinct_from_missing_or_wrong_identity(self):
+        root = Path(self.enterContext(TemporaryDirectory()))
+        (root / "empty").touch()
+        expected = hashlib.sha256(b"").hexdigest()
+        self.assertEqual(model._verify_bytes(root, "empty", expected), "artifact_type_or_size")
+        self.assertEqual(model._verify_bytes(root, "missing", expected), "artifact_missing")
+        (root / "different").write_bytes(b"nonempty")
+        self.assertEqual(model._verify_bytes(root, "different", expected), "artifact_sha256_mismatch")
+
+    def test_current_unique_version_is_never_selected_as_own_rollback(self):
+        selector, _, log, head, request, root = fixture(Path(self.enterContext(TemporaryDirectory())))
+        for row in selector["history"]:
+            row["artifact_sha256"] = ACTIVE
+        report = model.plan(selector, identity(selector), log, head, request, root)
+        self.assertEqual(report["status"], "hold")
+        self.assertEqual(report["candidates_checked"], [])
+        self.assertIsNone(report["proposed_selector_sha256"])
+
+    def test_successive_plans_cannot_reuse_activation_source_or_earlier_anchor(self):
+        args = fixture(Path(self.enterContext(TemporaryDirectory())))
+        report = model.plan(*args)
+        new_selector = report["proposed_selector"]
+        _, anchor, log, head, request, root = args
+        with self.assertRaisesRegex(model.InputError, "Selector.*anchor"):
+            model.plan(new_selector, anchor, log, head, request, root)
+        with self.assertRaisesRegex(model.InputError, "rujukan rollback ganda"):
+            model.plan(new_selector, identity(new_selector), log, head,
+                       {**request, "from_artifact_sha256": NEW_SHA}, root)
