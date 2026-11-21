@@ -35,6 +35,10 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 28 | `seed_builder.py` | Snapshot SQLite baru dari data seed dengan verifikasi FK dalam transaksi |
 | 29 | `acceptance_judge.py` | Aturan acceptance bertaut spesifikasi, artefak dan observasi |
 | 30 | `factory_bench.py` | Tiga produk fixture dari brief sampai acceptance, termasuk UI dan API di loopback |
+| 31 | `mobile_builder.py` | Aplikasi web mobile dengan penyimpanan terpisah per tab dan batas lokal |
+| 32 | `extension_builder.py` | Manifest V3 dengan izin storage dan pembaruan checklist terserialisasi |
+| 33 | `game_builder.py` | Puzzle grid yang dapat dimainkan dan verifier replay saksi BFS |
+| 34 | `dashboard_builder.py` | Agregasi periode, skala bersama, dan provenance bagi data dasbor |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q
