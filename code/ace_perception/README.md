@@ -10,6 +10,8 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 4 | `diagram_reader.py` | Grafik batang bertanda, kalibrasi rasional, dan bukti per kategori |
 | 5 | `audio_pipeline.py` | Segmen PCM dan pertautan token bertimestamp dari receipt yang terikat ke sumber |
 | 6 | `speaker_diarization.py` | Klaster anonim berbasis spektrum dengan abstain dan boks waktu |
+| 7 | `perceptual_memory.py` | Indeks persepsi tertambat, recall lintas modalitas, serta konflik satu lokasi |
+| 8 | `confidence_calibrator.py` | Kalibrasi per pita dan modalitas dengan ECE/Brier pada keluarga held-out |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -55,3 +57,13 @@ bila panjangnya memungkinkan. Label anonim berlaku dalam satu WAV.
 Bagian tanpa energi yang cocok, jarak meyakinkan, atau slot klaster
 tetap terbuka. Verifier memakai nada buatan. Kinerja pada rapat
 dan tumpang tindih pembicara belum diukur.
+
+`perceptual_memory.py` menyegel indeks JSON mandiri. Pencarian
+memerlukan head eksternal dan menampilkan rujukan receipt serta
+boks/waktu. Beberapa kutipan berbeda pada wilayah media yang sama
+dilaporkan sebagai konflik. Indeks terpisah dari store runtime.
+
+`confidence_calibrator.py` memisahkan train dan held-out berdasarkan
+keluarga. Frekuensi posterior per pita memakai prior eksplisit dan
+minimum dukungan. Brier dan ECE memakai kasus yang sama pada kedua
+lengan dengan confidence dikalibrasi masuk ulang ke pita metrik.
