@@ -54,6 +54,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 48 | `forge_report.py` | Laporan per eksperimen dari ledger, prefix checkpoint, dan bench held-out |
 | 49 | `forge_priority_queue.py` | Admit berdasar prioritas bertambah karena usia, tenggat, dependensi, dan kapasitas |
 | 50 | `failure_archive.py` | Arsip terminal terdeduplikasi, hash per catatan, dan konflik klasifikasi |
+| 51 | `adapter_zoo.py` | Katalog LoRA dense, versi, bentuk matematis, lineage dan review per artefak |
+| 52 | `adapter_router.py` | Routing kompatibel basis/layout dengan ranking, fallback eksplisit, dan cakupan |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -303,3 +305,12 @@ snapshot membuka pekerjaan dependen pada keputusan berikutnya.
 `failure_archive.py` mengambil event terminal gagal dari ledger
 yang sudah disegel. Snapshot berulang menambah pointer asal pada
 kegagalan yang sama. Konflik kategori tercatat beserta kedua anotasi.
+
+`adapter_zoo.py` menambatkan katalog ke SHA-256 payload kanonis.
+Versi berurutan perlu parent dan layout yang sama. Katalog menampilkan
+versi terbaru dan versi qualified terbaru secara terpisah.
+
+`adapter_router.py` memeriksa basis, lapisan, dimensi, label kemampuan,
+status review, dan batas rank. Urutan memilih domain, lebih sedikit
+label di luar kebutuhan, rank lebih kecil, nama, lalu versi terbaru
+dengan nama itu. Fallback domain umum memerlukan izin dari query.
