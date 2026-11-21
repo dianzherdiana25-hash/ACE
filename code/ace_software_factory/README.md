@@ -43,6 +43,10 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 36 | `api_gateway_builder.py` | Gateway JSON loopback dengan remap rute, batas respons, dan tanpa penerusan header |
 | 37 | `migration_builder.py` | Migrasi SQLite aditif pada salinan dengan checksum per tabel |
 | 38 | `search_builder.py` | Indeks Unicode FTS5 dengan BM25, filter kelompok, dan anchor byte |
+| 39 | `upload_builder.py` | Upload lokal beralamat hash dengan validasi tipe, ukuran dan publikasi tanpa overwrite |
+| 40 | `offline_builder.py` | Cache service worker same-origin dengan SHA-256 dan fallback eksplisit |
+| 41 | `i18n_builder.py` | Kompilasi ID/EN, field bertipe, plural, dan format angka lokal |
+| 42 | `auditlog_builder.py` | Snapshot audit JSONL berantai hash, replay idempoten dan tail eksternal |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q
