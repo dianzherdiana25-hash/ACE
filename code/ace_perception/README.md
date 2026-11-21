@@ -31,6 +31,9 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 25 | `ocr_confidence_map.py` | Peta tile dari jarak vote, margin, dan cakupan boks glyph |
 | 26 | `perception_cache.py` | Cache imutabel media/config, checksum entry, dan pemeriksaan umur |
 | 27 | `batch_perception_runner.py` | Antrean OCR/adegan/hening dengan anggaran, hash input, dan kegagalan per tugas |
+| 28 | `media_intake.py` | Jendela izin, tujuan, hash dan arsip media lokal berbasis isi |
+| 29 | `perception_bench.py` | Akurasi bidang/sel dan WER dari roster held-out yang ditambatkan |
+| 30 | `perception_eval_runner.py` | Putaran eval berkala dari receipt dengan ambang, delta, dan kalender |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -169,3 +172,16 @@ Cap waktu dari pemanggil memungkinkan pemeriksaan umur yang deterministik.
 `batch_perception_runner.py` menjalankan daftar operasi tetap dengan
 anggaran jumlah usaha dan byte. Pembacaan input relatif root menolak
 symlink. Sumber harus cocok ukuran dan checksum sebelum decode.
+
+`media_intake.py` memerlukan izin yang meliputi tujuan dan waktu
+evaluasi sebelum membaca media. PGM/WAV didekode saat diperiksa.
+PDF dan kontainer video menerima pemeriksaan header yang diberi label.
+
+`perception_bench.py` menghitung kecocokan bidang dokumen dan sel tabel
+dengan penalti unit ekstra. WER memakai edit distance dan jumlah kata
+gold. Receipt kosong dan hasil salah tetap dibedakan.
+
+`perception_eval_runner.py` mengevaluasi satu bukti terikat per
+jendela UTC. Putaran yang hilang, rusak, atau kurang cakupan tetap
+terlihat. Delta hanya diterbitkan antarjendela bersebelahan yang
+masing-masing mempunyai metrik.
