@@ -44,6 +44,9 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 38 | `object_flagger.py` | Aturan objek per wilayah dari receipt dengan penolakan bukti tipis |
 | 39 | `object_counter.py` | Kandidat tunggal, komponen berimpit, hitungan berbatas luas, dan inti erosi |
 | 40 | `spatial_reasoner.py` | Relasi boks, jarak kuadrat pusat/tepi, dan IoU berkalibrasi |
+| 41 | `photo_sequencer.py` | Urutan parsial waktu dan presedensi, pilihan ambigu, serta siklus |
+| 42 | `codeswitch_transcriber.py` | Bahasa per kata pada transkrip tertambat dan cap waktu peralihan |
+| 43 | `keyword_spotter.py` | Kecocokan contoh WAV berbasis spektrum dengan jendela dan skor |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -236,3 +239,16 @@ dengan jumlah yang sudah didukung.
 `spatial_reasoner.py` menerima boks sumber dan memberi relasi dua
 dimensi. Jarak kuadrat dan kalibrasi dinyatakan sebagai pecahan agar
 mempertahankan nilai eksak.
+
+`photo_sequencer.py` mengikat receipt waktu dengan byte foto lokal.
+Jika beberapa urutan konsisten, beberapa pilihan tetap tercatat.
+Kontradiksi relasi menahan urutan lengkap.
+
+`codeswitch_transcriber.py` memelihara kata dan waktunya dari receipt.
+Label kata berasal dari penanda unik atau konteks terbatas yang
+kebijakannya diterbitkan. Pergantian yang waktu pastinya tak diketahui
+tetap ditahan.
+
+`keyword_spotter.py` menilai deret spektral terhadap contoh WAV
+yang disediakan. Kecocokan adalah kandidat dengan jarak dan waktu.
+Verifier memakai nada sintetis yang mempunyai pola terukur.
