@@ -19,6 +19,9 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 13 | `chart_digitizer.py` | Digitasi seri garis per kolom dengan kalibrasi eksak dan bukti jejak |
 | 14 | `scene_describer.py` | Komponen gambar, atribut bentuk dan intensitas, serta relasi boks |
 | 15 | `change_detector.py` | Registrasi translasi, boks perubahan, dan ukuran wilayah yang terbanding |
+| 16 | `scan_enhancer.py` | Stretch percentile, filter speckle, dan binarisasi lingkungan |
+| 17 | `page_stitcher.py` | Susun raster berurutan dengan sambungan terukur dan jejak halaman |
+| 18 | `pdf_rasterizer.py` | Render Poppler lokal berbatas dan verifikasi roster raster PGM |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -107,3 +110,16 @@ ditelaah. Relasi menyatakan geometri koordinat piksel.
 setelah normalisasi tingkat abu. Shift opsional membutuhkan bukti
 perbaikan unik pada inti yang sama. Perubahan dan tepi yang luput
 dari perbandingan tercatat terpisah.
+
+`scan_enhancer.py` mendukung stretch kontras dan binarisasi adaptif.
+Filter speckle opsional memakai lingkungan asli. Percentile rata
+dipertahankan sebagai grayscale dan mendapatkan status tersendiri.
+
+`page_stitcher.py` mendukung mode gap serta overlap terukur tetap
+atau otomatis. Ambiguitas, area rata, dan mismatch menahan hasil.
+Boks hasil menunjuk halaman asli dan checksum.
+
+`pdf_rasterizer.py` membutuhkan `pdftoppm` lokal dari Poppler.
+Renderer memakai direktori sementara dengan batas halaman, dimensi,
+dan durasi. Manifest berisi ukuran serta SHA-256 tiap raster. Tes
+renderer memakai PDF dua halaman yang dibangun sendiri.
