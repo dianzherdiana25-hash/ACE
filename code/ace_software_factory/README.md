@@ -13,6 +13,10 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 6 | `ui_builder.py` | HTML semantik, tabel, navigasi dan form JSON dengan endpoint relatif |
 | 7 | `test_factory.py` | Verifier acceptance yang menjalankan CLI sesuai contoh bersumber |
 | 8 | `build_loop.py` | Uji dan patch terdaftar pada salinan terisolasi bubblewrap, dengan receipt per ronde |
+| 9 | `self_reviewer.py` | Temuan AST dengan posisi dan SHA-256 sumber |
+| 10 | `debt_detector.py` | Kompleksitas fungsi dan siklus graf impor internal |
+| 11 | `ci_builder.py` | Workflow PR dengan checkout terikat commit dan smoke lokal |
+| 12 | `release_packager.py` | ZIP byte-identik dan verifier tiap anggota |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q

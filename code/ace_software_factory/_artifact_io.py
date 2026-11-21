@@ -8,7 +8,7 @@ from .repo_scaffolder import _relative
 
 
 def read_relative(root, relative, maximum, expected=None):
-    if not relative.isprintable() or len(relative) > 500:
+    if not isinstance(relative, str) or not relative.isprintable() or len(relative) > 500:
         raise ContractError("Path artefak tidak sah.")
     parts = _relative(relative)
     directory_flags = os.O_DIRECTORY | os.O_NOFOLLOW | os.O_RDONLY
