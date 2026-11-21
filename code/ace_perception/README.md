@@ -25,6 +25,9 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 19 | `audio_denoiser.py` | Gate gain bertransisi dari profil noise WAV yang ditunjuk |
 | 20 | `silence_segmenter.py` | Interval hening histeresis, komplemen, dan usulan titik potong |
 | 21 | `audio_language_detector.py` | Bahasa segmen lewat penanda bersumber pada receipt tertambat |
+| 22 | `video_frame_sampler.py` | Keyframe video lokal dengan cap waktu probe dan render yang saling dicek |
+| 23 | `media_redactor.py` | Redaksi opak raster berdasarkan anotasi wajib tertambat dan verifikasi |
+| 24 | `media_forensics.py` | Statistik seam, blok berulang, dan delta piksel terhadap referensi |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -138,3 +141,16 @@ disarankan di tengah jeda internal yang memenuhi durasi.
 `audio_language_detector.py` memakai penanda dengan sumber yang
 diberikan pemanggil. Penanda lintas bahasa dikeluarkan. Teks campur,
 dukungan tipis, dan receipt yang belum tersedia dilaporkan berbeda.
+
+`video_frame_sampler.py` membutuhkan `ffprobe` dan `ffmpeg` lokal.
+Probe memakai demuxer tertentu dan protokol file. Ekspor PGM mencocokkan
+cap waktu frame render dengan probe dan menyimpan hash per frame.
+
+`media_redactor.py` menutup kotak anotasi wajah, plat, atau teks dengan
+nilai opak. Anotasi menyebut hash sumber dan daftar area wajib. Verifikasi
+mengulang pembuatan byte raster dan mengecek hasil. Deteksi otomatis
+wajah dan plat tetap memerlukan penghasil anotasi tersendiri.
+
+`media_forensics.py` menghitung gejala statistik raster dan perbedaan
+terhadap referensi ber-hash. Angka tersebut hanya menyatakan apa yang
+terlihat di piksel, dengan provenance tetap unknown.
