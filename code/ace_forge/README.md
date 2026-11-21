@@ -48,6 +48,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 42 | `negative_miner.py` | Kontras dari taksonomi tertutup, alias, dan ranking jarak edit |
 | 43 | `difficulty_scorer.py` | Kesulitan posterior, coverage solver, sensitivitas, dan anotasi tahap |
 | 44 | `dataset_versioning.py` | Snapshot, graf parent, dan diff metadata/konten tanpa menyalin payload |
+| 45 | `lean_forge_runner.py` | Worker numerik lokal dengan batas address space, waktu, dan prefix checkpoint |
+| 46 | `quant_matrix.py` | Roster dan baseline bersama, loss per tugas, serta frontier ukuran dan waktu |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -271,3 +273,11 @@ Anotasi menyambung ke pita `staged_curriculum.py` melalui ID dataset.
 `dataset_versioning.py` memakai mode `snapshot`, `diff`, dan
 `lineage` dengan anchor eksternal masing-masing. Versi mencatat hash
 konten, split, lisensi, serta rujukan bukti tanpa menyalin payload.
+
+`lean_forge_runner.py` menjalankan optimizer numerik pada proses
+lokal Linux dengan `RLIMIT_AS` dan timeout. Parent memeriksa setiap
+checkpoint yang tersisa. Resume memakai prefix JSONL dan head eksternal.
+
+`quant_matrix.py` membaca receipt kualitas, waktu, dan ukuran artefak.
+Satu baseline per kasus dipakai di semua varian. Batas loss diperiksa
+per tugas sebelum kandidat masuk frontier.
