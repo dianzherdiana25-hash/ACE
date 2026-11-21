@@ -58,6 +58,9 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 52 | `perception_costing.py` | Biaya unit internal per receipt dan status cakupan tarif |
 | 53 | `lean_perception.py` | Raster beranggaran dengan averaging area dan gerbang OCR opsional |
 | 54 | `perception_evidence.py` | Bundel artefak lokal dengan DAG provenance, head eksternal, dan hash |
+| 55 | `ocr_stress_bench.py` | CER pada clean, kontras, noise dan oklusi yang dapat direplay |
+| 56 | `diarization_bench.py` | DER dari pemetaan label global serta durasi miss, false alarm dan confusion |
+| 57 | `stamp_reader.py` | Pencocokan silhouette stempel/watermark dengan IoU dan margin |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -305,3 +308,14 @@ probe retensi OCR lokal.
 `perception_evidence.py` menyegel artefak dalam urutan DAG. Mode
 verifikasi membaca semua byte kembali dengan head eksternal dan
 membedakan file hilang serta file yang tidak cocok.
+
+`ocr_stress_bench.py` menilai clean dan gangguan berseed dari gold
+yang ditambatkan. Hasil char error rate menyertakan bacaan kosong
+dan karakter tak tentu sebagai hasil yang bisa diperiksa.
+
+`diarization_bench.py` menghitung error exact terhadap interval gold.
+Verifier melakukan roundtrip lima klaster sintetis melalui algoritme
+diarization. Percakapan bertumpuk belum tercakup protokol interval tunggal.
+
+`stamp_reader.py` membandingkan silhouette dengan pola bersumber
+serta mencatat posisi relatif, margin, dan kondisi seri.
