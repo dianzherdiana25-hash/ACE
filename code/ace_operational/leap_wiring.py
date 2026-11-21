@@ -5205,8 +5205,39 @@ def step_proposer_v2(engine: Any) -> dict[str, Any]:
 # ------------------------------------------------------------------
 
 
+def step_evo0054_factory(engine: Any) -> dict[str, Any]:
+    """Nilai receipt acceptance produk yang ditambatkan secara eksternal."""
+    if os.environ.get("ACE_EVO0054_FACTORY") != "1":
+        return {"status": "disabled"}
+    workspace = getattr(engine, "workspace", None)
+    expected_sha256 = os.environ.get("ACE_EVO0054_ACCEPTANCE_SHA256")
+    if not workspace or not expected_sha256:
+        return {"status": "held", "reason": "workspace_or_anchor_missing"}
+    try:
+        from ace_software_factory import acceptance_judge
+        from ace_software_factory._artifact_io import read_relative
+        from ace_software_factory._contracts import decode, digest, identity, schema
+
+        payload = read_relative(
+            Path(workspace), "evo0054_factory/acceptance.json", 250_000, digest(expected_sha256)
+        )
+        bundle = schema(
+            decode(payload), "ace.factory-acceptance-bundle.v1",
+            ("spec", "contract", "observations", "artifact_sha256"),
+        )
+        report = acceptance_judge.evaluate(
+            bundle["spec"], bundle["contract"], bundle["observations"],
+            identity(bundle["contract"]), identity(bundle["observations"]), bundle["artifact_sha256"],
+        )
+    except (OSError, ValueError, KeyError, TypeError, RecursionError):
+        return {"status": "held", "reason": "acceptance_evidence_unavailable"}
+    return {"status": report["status"], "evidence_sha256": expected_sha256, "acceptance": report}
+
+
 def step_software_factory(engine: Any) -> dict[str, Any]:
     """Jalankan pabrik perangkat lunak atas spesifikasi workspace atau probe AST (AG189)."""
+    if os.environ.get("ACE_EVO0054_FACTORY") == "1":
+        return step_evo0054_factory(engine)
     raw_ws = getattr(engine, "workspace", None)
     if not raw_ws:
         return {"status": "skipped", "reason": "no workspace"}

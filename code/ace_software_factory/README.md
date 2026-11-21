@@ -60,3 +60,31 @@ halaman disajikan bersama endpoint terkait.
 dan menghasilkan tes CLI. `build_loop.py` menjalankan tes di namespace
 bubblewrap tanpa jaringan dan dengan source read-only. Perbaikan hanya
 diterapkan pada salinan ketika head dan checksum byte lama cocok.
+
+## Bench produk
+
+`fixtures/factory_product_bench.json` menetapkan tiga spesifikasi,
+input probe, dan nilai harapan per kriteria. Jalankan bench di mode
+offline dan beri direktori keluaran baru untuk menyimpan ringkasan,
+observasi dan verdict bertaut SHA-256 setiap produk.
+
+```sh
+PYTHONPATH=code:. python3 -m ace_software_factory.factory_bench \
+  code/ace_software_factory/fixtures/factory_product_bench.json \
+  --expect-sha256 fbdb9ea98fbd12d2d38ba03fb66056e8b50d9f42c9bed7a9769077f2bbcc9dea --output DESTINASI_BARU
+```
+
+Hash rencana merujuk JSON UTF-8 kanonis dengan kunci diurutkan,
+separator tanpa spasi dan karakter non-ASCII dipertahankan. Verifier
+browser opsional memerlukan Chromium, Node dan Playwright yang sudah
+tersedia lokal. Ia mengisi form produk, menerima respons simpan, dan
+membaca data yang baru disimpan dari API loopback.
+
+## Gerbang penerimaan
+
+`step_software_factory` memakai jalur biasa saat flag mati. Bila
+`ACE_EVO0054_FACTORY=1`, `ACE_EVO0054_ACCEPTANCE_SHA256` mengikat byte
+`evo0054_factory/acceptance.json` pada workspace. Bundle harus memuat
+`spec`, `contract`, `observations`, `artifact_sha256`, dan schema
+`ace.factory-acceptance-bundle.v1`. Jalur ini hanya mengevaluasi
+receipt dan mengembalikan laporan.
