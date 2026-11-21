@@ -38,6 +38,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 32 | `code_reasoner_forge.py` | Ranker preferensi AST dan evaluasi pada keluarga held-out |
 | 33 | `judge_forge.py` | Kalibrasi isotonic per domain dan rubrik, MAE berpasangan |
 | 34 | `summarizer_forge.py` | Pelatihan ekstraksi, urutan sumber, anggaran karakter, dan precision/recall |
+| 35 | `translator_forge.py` | Tabel frasa ID–EN, segmentasi global, dan cakupan held-out |
+| 36 | `multitask_merge.py` | Komposisi matematis adaptor LoRA, bentuk faktor, dan drift per probe |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -220,3 +222,11 @@ kedua lengan pada kasus held-out yang tercakup.
 Mode `--adapter` mengekspor kalimat persis dalam urutan sumber
 dan menyimpan rujukan per kalimat. Skor held-out mengikuti anotasi
 ekstraktif yang dirujuk.
+
+`translator_forge.py` fit tabel dari pasangan berarah dengan dukungan
+unik. Bagian tak tercakup ditandai di keluaran. Posisi segmen mengacu
+pada code points NFC.
+
+`multitask_merge.py` menggabungkan faktor LoRA kompatibel dengan
+penskalaan alpha/rank per sumber. Probe membandingkan adaptor gabungan
+terhadap delta asli tugas, dengan batas perubahan dari resep.
