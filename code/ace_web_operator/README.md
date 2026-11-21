@@ -11,6 +11,10 @@ tersedia lokal.
 | 2 | `workflow_runner.py` | Prasyarat topologis dan stop pada kegagalan dalam satu sesi |
 | 3 | `form_filler.py` | Isi kontrol terdaftar tanpa menyertakan nilai di receipt atau submit |
 | 4 | `page_extractor.py` | Ekstraksi field HTML bertipe, posisi sumber, dan laporan baris ambigu |
+| 5 | `site_explorer.py` | BFS tautan loopback, prefix scope dan frontier yang belum dicakup |
+| 6 | `session_manager.py` | Handle vault opak dengan batas waktu, cap dan verifikasi login |
+| 7 | `page_watcher.py` | Perbandingan snapshot terikat hash dan perubahan blok terlacak |
+| 8 | `web_archiver.py` | Capture loopback berizin, dedup objek dan verifier ZIP |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q
