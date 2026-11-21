@@ -58,6 +58,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 52 | `adapter_router.py` | Routing kompatibel basis/layout dengan ranking, fallback eksplisit, dan cakupan |
 | 53 | `active_drift_check.py` | Audit selector, review registry, hash byte, usia receipt dan drift runtime |
 | 54 | `smoke_test_model.py` | Verifikasi roster smoke, tiga aturan jawaban, dan jendela maksimal 60 detik |
+| 55 | `activation_ladder.py` | Replay persetujuan per peran dengan receipt/hash bukti, veto, dan tahap pending |
+| 56 | `owner_correction_forge.py` | Readout koreksi kategoris dan evaluasi keluarga held-out terpisah |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -324,3 +326,11 @@ punya diagnosis sendiri. Mode ini membaca sumber yang disediakan.
 `smoke_test_model.py` memeriksa hasil smoke yang sudah direkam.
 Satu batch memakai waktu mulai bersama dan ambang sampai 60 detik.
 Aturan terdaftar ialah teks eksak, integer, atau hash JSON kanonis.
+
+`activation_ladder.py` memakai policy dan ledger yang masing-masing
+tertambat. Satu penolakan mengakhiri urutan. Persetujuan selesai berarti
+receipt yang diminta tersedia untuk telaah.
+
+`owner_correction_forge.py` menerima kode anonim dan rujukan izin.
+Konteks dengan koreksi sepakat dari cukup keluarga mendapat label
+usulan. Perbandingan pada keluarga held-out memakai baseline yang sama.
