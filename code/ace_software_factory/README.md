@@ -63,6 +63,8 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 56 | `a11y_checker.py` | Audit dasar HTML untuk landmark, label, fokus, dan heading |
 | 57 | `bundle_profiler.py` | Graf aset dan estimasi transfer dalam anggaran byte |
 | 58 | `changelog_writer.py` | Catatan rilis dari rentang commit dan penanda perubahan breaking |
+| 59 | `product_archiver.py` | ZIP produk dengan resep bersumber dan replay test lokal terisolasi |
+| 60 | `factory_trend.py` | Denominator mutu per produk/surface, perubahan verdict dan gap bukti |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q
