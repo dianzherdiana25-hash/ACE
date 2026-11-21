@@ -33,6 +33,8 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 26 | `notifier_builder.py` | Draf notifikasi lokal ber-template, batas field dan idempotency |
 | 27 | `admin_builder.py` | Panel tabel dan dispatch yang memeriksa izin serta CSRF |
 | 28 | `seed_builder.py` | Snapshot SQLite baru dari data seed dengan verifikasi FK dalam transaksi |
+| 29 | `acceptance_judge.py` | Aturan acceptance bertaut spesifikasi, artefak dan observasi |
+| 30 | `factory_bench.py` | Tiga produk fixture dari brief sampai acceptance, termasuk UI dan API di loopback |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q

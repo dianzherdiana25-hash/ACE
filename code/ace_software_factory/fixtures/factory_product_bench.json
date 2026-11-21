@@ -1,0 +1,643 @@
+{
+  "schema": "ace.factory-bench-plan.v1",
+  "source_ref": "fixture/factory",
+  "products": [
+    {
+      "brief": {
+        "schema": "ace.factory-product-brief.v1",
+        "id": "category_web",
+        "name": "Katalog kategori web",
+        "surface": "web",
+        "objective": "Katalog kategori web",
+        "objective_ref": "fixture/factory/category_web/goal",
+        "utterances": [
+          {
+            "id": "need",
+            "ref": "fixture/factory/category_web/need",
+            "text": "perlu use: Katalog kategori web sesuai definisi fixture."
+          },
+          {
+            "id": "criterion_1",
+            "ref": "fixture/factory/category_web/criterion/1",
+            "text": "uji use: Halaman menyajikan form kategori dari rute terdaftar."
+          },
+          {
+            "id": "criterion_2",
+            "ref": "fixture/factory/category_web/criterion/2",
+            "text": "uji use: Rekam kategori lalu baca kembali melalui HTTP."
+          },
+          {
+            "id": "criterion_3",
+            "ref": "fixture/factory/category_web/criterion/3",
+            "text": "uji use: Tolak field teks yang dikirim sebagai boolean."
+          }
+        ]
+      },
+      "architecture": {
+        "data_retention": "durable",
+        "storage_ref": "fixture/factory/category_web/retention",
+        "interfaces": [
+          {
+            "id": "run",
+            "requirement": "use",
+            "input_shape": "JSON fixture",
+            "output_shape": "Hasil terukur",
+            "persist": true,
+            "source_ref": "fixture/factory/category_web/interface"
+          }
+        ]
+      },
+      "recipe": {
+        "model": {
+          "schema": "ace.factory-relational-model.v1",
+          "model_ref": "fixture/schema",
+          "entities": [
+            {
+              "name": "category",
+              "source_ref": "fixture/category",
+              "columns": [
+                {
+                  "name": "id",
+                  "kind": "integer",
+                  "nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "name",
+                  "kind": "text",
+                  "nullable": false,
+                  "default": {
+                    "literal": "fixture's label"
+                  }
+                }
+              ],
+              "primary_key": [
+                "id"
+              ],
+              "unique": [
+                [
+                  "name"
+                ]
+              ],
+              "foreign_keys": [],
+              "indexes": []
+            },
+            {
+              "name": "item",
+              "source_ref": "fixture/item",
+              "columns": [
+                {
+                  "name": "id",
+                  "kind": "integer",
+                  "nullable": false,
+                  "default": null
+                },
+                {
+                  "name": "category_id",
+                  "kind": "integer",
+                  "nullable": true,
+                  "default": null
+                },
+                {
+                  "name": "visible",
+                  "kind": "boolean",
+                  "nullable": false,
+                  "default": {
+                    "literal": true
+                  }
+                }
+              ],
+              "primary_key": [
+                "id"
+              ],
+              "unique": [],
+              "foreign_keys": [
+                {
+                  "columns": [
+                    "category_id"
+                  ],
+                  "target": "category",
+                  "target_columns": [
+                    "id"
+                  ],
+                  "on_delete": "set_null"
+                }
+              ],
+              "indexes": [
+                [
+                  "category_id"
+                ]
+              ]
+            }
+          ]
+        },
+        "api": {
+          "schema": "ace.factory-api-plan.v1",
+          "plan_ref": "fixture/API",
+          "resources": [
+            {
+              "route": "categories",
+              "table": "category",
+              "read": [
+                "id",
+                "name"
+              ],
+              "write": [
+                "name"
+              ],
+              "methods": [
+                "GET",
+                "POST",
+                "PATCH",
+                "DELETE"
+              ],
+              "source_ref": "fixture/categories"
+            },
+            {
+              "route": "items",
+              "table": "item",
+              "read": [
+                "id",
+                "category_id",
+                "visible"
+              ],
+              "write": [
+                "category_id",
+                "visible"
+              ],
+              "methods": [
+                "GET",
+                "POST"
+              ],
+              "source_ref": "fixture/items"
+            }
+          ]
+        },
+        "ui": {
+          "schema": "ace.factory-ui-plan.v1",
+          "screen_ref": "fixture/factory/web/screen",
+          "locale": "id",
+          "title": "Katalog kategori",
+          "api_endpoints": [
+            "/categories"
+          ],
+          "navigation": [],
+          "sections": [
+            {
+              "id": "category",
+              "heading": "Tambah kategori",
+              "source_ref": "fixture/factory/web/form",
+              "blocks": [
+                {
+                  "type": "form",
+                  "data": {
+                    "id": "new",
+                    "endpoint": "/categories",
+                    "fields": [
+                      {
+                        "name": "name",
+                        "label": "Nama",
+                        "input_type": "text",
+                        "required": true,
+                        "max_length": 40
+                      }
+                    ],
+                    "submit": "Tambah",
+                    "wait": "Menunggu",
+                    "success": "Tercatat",
+                    "error": "Gagal"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "probe": {
+        "resource": "categories",
+        "field": "name",
+        "value": "Perlengkapan"
+      },
+      "rules": [
+        {
+          "id": "screen",
+          "criterion_ref": "fixture/factory/category_web/criterion/1",
+          "operator": "equals",
+          "expected": {
+            "status": 200,
+            "forms": [
+              "/categories"
+            ],
+            "limits_connect": true
+          },
+          "source_ref": "fixture/factory/category_web/rules/1"
+        },
+        {
+          "id": "roundtrip",
+          "criterion_ref": "fixture/factory/category_web/criterion/2",
+          "operator": "equals",
+          "expected": {
+            "created_status": 201,
+            "fetch_status": 200,
+            "created": {
+              "id": 1,
+              "name": "Perlengkapan"
+            },
+            "fetched": {
+              "id": 1,
+              "name": "Perlengkapan"
+            }
+          },
+          "source_ref": "fixture/factory/category_web/rules/2"
+        },
+        {
+          "id": "invalid_status",
+          "criterion_ref": "fixture/factory/category_web/criterion/3",
+          "operator": "equals",
+          "expected": 400,
+          "source_ref": "fixture/factory/category_web/rules/3"
+        }
+      ]
+    },
+    {
+      "brief": {
+        "schema": "ace.factory-product-brief.v1",
+        "id": "stock_report",
+        "name": "CLI total inventaris",
+        "surface": "cli",
+        "objective": "CLI total inventaris",
+        "objective_ref": "fixture/factory/stock_report/goal",
+        "utterances": [
+          {
+            "id": "need",
+            "ref": "fixture/factory/stock_report/need",
+            "text": "perlu use: CLI total inventaris sesuai definisi fixture."
+          },
+          {
+            "id": "criterion_1",
+            "ref": "fixture/factory/stock_report/criterion/1",
+            "text": "uji use: Jumlah record dan unit tepat sesuai STDIN."
+          },
+          {
+            "id": "criterion_2",
+            "ref": "fixture/factory/stock_report/criterion/2",
+            "text": "uji use: Tolak boolean di kolom integer."
+          },
+          {
+            "id": "criterion_3",
+            "ref": "fixture/factory/stock_report/criterion/3",
+            "text": "uji use: Tes acceptance CLI yang dibangkitkan lulus."
+          }
+        ]
+      },
+      "architecture": {
+        "data_retention": "none",
+        "storage_ref": "fixture/factory/stock_report/retention",
+        "interfaces": [
+          {
+            "id": "run",
+            "requirement": "use",
+            "input_shape": "JSON fixture",
+            "output_shape": "Hasil terukur",
+            "persist": false,
+            "source_ref": "fixture/factory/stock_report/interface"
+          }
+        ]
+      },
+      "recipe": {
+        "plan": {
+          "schema": "ace.factory-cli-plan.v1",
+          "id": "stock_report",
+          "description": "Ringkasan inventaris.",
+          "max_input_bytes": 128,
+          "commands": [
+            {
+              "id": "total",
+              "operation": "sum",
+              "help": "Jumlah unit",
+              "fields": [
+                {
+                  "name": "name",
+                  "type": "text"
+                },
+                {
+                  "name": "units",
+                  "type": "integer"
+                }
+              ],
+              "select": [
+                "units"
+              ],
+              "source_ref": "fixture/total"
+            },
+            {
+              "id": "names",
+              "operation": "project",
+              "help": "Daftar nama",
+              "fields": [
+                {
+                  "name": "name",
+                  "type": "text"
+                },
+                {
+                  "name": "units",
+                  "type": "integer"
+                }
+              ],
+              "select": [
+                "name"
+              ],
+              "source_ref": "fixture/name"
+            },
+            {
+              "id": "check",
+              "operation": "validate",
+              "help": "Periksa data",
+              "fields": [
+                {
+                  "name": "name",
+                  "type": "text"
+                },
+                {
+                  "name": "units",
+                  "type": "integer"
+                }
+              ],
+              "select": [],
+              "source_ref": "fixture/check"
+            }
+          ]
+        },
+        "examples": {
+          "schema": "ace.factory-acceptance-examples.v1",
+          "timeout_seconds": 5,
+          "example_ref": "fixture/factory/stock_report/inputs",
+          "cases": [
+            {
+              "id": "valid",
+              "acceptance_ref": "fixture/factory/stock_report/criterion/1",
+              "arguments": [
+                "total"
+              ],
+              "stdin": [
+                {
+                  "name": "gelas",
+                  "units": 4
+                },
+                {
+                  "name": "baut",
+                  "units": 3
+                }
+              ],
+              "exit_code": 0,
+              "stdout": {
+                "format": "json",
+                "value": {
+                  "total": 7,
+                  "records": 2
+                }
+              }
+            },
+            {
+              "id": "invalid",
+              "acceptance_ref": "fixture/factory/stock_report/criterion/2",
+              "arguments": [
+                "total"
+              ],
+              "stdin": [
+                {
+                  "name": "gelas",
+                  "units": true
+                }
+              ],
+              "exit_code": 2,
+              "stdout": {
+                "format": "text",
+                "value": ""
+              }
+            },
+            {
+              "id": "for_verifier",
+              "acceptance_ref": "fixture/factory/stock_report/criterion/3",
+              "arguments": [
+                "names"
+              ],
+              "stdin": [
+                {
+                  "name": "gelas",
+                  "units": 4
+                },
+                {
+                  "name": "baut",
+                  "units": 3
+                }
+              ],
+              "exit_code": 0,
+              "stdout": {
+                "format": "json",
+                "value": [
+                  {
+                    "name": "gelas"
+                  },
+                  {
+                    "name": "baut"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "probe": {
+        "operation": "total",
+        "data": [
+          {
+            "name": "gelas",
+            "units": 4
+          },
+          {
+            "name": "baut",
+            "units": 3
+          }
+        ],
+        "invalid": [
+          {
+            "name": "gelas",
+            "units": true
+          }
+        ]
+      },
+      "rules": [
+        {
+          "id": "result",
+          "criterion_ref": "fixture/factory/stock_report/criterion/1",
+          "operator": "equals",
+          "expected": {
+            "status": 0,
+            "output": {
+              "total": 7,
+              "records": 2
+            }
+          },
+          "source_ref": "fixture/factory/stock_report/rules/1"
+        },
+        {
+          "id": "invalid_status",
+          "criterion_ref": "fixture/factory/stock_report/criterion/2",
+          "operator": "equals",
+          "expected": 2,
+          "source_ref": "fixture/factory/stock_report/rules/2"
+        },
+        {
+          "id": "generated_suite",
+          "criterion_ref": "fixture/factory/stock_report/criterion/3",
+          "operator": "equals",
+          "expected": 0,
+          "source_ref": "fixture/factory/stock_report/rules/3"
+        }
+      ]
+    },
+    {
+      "brief": {
+        "schema": "ace.factory-product-brief.v1",
+        "id": "fixture_worker",
+        "name": "Worker agregasi",
+        "surface": "service",
+        "objective": "Worker agregasi",
+        "objective_ref": "fixture/factory/fixture_worker/goal",
+        "utterances": [
+          {
+            "id": "need",
+            "ref": "fixture/factory/fixture_worker/need",
+            "text": "perlu use: Worker agregasi sesuai definisi fixture."
+          },
+          {
+            "id": "criterion_1",
+            "ref": "fixture/factory/fixture_worker/criterion/1",
+            "text": "uji use: Dua pekerjaan berhasil masuk antrean."
+          },
+          {
+            "id": "criterion_2",
+            "ref": "fixture/factory/fixture_worker/criterion/2",
+            "text": "uji use: Worker memproses kedua pekerjaan dalam urutan FIFO."
+          },
+          {
+            "id": "criterion_3",
+            "ref": "fixture/factory/fixture_worker/criterion/3",
+            "text": "uji use: Proses baru dapat membaca hasil pekerjaan kedua."
+          }
+        ]
+      },
+      "architecture": {
+        "data_retention": "durable",
+        "storage_ref": "fixture/factory/fixture_worker/retention",
+        "interfaces": [
+          {
+            "id": "run",
+            "requirement": "use",
+            "input_shape": "JSON fixture",
+            "output_shape": "Hasil terukur",
+            "persist": true,
+            "source_ref": "fixture/factory/fixture_worker/interface"
+          }
+        ]
+      },
+      "recipe": {
+        "schema": "ace.factory-service-plan.v1",
+        "id": "fixture_worker",
+        "description": "worker inventaris",
+        "max_payload_bytes": 200,
+        "max_numbers": 8,
+        "max_pending": 2,
+        "routes": [
+          {
+            "id": "aggregate",
+            "operation": "sum",
+            "source_ref": "fixture/routes/0"
+          },
+          {
+            "id": "floor",
+            "operation": "minimum",
+            "source_ref": "fixture/routes/1"
+          }
+        ]
+      },
+      "probe": {
+        "route": "aggregate",
+        "jobs": [
+          {
+            "id": "one",
+            "payload": [
+              2,
+              4
+            ]
+          },
+          {
+            "id": "two",
+            "payload": [
+              -6,
+              5
+            ]
+          }
+        ]
+      },
+      "rules": [
+        {
+          "id": "prepared",
+          "criterion_ref": "fixture/factory/fixture_worker/criterion/1",
+          "operator": "equals",
+          "expected": [
+            0,
+            0
+          ],
+          "source_ref": "fixture/factory/fixture_worker/rules/1"
+        },
+        {
+          "id": "consumed",
+          "criterion_ref": "fixture/factory/fixture_worker/criterion/2",
+          "operator": "equals",
+          "expected": {
+            "status": 0,
+            "output": {
+              "processed": 2,
+              "jobs": [
+                {
+                  "id": "one",
+                  "state": "done",
+                  "result": {
+                    "value": 6
+                  }
+                },
+                {
+                  "id": "two",
+                  "state": "done",
+                  "result": {
+                    "value": -1
+                  }
+                }
+              ]
+            }
+          },
+          "source_ref": "fixture/factory/fixture_worker/rules/2"
+        },
+        {
+          "id": "inspected",
+          "criterion_ref": "fixture/factory/fixture_worker/criterion/3",
+          "operator": "equals",
+          "expected": {
+            "status": 0,
+            "output": {
+              "id": "two",
+              "route": "aggregate",
+              "state": "done",
+              "result": {
+                "value": -1
+              }
+            }
+          },
+          "source_ref": "fixture/factory/fixture_worker/rules/3"
+        }
+      ]
+    }
+  ]
+}

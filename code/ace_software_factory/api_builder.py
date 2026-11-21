@@ -20,6 +20,8 @@ CELL_TYPES = {"text", "integer", "boolean"}
 
 RUNTIME = r'''"""Backend JSON dari kontrak factory terverifikasi."""
 import argparse
+from base64 import b64encode
+from hashlib import sha256
 from contextlib import closing
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
@@ -179,6 +181,17 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         pass
 
+    def _homepage(self):
+        page=self.server.home_page
+        self.send_response(200)
+        self.send_header("Content-Type","text/html; charset=utf-8")
+        self.send_header("Content-Length",str(len(page)))
+        self.send_header("Cache-Control","no-store")
+        self.send_header("Content-Security-Policy",self.server.home_csp)
+        self.send_header("X-Content-Type-Options","nosniff")
+        self.end_headers()
+        self.wfile.write(page)
+
     def _serve(self):
         try:
             host=self.headers.get("Host","")
@@ -186,6 +199,9 @@ class Handler(BaseHTTPRequestHandler):
                 raise RequestError(400,"bad_host")
             if self.headers.get("Transfer-Encoding"):
                 raise RequestError(400,"unsupported_transfer")
+            if self.path == "/" and self.command == "GET" and self.server.home_page is not None:
+                self._homepage()
+                return
             data=None
             if self.command in {"POST","PATCH"}:
                 cap=self.headers.get("Content-Length","")
@@ -219,10 +235,23 @@ class Handler(BaseHTTPRequestHandler):
     do_DELETE=_serve
 
 
-def server(database,port=0):
+def _csp(page):
+    data={"script-src": [], "style-src": []}
+    for tag, directive in (("script","script-src"), ("style","style-src")):
+        for payload in re.findall(rb"<"+tag.encode()+rb">(.+?)</"+tag.encode()+rb">",page,re.S):
+            data[directive].append("'sha256-"+b64encode(sha256(payload).digest()).decode()+"'")
+    return ("default-src 'none'; base-uri 'none'; connect-src 'self'; form-action 'none'; frame-ancestors 'none'; "
+            +"; ".join(key+" "+(" ".join(values) or "'none'") for key,values in data.items()))
+
+
+def server(database,port=0,home_page=None):
+    if home_page is not None and (not isinstance(home_page,bytes) or len(home_page)>750_000):
+        raise ValueError("Halaman produk terlalu besar atau bukan byte.")
     initialize(database)
     endpoint=ThreadingHTTPServer(("127.0.0.1",port),Handler)
     endpoint.database=database
+    endpoint.home_page=home_page
+    endpoint.home_csp=_csp(home_page) if home_page is not None else None
     return endpoint
 
 
@@ -230,8 +259,13 @@ def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--database",type=Path,required=True)
     parser.add_argument("--port",type=int,default=8000)
+    parser.add_argument("--home-page",type=Path)
     args=parser.parse_args(argv)
-    with server(args.database,args.port) as endpoint:
+    home_page=None
+    if args.home_page:
+        with args.home_page.open("rb") as stream:
+            home_page=stream.read(750_001)
+    with server(args.database,args.port,home_page=home_page) as endpoint:
         try:
             endpoint.serve_forever()
         except KeyboardInterrupt:
