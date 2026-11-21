@@ -42,6 +42,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 36 | `multitask_merge.py` | Komposisi matematis adaptor LoRA, bentuk faktor, dan drift per probe |
 | 37 | `transfer_probe.py` | Matriks sumber × target dengan baseline bersama dan coverage per sel |
 | 38 | `staged_curriculum.py` | Pita sulit terpisah, replay, kuota, dan ekspor per tahap |
+| 39 | `recipe_ablation.py` | Satu jalur parameter berubah dan selisih skor/token berpasangan |
+| 40 | `poison_detector.py` | Sinyal perubahan label, irisan keluarga, drift bukti, dan konsentrasi |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -240,3 +242,12 @@ Rerata within/cross menyebut coverage sel yang masuk.
 `staged_curriculum.py` memilih contoh dari dataset berkustodi dan
 anotasi kesulitan. Mode `--export-stage` menulis JSONL ke stdout
 saat semua kuota terpenuhi, dengan record asli dan replay terbatas.
+
+`recipe_ablation.py` memeriksa jalur parameter yang berubah dan
+memakai baseline kasus bersama. Array parameter dianggap satu nilai
+berurutan. Delta memerlukan coverage lengkap sesuai protokol.
+
+`poison_detector.py` membandingkan dua snapshot berkustodi.
+Perubahan label dan partisi dicatat dengan hash serta rujukan.
+Konsentrasi dibandingkan di dalam jenis tugas. Sinyal adalah masukan
+untuk telaah manusia.
