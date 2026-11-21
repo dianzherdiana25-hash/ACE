@@ -47,6 +47,10 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 40 | `offline_builder.py` | Cache service worker same-origin dengan SHA-256 dan fallback eksplisit |
 | 41 | `i18n_builder.py` | Kompilasi ID/EN, field bertipe, plural, dan format angka lokal |
 | 42 | `auditlog_builder.py` | Snapshot audit JSONL berantai hash, replay idempoten dan tail eksternal |
+| 43 | `data_port_builder.py` | Pertukaran CSV/JSON bertipe dengan primary key dan perlindungan formula |
+| 44 | `load_test_builder.py` | Pengujian HTTP loopback dengan laju serta anggaran dan pengukuran p95 |
+| 45 | `uptime_builder.py` | Probe health dan laporan slot teramati beserta batas bawah uptime |
+| 46 | `flag_builder.py` | Feature flag dengan segmentasi, masa berlaku dan rollout berbasis hash |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q
