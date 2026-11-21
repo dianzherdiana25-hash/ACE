@@ -15,6 +15,10 @@ tersedia lokal.
 | 6 | `session_manager.py` | Handle vault opak dengan batas waktu, cap dan verifikasi login |
 | 7 | `page_watcher.py` | Perbandingan snapshot terikat hash dan perubahan blok terlacak |
 | 8 | `web_archiver.py` | Capture loopback berizin, dedup objek dan verifier ZIP |
+| 9 | `api_connector_builder.py` | Subset OpenAPI GET menjadi kontrak konektor JSON bertipe |
+| 10 | `connector_sandbox.py` | Exchange fixture offline dan pengujian bentuk respons |
+| 11 | `web_scheduler.py` | Slot UTC dan catch-up dengan receipt terminal |
+| 12 | `consent_handler.py` | Rencana kontrol consent opsional yang bertumpu pada pilihan operator |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q
