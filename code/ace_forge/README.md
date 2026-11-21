@@ -50,6 +50,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 44 | `dataset_versioning.py` | Snapshot, graf parent, dan diff metadata/konten tanpa menyalin payload |
 | 45 | `lean_forge_runner.py` | Worker numerik lokal dengan batas address space, waktu, dan prefix checkpoint |
 | 46 | `quant_matrix.py` | Roster dan baseline bersama, loss per tugas, serta frontier ukuran dan waktu |
+| 47 | `trap_bench.py` | Trap berpasangan dengan kontrol, abstain, dan kesalahan confidence tinggi |
+| 48 | `forge_report.py` | Laporan per eksperimen dari ledger, prefix checkpoint, dan bench held-out |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -281,3 +283,12 @@ checkpoint yang tersisa. Resume memakai prefix JSONL dan head eksternal.
 `quant_matrix.py` membaca receipt kualitas, waktu, dan ukuran artefak.
 Satu baseline per kasus dipakai di semua varian. Batas loss diperiksa
 per tugas sebelum kandidat masuk frontier.
+
+`trap_bench.py` menilai jawaban yang direkam terhadap kontrol pada
+keluarga yang sama. Perbandingan akurasi memakai pasangan lengkap.
+Kesalahan dengan confidence tinggi termasuk respons trap yang tersedia
+pada pasangan tidak lengkap.
+
+`forge_report.py` memvalidasi replay ledger dan prefix checkpoint.
+Bench wajib menunjuk artefak yang muncul pada checkpoint run.
+Laporan Markdown dan JSON membawa rujukan dan gap yang masih terbuka.
