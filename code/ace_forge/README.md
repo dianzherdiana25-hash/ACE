@@ -46,6 +46,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 40 | `poison_detector.py` | Sinyal perubahan label, irisan keluarga, drift bukti, dan konsentrasi |
 | 41 | `dataset_rebalancer.py` | Pembobotan invers frekuensi, share efektif, serta ESS eksak |
 | 42 | `negative_miner.py` | Kontras dari taksonomi tertutup, alias, dan ranking jarak edit |
+| 43 | `difficulty_scorer.py` | Kesulitan posterior, coverage solver, sensitivitas, dan anotasi tahap |
+| 44 | `dataset_versioning.py` | Snapshot, graf parent, dan diff metadata/konten tanpa menyalin payload |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -261,3 +263,11 @@ distribusi efektif dan ukuran sampel efektif.
 `negative_miner.py` hanya memakai target train yang bisa ditautkan ke
 taksonomi eksklusif. Kandidat kontras membawa label dan rujukan kedua
 sisi serta sumber aturan. Record hasil memakai skema contrastive.
+
+`difficulty_scorer.py` mengeluarkan anotasi dari verdict satu per
+solver per contoh, dengan prior eksplisit dan cutoff sampel.
+Anotasi menyambung ke pita `staged_curriculum.py` melalui ID dataset.
+
+`dataset_versioning.py` memakai mode `snapshot`, `diff`, dan
+`lineage` dengan anchor eksternal masing-masing. Versi mencatat hash
+konten, split, lisensi, serta rujukan bukti tanpa menyalin payload.
