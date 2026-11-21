@@ -39,6 +39,10 @@ menghasilkan artefak lokal baru. Fixture tidak memakai layanan.
 | 32 | `extension_builder.py` | Manifest V3 dengan izin storage dan pembaruan checklist terserialisasi |
 | 33 | `game_builder.py` | Puzzle grid yang dapat dimainkan dan verifier replay saksi BFS |
 | 34 | `dashboard_builder.py` | Agregasi periode, skala bersama, dan provenance bagi data dasbor |
+| 35 | `worker_builder.py` | Antrean SQLite dengan lease, retry berbatas, dan dead-letter |
+| 36 | `api_gateway_builder.py` | Gateway JSON loopback dengan remap rute, batas respons, dan tanpa penerusan header |
+| 37 | `migration_builder.py` | Migrasi SQLite aditif pada salinan dengan checksum per tabel |
+| 38 | `search_builder.py` | Indeks Unicode FTS5 dengan BM25, filter kelompok, dan anchor byte |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_software_factory -t code -q
