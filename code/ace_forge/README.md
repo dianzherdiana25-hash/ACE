@@ -28,6 +28,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 22 | `model_card_writer.py` | Kartu Markdown/JSON dari receipt dan bench tertambat, termasuk gap |
 | 23 | `quantization_lab.py` | Kode signed 4/8 bit, rekonstruksi, dan error probe matriks |
 | 24 | `inference_profiler.py` | Latensi, throughput, peak byte, dan coverage penilaian per pita konteks |
+| 25 | `organ_ab_router.py` | Alokasi A/B deterministik per strata dan audit receipt |
+| 26 | `model_rollback.py` | Kandidat rollback berdasarkan riwayat, registry, domain, dan hash byte |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -162,3 +164,12 @@ Ukuran payload merujuk ke kode yang dikemas, di luar metadata dan skala.
 `--expect-input-sha256`. Pita konteks mencatat jumlah warmup dan
 pengukuran terpisah. Kuantil nearest-rank, throughput, dan cakupan
 penilaian memakai observasi yang dapat diperiksa di receipt.
+
+`organ_ab_router.py` memisahkan tugas memenuhi syarat dari tugas di
+luar perbandingan, kemudian menghasilkan receipt alokasi yang bisa
+diperiksa ulang dengan `--verify`. Alokasi adalah rencana offline.
+
+`model_rollback.py` membaca selector, registry, permintaan, dan folder
+artefak. Head registry dan hash selector ditambatkan lewat argumen.
+Versi terdahulu yang memenuhi domain dan status diperiksa terhadap
+SHA-256 byte artefak, lalu usulan selector dicetak ke stdout.
