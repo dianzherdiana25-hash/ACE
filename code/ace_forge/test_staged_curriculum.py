@@ -169,3 +169,10 @@ class CurriculumTests(unittest.TestCase):
         selected = next(item for item in rows["easy"] if item["example_id"] == record["example_id"])
         self.assertEqual(selected["provenance"]["evidence_ref"], record["dataset_evidence_ref"])
         self.assertNotEqual(selected["provenance"]["evidence_ref"], record["difficulty_ref"])
+
+    def test_late_stage_can_disable_replay_despite_prior_exposures(self):
+        data, manifest, head, plan, _ = fixture()
+        plan["stages"][-1]["replay_limit"] = 0
+        outputs, report = model.prepare(data, manifest, head, plan, identity(plan))
+        self.assertEqual(report["stages"][-1]["replay"], [])
+        self.assertEqual([row["payload"]["event_id"] for row in outputs["hard"]], ["hard"])
