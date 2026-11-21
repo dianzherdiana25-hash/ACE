@@ -40,6 +40,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 34 | `summarizer_forge.py` | Pelatihan ekstraksi, urutan sumber, anggaran karakter, dan precision/recall |
 | 35 | `translator_forge.py` | Tabel frasa ID–EN, segmentasi global, dan cakupan held-out |
 | 36 | `multitask_merge.py` | Komposisi matematis adaptor LoRA, bentuk faktor, dan drift per probe |
+| 37 | `transfer_probe.py` | Matriks sumber × target dengan baseline bersama dan coverage per sel |
+| 38 | `staged_curriculum.py` | Pita sulit terpisah, replay, kuota, dan ekspor per tahap |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -230,3 +232,11 @@ pada code points NFC.
 `multitask_merge.py` menggabungkan faktor LoRA kompatibel dengan
 penskalaan alpha/rank per sumber. Probe membandingkan adaptor gabungan
 terhadap delta asli tugas, dengan batas perubahan dari resep.
+
+`transfer_probe.py` mengikat roster ke hash protokol. Satu baseline
+per kasus dipakai di semua sel, dengan pasangan adaptasi terpisah.
+Rerata within/cross menyebut coverage sel yang masuk.
+
+`staged_curriculum.py` memilih contoh dari dataset berkustodi dan
+anotasi kesulitan. Mode `--export-stage` menulis JSONL ke stdout
+saat semua kuota terpenuhi, dengan record asli dan replay terbatas.
