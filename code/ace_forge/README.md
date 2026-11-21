@@ -26,6 +26,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 20 | `safety_data_filter.py` | Aturan berbasis bidang, penanda sensitif, dan saringan tanpa kutipan |
 | 21 | `license_guard.py` | Cabang ekspresi lisensi, kebijakan izin, kewajiban notice, dan provenance |
 | 22 | `model_card_writer.py` | Kartu Markdown/JSON dari receipt dan bench tertambat, termasuk gap |
+| 23 | `quantization_lab.py` | Kode signed 4/8 bit, rekonstruksi, dan error probe matriks |
+| 24 | `inference_profiler.py` | Latensi, throughput, peak byte, dan coverage penilaian per pita konteks |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -150,3 +152,13 @@ diberikan pemanggil.
 receipt, dan input bench terikat `--expect-input-sha256`. Angka bench
 diputar ulang lewat pemeriksa pasangan. Bagian yang belum punya
 bukti tercatat sebagai TIDAK TAHU.
+
+`quantization_lab.py` membaca snapshot numerik dan resep dengan
+`--expect-recipe-sha256`. Artefak menyimpan kode 4/8 bit serta skala.
+Report mencatat error rekonstruksi dan probe matvec yang tersedia.
+Ukuran payload merujuk ke kode yang dikemas, di luar metadata dan skala.
+
+`inference_profiler.py` membaca receipt terikat
+`--expect-input-sha256`. Pita konteks mencatat jumlah warmup dan
+pengukuran terpisah. Kuantil nearest-rank, throughput, dan cakupan
+penilaian memakai observasi yang dapat diperiksa di receipt.
