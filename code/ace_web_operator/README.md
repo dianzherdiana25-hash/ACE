@@ -27,6 +27,10 @@ tersedia lokal.
 | 18 | `web_messenger.py` | Draf di thread loopback, izin terikat isi, dan verifier nilai tanpa send |
 | 19 | `web_task_queue.py` | Transaksi antrean banyak situs dengan lease dan penahanan setelah expiry |
 | 20 | `site_reliability_tracker.py` | Keandalan per situs dengan denominator yang memisahkan receipt absen |
+| 21 | `session_recoverer.py` | Resume baca dengan checkpoint yang diverifikasi ulang dan tanpa replay perubahan |
+| 22 | `search_reader.py` | Ekstrak serta ringkas hasil pencarian tersimpan dengan pointer |
+| 23 | `fact_verifier_web.py` | Cocokkan nilai dan grup sumber independen dari registry serta snapshot |
+| 24 | `page_proof_keeper.py` | Bekukan HTML dan locator, lalu periksa hash manifest serta isi |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q
