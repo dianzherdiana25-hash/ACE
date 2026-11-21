@@ -44,6 +44,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 38 | `staged_curriculum.py` | Pita sulit terpisah, replay, kuota, dan ekspor per tahap |
 | 39 | `recipe_ablation.py` | Satu jalur parameter berubah dan selisih skor/token berpasangan |
 | 40 | `poison_detector.py` | Sinyal perubahan label, irisan keluarga, drift bukti, dan konsentrasi |
+| 41 | `dataset_rebalancer.py` | Pembobotan invers frekuensi, share efektif, serta ESS eksak |
+| 42 | `negative_miner.py` | Kontras dari taksonomi tertutup, alias, dan ranking jarak edit |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -251,3 +253,11 @@ berurutan. Delta memerlukan coverage lengkap sesuai protokol.
 Perubahan label dan partisi dicatat dengan hash serta rujukan.
 Konsentrasi dibandingkan di dalam jenis tugas. Sinyal adalah masukan
 untuk telaah manusia.
+
+`dataset_rebalancer.py` menghitung bobot contoh train berkustodi
+sesuai target dan cap per jenis tugas serta bahasa. Report mengukur
+distribusi efektif dan ukuran sampel efektif.
+
+`negative_miner.py` hanya memakai target train yang bisa ditautkan ke
+taksonomi eksklusif. Kandidat kontras membawa label dan rujukan kedua
+sisi serta sumber aturan. Record hasil memakai skema contrastive.
