@@ -1,4 +1,5 @@
 """Pembacaan dan representasi kanonis agar hash fixture dapat direproduksi."""
+from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -73,3 +74,14 @@ def read_bytes(path: Path, maximum):
     if len(payload) > maximum:
         raise InputError("Berkas masukan melebihi batas byte.")
     return payload
+
+
+def utc_stamp(value):
+    value = string(value, "cap waktu")
+    try:
+        parsed = datetime.fromisoformat(value)
+        if parsed.tzinfo is None or parsed.utcoffset() is None:
+            raise ValueError("Timezone hilang")
+        return parsed.astimezone(timezone.utc)
+    except (ValueError, OverflowError) as exc:
+        raise InputError("Cap waktu perlu ISO-8601 bertimezone.") from exc

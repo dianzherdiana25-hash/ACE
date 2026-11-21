@@ -129,3 +129,9 @@ class RegistryTests(unittest.TestCase):
             with self.subTest(data=data), redirect_stderr(StringIO()), self.assertRaises(SystemExit) as error:
                 model.main([str(log), "--expect-head", model.GENESIS])
             self.assertEqual(error.exception.code, 2)
+
+    def test_utc_offsets_of_equal_instants_preserve_monotonic_order(self):
+        rows, head = records(event(BASE), event(CHILD, "adapter", [BASE], at="2026-11-20T20:00:00+07:00"))
+        first, second = model.inspect(rows, head)["artifacts"]
+        self.assertEqual(first["last_event_at"], second["last_event_at"])
+        self.assertEqual(second["last_event_at"], "2026-11-20T13:00:00+00:00")

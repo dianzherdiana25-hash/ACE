@@ -22,6 +22,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 16 | `eval_harness.py` | Protokol bersama, gerbang target/regresi, dan frontier kualitas/sumber daya |
 | 17 | `regression_diff.py` | Transisi per kontrak, regresi bernama, serta kehilangan cakupan |
 | 18 | `token_budgeter.py` | Token per batch dan pengulangan, cadangan bertarif eksak, serta ambang |
+| 19 | `experiment_tracker.py` | Replay receipt, pause/resume, checkpoint, dan overspend internal |
+| 20 | `safety_data_filter.py` | Aturan berbasis bidang, penanda sensitif, dan saringan tanpa kutipan |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -122,3 +124,16 @@ termasuk hasil yang belum dijalankan.
 resep batch dan tarif unit internal lewat `--expect-input-sha256`. Report
 memisahkan token nyata, padding, dan cadangan yang dibulatkan per tahap.
 Anggaran dihitung dari data masukan tanpa akses rekening atau layanan.
+
+`experiment_tracker.py` menerima snapshot receipt dengan
+`--expect-sha256` dan mengurutkan state per eksperimen menurut log.
+Ledger merekam kredit internal yang digunakan, termasuk overspend pada
+eksperimen gagal. Resume terikat ke checkpoint terakhir.
+
+`safety_data_filter.py` memeriksa berkas calon sebelum promosi. Aturan
+frasa dan kategori penanda sensitif dideklarasikan dalam kebijakan
+dengan `--expect-policy-sha256`. Mode bawaan mengeluarkan temuan per ID,
+aturan, dan bidang. Mode `--filtered` menghasilkan calon yang lolos
+pemeriksaan mekanis untuk diproses oleh `dataset_forge`. Byte payload yang dipertahankan tetap cocok
+dengan hash verifier asal. Cakupan aturan dan bahasa bergantung
+pada kebijakan.

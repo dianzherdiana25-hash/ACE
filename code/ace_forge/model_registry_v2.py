@@ -7,11 +7,11 @@ murni file dan tidak mengubah registry atau status aktivasi runtime.
 """
 import argparse
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 import sys
 
-from ._forge_io import InputError, canonical, decode, digest, entries, identity, integer, object_fields, read_bytes, string
+from ._forge_io import InputError, canonical, decode, digest, entries, identity, integer, object_fields, read_bytes, string, utc_stamp
 from ._numeric import reference
 from .dataset_forge import MAX_BYTES
 
@@ -19,17 +19,6 @@ from .dataset_forge import MAX_BYTES
 MAX_RECORDS = 25_000
 GENESIS = identity({"schema": "ace.forge-registry.v2", "records": []})
 PARENTS = {"base": (0, 0), "adapter": (1, 1), "merged": (2, 12), "quantized": (1, 1)}
-
-
-def _utc(value):
-    value = string(value, "cap waktu")
-    try:
-        parsed = datetime.fromisoformat(value)
-        if parsed.tzinfo is None or parsed.utcoffset() is None:
-            raise ValueError("Timezone hilang")
-        return parsed.astimezone(timezone.utc)
-    except (ValueError, OverflowError) as exc:
-        raise InputError("Cap waktu perlu ISO-8601 bertimezone.") from exc
 
 
 @dataclass(slots=True)
@@ -93,7 +82,7 @@ class Registry:
             raise InputError("Urutan atau rantai hash registry tidak cocok.")
         event = entry["event"]
         object_fields(event, ("type", "at", "artifact_sha256", "event_ref", "values"))
-        time = _utc(event["at"])
+        time = utc_stamp(event["at"])
         if self.newest is not None and time < self.newest:
             raise InputError("Cap waktu event tidak boleh mundur.")
         action = event["type"]
