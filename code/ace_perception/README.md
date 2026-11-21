@@ -16,6 +16,9 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 10 | `handwriting_reader.py` | Jarak bentuk cetakan tangan per kotak dan dukungan lintas penulis |
 | 11 | `table_extractor.py` | Grid bergaris, pemeriksaan perpotongan, OCR per sel, dan koordinat sumber |
 | 12 | `form_reader.py` | OCR label/nilai terpisah serta verifikasi jenis dan outline checkbox |
+| 13 | `chart_digitizer.py` | Digitasi seri garis per kolom dengan kalibrasi eksak dan bukti jejak |
+| 14 | `scene_describer.py` | Komponen gambar, atribut bentuk dan intensitas, serta relasi boks |
+| 15 | `change_detector.py` | Registrasi translasi, boks perubahan, dan ukuran wilayah yang terbanding |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -91,3 +94,16 @@ tetap memiliki posisi. Sel dengan glyph tak yakin berstatus partial.
 nilai. Kotak label dan nilai harus terpisah. Nilai digits
 mempertahankan nol awal. Checkbox membutuhkan outline, lalu
 mengklasifikasikan kepadatan tanda dalam interior.
+
+`chart_digitizer.py` memakai kalibrasi linear dua titik per sumbu,
+pita abu per seri, dan interval setiap jejak. Pencabangan, hilangnya
+jejak, ketebalan berlebih dan di luar kalibrasi ditandai per kolom.
+
+`scene_describer.py` membangun deskripsi komponen terukur. Isi
+komponen dan isi boks diukur terpisah agar wilayah bersarang dapat
+ditelaah. Relasi menyatakan geometri koordinat piksel.
+
+`change_detector.py` membandingkan raster dengan dimensi sama
+setelah normalisasi tingkat abu. Shift opsional membutuhkan bukti
+perbaikan unik pada inti yang sama. Perubahan dan tepi yang luput
+dari perbandingan tercatat terpisah.
