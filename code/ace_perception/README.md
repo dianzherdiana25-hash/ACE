@@ -8,6 +8,8 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 2 | `document_extractor.py` | Klaim teks, jumlah, desimal eksak, dan tanggal dengan zona sumber serta ketidakpastian |
 | 3 | `screen_understanding.py` | Geometri frame, induk, label interior, dan boks glyph dalam koordinat layar |
 | 4 | `diagram_reader.py` | Grafik batang bertanda, kalibrasi rasional, dan bukti per kategori |
+| 5 | `audio_pipeline.py` | Segmen PCM dan pertautan token bertimestamp dari receipt yang terikat ke sumber |
+| 6 | `speaker_diarization.py` | Klaster anonim berbasis spektrum dengan abstain dan boks waktu |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -41,3 +43,15 @@ hubungan induk dari boks terkecil yang mencakupnya.
 dan dua tanda skala yang dirujuk. Satu batang perlu bertemu baseline
 nol. Komponen ganda, melewati nol, lepas dari baseline, atau di luar
 kalibrasi tetap terbuka. Nilai hasil disimpan sebagai pecahan eksak.
+
+`audio_pipeline.py` membaca WAV PCM 8/16 bit. Roster segmen berasal
+dari energi per jendela, durasi minimum, dan batas jeda. Receipt yang
+sudah direkam harus menunjuk hash WAV dan roster. Kata membawa
+interval sampel dan mikrodetik. Dekode bahasa berada di pihak
+pencatat receipt.
+
+`speaker_diarization.py` memakai tiga jendela spektral per segmen
+bila panjangnya memungkinkan. Label anonim berlaku dalam satu WAV.
+Bagian tanpa energi yang cocok, jarak meyakinkan, atau slot klaster
+tetap terbuka. Verifier memakai nada buatan. Kinerja pada rapat
+dan tumpang tindih pembicara belum diukur.
