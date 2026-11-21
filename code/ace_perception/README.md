@@ -37,6 +37,9 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 31 | `code_reader.py` | Decode barcode dan QR lewat libzbar lokal dengan mode hash-only |
 | 32 | `plate_reader.py` | OCR plat terlokalisasi, pembuktian format, dan penyembunyian default |
 | 33 | `gauge_reader.py` | Estimasi jarum annulus dalam sweep terkalibrasi dengan ambiguitas |
+| 34 | `map_reader.py` | Graf ruang dari grid raster dan rute ketika landmark terhubung |
+| 35 | `sheet_music_reader.py` | Deteksi staf, notehead berisi, dan pitch diatonik dari clef deklaratif |
+| 36 | `formula_reader.py` | OCR rumus linear dan AST bertata bahasa dengan offset galat |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -201,3 +204,15 @@ secara default. Verifier memakai raster dan grammar sintetis.
 `gauge_reader.py` mengukur jarum dari piksel di antara dua radius.
 Sumber kalibrasi menetapkan sudut, arah, dan satuan. Puncak ganda atau
 dukungan rendah menahan nilai.
+
+`map_reader.py` mengukur coverage jalan pada kotak piksel dan
+membangun graf empat arah. Rute unit memakai BFS dengan urutan
+koordinat yang tetap.
+
+`sheet_music_reader.py` membaca pitch diatonik notehead hitam pada
+satu staf. Clef ditetapkan pemanggil. Ritme dan accidental belum
+diidentifikasi.
+
+`formula_reader.py` membutuhkan satu baris per zona. AST mendukung
+operator dasar, pangkat asosiatif kanan dan satu persamaan. Boks
+OCR serta offset token tetap tercatat.
