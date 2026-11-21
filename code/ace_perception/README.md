@@ -12,6 +12,8 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 6 | `speaker_diarization.py` | Klaster anonim berbasis spektrum dengan abstain dan boks waktu |
 | 7 | `perceptual_memory.py` | Indeks persepsi tertambat, recall lintas modalitas, serta konflik satu lokasi |
 | 8 | `confidence_calibrator.py` | Kalibrasi per pita dan modalitas dengan ECE/Brier pada keluarga held-out |
+| 9 | `image_classifier.py` | Voting gambar dari receipt organ, kuorum, coverage, dan margin |
+| 10 | `handwriting_reader.py` | Jarak bentuk cetakan tangan per kotak dan dukungan lintas penulis |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -67,3 +69,13 @@ dilaporkan sebagai konflik. Indeks terpisah dari store runtime.
 keluarga. Frekuensi posterior per pita memakai prior eksplisit dan
 minimum dukungan. Brier dan ECE memakai kasus yang sama pada kedua
 lengan dengan confidence dikalibrasi masuk ulang ke pita metrik.
+
+`image_classifier.py` menggabungkan vote tercatat atas byte gambar
+yang diikat ke roster. Coverage, dukungan, dan margin dihitung
+terhadap bobot seluruh organ terdaftar. Vote kurang percaya, abstain,
+dan absen muncul terpisah. Seri menahan putusan.
+
+`handwriting_reader.py` memakai lokasi satu glyph per kotak dan
+contoh berkode penulis. Jarak mencakup silhouette, profil elastis,
+dan aspek. Kata dibentuk sesuai urutan kotak. Pemanggil dapat
+mengeluarkan satu penulis dari sumber contoh sebelum ranking.
