@@ -40,6 +40,10 @@ Draf dari `main` pada `42f0102`. Bentuk font dan raster fixture ada di `test_ocr
 | 34 | `map_reader.py` | Graf ruang dari grid raster dan rute ketika landmark terhubung |
 | 35 | `sheet_music_reader.py` | Deteksi staf, notehead berisi, dan pitch diatonik dari clef deklaratif |
 | 36 | `formula_reader.py` | OCR rumus linear dan AST bertata bahasa dengan offset galat |
+| 37 | `signature_presence.py` | Tinta tambahan relatif terhadap formulir kosong yang tertambat |
+| 38 | `object_flagger.py` | Aturan objek per wilayah dari receipt dengan penolakan bukti tipis |
+| 39 | `object_counter.py` | Kandidat tunggal, komponen berimpit, hitungan berbatas luas, dan inti erosi |
+| 40 | `spatial_reasoner.py` | Relasi boks, jarak kuadrat pusat/tepi, dan IoU berkalibrasi |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_perception -t code -q
@@ -216,3 +220,19 @@ diidentifikasi.
 `formula_reader.py` membutuhkan satu baris per zona. AST mendukung
 operator dasar, pangkat asosiatif kanan dan satu persamaan. Boks
 OCR serta offset token tetap tercatat.
+
+`signature_presence.py` memakai formulir kosong dengan hash dan
+geometri yang cocok. Hilangnya tinta rujukan di atas ambang menahan
+kesimpulan keberadaan tanda.
+
+`object_flagger.py` menilai observasi yang sudah direkam terhadap
+aturan per zona. Nilai confidence di bawah ambang dan zona absen
+tetap terlihat. Pendeteksi objek menyuplai receipt di luar alat ini.
+
+`object_counter.py` mengukur komponen tinta. Luas per objek menjadi
+asumsi eksplisit untuk estimasi serta tidak mencampurkan inti erosi
+dengan jumlah yang sudah didukung.
+
+`spatial_reasoner.py` menerima boks sumber dan memberi relasi dua
+dimensi. Jarak kuadrat dan kalibrasi dinyatakan sebagai pecahan agar
+mempertahankan nilai eksak.
