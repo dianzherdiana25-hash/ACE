@@ -60,6 +60,8 @@ Draf pembangunan dari main `42f0102`. Peta mengikuti penomoran rencana EVO 0052.
 | 54 | `smoke_test_model.py` | Verifikasi roster smoke, tiga aturan jawaban, dan jendela maksimal 60 detik |
 | 55 | `activation_ladder.py` | Replay persetujuan per peran dengan receipt/hash bukti, veto, dan tahap pending |
 | 56 | `owner_correction_forge.py` | Readout koreksi kategoris dan evaluasi keluarga held-out terpisah |
+| 57 | `receipt_preference_miner.py` | Pasangan DPO dari receipt verified, margin runner-up, dan isolasi held-out |
+| 58 | `long_forgetting_probe.py` | Retensi per checkpoint dengan baseline sama, kehilangan tertunda dan pemulihan |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_forge -t code -q
@@ -334,3 +336,11 @@ receipt yang diminta tersedia untuk telaah.
 `owner_correction_forge.py` menerima kode anonim dan rujukan izin.
 Konteks dengan koreksi sepakat dari cukup keluarga mendapat label
 usulan. Perbandingan pada keluarga held-out memakai baseline yang sama.
+
+`receipt_preference_miner.py` mengunci roster, rubrik, snapshot
+receipt, identitas artefak, dan representasi fitur. Mode `--dataset`
+mengeluarkan pasangan berformat `preference_trainer.py` dari train.
+
+`long_forgetting_probe.py` memakai baseline yang sama untuk semua
+checkpoint. Rentetan penurunan putus saat coverage hilang. Keluaran
+membawa pointer kasus, penilaian, dan checkpoint.
