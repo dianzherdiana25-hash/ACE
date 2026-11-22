@@ -37,6 +37,10 @@ tersedia lokal.
 | 28 | `web_sheet_filler.py` | Pemetaan matriks ke alamat A1 dan verifikasi isi grid tanpa submit |
 | 29 | `account_exporter.py` | Ekspor snapshot akun sendiri dengan grant, proyeksi field dan TTL |
 | 30 | `web_ops_bench.py` | Chromium pada tujuh tugas tertutup dan arsip hash per kasus |
+| 31 | `shop_operator.py` | Audit stok dashboard dengan verifikasi toko dan bukti per SKU |
+| 32 | `catalog_manager.py` | Revisi snapshot dan retire produk dengan preimage per SKU |
+| 33 | `content_uploader.py` | Paket draft terjadwal, validasi byte aset dan preflight lokal |
+| 34 | `comment_drafter.py` | Draf berkategori dan berbahasa dengan sumber fakta terverifikasi |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q
