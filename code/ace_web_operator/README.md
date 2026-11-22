@@ -99,3 +99,14 @@ ke ringkasan papan yang membaca `evo0055_skills/board.json`
 pada workspace. `ACE_EVO0055_BOARD_SHA256` adalah hash byte eksternal.
 Bundel `ace.web.skill-board-bundle.v1` memuat `plan`, `roadmap`,
 `registry`, dan `staleness`. Gerbang mati secara bawaan.
+
+## Tinjauan batch serapan
+
+`skill_campaign` memutar ulang batch serapan secara berurutan dengan
+`skill_registry.revise` sebagai pemutus status dan `skill_board` sebagai
+penghitung roadmap. Setiap kebijakan menunjuk hash registry pendahulu
+dan batch masing-masing. Plan memin hash byte roadmap, registry awal,
+kebijakan dan batch. Keluaran menampilkan riwayat transisi, jumlah
+ACQUIRED tercatat, dan jarak ke target sebagai draf JSON. Tool membaca
+berkas masukan dan tidak menulis registry atau menjalankan pembelajaran.
+Pemeriksaan retensi tetap tersedia pada `skill_staleness`.
