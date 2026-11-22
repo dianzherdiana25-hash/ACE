@@ -57,6 +57,10 @@ tersedia lokal.
 | 48 | `site_health_checker.py` | Probe status, media, isi dan latency lokal berbatas |
 | 49 | `analytics_operator.py` | Filter dashboard, snapshot DOM dan rekap kelompok bertambat |
 | 50 | `failed_task_escalator.py` | Triage dari receipt, efek dan batas retry sebelum telaah operator |
+| 51 | `skill_absorber.py` | Paket kutipan, tujuan dan latihan lokal dengan commitment held-out terpisah |
+| 52 | `skill_verifier.py` | Verifier per tujuan dan pengecekan kontaminasi latihan |
+| 53 | `skill_registry.py` | Revisi registry dari verifier ulang dan kebijakan atestasi eksternal |
+| 54 | `skill_path_builder.py` | Jalur belajar deterministik dengan prasyarat, gap dan anggaran |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q
