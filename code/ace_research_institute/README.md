@@ -47,6 +47,16 @@ atau rujukan sumber serta hash. Format tabel hasil di
 | 38 | `paper_conflict.py` | Selisih antar-paper dengan interval, konteks dan kemandirian |
 | 39 | `replication_assessor.py` | Toleransi efek, arah dan penahanan saat temuan desain menyimpang |
 | 40 | `anomaly_questioner.py` | Pertanyaan falsifiable dari pencilan dan nomor baris data |
+| 41 | `replication_designer.py` | Ukuran sampel dua proporsi dan pilihan desain yang memenuhi anggaran |
+| 42 | `expert_source_panel.py` | Pemilihan cakupan topik, afiliasi berbeda dan hold konflik |
+| 43 | `kb_freshness.py` | Usia bukti bertambat per topik, TTL dan celah kelompok |
+| 44 | `tiered_report.py` | Tiga kedalaman laporan dengan sitasi dan celah yang sama |
+| 45 | `open_dataset_publisher.py` | Draf dataset lokal, hak pakai, proyeksi kolom, kelompok langka |
+| 46 | `viewpoint_coverage.py` | Cakupan perspektif per konteks dan kelompok sumber, label tercatat |
+| 47 | `unsourced_number_detector.py` | Posisi angka yang tak punya pointer atau pointer tak terurai |
+| 48 | `journal_club.py` | Rotasi dua peran, ketersediaan, dan slot mingguan belum terisi |
+| 49 | `failed_research_archive.py` | Indeks draf kegagalan bernama dengan kutipan baris dan protokol |
+| 50 | `research_impact.py` | Keputusan dengan sitasi eksplisit serta observasi pre/post seunit |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_research_institute -t code -q
