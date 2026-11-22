@@ -11,6 +11,8 @@ dan menghasilkan artefak baru di direktori yang ditunjuk.
 | 4 | `style_series.py` | Render palet dan motif tetap, layout berbeda, serta verifier piksel |
 | 5 | `voice_generator.py` | WAV PCM16 deterministik dari formant dan aturan fonem Indonesia |
 | 6 | `voice_style.py` | Izin eksplisit dan estimasi prosodi pada sampel sintetis berfrekuensi acuan |
+| 7 | `podcast_producer.py` | Narasi WAV, klip berlisensi dan ber-hash, cue bab serta jeda yang sesuai durasi |
+| 8 | `audio_mixer.py` | Mix dialog/bed/efek, ducking berbasis sampel, pan, fade dan batas headroom |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_media_studio -t code -q
