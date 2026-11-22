@@ -41,6 +41,14 @@ dan menghasilkan artefak baru di direktori yang ditunjuk.
 | 34 | `data_motion.py` | Interpolasi angka, skala divergen tetap dan jejak keyframe |
 | 35 | `loop_maker.py` | Gerak periodik dan pengukuran selisih pada sambungan loop |
 | 36 | `talking_avatar.py` | Avatar orisinal dengan bentuk mulut pada timeline sampel narasi sintetis |
+| 37 | `dubbing_maker.py` | Dua MP4 dengan rekaman bahasa yang berbeda pada timeline video yang sama |
+| 38 | `aspect_adapter.py` | Turunan portrait/landscape dengan crop fokus dan cek piksel |
+| 39 | `highlight_reel.py` | Pemilihan jendela aktif RGB, jarak antar pilihan dan trim audio |
+| 40 | `teaser_maker.py` | Potongan babak yang menjaga anchor dan kartu penutup |
+| 41 | `series_cover_system.py` | Pita yang konsisten, kode episode berbeda dan kontras terukur |
+| 42 | `sticker_maker.py` | Stiker RGBA dari pose karakter, alpha dan garis luar terukur |
+| 43 | `still_poster.py` | Poster berjudul dari frame dan cap waktu video terpilih |
+| 44 | `audio_drama.py` | Dialog multikarakter, efek berizin, overlap cue dan pointer episode |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_media_studio -t code -q
