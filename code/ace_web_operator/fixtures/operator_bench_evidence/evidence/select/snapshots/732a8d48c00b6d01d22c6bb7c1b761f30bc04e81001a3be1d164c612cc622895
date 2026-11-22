@@ -1,0 +1,1 @@
+<select data-testid="colors"><option value="red">Merah</option><option value="blue">Biru</option></select>

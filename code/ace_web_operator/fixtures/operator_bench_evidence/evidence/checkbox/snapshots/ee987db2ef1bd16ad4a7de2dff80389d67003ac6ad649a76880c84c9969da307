@@ -1,0 +1,1 @@
+<label><input type="checkbox" data-testid="option" onchange="document.querySelector('[data-testid=status]').textContent=this.checked?'Aktif':'Mati'">Pilihan</label><p data-testid="status">Mati</p>

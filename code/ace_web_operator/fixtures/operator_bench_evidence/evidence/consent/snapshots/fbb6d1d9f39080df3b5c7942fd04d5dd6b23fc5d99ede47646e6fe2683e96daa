@@ -1,0 +1,4 @@
+<dialog open data-consent="prefs" data-kind="cookie_preferences">
+<button type="button" data-testid="deny" data-consent-choice="deny_optional"
+onclick="this.closest('dialog').close();document.querySelector('[data-testid=status]').textContent='Opsional ditolak'">Tolak</button>
+</dialog><p data-testid="status">Menunggu</p>
