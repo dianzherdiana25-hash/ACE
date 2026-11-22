@@ -21,6 +21,14 @@ dan menghasilkan artefak baru di direktori yang ditunjuk.
 | 14 | `subtitle_maker.py` | Dua WebVTT dari transkrip tersumber dan pengukuran aktivitas PCM |
 | 15 | `media_localizer.py` | Lokalisasi dengan tabel tersumber, audit angka, istilah, placeholder dan durasi |
 | 16 | `cover_maker.py` | Gambar sampul PNG dengan tipografi bitmap dan verifikasi kontras dari piksel |
+| 17 | `music_generator.py` | Musik latar PCM dengan progresi MIDI, tempo, determinisme dan headroom |
+| 18 | `audio_restorer.py` | Noise gate, koreksi bias DC, kanal stereo dan pengukuran RMS sebelum/sesudah |
+| 19 | `video_assembler.py` | Trim dan gabung MP4, baca ulang urutan frame dan panjang audio |
+| 20 | `media_compressor.py` | Profil ukuran dan dimensi, sampel PSNR dari hasil decode, tahan keluaran gagal |
+| 21 | `upload_metadata_writer.py` | Draf untuk platform dengan batas field, persetujuan dan sumber per baris |
+| 22 | `media_scheduler.py` | Penjadwalan deterministik dengan batas RAM dan slot, serta prasyarat |
+| 23 | `asset_library.py` | Simpan objek berdasarkan hash, provenance per entri dan deteksi perubahan byte |
+| 24 | `consistency_checker.py` | Ukur irisan palet dan audit landmark independen untuk mendeteksi pergeseran |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_media_studio -t code -q

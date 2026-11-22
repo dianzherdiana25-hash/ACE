@@ -78,3 +78,46 @@ def extract_frame(root, index, source="result.mp4"):
                             "-f", "image2pipe", "-vcodec", "ppm", "pipe:1"], root)
     from ._raster import raster
     return raster(data)
+
+
+def load_movie(root, data):
+    """Decode a bounded MP4 into RGB frames and, if present, mono PCM WAV."""
+    from ._audio import parse_wav
+    from ._raster import Raster
+
+    source = root / "input.mp4"
+    source.write_bytes(data)
+    raw = _call("ffprobe", ["-v", "error", "-protocol_whitelist", "file,pipe", "-f", "mov",
+                           "-show_streams", "-of", "json", source.name], root)
+    streams = json.loads(raw)["streams"]
+    videos = [item for item in streams if item["codec_type"] == "video"]
+    sounds = [item for item in streams if item["codec_type"] == "audio"]
+    if len(videos) != 1 or len(sounds) > 1:
+        raise ContractError("MP4 sumber harus berisi satu stream gambar dan paling banyak satu audio.")
+    stream = videos[0]
+    width, height = stream["width"], stream["height"]
+    fps = Fraction(stream["avg_frame_rate"])
+    try:
+        count = int(stream["nb_frames"])
+    except (ValueError, KeyError) as error:
+        raise ContractError("Jumlah frame sumber tidak tersedia.") from error
+    if (fps.denominator != 1 or not 2 <= fps <= 30 or not 16 <= width <= 960
+            or not 16 <= height <= 960 or not 1 <= count <= 450 or width * height * count > 27_000_000):
+        raise ContractError("MP4 sumber melampaui batas frame RGB.")
+    options = ["-hide_banner", "-loglevel", "error", "-nostdin", "-threads", "1",
+               "-protocol_whitelist", "file,pipe", "-f", "mov", "-i", source.name]
+    pixels = _call("ffmpeg", [*options, "-map", "0:v:0", "-an", "-frames:v", str(count + 1), "-vsync", "0",
+                              "-pix_fmt", "rgb24", "-threads", "1", "-f", "rawvideo", "pipe:1"], root)
+    stride = width * height * 3
+    if len(pixels) != stride * count:
+        raise ContractError("Panjang gambar RGB tidak sama dengan metadata sumber.")
+    frames = [Raster(width, height, pixels[offset:offset + stride]) for offset in range(0, len(pixels), stride)]
+    audio = None
+    if sounds:
+        target_frames = count * 24000 // int(fps)
+        _call("ffmpeg", [*options, "-map", "0:a:0", "-vn", "-ac", "1", "-ar", "24000", "-af",
+                         f"aresample=24000,apad,atrim=end_sample={target_frames}", "-c:a", "pcm_s16le", "decoded.wav"], root)
+        audio = parse_wav(read(root / "decoded.wav", 24_000_000))
+        if audio.frames != target_frames:
+            raise ContractError("Durasi audio decode berbeda dari rentang video.")
+    return frames, int(fps), audio
