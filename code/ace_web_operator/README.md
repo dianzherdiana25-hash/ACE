@@ -41,6 +41,10 @@ tersedia lokal.
 | 32 | `catalog_manager.py` | Revisi snapshot dan retire produk dengan preimage per SKU |
 | 33 | `content_uploader.py` | Paket draft terjadwal, validasi byte aset dan preflight lokal |
 | 34 | `comment_drafter.py` | Draf berkategori dan berbahasa dengan sumber fakta terverifikasi |
+| 35 | `mention_watcher.py` | Alias terdaftar, kecocokan Unicode, jendela dan dedup snapshot |
+| 36 | `review_collector.py` | Normalisasi rating lintas skala dengan dedup serta konflik eksplisit |
+| 37 | `spec_comparator.py` | Perbandingan field berbasis unit, toleransi Decimal dan sumber |
+| 38 | `report_submitter.py` | Rekap periode bersumber dan rehearsal pengisian tanpa submit |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q
