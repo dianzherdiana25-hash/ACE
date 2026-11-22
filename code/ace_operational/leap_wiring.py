@@ -6530,13 +6530,13 @@ def step_mobile_report(engine: Any) -> dict[str, Any]:
         (engine.workspace / "mobile_report.md").write_text(md, encoding="utf-8")
         result = {"status": "ok", "report_bytes": len(md.encode("utf-8"))}
         if os.environ.get("ACE_EVO0059_PRESENCE") == "1":
-            result["presence"] = step_evo0059_presence(engine)
+            result["presence"] = _evo0059_presence_evidence(engine)
         return result
     except Exception as exc:
         return {"status": "error", "reason": str(exc)}
 
 
-def step_evo0059_presence(engine: Any) -> dict[str, Any]:
+def _evo0059_presence_evidence(engine: Any) -> dict[str, Any]:
     """Baca bukti fixture kehadiran dan periksa ulang label serta byte sumber."""
     if os.environ.get("ACE_EVO0059_PRESENCE") != "1":
         return {"status": "disabled"}

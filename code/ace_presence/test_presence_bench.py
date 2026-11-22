@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 from ._contracts import decode, identity
 from .closed_bench import assess
-from ace_operational.leap_wiring import step_evo0059_presence, step_mobile_report
+from ace_operational.leap_wiring import _evo0059_presence_evidence, step_mobile_report
 
 FIXTURES = Path(__file__).parent / "fixtures" / "closed_presence"
 
@@ -29,7 +29,7 @@ class PresenceBenchTests(unittest.TestCase):
             engine = SimpleNamespace(workspace=workspace)
             off = step_mobile_report(engine)
             self.assertEqual(set(off), {"status", "report_bytes"})
-            self.assertEqual(step_evo0059_presence(engine), {"status": "disabled"})
+            self.assertEqual(_evo0059_presence_evidence(engine), {"status": "disabled"})
             shutil.copytree(FIXTURES, workspace / "evo0059_presence")
             os.environ["ACE_EVO0059_PRESENCE"] = "1"
             self.assertEqual(step_mobile_report(engine)["presence"]["status"], "held")
