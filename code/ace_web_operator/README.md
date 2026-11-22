@@ -65,6 +65,8 @@ tersedia lokal.
 | 56 | `skill_retention_probe.py` | Perbandingan retensi per tujuan atas suite controlled yang berbeda |
 | 57 | `skill_staleness.py` | Usia bukti, perubahan versi dan penurunan retensi |
 | 58 | `curriculum_importer.py` | Impor blob dari commit lokal terpin dengan lisensi dan hash |
+| 59 | `source_quality_gate.py` | Mutu sumber dari byte aktual, umur, kata, topik dan duplikasi sebelum penyerapan |
+| 60 | `skill_board.py` | Papan roadmap, custody registry dan bukti staleness per skill |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q

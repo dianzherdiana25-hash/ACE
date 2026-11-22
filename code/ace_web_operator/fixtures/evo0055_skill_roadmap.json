@@ -1,0 +1,2326 @@
+{
+  "schema": "ace.web.skill-roadmap.v1",
+  "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3",
+  "clusters": [
+    {
+      "id": "k01",
+      "title": "Bahasa",
+      "domain": "software",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K1",
+      "skills": [
+        {
+          "id": "k01_01",
+          "title": "Python lanjutan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K1 / 1"
+        },
+        {
+          "id": "k01_02",
+          "title": "TypeScript",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K1 / 2"
+        },
+        {
+          "id": "k01_03",
+          "title": "Rust dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K1 / 3"
+        },
+        {
+          "id": "k01_04",
+          "title": "Go dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K1 / 4"
+        },
+        {
+          "id": "k01_05",
+          "title": "SQL",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K1 / 5"
+        },
+        {
+          "id": "k01_06",
+          "title": "Bash",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K1 / 6"
+        },
+        {
+          "id": "k01_07",
+          "title": "regex lanjut",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K1 / 7"
+        },
+        {
+          "id": "k01_08",
+          "title": "HTML/CSS",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K1 / 8"
+        },
+        {
+          "id": "k01_09",
+          "title": "JSON/YAML",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K1 / 9"
+        },
+        {
+          "id": "k01_10",
+          "title": "Markdown teknis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K1 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k02",
+      "title": "Rekayasa",
+      "domain": "software",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K2",
+      "skills": [
+        {
+          "id": "k02_01",
+          "title": "debugging sistematis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K2 / 1"
+        },
+        {
+          "id": "k02_02",
+          "title": "refactoring aman",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K2 / 2"
+        },
+        {
+          "id": "k02_03",
+          "title": "desain API REST",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K2 / 3"
+        },
+        {
+          "id": "k02_04",
+          "title": "desain skema data",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K2 / 4"
+        },
+        {
+          "id": "k02_05",
+          "title": "uji unit",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K2 / 5"
+        },
+        {
+          "id": "k02_06",
+          "title": "uji integrasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K2 / 6"
+        },
+        {
+          "id": "k02_07",
+          "title": "CI/CD",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K2 / 7"
+        },
+        {
+          "id": "k02_08",
+          "title": "Git lanjutan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K2 / 8"
+        },
+        {
+          "id": "k02_09",
+          "title": "keamanan web dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K2 / 9"
+        },
+        {
+          "id": "k02_10",
+          "title": "kinerja web",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K2 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k03",
+      "title": "Data",
+      "domain": "software",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K3",
+      "skills": [
+        {
+          "id": "k03_01",
+          "title": "pandas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K3 / 1"
+        },
+        {
+          "id": "k03_02",
+          "title": "polars",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K3 / 2"
+        },
+        {
+          "id": "k03_03",
+          "title": "SQL analitik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K3 / 3"
+        },
+        {
+          "id": "k03_04",
+          "title": "visualisasi data",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K3 / 4"
+        },
+        {
+          "id": "k03_05",
+          "title": "statistik deskriptif",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K3 / 5"
+        },
+        {
+          "id": "k03_06",
+          "title": "statistik inferensial",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K3 / 6"
+        },
+        {
+          "id": "k03_07",
+          "title": "pembersihan data",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K3 / 7"
+        },
+        {
+          "id": "k03_08",
+          "title": "ETL",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K3 / 8"
+        },
+        {
+          "id": "k03_09",
+          "title": "spreadsheet lanjut",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K3 / 9"
+        },
+        {
+          "id": "k03_10",
+          "title": "SQL window",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K3 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k04",
+      "title": "Sistem",
+      "domain": "software",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K4",
+      "skills": [
+        {
+          "id": "k04_01",
+          "title": "Linux CLI",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K4 / 1"
+        },
+        {
+          "id": "k04_02",
+          "title": "systemd",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K4 / 2"
+        },
+        {
+          "id": "k04_03",
+          "title": "jaringan dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K4 / 3"
+        },
+        {
+          "id": "k04_04",
+          "title": "Docker",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K4 / 4"
+        },
+        {
+          "id": "k04_05",
+          "title": "proses dan sinyal",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K4 / 5"
+        },
+        {
+          "id": "k04_06",
+          "title": "berkas dan izin",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K4 / 6"
+        },
+        {
+          "id": "k04_07",
+          "title": "cron",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K4 / 7"
+        },
+        {
+          "id": "k04_08",
+          "title": "SSH",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K4 / 8"
+        },
+        {
+          "id": "k04_09",
+          "title": "log dan observasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K4 / 9"
+        },
+        {
+          "id": "k04_10",
+          "title": "cadangan data",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K4 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k05",
+      "title": "Web lanjut",
+      "domain": "software",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K5",
+      "skills": [
+        {
+          "id": "k05_01",
+          "title": "GraphQL",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K5 / 1"
+        },
+        {
+          "id": "k05_02",
+          "title": "WebSocket",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K5 / 2"
+        },
+        {
+          "id": "k05_03",
+          "title": "PWA",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K5 / 3"
+        },
+        {
+          "id": "k05_04",
+          "title": "SSR",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K5 / 4"
+        },
+        {
+          "id": "k05_05",
+          "title": "caching",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K5 / 5"
+        },
+        {
+          "id": "k05_06",
+          "title": "CDN",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K5 / 6"
+        },
+        {
+          "id": "k05_07",
+          "title": "SEO teknis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K5 / 7"
+        },
+        {
+          "id": "k05_08",
+          "title": "keamanan API",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K5 / 8"
+        },
+        {
+          "id": "k05_09",
+          "title": "rate limiting",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K5 / 9"
+        },
+        {
+          "id": "k05_10",
+          "title": "webhook",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K5 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k06",
+      "title": "Mobile & desktop",
+      "domain": "software",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K6",
+      "skills": [
+        {
+          "id": "k06_01",
+          "title": "Android dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K6 / 1"
+        },
+        {
+          "id": "k06_02",
+          "title": "iOS dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K6 / 2"
+        },
+        {
+          "id": "k06_03",
+          "title": "Flutter dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K6 / 3"
+        },
+        {
+          "id": "k06_04",
+          "title": "Electron",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K6 / 4"
+        },
+        {
+          "id": "k06_05",
+          "title": "notifikasi push",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K6 / 5"
+        },
+        {
+          "id": "k06_06",
+          "title": "penyimpanan lokal",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K6 / 6"
+        },
+        {
+          "id": "k06_07",
+          "title": "sinkronisasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K6 / 7"
+        },
+        {
+          "id": "k06_08",
+          "title": "publikasi toko aplikasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K6 / 8"
+        },
+        {
+          "id": "k06_09",
+          "title": "telemetri",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K6 / 9"
+        },
+        {
+          "id": "k06_10",
+          "title": "uji perangkat",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K6 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k07",
+      "title": "DevOps",
+      "domain": "software",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K7",
+      "skills": [
+        {
+          "id": "k07_01",
+          "title": "Kubernetes dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K7 / 1"
+        },
+        {
+          "id": "k07_02",
+          "title": "Terraform dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K7 / 2"
+        },
+        {
+          "id": "k07_03",
+          "title": "pemantauan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K7 / 3"
+        },
+        {
+          "id": "k07_04",
+          "title": "alerting",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K7 / 4"
+        },
+        {
+          "id": "k07_05",
+          "title": "manajemen rahasia",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K7 / 5"
+        },
+        {
+          "id": "k07_06",
+          "title": "penyeimbang beban",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K7 / 6"
+        },
+        {
+          "id": "k07_07",
+          "title": "antrean pesan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K7 / 7"
+        },
+        {
+          "id": "k07_08",
+          "title": "cadangan otomatis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K7 / 8"
+        },
+        {
+          "id": "k07_09",
+          "title": "pemulihan bencana",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K7 / 9"
+        },
+        {
+          "id": "k07_10",
+          "title": "biaya cloud",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K7 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k08",
+      "title": "Kualitas",
+      "domain": "software",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K8",
+      "skills": [
+        {
+          "id": "k08_01",
+          "title": "TDD",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K8 / 1"
+        },
+        {
+          "id": "k08_02",
+          "title": "BDD",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K8 / 2"
+        },
+        {
+          "id": "k08_03",
+          "title": "uji properti",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K8 / 3"
+        },
+        {
+          "id": "k08_04",
+          "title": "fuzzing",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K8 / 4"
+        },
+        {
+          "id": "k08_05",
+          "title": "uji beban",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K8 / 5"
+        },
+        {
+          "id": "k08_06",
+          "title": "uji aksesibilitas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K8 / 6"
+        },
+        {
+          "id": "k08_07",
+          "title": "uji regresi visual",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K8 / 7"
+        },
+        {
+          "id": "k08_08",
+          "title": "analisis statis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K8 / 8"
+        },
+        {
+          "id": "k08_09",
+          "title": "tinjauan keamanan kode",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K8 / 9"
+        },
+        {
+          "id": "k08_10",
+          "title": "dokumentasi kode",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K8 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k09",
+      "title": "Arsitektur",
+      "domain": "software",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K9",
+      "skills": [
+        {
+          "id": "k09_01",
+          "title": "pola desain",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K9 / 1"
+        },
+        {
+          "id": "k09_02",
+          "title": "arsitektur heksagonal",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K9 / 2"
+        },
+        {
+          "id": "k09_03",
+          "title": "event-driven",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K9 / 3"
+        },
+        {
+          "id": "k09_04",
+          "title": "CQRS dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K9 / 4"
+        },
+        {
+          "id": "k09_05",
+          "title": "idempotensi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K9 / 5"
+        },
+        {
+          "id": "k09_06",
+          "title": "konsistensi data",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K9 / 6"
+        },
+        {
+          "id": "k09_07",
+          "title": "sharding dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K9 / 7"
+        },
+        {
+          "id": "k09_08",
+          "title": "cache terdistribusi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K9 / 8"
+        },
+        {
+          "id": "k09_09",
+          "title": "versioning API",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K9 / 9"
+        },
+        {
+          "id": "k09_10",
+          "title": "migrasi monolit",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K9 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k10",
+      "title": "Perkakas",
+      "domain": "software",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K10",
+      "skills": [
+        {
+          "id": "k10_01",
+          "title": "Docker lanjut",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K10 / 1"
+        },
+        {
+          "id": "k10_02",
+          "title": "Make/Bash lanjut",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K10 / 2"
+        },
+        {
+          "id": "k10_03",
+          "title": "Git worktree",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K10 / 3"
+        },
+        {
+          "id": "k10_04",
+          "title": "generator kode",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K10 / 4"
+        },
+        {
+          "id": "k10_05",
+          "title": "linter kustom",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K10 / 5"
+        },
+        {
+          "id": "k10_06",
+          "title": "skrip CI",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K10 / 6"
+        },
+        {
+          "id": "k10_07",
+          "title": "manajemen monorepo",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K10 / 7"
+        },
+        {
+          "id": "k10_08",
+          "title": "changelog otomatis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K10 / 8"
+        },
+        {
+          "id": "k10_09",
+          "title": "rilis semantik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K10 / 9"
+        },
+        {
+          "id": "k10_10",
+          "title": "editor makro",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K10 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k11",
+      "title": "Akademik",
+      "domain": "research",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K11",
+      "skills": [
+        {
+          "id": "k11_01",
+          "title": "membaca paper",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K11 / 1"
+        },
+        {
+          "id": "k11_02",
+          "title": "menulis sitasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K11 / 2"
+        },
+        {
+          "id": "k11_03",
+          "title": "tinjauan pustaka",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K11 / 3"
+        },
+        {
+          "id": "k11_04",
+          "title": "desain eksperimen",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K11 / 4"
+        },
+        {
+          "id": "k11_05",
+          "title": "statistik penelitian",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K11 / 5"
+        },
+        {
+          "id": "k11_06",
+          "title": "meta-analisis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K11 / 6"
+        },
+        {
+          "id": "k11_07",
+          "title": "kritik metodologi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K11 / 7"
+        },
+        {
+          "id": "k11_08",
+          "title": "replikasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K11 / 8"
+        },
+        {
+          "id": "k11_09",
+          "title": "penulisan akademik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K11 / 9"
+        },
+        {
+          "id": "k11_10",
+          "title": "presentasi riset",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K11 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k12",
+      "title": "Bahasa manusia",
+      "domain": "research",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K12",
+      "skills": [
+        {
+          "id": "k12_01",
+          "title": "Inggris akademik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K12 / 1"
+        },
+        {
+          "id": "k12_02",
+          "title": "Inggris bisnis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K12 / 2"
+        },
+        {
+          "id": "k12_03",
+          "title": "Indonesia formal",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K12 / 3"
+        },
+        {
+          "id": "k12_04",
+          "title": "terjemahan ID-EN",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K12 / 4"
+        },
+        {
+          "id": "k12_05",
+          "title": "terjemahan EN-ID",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K12 / 5"
+        },
+        {
+          "id": "k12_06",
+          "title": "penyuntingan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K12 / 6"
+        },
+        {
+          "id": "k12_07",
+          "title": "parafrase",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K12 / 7"
+        },
+        {
+          "id": "k12_08",
+          "title": "ringkasan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K12 / 8"
+        },
+        {
+          "id": "k12_09",
+          "title": "penulisan teknis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K12 / 9"
+        },
+        {
+          "id": "k12_10",
+          "title": "penulisan persuasif",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K12 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k13",
+      "title": "Pengetahuan",
+      "domain": "research",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K13",
+      "skills": [
+        {
+          "id": "k13_01",
+          "title": "sejarah sains",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K13 / 1"
+        },
+        {
+          "id": "k13_02",
+          "title": "filsafat dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K13 / 2"
+        },
+        {
+          "id": "k13_03",
+          "title": "ekonomi dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K13 / 3"
+        },
+        {
+          "id": "k13_04",
+          "title": "hukum dasar Indonesia",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K13 / 4"
+        },
+        {
+          "id": "k13_05",
+          "title": "politik dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K13 / 5"
+        },
+        {
+          "id": "k13_06",
+          "title": "geografi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K13 / 6"
+        },
+        {
+          "id": "k13_07",
+          "title": "biologi dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K13 / 7"
+        },
+        {
+          "id": "k13_08",
+          "title": "kimia dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K13 / 8"
+        },
+        {
+          "id": "k13_09",
+          "title": "fisika dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K13 / 9"
+        },
+        {
+          "id": "k13_10",
+          "title": "matematika lanjut",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K13 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k14",
+      "title": "Analisis",
+      "domain": "research",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K14",
+      "skills": [
+        {
+          "id": "k14_01",
+          "title": "penalaran kausal terapan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K14 / 1"
+        },
+        {
+          "id": "k14_02",
+          "title": "analisis keputusan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K14 / 2"
+        },
+        {
+          "id": "k14_03",
+          "title": "analisis risiko",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K14 / 3"
+        },
+        {
+          "id": "k14_04",
+          "title": "pemodelan spreadsheet",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K14 / 4"
+        },
+        {
+          "id": "k14_05",
+          "title": "analisis pasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K14 / 5"
+        },
+        {
+          "id": "k14_06",
+          "title": "analisis pesaing",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K14 / 6"
+        },
+        {
+          "id": "k14_07",
+          "title": "analisis tren",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K14 / 7"
+        },
+        {
+          "id": "k14_08",
+          "title": "analisis teks",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K14 / 8"
+        },
+        {
+          "id": "k14_09",
+          "title": "analisis sentimen",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K14 / 9"
+        },
+        {
+          "id": "k14_10",
+          "title": "analisis jaringan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K14 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k15",
+      "title": "Kuantitatif",
+      "domain": "research",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K15",
+      "skills": [
+        {
+          "id": "k15_01",
+          "title": "probabilitas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K15 / 1"
+        },
+        {
+          "id": "k15_02",
+          "title": "Bayesian dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K15 / 2"
+        },
+        {
+          "id": "k15_03",
+          "title": "regresi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K15 / 3"
+        },
+        {
+          "id": "k15_04",
+          "title": "deret waktu",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K15 / 4"
+        },
+        {
+          "id": "k15_05",
+          "title": "uji A/B",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K15 / 5"
+        },
+        {
+          "id": "k15_06",
+          "title": "power analysis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K15 / 6"
+        },
+        {
+          "id": "k15_07",
+          "title": "sampling",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K15 / 7"
+        },
+        {
+          "id": "k15_08",
+          "title": "imputasi data",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K15 / 8"
+        },
+        {
+          "id": "k15_09",
+          "title": "validasi model",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K15 / 9"
+        },
+        {
+          "id": "k15_10",
+          "title": "interpretasi ukuran efek",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K15 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k16",
+      "title": "Kualitatif",
+      "domain": "research",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K16",
+      "skills": [
+        {
+          "id": "k16_01",
+          "title": "wawancara mendalam",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K16 / 1"
+        },
+        {
+          "id": "k16_02",
+          "title": "etnografi dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K16 / 2"
+        },
+        {
+          "id": "k16_03",
+          "title": "analisis tematik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K16 / 3"
+        },
+        {
+          "id": "k16_04",
+          "title": "grounded theory dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K16 / 4"
+        },
+        {
+          "id": "k16_05",
+          "title": "studi kasus",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K16 / 5"
+        },
+        {
+          "id": "k16_06",
+          "title": "analisis wacana",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K16 / 6"
+        },
+        {
+          "id": "k16_07",
+          "title": "observasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K16 / 7"
+        },
+        {
+          "id": "k16_08",
+          "title": "triangulasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K16 / 8"
+        },
+        {
+          "id": "k16_09",
+          "title": "coding kualitatif",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K16 / 9"
+        },
+        {
+          "id": "k16_10",
+          "title": "saturasi data",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K16 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k17",
+      "title": "Data terbuka",
+      "domain": "research",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K17",
+      "skills": [
+        {
+          "id": "k17_01",
+          "title": "dataset pemerintah",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K17 / 1"
+        },
+        {
+          "id": "k17_02",
+          "title": "data BPS",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K17 / 2"
+        },
+        {
+          "id": "k17_03",
+          "title": "data Bank Indonesia",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K17 / 3"
+        },
+        {
+          "id": "k17_04",
+          "title": "data pasar terbuka",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K17 / 4"
+        },
+        {
+          "id": "k17_05",
+          "title": "arsip web",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K17 / 5"
+        },
+        {
+          "id": "k17_06",
+          "title": "perpustakaan digital",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K17 / 6"
+        },
+        {
+          "id": "k17_07",
+          "title": "data geospasial",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K17 / 7"
+        },
+        {
+          "id": "k17_08",
+          "title": "data cuaca",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K17 / 8"
+        },
+        {
+          "id": "k17_09",
+          "title": "data transportasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K17 / 9"
+        },
+        {
+          "id": "k17_10",
+          "title": "data kesehatan publik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K17 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k18",
+      "title": "Bidang terapan",
+      "domain": "research",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K18",
+      "skills": [
+        {
+          "id": "k18_01",
+          "title": "analisis kebijakan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K18 / 1"
+        },
+        {
+          "id": "k18_02",
+          "title": "analisis regulasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K18 / 2"
+        },
+        {
+          "id": "k18_03",
+          "title": "analisis industri",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K18 / 3"
+        },
+        {
+          "id": "k18_04",
+          "title": "analisis teknologi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K18 / 4"
+        },
+        {
+          "id": "k18_05",
+          "title": "analisis pendidikan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K18 / 5"
+        },
+        {
+          "id": "k18_06",
+          "title": "analisis kesehatan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K18 / 6"
+        },
+        {
+          "id": "k18_07",
+          "title": "analisis lingkungan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K18 / 7"
+        },
+        {
+          "id": "k18_08",
+          "title": "analisis energi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K18 / 8"
+        },
+        {
+          "id": "k18_09",
+          "title": "analisis pangan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K18 / 9"
+        },
+        {
+          "id": "k18_10",
+          "title": "analisis keuangan publik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K18 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k19",
+      "title": "Komunikasi riset",
+      "domain": "research",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K19",
+      "skills": [
+        {
+          "id": "k19_01",
+          "title": "visualisasi laporan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K19 / 1"
+        },
+        {
+          "id": "k19_02",
+          "title": "penulisan populer sains",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K19 / 2"
+        },
+        {
+          "id": "k19_03",
+          "title": "fact-checking",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K19 / 3"
+        },
+        {
+          "id": "k19_04",
+          "title": "brief kebijakan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K19 / 4"
+        },
+        {
+          "id": "k19_05",
+          "title": "poster ilmiah",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K19 / 5"
+        },
+        {
+          "id": "k19_06",
+          "title": "abstrak dwibahasa",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K19 / 6"
+        },
+        {
+          "id": "k19_07",
+          "title": "siaran pers riset",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K19 / 7"
+        },
+        {
+          "id": "k19_08",
+          "title": "FAQ publik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K19 / 8"
+        },
+        {
+          "id": "k19_09",
+          "title": "glosarium publik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K19 / 9"
+        },
+        {
+          "id": "k19_10",
+          "title": "ringkasan media sosial",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K19 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k20",
+      "title": "Etika riset",
+      "domain": "research",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K20",
+      "skills": [
+        {
+          "id": "k20_01",
+          "title": "etika penelitian",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K20 / 1"
+        },
+        {
+          "id": "k20_02",
+          "title": "privasi subjek",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K20 / 2"
+        },
+        {
+          "id": "k20_03",
+          "title": "konflik kepentingan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K20 / 3"
+        },
+        {
+          "id": "k20_04",
+          "title": "plagiarisme",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K20 / 4"
+        },
+        {
+          "id": "k20_05",
+          "title": "fabrikasi data",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K20 / 5"
+        },
+        {
+          "id": "k20_06",
+          "title": "lisensi data",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K20 / 6"
+        },
+        {
+          "id": "k20_07",
+          "title": "atribusi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K20 / 7"
+        },
+        {
+          "id": "k20_08",
+          "title": "koreksi publik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K20 / 8"
+        },
+        {
+          "id": "k20_09",
+          "title": "replikasi terbuka",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K20 / 9"
+        },
+        {
+          "id": "k20_10",
+          "title": "preregistrasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K20 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k21",
+      "title": "Visual",
+      "domain": "media",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K21",
+      "skills": [
+        {
+          "id": "k21_01",
+          "title": "fotografi dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K21 / 1"
+        },
+        {
+          "id": "k21_02",
+          "title": "komposisi gambar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K21 / 2"
+        },
+        {
+          "id": "k21_03",
+          "title": "teori warna",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K21 / 3"
+        },
+        {
+          "id": "k21_04",
+          "title": "tipografi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K21 / 4"
+        },
+        {
+          "id": "k21_05",
+          "title": "desain poster",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K21 / 5"
+        },
+        {
+          "id": "k21_06",
+          "title": "desain logo dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K21 / 6"
+        },
+        {
+          "id": "k21_07",
+          "title": "infografik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K21 / 7"
+        },
+        {
+          "id": "k21_08",
+          "title": "ilustrasi vektor",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K21 / 8"
+        },
+        {
+          "id": "k21_09",
+          "title": "edit foto",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K21 / 9"
+        },
+        {
+          "id": "k21_10",
+          "title": "storyboard",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K21 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k22",
+      "title": "Audio-video",
+      "domain": "media",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K22",
+      "skills": [
+        {
+          "id": "k22_01",
+          "title": "naskah video",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K22 / 1"
+        },
+        {
+          "id": "k22_02",
+          "title": "penyutradaraan dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K22 / 2"
+        },
+        {
+          "id": "k22_03",
+          "title": "edit video",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K22 / 3"
+        },
+        {
+          "id": "k22_04",
+          "title": "mixing audio",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K22 / 4"
+        },
+        {
+          "id": "k22_05",
+          "title": "mastering podcast",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K22 / 5"
+        },
+        {
+          "id": "k22_06",
+          "title": "desain suara",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K22 / 6"
+        },
+        {
+          "id": "k22_07",
+          "title": "animasi 2D",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K22 / 7"
+        },
+        {
+          "id": "k22_08",
+          "title": "animasi 3D dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K22 / 8"
+        },
+        {
+          "id": "k22_09",
+          "title": "motion graphics",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K22 / 9"
+        },
+        {
+          "id": "k22_10",
+          "title": "pewarnaan video",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K22 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k23",
+      "title": "Gambar generatif",
+      "domain": "media",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K23",
+      "skills": [
+        {
+          "id": "k23_01",
+          "title": "prompt gambar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K23 / 1"
+        },
+        {
+          "id": "k23_02",
+          "title": "konsistensi gaya",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K23 / 2"
+        },
+        {
+          "id": "k23_03",
+          "title": "inpainting",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K23 / 3"
+        },
+        {
+          "id": "k23_04",
+          "title": "outpainting",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K23 / 4"
+        },
+        {
+          "id": "k23_05",
+          "title": "upscale",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K23 / 5"
+        },
+        {
+          "id": "k23_06",
+          "title": "kontrol komposisi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K23 / 6"
+        },
+        {
+          "id": "k23_07",
+          "title": "karakter konsisten",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K23 / 7"
+        },
+        {
+          "id": "k23_08",
+          "title": "latar transparan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K23 / 8"
+        },
+        {
+          "id": "k23_09",
+          "title": "variasi terkendali",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K23 / 9"
+        },
+        {
+          "id": "k23_10",
+          "title": "kurasi hasil",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K23 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k24",
+      "title": "Video generatif",
+      "domain": "media",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K24",
+      "skills": [
+        {
+          "id": "k24_01",
+          "title": "prompt video",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K24 / 1"
+        },
+        {
+          "id": "k24_02",
+          "title": "gerak kamera",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K24 / 2"
+        },
+        {
+          "id": "k24_03",
+          "title": "kesinambungan adegan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K24 / 3"
+        },
+        {
+          "id": "k24_04",
+          "title": "lipsync dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K24 / 4"
+        },
+        {
+          "id": "k24_05",
+          "title": "teks dalam video",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K24 / 5"
+        },
+        {
+          "id": "k24_06",
+          "title": "transisi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K24 / 6"
+        },
+        {
+          "id": "k24_07",
+          "title": "grading otomatis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K24 / 7"
+        },
+        {
+          "id": "k24_08",
+          "title": "multi-rasio",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K24 / 8"
+        },
+        {
+          "id": "k24_09",
+          "title": "thumbnail dinamis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K24 / 9"
+        },
+        {
+          "id": "k24_10",
+          "title": "lokalisasi video",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K24 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k25",
+      "title": "Audio generatif",
+      "domain": "media",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K25",
+      "skills": [
+        {
+          "id": "k25_01",
+          "title": "prompt musik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K25 / 1"
+        },
+        {
+          "id": "k25_02",
+          "title": "struktur lagu",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K25 / 2"
+        },
+        {
+          "id": "k25_03",
+          "title": "aransemen sederhana",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K25 / 3"
+        },
+        {
+          "id": "k25_04",
+          "title": "desain suara",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K25 / 4"
+        },
+        {
+          "id": "k25_05",
+          "title": "VO sintetis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K25 / 5"
+        },
+        {
+          "id": "k25_06",
+          "title": "kloning suara berizin",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K25 / 6"
+        },
+        {
+          "id": "k25_07",
+          "title": "pembersihan vokal",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K25 / 7"
+        },
+        {
+          "id": "k25_08",
+          "title": "mastering otomatis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K25 / 8"
+        },
+        {
+          "id": "k25_09",
+          "title": "efek audio",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K25 / 9"
+        },
+        {
+          "id": "k25_10",
+          "title": "lisensi audio",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K25 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k26",
+      "title": "Animasi",
+      "domain": "media",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K26",
+      "skills": [
+        {
+          "id": "k26_01",
+          "title": "prinsip animasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K26 / 1"
+        },
+        {
+          "id": "k26_02",
+          "title": "rigging dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K26 / 2"
+        },
+        {
+          "id": "k26_03",
+          "title": "keyframing",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K26 / 3"
+        },
+        {
+          "id": "k26_04",
+          "title": "easing",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K26 / 4"
+        },
+        {
+          "id": "k26_05",
+          "title": "animasi teks",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K26 / 5"
+        },
+        {
+          "id": "k26_06",
+          "title": "animasi karakter 2D",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K26 / 6"
+        },
+        {
+          "id": "k26_07",
+          "title": "animasi kamera 3D",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K26 / 7"
+        },
+        {
+          "id": "k26_08",
+          "title": "render dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K26 / 8"
+        },
+        {
+          "id": "k26_09",
+          "title": "kompositing",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K26 / 9"
+        },
+        {
+          "id": "k26_10",
+          "title": "ekspor animasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K26 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k27",
+      "title": "Konten seri",
+      "domain": "media",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K27",
+      "skills": [
+        {
+          "id": "k27_01",
+          "title": "perencanaan musim",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K27 / 1"
+        },
+        {
+          "id": "k27_02",
+          "title": "kalender konten",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K27 / 2"
+        },
+        {
+          "id": "k27_03",
+          "title": "konsistensi dunia cerita",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K27 / 3"
+        },
+        {
+          "id": "k27_04",
+          "title": "bible seri",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K27 / 4"
+        },
+        {
+          "id": "k27_05",
+          "title": "arc karakter",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K27 / 5"
+        },
+        {
+          "id": "k27_06",
+          "title": "hook episode",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K27 / 6"
+        },
+        {
+          "id": "k27_07",
+          "title": "retensi penonton",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K27 / 7"
+        },
+        {
+          "id": "k27_08",
+          "title": "analitik konten",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K27 / 8"
+        },
+        {
+          "id": "k27_09",
+          "title": "repurpose konten",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K27 / 9"
+        },
+        {
+          "id": "k27_10",
+          "title": "arsip seri",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K27 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k28",
+      "title": "Desain digital",
+      "domain": "media",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K28",
+      "skills": [
+        {
+          "id": "k28_01",
+          "title": "UI dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K28 / 1"
+        },
+        {
+          "id": "k28_02",
+          "title": "UX dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K28 / 2"
+        },
+        {
+          "id": "k28_03",
+          "title": "wireframe",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K28 / 3"
+        },
+        {
+          "id": "k28_04",
+          "title": "prototipe",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K28 / 4"
+        },
+        {
+          "id": "k28_05",
+          "title": "sistem desain",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K28 / 5"
+        },
+        {
+          "id": "k28_06",
+          "title": "ikon",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K28 / 6"
+        },
+        {
+          "id": "k28_07",
+          "title": "ilustrasi UI",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K28 / 7"
+        },
+        {
+          "id": "k28_08",
+          "title": "mode gelap",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K28 / 8"
+        },
+        {
+          "id": "k28_09",
+          "title": "responsif",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K28 / 9"
+        },
+        {
+          "id": "k28_10",
+          "title": "aksesibilitas visual",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K28 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k29",
+      "title": "Produksi nyata",
+      "domain": "media",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K29",
+      "skills": [
+        {
+          "id": "k29_01",
+          "title": "pencahayaan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K29 / 1"
+        },
+        {
+          "id": "k29_02",
+          "title": "komposisi video",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K29 / 2"
+        },
+        {
+          "id": "k29_03",
+          "title": "suara lokasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K29 / 3"
+        },
+        {
+          "id": "k29_04",
+          "title": "wawancara video",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K29 / 4"
+        },
+        {
+          "id": "k29_05",
+          "title": "b-roll",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K29 / 5"
+        },
+        {
+          "id": "k29_06",
+          "title": "color grading",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K29 / 6"
+        },
+        {
+          "id": "k29_07",
+          "title": "stabilisasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K29 / 7"
+        },
+        {
+          "id": "k29_08",
+          "title": "teori drone",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K29 / 8"
+        },
+        {
+          "id": "k29_09",
+          "title": "edit dokumenter",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K29 / 9"
+        },
+        {
+          "id": "k29_10",
+          "title": "etika dokumentasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K29 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k30",
+      "title": "Distribusi",
+      "domain": "media",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K30",
+      "skills": [
+        {
+          "id": "k30_01",
+          "title": "metadata platform",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K30 / 1"
+        },
+        {
+          "id": "k30_02",
+          "title": "jadwal unggah",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K30 / 2"
+        },
+        {
+          "id": "k30_03",
+          "title": "teks unggahan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K30 / 3"
+        },
+        {
+          "id": "k30_04",
+          "title": "tagar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K30 / 4"
+        },
+        {
+          "id": "k30_05",
+          "title": "sampul seri",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K30 / 5"
+        },
+        {
+          "id": "k30_06",
+          "title": "analitik platform",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K30 / 6"
+        },
+        {
+          "id": "k30_07",
+          "title": "komentar komunitas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K30 / 7"
+        },
+        {
+          "id": "k30_08",
+          "title": "kolaborasi kreator",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K30 / 8"
+        },
+        {
+          "id": "k30_09",
+          "title": "hak cipta konten",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K30 / 9"
+        },
+        {
+          "id": "k30_10",
+          "title": "arsip distribusi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K30 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k31",
+      "title": "Bisnis & operasi",
+      "domain": "production_presence",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K31",
+      "skills": [
+        {
+          "id": "k31_01",
+          "title": "proposal",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K31 / 1"
+        },
+        {
+          "id": "k31_02",
+          "title": "laporan bisnis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K31 / 2"
+        },
+        {
+          "id": "k31_03",
+          "title": "layanan pelanggan tertulis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K31 / 3"
+        },
+        {
+          "id": "k31_04",
+          "title": "manajemen proyek dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K31 / 4"
+        },
+        {
+          "id": "k31_05",
+          "title": "pencatatan keuangan terbaca",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K31 / 5"
+        },
+        {
+          "id": "k31_06",
+          "title": "email bisnis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K31 / 6"
+        },
+        {
+          "id": "k31_07",
+          "title": "negosiasi tertulis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K31 / 7"
+        },
+        {
+          "id": "k31_08",
+          "title": "SOP",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K31 / 8"
+        },
+        {
+          "id": "k31_09",
+          "title": "deskripsi produk",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K31 / 9"
+        },
+        {
+          "id": "k31_10",
+          "title": "halaman penjualan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K31 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k32",
+      "title": "Mengajar & komunikasi",
+      "domain": "production_presence",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K32",
+      "skills": [
+        {
+          "id": "k32_01",
+          "title": "menjelaskan konsep sulit",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K32 / 1"
+        },
+        {
+          "id": "k32_02",
+          "title": "analogi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K32 / 2"
+        },
+        {
+          "id": "k32_03",
+          "title": "pertanyaan sokratik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K32 / 3"
+        },
+        {
+          "id": "k32_04",
+          "title": "umpan balik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K32 / 4"
+        },
+        {
+          "id": "k32_05",
+          "title": "kurikulum mini",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K32 / 5"
+        },
+        {
+          "id": "k32_06",
+          "title": "penilaian esai",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K32 / 6"
+        },
+        {
+          "id": "k32_07",
+          "title": "pembuatan kuis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K32 / 7"
+        },
+        {
+          "id": "k32_08",
+          "title": "mengajar anak",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K32 / 8"
+        },
+        {
+          "id": "k32_09",
+          "title": "mengajar pemula dewasa",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K32 / 9"
+        },
+        {
+          "id": "k32_10",
+          "title": "naskah bicara publik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K32 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k33",
+      "title": "Dokumen profesional",
+      "domain": "production_presence",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K33",
+      "skills": [
+        {
+          "id": "k33_01",
+          "title": "surat resmi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K33 / 1"
+        },
+        {
+          "id": "k33_02",
+          "title": "memo",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K33 / 2"
+        },
+        {
+          "id": "k33_03",
+          "title": "notulen",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K33 / 3"
+        },
+        {
+          "id": "k33_04",
+          "title": "proposal proyek",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K33 / 4"
+        },
+        {
+          "id": "k33_05",
+          "title": "laporan tahunan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K33 / 5"
+        },
+        {
+          "id": "k33_06",
+          "title": "manual pengguna",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K33 / 6"
+        },
+        {
+          "id": "k33_07",
+          "title": "kebijakan internal",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K33 / 7"
+        },
+        {
+          "id": "k33_08",
+          "title": "formulir standar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K33 / 8"
+        },
+        {
+          "id": "k33_09",
+          "title": "presentasi bisnis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K33 / 9"
+        },
+        {
+          "id": "k33_10",
+          "title": "profil perusahaan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K33 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k34",
+      "title": "Produktivitas pemilik",
+      "domain": "production_presence",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K34",
+      "skills": [
+        {
+          "id": "k34_01",
+          "title": "pengelolaan email",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K34 / 1"
+        },
+        {
+          "id": "k34_02",
+          "title": "pengelolaan kalender",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K34 / 2"
+        },
+        {
+          "id": "k34_03",
+          "title": "pengelolaan tugas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K34 / 3"
+        },
+        {
+          "id": "k34_04",
+          "title": "catatan rapat",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K34 / 4"
+        },
+        {
+          "id": "k34_05",
+          "title": "pengingat cerdas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K34 / 5"
+        },
+        {
+          "id": "k34_06",
+          "title": "arsip pribadi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K34 / 6"
+        },
+        {
+          "id": "k34_07",
+          "title": "pencarian berkas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K34 / 7"
+        },
+        {
+          "id": "k34_08",
+          "title": "ringkasan harian",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K34 / 8"
+        },
+        {
+          "id": "k34_09",
+          "title": "persiapan perjalanan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K34 / 9"
+        },
+        {
+          "id": "k34_10",
+          "title": "daftar belanja cerdas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K34 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k35",
+      "title": "Bahasa asing",
+      "domain": "production_presence",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K35",
+      "skills": [
+        {
+          "id": "k35_01",
+          "title": "Jepang dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K35 / 1"
+        },
+        {
+          "id": "k35_02",
+          "title": "Mandarin dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K35 / 2"
+        },
+        {
+          "id": "k35_03",
+          "title": "Arab dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K35 / 3"
+        },
+        {
+          "id": "k35_04",
+          "title": "Korea dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K35 / 4"
+        },
+        {
+          "id": "k35_05",
+          "title": "Spanyol dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K35 / 5"
+        },
+        {
+          "id": "k35_06",
+          "title": "Prancis dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K35 / 6"
+        },
+        {
+          "id": "k35_07",
+          "title": "Jerman dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K35 / 7"
+        },
+        {
+          "id": "k35_08",
+          "title": "Belanda dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K35 / 8"
+        },
+        {
+          "id": "k35_09",
+          "title": "percakapan perjalanan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K35 / 9"
+        },
+        {
+          "id": "k35_10",
+          "title": "aksara dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K35 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k36",
+      "title": "Menulis kreatif",
+      "domain": "production_presence",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K36",
+      "skills": [
+        {
+          "id": "k36_01",
+          "title": "puisi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K36 / 1"
+        },
+        {
+          "id": "k36_02",
+          "title": "cerpen",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K36 / 2"
+        },
+        {
+          "id": "k36_03",
+          "title": "dialog",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K36 / 3"
+        },
+        {
+          "id": "k36_04",
+          "title": "monolog",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K36 / 4"
+        },
+        {
+          "id": "k36_05",
+          "title": "humor tertulis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K36 / 5"
+        },
+        {
+          "id": "k36_06",
+          "title": "penulisan anak",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K36 / 6"
+        },
+        {
+          "id": "k36_07",
+          "title": "lirik",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K36 / 7"
+        },
+        {
+          "id": "k36_08",
+          "title": "naskah pendek",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K36 / 8"
+        },
+        {
+          "id": "k36_09",
+          "title": "penulisan ulang gaya",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K36 / 9"
+        },
+        {
+          "id": "k36_10",
+          "title": "penamaan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K36 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k37",
+      "title": "Rumah & kehidupan",
+      "domain": "production_presence",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K37",
+      "skills": [
+        {
+          "id": "k37_01",
+          "title": "perencanaan menu",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K37 / 1"
+        },
+        {
+          "id": "k37_02",
+          "title": "resep dari bahan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K37 / 2"
+        },
+        {
+          "id": "k37_03",
+          "title": "perencanaan kebun",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K37 / 3"
+        },
+        {
+          "id": "k37_04",
+          "title": "perawatan tanaman",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K37 / 4"
+        },
+        {
+          "id": "k37_05",
+          "title": "pengetahuan perbaikan rumah",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K37 / 5"
+        },
+        {
+          "id": "k37_06",
+          "title": "perencanaan acara",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K37 / 6"
+        },
+        {
+          "id": "k37_07",
+          "title": "perencanaan hadiah",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K37 / 7"
+        },
+        {
+          "id": "k37_08",
+          "title": "perencanaan liburan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K37 / 8"
+        },
+        {
+          "id": "k37_09",
+          "title": "anggaran rumah tangga terbaca",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K37 / 9"
+        },
+        {
+          "id": "k37_10",
+          "title": "inventaris rumah",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K37 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k38",
+      "title": "Kesehatan (pengetahuan)",
+      "domain": "production_presence",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K38",
+      "skills": [
+        {
+          "id": "k38_01",
+          "title": "nutrisi dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K38 / 1"
+        },
+        {
+          "id": "k38_02",
+          "title": "perencanaan latihan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K38 / 2"
+        },
+        {
+          "id": "k38_03",
+          "title": "tidur sehat",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K38 / 3"
+        },
+        {
+          "id": "k38_04",
+          "title": "manajemen stres",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K38 / 4"
+        },
+        {
+          "id": "k38_05",
+          "title": "pertolongan pertama",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K38 / 5"
+        },
+        {
+          "id": "k38_06",
+          "title": "pembacaan label obat",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K38 / 6"
+        },
+        {
+          "id": "k38_07",
+          "title": "persiapan konsultasi dokter",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K38 / 7"
+        },
+        {
+          "id": "k38_08",
+          "title": "jurnal kesehatan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K38 / 8"
+        },
+        {
+          "id": "k38_09",
+          "title": "kebiasaan sehat",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K38 / 9"
+        },
+        {
+          "id": "k38_10",
+          "title": "ergonomi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K38 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k39",
+      "title": "Keuangan pribadi (literasi, bukan transaksi)",
+      "domain": "production_presence",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K39",
+      "skills": [
+        {
+          "id": "k39_01",
+          "title": "anggaran pribadi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K39 / 1"
+        },
+        {
+          "id": "k39_02",
+          "title": "dana darurat",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K39 / 2"
+        },
+        {
+          "id": "k39_03",
+          "title": "literasi utang",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K39 / 3"
+        },
+        {
+          "id": "k39_04",
+          "title": "literasi investasi",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K39 / 4"
+        },
+        {
+          "id": "k39_05",
+          "title": "pajak pribadi dasar Indonesia",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K39 / 5"
+        },
+        {
+          "id": "k39_06",
+          "title": "asuransi dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K39 / 6"
+        },
+        {
+          "id": "k39_07",
+          "title": "pensiun dasar",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K39 / 7"
+        },
+        {
+          "id": "k39_08",
+          "title": "pembacaan laporan keuangan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K39 / 8"
+        },
+        {
+          "id": "k39_09",
+          "title": "deteksi penipuan keuangan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K39 / 9"
+        },
+        {
+          "id": "k39_10",
+          "title": "perencanaan keuangan tahunan",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K39 / 10"
+        }
+      ]
+    },
+    {
+      "id": "k40",
+      "title": "Sosial & komunitas",
+      "domain": "production_presence",
+      "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K40",
+      "skills": [
+        {
+          "id": "k40_01",
+          "title": "pengumuman",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K40 / 1"
+        },
+        {
+          "id": "k40_02",
+          "title": "moderasi komunitas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K40 / 2"
+        },
+        {
+          "id": "k40_03",
+          "title": "pengelolaan acara komunitas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K40 / 3"
+        },
+        {
+          "id": "k40_04",
+          "title": "kampanye donasi tertulis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K40 / 4"
+        },
+        {
+          "id": "k40_05",
+          "title": "relawan digital",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K40 / 5"
+        },
+        {
+          "id": "k40_06",
+          "title": "dokumentasi komunitas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K40 / 6"
+        },
+        {
+          "id": "k40_07",
+          "title": "penyelesaian konflik tertulis",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K40 / 7"
+        },
+        {
+          "id": "k40_08",
+          "title": "sambutan acara",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K40 / 8"
+        },
+        {
+          "id": "k40_09",
+          "title": "profil komunitas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K40 / 9"
+        },
+        {
+          "id": "k40_10",
+          "title": "arsip komunitas",
+          "source_ref": "Rancangan EVO 0051–0060 / Gelombang 3 / K40 / 10"
+        }
+      ]
+    }
+  ]
+}
