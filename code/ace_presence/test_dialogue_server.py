@@ -64,3 +64,17 @@ class DialogueServerTests(unittest.TestCase):
             self.assertEqual(path.read_bytes(), prior)
             with self.assertRaisesRegex(PresenceError, "loopback"):
                 create_server(path, secrets.token_urlsafe(32), host="0.0.0.0")
+
+    def test_replaced_journal_is_never_opened_for_append(self):
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            path = root / "fixture.sqlite"
+            journal = Journal(path)
+            journal.append(turn())
+            path.rename(root / "original.sqlite")
+            replacement = Journal(path)
+            old = path.read_bytes()
+            with self.assertRaises(PresenceError):
+                journal.append(turn("new", message="Discard this."))
+            self.assertEqual(path.read_bytes(), old)
+            self.assertEqual(replacement.export("fixture")["events"], [])

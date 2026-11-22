@@ -5,6 +5,7 @@ from pathlib import Path
 import os
 import re
 import sqlite3
+import stat
 
 from ._contracts import PresenceError, canonical, decode, digest, identifier, identity, integer, items, obj, text
 
@@ -84,29 +85,47 @@ def validate_chain(session, events):
     return previous["sha256"] if previous else initial(session)
 
 
+def _file_identity(path):
+    details = path.lstat()
+    if not stat.S_ISREG(details.st_mode) or details.st_nlink != 1:
+        raise PresenceError("Jurnal harus berkas reguler tunggal milik paket dialog.")
+    return details.st_dev, details.st_ino
+
+
 def _connect(path, readonly=False):
-    if readonly:
-        url = Path(path).absolute().as_uri() + "?mode=ro"
-        return sqlite3.connect(url, timeout=3, isolation_level=None, uri=True)
-    return sqlite3.connect(path, timeout=3, isolation_level=None)
+    resolved_mode = "ro" if readonly else "rw"
+    url = path.as_uri() + "?mode=" + resolved_mode
+    return sqlite3.connect(url, timeout=3, isolation_level=None, uri=True)
+
+
+def _validate_database(connection):
+    connection.execute("PRAGMA trusted_schema=OFF")
+    if connection.execute("PRAGMA application_id").fetchone() != (APP_ID,):
+        raise PresenceError("Berkas SQLite bukan jurnal dialog ACE.")
 
 
 class Journal:
     """SQLite hanya di lokasi yang dipilih pemanggil untuk sesi dialog paket ini."""
 
     def __init__(self, path):
-        self.path = Path(path)
+        supplied = Path(path)
+        self.path = supplied.parent.resolve(strict=True) / supplied.name
         try:
             descriptor = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_WRONLY, 0o600)
         except FileExistsError:
-            if self.path.is_symlink() or not self.path.is_file():
-                raise PresenceError("Jurnal harus berkas reguler milik paket dialog.")
-            with closing(_connect(self.path, readonly=True)) as connection:
-                if connection.execute("PRAGMA application_id").fetchone() != (APP_ID,):
-                    raise PresenceError("Berkas SQLite bukan jurnal dialog ACE.")
+            self._identity = _file_identity(self.path)
+            with closing(self._session(readonly=True)):
+                pass
         else:
-            os.close(descriptor)
+            try:
+                details = os.fstat(descriptor)
+                self._identity = details.st_dev, details.st_ino
+            finally:
+                os.close(descriptor)
             with closing(_connect(self.path)) as connection:
+                if _file_identity(self.path) != self._identity:
+                    raise PresenceError("Identitas jurnal baru berubah selama inisialisasi.")
+                connection.execute("PRAGMA trusted_schema=OFF")
                 connection.execute("BEGIN IMMEDIATE")
                 connection.execute(f"PRAGMA application_id={APP_ID}")
                 connection.execute("""
@@ -121,13 +140,26 @@ class Journal:
                 """)
                 connection.commit()
 
+    def _session(self, readonly=False):
+        if _file_identity(self.path) != self._identity:
+            raise PresenceError("Identitas inode jurnal berubah.")
+        connection = _connect(self.path, readonly=readonly)
+        try:
+            _validate_database(connection)
+            if _file_identity(self.path) != self._identity:
+                raise PresenceError("Identitas inode berubah selama sambung jurnal.")
+        except BaseException:
+            connection.close()
+            raise
+        return connection
+
     @staticmethod
     def _load(connection, session):
         return [decode(row[0]) for row in connection.execute(
             "SELECT record FROM turns WHERE session=? ORDER BY seq LIMIT ?", (session, LIMIT + 1))]
 
     def export(self, session):
-        with closing(_connect(self.path, readonly=True)) as connection:
+        with closing(self._session(readonly=True)) as connection:
             events = self._load(connection, session)
         head = validate_chain(session, events)
         return {"schema": "ace.presence.dialogue-export.v1", "session": session,
@@ -136,7 +168,7 @@ class Journal:
     def append(self, raw):
         payload = turn(raw)
         session = payload["session"]
-        with closing(_connect(self.path)) as connection:
+        with closing(self._session()) as connection:
             connection.execute("BEGIN IMMEDIATE")
             try:
                 records = self._load(connection, session)
