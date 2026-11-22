@@ -2,6 +2,7 @@ from copy import deepcopy
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 from ._contracts import GuardianError, canonical, identity
 from ._snapshots import build_manifest, verify
@@ -118,6 +119,27 @@ class TwinsTests(unittest.TestCase):
         self.assertEqual(result["removed"], ["temp.json"])
         self.assertEqual(verify(target, self.manifest, reject_extras=True)["sub/model.json"], self.raw)
         self.assertEqual((current / "temp.json").read_bytes(), b"rejected")
+
+    def test_07_rollback_cleans_fresh_copy_if_source_changes_before_recheck(self):
+        current = self.root / "current"
+        current.mkdir()
+        current_file = current / "work.json"
+        current_file.write_bytes(b"before")
+        current_snapshot = build_manifest(current, ["work.json"])
+        target = self.root / "recovered"
+        configuration = plan("rollback-plan", verified_snapshot=self.manifest, current_snapshot=current_snapshot)
+
+        def copy_then_change(*args):
+            result = fork(*args)
+            current_file.write_bytes(b"new external observation")
+            return result
+
+        with patch("ace_guardian.rollback_engine.fork", side_effect=copy_then_change):
+            with self.assertRaises(GuardianError):
+                call(restore, configuration, self.source, current, target)
+        self.assertFalse(target.exists())
+        self.assertEqual(current_file.read_bytes(), b"new external observation")
+        self.assertEqual(self.original.read_bytes(), self.raw)
 
     def test_08_registry_rejects_bad_transition_or_snapshot_replacement(self):
         row = {"twin": "fixture", "event": "created", "snapshot": "a"*64, "source": "fixture:1",

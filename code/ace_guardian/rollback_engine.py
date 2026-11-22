@@ -1,6 +1,7 @@
 """Pulihkan snapshot terverifikasi ke jalur fixture baru dan periksa kedua lengan lama tetap utuh."""
 import argparse
 from pathlib import Path
+import shutil
 import sys
 
 from ._contracts import GuardianError, anchor, canonical, decode, identity, read, schema
@@ -10,6 +11,8 @@ from .state_forker import fork
 def restore(plan, expected, snapshot_root, current_root, destination):
     anchor(plan, expected)
     schema(plan, "ace.guardian.rollback-plan.v1", ("verified_snapshot", "current_snapshot"))
+    if current_root.is_symlink():
+        raise GuardianError("State yang ditinjau harus berupa direktori fixture nyata.")
     current_root = current_root.resolve(strict=True)
     output = destination.parent.resolve(strict=True) / destination.name
     if output == current_root or output in current_root.parents or current_root in output.parents:
@@ -19,10 +22,21 @@ def restore(plan, expected, snapshot_root, current_root, destination):
     before = verify(current_root, current)
     approved_bytes = verify(snapshot_root, approved)
     stats = fork(snapshot_root, destination, approved, identity(approved))
-    actual = verify(output, approved, reject_extras=True)
-    unchanged = verify(current_root, current) == before and verify(snapshot_root, approved) == approved_bytes
-    if not unchanged or actual != approved_bytes:
-        raise GuardianError("Sumber atau byte hasil berubah selama pemulihan.")
+    original_output = output.lstat()
+    try:
+        actual = verify(output, approved, reject_extras=True)
+        unchanged = verify(current_root, current) == before and verify(snapshot_root, approved) == approved_bytes
+        if not unchanged or actual != approved_bytes:
+            raise GuardianError("Sumber atau byte hasil berubah selama pemulihan.")
+    except (OSError, ValueError):
+        try:
+            found = output.lstat()
+        except FileNotFoundError:
+            pass
+        else:
+            if (found.st_dev, found.st_ino) == (original_output.st_dev, original_output.st_ino):
+                shutil.rmtree(output)
+        raise
     changes = {"added": sorted(actual.keys() - before), "removed": sorted(before.keys() - actual),
                "replaced": sorted(name for name in actual.keys() & before if actual[name] != before[name])}
     payload = {"status": "restored_isolated_fixture", "plan_sha256": expected,
