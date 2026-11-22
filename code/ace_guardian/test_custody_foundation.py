@@ -8,7 +8,7 @@ from ._contracts import GuardianError, canonical, identity
 from ._snapshots import build_manifest
 from .action_gate import assess
 from .custody_rules import policy_data, standing
-from .fork_redactor import redact
+from .fork_redactor import fork_clean, redact
 from .gate_receipt_ledger import append, verify_ledger
 from .incremental_fork import increment
 from .promotion_dossier import dossier
@@ -66,6 +66,27 @@ class CustodyTests(unittest.TestCase):
         probe["fields"].append("/absent")
         with self.assertRaises(GuardianError):
             call(redact, probe)
+
+    def test_13_fork_clean_never_copies_unredacted_json_to_new_root(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "source"
+            source.mkdir()
+            sample = "placeholder-for-redaction-fixture"
+            raw = canonical({"field": sample, "api_key": sample, "visible": True})
+            stash(source, "state.json", raw)
+            manifest = build_manifest(source, ["state.json"])
+            target = root / "twin"
+            probe = plan("redacted-fork", manifest=manifest, redact_fields={"state.json": ["/field"]})
+            result = call(fork_clean, probe, source, target)
+            self.assertEqual(result["redaction_counts"]["state.json"], {"explicit": 1, "sensitive_name": 1})
+            self.assertNotIn(sample.encode(), (target / "state.json").read_bytes())
+            self.assertEqual((source / "state.json").read_bytes(), raw)
+            probe["redact_fields"] = {}
+            rejected = root / "rejected"
+            with self.assertRaises(GuardianError):
+                call(fork_clean, probe, source, rejected)
+            self.assertFalse(rejected.exists())
 
     def test_14_promotion_custody_verifies_files_and_requires_every_metric_ref(self):
         with TemporaryDirectory() as tmp:

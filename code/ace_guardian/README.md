@@ -69,3 +69,25 @@ ditelaah. Fixture dibuat di direktori uji. Tabel mencakup butir 1–60.
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_guardian -t code -v
 ```
+
+## Bukti fixture tertutup
+
+[Plan](fixtures/closed_guardian/plan.json) memuat input dua snapshot, daftar
+aksi dengan outcome yang ditetapkan, dan prediksi/resolusi sintetis.
+[Run](fixtures/closed_guardian/run.json) mencatat uji mutasi pada salinan
+fork, receipt untuk 11 aksi dari delapan kelas terdaftar ditambah kelas
+asing, dan pemulihan yang mengakhiri subprocess Python fixture. Recheck
+membaca ulang byte kedua snapshot dan menghitung receipt, ECE, serta hasil
+rollback. Durasi yang direkam adalah observasi lokal dan berubah antar-run.
+Klaim isolasi berlaku untuk operasi data tertutup di fixture, tanpa menjalankan
+program kandidat bebas di OS. Pemulihan menulis ke direktori fixture baru.
+
+`fork_redactor.fork_clean` memerlukan kebijakan eksplisit per berkas JSON
+dan membuat salinan yang sudah disunting. Jalur copy-bytes lebih dasar
+membutuhkan manifest input yang sudah aman dan menjaga digest aslinya.
+
+Gerbang `ACE_EVO0060_GUARDIAN=1` mati secara bawaan. Saat aktif,
+`step_custody_manifest_check` melaporkan recheck baca-saja jika byte
+`<workspace>/evo0060_guardian/{plan,run}.json` cocok dengan
+`ACE_EVO0060_PLAN_SHA256` dan `ACE_EVO0060_RUN_SHA256`.
+Gerbang tidak meluncurkan subprocess atau menjalankan playbook.

@@ -2337,6 +2337,8 @@ def step_custody_manifest_check(engine: Any) -> dict[str, Any]:
                 "checked_at": _now_iso(),
             }
             _write_json(out_path, skipped)
+            if os.environ.get("ACE_EVO0060_GUARDIAN") == "1":
+                skipped["guardian"] = _guardian_fixture_evidence(engine)
             return skipped
 
         root_dir = (ws / "custody") if (ws / "custody").is_dir() else ws
@@ -2350,14 +2352,39 @@ def step_custody_manifest_check(engine: Any) -> dict[str, Any]:
             "files": report.get("files", []),
         }
         _write_json(out_path, payload)
-        return {
+        result = {
             "status": "ok",
             "all_ok": bool(report.get("all_ok")),
             "summary": report.get("summary", {}),
         }
+        if os.environ.get("ACE_EVO0060_GUARDIAN") == "1":
+            result["guardian"] = _guardian_fixture_evidence(engine)
+        return result
     except Exception as exc:
         return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
 
+
+
+def _guardian_fixture_evidence(engine: Any) -> dict[str, Any]:
+    """Verifikasi laporan guardian fixture dari plan dan run yang telah dipin."""
+    if os.environ.get("ACE_EVO0060_GUARDIAN") != "1":
+        return {"status": "disabled"}
+    workspace = getattr(engine, "workspace", None)
+    plan_sha = os.environ.get("ACE_EVO0060_PLAN_SHA256")
+    run_sha = os.environ.get("ACE_EVO0060_RUN_SHA256")
+    if workspace is None or not plan_sha or not run_sha:
+        return {"status": "held", "reason": "workspace_or_anchors_missing"}
+    try:
+        from ace_guardian._contracts import decode, identity, source_bytes
+        from ace_guardian.closed_bench import recheck
+
+        root = Path(workspace)
+        plan = decode(source_bytes(root, "evo0060_guardian/plan.json", plan_sha, 500_000))
+        run = decode(source_bytes(root, "evo0060_guardian/run.json", run_sha, 500_000))
+        result = recheck(plan, identity(plan), run, root / "evo0060_guardian")
+    except (OSError, ValueError, TypeError, KeyError, RecursionError, ArithmeticError):
+        return {"status": "held", "reason": "guardian_evidence_unavailable"}
+    return {"status": "ok", "plan_sha256": plan_sha, "run_sha256": run_sha, **result}
 
 
 # ------------------------------------------------------------------
