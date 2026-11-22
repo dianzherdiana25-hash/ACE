@@ -3969,8 +3969,44 @@ def step_environment_probe(engine: Any) -> dict[str, Any]:
 
 
 
+def step_evo0055_skill_board(engine: Any) -> dict[str, Any]:
+    """Baca papan skill ber-anchor hanya saat gerbang EVO 0055 diaktifkan."""
+    if os.environ.get("ACE_EVO0055_SKILL_BOARD") != "1":
+        return {"status": "disabled"}
+    workspace = getattr(engine, "workspace", None)
+    expected = os.environ.get("ACE_EVO0055_BOARD_SHA256")
+    if not workspace or not expected:
+        return {"status": "held", "reason": "workspace_or_anchor_missing"}
+    try:
+        from ace_web_operator import skill_board
+        from ace_web_operator._artifact import read_relative
+        from ace_web_operator._contracts import decode, digest, identity, schema
+
+        payload = read_relative(Path(workspace), "evo0055_skills/board.json", 1_000_000, digest(expected))
+        bundle = schema(
+            decode(payload), "ace.web.skill-board-bundle.v1", ("plan", "roadmap", "registry", "staleness")
+        )
+        planned = bundle["plan"]
+        report = skill_board.build(
+            planned, identity(planned), bundle["roadmap"], bundle["registry"], bundle["staleness"]
+        )
+    except (OSError, ValueError, KeyError, TypeError, RecursionError):
+        return {"status": "held", "reason": "skill_board_evidence_unavailable"}
+    return {
+        "status": "ok",
+        "evidence_sha256": expected,
+        "board_sha256": identity(report),
+        "registry_sha256": report["registry_sha256"],
+        "roadmap_sha256": report["roadmap_sha256"],
+        "counts": report["counts"],
+        "skills_requested": report["skills_requested"],
+    }
+
+
 def step_capability_report(engine: Any) -> dict[str, Any]:
     """AG166: build honest one-page Markdown capability report into capability_report.md."""
+    if os.environ.get("ACE_EVO0055_SKILL_BOARD") == "1":
+        return step_evo0055_skill_board(engine)
     raw_ws = getattr(engine, "workspace", None)
     if raw_ws is None:
         return {"status": "skipped", "reason": "no_workspace"}

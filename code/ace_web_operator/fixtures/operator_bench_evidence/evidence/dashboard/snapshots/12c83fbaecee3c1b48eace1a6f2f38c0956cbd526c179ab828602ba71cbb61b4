@@ -1,0 +1,2 @@
+<script>function show(){document.querySelector('[data-testid=total]').textContent='Total 7'}</script>
+<button data-testid="tab" onclick="show()">Pilih tab</button><p data-testid="total">Total 0</p>

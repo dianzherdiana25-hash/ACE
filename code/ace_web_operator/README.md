@@ -75,3 +75,27 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code
 Semua perintah memakai `--expect-sha256` dari JSON terkanonisasi
 menurut `_contracts.identity`. Receipt mengacu ke konfigurasi, snapshot
 atau observasi yang dipakai oleh operasinya.
+
+## Bukti bench dan roadmap
+
+`fixtures/web_operator_bench.json` menetapkan tujuh tugas loopback.
+`fixtures/operator_bench_evidence/operator_bench_report.json` menunjuk
+manifest per tugas, request log, receipt workflow dan snapshot dari satu
+run Chromium. Verifier membandingkan kembali hash dan ukuran tiap berkas.
+Port fixture ephemeral, sehingga receipt dari run baru boleh berbeda
+sambil mempertahankan hasil ukur yang sama.
+
+`fixtures/evo0055_skill_roadmap.json` memuat 40 klaster dan 400 kandidat
+yang diminta rancangan. Runner penyerapan membangun paket dari materi
+yang sudah ada, sedangkan verifikasi memakai data jawaban yang
+diberikan. `skill_registry` hanya memberi status `ACQUIRED` untuk
+receipt controlled yang dihitung ulang dan ditambatkan pada daftar
+atestasi terpisah. Tes fixture memeriksa aturan tersebut.
+
+## Integrasi baca-saja
+
+`ACE_EVO0055_SKILL_BOARD=1` mengalihkan langkah capability report
+ke ringkasan papan yang membaca `evo0055_skills/board.json`
+pada workspace. `ACE_EVO0055_BOARD_SHA256` adalah hash byte eksternal.
+Bundel `ace.web.skill-board-bundle.v1` memuat `plan`, `roadmap`,
+`registry`, dan `staleness`. Gerbang mati secara bawaan.

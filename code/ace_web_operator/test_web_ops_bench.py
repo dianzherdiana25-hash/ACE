@@ -39,6 +39,17 @@ class WebBenchTests(unittest.TestCase):
         _,result=web_ops_bench.run(self.plan,identity(self.plan))
         self.assertEqual((result["completed"],result["with_snapshot_proof"],result["status"]),(0,1,"failed"))
 
+    def test_saved_fixture_proofs_verify_from_repository_bytes(self):
+        base=FIXTURE.parent / "operator_bench_evidence"
+        files={path.relative_to(base).as_posix(): path.read_bytes() for path in base.rglob("*") if path.is_file()}
+        report=decode(files["operator_bench_report.json"])
+        self.assertEqual(report["plan_sha256"],identity(self.plan))
+        self.assertEqual((report["tasks"],report["completed"],report["with_snapshot_proof"]),(7,7,7))
+        self.assertEqual(report["mutating_requests_observed"],0)
+        for row in report["cases"]:
+            evidence=web_ops_bench.verify_case(files,row["manifest"],row["manifest_sha256"])
+            self.assertEqual(evidence["task_id"],row["id"])
+
     def test_no_checkout_route_is_registered(self):
         self.plan["pages"].append({"path":"/checkout","media_type":"text/html","body":"fake","source_ref":"fixture/no"})
         with self.assertRaisesRegex(ContractError,"transaksi"):
