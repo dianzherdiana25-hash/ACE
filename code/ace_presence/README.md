@@ -9,7 +9,7 @@ sendiri. Uji memakai workspace baru dan HTTP pada loopback.
 | 2 | `rolling_summary` | Petikan turn utuh dengan penunjuk sumber dan topik yang terlewat. |
 | 3 | `conversation_memory` | Recall lintas sesi hanya dari ekspor yang diberi izin, bertambat, dan memenuhi retensi. |
 | 4 | `persona_core` | Rantai versi persona dan bukti per perubahan, dengan identitas tetap. |
-| 5 | `voice_channel` | Audio PCM yang sudah disediakan ditempatkan bergiliran ke dua kanal dengan interval berbasis sampel. |
+| 5 | `voice_channel` | Streaming PCM dua arah lewat socket lokal dengan receipt, serta WAV stereo dari klip turn bertambat. |
 
 | 6 | `owner_channel` | Antrean lokal memprioritaskan digest permintaan interupsi yang diizinkan. |
 | 7 | `topic_tracker` | Setiap perubahan status perlu petikan yang cocok dengan turn. |
@@ -80,8 +80,8 @@ label recall, serta kasus dan label waktu yang terpisah. Harness
 ekstraktif, audit, dan bench temporal dari input itu. [Run](fixtures/closed_presence/run.json)
 mencatat 10/10 recall fakta atau janji terlabel, 9/9 petikan ringkasan cocok
 byte dengan turn, dan 16/16 kasus temporal benar. Label hanya mewakili
-fixture sintetis dengan kosa kata kueri yang telah diketahui. Login jaringan,
-kanal suara langsung, dan terjemahan teks baru berada di luar bukti itu.
+fixture sintetis dengan kosa kata kueri yang telah diketahui. Login jaringan, akses perangkat audio, dan terjemahan teks baru berada di luar bukti itu.
+Verifier terpisah mengirim PCM mentah dua arah lewat AF_UNIX serta membaca ulang WAV.
 
 Flag `ACE_EVO0059_PRESENCE=1` menambahkan ringkasan bukti terverifikasi
 ke hasil `step_mobile_report` bila plan di
