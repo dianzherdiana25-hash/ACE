@@ -49,6 +49,12 @@ dan menghasilkan artefak baru di direktori yang ditunjuk.
 | 42 | `sticker_maker.py` | Stiker RGBA dari pose karakter, alpha dan garis luar terukur |
 | 43 | `still_poster.py` | Poster berjudul dari frame dan cap waktu video terpilih |
 | 44 | `audio_drama.py` | Dialog multikarakter, efek berizin, overlap cue dan pointer episode |
+| 45 | `scene_scorer.py` | Motif audio unik dengan interval nada, cue sampel dan jeda terukur |
+| 46 | `sfx_generator.py` | Foley sintetis lokal dengan seed, envelope dan puncak terverifikasi |
+| 47 | `voice_consistency.py` | Ukur selisih pitch dan jeda dari WAV berizin yang tertambat |
+| 48 | `brand_safety_qa.py` | Saring kategori, frasa dan timeline anotasi yang belum tercakup |
+| 49 | `asset_rights.py` | Cakupan grant atas hash, tujuan, atribusi, wilayah dan tanggal |
+| 50 | `release_packager_media.py` | Preflight profil dan laporan QA yang terikat hash video, draf lokal |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_media_studio -t code -q
