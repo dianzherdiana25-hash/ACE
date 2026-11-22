@@ -9,6 +9,8 @@ dan menghasilkan artefak baru di direktori yang ditunjuk.
 | 2 | `image_editor.py` | Crop, resize, rotasi, exposure, penutup, tint dan blur atas raster |
 | 3 | `image_qa.py` | Luminans, clipping, tepi dan kontras pada anotasi teks |
 | 4 | `style_series.py` | Render palet dan motif tetap, layout berbeda, serta verifier piksel |
+| 5 | `voice_generator.py` | WAV PCM16 deterministik dari formant dan aturan fonem Indonesia |
+| 6 | `voice_style.py` | Izin eksplisit dan estimasi prosodi pada sampel sintetis berfrekuensi acuan |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_media_studio -t code -q
