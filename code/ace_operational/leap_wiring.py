@@ -5983,14 +5983,38 @@ def step_program_glossary(engine: Any) -> dict[str, Any]:
             "ts": _now_iso(),
         }
         _write_json(engine.workspace / "program_glossary.json", compact)
-        return {
+        result = {
             "status": "ok",
             "schema": compact["schema"],
             "groups": len(compact["term_groups"]),
             "terms": compact["term_count"],
         }
+        if os.environ.get("ACE_EVO0057_RESEARCH_INSTITUTE") == "1":
+            result["research_institute"] = step_evo0057_institute_report(engine)
+        return result
     except Exception as exc:
         return {"status": "error", "reason": str(exc)}
+
+def step_evo0057_institute_report(engine: Any) -> dict[str, Any]:
+    """Rekap rubrik studi yang ditambatkan, hanya saat gerbang diaktifkan."""
+    if os.environ.get("ACE_EVO0057_RESEARCH_INSTITUTE") != "1":
+        return {"status": "disabled"}
+    workspace = getattr(engine, "workspace", None)
+    expected = os.environ.get("ACE_EVO0057_QUARTER_SHA256")
+    if workspace is None or not expected:
+        return {"status": "held", "reason": "workspace_or_anchor_missing"}
+    try:
+        from ace_research_institute._contracts import decode, identity, source_bytes
+        from ace_research_institute.institute_quarterly import quarterly
+
+        root = Path(workspace)
+        raw = source_bytes(root, "evo0057_research/quarter.json", expected, 500_000)
+        plan = decode(raw)
+        observed = quarterly(plan, identity(plan), root / "evo0057_research")
+    except (OSError, ValueError, KeyError, TypeError, ArithmeticError, RecursionError):
+        return {"status": "held", "reason": "institute_evidence_unavailable"}
+    fields = ("quarter", "scope", "reviewed_count", "rubric_passes", "verified_numeric_total", "median_rubric_bp")
+    return {"status": "ok", "evidence_sha256": expected, **{field: observed[field] for field in fields}}
 
 
 def step_seal_run(engine: Any) -> dict[str, Any]:

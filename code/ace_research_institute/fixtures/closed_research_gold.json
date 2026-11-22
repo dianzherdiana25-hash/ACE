@@ -1,0 +1,1 @@
+{"cases":[{"claim_status":{"absent":"insufficient_evidence","observed":"supported","wrong":"contradicted"},"id":"light"},{"claim_status":{"absent":"insufficient_evidence","observed":"supported","wrong":"contradicted"},"id":"timing"}],"schema":"ace.institute.bench-gold.v1"}
