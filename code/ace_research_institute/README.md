@@ -37,6 +37,16 @@ atau rujukan sumber serta hash. Format tabel hasil di
 | 28 | `research_archiver.py` | ZIP deterministik dengan sumber, laporan, manifest dan verifier |
 | 29 | `agenda_generator.py` | Kandidat agenda dari status bukti dengan prioritas dan brain-of-origin |
 | 30 | `institute_bench.py` | Kasus tertutup, kunci terpisah, audit angka prosa aktual dan rubrik |
+| 31 | `claim_evolution.py` | Riwayat status klaim dari laporan ber-hash dan tanggal |
+| 32 | `controversy_mapper.py` | Graf konflik material dari pengukuran sebanding dan komponen terkait |
+| 33 | `methodology_grader.py` | Rubrik per desain dengan kutipan aktual dan kriteria belum dinilai |
+| 34 | `publication_bias_detector.py` | Sinyal asimetri skala studi dengan permutasi rank eksak |
+| 35 | `meta_analyzer.py` | Efek gabungan fixed/random, Q, I², tau², serta bobot dan sumber |
+| 36 | `living_glossary.py` | Definisi dengan versi dan konflik alias atau definisi terbaru |
+| 37 | `field_chronology.py` | Kejadian dan presisi interval waktu dari kutipan sumber |
+| 38 | `paper_conflict.py` | Selisih antar-paper dengan interval, konteks dan kemandirian |
+| 39 | `replication_assessor.py` | Toleransi efek, arah dan penahanan saat temuan desain menyimpang |
+| 40 | `anomaly_questioner.py` | Pertanyaan falsifiable dari pencilan dan nomor baris data |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_research_institute -t code -q
