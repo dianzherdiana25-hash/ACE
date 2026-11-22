@@ -5743,7 +5743,7 @@ def step_dashboard_v3(engine: Any) -> dict[str, Any]:
         )
         html_path.write_text(html_doc, encoding="utf-8")
         summary = state.get("summary") or {}
-        return {
+        result = {
             "status": "ok",
             "tool_count": summary.get("tool_count", 0),
             "code_module_count": summary.get("code_module_count", 0),
@@ -5751,8 +5751,30 @@ def step_dashboard_v3(engine: Any) -> dict[str, Any]:
             "report_path": str(json_path),
             "html_path": str(html_path),
         }
+        if os.environ.get("ACE_EVO0058_TEACHING") == "1":
+            result["production_teaching"] = step_evo0058_teaching(engine)
+        return result
     except Exception as exc:
         return {"status": "skipped", "error": str(exc)}
+
+def step_evo0058_teaching(engine: Any) -> dict[str, Any]:
+    """Laporkan receipt pengajaran fixture dan hash artefak yang diverifikasi."""
+    if os.environ.get("ACE_EVO0058_TEACHING") != "1":
+        return {"status": "disabled"}
+    workspace = getattr(engine, "workspace", None)
+    expected = os.environ.get("ACE_EVO0058_REPORT_SHA256")
+    if workspace is None or not expected:
+        return {"status": "held", "reason": "workspace_or_anchor_missing"}
+    try:
+        from ace_production_teaching._contracts import decode, source_bytes
+        from ace_production_teaching.teaching_bench import summarize_fixture
+
+        root = Path(workspace)
+        raw = source_bytes(root, "evo0058_teaching/run.json", expected, 500_000)
+        result = summarize_fixture(decode(raw), root / "evo0058_teaching")
+    except (OSError, ValueError, KeyError, TypeError, ArithmeticError, RecursionError):
+        return {"status": "held", "reason": "teaching_evidence_unavailable"}
+    return {"status": "ok", "evidence_sha256": expected, **result}
 
 
 
