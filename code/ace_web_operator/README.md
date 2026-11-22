@@ -49,6 +49,10 @@ tersedia lokal.
 | 40 | `tos_watcher.py` | Jejak perubahan klausul berlabel dan selisih kata |
 | 41 | `thread_archiver.py` | Arsip utas yang disetujui dengan redaksi dan reply chain |
 | 42 | `price_research_runner.py` | Slot UTC riset harga dan delta dari snapshot yang ada |
+| 43 | `bulk_downloader.py` | Unduh dataset fixture berlisensi dengan resume dari objek terverifikasi |
+| 44 | `link_validator.py` | Uji fragment snapshot dan status dari probe yang telah disimpan |
+| 45 | `heavy_js_extractor.py` | Capture DOM dinamis dengan penanda siap dan field terverifikasi |
+| 46 | `scroll_handler.py` | Traversal halaman/gulir dengan dedup, penanda akhir dan batas putaran |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q

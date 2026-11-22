@@ -24,6 +24,9 @@ SUPPORTED = {
     "expect_text": ("test_id", "expected"),
     "expect_value": ("test_id", "expected"),
     "read_text": ("test_id",),
+    "wait_text": ("test_id", "expected"),
+    "capture_dom": ("test_id",),
+    "scroll_collect": ("test_id", "end_test_id", "next_test_id", "max_turns"),
     "screenshot": ("test_id",),
 }
 MAX_OPERATIONS = 40
@@ -44,6 +47,11 @@ def _step(raw, paths):
         clean["path"] = value
     if "test_id" in raw:
         clean["test_id"] = identifier(raw["test_id"], "Selector fixture")
+    for selector in ("end_test_id","next_test_id"):
+        if selector in raw:
+            clean[selector]=identifier(raw[selector],"Selector paginasi") if raw[selector] is not None else None
+    if "max_turns" in raw:
+        clean["max_turns"]=integer(raw["max_turns"],"Batas gulir",1,12)
     if "expected" in raw:
         clean["expected"] = text(raw["expected"], "Harapan", 500)
     if "value" in raw:
@@ -66,7 +74,7 @@ def compile_plan(plan, expected):
     if len(paths) != len(set(paths)):
         raise ContractError("Rute browser ganda.")
     steps = [_step(row, paths) for row in entries(plan["steps"], MAX_OPERATIONS, 1)]
-    if sum(row["op"] == "screenshot" for row in steps)>1:
+    if sum(row["op"] in ("screenshot","capture_dom") for row in steps)>1:
         raise ContractError("Satu rencana hanya boleh memuat satu capture.")
     if steps[0]["op"] != "navigate" or len({row["id"] for row in steps}) != len(steps):
         raise ContractError("Alur perlu navigasi awal dan ID tahap unik.")

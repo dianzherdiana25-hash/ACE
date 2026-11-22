@@ -75,7 +75,7 @@ async function main() {
                 const needsPath = ["navigate","expect_url"].includes(step.op);
                 if (needsPath && !paths.has(step.path)) throw Error("path_invalid");
                 let control;
-                if (["click","fill","select","check","expect_text","read_text","screenshot","expect_value"].includes(step.op)) {
+                if (["click","fill","select","check","expect_text","read_text","screenshot","expect_value","wait_text","capture_dom","scroll_collect"].includes(step.op)) {
                     if (typeof step.test_id !== "string" || !/^[a-z][a-z0-9_]{0,63}$/.test(step.test_id))
                         throw Error("selector_invalid");
                     control = page.getByTestId(step.test_id);
@@ -114,6 +114,62 @@ async function main() {
                     evidence = proof(value);
                     if (step.op === "expect_text" && evidence.text_sha256 !== proof(step.expected).text_sha256)
                         throw Error("assertion_failed");
+                    break;
+                }
+                case "wait_text": {
+                    const expected = step.expected.replace(/\s+/gu," ").trim();
+                    const tokens = expected.split(" ").map(token => token.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
+                    await control.filter({hasText:new RegExp("^\\s*"+tokens.join("\\s+")+"\\s*$","u")})
+                        .waitFor({state:"visible",...timing});
+                    evidence=proof(await control.innerText(timing));
+                    if(evidence.text_sha256!==proof(expected).text_sha256)throw Error("assertion_failed");
+                    break;
+                }
+                case "capture_dom": {
+                    const result = await control.evaluate(element=>element.outerHTML,undefined,timing);
+                    const at = Buffer.from(result,"utf8");
+                    if (at.length > 160000) throw Error("dom_limit");
+                    evidence={html_base64:at.toString("base64"),bytes:at.length,
+                              sha256:createHash("sha256").update(at).digest("hex")};
+                    break;
+                }
+                case "scroll_collect": {
+                    const validId = value => typeof value === "string" && /^[a-z][a-z0-9_]{0,63}$/.test(value);
+                    if (!validId(step.end_test_id) || (step.next_test_id !== null && !validId(step.next_test_id))
+                        || !Number.isInteger(step.max_turns) || step.max_turns < 1 || step.max_turns > 12) throw Error("scroll_contract");
+                    const seen = new Set(), counts = [];
+                    const end = page.getByTestId(step.end_test_id);
+                    const next = step.next_test_id === null ? null : page.getByTestId(step.next_test_id);
+                    let terminal = false, stalled = false;
+                    for (let turn=0; turn<=step.max_turns; turn++) {
+                        const ids=await control.evaluate(element=>Array.from(element.querySelectorAll("[data-item-id]"),
+                                                                           child=>child.getAttribute("data-item-id")),
+                                                         undefined,timing);
+                        if (ids.length > 400 || ids.some(value=>!validId(value))) throw Error("scroll_data");
+                        for (const value of ids) seen.add(createHash("sha256").update(value).digest("hex"));
+                        counts.push({turn,visible:ids.length,unique:seen.size});
+                        if (await end.isVisible()) { terminal=true; break; }
+                        if (turn===step.max_turns) break;
+                        if (next) await next.click(timing);
+                        else await control.evaluate(element=>{element.scrollTop += Math.max(element.clientHeight,120);},undefined,timing);
+                        try {
+                            await page.waitForFunction(({target,finish,prior}) => {
+                                const final = document.querySelector(`[data-testid="${finish}"]`);
+                                if (final && final.getClientRects().length && getComputedStyle(final).visibility !== "hidden")
+                                    return true;
+                                const container = document.querySelector(`[data-testid="${target}"]`);
+                                if (!container) return false;
+                                const current=Array.from(container.querySelectorAll("[data-item-id]"),
+                                                         node=>node.getAttribute("data-item-id"));
+                                return current.length!==prior.length || current.some((value,index)=>value!==prior[index]);
+                            },{target:step.test_id,finish:step.end_test_id,prior:ids},timing);
+                        } catch (error) {
+                            if (error.name!=="TimeoutError")throw error;
+                            stalled=true;
+                            break;
+                        }
+                    }
+                    evidence={terminal,stalled,counts,member_sha256:[...seen].sort()};
                     break;
                 }
                 case "screenshot": {
