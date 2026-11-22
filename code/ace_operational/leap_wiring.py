@@ -6869,3 +6869,234 @@ def step_evo0052_forge(engine: Any) -> dict[str, Any]:
     return {"status": report["status"], "candidate_sha256": report["candidate_sha256"],
             "dossier_sha256": report["input_sha256"], "missing": report["missing"],
             "blockers": report["blockers"]}
+
+
+# ------------------------------------------------------------------
+# Perbaikan wiring Kelompok 1 — penalaran & pengetahuan (20 paket)
+# Perbaikan Ian tanpa nomor EVO (RENCANA_WIRING.md). Tiap paket masuk
+# sebagai step Step 3d belakang flag per paket ACE_WIRING_<PAKET>
+# (default OFF), fail-closed lewat pembungkus _leap pemanggil, cadence
+# %200 (penalaran berat, cadence rendah lebih dulu). Step menjalankan
+# smoke katalog: impor literal semua modul non-tes paket (itu yang
+# menandai paket WIRED di wiring_audit), enumerasi permukaan API
+# publiknya, dan menulis artefak per paket ke
+# workspace/wiring_kelompok1/<paket>.json. Isi paket tidak diubah.
+# ------------------------------------------------------------------
+
+_WIRING_K1_MODULES: dict[str, tuple[str, ...]] = {
+    "ace_cognition": ("reasoning", "substrate_guardian",
+                      "evolutionary_memory", "meta_curriculum"),
+    "ace_mcts": ("program_mcts",),
+    "ace_causal": ("causal_miner",),
+    "ace_neurosymbolic": ("neural_guided_search", "cegar_refinement",
+                          "graph_embedding", "sketch_synthesizer"),
+    "ace_smt": ("dpllt_solver",),
+    "ace_ilp": ("relational_miner",),
+    "ace_egraph": ("equality_saturation",),
+    "ace_automata": ("lstar",),
+    "ace_abstract_interp": ("invariants", "disjunctive_domain"),
+    "ace_interpolation": ("craig_interpolator",),
+    "ace_inversion": ("bidirectional_transducer",),
+    "ace_abstraction": ("wake_sleep",),
+    "ace_epistemic": ("active_sampler",),
+    "ace_conformal": ("conformal_risk",),
+    "ace_pac_bayes": ("pac_bounds",),
+    "ace_game_theory": ("minimax_synthesizer",),
+    "ace_synthesis": ("cegis",),
+    "ace_component_synthesis": ("component_synthesizer",),
+    "ace_dsl_growth": ("graph_primitives", "ratio4_primitives",
+                       "experiment_runner"),
+    "ace_gnn": ("ast_embedder",),
+}
+
+
+def _wiring_k1_catalog(engine: Any, pkg: str) -> dict[str, Any]:
+    """Katalog permukaan API paket dari modul yang sudah diimpor step."""
+    modules: dict[str, Any] = {}
+    for modname in _WIRING_K1_MODULES[pkg]:
+        mod = sys.modules[f"{pkg}.{modname}"]
+        classes = sorted(
+            name for name, obj in vars(mod).items()
+            if isinstance(obj, type) and obj.__module__ == mod.__name__)
+        functions = sorted(
+            name for name, obj in vars(mod).items()
+            if callable(obj) and not isinstance(obj, type)
+            and getattr(obj, "__module__", None) == mod.__name__)
+        modules[modname] = {"classes": classes, "functions": functions}
+    payload = {"package": pkg, "at": _now_iso(),
+               "cycle": engine.cycle_count, "modules": modules}
+    _write_json(engine.workspace / "wiring_kelompok1" / f"{pkg}.json",
+                payload)
+    return {"status": "ok", "package": pkg,
+            "modules": len(modules),
+            "classes": sum(len(m["classes"]) for m in modules.values()),
+            "functions": sum(len(m["functions"]) for m in modules.values())}
+
+
+def step_wiring_ace_cognition(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_cognition."""
+    if os.environ.get("ACE_WIRING_ACE_COGNITION") != "1":
+        return {"status": "disabled"}
+    import ace_cognition.evolutionary_memory  # noqa: F401
+    import ace_cognition.meta_curriculum  # noqa: F401
+    import ace_cognition.reasoning  # noqa: F401
+    import ace_cognition.substrate_guardian  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_cognition")
+
+
+def step_wiring_ace_mcts(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_mcts."""
+    if os.environ.get("ACE_WIRING_ACE_MCTS") != "1":
+        return {"status": "disabled"}
+    import ace_mcts.program_mcts  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_mcts")
+
+
+def step_wiring_ace_causal(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_causal."""
+    if os.environ.get("ACE_WIRING_ACE_CAUSAL") != "1":
+        return {"status": "disabled"}
+    import ace_causal.causal_miner  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_causal")
+
+
+def step_wiring_ace_neurosymbolic(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_neurosymbolic."""
+    if os.environ.get("ACE_WIRING_ACE_NEUROSYMBOLIC") != "1":
+        return {"status": "disabled"}
+    import ace_neurosymbolic.cegar_refinement  # noqa: F401
+    import ace_neurosymbolic.graph_embedding  # noqa: F401
+    import ace_neurosymbolic.neural_guided_search  # noqa: F401
+    import ace_neurosymbolic.sketch_synthesizer  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_neurosymbolic")
+
+
+def step_wiring_ace_smt(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_smt."""
+    if os.environ.get("ACE_WIRING_ACE_SMT") != "1":
+        return {"status": "disabled"}
+    import ace_smt.dpllt_solver  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_smt")
+
+
+def step_wiring_ace_ilp(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_ilp."""
+    if os.environ.get("ACE_WIRING_ACE_ILP") != "1":
+        return {"status": "disabled"}
+    import ace_ilp.relational_miner  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_ilp")
+
+
+def step_wiring_ace_egraph(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_egraph."""
+    if os.environ.get("ACE_WIRING_ACE_EGRAPH") != "1":
+        return {"status": "disabled"}
+    import ace_egraph.equality_saturation  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_egraph")
+
+
+def step_wiring_ace_automata(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_automata."""
+    if os.environ.get("ACE_WIRING_ACE_AUTOMATA") != "1":
+        return {"status": "disabled"}
+    import ace_automata.lstar  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_automata")
+
+
+def step_wiring_ace_abstract_interp(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_abstract_interp."""
+    if os.environ.get("ACE_WIRING_ACE_ABSTRACT_INTERP") != "1":
+        return {"status": "disabled"}
+    import ace_abstract_interp.disjunctive_domain  # noqa: F401
+    import ace_abstract_interp.invariants  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_abstract_interp")
+
+
+def step_wiring_ace_interpolation(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_interpolation."""
+    if os.environ.get("ACE_WIRING_ACE_INTERPOLATION") != "1":
+        return {"status": "disabled"}
+    import ace_interpolation.craig_interpolator  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_interpolation")
+
+
+def step_wiring_ace_inversion(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_inversion."""
+    if os.environ.get("ACE_WIRING_ACE_INVERSION") != "1":
+        return {"status": "disabled"}
+    import ace_inversion.bidirectional_transducer  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_inversion")
+
+
+def step_wiring_ace_abstraction(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_abstraction."""
+    if os.environ.get("ACE_WIRING_ACE_ABSTRACTION") != "1":
+        return {"status": "disabled"}
+    import ace_abstraction.wake_sleep  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_abstraction")
+
+
+def step_wiring_ace_epistemic(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_epistemic."""
+    if os.environ.get("ACE_WIRING_ACE_EPISTEMIC") != "1":
+        return {"status": "disabled"}
+    import ace_epistemic.active_sampler  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_epistemic")
+
+
+def step_wiring_ace_conformal(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_conformal."""
+    if os.environ.get("ACE_WIRING_ACE_CONFORMAL") != "1":
+        return {"status": "disabled"}
+    import ace_conformal.conformal_risk  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_conformal")
+
+
+def step_wiring_ace_pac_bayes(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_pac_bayes."""
+    if os.environ.get("ACE_WIRING_ACE_PAC_BAYES") != "1":
+        return {"status": "disabled"}
+    import ace_pac_bayes.pac_bounds  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_pac_bayes")
+
+
+def step_wiring_ace_game_theory(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_game_theory."""
+    if os.environ.get("ACE_WIRING_ACE_GAME_THEORY") != "1":
+        return {"status": "disabled"}
+    import ace_game_theory.minimax_synthesizer  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_game_theory")
+
+
+def step_wiring_ace_synthesis(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_synthesis."""
+    if os.environ.get("ACE_WIRING_ACE_SYNTHESIS") != "1":
+        return {"status": "disabled"}
+    import ace_synthesis.cegis  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_synthesis")
+
+
+def step_wiring_ace_component_synthesis(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_component_synthesis."""
+    if os.environ.get("ACE_WIRING_ACE_COMPONENT_SYNTHESIS") != "1":
+        return {"status": "disabled"}
+    import ace_component_synthesis.component_synthesizer  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_component_synthesis")
+
+
+def step_wiring_ace_dsl_growth(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_dsl_growth."""
+    if os.environ.get("ACE_WIRING_ACE_DSL_GROWTH") != "1":
+        return {"status": "disabled"}
+    import ace_dsl_growth.experiment_runner  # noqa: F401
+    import ace_dsl_growth.graph_primitives  # noqa: F401
+    import ace_dsl_growth.ratio4_primitives  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_dsl_growth")
+
+
+def step_wiring_ace_gnn(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 1 — smoke katalog ace_gnn."""
+    if os.environ.get("ACE_WIRING_ACE_GNN") != "1":
+        return {"status": "disabled"}
+    import ace_gnn.ast_embedder  # noqa: F401
+    return _wiring_k1_catalog(engine, "ace_gnn")

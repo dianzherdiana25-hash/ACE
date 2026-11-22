@@ -2083,6 +2083,50 @@ class ContinuousAutonomousEngine:
             if self.cycle_count % 200 == 0:
                 _leap("mission_proposers", leap_wiring.step_mission_proposers)
 
+            # Perbaikan wiring Kelompok 1 — penalaran & pengetahuan
+            # (20 paket; flag per paket ACE_WIRING_<PAKET>, default OFF;
+            # cadence %200 — penalaran berat, cadence rendah lebih dulu)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_cognition", leap_wiring.step_wiring_ace_cognition)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_mcts", leap_wiring.step_wiring_ace_mcts)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_causal", leap_wiring.step_wiring_ace_causal)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_neurosymbolic", leap_wiring.step_wiring_ace_neurosymbolic)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_smt", leap_wiring.step_wiring_ace_smt)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_ilp", leap_wiring.step_wiring_ace_ilp)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_egraph", leap_wiring.step_wiring_ace_egraph)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_automata", leap_wiring.step_wiring_ace_automata)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_abstract_interp", leap_wiring.step_wiring_ace_abstract_interp)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_interpolation", leap_wiring.step_wiring_ace_interpolation)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_inversion", leap_wiring.step_wiring_ace_inversion)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_abstraction", leap_wiring.step_wiring_ace_abstraction)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_epistemic", leap_wiring.step_wiring_ace_epistemic)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_conformal", leap_wiring.step_wiring_ace_conformal)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_pac_bayes", leap_wiring.step_wiring_ace_pac_bayes)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_game_theory", leap_wiring.step_wiring_ace_game_theory)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_synthesis", leap_wiring.step_wiring_ace_synthesis)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_component_synthesis", leap_wiring.step_wiring_ace_component_synthesis)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_dsl_growth", leap_wiring.step_wiring_ace_dsl_growth)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_gnn", leap_wiring.step_wiring_ace_gnn)
+
             # EVO 0041 — Mengingat yang hidup
             if self.cycle_count % 50 == 0: _leap("memory_hygiene", leap_wiring.step_memory_hygiene_audit)
 
