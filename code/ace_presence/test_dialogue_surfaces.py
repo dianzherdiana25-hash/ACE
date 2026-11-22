@@ -10,7 +10,7 @@ from .clarification_asker import ask
 from .conversation_search import search
 from .fact_corrector import corrections
 from .group_dialogue import assemble
-from .memory_writeback import prepare
+from .session_fact_candidates import prepare
 from .owner_channel import route
 from .promise_extractor import extract
 from .session_handoff import issue, receive
