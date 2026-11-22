@@ -1,6 +1,6 @@
 """Jaga sumber baris dan nilai kosong pada analisis CSV lokal."""
 from dataclasses import dataclass
-from csv import reader
+from csv import Error as CSVError, reader
 from hashlib import sha256
 from io import StringIO
 
@@ -67,6 +67,13 @@ def serialize(value, spec):
     return str(value)
 
 
+def _records(csv):
+    try:
+        yield from csv
+    except CSVError as error:
+        raise ResearchError(f"CSV rusak di sekitar baris {csv.line_num}.") from error
+
+
 def load(raw, expected, plan):
     if not isinstance(raw, bytes) or len(raw) > 3_000_000 or sha256(raw).hexdigest() != digest(expected):
         raise ResearchError("CSV berbeda dari anchor atau melewati batas.")
@@ -76,12 +83,13 @@ def load(raw, expected, plan):
     if len(declarations) != len(plan["columns"]):
         raise ResearchError("Deklarasi kolom CSV ganda.")
     csv = reader(StringIO(raw.decode("utf-8"), newline=""), strict=True)
-    if next(csv, None) != list(declarations):
+    parsed = _records(csv)
+    if next(parsed, None) != list(declarations):
         raise ResearchError("Header CSV tidak sama dengan urutan deklarasi.")
     records = []
     rejected = []
     previous = csv.line_num
-    for index, current in enumerate(csv, 1):
+    for index, current in enumerate(parsed, 1):
         line = previous + 1
         previous = csv.line_num
         if index > maximum:

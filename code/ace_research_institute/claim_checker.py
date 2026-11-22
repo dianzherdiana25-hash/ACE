@@ -68,7 +68,7 @@ def check_claims(plan, expected, root):
             status = "contradicted"
         else:
             status = "insufficient_evidence"
-        results.append({"id": key, "claim": description, "source_ref": pointer, "value": fmt(target), "unit": unit,
+        results.append({"id": key, "claim": description, "source_ref": pointer, "value": fmt(target), "unit": unit, "dimensions": row["dimensions"],
                         "tolerance": fmt(tolerance), "minimum_groups": required, "status": status,
                         "support_groups": support, "contradict_groups": conflict, "measurements": checks, "excluded": excluded})
     summary = {status: sum(row["status"] == status for row in results) for status in (
