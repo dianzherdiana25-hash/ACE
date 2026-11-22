@@ -1,0 +1,1 @@
+[{"id":"fpanel","kind":"fact"},{"id":"pseal","kind":"promise"},{"id":"farchive","kind":"fact"},{"id":"pdiagram","kind":"promise"},{"id":"fgauge","kind":"fact"},{"id":"pcount","kind":"promise"},{"id":"fenergy","kind":"fact"},{"id":"ptrace","kind":"promise"},{"id":"fmap","kind":"fact"},{"id":"pfolder","kind":"promise"}]
