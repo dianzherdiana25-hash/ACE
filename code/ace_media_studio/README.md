@@ -29,6 +29,12 @@ dan menghasilkan artefak baru di direktori yang ditunjuk.
 | 22 | `media_scheduler.py` | Penjadwalan deterministik dengan batas RAM dan slot, serta prasyarat |
 | 23 | `asset_library.py` | Simpan objek berdasarkan hash, provenance per entri dan deteksi perubahan byte |
 | 24 | `consistency_checker.py` | Ukur irisan palet dan audit landmark independen untuk mendeteksi pergeseran |
+| 25 | `infographic_maker.py` | Raster grafik bar dengan skala nol, nilai CSV dan verifikasi piksel |
+| 26 | `template_composer.py` | Templat lokal, caption, penjagaan area, dan kontras yang diukur |
+| 27 | `preview_renderer.py` | Contact sheet gambar dan frame MP4 dengan waktu, ukuran, serta hash |
+| 28 | `studio_bench.py` | Paket klip beranimasi, audio, sampul dan audit karakter pada fixture tertutup |
+| 29 | `project_archiver.py` | ZIP deterministik berisi resep, aset dan bukti dengan verifier manifest |
+| 30 | `variation_engine.py` | Variasi palet, posisi dan bentuk terstratifikasi dengan hash per PNG |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_media_studio -t code -q
@@ -37,3 +43,16 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code
 Format arahan gambar menggunakan baris `CANVAS` diikuti
 `RECT`, `ELLIPSE`, `LINE`, `GRADIENT`, atau `POLYGON`.
 Lihat fixture di `test_image_generator.py`.
+
+
+## Bench tertutup
+
+Rencana ada di `fixtures/closed_studio_bench.json`. Arsip bukti berisi
+MP4, WAV campuran, sampul PNG, empat pose karakter, dan report dengan
+hash per aset di `fixtures/closed_studio_evidence/`. Nilai pengukuran
+berlaku untuk fixture itu. Kontras memakai sampel glyph, narasi memakai
+formant aturan, dan konsistensi diukur dari lima landmark per pose.
+
+```sh
+PYTHONPATH=code:. python3 -m ace_media_studio.studio_bench   code/ace_media_studio/fixtures/closed_studio_bench.json ./bench-replay   --expect-sha256 2791b40f488b6ec61de645e1ec356fca06a6103ac223647e7b1001394bfb8d78
+```
