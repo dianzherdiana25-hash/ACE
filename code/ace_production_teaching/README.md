@@ -97,3 +97,15 @@ PYTHONPATH=code:. python3 -m ace_production_teaching.teaching_bench \
 diperiksa ulang. Gerbang mati secara bawaan dan hook tambahan
 hanya membaca. Ringkasan keuangan, faktur, kontrak, dan label
 dihasilkan secara lokal dari masukan yang diberikan.
+
+## Ablasi petunjuk pada learner simulasi
+
+[Plan](fixtures/learning_loop/plan.json) memakai learner deterministik dengan
+repertoar awal yang sama pada kedua lengan. Keduanya menerima penilaian
+dan feedback. Lengan perlakuan juga menerima petunjuk yang lolos penyaring
+bocor jawaban. Suatu strategi masuk repertoar sesudah dua latihan dengan
+operand berbeda dikoreksi dan dinilai benar. [Kunci held-out](fixtures/learning_loop/holdout.json)
+bertambat dan terpisah dari latihan. [Run](fixtures/learning_loop/run.json)
+mencatat skor 3/9 tanpa petunjuk dan 9/9 dengan petunjuk, dengan penunjuk
+berupa digest per receipt petunjuk. Hasil menunjukkan perilaku
+simulator sesuai aturan belajarnya. Efek pada pelajar sungguhan belum diukur.
