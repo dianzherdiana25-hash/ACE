@@ -7282,3 +7282,303 @@ def step_wiring_ace_visual_bridge(engine: Any) -> dict[str, Any]:
     import ace_visual_bridge.cli  # noqa: F401
     import ace_visual_bridge.contract  # noqa: F401
     return _wiring_k2_catalog(engine, "ace_visual_bridge")
+
+# ------------------------------------------------------------------
+# Perbaikan wiring Kelompok 3 — evolusi, riset, dan evaluasi
+# (15 dari 16 paket; perbaikan Ian tanpa nomor EVO,
+# RENCANA_WIRING.md). Tiap paket masuk sebagai step Step 3d
+# belakang flag per paket ACE_WIRING_<PAKET> (default OFF),
+# fail-closed lewat pembungkus _leap pemanggil. Cadence: %200
+# untuk paket bench/generasi/berat (ace_capability_evolution,
+# ace_evolution, ace_selfmodel, ace_research_discovery,
+# ace_research_reptransfer, ace_research_generations,
+# ace_research_repair, ace_research_f12, ace_research_f13,
+# ace_research_f14, ace_red_team, ace_runtime), %50 untuk paket
+# katalog ringan (ace_research_agenda, ace_research_hypgen,
+# ace_integration_redteam). Sesuai rencana, paket research_f*
+# dan paket riset lain masuk sebagai langkah bench/observasi,
+# BUKAN jalur keputusan: step hanya menjalankan smoke katalog —
+# impor literal semua modul non-tes paket (itu yang menandai
+# modul WIRED di wiring_audit), enumerasi permukaan API
+# publiknya, dan menulis artefak per paket ke
+# workspace/wiring_kelompok3/<paket>.json. Isi paket tidak
+# diubah.
+#
+# ace_evaluator SENGAJA tidak di-wire di sini: wiring_audit
+# mengklasifikasikan seluruh paket itu MENUNGGU_ENGINEER_UTAMA
+# (wilayah terlarang jalur pengukuran/evaluator), jadi impor
+# dari leap_wiring tidak akan mengubah statusnya dan hanya
+# menaruh jalur produksi ke dalam wilayah terlarang.
+#
+# Tambahan Kelompok 3: dua dari tiga modul orphan sisa di luar
+# cakupan kelompok mana pun — ace_core_repair.decomposed_library
+# dan ace_operational.massive_skills_expansion (modul internal
+# paket yang sudah ter-wire) — di-wire dengan pola yang sama
+# lewat flag per modul. Modul ketiga, ace_operational.
+# story_state, SENGAJA tidak di-wire: tes karantina aktivasi
+# (test_activation_0047, test_activation_wave2,
+# test_activation_full) mewajibkan story_state tetap ORPHAN /
+# wilayah terlarang dan leap_wiring tidak boleh menjadi
+# pemanggil non-tesnya.
+# ------------------------------------------------------------------
+
+_WIRING_K3_MODULES: dict[str, tuple[str, ...]] = {
+    "ace_capability_evolution": ("compositional", "pilot", "structural", "verify", "verify_structural"),
+    "ace_evolution": ("island_search", "neutral_archive_pilot_20261109", "pareto_dsl_optimizer"),
+    "ace_selfmodel": ("core", "memory", "metacognition", "runner", "verify"),
+    "ace_research_agenda": ("coordinator", "models", "verify"),
+    "ace_research_discovery": ("arms", "discovery", "dsl", "evaluator", "runner", "sampling", "tasks", "verify"),
+    "ace_research_hypgen": ("evaluator", "generator", "grammar", "runner", "verify"),
+    "ace_research_reptransfer": ("arms", "audit_diagnostics", "evaluator", "features", "head", "runner", "sampling", "tasks", "verify"),
+    "ace_research_generations": ("evaluator", "growth", "immutable_guard", "lineage", "mechanisms", "runner", "tasks", "verify", "verify_growth"),
+    "ace_research_repair": ("corpus", "engine", "evaluator", "memory", "operators", "represent", "runner", "sandbox", "verify"),
+    "ace_research_f12": ("benchmark", "causal_agent", "generational_growth", "tasks", "verify"),
+    "ace_research_f13": ("agent", "benchmark", "causal_memory", "tasks", "verify"),
+    "ace_research_f14": ("benchmark", "benchmark_v3", "discovery_engine", "grammar", "terminal_tasks", "terminal_tasks_v3", "verify", "verify_v3"),
+    "ace_red_team": ("adversarial_suite",),
+    "ace_integration_redteam": ("redteam_suite",),
+    "ace_runtime": ("cli", "engine"),
+}
+
+
+def _wiring_k3_catalog(engine: Any, pkg: str) -> dict[str, Any]:
+    """Katalog permukaan API paket dari modul yang sudah diimpor step."""
+    modules: dict[str, Any] = {}
+    for modname in _WIRING_K3_MODULES[pkg]:
+        mod = sys.modules[f"{pkg}.{modname}"]
+        classes = sorted(
+            name for name, obj in vars(mod).items()
+            if isinstance(obj, type) and obj.__module__ == mod.__name__)
+        functions = sorted(
+            name for name, obj in vars(mod).items()
+            if callable(obj) and not isinstance(obj, type)
+            and getattr(obj, "__module__", None) == mod.__name__)
+        modules[modname] = {"classes": classes, "functions": functions}
+    payload = {"package": pkg, "at": _now_iso(),
+               "cycle": engine.cycle_count, "modules": modules}
+    _write_json(engine.workspace / "wiring_kelompok3" / f"{pkg}.json",
+                payload)
+    return {"status": "ok", "package": pkg,
+            "modules": len(modules),
+            "classes": sum(len(m["classes"]) for m in modules.values()),
+            "functions": sum(len(m["functions"]) for m in modules.values())}
+
+
+def step_wiring_ace_capability_evolution(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_capability_evolution."""
+    if os.environ.get("ACE_WIRING_ACE_CAPABILITY_EVOLUTION") != "1":
+        return {"status": "disabled"}
+    import ace_capability_evolution.compositional  # noqa: F401
+    import ace_capability_evolution.pilot  # noqa: F401
+    import ace_capability_evolution.structural  # noqa: F401
+    import ace_capability_evolution.verify  # noqa: F401
+    import ace_capability_evolution.verify_structural  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_capability_evolution")
+
+def step_wiring_ace_evolution(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_evolution."""
+    if os.environ.get("ACE_WIRING_ACE_EVOLUTION") != "1":
+        return {"status": "disabled"}
+    import ace_evolution.island_search  # noqa: F401
+    import ace_evolution.neutral_archive_pilot_20261109  # noqa: F401
+    import ace_evolution.pareto_dsl_optimizer  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_evolution")
+
+def step_wiring_ace_selfmodel(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_selfmodel."""
+    if os.environ.get("ACE_WIRING_ACE_SELFMODEL") != "1":
+        return {"status": "disabled"}
+    import ace_selfmodel.core  # noqa: F401
+    import ace_selfmodel.memory  # noqa: F401
+    import ace_selfmodel.metacognition  # noqa: F401
+    import ace_selfmodel.runner  # noqa: F401
+    import ace_selfmodel.verify  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_selfmodel")
+
+def step_wiring_ace_research_agenda(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_research_agenda."""
+    if os.environ.get("ACE_WIRING_ACE_RESEARCH_AGENDA") != "1":
+        return {"status": "disabled"}
+    import ace_research_agenda.coordinator  # noqa: F401
+    import ace_research_agenda.models  # noqa: F401
+    import ace_research_agenda.verify  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_research_agenda")
+
+def step_wiring_ace_research_discovery(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_research_discovery."""
+    if os.environ.get("ACE_WIRING_ACE_RESEARCH_DISCOVERY") != "1":
+        return {"status": "disabled"}
+    import ace_research_discovery.arms  # noqa: F401
+    import ace_research_discovery.discovery  # noqa: F401
+    import ace_research_discovery.dsl  # noqa: F401
+    import ace_research_discovery.evaluator  # noqa: F401
+    import ace_research_discovery.runner  # noqa: F401
+    import ace_research_discovery.sampling  # noqa: F401
+    import ace_research_discovery.tasks  # noqa: F401
+    import ace_research_discovery.verify  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_research_discovery")
+
+def step_wiring_ace_research_hypgen(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_research_hypgen."""
+    if os.environ.get("ACE_WIRING_ACE_RESEARCH_HYPGEN") != "1":
+        return {"status": "disabled"}
+    import ace_research_hypgen.evaluator  # noqa: F401
+    import ace_research_hypgen.generator  # noqa: F401
+    import ace_research_hypgen.grammar  # noqa: F401
+    import ace_research_hypgen.runner  # noqa: F401
+    import ace_research_hypgen.verify  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_research_hypgen")
+
+def step_wiring_ace_research_reptransfer(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_research_reptransfer."""
+    if os.environ.get("ACE_WIRING_ACE_RESEARCH_REPTRANSFER") != "1":
+        return {"status": "disabled"}
+    import ace_research_reptransfer.arms  # noqa: F401
+    import ace_research_reptransfer.audit_diagnostics  # noqa: F401
+    import ace_research_reptransfer.evaluator  # noqa: F401
+    import ace_research_reptransfer.features  # noqa: F401
+    import ace_research_reptransfer.head  # noqa: F401
+    import ace_research_reptransfer.runner  # noqa: F401
+    import ace_research_reptransfer.sampling  # noqa: F401
+    import ace_research_reptransfer.tasks  # noqa: F401
+    import ace_research_reptransfer.verify  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_research_reptransfer")
+
+def step_wiring_ace_research_generations(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_research_generations."""
+    if os.environ.get("ACE_WIRING_ACE_RESEARCH_GENERATIONS") != "1":
+        return {"status": "disabled"}
+    import ace_research_generations.evaluator  # noqa: F401
+    import ace_research_generations.growth  # noqa: F401
+    import ace_research_generations.immutable_guard  # noqa: F401
+    import ace_research_generations.lineage  # noqa: F401
+    import ace_research_generations.mechanisms  # noqa: F401
+    import ace_research_generations.runner  # noqa: F401
+    import ace_research_generations.tasks  # noqa: F401
+    import ace_research_generations.verify  # noqa: F401
+    import ace_research_generations.verify_growth  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_research_generations")
+
+def step_wiring_ace_research_repair(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_research_repair."""
+    if os.environ.get("ACE_WIRING_ACE_RESEARCH_REPAIR") != "1":
+        return {"status": "disabled"}
+    import ace_research_repair.corpus  # noqa: F401
+    import ace_research_repair.engine  # noqa: F401
+    import ace_research_repair.evaluator  # noqa: F401
+    import ace_research_repair.memory  # noqa: F401
+    import ace_research_repair.operators  # noqa: F401
+    import ace_research_repair.represent  # noqa: F401
+    import ace_research_repair.runner  # noqa: F401
+    import ace_research_repair.sandbox  # noqa: F401
+    import ace_research_repair.verify  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_research_repair")
+
+def step_wiring_ace_research_f12(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_research_f12."""
+    if os.environ.get("ACE_WIRING_ACE_RESEARCH_F12") != "1":
+        return {"status": "disabled"}
+    import ace_research_f12.benchmark  # noqa: F401
+    import ace_research_f12.causal_agent  # noqa: F401
+    import ace_research_f12.generational_growth  # noqa: F401
+    import ace_research_f12.tasks  # noqa: F401
+    import ace_research_f12.verify  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_research_f12")
+
+def step_wiring_ace_research_f13(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_research_f13."""
+    if os.environ.get("ACE_WIRING_ACE_RESEARCH_F13") != "1":
+        return {"status": "disabled"}
+    import ace_research_f13.agent  # noqa: F401
+    import ace_research_f13.benchmark  # noqa: F401
+    import ace_research_f13.causal_memory  # noqa: F401
+    import ace_research_f13.tasks  # noqa: F401
+    import ace_research_f13.verify  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_research_f13")
+
+def step_wiring_ace_research_f14(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_research_f14."""
+    if os.environ.get("ACE_WIRING_ACE_RESEARCH_F14") != "1":
+        return {"status": "disabled"}
+    import ace_research_f14.benchmark  # noqa: F401
+    import ace_research_f14.benchmark_v3  # noqa: F401
+    import ace_research_f14.discovery_engine  # noqa: F401
+    import ace_research_f14.grammar  # noqa: F401
+    import ace_research_f14.terminal_tasks  # noqa: F401
+    import ace_research_f14.terminal_tasks_v3  # noqa: F401
+    import ace_research_f14.verify  # noqa: F401
+    import ace_research_f14.verify_v3  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_research_f14")
+
+def step_wiring_ace_red_team(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_red_team."""
+    if os.environ.get("ACE_WIRING_ACE_RED_TEAM") != "1":
+        return {"status": "disabled"}
+    import ace_red_team.adversarial_suite  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_red_team")
+
+def step_wiring_ace_integration_redteam(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_integration_redteam."""
+    if os.environ.get("ACE_WIRING_ACE_INTEGRATION_REDTEAM") != "1":
+        return {"status": "disabled"}
+    import ace_integration_redteam.redteam_suite  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_integration_redteam")
+
+def step_wiring_ace_runtime(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 — smoke katalog ace_runtime."""
+    if os.environ.get("ACE_WIRING_ACE_RUNTIME") != "1":
+        return {"status": "disabled"}
+    import ace_runtime.cli  # noqa: F401
+    import ace_runtime.engine  # noqa: F401
+    return _wiring_k3_catalog(engine, "ace_runtime")
+
+
+_WIRING_K3_EXTRA_MODULES: dict[str, str] = {
+    "ace_core_repair_decomposed_library":
+        "ace_core_repair.decomposed_library",
+    "ace_operational_massive_skills_expansion":
+        "ace_operational.massive_skills_expansion",
+}
+
+
+def _wiring_k3_extra_catalog(engine: Any, key: str) -> dict[str, Any]:
+    """Katalog permukaan API satu modul orphan tambahan Kelompok 3."""
+    dotted = _WIRING_K3_EXTRA_MODULES[key]
+    mod = sys.modules[dotted]
+    classes = sorted(
+        name for name, obj in vars(mod).items()
+        if isinstance(obj, type) and obj.__module__ == mod.__name__)
+    functions = sorted(
+        name for name, obj in vars(mod).items()
+        if callable(obj) and not isinstance(obj, type)
+        and getattr(obj, "__module__", None) == mod.__name__)
+    payload = {"package": dotted, "at": _now_iso(),
+               "cycle": engine.cycle_count,
+               "modules": {dotted.rsplit(".", 1)[-1]:
+                           {"classes": classes, "functions": functions}}}
+    _write_json(engine.workspace / "wiring_kelompok3" / f"{dotted}.json",
+                payload)
+    return {"status": "ok", "package": dotted, "modules": 1,
+            "classes": len(classes), "functions": len(functions)}
+
+
+def step_wiring_ace_core_repair_decomposed_library(
+        engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 (tambahan) — smoke katalog decomposed_library."""
+    if os.environ.get(
+            "ACE_WIRING_ACE_CORE_REPAIR_DECOMPOSED_LIBRARY") != "1":
+        return {"status": "disabled"}
+    import ace_core_repair.decomposed_library  # noqa: F401
+    return _wiring_k3_extra_catalog(
+        engine, "ace_core_repair_decomposed_library")
+
+
+def step_wiring_ace_operational_massive_skills_expansion(
+        engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 3 (tambahan) — smoke katalog massive_skills_expansion."""
+    if os.environ.get(
+            "ACE_WIRING_ACE_OPERATIONAL_MASSIVE_SKILLS_EXPANSION") != "1":
+        return {"status": "disabled"}
+    import ace_operational.massive_skills_expansion  # noqa: F401
+    return _wiring_k3_extra_catalog(
+        engine, "ace_operational_massive_skills_expansion")

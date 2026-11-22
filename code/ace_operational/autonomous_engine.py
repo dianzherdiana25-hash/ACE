@@ -2152,6 +2152,49 @@ class ContinuousAutonomousEngine:
             if self.cycle_count % 50 == 0:
                 _leap("wiring_ace_visual_bridge", leap_wiring.step_wiring_ace_visual_bridge)
 
+            # Perbaikan wiring Kelompok 3 — evolusi, riset, dan evaluasi
+            # (15 paket; flag per paket ACE_WIRING_<PAKET>, default OFF;
+            # cadence %200 untuk paket bench/generasi/berat, %50 untuk
+            # paket katalog ringan; step bench/observasi/katalog saja,
+            # bukan jalur keputusan. ace_evaluator tidak di-wire:
+            # wilayah terlarang MENUNGGU_ENGINEER_UTAMA. Dua modul
+            # orphan tambahan di-wire per modul di akhir blok;
+            # story_state tetap ORPHAN by design — karantina §3.)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_capability_evolution", leap_wiring.step_wiring_ace_capability_evolution)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_evolution", leap_wiring.step_wiring_ace_evolution)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_selfmodel", leap_wiring.step_wiring_ace_selfmodel)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_research_discovery", leap_wiring.step_wiring_ace_research_discovery)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_research_reptransfer", leap_wiring.step_wiring_ace_research_reptransfer)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_research_generations", leap_wiring.step_wiring_ace_research_generations)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_research_repair", leap_wiring.step_wiring_ace_research_repair)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_research_f12", leap_wiring.step_wiring_ace_research_f12)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_research_f13", leap_wiring.step_wiring_ace_research_f13)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_research_f14", leap_wiring.step_wiring_ace_research_f14)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_red_team", leap_wiring.step_wiring_ace_red_team)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_runtime", leap_wiring.step_wiring_ace_runtime)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_operational_massive_skills_expansion", leap_wiring.step_wiring_ace_operational_massive_skills_expansion)
+            if self.cycle_count % 50 == 0:
+                _leap("wiring_ace_research_agenda", leap_wiring.step_wiring_ace_research_agenda)
+            if self.cycle_count % 50 == 0:
+                _leap("wiring_ace_research_hypgen", leap_wiring.step_wiring_ace_research_hypgen)
+            if self.cycle_count % 50 == 0:
+                _leap("wiring_ace_integration_redteam", leap_wiring.step_wiring_ace_integration_redteam)
+            if self.cycle_count % 50 == 0:
+                _leap("wiring_ace_core_repair_decomposed_library", leap_wiring.step_wiring_ace_core_repair_decomposed_library)
+
             # EVO 0041 — Mengingat yang hidup
             if self.cycle_count % 50 == 0: _leap("memory_hygiene", leap_wiring.step_memory_hygiene_audit)
 
