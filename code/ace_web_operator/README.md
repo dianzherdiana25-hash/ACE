@@ -61,6 +61,10 @@ tersedia lokal.
 | 52 | `skill_verifier.py` | Verifier per tujuan dan pengecekan kontaminasi latihan |
 | 53 | `skill_registry.py` | Revisi registry dari verifier ulang dan kebijakan atestasi eksternal |
 | 54 | `skill_path_builder.py` | Jalur belajar deterministik dengan prasyarat, gap dan anggaran |
+| 55 | `skill_composer.py` | Komposisi skill dari port bertipe, versi dan prasyarat terverifikasi |
+| 56 | `skill_retention_probe.py` | Perbandingan retensi per tujuan atas suite controlled yang berbeda |
+| 57 | `skill_staleness.py` | Usia bukti, perubahan versi dan penurunan retensi |
+| 58 | `curriculum_importer.py` | Impor blob dari commit lokal terpin dengan lisensi dan hash |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q
