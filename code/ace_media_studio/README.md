@@ -35,6 +35,12 @@ dan menghasilkan artefak baru di direktori yang ditunjuk.
 | 28 | `studio_bench.py` | Paket klip beranimasi, audio, sampul dan audit karakter pada fixture tertutup |
 | 29 | `project_archiver.py` | ZIP deterministik berisi resep, aset dan bukti dengan verifier manifest |
 | 30 | `variation_engine.py` | Variasi palet, posisi dan bentuk terstratifikasi dengan hash per PNG |
+| 31 | `explainer_maker.py` | Video penjelasan dengan kutipan artikel relevan serta pointer baris |
+| 32 | `listicle_maker.py` | Urutan hitung mundur, durasi tiap bagian dan video kartu |
+| 33 | `whiteboard_animator.py` | Pengungkapan stroke bertahap dan verifikasi piksel akhir |
+| 34 | `data_motion.py` | Interpolasi angka, skala divergen tetap dan jejak keyframe |
+| 35 | `loop_maker.py` | Gerak periodik dan pengukuran selisih pada sambungan loop |
+| 36 | `talking_avatar.py` | Avatar orisinal dengan bentuk mulut pada timeline sampel narasi sintetis |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_media_studio -t code -q
@@ -54,5 +60,7 @@ berlaku untuk fixture itu. Kontras memakai sampel glyph, narasi memakai
 formant aturan, dan konsistensi diukur dari lima landmark per pose.
 
 ```sh
-PYTHONPATH=code:. python3 -m ace_media_studio.studio_bench   code/ace_media_studio/fixtures/closed_studio_bench.json ./bench-replay   --expect-sha256 2791b40f488b6ec61de645e1ec356fca06a6103ac223647e7b1001394bfb8d78
+PYTHONPATH=code:. python3 -m ace_media_studio.studio_bench \
+  code/ace_media_studio/fixtures/closed_studio_bench.json ./bench-replay \
+  --expect-sha256 2791b40f488b6ec61de645e1ec356fca06a6103ac223647e7b1001394bfb8d78
 ```
