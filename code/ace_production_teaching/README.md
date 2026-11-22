@@ -47,6 +47,16 @@ membaca kembali artefak yang ditulis pada fixture.
 | 38 | `static_dashboard.py` | Satu HTML statis dengan data ter-escape, grafik dan navigasi lokal |
 | 39 | `document_proofreader.py` | Saran ejaan ID/EN, pengulangan dan spasi dengan lokasi |
 | 40 | `doc_a11y_checker.py` | Heading, label tautan, alt dan header tabel native |
+| 41 | `case_method_teacher.py` | Kasus berizin sesuai topik, baris skenario dan pertanyaan tanpa bocor jawaban |
+| 42 | `project_teacher.py` | Prasyarat milestone proyek dan bukti struktur artefak |
+| 43 | `essay_grader.py` | Kredit isi, urutan lapisan dan sitasi yang dapat diperiksa |
+| 44 | `listening_trainer.py` | WAV potong terukur, opsi acak berseed dan kunci terpisah |
+| 45 | `pronunciation_coach.py` | Penyelarasan grapheme ID dan tindakan latihan berdasar transkrip |
+| 46 | `vocab_trainer.py` | Kosakata konteks dengan gap tunggal, distraktor serta sumber |
+| 47 | `math_story_trainer.py` | Cerita aritmetika lokal dengan kuantitas, satuan dan kunci eksak |
+| 48 | `code_tutor.py` | Penilaian fungsi pada interpreter AST pure berbatas langkah dan ukuran |
+| 49 | `writing_coach.py` | Delta revisi dan hubungan perubahan dengan umpan balik serta syarat |
+| 50 | `self_study_planner.py` | Jadwal tiga puluh hari, anggaran, review dan verifikasi prasyarat |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_production_teaching -t code -q
