@@ -23,7 +23,38 @@ atau rujukan sumber serta hash. Format tabel hasil di
 | 14 | `interview_kit.py` | Panduan bercabang, batas waktu terburuk dan jejak simulasi |
 | 15 | `deep_report_writer.py` | Laporan numerik terverifikasi dan bibliografi baris, gap yang disebut |
 | 16 | `executive_summarizer.py` | Pemilihan temuan berbukti dengan rekonsiliasi sitasi dan keterbatasan |
+| 17 | `comparison_analyst.py` | Peringkat dengan bobot tetap, unit dinormalisasi dan metrik wajib |
+| 18 | `market_analyst.py` | Rekap observasi, denominator per periode dan HHI pada cakupan lengkap |
+| 19 | `trend_analyst.py` | Slope Theil–Sen per hari, jendela, gap kalender dan pointer baris |
+| 20 | `topic_knowledge_base.py` | Pencarian outcome atau alias dan kartu bukti per konteks |
+| 21 | `actor_mapper.py` | Relasi teranotasi yang menyebut kedua aktor dan jarak pada graf berarah |
+| 22 | `evidence_grader.py` | Tiers desain, risiko deklaratif, kelompok, dan konflik antar-estimasi |
+| 23 | `viral_claim_watcher.py` | Pertumbuhan observasi dari slot sebanding dan status klaim diperiksa ulang |
+| 24 | `number_provenance.py` | Posisi angka, konversi satuan dan sumber pengukuran yang sama konteksnya |
+| 25 | `rebuttal_writer.py` | Sanggahan numerik yang tetap memuat bukti pendukung |
+| 26 | `report_updater.py` | Revisi dari sumber terkini, delta status dan bukti per klaim |
+| 27 | `research_qa.py` | Rubrik dan pembacaan ulang byte sumber untuk verifikasi klaim |
+| 28 | `research_archiver.py` | ZIP deterministik dengan sumber, laporan, manifest dan verifier |
+| 29 | `agenda_generator.py` | Kandidat agenda dari status bukti dengan prioritas dan brain-of-origin |
+| 30 | `institute_bench.py` | Kasus tertutup, kunci terpisah, audit angka prosa aktual dan rubrik |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_research_institute -t code -q
+```
+
+
+## Bench tertutup
+
+Rencana dan label kasus tersimpan di `fixtures/closed_research_plan.json`
+dan `fixtures/closed_research_gold.json`. Arsip pertama di
+`fixtures/closed_research_evidence/` menyimpan laporan, rubric QA,
+provenance angka per kasus serta manifest hash. Studi sintetis hanya
+menilai perilaku terhadap dua fixture, termasuk bukti yang kurang
+dan klaim yang berlawanan dengan tabel.
+
+```sh
+PYTHONPATH=code:. python3 -m ace_research_institute.institute_bench \
+  code/ace_research_institute/fixtures/closed_research_plan.json \
+  code/ace_research_institute/fixtures ./research-replay \
+  --expect-sha256 7c0ed3901997af8b0c70ccfc4ca60e80258d93bd26f444e88eb85a61f44aaf23
 ```

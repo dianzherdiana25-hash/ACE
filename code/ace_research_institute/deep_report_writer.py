@@ -54,7 +54,7 @@ def make_report(plan, expected, root):
             sources = _cite(observed, bibliography)
             verified = observed["status"] == "supported"
             line = {"id": claim, "source_ref": observed["source_ref"], "status": observed["status"], "sources": sources,
-                    "dimensions": observed["dimensions"],
+                    "dimensions": observed["dimensions"], "tolerance": observed["tolerance"],
                     "candidate_text": observed["claim"] if verified else None,
                     "amount": {"value": observed["value"], "unit": observed["unit"]} if verified else None}
             reports.append(line)
@@ -69,7 +69,7 @@ def make_report(plan, expected, root):
     if used != matrix.keys():
         raise ResearchError("Ada klaim yang diperiksa dan belum ditempatkan pada bagian laporan.")
     lines.extend(["## Batasan", "", *["- " + _safe_markdown(value) for value in limits], "", "## Sumber", ""])
-    lines.extend(f"- [{ref['id']}] `{ref['path']}:{ref['line']}` · SHA-256 `{ref['sha256']}`"
+    lines.extend(f"- [{ref['id']}] `{ref['path']}:{ref['line']}` · hash `{ref['sha256']}`"
                  for ref in bibliography.values())
     markdown = "\n".join(lines) + "\n"
     return {"schema": "ace.institute.deep-report.v1", "plan_sha256": expected, "claim_check_sha256": identity(checked),
