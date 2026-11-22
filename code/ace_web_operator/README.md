@@ -53,6 +53,10 @@ tersedia lokal.
 | 44 | `link_validator.py` | Uji fragment snapshot dan status dari probe yang telah disimpan |
 | 45 | `heavy_js_extractor.py` | Capture DOM dinamis dengan penanda siap dan field terverifikasi |
 | 46 | `scroll_handler.py` | Traversal halaman/gulir dengan dedup, penanda akhir dan batas putaran |
+| 47 | `form_state_keeper.py` | Checkpoint field biasa dengan versi, scope dan expiry |
+| 48 | `site_health_checker.py` | Probe status, media, isi dan latency lokal berbatas |
+| 49 | `analytics_operator.py` | Filter dashboard, snapshot DOM dan rekap kelompok bertambat |
+| 50 | `failed_task_escalator.py` | Triage dari receipt, efek dan batas retry sebelum telaah operator |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q
