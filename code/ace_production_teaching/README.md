@@ -57,6 +57,16 @@ membaca kembali artefak yang ditulis pada fixture.
 | 48 | `code_tutor.py` | Penilaian fungsi pada interpreter AST pure berbatas langkah dan ukuran |
 | 49 | `writing_coach.py` | Delta revisi dan hubungan perubahan dengan umpan balik serta syarat |
 | 50 | `self_study_planner.py` | Jadwal tiga puluh hari, anggaran, review dan verifikasi prasyarat |
+| 51 | `learning_style_probe.py` | Capaian berpasangan lintas format dengan kasus tidak lengkap terpisah |
+| 52 | `at_risk_detector.py` | Sinyal penurunan, skor rendah atau jeda, dengan bukti minimum |
+| 53 | `learner_report_card.py` | Rapor native per periode, poin bersumber dan belum diukur |
+| 54 | `question_bank.py` | Kalibrasi butir dari percobaan unik terikat hash soal |
+| 55 | `explained_key.py` | Perhitungan ulang dan langkah periksa kunci aritmetika |
+| 56 | `reteach_engine.py` | Materi ulang dengan metode lain, verifikasi dan anggaran eksplisit |
+| 57 | `bridge_lesson.py` | Target majemuk, prasyarat bersama dan latihan gabungan |
+| 58 | `material_qa.py` | Sumber, tujuan, struktur a11y dan jawaban tertahan |
+| 59 | `learning_journey.py` | Arsip perjalanan pseudonim berisi receipt sesi tertutup berantai |
+| 60 | `cohort_report.py` | Rekap skor berpasangan dengan penyembunyian kelompok kecil |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_production_teaching -t code -q
@@ -77,3 +87,13 @@ PYTHONPATH=code:. python3 -m ace_production_teaching.teaching_bench \
   --root code/ace_production_teaching/fixtures \
   --expect-sha256 34ba6d3b3ce6a76df7ab05db673bc1d50081d8475b90f2e3ac0750b81c4d15d0
 ```
+
+
+## Gerbang integrasi
+
+`step_dashboard_v3` dapat menyertakan ringkasan fixture saat
+`ACE_EVO0058_TEACHING=1` dan `ACE_EVO0058_REPORT_SHA256` cocok dengan
+`evo0058_teaching/run.json` di workspace. Seluruh byte pada manifest
+diperiksa ulang. Gerbang mati secara bawaan dan hook tambahan
+hanya membaca. Ringkasan keuangan, faktur, kontrak, dan label
+dihasilkan secara lokal dari masukan yang diberikan.

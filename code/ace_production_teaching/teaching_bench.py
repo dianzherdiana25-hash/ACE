@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 
 from ._artifacts import evidence
 from ._contracts import (ProductionError, anchor, canonical, decode, identifier, identity,
-                         integer, items, obj, read, schema, source_bytes)
+                         digest, integer, items, obj, read, schema, source_bytes)
 from .artifact_qa import audit
 from .chart_builder import make_chart
 from .document_builder import make_document
@@ -157,6 +157,45 @@ def run_bench(plan, expected, root):
                                 "learner_pre_passed": simulations["before_passed"], "learner_post_passed": simulations["after_passed"],
                                 "learner_items_per_arm": simulations["count_per_arm"], "detected": len(actual & recurring),
                                 "misconceptions_in_key": len(recurring)}}
+
+
+def summarize_fixture(report, root):
+    """Periksa bukti draf yang ditempatkan di workspace sebelum meringkasnya."""
+    schema(report, "ace.teaching.bench-result.v1", ("plan_sha256", "scope", "status", "metrics", "gold",
+                                                   "false_positive_misconceptions", "artifacts", "details"))
+    if report["scope"] != "closed_fixture":
+        raise ProductionError("Cakupan receipt pengajaran harus closed_fixture.")
+    digest(report["plan_sha256"])
+    artifact_types = ("artifact_qa.json", "chart.svg", "diagnosis.json", "document.docx", "document.pdf",
+                      "learner_trials.json", "slides.pptx", "workbook.xlsx")
+    obj(report["artifacts"], artifact_types)
+    for filename, row in report["artifacts"].items():
+        obj(row, ("sha256", "bytes"))
+        length = integer(row["bytes"], "Ukuran artefak", 1, 12_000_000)
+        raw = source_bytes(root, filename, row["sha256"], length)
+        if len(raw) != length:
+            raise ProductionError("Ukuran artefak tidak sama dengan receipt.")
+    details = obj(report["details"], ("artifact_passed", "artifact_count", "learner_pre_passed", "learner_post_passed",
+                                       "learner_items_per_arm", "detected", "misconceptions_in_key"))
+    assets = integer(details["artifact_count"], "Jumlah artefak", 1, 16)
+    passes = integer(details["artifact_passed"], "Artefak lulus", 0, assets)
+    arm = integer(details["learner_items_per_arm"], "Jumlah soal per arm", 1, 1000)
+    pre = integer(details["learner_pre_passed"], "Jawaban benar sebelum", 0, arm)
+    post = integer(details["learner_post_passed"], "Jawaban benar sesudah", 0, arm)
+    misconception = integer(details["misconceptions_in_key"], "Miskonsepsi", 1, 160)
+    hits = integer(details["detected"], "Miskonsepsi terdeteksi", 0, misconception)
+    metrics = {"artifact_first_pass_bp": 10000 * passes // assets, "simulation_gain_bp": 10000 * (post - pre) // arm,
+               "simulation_relative_gain_bp": 10000 * (post - pre) // pre if pre else None,
+               "misconception_detection_bp": 10000 * hits // misconception}
+    if metrics != report["metrics"]:
+        raise ProductionError("Metrik tidak sesuai dengan denominator di receipt.")
+    relative = metrics["simulation_relative_gain_bp"]
+    passed = metrics["artifact_first_pass_bp"] >= 9000 and relative is not None and relative >= 2500 and (
+        metrics["misconception_detection_bp"] >= 8000 and not report["false_positive_misconceptions"])
+    status = "fixture_pass" if passed else "fixture_hold"
+    if report["status"] != status:
+        raise ProductionError("Status receipt berbeda dari kriteria fixture.")
+    return {"scope": report["scope"], "fixture_status": status, "metrics": metrics, "details": details}
 
 
 def main(argv=None):
