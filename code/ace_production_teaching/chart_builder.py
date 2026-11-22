@@ -32,6 +32,11 @@ def _metric(bound, value):
     return (value - low) / (high - low)
 
 
+def _tick(value):
+    literal = fmt(value)
+    return literal if len(literal) < 11 else format(value.normalize(), ".3E")
+
+
 def make_chart(plan, expected):
     anchor(plan, expected)
     schema(plan, "ace.production.chart-plan.v1", ("title", "kind", "width", "height", "y_label", "points", "y_axis"))
@@ -76,7 +81,7 @@ def make_chart(plan, expected):
         value = bounds[0] + (bounds[1] - bounds[0]) * idx / 5
         y = floor - idx * plot_height // 5
         elements.append(f'<line x1="{left}" y1="{y}" x2="{right}" y2="{y}" stroke="#D9E1EA"/>'
-                        f'<text x="{left-9}" y="{y+4}" text-anchor="end" font-size="12">{e(fmt(value.quantize(Decimal("0.000001"))))}</text>')
+                        f'<text x="{left-9}" y="{y+4}" text-anchor="end" font-size="12">{e(_tick(value))}</text>')
     if kind == "bar":
         zero = int(floor - _metric(bounds, Decimal(0)) * plot_height)
     for index, (name, value, pointer) in enumerate(points):

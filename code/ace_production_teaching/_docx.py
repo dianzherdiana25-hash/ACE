@@ -52,6 +52,16 @@ def build_docx(title, blocks):
             sections.append(_paragraph(block["body"]))
         elif kind == "table":
             sections.append(_table(block))
+        elif kind == "bookmark":
+            index, name = block["index"], block["name"]
+            link = (f'<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:bookmarkStart w:id="{index}" w:name="{name}"/>'
+                    f'<w:r><w:t>{e(block["body"])}</w:t></w:r><w:bookmarkEnd w:id="{index}"/></w:p>')
+            sections.append(link)
+        elif kind == "toc":
+            for index, entry in enumerate(block["entries"], 1):
+                headline = e(f'{index}. {entry["title"]}') if entry["level"] == 1 else e("    " + entry["title"])
+                sections.append(f'<w:p><w:hyperlink w:anchor="{entry["name"]}"><w:r><w:rPr><w:color w:val="246478"/>'
+                                f'<w:u w:val="single"/></w:rPr><w:t xml:space="preserve">{headline}</w:t></w:r></w:hyperlink></w:p>')
         else:
             sections.append('<w:p><w:r><w:br w:type="page"/></w:r></w:p>')
     body = (f'<w:document xmlns:w="{NS}"><w:body>{"".join(sections)}'
