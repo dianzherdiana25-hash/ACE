@@ -24,6 +24,7 @@ MAX_CELLS = 2500
 MAX_TEXT = 16000
 MAX_WORK = 4_000_000
 KINDS = ("document", "table", "asr")
+UNRESOLVED_CELL = {"unresolved": True}
 
 
 def _scalar(value):
@@ -45,7 +46,7 @@ def _fields(raw):
     return {_token(key, "ID bidang"): _scalar(value) for key, value in raw.items()}
 
 
-def _matrix(raw):
+def _matrix(raw, *, observation=False):
     if raw == []:
         return []
     if not isinstance(raw, list) or not raw or not isinstance(raw[0], list) or not raw[0]:
@@ -53,7 +54,12 @@ def _matrix(raw):
     span = len(raw[0])
     if len(raw)*span > MAX_CELLS or any(not isinstance(row, list) or len(row) != span for row in raw):
         raise ValueError("Tabel ragged atau terlalu besar.")
-    return [[_scalar(item) for item in row] for row in raw]
+    def normalize(item):
+        if (observation and isinstance(item, dict) and item.keys() == UNRESOLVED_CELL.keys()
+                and item["unresolved"] is True):
+            return dict(UNRESOLVED_CELL)
+        return _scalar(item)
+    return [[normalize(item) for item in row] for row in raw]
 
 
 def _words(raw):
@@ -108,7 +114,8 @@ def _observations(data, roster, refs):
             raise ValueError("Hasil ganda atau tidak terikat media.")
         kind, _, _, target = roster[key]
         refs.add(ref)
-        normalized = _check_value(kind, row["result"])
+        normalized = (_matrix(row["result"], observation=True) if kind == "table"
+                      else _check_value(kind, row["result"]))
         if kind == "asr":
             work += (len(target)+1)*(len(normalized)+1)
             if work > MAX_WORK:
@@ -148,7 +155,8 @@ def _score(kind, expected, actual):
         n, m = len(actual), len(actual[0]) if actual else 0
         positions = min(n, rows)*min(m, columns)
         correct = sum(_same(expected[y][x], actual[y][x]) for y in range(min(n, rows)) for x in range(min(m, columns)))
-        return {"units": rows*columns, "correct": correct, "missing_units": rows*columns-positions,
+        unresolved_inside = sum(actual[y][x] == UNRESOLVED_CELL for y in range(min(n, rows)) for x in range(min(m, columns)))
+        return {"units": rows*columns, "correct": correct, "missing_units": rows*columns-positions+unresolved_inside,
                 "extra_units": n*m-positions}
     _, s, d, i = _align(expected, actual)
     return {"units": len(expected), "substitutions": s, "deletions": d, "insertions": i}

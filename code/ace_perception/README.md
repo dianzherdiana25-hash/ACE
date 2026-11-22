@@ -343,3 +343,17 @@ Pemanggilan berasal dari laporan-diri berkala yang sudah ada.
 Runner hanya membaca masukan dengan batas delapan pekerjaan dan
 anggaran reservasi empat juta byte per pemanggilan. Ringkasan ada
 di hasil langkah. Gerbang default mati.
+
+## Bench fixture tertutup
+
+[Protokol](fixtures/closed_perception/protocol.json) memuat label sumber yang
+ditulis terpisah dari hasil ekstraksi. [Plan](fixtures/closed_perception/plan.json)
+menambatkan byte PGM, font, layout, WAV, dan receipt transkrip. Runner
+`ace_perception.closed_suite` mengekstrak ulang bidang dan sel dari pixel,
+mengikat transkrip ke segmentasi WAV, dan memakai scorer yang sama.
+[Run](fixtures/closed_perception/run.json) mencatat 11/12 bidang dokumen,
+11/12 sel tabel, serta 1 substitusi per 6 token transkrip masukan.
+Satu klaim dokumen ambigu dan satu sel berisi glyph tak terbaca tetap tercatat.
+Font raster sintetis dan WAV nada fixture membatasi cakupan. WER tersebut
+mengukur skor receipt masukan terhadap label fixture. Decode ujaran dari
+gelombang audio masih belum diukur.
