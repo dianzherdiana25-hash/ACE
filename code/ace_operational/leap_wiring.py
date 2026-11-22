@@ -4006,14 +4006,36 @@ def step_capability_report(engine: Any) -> dict[str, Any]:
         tmp = out_path.with_suffix(".md.tmp")
         tmp.write_text(md, encoding="utf-8")
         tmp.replace(out_path)
-        return {
+        result = {
             "status": "ok",
             "schema": report["schema"],
             "completeness": report["completeness"],
             "gaps": report["gaps"],
         }
+        if os.environ.get("ACE_EVO0056_MEDIA_STUDIO") == "1":
+            result["media_studio"] = step_evo0056_media_studio(engine)
+        return result
     except Exception as exc:
         return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
+
+def step_evo0056_media_studio(engine: Any) -> dict[str, Any]:
+    """Baca bukti QA fixture studio yang telah ditambatkan operator."""
+    if os.environ.get("ACE_EVO0056_MEDIA_STUDIO") != "1":
+        return {"status": "disabled"}
+    workspace = getattr(engine, "workspace", None)
+    expected = os.environ.get("ACE_EVO0056_REPORT_SHA256")
+    if workspace is None or not expected:
+        return {"status": "held", "reason": "workspace_or_anchor_missing"}
+    try:
+        from ace_media_studio._assets import asset
+        from ace_media_studio._contracts import decode
+        from ace_media_studio.studio_season_report import _rubric
+
+        receipt = asset(Path(workspace), "evo0056_media/bench_report.json", expected, 500_000)
+        measured = _rubric(decode(receipt))
+    except (OSError, ValueError, KeyError, TypeError, RecursionError):
+        return {"status": "held", "reason": "media_studio_evidence_unavailable"}
+    return {"status": "ok", "evidence_sha256": expected, **measured}
 
 
 

@@ -85,6 +85,8 @@ def load_movie(root, data):
     from ._audio import parse_wav
     from ._raster import Raster
 
+    if not isinstance(data, bytes) or not 32 <= len(data) <= MAX_MOVIE:
+        raise ContractError("Ukuran MP4 sumber di luar anggaran.")
     source = root / "input.mp4"
     source.write_bytes(data)
     raw = _call("ffprobe", ["-v", "error", "-protocol_whitelist", "file,pipe", "-f", "mov",

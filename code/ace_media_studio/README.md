@@ -55,6 +55,16 @@ dan menghasilkan artefak baru di direktori yang ditunjuk.
 | 48 | `brand_safety_qa.py` | Saring kategori, frasa dan timeline anotasi yang belum tercakup |
 | 49 | `asset_rights.py` | Cakupan grant atas hash, tujuan, atribusi, wilayah dan tanggal |
 | 50 | `release_packager_media.py` | Preflight profil dan laporan QA yang terikat hash video, draf lokal |
+| 51 | `text_legibility_qa.py` | Kontras wilayah teks pada frame terdecode, tinggi glyph dan gap sampling |
+| 52 | `scene_retention_predictor.py` | Proxy retensi naskah, bobot eksplisit dan jejak fitur per adegan |
+| 53 | `thumbnail_ab.py` | Dua PNG satu faktor, penugasan berimbang dan hasil eksperimen kosong |
+| 54 | `render_recipe.py` | Bekukan profil, kontrak, build lokal dan persamaan byte hasil replay |
+| 55 | `night_render_queue.py` | Filter jendela UTC, estimasi energi/daya dan replay serial yang eksplisit |
+| 56 | `catalog_search_media.py` | Pencarian BM25 atas transkrip lokal terikat hash dan nomor baris |
+| 57 | `reverse_storyboard.py` | Deteksi pergantian shot dan ekstraksi thumbnail representatif |
+| 58 | `originality_checker.py` | Pisahkan duplikat byte dari kemiripan struktur dan warna teknis |
+| 59 | `campaign_packager.py` | Draf kampanye lokal dari bukti izin per tanggal, aset dan jadwal dependen |
+| 60 | `studio_season_report.py` | Rekap dari baris receipt, celah bukti per episode dan delta antar-musim |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_media_studio -t code -q
@@ -78,3 +88,20 @@ PYTHONPATH=code:. python3 -m ace_media_studio.studio_bench \
   code/ace_media_studio/fixtures/closed_studio_bench.json ./bench-replay \
   --expect-sha256 2791b40f488b6ec61de645e1ec356fca06a6103ac223647e7b1001394bfb8d78
 ```
+
+
+## Gerbang integrasi
+
+`step_capability_report` dapat melampirkan ringkasan fixture setelah
+`ACE_EVO0056_MEDIA_STUDIO=1` disetel dan isi
+`evo0056_media/bench_report.json` di workspace cocok dengan
+`ACE_EVO0056_REPORT_SHA256`. Gerbang mati secara bawaan. Hook baru
+hanya melakukan pembacaan. Rencana narasi, gambar, dan render lain
+dijalankan secara mandiri melalui CLI paket.
+
+Lingkup verifikasi mencakup geometri terstruktur, narasi formant,
+prosodi berizin, karakter orisinal, WebVTT dengan transkrip masukan,
+dan sulih suara dari rekaman masukan. Antrean render memeriksa
+perkiraan watt dan watt-detik yang dideklarasikan, tanpa pengukuran
+daya perangkat. Skor proxy retensi belum dikalibrasi terhadap
+perilaku penonton.
