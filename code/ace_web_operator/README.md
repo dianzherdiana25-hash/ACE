@@ -45,6 +45,10 @@ tersedia lokal.
 | 36 | `review_collector.py` | Normalisasi rating lintas skala dengan dedup serta konflik eksplisit |
 | 37 | `spec_comparator.py` | Perbandingan field berbasis unit, toleransi Decimal dan sumber |
 | 38 | `report_submitter.py` | Rekap periode bersumber dan rehearsal pengisian tanpa submit |
+| 39 | `multi_account_guard.py` | Marker profil terpisah, origin bound, symlink dan profil silang ditahan |
+| 40 | `tos_watcher.py` | Jejak perubahan klausul berlabel dan selisih kata |
+| 41 | `thread_archiver.py` | Arsip utas yang disetujui dengan redaksi dan reply chain |
+| 42 | `price_research_runner.py` | Slot UTC riset harga dan delta dari snapshot yang ada |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_web_operator -t code -q
