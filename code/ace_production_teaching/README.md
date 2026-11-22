@@ -37,6 +37,16 @@ membaca kembali artefak yang ditulis pada fixture.
 | 28 | `flashcard_engine.py` | Kartu dari kelemahan teramati, pointer baris sumber jawaban |
 | 29 | `progress_visualizer.py` | Grafik checkpoint per topik dengan gap eksplisit |
 | 30 | `teaching_bench.py` | Artefak native dan hasil learner simulasi tertutup dengan kunci terpisah |
+| 31 | `epub_builder.py` | EPUB 3, OCF, spine, TOC, dan bab XHTML yang dapat dibaca ulang |
+| 32 | `content_calendar_builder.py` | ICS lokal, interval UTC, dependensi dan fold UTF-8 |
+| 33 | `invoice_builder.py` | Aritmetika faktur draf dengan neto, pajak, total dan sumber per baris |
+| 34 | `contract_builder.py` | Draf bertemplat dari klausul bertambat dan cakupan topik wajib |
+| 35 | `certificate_builder.py` | Bukti capaian dan izin label sebelum membuat sertifikat lokal |
+| 36 | `label_builder.py` | Label per paket, konflik alamat, dan daftar barang tanpa alamat |
+| 37 | `finance_report_builder.py` | Rekap tabel baca-saja dengan total, kategori, dan jendela tanggal |
+| 38 | `static_dashboard.py` | Satu HTML statis dengan data ter-escape, grafik dan navigasi lokal |
+| 39 | `document_proofreader.py` | Saran ejaan ID/EN, pengulangan dan spasi dengan lokasi |
+| 40 | `doc_a11y_checker.py` | Heading, label tautan, alt dan header tabel native |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_production_teaching -t code -q
