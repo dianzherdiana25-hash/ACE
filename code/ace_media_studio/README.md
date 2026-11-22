@@ -13,6 +13,10 @@ dan menghasilkan artefak baru di direktori yang ditunjuk.
 | 6 | `voice_style.py` | Izin eksplisit dan estimasi prosodi pada sampel sintetis berfrekuensi acuan |
 | 7 | `podcast_producer.py` | Narasi WAV, klip berlisensi dan ber-hash, cue bab serta jeda yang sesuai durasi |
 | 8 | `audio_mixer.py` | Mix dialog/bed/efek, ducking berbasis sampel, pan, fade dan batas headroom |
+| 9 | `video_composer.py` | Pan kamera per frame, potongan adegan dan soundtrack yang terukur dengan FFmpeg |
+| 10 | `animation_renderer.py` | Render Blender Cycles CPU dan verifikasi perpindahan objek pada frame MP4 |
+| 11 | `scene_director.py` | Timeline storyboard, batas dialog, continuity kamera dan wardrobe |
+| 12 | `character_keeper.py` | Empat pose orisinal dan audit landmark piksel terhadap bible karakter |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_media_studio -t code -q
