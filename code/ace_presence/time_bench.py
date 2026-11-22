@@ -9,6 +9,7 @@ from .rhythm_learner import learn
 from .temporal_store import timeline
 
 METHODS = {
+    "active_versions": (timeline, lambda out: {key: row["id"] for key, row in out["active"].items()}),
     "active_fact_ids": (timeline, lambda out: sorted(out["active"])),
     "calendar_event_ids": (calendar, lambda out: [row["id"] for row in out["events"]]),
     "moment_ids": (recall, lambda out: [row["id"] for row in out["matches"]]),

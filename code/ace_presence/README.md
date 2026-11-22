@@ -1,7 +1,6 @@
 # EVO 0059 · Kehadiran
 
-Modul lokal untuk dialog, waktu, dan kehadiran berbukti. Checkpoint ini
-mencakup butir 1–40. Jurnal sesi adalah SQLite terisolasi dengan format
+Modul lokal untuk dialog, waktu, dan kehadiran berbukti. Tabel menunjukkan cakupan butir 1–60 dan batas butir 15. Jurnal sesi adalah SQLite terisolasi dengan format
 sendiri. Uji memakai workspace baru dan HTTP pada loopback.
 
 | Butir | Modul | Bukti fixture |
@@ -48,7 +47,44 @@ sendiri. Uji memakai workspace baru dan HTTP pada loopback.
 | 38 | `thread_resumer` | Lanjutan paginasi dari hash riwayat terverifikasi. |
 | 39 | `decision_marker` | Putusan berlabel, teratribusi, dan riwayat per ID. |
 | 40 | `decision_linker_presence` | Tautan keputusan sah dan janji beserta sumber keduanya. |
+| 41 | `shared_history_answerer` | Petikan riwayat dengan permit dan partisipasi sumber. |
+| 42 | `topic_boundary_guard` | Pagar kanal eksplisit dengan tinjauan untuk topik yang tidak dikenal. |
+| 43 | `register_switcher` | Dua register mempertahankan slot fakta yang sama. |
+| 44 | `dialogue_satisfaction` | Sinyal eksplisit dan jumlah turn tanpa rating. |
+| 45 | `owner_rhythm` | Rata-rata durasi kalender kerja per hari lokal dengan provenance. |
+| 46 | `best_time_advisor` | Saran bebas tabrakan dengan ranking dari riwayat fokus. |
+| 47 | `topic_waitlist` | Daftar tunggu dengan aging, prasyarat, dan tanggal siap. |
+| 48 | `recurring_reminder` | Jeda kalender lokal, verifikasi DST dan deduplikasi. |
+| 49 | `daily_agenda` | Acara lokal dan daftar prioritas tenggat serta janji. |
+| 50 | `weekly_review` | Tujuh hari dengan hasil, rencana, dan hambatan dipisahkan. |
+| 51 | `deadline_collision` | Bukti defisit kapasitas preemptive di jendela tenggat. |
+| 52 | `reschedule_proposer` | Kandidat pindah bebas tabrakan menurut jarak waktunya. |
+| 53 | `estimate_calibrator` | Galat absolut, bias bertanda, dan kuantil rasio. |
+| 54 | `day_archiver` | Manifest hari lokal tanpa menyalin isi turn. |
+| 55 | `while_away_brief` | Kejadian bertanggal setelah checkpoint dengan cakupan. |
+| 56 | `persona_continuity` | Pemeriksaan rantai antartahun dan drift nilai tetap. |
+| 57 | `greeting_keeper` | Izin dan pencabutan sapaan dengan pilihan bawaan. |
+| 58 | `presence_quality` | Cakupan respons dan rating per kanal serta abstain. |
+| 59 | `smart_dnd` | Waktu tenang dengan interupsi yang diberi izin secara spesifik. |
+| 60 | `presence_report` | Kohort tenggat dan bukti realisasi tepat waktu atau terlambat. |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_presence -t code -v
 ```
+
+## Bench fixture tertutup
+
+[Plan](fixtures/closed_presence/plan.json) menautkan ekspor rantai dialog,
+label recall, serta kasus dan label waktu yang terpisah. Harness
+`closed_bench.assess` menjalankan recall, ekstraksi janji, ringkasan
+ekstraktif, audit, dan bench temporal dari input itu. [Run](fixtures/closed_presence/run.json)
+mencatat 10/10 recall fakta atau janji terlabel, 9/9 petikan ringkasan cocok
+byte dengan turn, dan 16/16 kasus temporal benar. Label hanya mewakili
+fixture sintetis dengan kosa kata kueri yang telah diketahui. Login jaringan,
+kanal suara langsung, dan terjemahan teks baru berada di luar bukti itu.
+
+Flag `ACE_EVO0059_PRESENCE=1` menambahkan ringkasan bukti terverifikasi
+ke hasil `step_mobile_report` bila plan di
+`<workspace>/evo0059_presence/plan.json` cocok dengan
+`ACE_EVO0059_PLAN_SHA256` dan semua sumber lulus verifikasi. Flag mati
+secara bawaan. Program baca-saja untuk input ini.

@@ -6528,9 +6528,38 @@ def step_mobile_report(engine: Any) -> dict[str, Any]:
         }
         md = generate_indonesian_mobile_report(data)
         (engine.workspace / "mobile_report.md").write_text(md, encoding="utf-8")
-        return {"status": "ok", "report_bytes": len(md.encode("utf-8"))}
+        result = {"status": "ok", "report_bytes": len(md.encode("utf-8"))}
+        if os.environ.get("ACE_EVO0059_PRESENCE") == "1":
+            result["presence"] = step_evo0059_presence(engine)
+        return result
     except Exception as exc:
         return {"status": "error", "reason": str(exc)}
+
+
+def step_evo0059_presence(engine: Any) -> dict[str, Any]:
+    """Baca bukti fixture kehadiran dan periksa ulang label serta byte sumber."""
+    if os.environ.get("ACE_EVO0059_PRESENCE") != "1":
+        return {"status": "disabled"}
+    workspace = getattr(engine, "workspace", None)
+    expected = os.environ.get("ACE_EVO0059_PLAN_SHA256")
+    if workspace is None or not expected:
+        return {"status": "held", "reason": "workspace_or_anchor_missing"}
+    try:
+        from ace_presence._contracts import decode, identity, source_bytes
+        from ace_presence.closed_bench import assess
+
+        root = Path(workspace)
+        raw = source_bytes(root, "evo0059_presence/plan.json", expected, 500_000)
+        plan = decode(raw)
+        result = assess(plan, identity(plan), root / "evo0059_presence")
+    except (OSError, ValueError, KeyError, TypeError, ArithmeticError, RecursionError):
+        return {"status": "held", "reason": "presence_evidence_unavailable"}
+    dialog = result["dialogue"]
+    time = result["time"]
+    return {"status": "ok", "scope": result["scope"], "evidence_sha256": expected,
+            "recall": dialog["recall"], "recall_count": dialog["gold"],
+            "summary_checked": dialog["summary_checked"], "unsupported_summary": dialog["unsupported_summary"],
+            "temporal_accuracy": time["accuracy"], "temporal_count": time["evaluated"]}
 
 
 def step_mission_proposers(engine: Any) -> dict[str, Any]:
