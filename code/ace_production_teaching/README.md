@@ -27,7 +27,33 @@ membaca kembali artefak yang ditulis pada fixture.
 | 18 | `misconception_tracker.py` | Temuan berulang antartugas dalam jendela bukti |
 | 19 | `spaced_repetition.py` | Interval pengulangan, ease, jatuh ulang, dan tanggal jatuh tempo |
 | 20 | `explanation_adapter.py` | Varian tingkat penjelasan dengan binding fakta dan sumber yang sama |
+| 21 | `session_manager.py` | Sesi stdio, evaluasi terbuka dan transisi receipt berantai hash |
+| 22 | `hint_engine.py` | Rantai petunjuk dan hold ketika mengulang bentuk jawaban terlindungi |
+| 23 | `socratic_questioner.py` | Pertanyaan lanjutan berdasar bukti rubrik dan fokus kontradiksi |
+| 24 | `mastery_predictor.py` | Prognosis dengan half-life deklaratif dan batas bukti prasyarat |
+| 25 | `feedback_writer.py` | Umpan balik, alasan kredit dan tindakan ulang terarah |
+| 26 | `exam_builder.py` | Ujian native dari kisi held-out dengan kunci terpisah |
+| 27 | `notes_generator.py` | Catatan dan gap dari rantai receipt yang diverifikasi ulang |
+| 28 | `flashcard_engine.py` | Kartu dari kelemahan teramati, pointer baris sumber jawaban |
+| 29 | `progress_visualizer.py` | Grafik checkpoint per topik dengan gap eksplisit |
+| 30 | `teaching_bench.py` | Artefak native dan hasil learner simulasi tertutup dengan kunci terpisah |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_production_teaching -t code -q
+```
+
+
+## Bench tertutup
+
+`fixtures/teaching_plan.json` memuat rencana fixture dan anchor atas
+`fixtures/teaching_gold.json`. Artefak serta receipt perhitungan berada
+di `fixtures/teaching_bench_evidence/`. Ukuran pengajaran memakai
+learner deterministik dengan perubahan level yang disebut di rencana.
+Angka itu berlaku pada simulator tersebut.
+
+```sh
+PYTHONPATH=code:. python3 -m ace_production_teaching.teaching_bench \
+  code/ace_production_teaching/fixtures/teaching_plan.json ./teaching-replay \
+  --root code/ace_production_teaching/fixtures \
+  --expect-sha256 34ba6d3b3ce6a76df7ab05db673bc1d50081d8475b90f2e3ac0750b81c4d15d0
 ```
