@@ -88,11 +88,15 @@ def recheck(plan, plan_expected, report, root):
         report["recovered_bytes_match"], report["fault_source_intact"]]
     if isolation["files"] != len(validate_manifest(manifest)) or any(type(value) is not bool for value in booleans):
         raise GuardianError("Bukti isolasi fixture tidak konsisten.")
-    recovery = obj(report["recovery"], ("status", "process_exit", "elapsed_ms", "under_limit", "limit_ms", "playbook", "scope"))
+    recovery = obj(report["recovery"], ("status", "process_exit", "elapsed_ms", "under_limit", "limit_ms", "restart", "playbook", "scope"))
     limit = plan["recovery"]["limit_ms"]
     elapsed = integer(recovery["elapsed_ms"], "Durasi subprocess", 0, 300_000_000)
     exit_code = integer(recovery["process_exit"], "Kode keluar proses", -255, 255)
-    measured = exit_code < 0 and recovery["status"] == "fixture_recovered" and elapsed < limit
+    restart = obj(recovery["restart"], ("exit_code", "ready_verified", "manifest_sha256"))
+    restart_status = integer(restart["exit_code"], "Kode keluar proses restart", -255, 255)
+    if restart["manifest_sha256"] != identity(manifest) or restart["ready_verified"] is not (restart_status == 0):
+        raise GuardianError("Restart fixture berbeda dari receipt.")
+    measured = exit_code < 0 and restart["ready_verified"] and recovery["status"] == "fixture_recovered" and elapsed < limit
     if recovery["limit_ms"] != limit or recovery["under_limit"] is not measured or recovery["scope"] != "local_fixture_subprocess":
         raise GuardianError("Batas dan status waktu pemulihan tidak konsisten.")
     recipe = plan["recovery"]["playbook"]

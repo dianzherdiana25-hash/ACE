@@ -76,7 +76,8 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code
 aksi dengan outcome yang ditetapkan, dan prediksi/resolusi sintetis.
 [Run](fixtures/closed_guardian/run.json) mencatat uji mutasi pada salinan
 fork, receipt untuk 11 aksi dari delapan kelas terdaftar ditambah kelas
-asing, dan pemulihan yang mengakhiri subprocess Python fixture. Recheck
+asing, dan pemulihan yang mengakhiri subprocess Python fixture lalu memulai
+proses pemeriksa baru di direktori hasil. Recheck
 membaca ulang byte kedua snapshot dan menghitung receipt, ECE, serta hasil
 rollback. Durasi yang direkam adalah observasi lokal dan berubah antar-run.
 Klaim isolasi berlaku untuk operasi data tertutup di fixture, tanpa menjalankan

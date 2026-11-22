@@ -14,7 +14,7 @@ from .leak_detector import detect
 from .log_rotator import manifest, split
 from .organ_health_report import health
 from .orphan_sweeper import sweep
-from .recovery_drill import drill
+from .recovery_drill import drill, restart_fixture
 from .recovery_playbooks import ACTIONS
 from .safe_mode import transition
 from .self_compliance_score import score
@@ -47,6 +47,15 @@ class GuardianOperationsTests(unittest.TestCase):
         self.assertLess(result["process_exit"], 0)
         self.assertEqual((target / "s").read_bytes(), b"healthy")
         self.assertEqual((failed / "s").read_bytes(), b"faulted")
+
+    def test_31_restart_verifies_manifest_in_a_separate_process(self):
+        stash(self.root, "state.json", b"captured")
+        manifest = build_manifest(self.root, ["state.json"])
+        self.assertTrue(restart_fixture(self.root, manifest)["ready_verified"])
+        stash(self.root, "state.json", b"other")
+        rejected = restart_fixture(self.root, manifest)
+        self.assertEqual(rejected["exit_code"], 3)
+        self.assertFalse(rejected["ready_verified"])
 
     def test_32_leak_slope_uses_process_instances_and_robust_pairs(self):
         plan_data = plan("rss-leak", samples=[
