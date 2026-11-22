@@ -1,7 +1,7 @@
 # EVO 0060 · Penjaga Diri
 
 Paket lokal untuk kembaran, aturan aksi, dan pemulihan yang bisa
-ditelaah. Fixture dibuat di direktori uji. Checkpoint mencakup butir 1–30.
+ditelaah. Fixture dibuat di direktori uji. Tabel mencakup butir 1–60.
 
 | Butir | Modul | Verifikasi fixture |
 | --- | --- | --- |
@@ -35,6 +35,36 @@ ditelaah. Fixture dibuat di direktori uji. Checkpoint mencakup butir 1–30.
 | 28 | `incident_journal` | Kegagalan tetap tercatat setelah insiden ditutup. |
 | 29 | `confidence_ledger` | Prediksi sebelum resolusi dengan bukti terpisah dan rantai hash. |
 | 30 | `calibration_scorer` | ECE dan Brier berbobot per domain dengan basis point dan rasio eksak. |
+| 31 | `recovery_drill` | Hentikan subprocess fixture yang baru diluncurkan dan ukur waktu sampai restore terverifikasi. |
+| 32 | `leak_detector` | Median kemiringan RSS per instance, tahan efek satu outlier. |
+| 33 | `orphan_sweeper` | Tentukan file tua tak terujuk tanpa melakukan penghapusan. |
+| 34 | `store_verifier` | Checksum, berkas hilang, dan inventory tambahan. |
+| 35 | `log_rotator` | Pecah log fixture dan verifikasi isi dari gzip deterministik. |
+| 36 | `organ_health_report` | Umur, streak, rasio, dan data health yang belum ada. |
+| 37 | `slow_step_trend` | Median dua jendela dan delta dengan denominator. |
+| 38 | `step_quarantine` | Usulan karantina berprovenance dengan daftar fungsi wajib. |
+| 39 | `cycle_budget_guard` | Cadangan untuk langkah wajib dan defer yang tidak memakai jatah. |
+| 40 | `state_of_ace` | Ringkasan satu halaman dari panel bertambat. |
+| 41 | `safe_mode` | Latch anomali, syarat bersih, dan persetujuan untuk kembali normal. |
+| 42 | `gate_regression_runner` | Verifikasi keputusan beserta aturan pertama dan cakupan kelas. |
+| 43 | `trusted_actor_admin` | Grant, expiry dan pencabutan per scope dengan sumber otoritas. |
+| 44 | `action_anomaly` | Deteksi aktor baru dan kuantitas outlier terhadap baseline. |
+| 45 | `self_compliance_score` | Skor pekanan dengan denominator termasuk receipt yang hilang. |
+| 46 | `snapshot_retention` | Rencana retensi mematuhi hold, umur, dan batas byte. |
+| 47 | `rollback_drill` | Bandingkan hasil restore nyata fixture terhadap delta yang diharapkan. |
+| 48 | `standby_mirror` | Audit urutan dan hubungan manifest replika sebelum tinjauan failover. |
+| 49 | `recovery_time_tracker` | Waktu deteksi/pulih serta insiden tidak tuntas. |
+| 50 | `postmortem_writer` | Timeline dan hipotesis berujukan tanpa menyimpulkan akar sebab. |
+| 51 | `abstention_calibrator` | Kurva selective risk dengan ambang dan minimum sampel. |
+| 52 | `calibration_to_director` | Saran abstain atas confidence domain yang bertambat. |
+| 53 | `ece_publisher` | Tabel lokal ECE dan cakupan domain dari ledger resolusi. |
+| 54 | `low_confidence_registry` | Abstain untuk pengukuran kedaluwarsa atau tipis. |
+| 55 | `report_truth_checker` | Verifikasi pointer JSON, hash sumber, dan jenis nilai klaim. |
+| 56 | `decade_verdict_board` | Tampilkan status tercatat dan sumber belum terverifikasi. |
+| 57 | `flag_transition_manager` | Usulan versi flag dengan bukti terbaru dan draf rollback. |
+| 58 | `decade_baseline_archiver` | Tar+gzip byte-identik dengan metadata tetap dan isi bertambat. |
+| 59 | `decade_closing_report` | Pisahkan bukti fixture dari penerimaan yang terdaftar. |
+| 60 | `next_decade_opener` | Tranche usulan berdasarkan kesenjangan dengan bukti dan uji. |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_guardian -t code -v
