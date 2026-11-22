@@ -2127,6 +2127,31 @@ class ContinuousAutonomousEngine:
             if self.cycle_count % 200 == 0:
                 _leap("wiring_ace_gnn", leap_wiring.step_wiring_ace_gnn)
 
+            # Perbaikan wiring Kelompok 2 — agen, misi, dan dunia luar
+            # (10 paket; flag per paket ACE_WIRING_<PAKET>, default OFF;
+            # cadence %200 untuk paket aksi nyata/berat, %50 untuk paket
+            # katalog ringan; step baca/katalog saja, bukan eksekusi)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_code_agent", leap_wiring.step_wiring_ace_code_agent)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_autonomy", leap_wiring.step_wiring_ace_autonomy)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_host_controller", leap_wiring.step_wiring_ace_host_controller)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_real_world", leap_wiring.step_wiring_ace_real_world)
+            if self.cycle_count % 200 == 0:
+                _leap("wiring_ace_loop", leap_wiring.step_wiring_ace_loop)
+            if self.cycle_count % 50 == 0:
+                _leap("wiring_ace_host_exchange", leap_wiring.step_wiring_ace_host_exchange)
+            if self.cycle_count % 50 == 0:
+                _leap("wiring_ace_mcp", leap_wiring.step_wiring_ace_mcp)
+            if self.cycle_count % 50 == 0:
+                _leap("wiring_ace_candidate_search", leap_wiring.step_wiring_ace_candidate_search)
+            if self.cycle_count % 50 == 0:
+                _leap("wiring_ace_chat", leap_wiring.step_wiring_ace_chat)
+            if self.cycle_count % 50 == 0:
+                _leap("wiring_ace_visual_bridge", leap_wiring.step_wiring_ace_visual_bridge)
+
             # EVO 0041 — Mengingat yang hidup
             if self.cycle_count % 50 == 0: _leap("memory_hygiene", leap_wiring.step_memory_hygiene_audit)
 

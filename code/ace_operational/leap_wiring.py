@@ -7100,3 +7100,185 @@ def step_wiring_ace_gnn(engine: Any) -> dict[str, Any]:
         return {"status": "disabled"}
     import ace_gnn.ast_embedder  # noqa: F401
     return _wiring_k1_catalog(engine, "ace_gnn")
+
+
+# ------------------------------------------------------------------
+# Perbaikan wiring Kelompok 2 — agen, misi, dan dunia luar (10 paket)
+# Perbaikan Ian tanpa nomor EVO (RENCANA_WIRING.md). Tiap paket masuk
+# sebagai step Step 3d belakang flag per paket ACE_WIRING_<PAKET>
+# (default OFF), fail-closed lewat pembungkus _leap pemanggil.
+# Cadence: %200 untuk paket yang bersentuhan dengan aksi nyata /
+# berat (ace_code_agent, ace_autonomy, ace_host_controller,
+# ace_real_world, ace_loop), %50 untuk paket katalog ringan
+# (ace_host_exchange, ace_mcp, ace_candidate_search, ace_chat,
+# ace_visual_bridge). Sesuai rencana, paket aksi nyata masuk
+# sebagai langkah baca/katalog dulu, BUKAN eksekusi: step hanya
+# menjalankan smoke katalog — impor literal semua modul non-tes
+# paket (itu yang menandai paket WIRED di wiring_audit), enumerasi
+# permukaan API publiknya, dan menulis artefak per paket ke
+# workspace/wiring_kelompok2/<paket>.json. Isi paket tidak diubah.
+# ------------------------------------------------------------------
+
+_WIRING_K2_MODULES: dict[str, tuple[str, ...]] = {
+    "ace_code_agent": ("ai_advisor", "cli", "codebase_reader", "controller", "independent_evaluator", "models", "patch_diagnostic", "patch_synthesizer", "pr_manager", "problem_selector", "repo_retrieval", "static_probe", "worktree_harness"),
+    "ace_autonomy": ("broker", "budget", "cli", "core", "errors", "escrow", "planner", "policy", "registry", "research_pipeline", "verifier"),
+    "ace_host_controller": ("boundary", "budget_permits", "controller", "evaluator_v2", "exposure_ledger", "isolated_worker", "lineage", "repo_janitor", "resilient_watchdog", "sandbox_gate", "sealed_evaluator", "subprocess_evaluator", "verify"),
+    "ace_host_exchange": ("contracts", "diagnostic"),
+    "ace_mcp": ("bridge", "code_diagnostic", "server"),
+    "ace_real_world": ("data_wrangler_synth", "git_analyzer_synth", "log_parser_synth", "mission_integration", "net_client_synth", "process_sentinel", "system_tool_synth"),
+    "ace_candidate_search": ("benchmark", "journal", "model", "search", "verify_results"),
+    "ace_loop": ("source_evolution",),
+    "ace_chat": ("task_runner",),
+    "ace_visual_bridge": ("cli", "contract"),
+}
+
+
+def _wiring_k2_catalog(engine: Any, pkg: str) -> dict[str, Any]:
+    """Katalog permukaan API paket dari modul yang sudah diimpor step."""
+    modules: dict[str, Any] = {}
+    for modname in _WIRING_K2_MODULES[pkg]:
+        mod = sys.modules[f"{pkg}.{modname}"]
+        classes = sorted(
+            name for name, obj in vars(mod).items()
+            if isinstance(obj, type) and obj.__module__ == mod.__name__)
+        functions = sorted(
+            name for name, obj in vars(mod).items()
+            if callable(obj) and not isinstance(obj, type)
+            and getattr(obj, "__module__", None) == mod.__name__)
+        modules[modname] = {"classes": classes, "functions": functions}
+    payload = {"package": pkg, "at": _now_iso(),
+               "cycle": engine.cycle_count, "modules": modules}
+    _write_json(engine.workspace / "wiring_kelompok2" / f"{pkg}.json",
+                payload)
+    return {"status": "ok", "package": pkg,
+            "modules": len(modules),
+            "classes": sum(len(m["classes"]) for m in modules.values()),
+            "functions": sum(len(m["functions"]) for m in modules.values())}
+
+
+def step_wiring_ace_code_agent(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 2 — smoke katalog ace_code_agent."""
+    if os.environ.get("ACE_WIRING_ACE_CODE_AGENT") != "1":
+        return {"status": "disabled"}
+    import ace_code_agent.ai_advisor  # noqa: F401
+    import ace_code_agent.cli  # noqa: F401
+    import ace_code_agent.codebase_reader  # noqa: F401
+    import ace_code_agent.controller  # noqa: F401
+    import ace_code_agent.independent_evaluator  # noqa: F401
+    import ace_code_agent.models  # noqa: F401
+    import ace_code_agent.patch_diagnostic  # noqa: F401
+    import ace_code_agent.patch_synthesizer  # noqa: F401
+    import ace_code_agent.pr_manager  # noqa: F401
+    import ace_code_agent.problem_selector  # noqa: F401
+    import ace_code_agent.repo_retrieval  # noqa: F401
+    import ace_code_agent.static_probe  # noqa: F401
+    import ace_code_agent.worktree_harness  # noqa: F401
+    return _wiring_k2_catalog(engine, "ace_code_agent")
+
+
+def step_wiring_ace_autonomy(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 2 — smoke katalog ace_autonomy."""
+    if os.environ.get("ACE_WIRING_ACE_AUTONOMY") != "1":
+        return {"status": "disabled"}
+    import ace_autonomy.broker  # noqa: F401
+    import ace_autonomy.budget  # noqa: F401
+    import ace_autonomy.cli  # noqa: F401
+    import ace_autonomy.core  # noqa: F401
+    import ace_autonomy.errors  # noqa: F401
+    import ace_autonomy.escrow  # noqa: F401
+    import ace_autonomy.planner  # noqa: F401
+    import ace_autonomy.policy  # noqa: F401
+    import ace_autonomy.registry  # noqa: F401
+    import ace_autonomy.research_pipeline  # noqa: F401
+    import ace_autonomy.verifier  # noqa: F401
+    return _wiring_k2_catalog(engine, "ace_autonomy")
+
+
+def step_wiring_ace_host_controller(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 2 — smoke katalog ace_host_controller."""
+    if os.environ.get("ACE_WIRING_ACE_HOST_CONTROLLER") != "1":
+        return {"status": "disabled"}
+    import ace_host_controller.boundary  # noqa: F401
+    import ace_host_controller.budget_permits  # noqa: F401
+    import ace_host_controller.controller  # noqa: F401
+    import ace_host_controller.evaluator_v2  # noqa: F401
+    import ace_host_controller.exposure_ledger  # noqa: F401
+    import ace_host_controller.isolated_worker  # noqa: F401
+    import ace_host_controller.lineage  # noqa: F401
+    import ace_host_controller.repo_janitor  # noqa: F401
+    import ace_host_controller.resilient_watchdog  # noqa: F401
+    import ace_host_controller.sandbox_gate  # noqa: F401
+    import ace_host_controller.sealed_evaluator  # noqa: F401
+    import ace_host_controller.subprocess_evaluator  # noqa: F401
+    import ace_host_controller.verify  # noqa: F401
+    return _wiring_k2_catalog(engine, "ace_host_controller")
+
+
+def step_wiring_ace_host_exchange(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 2 — smoke katalog ace_host_exchange."""
+    if os.environ.get("ACE_WIRING_ACE_HOST_EXCHANGE") != "1":
+        return {"status": "disabled"}
+    import ace_host_exchange.contracts  # noqa: F401
+    import ace_host_exchange.diagnostic  # noqa: F401
+    return _wiring_k2_catalog(engine, "ace_host_exchange")
+
+
+def step_wiring_ace_mcp(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 2 — smoke katalog ace_mcp."""
+    if os.environ.get("ACE_WIRING_ACE_MCP") != "1":
+        return {"status": "disabled"}
+    import ace_mcp.bridge  # noqa: F401
+    import ace_mcp.code_diagnostic  # noqa: F401
+    import ace_mcp.server  # noqa: F401
+    return _wiring_k2_catalog(engine, "ace_mcp")
+
+
+def step_wiring_ace_real_world(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 2 — smoke katalog ace_real_world."""
+    if os.environ.get("ACE_WIRING_ACE_REAL_WORLD") != "1":
+        return {"status": "disabled"}
+    import ace_real_world.data_wrangler_synth  # noqa: F401
+    import ace_real_world.git_analyzer_synth  # noqa: F401
+    import ace_real_world.log_parser_synth  # noqa: F401
+    import ace_real_world.mission_integration  # noqa: F401
+    import ace_real_world.net_client_synth  # noqa: F401
+    import ace_real_world.process_sentinel  # noqa: F401
+    import ace_real_world.system_tool_synth  # noqa: F401
+    return _wiring_k2_catalog(engine, "ace_real_world")
+
+
+def step_wiring_ace_candidate_search(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 2 — smoke katalog ace_candidate_search."""
+    if os.environ.get("ACE_WIRING_ACE_CANDIDATE_SEARCH") != "1":
+        return {"status": "disabled"}
+    import ace_candidate_search.benchmark  # noqa: F401
+    import ace_candidate_search.journal  # noqa: F401
+    import ace_candidate_search.model  # noqa: F401
+    import ace_candidate_search.search  # noqa: F401
+    import ace_candidate_search.verify_results  # noqa: F401
+    return _wiring_k2_catalog(engine, "ace_candidate_search")
+
+
+def step_wiring_ace_loop(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 2 — smoke katalog ace_loop."""
+    if os.environ.get("ACE_WIRING_ACE_LOOP") != "1":
+        return {"status": "disabled"}
+    import ace_loop.source_evolution  # noqa: F401
+    return _wiring_k2_catalog(engine, "ace_loop")
+
+
+def step_wiring_ace_chat(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 2 — smoke katalog ace_chat."""
+    if os.environ.get("ACE_WIRING_ACE_CHAT") != "1":
+        return {"status": "disabled"}
+    import ace_chat.task_runner  # noqa: F401
+    return _wiring_k2_catalog(engine, "ace_chat")
+
+
+def step_wiring_ace_visual_bridge(engine: Any) -> dict[str, Any]:
+    """Wiring Kelompok 2 — smoke katalog ace_visual_bridge."""
+    if os.environ.get("ACE_WIRING_ACE_VISUAL_BRIDGE") != "1":
+        return {"status": "disabled"}
+    import ace_visual_bridge.cli  # noqa: F401
+    import ace_visual_bridge.contract  # noqa: F401
+    return _wiring_k2_catalog(engine, "ace_visual_bridge")
