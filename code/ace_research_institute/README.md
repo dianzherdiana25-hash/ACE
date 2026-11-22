@@ -57,6 +57,16 @@ atau rujukan sumber serta hash. Format tabel hasil di
 | 48 | `journal_club.py` | Rotasi dua peran, ketersediaan, dan slot mingguan belum terisi |
 | 49 | `failed_research_archive.py` | Indeks draf kegagalan bernama dengan kutipan baris dan protokol |
 | 50 | `research_impact.py` | Keputusan dengan sitasi eksplisit serta observasi pre/post seunit |
+| 51 | `internal_citation_index.py` | Kanonisasi DOI dan URL, jejak baris/kolom dan penolakan URL ber-auth |
+| 52 | `research_roadmap.py` | Alokasi dua belas bulan dengan kapasitas, tenggat dan dependensi |
+| 53 | `paper_trap_bench.py` | Label held-out untuk bagian paper pengalih, hold dan klaim nyata |
+| 54 | `research_costing.py` | Gabungan interval kerja per studi dengan waktu tunggu terpisah |
+| 55 | `self_rebuttal.py` | Uji klaim asal dengan sumber baru, konteks dan nilai tetap |
+| 56 | `research_intake.py` | Permintaan dengan persetujuan scope, artefak, tenggat, dan sumber |
+| 57 | `research_prioritizer.py` | Peringkat berbobot dan alokasi jam dari intake terverifikasi |
+| 58 | `report_audio_summary.py` | WAV formant lokal, angka terucap dan cue sitasi |
+| 59 | `citation_validator.py` | Status snapshot, redirect, kebasian dan petikan pada baris |
+| 60 | `institute_quarterly.py` | Agregasi kuartal dengan audit ulang rubrik, batas tanggal dan bukti hilang |
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=code:. python3 -m unittest discover -s code/ace_research_institute -t code -q
@@ -78,3 +88,15 @@ PYTHONPATH=code:. python3 -m ace_research_institute.institute_bench \
   code/ace_research_institute/fixtures ./research-replay \
   --expect-sha256 7c0ed3901997af8b0c70ccfc4ca60e80258d93bd26f444e88eb85a61f44aaf23
 ```
+
+
+## Gerbang integrasi
+
+`step_program_glossary` dapat menambahkan hasil ringkas kuartal dengan
+`ACE_EVO0057_RESEARCH_INSTITUTE=1` serta hash
+`ACE_EVO0057_QUARTER_SHA256` atas `evo0057_research/quarter.json`
+di workspace. Roster dan sumber kuartal dibaca di bawah direktori itu.
+Gerbang mati secara bawaan. Ringkasan media memakai narasi formant
+aturan. Keterbacaan suara belum dinilai. Pemeriksa sitasi mengandalkan
+snapshot HTTP tersimpan, sedangkan rilis dataset menghasilkan draf
+lokal berdasarkan peran kolom dan izin yang diberikan.
