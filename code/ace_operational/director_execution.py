@@ -92,7 +92,9 @@ def run_execution_step(store, workspace, *, environ=None) -> dict:
     receipt_path = Path(workspace) / RECEIPT_NAME
     already = _receipted_task_ids(receipt_path)
     summary = {"status": "ran", "considered": 0, "executed": 0,
-               "refused": 0, "skipped": 0}
+               "refused": 0, "skipped": 0,
+               "skip_reasons": {"already_receipted": 0, "multi_gap": 0,
+                                "no_verified_evidence": 0, "anchor_failed": 0}}
     open_gaps = {g["gap_id"]: g for g in store.list_gaps(status="OPEN")}
     for task in store.list_tasks(limit=200):
         if summary["considered"] >= MAX_PER_CYCLE:
@@ -103,6 +105,7 @@ def run_execution_step(store, workspace, *, environ=None) -> dict:
             continue
         if task.get("task_id") in already:
             summary["skipped"] += 1
+            summary["skip_reasons"]["already_receipted"] += 1
             continue
         checkpoint = task.get("checkpoint") or {}
         proposal = checkpoint.get("proposal") or {}
@@ -112,16 +115,19 @@ def run_execution_step(store, workspace, *, environ=None) -> dict:
         gap_refs = [r for r in based_on if r in open_gaps]
         if len(gap_refs) != 1:
             summary["skipped"] += 1
+            summary["skip_reasons"]["multi_gap"] += 1
             continue
         gap = open_gaps[gap_refs[0]]
         evidence_ref = _verified_evidence(store, gap)
         if evidence_ref is None:
             summary["skipped"] += 1
+            summary["skip_reasons"]["no_verified_evidence"] += 1
             continue
         # Aturan anchor EVO 0013: bukti wajib tertambat & dapat diambil
         # kembali; yang dangling tidak pernah menjadi Kelas A.
         if check_anchors([evidence_ref], adapter)["status"] != "anchored":
             summary["skipped"] += 1
+            summary["skip_reasons"]["anchor_failed"] += 1
             continue
         summary["considered"] += 1
         exec_task = {
