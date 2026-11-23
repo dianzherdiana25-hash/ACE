@@ -2231,12 +2231,15 @@ class ContinuousAutonomousEngine:
         slowest_name, slowest_seconds = max(step_durations, key=lambda step: step[1])
         self._last_cycle_duration_seconds = time.monotonic() - cycle_started_at
         self._slowest_step = {"name": slowest_name, "seconds": slowest_seconds}
-        self.update_status_file("idle_waiting_next_cycle", {
+        idle_details: dict[str, Any] = {
             "last_cycle_completed": self.cycle_count,
             "track": summary["track"],
             "vocab_added": summary["vocab_added"],
             "next_cycle_in_seconds": self.tick_interval_seconds,
-        })
+        }
+        if director_exec_res is not None:
+            idle_details["director_execution"] = director_exec_res
+        self.update_status_file("idle_waiting_next_cycle", idle_details)
         logger.info(
             f"--- Completed Autonomous Cycle #{self.cycle_count} (track={summary['track']}). "
             f"Sleeping {self.tick_interval_seconds}s ---"

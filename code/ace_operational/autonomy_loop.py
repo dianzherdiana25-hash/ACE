@@ -478,6 +478,24 @@ class AutonomyOrchestrator:
             )
         return {"accepted": True, "work_order": updated_wo, "verification": ver}
 
+    def _has_waiting_director_proposal(self, gap_id: str) -> bool:
+        """True bila ada proposal director WAITING yang mengutip gap ini.
+
+        Pola based_on sama persis dengan director_execution.run_execution_step:
+        checkpoint["based_on"] atau checkpoint["proposal"]["based_on"].
+        """
+        for task in self.store.list_tasks(limit=200):
+            if task.get("kind") != "director_proposal":
+                continue
+            if task.get("status") != "WAITING_FOR_DEPENDENCY":
+                continue
+            checkpoint = task.get("checkpoint") or {}
+            proposal = checkpoint.get("proposal") or {}
+            based_on = checkpoint.get("based_on") or proposal.get("based_on") or []
+            if gap_id in [r for r in based_on if isinstance(r, str)]:
+                return True
+        return False
+
     # --- 4. Bounded Learning Loop & Automatic Parent Task Resumption (`A27`-`A30`, `AUTO10`, `AUTO11`) ---
     def learn_skill_and_resume_parent(
         self,
@@ -596,7 +614,20 @@ if __name__ == "__main__":
             source_task_ids=[learn_task["task_id"], parent_id],
         )
 
-        self.store.update_gap(gap_id, status="RESOLVED", linked_learning_task_id=learn_task["task_id"])
+        # Receipt director (EVO 0012 M2): eksekutor Kelas A hanya menutup
+        # gap yang masih OPEN dengan bukti KNOWN_AND_TESTED terikat gap
+        # itu. Bila ada proposal director WAITING yang mengutip gap ini,
+        # penutupan diserahkan ke aksi CloseGap director (yang menulis
+        # receipt): gap dikembalikan ke OPEN — statusnya saat ini
+        # LEARNING_IN_PROGRESS, yang sama mustahilnya bagi eksekutor —
+        # dengan linked_learning_task_id tetap terpasang, sementara
+        # capability tetap dinaikkan ke KNOWN_AND_TESTED di bawah.
+        # Tanpa proposal menunggu, perilaku lama persis: jalur belajar
+        # menutup gap-nya sendiri di sini.
+        if self._has_waiting_director_proposal(gap_id):
+            self.store.update_gap(gap_id, status="OPEN", linked_learning_task_id=learn_task["task_id"])
+        else:
+            self.store.update_gap(gap_id, status="RESOLVED", linked_learning_task_id=learn_task["task_id"])
         self.store.set_frontier_capability(
             capability_id=f"cap_{gap['fingerprint'][:10]}",
             name_id=gap["description_id"],
