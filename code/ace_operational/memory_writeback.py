@@ -63,6 +63,15 @@ EVENT_CLASSES: dict[str, tuple[str, float]] = {
     # a distillation is one step removed from the ratified
     # evidence it summarises.
     "pattern_distilled": ("semantic", 0.90),
+    # EVO 0059 (PR #720, butir 15): session facts proposed by
+    # ace_presence.session_fact_candidates — a quote pinned to
+    # a dialogue turn, backed by evidence held OUTSIDE the
+    # dialogue export and validated before this class is ever
+    # used. A verified session fact is durable knowledge of
+    # what was said and shown, hence semantic; confidence
+    # matches pattern_distilled because the fact stands one
+    # validation step removed from the raw evidence it cites.
+    "session_fact_verified": ("semantic", 0.90),
 }
 
 

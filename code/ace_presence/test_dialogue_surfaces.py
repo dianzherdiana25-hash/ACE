@@ -131,15 +131,36 @@ class DialogSurfaceTests(unittest.TestCase):
         self.assertEqual(result["remaining"], ["zone", "format"])
 
     def test_15_verified_pointer_does_not_override_closed_write_set(self):
+        # Pin lama: pointer terverifikasi saja tidak menulis apa pun
+        # selama kelas event fakta sesi belum terdaftar. Kelas
+        # session_fact_verified kini terdaftar (EVO 0059, PR #720
+        # butir 15), jadi pin ini kini menjaga sisi lainnya: jalur
+        # tervalidasi yang sama menulis tepat satu record, replay
+        # idempoten, dan bukti yang gagal validasi tetap fail-closed
+        # tanpa menulis apa pun.
+        from ace_operational.cognitive_memory import CognitiveMemory
         evidence = save(self.root, "source.txt", b"Kalibrasi panel tersedia.")
         plan = {"schema": "ace.presence.writeback-plan.v1", "dialogue": self.ref,
                 "facts": [{"id": "panel", "turn_id": "opening", "quote": "Kalibrasi panel", "evidence": evidence}]}
-        before = sorted(self.root.iterdir())
         result = prepare(plan, identity(plan), self.root)
-        self.assertEqual(result["reason"], "session_fact_event_class_not_registered")
+        self.assertEqual(result["status"], "written")
+        self.assertEqual(result["event_class"], "session_fact_verified")
         self.assertEqual(result["candidates"][0]["external"], evidence)
-        self.assertEqual(sorted(self.root.iterdir()), before)
+        record_id = result["candidates"][0]["record_id"]
+        self.assertIsNotNone(record_id)
+        store = CognitiveMemory(self.root / "cognitive_memory")
+        records = list(store._records.values())
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0]["id"], record_id)
+        self.assertEqual(records[0]["kind"], "semantic")
+        self.assertEqual(records[0]["confidence"], 0.90)
+        self.assertEqual(records[0]["content"]["class"], "session_fact_verified")
+        self.assertEqual(records[0]["content"]["fact_id"], "panel")
+        again = prepare(plan, identity(plan), self.root)
+        self.assertEqual(again["candidates"][0]["record_id"], record_id)
+        self.assertEqual(len(CognitiveMemory(self.root / "cognitive_memory")._records), 1)
         bad = deepcopy(plan)
         bad["facts"][0]["evidence"] = self.ref
         with self.assertRaises(PresenceError):
             prepare(bad, identity(bad), self.root)
+        self.assertEqual(len(CognitiveMemory(self.root / "cognitive_memory")._records), 1)

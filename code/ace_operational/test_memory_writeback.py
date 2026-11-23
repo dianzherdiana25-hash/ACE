@@ -301,3 +301,49 @@ class PatternDistilledClassTests(unittest.TestCase):
             self.assertEqual(rec["content"]["source_episode"],
                              "w2-code-003")
             self.assertEqual(rec["source"]["ref"], _digest(EVIDENCE))
+
+
+class SessionFactClassTests(unittest.TestCase):
+    """EVO 0059 (PR #720, item 15): the session_fact_verified
+    class is registered as semantic, round-trips with its
+    session-fact fields, and replays idempotently."""
+
+    EXTRA = {"fact_id": "panel",
+             "candidate_sha256": "a" * 64,
+             "turn_sha256": "b" * 64,
+             "dialogue_sha256": "c" * 64}
+
+    def test_session_fact_class_registered_semantic(self):
+        from ace_operational.memory_writeback import EVENT_CLASSES
+        self.assertEqual(EVENT_CLASSES["session_fact_verified"],
+                         ("semantic", 0.90))
+
+    def test_session_fact_write_read_back_and_replay(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d) / "mem"
+            rid = record_verified_event(
+                root, event="session_fact_verified",
+                summary="Kalibrasi panel",
+                evidence_bytes=EVIDENCE,
+                content_extra=dict(self.EXTRA))
+            self.assertIsNotNone(rid)
+            again = record_verified_event(
+                root, event="session_fact_verified",
+                summary="Kalibrasi panel",
+                evidence_bytes=EVIDENCE,
+                content_extra=dict(self.EXTRA))
+            self.assertEqual(again, rid)
+            records = _records(root)
+            self.assertEqual(len(records), 1)
+            rec = records[0]
+            self.assertEqual(rec["id"], rid)
+            self.assertEqual(rec["kind"], "semantic")
+            self.assertEqual(rec["confidence"], 0.90)
+            self.assertEqual(rec["content"]["class"],
+                             "session_fact_verified")
+            self.assertEqual(rec["content"]["fact_id"], "panel")
+            self.assertEqual(rec["content"]["candidate_sha256"],
+                             self.EXTRA["candidate_sha256"])
+            self.assertEqual(rec["content"]["turn_sha256"],
+                             self.EXTRA["turn_sha256"])
+            self.assertEqual(rec["source"]["ref"], _digest(EVIDENCE))
