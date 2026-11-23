@@ -4068,8 +4068,17 @@ def step_evo0055_skill_board(engine: Any) -> dict[str, Any]:
 
 def step_capability_report(engine: Any) -> dict[str, Any]:
     """AG166: build honest one-page Markdown capability report into capability_report.md."""
+    result = _capability_report_legacy(engine)
     if os.environ.get("ACE_EVO0055_SKILL_BOARD") == "1":
-        return step_evo0055_skill_board(engine)
+        try:
+            result["skill_board"] = step_evo0055_skill_board(engine)
+        except Exception as exc:  # bukti 0055 tak boleh menjatuhkan laporan
+            result["skill_board"] = {
+                "status": "error", "error": f"{type(exc).__name__}:{exc}"}
+    return result
+
+
+def _capability_report_legacy(engine: Any) -> dict[str, Any]:
     raw_ws = getattr(engine, "workspace", None)
     if raw_ws is None:
         return {"status": "skipped", "reason": "no_workspace"}
@@ -5398,8 +5407,17 @@ def step_evo0054_factory(engine: Any) -> dict[str, Any]:
 
 def step_software_factory(engine: Any) -> dict[str, Any]:
     """Jalankan pabrik perangkat lunak atas spesifikasi workspace atau probe AST (AG189)."""
+    result = _software_factory_legacy(engine)
     if os.environ.get("ACE_EVO0054_FACTORY") == "1":
-        return step_evo0054_factory(engine)
+        try:
+            result["factory_acceptance"] = step_evo0054_factory(engine)
+        except Exception as exc:  # bukti 0054 tak boleh menjatuhkan pabrik
+            result["factory_acceptance"] = {
+                "status": "error", "error": f"{type(exc).__name__}:{exc}"}
+    return result
+
+
+def _software_factory_legacy(engine: Any) -> dict[str, Any]:
     raw_ws = getattr(engine, "workspace", None)
     if not raw_ws:
         return {"status": "skipped", "reason": "no workspace"}

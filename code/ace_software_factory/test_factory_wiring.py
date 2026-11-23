@@ -43,13 +43,16 @@ class FactoryWiringTests(unittest.TestCase):
         checksum = sha256(payload).hexdigest()
         with patch.dict(os.environ, {"ACE_EVO0054_FACTORY": "1", "ACE_EVO0054_ACCEPTANCE_SHA256": checksum}):
             result = leap_wiring.step_software_factory(self.engine)
-            self.assertEqual(result["status"], "passed")
-            self.assertEqual(result["acceptance"]["counts"]["passed"], 1)
-            self.assertEqual(result["evidence_sha256"], checksum)
+            self.assertEqual(result["reason"], "no store")
+            acceptance = result["factory_acceptance"]
+            self.assertEqual(acceptance["status"], "passed")
+            self.assertEqual(acceptance["acceptance"]["counts"]["passed"], 1)
+            self.assertEqual(acceptance["evidence_sha256"], checksum)
             self.assertEqual(list(self.path.parent.iterdir()), [self.path])
             self.assertEqual(self.path.read_bytes(), payload)
             self.path.write_bytes(payload + b" ")
-            self.assertEqual(leap_wiring.step_software_factory(self.engine)["reason"], "acceptance_evidence_unavailable")
+            held = leap_wiring.step_software_factory(self.engine)
+            self.assertEqual(held["factory_acceptance"]["reason"], "acceptance_evidence_unavailable")
 
     def test_no_anchor_or_indirected_receipt_holds(self):
         self.path.parent.mkdir()
@@ -58,7 +61,7 @@ class FactoryWiringTests(unittest.TestCase):
         link_target.write_bytes(payload)
         self.path.symlink_to(link_target)
         with patch.dict(os.environ, {"ACE_EVO0054_FACTORY": "1", "ACE_EVO0054_ACCEPTANCE_SHA256": ""}):
-            self.assertEqual(leap_wiring.step_software_factory(self.engine)["reason"], "workspace_or_anchor_missing")
+            self.assertEqual(leap_wiring.step_software_factory(self.engine)["factory_acceptance"]["reason"], "workspace_or_anchor_missing")
         with patch.dict(os.environ, {"ACE_EVO0054_FACTORY": "1",
                                     "ACE_EVO0054_ACCEPTANCE_SHA256": sha256(payload).hexdigest()}):
-            self.assertEqual(leap_wiring.step_software_factory(self.engine)["reason"], "acceptance_evidence_unavailable")
+            self.assertEqual(leap_wiring.step_software_factory(self.engine)["factory_acceptance"]["reason"], "acceptance_evidence_unavailable")
