@@ -47,6 +47,12 @@ Z 1F 01 02 04 08 10 1F
 + 00 04 04 1F 04 04 00
 ! 04 04 04 04 04 00 04
 ? 0E 11 01 02 04 00 04
+, 00 00 00 00 0C 04 08
+; 00 04 04 00 0C 04 08
+' 04 04 08 00 00 00 00
+" 0A 0A 0A 00 00 00 00
+( 08 10 10 10 10 10 08
+) 02 01 01 01 01 01 02
 """
 GLYPHS = {key: tuple(int(row, 16) for row in values) for key, *values in
           (line.split() for line in _GLYPHS.strip().splitlines())}
