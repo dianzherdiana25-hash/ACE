@@ -92,6 +92,34 @@ diberikan. `skill_registry` hanya memberi status `ACQUIRED` untuk
 receipt controlled yang dihitung ulang dan ditambatkan pada daftar
 atestasi terpisah. Tes fixture memeriksa aturan tersebut.
 
+## Perkakas Gelombang 3 (Fase 0)
+
+`skill_solver` adalah produsen jawaban rantai bukti: diberi plan
+`ace.web.skill-solve-plan.v1` (paket + suite beku tertambat hash,
+`solver_ref` tetap, peran bridge), ia meminta solver di balik bridge
+lokal `http://127.0.0.1:8931` menjawab prompt kasus — solver hanya
+menerima materi paket dan prompt, tidak pernah patokan — lalu
+menulis `heldout_answers.json` (`ace.web.heldout-answers.v1`) dan
+`solve_receipt.json` dengan `answers_sha256` yang dihitung sebelum
+verifikasi apa pun. `evaluator_ref` suite wajib berbeda dari
+`solver_ref`. Bridge yang tidak menjawab menghasilkan receipt
+berstatus `failed` tercatat (keluar 1), bukan jawaban karangan.
+
+```sh
+python3 -m ace_web_operator.skill_solver <root> <solve-plan.json> <output-dir> --expect-sha256 <sha>
+python3 -m ace_web_operator.skill_bundle skill <root> <bundle-plan.json> <bundle-dir> --expect-sha256 <sha>
+python3 -m ace_web_operator.skill_bundle cluster <root> <cluster-plan.json> <bundle-dir> --expect-sha256 <sha>
+```
+
+`skill_bundle` merakit bundel bukti create-only mengikuti pola
+kustodi repo: per skill satu folder (suite, plan, sources, package,
+absorb receipt, answers, verification, attempts, `MANIFEST.json`
+berisi hash byte setiap berkas), dan agregat per klaster
+(`CLUSTER_MANIFEST.json`) dari keluaran registry yang sudah ada.
+Rantai antar-dokumen (plan↔paket↔suite↔jawaban↔receipt verifikasi;
+policy↔registry↔laporan revisi↔kampanye↔papan) diperiksa sebelum
+satu byte pun ditulis; folder yang sudah ada tidak pernah ditimpa.
+
 ## Integrasi baca-saja
 
 `ACE_EVO0055_SKILL_BOARD=1` mengalihkan langkah capability report
