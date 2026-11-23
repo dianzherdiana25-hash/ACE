@@ -20,7 +20,7 @@ sendiri. Uji memakai workspace baru dan HTTP pada loopback.
 | 12 | `conversation_search` | Cari riwayat berizin dengan petikan bertambat dan ranking deterministik. |
 | 13 | `session_handoff` | Tujuan, hash head, nonce, dan masa berlaku serah terima. |
 | 14 | `clarification_asker` | Prioritas pertanyaan pada slot ambigu dengan biaya salah tertinggi. |
-| 15 | `session_fact_candidates` | Kandidat fakta dengan bukti eksternal. Penulisan tertahan karena kelas event fakta sesi belum terdaftar. |
+| 15 | `session_fact_candidates` | Kandidat fakta dengan bukti eksternal, ditulis ke memori kognitif lewat kelas event `session_fact_verified` (terdaftar; validasi tetap fail-closed sebelum penulisan). |
 
 | 16 | `temporal_store` | Fakta berversi dengan batas tanggal setengah terbuka. |
 | 17 | `calendar_engine` | Hari IANA meliputi transisi DST dan acara lintas batas. |
