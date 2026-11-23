@@ -1,4 +1,5 @@
 """Verifier gerbang dossier pada satu-satunya titik integrasi EVO 0052."""
+import json
 import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -8,7 +9,7 @@ from unittest.mock import patch
 
 from ace_forge._forge_io import canonical, identity
 from ace_forge.test_model_dossier import fixture
-from ace_operational.leap_wiring import step_evo0052_forge
+from ace_operational.leap_wiring import step_brain_registry, step_evo0052_forge
 
 
 def read_step(engine, environ):
@@ -74,3 +75,45 @@ class ForgeWiringTests(unittest.TestCase):
         self.path.unlink()
         os.mkfifo(self.path)
         self.assertEqual(read_step(self.engine, enabled)["reason"], "dossier_type_or_size")
+
+
+class ForgeCallerTests(unittest.TestCase):
+    """Pemanggil step_evo0052_forge: step_brain_registry (Step 3d, %200), aditif."""
+
+    def setUp(self):
+        self.root = Path(self.enterContext(TemporaryDirectory()))
+        self.engine = SimpleNamespace(workspace=self.root)
+        self.path = self.root / "evo0052_dossier.json"
+        self.snapshot = self.root / "brain_registry_snapshot.json"
+
+    def read_parent(self, environ):
+        with patch.dict(os.environ, environ, clear=True):
+            return step_brain_registry(self.engine)
+
+    def test_flag_off_parent_result_and_snapshot_have_no_forge_key(self):
+        for flags in ({}, {"ACE_EVO0052_FORGE": "0"}, {"ACE_EVO0052_FORGE": "true"}):
+            with self.subTest(flags=flags):
+                res = self.read_parent(flags)
+                self.assertEqual(res["status"], "ok")
+                self.assertNotIn("forge", res)
+                saved = json.loads(self.snapshot.read_text(encoding="utf-8"))
+                self.assertNotIn("forge", saved)
+
+    def test_flag_on_without_anchor_attaches_hold_and_keeps_parent_result(self):
+        res = self.read_parent({"ACE_EVO0052_FORGE": "1"})
+        self.assertEqual(res.pop("forge"), {"status": "hold", "reason": "dossier_anchor_missing_or_invalid"})
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["brain_count"], 0)
+        saved = json.loads(self.snapshot.read_text(encoding="utf-8"))
+        self.assertNotIn("forge", saved)
+
+    def test_flag_on_with_anchored_dossier_attaches_ready_summary(self):
+        raw = fixture()
+        payload = canonical(raw)
+        self.path.write_bytes(payload)
+        res = self.read_parent({"ACE_EVO0052_FORGE": "1", "ACE_EVO0052_DOSSIER_SHA256": identity(raw)})
+        self.assertEqual(res["status"], "ok")
+        self.assertEqual(res["forge"]["status"], "ready_for_review")
+        self.assertEqual(res["forge"]["candidate_sha256"], raw["candidate_sha256"])
+        self.assertEqual(res["forge"]["dossier_sha256"], identity(raw))
+        self.assertEqual(self.path.read_bytes(), payload)

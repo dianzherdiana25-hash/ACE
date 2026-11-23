@@ -3368,6 +3368,8 @@ def step_brain_registry(engine: Any) -> dict[str, Any]:
             "checked_at": _now_iso(),
         }
         _write_json(ws / "brain_registry_snapshot.json", out)
+        if os.environ.get("ACE_EVO0052_FORGE") == "1":
+            out["forge"] = step_evo0052_forge(engine)
         return out
     except Exception as exc:
         return {"status": "error", "error": f"{type(exc).__name__}:{exc}"}
