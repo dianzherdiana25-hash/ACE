@@ -372,5 +372,43 @@ class ToolboxBatch3Tests(unittest.TestCase):
         self.assertIsInstance(board, dict)
 
 
+class ToolboxBatch4Tests(unittest.TestCase):
+    """Batch 4: agenda/curiosity/report family, all read-only."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch4_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX4_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX4_SPECS), 8)
+        for spec in ACE_TOOLBOX4_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_plain_data_tools(self) -> None:
+        prio = self.ro.call("ace_op_tool_agenda_prioritize", {"items": [{
+            "schema": "ace.agenda-proposal.v1", "proposal_id": "p1",
+            "brain_of_origin": "claude-agent", "title": "satu",
+            "sources": [{"path": "code/ace_mcp/op_bridge.py"}],
+            "kind": "failure", "status": "proposal_only",
+            "claim_made": False, "requires_human_validation": True}]})
+        self.assertIsInstance(prio, list)
+        nov = self.ro.call("ace_op_tool_corpus_novelty", {
+            "corpus": [{"work_id": "w1", "text": "graf pohon biner"}],
+            "candidates": [{"work_id": "c1", "text": "resep rendang sapi"}]})
+        self.assertIsInstance(nov, dict)
+        cap = self.ro.call("ace_op_tool_capability_report", {
+            "gate_board": {"gates": {}}, "store_stats": {"tasks": 3}})
+        self.assertIsInstance(cap, dict)
+        ver = self.ro.call("ace_op_tool_assessment_verify",
+                           {"versions": []})
+        self.assertIsInstance(ver, dict)
+
+
 if __name__ == "__main__":
     unittest.main()

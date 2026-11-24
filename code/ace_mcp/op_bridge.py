@@ -295,6 +295,40 @@ ACE_TOOLBOX3_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX3_SPECS
 
+# -- Toolbox batch 4: agenda/curiosity/report family. All read-only.
+# repo_status_dashboard_v3 stays unwired (repo-root scoped, same
+# open question as daily_digest).
+ACE_TOOLBOX4_SPECS = (
+    _spec("ace_op_tool_curiosity_questions",
+          "Generate ranked open curiosity questions from a world model and hypothesis book (tools.curiosity_questions).",
+          {"world_model": _OBJ, "hypothesis_book": _OBJ,
+           "asked_questions": _ARR}, ("world_model",)),
+    _spec("ace_op_tool_capability_report",
+          "Build the capability report structure from a gate board and store stats, marking unknowns honestly (tools.capability_report).",
+          {"gate_board": _OBJ, "store_stats": _OBJ},
+          ("gate_board", "store_stats")),
+    _spec("ace_op_tool_assessment_verify",
+          "Verify the hash chain of self-assessment versions (tools.self_assessment).",
+          {"versions": _ARR}, ("versions",)),
+    _spec("ace_op_tool_corpus_novelty",
+          "Score candidate works for novelty against a corpus (tools.corpus_novelty).",
+          {"corpus": _ARR, "candidates": _ARR}, ("corpus", "candidates")),
+    _spec("ace_op_tool_evo_verdicts",
+          "Tabulate EVO verdicts from consolidation/result files inside the workspace (tools.evo_results).",
+          {"paths": _STR_ARR}, ("paths",)),
+    _spec("ace_op_tool_periodic_report",
+          "Build the periodic self-report from the workspace's self-model sources, read-only (tools.periodic_self_report).",
+          {}),
+    _spec("ace_op_tool_agenda_prioritize",
+          "Prioritize agenda candidate items deterministically (tools.agenda_candidates).",
+          {"items": _ARR}, ("items",)),
+    _spec("ace_op_tool_failure_scan",
+          "Scan failure documents (name -> text) for agenda-worthy failure patterns (tools.agenda_candidates).",
+          {"documents": _OBJ}, ("documents",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX4_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -874,3 +908,44 @@ class OperationalBridge:
         store = load(self._ws_path(str(args["refs_path"])))
         return self._run_tool("memory_anchor_audit", "audit_proposals",
                               list(args["rows"]), store)
+
+    # -- toolbox batch 4 ---------------------------------------------------
+    def _do_ace_op_tool_curiosity_questions(self, args: dict) -> Any:
+        kw: dict[str, Any] = {}
+        if args.get("asked_questions"):
+            kw["asked_questions"] = list(args["asked_questions"])
+        return self._run_tool("curiosity_questions",
+                              "generate_curiosity_questions",
+                              dict(args["world_model"]),
+                              dict(args["hypothesis_book"])
+                              if args.get("hypothesis_book") else None, **kw)
+
+    def _do_ace_op_tool_capability_report(self, args: dict) -> Any:
+        return self._run_tool("capability_report", "build_capability_report",
+                              dict(args["gate_board"]),
+                              dict(args["store_stats"]))
+
+    def _do_ace_op_tool_assessment_verify(self, args: dict) -> Any:
+        return self._run_tool("self_assessment", "verify_assessment_chain",
+                              list(args["versions"]))
+
+    def _do_ace_op_tool_corpus_novelty(self, args: dict) -> Any:
+        return self._run_tool("corpus_novelty", "score_corpus_novelty",
+                              list(args["corpus"]), list(args["candidates"]))
+
+    def _do_ace_op_tool_evo_verdicts(self, args: dict) -> Any:
+        paths = [self._ws_path(p) for p in args["paths"]]
+        return self._run_tool("evo_results", "tabulate_verdicts", paths)
+
+    def _do_ace_op_tool_periodic_report(self, args: dict) -> Any:
+        return self._run_tool("periodic_self_report",
+                              "build_periodic_self_report",
+                              self.store.workspace)
+
+    def _do_ace_op_tool_agenda_prioritize(self, args: dict) -> Any:
+        return self._run_tool("agenda_candidates", "prioritize",
+                              list(args["items"]))
+
+    def _do_ace_op_tool_failure_scan(self, args: dict) -> Any:
+        return self._run_tool("agenda_candidates", "scan_failure_documents",
+                              dict(args["documents"]))

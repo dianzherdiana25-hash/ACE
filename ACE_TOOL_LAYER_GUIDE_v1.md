@@ -198,3 +198,10 @@ memory_anchor_audit. Total permukaan agen: 58 tool; suite ace_mcp
 44 tes lulus. Dua perkakas ditunda dengan alasan tercatat di
 op_bridge.py: organ_smoke (butuh transport suntikan) dan perkakas
 baca-repo (di luar kotak pasir workspace).
+
+Batch 4 (8 tool, semua baca-saja): curiosity_questions,
+capability_report, self_assessment verify, corpus_novelty,
+evo_results, periodic_self_report, agenda prioritize +
+failure scan. Total permukaan agen: 66 tool; suite ace_mcp
+46 tes lulus. repo_status_dashboard_v3 menyusul keputusan
+adapter baca-repo yang sama dengan daily_digest.
