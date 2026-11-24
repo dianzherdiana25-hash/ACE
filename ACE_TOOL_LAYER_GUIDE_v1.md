@@ -235,3 +235,8 @@ Batch 9 (4 tool, semua baca-saja, paket code/): ace_causal
 d-separation, ace_epistemic entropi, ace_selfmodel metrik
 kalibrasi, ace_report laporan mobile Bahasa Indonesia.
 Total permukaan agen: 97 tool; suite ace_mcp 58 tes lulus.
+
+Batch 10 (3 tool, paket ace_evaluator): integritas kandidat
+(deteksi pola curang pada kode), seed evaluasi tersegel,
+pembangkit instans keluarga tugas. Total permukaan agen:
+100 tool; suite ace_mcp 60 tes lulus.

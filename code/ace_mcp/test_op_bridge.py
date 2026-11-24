@@ -581,5 +581,34 @@ class ToolboxBatch9Tests(unittest.TestCase):
         self.assertIsInstance(out, dict)
 
 
+class ToolboxBatch10Tests(unittest.TestCase):
+    """Batch 10: ace_evaluator family."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch10_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX10_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX10_SPECS), 3)
+        for spec in ACE_TOOLBOX10_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_evaluator_tools(self) -> None:
+        verdict = self.ro.call("ace_op_tool_candidate_integrity", {
+            "code": "def solve(x):\n    return x > 0\n"})
+        self.assertIsInstance(verdict, dict)
+        seed = self.ro.call("ace_op_tool_evaluation_seed", {})
+        self.assertIsInstance(seed, dict)
+        inst = self.ro.call("ace_op_tool_task_family_instances", {
+            "family": "parity", "seed": 7, "count": 4})
+        self.assertEqual(len(inst["instances"]), 4)
+
+
 if __name__ == "__main__":
     unittest.main()

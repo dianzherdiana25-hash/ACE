@@ -471,6 +471,23 @@ ACE_TOOLBOX9_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX9_SPECS
 
+# -- Toolbox batch 10: ace_evaluator family (integrity checks,
+# sealed evaluation seed, task-family instance generation).
+ACE_TOOLBOX10_SPECS = (
+    _spec("ace_op_tool_candidate_integrity",
+          "Inspect candidate source code for cheating patterns (bank memorizer, hardcoding, and kin) (code/ace_evaluator).",
+          {"code": _STR, "is_flipped": {"type": "boolean"}}, ("code",)),
+    _spec("ace_op_tool_evaluation_seed",
+          "Read the sealed evaluation seed and its status (code/ace_evaluator).",
+          {}, ()),
+    _spec("ace_op_tool_task_family_instances",
+          "Generate instances of a sealed task family (counter_ratio, parity, boundary, graph, an_bn, sequence) from a seed (code/ace_evaluator).",
+          {"family": _STR, "seed": {"type": "integer"},
+           "count": {"type": "integer"}}, ("family", "seed")),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX10_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1317,3 +1334,28 @@ class OperationalBridge:
         return self._run_pkg("ace_report", "mobile_report",
                              "generate_indonesian_mobile_report",
                              dict(args["experiment_data"]))
+
+    # -- toolbox batch 10 --------------------------------------------------
+    def _do_ace_op_tool_candidate_integrity(self, args: dict) -> Any:
+        kw: dict[str, Any] = {}
+        if args.get("is_flipped") is not None:
+            kw["is_flipped"] = bool(args["is_flipped"])
+        return self._run_pkg("ace_evaluator", "cheat_detection",
+                             "evaluate_candidate_integrity",
+                             str(args["code"]), **kw)
+
+    def _do_ace_op_tool_evaluation_seed(self, args: dict) -> Any:
+        out = self._run_pkg("ace_evaluator", "sealed_generator",
+                            "get_evaluation_seed_and_status")
+        if isinstance(out, list) and len(out) == 2:
+            return {"seed": out[0], "status": out[1]}
+        return {"result": out}
+
+    def _do_ace_op_tool_task_family_instances(self, args: dict) -> Any:
+        count = int(args.get("count") or 16)
+        if not 1 <= count <= 512:
+            raise ValueError("count must be between 1 and 512")
+        out = self._run_pkg("ace_evaluator", "task_families",
+                            "generate_family_instances", str(args["family"]),
+                            int(args["seed"]), count)
+        return {"instances": out}
