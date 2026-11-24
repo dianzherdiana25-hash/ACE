@@ -410,5 +410,40 @@ class ToolboxBatch4Tests(unittest.TestCase):
         self.assertIsInstance(ver, dict)
 
 
+class ToolboxBatch5Tests(unittest.TestCase):
+    """Batch 5: audit/agreement family, all read-only."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch5_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX5_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX5_SPECS), 8)
+        for spec in ACE_TOOLBOX5_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_plain_data_tools(self) -> None:
+        inv = self.ro.call("ace_op_tool_execution_invariants",
+                           {"receipts": [], "executions": []})
+        self.assertIsInstance(inv, dict)
+        snap = {"responses": [{"prompt_id": "p1", "category": "gaya",
+                               "response": "jawaban", "response_sha256": "a" * 64}]}
+        diff = self.ro.call("ace_op_tool_fingerprint_diff",
+                            {"baseline": snap, "candidate": snap})
+        self.assertIsInstance(diff, dict)
+        val = self.ro.call("ace_op_tool_organ_registry_validate",
+                           {"data": {}})
+        self.assertIsInstance(val, dict)
+        story = self.ro.call("ace_op_tool_story_consistency", {
+            "story_state": {}, "chapter_draft": {"chapter_id": "c1"}})
+        self.assertIsInstance(story, dict)
+
+
 if __name__ == "__main__":
     unittest.main()

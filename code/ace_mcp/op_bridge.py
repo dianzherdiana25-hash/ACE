@@ -329,6 +329,41 @@ ACE_TOOLBOX4_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX4_SPECS
 
+# -- Toolbox batch 5: audit/agreement family. All read-only.
+# evo_range_audit and director_screen stay unwired (repo-root /
+# GitSnapshot-object inputs, not plain agent data).
+ACE_TOOLBOX5_SPECS = (
+    _spec("ace_op_tool_execution_invariants",
+          "Audit receipts + execution logs against ACE's named execution invariants (tools.execution_invariants).",
+          {"receipts": _ARR, "executions": _ARR,
+           "daily_cap": {"type": "integer"}, "verified_refs": _STR_ARR},
+          ("receipts", "executions")),
+    _spec("ace_op_tool_introspect_recall",
+          "Query the workspace memory introspectively (tools.introspect_recall).",
+          {"query": _STR, "top_k": {"type": "integer"}}, ("query",)),
+    _spec("ace_op_tool_bridge_self_check",
+          "Self-check the brain bridge + engine status file (tools.bridge_self_check). Defaults to this workspace's bridge URL and engine_status.json.",
+          {"bridge_url": _STR, "status_path": _STR}),
+    _spec("ace_op_tool_story_consistency",
+          "Check a structured chapter draft against the story state snapshot (tools.story_consistency_gate).",
+          {"story_state": _OBJ, "chapter_draft": _OBJ},
+          ("story_state", "chapter_draft")),
+    _spec("ace_op_tool_fingerprint_diff",
+          "Diff two behavior fingerprint snapshots per prompt category (tools.behavior_fingerprint).",
+          {"baseline": _OBJ, "candidate": _OBJ}, ("baseline", "candidate")),
+    _spec("ace_op_tool_organ_registry_validate",
+          "Validate an organ-registry configuration object (tools.organ_registry_validate).",
+          {"data": _OBJ}, ("data",)),
+    _spec("ace_op_tool_recall_ablation",
+          "Run the recall ablation over this workspace's operational store with the fixture recall (tools.recall_ablation).",
+          {"tasks": _ARR, "seed": {"type": "integer"}}, ("tasks",)),
+    _spec("ace_op_tool_cross_organ_agreement",
+          "Evaluate cross-organ agreement (Cohen's kappa, abstention, consensus) from fixture records (tools.cross_organ_agreement).",
+          {"records": _ARR}, ("records",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX5_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -949,3 +984,65 @@ class OperationalBridge:
     def _do_ace_op_tool_failure_scan(self, args: dict) -> Any:
         return self._run_tool("agenda_candidates", "scan_failure_documents",
                               dict(args["documents"]))
+
+    # -- toolbox batch 5 ---------------------------------------------------
+    def _do_ace_op_tool_execution_invariants(self, args: dict) -> Any:
+        kw: dict[str, Any] = {}
+        if args.get("daily_cap") is not None:
+            kw["daily_cap"] = int(args["daily_cap"])
+        if args.get("verified_refs"):
+            kw["verified_refs"] = list(args["verified_refs"])
+        return self._run_tool("execution_invariants",
+                              "check_execution_invariants",
+                              list(args["receipts"]),
+                              list(args["executions"]), **kw)
+
+    def _do_ace_op_tool_introspect_recall(self, args: dict) -> Any:
+        kw: dict[str, Any] = {"root": self.store.workspace}
+        if args.get("top_k") is not None:
+            kw["top_k"] = int(args["top_k"])
+        return self._run_tool("introspect_recall", "query_introspection",
+                              str(args["query"]), **kw)
+
+    def _do_ace_op_tool_bridge_self_check(self, args: dict) -> Any:
+        url = (str(args["bridge_url"]) if args.get("bridge_url")
+               else os.environ.get("ACE_BRAIN_BRIDGE_URL",
+                                   "http://127.0.0.1:18931"))
+        status = (self._ws_path(str(args["status_path"]))
+                  if args.get("status_path")
+                  else self.store.workspace / "engine_status.json")
+        return self._run_tool("bridge_self_check", "self_check", url, status)
+
+    def _do_ace_op_tool_story_consistency(self, args: dict) -> Any:
+        return self._run_tool("story_consistency_gate",
+                              "check_chapter_consistency",
+                              dict(args["story_state"]),
+                              dict(args["chapter_draft"]))
+
+    def _do_ace_op_tool_fingerprint_diff(self, args: dict) -> Any:
+        return self._run_tool("behavior_fingerprint",
+                              "diff_fingerprint_snapshots",
+                              dict(args["baseline"]), dict(args["candidate"]))
+
+    def _do_ace_op_tool_organ_registry_validate(self, args: dict) -> Any:
+        return self._run_tool("organ_registry_validate",
+                              "validate_config_data", dict(args["data"]))
+
+    def _do_ace_op_tool_recall_ablation(self, args: dict) -> Any:
+        load = self._repo_tool("recall_ablation",
+                               "load_sqlite_ablation_store")
+        tasks = list(args["tasks"])
+        store = load(self._store_db(), tasks)
+        kw: dict[str, Any] = {}
+        if args.get("seed") is not None:
+            kw["seed"] = int(args["seed"])
+        return self._run_tool("recall_ablation", "run_ablation",
+                              store, tasks, **kw)
+
+    def _do_ace_op_tool_cross_organ_agreement(self, args: dict) -> Any:
+        parse = self._repo_tool("cross_organ_agreement",
+                                "parse_fixture_records")
+        matrix, anomalies = parse(list(args["records"]))
+        return self._run_tool("cross_organ_agreement",
+                              "evaluate_cross_organ_agreement",
+                              matrix, anomalies=anomalies)

@@ -205,3 +205,9 @@ evo_results, periodic_self_report, agenda prioritize +
 failure scan. Total permukaan agen: 66 tool; suite ace_mcp
 46 tes lulus. repo_status_dashboard_v3 menyusul keputusan
 adapter baca-repo yang sama dengan daily_digest.
+
+Batch 5 (8 tool, semua baca-saja): execution_invariants,
+introspect_recall, bridge_self_check, story_consistency_gate,
+behavior_fingerprint diff, organ_registry_validate,
+recall_ablation, cross_organ_agreement. Total permukaan
+agen: 74 tool; suite ace_mcp 48 tes lulus.
