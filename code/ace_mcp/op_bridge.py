@@ -488,6 +488,28 @@ ACE_TOOLBOX10_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX10_SPECS
 
+# -- Toolbox batch 11: mission schema, receipt verification,
+# self-dev calibration scorers. All read-only.
+_BOOL_ARR = {"type": "array", "items": {"type": "boolean"}}
+ACE_TOOLBOX11_SPECS = (
+    _spec("ace_op_tool_mission_validate",
+          "Validate a mission definition against ACE's mission schema (code/ace_mission).",
+          {"mission": _OBJ}, ("mission",)),
+    _spec("ace_op_tool_receipt_verify",
+          "Verify a code-agent patch receipt's integrity (code/ace_code_agent).",
+          {"receipt": _OBJ}, ("receipt",)),
+    _spec("ace_op_tool_brier_score",
+          "Compute the Brier score of probability predictions against boolean outcomes (code/ace_self_dev).",
+          {"predictions": _NUM_ARR, "outcomes": _BOOL_ARR},
+          ("predictions", "outcomes")),
+    _spec("ace_op_tool_calibration_error",
+          "Compute the Expected Calibration Error (ECE) of predictions against outcomes (code/ace_self_dev).",
+          {"predictions": _NUM_ARR, "outcomes": _BOOL_ARR,
+           "n_bins": {"type": "integer"}}, ("predictions", "outcomes")),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX11_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1359,3 +1381,28 @@ class OperationalBridge:
                             "generate_family_instances", str(args["family"]),
                             int(args["seed"]), count)
         return {"instances": out}
+
+    # -- toolbox batch 11 --------------------------------------------------
+    def _do_ace_op_tool_mission_validate(self, args: dict) -> Any:
+        return self._run_pkg("ace_mission", "schema", "validate_mission",
+                             dict(args["mission"]))
+
+    def _do_ace_op_tool_receipt_verify(self, args: dict) -> Any:
+        out = self._run_pkg("ace_code_agent", "patch_diagnostic",
+                            "verify_receipt", dict(args["receipt"]))
+        return {"valid": bool(out)}
+
+    def _do_ace_op_tool_brier_score(self, args: dict) -> Any:
+        return self._run_pkg("ace_self_dev", "metacognitive_predictor",
+                             "compute_brier_score",
+                             [float(x) for x in args["predictions"]],
+                             [bool(x) for x in args["outcomes"]])
+
+    def _do_ace_op_tool_calibration_error(self, args: dict) -> Any:
+        kw: dict[str, Any] = {}
+        if args.get("n_bins") is not None:
+            kw["n_bins"] = int(args["n_bins"])
+        return self._run_pkg("ace_self_dev", "metacognitive_predictor",
+                             "compute_expected_calibration_error",
+                             [float(x) for x in args["predictions"]],
+                             [bool(x) for x in args["outcomes"]], **kw)

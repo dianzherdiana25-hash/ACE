@@ -610,5 +610,36 @@ class ToolboxBatch10Tests(unittest.TestCase):
         self.assertEqual(len(inst["instances"]), 4)
 
 
+class ToolboxBatch11Tests(unittest.TestCase):
+    """Batch 11: mission/code-agent/self-dev packages."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch11_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX11_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX11_SPECS), 4)
+        for spec in ACE_TOOLBOX11_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_scorers(self) -> None:
+        brier = self.ro.call("ace_op_tool_brier_score", {
+            "predictions": [0.9, 0.1], "outcomes": [True, False]})
+        self.assertIsInstance(brier, float)
+        self.assertLess(brier, 0.05)
+        ece = self.ro.call("ace_op_tool_calibration_error", {
+            "predictions": [0.9, 0.1], "outcomes": [True, False]})
+        self.assertIsInstance(ece, float)
+        verdict = self.ro.call("ace_op_tool_receipt_verify",
+                               {"receipt": {"bogus": True}})
+        self.assertEqual(verdict, {"valid": False})
+
+
 if __name__ == "__main__":
     unittest.main()

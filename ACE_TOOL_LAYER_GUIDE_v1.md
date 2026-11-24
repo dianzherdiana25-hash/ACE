@@ -240,3 +240,8 @@ Batch 10 (3 tool, paket ace_evaluator): integritas kandidat
 (deteksi pola curang pada kode), seed evaluasi tersegel,
 pembangkit instans keluarga tugas. Total permukaan agen:
 100 tool; suite ace_mcp 60 tes lulus.
+
+Batch 11 (4 tool, semua baca-saja): validasi skema misi
+(ace_mission), verifikasi receipt patch (ace_code_agent),
+skor Brier + ECE (ace_self_dev). Total permukaan agen:
+104 tool; suite ace_mcp 62 tes lulus.
