@@ -265,3 +265,13 @@ divalidasi adalah konsistensi internal + logika paket —
 bukan kustodi eksternal atas plan (pada CLI paket, operator
 memberi --expect-sha256 dari saluran terpisah). Total
 permukaan agen: 112 tool; suite ace_mcp 67 tes lulus.
+
+Batch 14 (4 tool, semua baca-saja): lanjutan pola anchor
+batch 13 di ace_software_factory — desainer skema SQLite
+STRICT dari model relasional terdeklarasi, pemeriksa pin
+dependensi terhadap katalog + advisori beku, gerbang rilis
+(hasil terbaik ready_for_review; gerbang tidak pernah
+merilis), dan verifikator log audit JSONL berantai hash
+dengan tail hash yang dipegang terpisah (mendeteksi
+pemotongan yang sah secara lokal). Total permukaan agen:
+116 tool; suite ace_mcp 70 tes lulus.

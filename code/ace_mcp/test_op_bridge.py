@@ -799,5 +799,125 @@ class ToolboxBatch13Tests(unittest.TestCase):
         self.assertEqual(comp["uptime_lower_bound"]["denominator"], 3)
 
 
+class ToolboxBatch14Tests(unittest.TestCase):
+    """Batch 14: more ace_software_factory anchored tools."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch14_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX14_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX14_SPECS), 4)
+        for spec in ACE_TOOLBOX14_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_factory_schema_and_dependencies(self) -> None:
+        from ace_software_factory._contracts import identity
+        model = {
+            "schema": "ace.factory-relational-model.v1",
+            "model_ref": "test:model",
+            "entities": [{"name": "item", "source_ref": "test:item",
+                          "columns": [
+                              {"name": "id", "kind": "integer",
+                               "nullable": False, "default": None},
+                              {"name": "label", "kind": "text",
+                               "nullable": False, "default": None}],
+                          "primary_key": ["id"], "unique": [],
+                          "foreign_keys": [], "indexes": []}]}
+        ddl = self.ro.call("ace_op_tool_factory_schema_design",
+                           {"model": model})
+        self.assertIn("CREATE TABLE", ddl["sql"])
+        self.assertIn("item", ddl["entities"][0]["name"])
+
+        catalog = {
+            "schema": "ace.factory-package-catalog.v1",
+            "ref": "test:catalog",
+            "packages": [{"name": "demo-pkg", "releases": [
+                {"version": "1.0.0", "sha256": "c" * 64,
+                 "yanked": False}]}]}
+        advisories = {"schema": "ace.factory-package-advisories.v1",
+                      "ref": "test:adv", "advisories": []}
+        plan = {
+            "schema": "ace.factory-dependency-plan.v1",
+            "source_ref": "test:plan",
+            "catalog_sha256": identity(catalog),
+            "advisories_sha256": identity(advisories),
+            "pins": [{"name": "demo-pkg", "version": "1.0.0",
+                      "sha256": "c" * 64,
+                      "allowed": {"min_inclusive": "1.0.0",
+                                  "max_exclusive": "2.0.0"},
+                      "source_ref": "test:pin"}]}
+        report = self.ro.call("ace_op_tool_factory_dependency_check", {
+            "plan": plan, "catalog": catalog, "advisories": advisories})
+        self.assertEqual(report["status"], "snapshot_checks_passed")
+        self.assertEqual(report["pins"][0]["issues"], [])
+
+    def test_factory_release_gate_and_audit(self) -> None:
+        from ace_software_factory._contracts import identity
+        from ace_software_factory import auditlog_builder
+        files = [{"path": "mod.py", "sha256": "d" * 64}]
+        artifact = identity(files)
+        acceptance = {
+            "schema": "ace.factory-acceptance-report.v1",
+            "status": "passed", "artifact_sha256": artifact,
+            "counts": {"passed": 1, "failed": 0, "missing_rule": 0,
+                       "missing_observation": 0}}
+        coverage = {
+            "schema": "ace.factory-coverage-report.v1",
+            "status": "measured", "files": files, "skipped": 0,
+            "modules": [{"path": "mod.py", "sha256": "d" * 64,
+                         "ratio_bp": 10000}]}
+        scan = {
+            "schema": "ace.factory-sast-report.v1",
+            "status": "no_rule_matches", "findings": [], "unscanned": [],
+            "sources": [{"path": "mod.py", "parse_ok": True,
+                         "sha256": "d" * 64}]}
+        archive = {
+            "schema": "ace.factory-release-verification.v1",
+            "status": "verified", "zip_sha256": "b" * 64,
+            "manifest_sha256": "e" * 64, "verified_files": 1}
+        evidence = {"acceptance": acceptance, "coverage": coverage,
+                    "scan": scan, "archive": archive}
+        policy = {
+            "schema": "ace.factory-release-gate-policy.v1",
+            "source_ref": "test:policy", "artifact_sha256": artifact,
+            "zip_sha256": "b" * 64, "zip_manifest_sha256": "e" * 64,
+            "expected_criteria": 1,
+            "required_modules": [{"path": "mod.py", "min_bp": 5000,
+                                  "source_ref": "test:req"}],
+            "evidence_sha256": {k: identity(v)
+                                for k, v in evidence.items()}}
+        gate = self.ro.call("ace_op_tool_factory_release_gate", {
+            "policy": policy, "evidence": evidence})
+        self.assertEqual(gate["status"], "ready_for_review")
+        self.assertEqual(gate["blockers"], [])
+
+        audit_policy = {
+            "schema": "ace.factory-audit-policy.v1", "id": "demo",
+            "source_ref": "test:audit",
+            "operations": [{"id": "login", "source_ref": "test:op"}]}
+        empty = self.ro.call("ace_op_tool_factory_audit_verify", {
+            "policy": audit_policy, "log_text": ""})
+        self.assertEqual(empty["status"], "verified")
+        self.assertEqual(empty["events"], 0)
+        snapshot, built = auditlog_builder.extend(
+            b"", audit_policy, identity(audit_policy), "0" * 64,
+            [{"id": "ev1", "at": "2026-01-01T00:00:00Z",
+              "actor_ref": "actor1", "operation": "login",
+              "target_ref": "target1", "status": "allowed",
+              "evidence_ref": "evref1"}])
+        chained = self.ro.call("ace_op_tool_factory_audit_verify", {
+            "policy": audit_policy, "log_text": snapshot.decode(),
+            "tail_sha256": built["tail_sha256"]})
+        self.assertEqual(chained["events"], 1)
+        self.assertEqual(chained["by_status"]["allowed"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()

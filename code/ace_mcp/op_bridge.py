@@ -559,6 +559,27 @@ ACE_TOOLBOX13_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX13_SPECS
 
+# -- Toolbox batch 14: more ace_software_factory anchored tools,
+# same derived-anchor design as batch 13 (see its note).
+ACE_TOOLBOX14_SPECS = (
+    _spec("ace_op_tool_factory_schema_design",
+          "Design STRICT-mode SQLite DDL from a declared relational model: typed columns, literal-only defaults, foreign keys must target primary/unique columns with matching types (code/ace_software_factory).",
+          {"model": _OBJ}, ("model",)),
+    _spec("ace_op_tool_factory_dependency_check",
+          "Check dependency pins against a frozen catalog and advisory snapshot; suggests only registered, in-policy, advisory-free pins (code/ace_software_factory). The plan's catalog_sha256/advisories_sha256 must be the canonical sha256 of those documents.",
+          {"plan": _OBJ, "catalog": _OBJ, "advisories": _OBJ},
+          ("plan", "catalog", "advisories")),
+    _spec("ace_op_tool_factory_release_gate",
+          "Evaluate release readiness from acceptance, coverage, scan, and archive receipts bound to one source snapshot; best outcome is ready_for_review, the gate never releases (code/ace_software_factory). The policy's evidence_sha256 anchors must be the canonical sha256 of each evidence document.",
+          {"policy": _OBJ, "evidence": _OBJ}, ("policy", "evidence")),
+    _spec("ace_op_tool_factory_audit_verify",
+          "Verify a hash-chained JSONL audit log against its policy and an externally held tail hash, which detects locally-valid truncation (code/ace_software_factory). tail_sha256 defaults to the genesis tail (empty log).",
+          {"policy": _OBJ, "log_text": _STR, "tail_sha256": _STR},
+          ("policy", "log_text")),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX14_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1520,3 +1541,30 @@ class OperationalBridge:
         return self._run_pkg("ace_software_factory", "uptime_builder",
                              "evaluate", plan, self._factory_anchor(plan),
                              args["observations"])
+
+    # -- toolbox batch 14 --------------------------------------------------
+    def _do_ace_op_tool_factory_schema_design(self, args: dict) -> Any:
+        model = args["model"]
+        return self._run_pkg("ace_software_factory", "schema_designer",
+                             "design", model, self._factory_anchor(model))
+
+    def _do_ace_op_tool_factory_dependency_check(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_software_factory", "dependency_manager",
+                             "inspect", plan, args["catalog"],
+                             args["advisories"],
+                             self._factory_anchor(plan))
+
+    def _do_ace_op_tool_factory_release_gate(self, args: dict) -> Any:
+        policy = args["policy"]
+        return self._run_pkg("ace_software_factory", "release_gate",
+                             "evaluate", policy,
+                             self._factory_anchor(policy), args["evidence"])
+
+    def _do_ace_op_tool_factory_audit_verify(self, args: dict) -> Any:
+        policy = args["policy"]
+        tail = str(args.get("tail_sha256") or "0" * 64)
+        payload = str(args["log_text"]).encode("utf-8")
+        return self._run_pkg("ace_software_factory", "auditlog_builder",
+                             "verify", payload, policy,
+                             self._factory_anchor(policy), tail)
