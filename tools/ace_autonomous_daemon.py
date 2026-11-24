@@ -157,14 +157,38 @@ def run_parameter_cycle(
     return res
 
 
+def run_orchestrator_cycle(workspace: Path | None = None) -> Dict[str, Any]:
+    """Advance active Goal DAGs in OperationalStore via ACE Orchestrator v3."""
+    from ace_operational.memory_bridge import ConversationalMemoryManager
+    from ace_operational.orchestrator_playbook import tick_goal
+    from ace_operational.store import OperationalStore
+
+    with OperationalStore(workspace) as store:
+        memory = ConversationalMemoryManager(store)
+        active = store.list_goals(status="ACTIVE", limit=20)
+        results = []
+        for goal in active:
+            tick = tick_goal(
+                store,
+                memory,
+                goal_id=goal["goal_id"],
+                workspace=store.workspace,
+                repo_root=REPO_ROOT,
+                allow_executors=True,
+            )
+            results.append({"goal_id": goal["goal_id"], "action": tick.get("action")})
+        return {"goals_checked": len(active), "ticks": results}
+
+
 def run_daemon_loop(
     mode: str = "researcher",
     max_cycles: int = 0,
     batch_size: int = 2,
     sleep_seconds: int = 15,
     auto_pr: bool = True,
+    workspace: Path | None = None,
 ):
-    """Main daemon loop running continuous or bounded research iterations."""
+    """Main daemon loop running continuous or bounded research / orchestrator iterations."""
     log("=== ACE Autonomous Daemon V0.3 Initialized ===")
     log(f"Repository Root: {REPO_ROOT}")
     log(f"Mode: {mode.upper()} | Max Cycles: {max_cycles if max_cycles > 0 else 'Continuous'}")
@@ -241,6 +265,11 @@ def run_daemon_loop(
                         if p_promoted or is_milestone:
                             git_commit_and_push(p_cid, p_dec, p_tid)
 
+                    if mode in ("orchestrator", "hybrid"):
+                        o_res = run_orchestrator_cycle(workspace=workspace)
+                        total_completed += 1
+                        log(f"  Orchestrator DAG check: goals={o_res['goals_checked']} ticks={o_res['ticks']}")
+
                     if max_cycles > 0 and total_completed >= max_cycles:
                         log(f"Target max_cycles ({max_cycles}) reached. Cleanly terminating daemon loop.")
                         return
@@ -286,7 +315,8 @@ def run_daemon_loop(
 
 def main():
     parser = argparse.ArgumentParser(description="ACE Autonomous Continuity & Software Researcher Daemon (V0.3)")
-    parser.add_argument("--mode", choices=["researcher", "parameter", "hybrid"], default="researcher", help="Operating mode")
+    parser.add_argument("--mode", choices=["researcher", "parameter", "orchestrator", "hybrid"], default="researcher", help="Operating mode")
+    parser.add_argument("--workspace", type=Path, default=None, help="ACE OperationalStore workspace path (for orchestrator mode)")
     parser.add_argument("--max-cycles", type=int, default=0, help="Maximum cycles to execute (0 for continuous loop)")
     parser.add_argument("--batch-size", type=int, default=1, help="Cycles per iteration batch")
     parser.add_argument("--sleep-seconds", type=int, default=15, help="Sleep duration between batches")
@@ -299,6 +329,7 @@ def main():
         batch_size=args.batch_size,
         sleep_seconds=args.sleep_seconds,
         auto_pr=args.auto_pr,
+        workspace=args.workspace,
     )
 
 

@@ -147,6 +147,8 @@ def main(argv=None):
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8735)
     parser.add_argument("--allowed-origin", action="append", default=[])
+    parser.add_argument("--tool-profile", choices=("full", "core"), default="full",
+                        help="Expose full tool catalog or compact core profile + ace_op_tool_search/invoke")
     parser.add_argument("--enable-code-diagnostic", action="store_true",
                         help="Enable experimental sandbox diagnostic on local stdio only")
     args = parser.parse_args(argv)
@@ -154,7 +156,8 @@ def main(argv=None):
         parser.error("code diagnostic is restricted to local stdio")
     bridge = ACEBridge(args.workspace, allow_writes=args.read_write,
                        enable_code_diagnostic=args.enable_code_diagnostic,
-                       operational=not args.research_only)
+                       operational=not args.research_only,
+                       tool_profile=args.tool_profile)
     if args.transport == "stdio":
         stdio(bridge)
     else:

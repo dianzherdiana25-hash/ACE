@@ -18,6 +18,11 @@ SCHEMA_ACTIVITY = "ace.activity.v1"
 SCHEMA_GAP = "ace.gap.v1"
 SCHEMA_FRONTIER = "ace.frontier.v1"
 SCHEMA_VERSION_MANIFEST = "ace.version_manifest.v1"
+SCHEMA_AGENT = "ace.agent.v1"
+SCHEMA_GOAL = "ace.goal.v1"
+SCHEMA_GOAL_STAGE = "ace.goal_stage.v1"
+SCHEMA_QUALITY_VERDICT = "ace.quality_verdict.v1"
+SCHEMA_OUTCOME = "ace.outcome.v1"
 
 RELEASE_VERSION = "4.0.0-oaie"
 
@@ -33,5 +38,10 @@ __all__ = [
     "SCHEMA_GAP",
     "SCHEMA_FRONTIER",
     "SCHEMA_VERSION_MANIFEST",
+    "SCHEMA_AGENT",
+    "SCHEMA_GOAL",
+    "SCHEMA_GOAL_STAGE",
+    "SCHEMA_QUALITY_VERDICT",
+    "SCHEMA_OUTCOME",
     "RELEASE_VERSION",
 ]

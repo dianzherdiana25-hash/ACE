@@ -688,6 +688,9 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
       <button type="button" class="status-pill speech-badge-btn" id="badge-memory" onclick="toggleMemoryDrawer()" aria-expanded="false">
         Memori: 0 aktif
       </button>
+      <button type="button" class="status-pill speech-badge-btn" id="badge-v3" onclick="toggleCommandDrawer()" aria-expanded="false">
+        Orchestrator v3
+      </button>
     </div>
   </header>
 
@@ -771,6 +774,63 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
       <div class="speech-vocab-box">
         <strong>Riwayat Digantikan (`superseded`) &amp; Tombstone Lupa</strong>
         <div id="memory-audit-list" style="margin-top:6px;color:var(--text-secondary);">Belum ada riwayat ralat atau tombstone.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="speech-drawer hidden" id="command-drawer" aria-label="ACE Orchestrator v3 Command Center">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <div>
+        <strong style="font-size:14px;">ACE Orchestrator v3 — Goal DAG, Multi-Agen &amp; Copy-Paste Web Relay</strong>
+        <span id="v3-summary-meta" style="margin-left:8px;font-size:12px;color:var(--text-secondary);">Zero Paid API</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="password" id="v3-token-input" placeholder="X-ACE-Token (.ace-web-auth.json)" style="padding:4px 8px;font-size:12px;border-radius:8px;border:1px solid var(--border);" />
+        <button type="button" class="control-btn" onclick="refreshCommandCenter()">Segarkan</button>
+        <button type="button" class="control-btn" onclick="toggleCommandDrawer()">Tutup</button>
+      </div>
+    </div>
+    <form class="speech-teach-form" onsubmit="submitCreateGoalForm(event)">
+      <input type="text" id="v3-goal-title" placeholder="Judul Goal (mis. Reels Produk Mei)" required style="min-width:170px;" />
+      <select id="v3-goal-domain">
+        <option value="video_reels">Video Reels 9:16 + FB</option>
+        <option value="kbm_apps">KBM Apps</option>
+        <option value="code_evolution">GitHub Code &amp; Auto-PR</option>
+        <option value="research">Riset Terjangkar</option>
+        <option value="general">Umum</option>
+      </select>
+      <input type="text" id="v3-goal-req" placeholder="Instruksi lengkap ke ACE..." required style="flex:1;min-width:220px;" />
+      <button type="submit" class="control-btn">Buat Goal DAG</button>
+    </form>
+    <div class="speech-vocab-row">
+      <div class="speech-vocab-box">
+        <strong>Goals &amp; Quality Gate (`&gt;= 8500 bp`)</strong>
+        <div id="v3-goals-list" style="margin-top:6px;color:var(--text-secondary);">Belum ada Goal DAG.</div>
+      </div>
+      <div class="speech-vocab-box">
+        <strong>Agen Terdaftar &amp; Status Konektor Vault</strong>
+        <div id="v3-agents-connectors" style="margin-top:6px;color:var(--text-secondary);">Memuat...</div>
+      </div>
+    </div>
+    <div class="speech-vocab-row" style="margin-top:8px;">
+      <div class="speech-vocab-box" style="flex:1;">
+        <strong>Web Relay Copy-Paste (ChatGPT / Gemini / Muse.ai Web)</strong>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0;">
+          <select id="v3-relay-vendor">
+            <option value="chatgpt">ChatGPT Web</option>
+            <option value="gemini">Gemini Web</option>
+            <option value="muse.ai">Muse.ai Web</option>
+            <option value="claude">Claude Web</option>
+          </select>
+          <input type="text" id="v3-relay-wo" placeholder="Work Order ID (opsional)" style="min-width:160px;" />
+          <input type="text" id="v3-relay-obj" placeholder="Objektif relay..." style="flex:1;min-width:160px;" />
+          <button type="button" class="control-btn" onclick="exportWebRelayPrompt()">Ekspor Prompt</button>
+        </div>
+        <textarea id="v3-relay-box" rows="4" placeholder="Prompt siap salin ATAU tempel JSON balasan AI web di sini..." style="width:100%;font-size:12px;"></textarea>
+        <div style="margin-top:6px;display:flex;gap:8px;">
+          <button type="button" class="control-btn" onclick="ingestWebRelayReply()">Proses Balasan AI Web</button>
+          <span id="v3-relay-status" style="font-size:12px;color:var(--text-secondary);"></span>
+        </div>
       </div>
     </div>
   </section>
@@ -1552,6 +1612,137 @@ ANIME_WEB_HTML = r"""<!DOCTYPE html>
       }
     }
 
+    function v3Headers() {
+      const tokEl = document.getElementById("v3-token-input");
+      const h = { "Content-Type": "application/json" };
+      if (tokEl && tokEl.value.trim()) h["X-ACE-Token"] = tokEl.value.trim();
+      return h;
+    }
+
+    function toggleCommandDrawer() {
+      const drawer = document.getElementById("command-drawer");
+      const btn = document.getElementById("badge-v3");
+      if (!drawer) return;
+      const open = drawer.classList.toggle("hidden");
+      if (btn) btn.setAttribute("aria-expanded", String(!open));
+      if (!open) refreshCommandCenter();
+    }
+
+    async function refreshCommandCenter() {
+      const gBox = document.getElementById("v3-goals-list");
+      const aBox = document.getElementById("v3-agents-connectors");
+      const headers = v3Headers();
+      try {
+        const [gRes, aRes, cRes] = await Promise.all([
+          fetch("/api/goals", { headers }),
+          fetch("/api/agents", { headers }),
+          fetch("/api/connectors/status", { headers }),
+        ]);
+        if (gRes.status === 401) {
+          if (gBox) gBox.textContent = "Masukkan X-ACE-Token di pojok kanan drawer untuk mengakses API.";
+          return;
+        }
+        const gData = await gRes.json();
+        const aData = await aRes.json();
+        const cData = await cRes.json();
+        const goals = gData.goals || [];
+        if (gBox) {
+          gBox.innerHTML = goals.length
+            ? goals.map(g => {
+                const stg = (g.stages || [])[g.current_stage_index || 0] || {};
+                return `<div style="margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px;">` +
+                  `<b>${escapeHtml(g.title)}</b> [${escapeHtml(g.domain)}] — <code>${escapeHtml(g.status)}</code>` +
+                  ` (Tahap: ${escapeHtml(stg.name || "-")}, Min: ${g.min_quality_score_bp}bp)` +
+                  ` <button type="button" class="control-btn" onclick="tickGoalV3('${escapeHtml(g.goal_id)}')">Tick</button></div>`;
+              }).join("")
+            : "Belum ada Goal DAG.";
+        }
+        if (aBox) {
+          const agents = (aData.agents || []).map(a => `<div>• <code>${escapeHtml(a.agent_id)}</code> (${escapeHtml(a.vendor)}) [${escapeHtml(a.transport)}] — ${escapeHtml(a.status)}</div>`).join("");
+          const venues = cData.vault && cData.vault.venues ? Object.values(cData.vault.venues).map(v => `<div>• Vault <b>${escapeHtml(v.venue)}</b>: ${v.ready ? "SIAP" : "Perlu login/setup"}</div>`).join("") : "";
+          aBox.innerHTML = (agents || "<div>Belum ada agen terdaftar.</div>") + "<hr style='margin:6px 0;opacity:.3;'/>" + venues;
+        }
+      } catch (err) {
+        if (gBox) gBox.textContent = "Gagal memuat Command Center: " + err;
+      }
+    }
+
+    async function submitCreateGoalForm(ev) {
+      ev.preventDefault();
+      const res = await fetch("/api/goals", {
+        method: "POST",
+        headers: v3Headers(),
+        body: JSON.stringify({
+          title: document.getElementById("v3-goal-title").value,
+          domain: document.getElementById("v3-goal-domain").value,
+          user_request: document.getElementById("v3-goal-req").value,
+        }),
+      });
+      if (res.ok) {
+        document.getElementById("v3-goal-title").value = "";
+        document.getElementById("v3-goal-req").value = "";
+        refreshCommandCenter();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        appendSystemNotice("Gagal membuat Goal DAG: " + (err.error || "HTTP " + res.status), true);
+      }
+    }
+
+    async function tickGoalV3(goalId) {
+      await fetch(`/api/goals/${encodeURIComponent(goalId)}/tick`, { method: "POST", headers: v3Headers(), body: "{}" });
+      refreshCommandCenter();
+    }
+
+    async function exportWebRelayPrompt() {
+      const box = document.getElementById("v3-relay-box");
+      const statusEl = document.getElementById("v3-relay-status");
+      const res = await fetch("/api/relay/export", {
+        method: "POST",
+        headers: v3Headers(),
+        body: JSON.stringify({
+          vendor: document.getElementById("v3-relay-vendor").value,
+          work_order_id: document.getElementById("v3-relay-wo").value,
+          objective: document.getElementById("v3-relay-obj").value,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        if (box) box.value = data.prompt || "";
+        if (statusEl) statusEl.textContent = "Prompt diekspor — salin ke ChatGPT/Gemini/Muse.ai Web.";
+      } else if (statusEl) {
+        statusEl.textContent = "Gagal ekspor: " + (data.error || res.status);
+      }
+    }
+
+    async function ingestWebRelayReply() {
+      const box = document.getElementById("v3-relay-box");
+      const statusEl = document.getElementById("v3-relay-status");
+      const res = await fetch("/api/relay/ingest", {
+        method: "POST",
+        headers: v3Headers(),
+        body: JSON.stringify({
+          vendor: document.getElementById("v3-relay-vendor").value,
+          work_order_id: document.getElementById("v3-relay-wo").value,
+          raw_reply: box ? box.value : "",
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (statusEl) statusEl.textContent = "Gagal ingest: " + (data.error || res.status);
+        return;
+      }
+      if (data.continuation_prompt && box) {
+        box.value = data.continuation_prompt;
+        if (statusEl) statusEl.textContent = "Tool dieksekusi! Salin Continuation Prompt balik ke AI Web.";
+      } else if (data.revision_prompt && box) {
+        box.value = data.revision_prompt;
+        if (statusEl) statusEl.textContent = "DITOLAK Quality Gate — salin Revision Prompt balik ke AI Web.";
+      } else if (statusEl) {
+        statusEl.textContent = "Submission terverifikasi (" + ((data.verification && data.verification.verdict) || data.mode) + ")";
+      }
+      refreshCommandCenter();
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
       const chatInput = document.getElementById("chat-input");
       if (chatInput) {
@@ -1671,6 +1862,28 @@ class ACEWebCore:
             )
         if path == "/api/memory/audit":
             return self.chat_engine.memory.audit_report()
+        if path == "/api/goals":
+            st = (query_params.get("status") or [""])[0] or None
+            return {"goals": self.store.list_goals(status=st)}
+        if path.startswith("/api/goals/"):
+            gid = unquote(path.split("/api/goals/", 1)[1]).strip("/")
+            g = self.store.get_goal(gid)
+            return g if g is not None else {"error": f"Goal tidak ditemukan: {gid}"}
+        if path == "/api/agents":
+            return {"agents": self.store.list_agents()}
+        if path == "/api/work-orders":
+            return {"work_orders": self.store.list_work_orders()}
+        if path == "/api/connectors/status":
+            from .connectors.vault import SecretVault
+            from .git_ops import load_host_policy
+            return {
+                "vault": SecretVault(self.store.workspace).all_status(),
+                "policy": load_host_policy(self.store.workspace),
+            }
+        if path == "/api/calibration":
+            from .outcome_calibrator import calibration_report
+            dom = (query_params.get("domain") or [""])[0] or None
+            return calibration_report(self.store, domain=dom)
         return None
 
     def control_task(self, task_id: str, action: str) -> dict[str, Any]:
@@ -1838,6 +2051,107 @@ class ACEWebCore:
         mem_res = self.dispatch_memory_post(path, body)
         if mem_res is not None:
             return mem_res
+
+        if path == "/api/goals":
+            title = str(body.get("title") or "").strip()
+            user_request = str(body.get("user_request") or "").strip()
+            if not title or not user_request:
+                return int(HTTPStatus.BAD_REQUEST), {"error": "Field `title` dan `user_request` wajib diisi"}
+            from .orchestrator_playbook import create_goal
+            try:
+                goal = create_goal(
+                    self.store,
+                    title=title,
+                    user_request=user_request,
+                    domain=str(body.get("domain") or "general"),
+                    publish_mode=str(body.get("publish_mode") or "auto"),
+                    min_quality_score_bp=int(body.get("min_quality_score_bp", 8500)),
+                    max_revisions=int(body.get("max_revisions", 3)),
+                    require_cross_review=bool(body.get("require_cross_review", True)),
+                    preferred_vendors=dict(body.get("preferred_vendors") or {}),
+                    stage_configs=dict(body.get("stage_configs") or {}),
+                    metadata=dict(body.get("metadata") or {}),
+                )
+                return int(HTTPStatus.OK), goal
+            except ValueError as exc:
+                return int(HTTPStatus.BAD_REQUEST), {"error": str(exc)}
+
+        if path.startswith("/api/goals/") and path.endswith("/tick"):
+            gid = unquote(path[len("/api/goals/") : -len("/tick")]).strip("/")
+            from .orchestrator_playbook import tick_goal
+            try:
+                res = tick_goal(
+                    self.store,
+                    self.chat_engine.memory,
+                    goal_id=gid,
+                    workspace=self.store.workspace,
+                    allow_executors=bool(body.get("allow_executors", True)),
+                )
+                return int(HTTPStatus.OK), res
+            except KeyError as exc:
+                return int(HTTPStatus.NOT_FOUND), {"error": str(exc)}
+            except Exception as exc:
+                return int(HTTPStatus.BAD_REQUEST), {"error": str(exc)}
+
+        if path == "/api/agents/register":
+            try:
+                ag = self.store.register_agent(
+                    agent_id=str(body.get("agent_id") or ""),
+                    vendor=str(body.get("vendor") or ""),
+                    roles=[str(r) for r in (body.get("roles") or ["creator"])],
+                    capabilities=[str(c) for c in (body.get("capabilities") or [])],
+                    transport=str(body.get("transport") or "mcp_stdio"),
+                )
+                return int(HTTPStatus.OK), ag
+            except ValueError as exc:
+                return int(HTTPStatus.BAD_REQUEST), {"error": str(exc)}
+
+        if path == "/api/relay/export":
+            from ace_mcp.bridge import ACEBridge
+            from ace_mcp.relay import build_relay_prompt
+            bridge = ACEBridge(self.store.workspace, allow_writes=True, operational=True)
+            res = build_relay_prompt(
+                bridge,
+                objective=str(body.get("objective") or ""),
+                vendor=str(body.get("vendor") or "chatgpt"),
+                agent_id=str(body.get("agent_id") or ""),
+                goal_id=str(body.get("goal_id") or ""),
+                work_order_id=str(body.get("work_order_id") or ""),
+            )
+            return int(HTTPStatus.OK), res
+
+        if path == "/api/relay/ingest":
+            from ace_mcp.bridge import ACEBridge
+            from ace_mcp.relay import ingest_relay_reply
+            bridge = ACEBridge(self.store.workspace, allow_writes=True, operational=True)
+            try:
+                res = ingest_relay_reply(
+                    bridge,
+                    str(body.get("raw_reply") or ""),
+                    agent_id=str(body.get("agent_id") or ""),
+                    vendor=str(body.get("vendor") or "chatgpt"),
+                    work_order_id=str(body.get("work_order_id") or ""),
+                )
+                return int(HTTPStatus.OK), res
+            except (KeyError, ValueError, PermissionError) as exc:
+                return int(HTTPStatus.BAD_REQUEST), {"error": str(exc)}
+
+        if path == "/api/outcome/record":
+            from .outcome_calibrator import record_real_outcome
+            try:
+                res = record_real_outcome(
+                    self.store,
+                    self.chat_engine.memory,
+                    goal_id=str(body.get("goal_id") or ""),
+                    stage_id=str(body.get("stage_id") or ""),
+                    domain=str(body.get("domain") or ""),
+                    asset_ref=str(body.get("asset_ref") or ""),
+                    actual_metrics=dict(body.get("actual_metrics") or {}),
+                    skill_ids=[str(s) for s in (body.get("skill_ids") or [])],
+                )
+                return int(HTTPStatus.OK), res
+            except Exception as exc:
+                return int(HTTPStatus.BAD_REQUEST), {"error": str(exc)}
 
         return int(HTTPStatus.NOT_FOUND), {"error": f"Route POST tidak ditemukan: {path}"}
 

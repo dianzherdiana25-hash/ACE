@@ -135,7 +135,11 @@ OP_TOOL_SPECS = (
           "Create a delegated work order under a parent task (idempotency-keyed).",
           {**_AGENT_PROP, "parent_task_id": _STR, "objective": _STR,
            "idempotency_key": _STR, "worker_kind": _STR,
-           "base_snapshot_hash": _STR, "mission_id": _STR},
+           "base_snapshot_hash": _STR, "mission_id": _STR,
+           "goal_id": _STR, "stage_id": _STR, "required_role": _STR,
+           "required_skills": {"type": "array", "items": _STR},
+           "acceptance_checks": {"type": "array", "items": {"type": "object"}},
+           "payload": {"type": "object"}},
           ("parent_task_id", "objective", "idempotency_key"), write=True),
     _spec("ace_op_work_order_list",
           "List work orders, optionally for one parent task.",
@@ -731,6 +735,152 @@ ACE_TOOLBOX21_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX21_SPECS
 
+# -- Orchestrator v3: Multi-Agent Coordination, Goal DAG, Quality Gate, & Domain Connectors --
+ACE_ORCHESTRATION_V3_SPECS = (
+    _spec("ace_op_agent_register",
+          "Register or update an external AI agent (antigravity, gemini, muse.ai, chatgpt, claude, codex, local_cli) with roles and transport.",
+          {**_AGENT_PROP, "agent_id": _STR, "vendor": _STR,
+           "roles": _STR_ARR, "capabilities": _STR_ARR,
+           "transport": _STR, "status": _STR, "endpoint_or_profile": _STR},
+          ("agent_id", "vendor"), write=True),
+    _spec("ace_op_agent_heartbeat",
+          "Update heartbeat and availability status for a registered AI agent.",
+          {**_AGENT_PROP, "agent_id": _STR, "status": _STR, "metadata": _OBJ},
+          ("agent_id",), write=True),
+    _spec("ace_op_agent_list",
+          "List registered AI agents filtered optionally by status, vendor, or role.",
+          {"status": _STR, "vendor": _STR, "role": _STR}),
+    _spec("ace_op_agent_orient",
+          "Obtain ACE's Directive Packet: relevant skills, top tools, non-private memories, open gaps, prior revision feedback, and Quality Gate requirements.",
+          {"agent_id": _STR, "vendor": _STR, "role": _STR,
+           "goal_id": _STR, "work_order_id": _STR, "objective": _STR},
+          ("agent_id",)),
+    _spec("ace_op_goal_create",
+          "Create an autonomous Goal DAG (code_evolution, video_reels, kbm_apps, research, general) with High-Bar Quality Gate enforcement.",
+          {**_AGENT_PROP, "title": _STR, "user_request": _STR,
+           "domain": _STR, "publish_mode": _STR,
+           "min_quality_score_bp": {"type": "integer", "minimum": 0, "maximum": 10000},
+           "max_revisions": {"type": "integer", "minimum": 0, "maximum": 10},
+           "require_cross_review": {"type": "boolean"},
+           "preferred_vendors": _OBJ, "stage_configs": _OBJ, "metadata": _OBJ},
+          ("title", "user_request"), write=True),
+    _spec("ace_op_goal_list",
+          "List multi-stage Goals tracked by ACE, optionally filtered by status.",
+          {"status": _STR, "limit": {"type": "integer", "minimum": 1, "maximum": 200}}),
+    _spec("ace_op_goal_status",
+          "Inspect one Goal with all stages, work orders, revision counts, and quality verdicts.",
+          {"goal_id": _STR}, ("goal_id",)),
+    _spec("ace_op_goal_tick",
+          "Advance one Goal DAG step: independently verify submitted work orders or run ready ACE quality gates/executors.",
+          {**_AGENT_PROP, "goal_id": _STR, "allow_executors": {"type": "boolean"}},
+          ("goal_id",), write=True),
+    _spec("ace_op_work_order_claim",
+          "Atomically claim a work order via FencedStore lease so concurrent agents cannot double-claim.",
+          {**_AGENT_PROP, "work_order_id": _STR, "agent_id": _STR,
+           "ttl_sec": {"type": "integer", "minimum": 10, "maximum": 86400}},
+          ("work_order_id", "agent_id"), write=True),
+    _spec("ace_op_work_order_release",
+          "Release a claimed work order lease back to PENDING or a target status.",
+          {**_AGENT_PROP, "work_order_id": _STR, "agent_id": _STR,
+           "lease_token": _STR, "new_status": _STR},
+          ("work_order_id", "agent_id", "lease_token"), write=True),
+    _spec("ace_op_work_order_verify",
+          "Independently verify a submitted work order against ACE Quality Gates; rejects work below threshold and mints receipt only on PASS.",
+          {**_AGENT_PROP, "work_order_id": _STR,
+           "min_score_bp": {"type": "integer", "minimum": 0, "maximum": 10000}},
+          ("work_order_id",), write=True),
+    _spec("ace_op_tool_search",
+          "Search ACE's registered tool catalog by keyword, category, or read/write mode.",
+          {"query": _STR, "category": _STR, "mode": _STR,
+           "limit": {"type": "integer", "minimum": 1, "maximum": 50}}),
+    _spec("ace_op_tool_invoke",
+          "Invoke any registered ACE tool by name with a JSON arguments object (still enforces operator write opt-in on write tools).",
+          {"tool": _STR, "arguments": _OBJ}, ("tool", "arguments")),
+    _spec("ace_op_skill_record_outcome",
+          "Record empirical success/failure/negative-transfer outcome on a skill (auto-suspends unreliable skills).",
+          {**_AGENT_PROP, "skill_id": _STR, "success": {"type": "boolean"},
+           "negative_transfer": {"type": "boolean"}},
+          ("skill_id", "success"), write=True),
+    _spec("ace_op_skill_absorb",
+          "Absorb a newly discovered/verified skill into ACE only after source references and passed checks pass quality gates.",
+          {**_AGENT_PROP, "name": _STR, "domain": _STR,
+           "procedure_steps": _STR_ARR, "preconditions": _STR_ARR,
+           "boundary_limitations": _STR_ARR, "source_refs": _STR_ARR,
+           "checks_passed": _STR_ARR, "verified_score_bp": {"type": "integer"},
+           "min_score_bp": {"type": "integer"}},
+          ("name", "domain", "procedure_steps", "source_refs", "checks_passed"), write=True),
+    _spec("ace_op_quality_evaluate",
+          "Run ACE High-Bar Quality Gate directly on research claims, Reels package, KBM package, or workspace code.",
+          {"domain": _STR, "payload": _OBJ,
+           "min_score_bp": {"type": "integer", "minimum": 0, "maximum": 10000}},
+          ("domain", "payload")),
+    _spec("ace_op_outcome_record",
+          "Record real-world post-publish/post-merge outcome metrics (views, completion, KBM reads/royalty, CI) to calibrate predictors and skill scores.",
+          {**_AGENT_PROP, "goal_id": _STR, "stage_id": _STR, "domain": _STR,
+           "asset_ref": _STR, "actual_metrics": _OBJ, "skill_ids": _STR_ARR,
+           "predicted_score_bp": {"type": "integer"}},
+          ("goal_id", "actual_metrics"), write=True),
+    _spec("ace_op_calibration_report",
+          "Inspect empirical calibration metrics comparing ACE predicted quality scores against real outcomes.",
+          {"domain": _STR}),
+    _spec("ace_op_vault_status",
+          "Inspect SecretVault readiness status (configured field names and browser session presence only; never exposes secret values).",
+          {"venue": _STR}),
+)
+
+ACE_TOOLBOX_V3_SPECS = (
+    _spec("ace_op_tool_kbm_arc_rubric",
+          "Score KBM chapter pack across alur, tokoh, bahasa, and daya_tarik (tools.arc_rubric).",
+          {"pack": _OBJ}, ("pack",)),
+    _spec("ace_op_tool_kbm_qc",
+          "Run KBM manuscript continuity & word count QC over workspace files (tools.kbm_qc).",
+          {"manuscript_path": _STR, "title_config_path": _STR, "min_words": {"type": "integer"}},
+          ("manuscript_path", "title_config_path")),
+    _spec("ace_op_tool_kbm_schedule",
+          "Build deterministic KBM chapter production & release schedule from workspace catalog (tools.kbm_schedule).",
+          {"catalog_path": _STR, "as_of_date": _STR, "default_weekly_target": {"type": "integer"}},
+          ("catalog_path",)),
+    _spec("ace_op_tool_kbm_titles",
+          "Build multi-title KBM portfolio progress report from workspace catalog (tools.kbm_titles).",
+          {"state_path": _STR}, ("state_path",)),
+    _spec("ace_op_tool_kbm_royalty",
+          "Summarize KBM royalty CSV reports and Pasal 7 cumulative share from workspace files (tools.royalty_track).",
+          {"csv_paths": _STR_ARR, "map_path": _STR}, ("csv_paths",)),
+    _spec("ace_op_tool_kbm_cover_check",
+          "Validate KBM PNG/JPEG cover dimensions, aspect ratio, and size inside workspace (tools.cover_check).",
+          {"image_path": _STR, "rules": _OBJ}, ("image_path",)),
+    _spec("ace_op_tool_reels_retention",
+          "Predict scene-by-scene retention proxy scores and weakest scene for a Reels script (ace_media_studio.scene_retention_predictor).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_reels_metadata",
+          "Validate grounded upload metadata facts, credits, and platform limits for Reels (ace_media_studio.upload_metadata_writer).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_reels_brand_safety",
+          "Audit Reels script track annotations for blocked categories/phrases (ace_media_studio.brand_safety_qa).",
+          {"policy": _OBJ, "annotations": _OBJ}, ("policy", "annotations")),
+    _spec("ace_op_tool_reels_render",
+          "Render a real 9:16 vertical MP4 + AAC audio + SRT captions + PNG cover inside the ACE workspace (ace_media_studio.reels_pipeline).",
+          {**_AGENT_PROP, "package": _OBJ, "output_dir": _STR,
+           "width": {"type": "integer"}, "height": {"type": "integer"},
+           "fps": {"type": "integer"}},
+          ("package", "output_dir"), write=True),
+    _spec("ace_op_tool_git_pr",
+          "Create isolated ace-auto/* branch with verified quality receipt, commit target files, and open GitHub PR per host policy.",
+          {**_AGENT_PROP, "task_id": _STR, "receipt_id": _STR, "order_id": _STR,
+           "slug": _STR, "target_files": _STR_ARR, "commit_message": _STR,
+           "pr_title": _STR, "pr_body": _STR, "draft": {"type": "boolean"},
+           "score_bp": {"type": "integer"}},
+          ("task_id", "receipt_id", "order_id", "slug", "target_files", "commit_message", "pr_title"), write=True),
+    _spec("ace_op_tool_git_merge",
+          "Verify anti-TOCTOU head SHA, CI checks, and High-Bar Quality score, then squash-merge PR into main per host policy.",
+          {**_AGENT_PROP, "task_id": _STR, "receipt_id": _STR,
+           "pr_number": {"type": "integer"}, "expected_head_sha": _STR,
+           "score_bp": {"type": "integer"}},
+          ("task_id", "receipt_id", "pr_number", "expected_head_sha"), write=True),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_ORCHESTRATION_V3_SPECS + ACE_TOOLBOX_V3_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -749,7 +899,10 @@ class OperationalBridge:
         self.memory = ConversationalMemoryManager(self.store)
 
     # -- plumbing ---------------------------------------------------------
-    def tools(self) -> list[dict]:
+    def tools(self, *, profile: str = "full") -> list[dict]:
+        if profile == "core":
+            from ace_operational.agent_director import CORE_PROFILE_TOOLS
+            return [s for s in OP_TOOL_SPECS if s["name"] in CORE_PROFILE_TOOLS]
         return list(OP_TOOL_SPECS)
 
     def _agent(self, args: dict) -> str:
@@ -943,7 +1096,12 @@ class OperationalBridge:
             worker_kind=str(args.get("worker_kind") or "coding_worker"),
             objective=str(args["objective"]),
             base_snapshot_hash=str(args.get("base_snapshot_hash") or ""),
-            payload={},
+            payload=dict(args.get("payload") or {}),
+            goal_id=str(args.get("goal_id") or ""),
+            stage_id=str(args.get("stage_id") or ""),
+            required_role=str(args.get("required_role") or ""),
+            required_skills=[str(x) for x in (args.get("required_skills") or [])],
+            acceptance_checks=[dict(c) for c in (args.get("acceptance_checks") or [])],
         )
         self._log("ace_op_work_order_create", args,
                   {"work_order_id": wo["work_order_id"], "created_new": created})
@@ -1922,3 +2080,355 @@ class OperationalBridge:
         return self._run_pkg("ace_presence", "best_time_advisor",
                              "advise", plan,
                              self._pkg_anchor("ace_presence", plan))
+
+    # -- Orchestrator v3 handlers -----------------------------------------
+    def _repo_root_for_git(self) -> Path:
+        if (self.store.workspace / ".git").exists():
+            return self.store.workspace
+        return Path(__file__).resolve().parents[2]
+
+    def _do_ace_op_agent_register(self, args: dict) -> Any:
+        rec = self.store.register_agent(
+            agent_id=str(args["agent_id"]),
+            vendor=str(args["vendor"]),
+            roles=[str(r) for r in (args.get("roles") or ["creator"])],
+            capabilities=[str(c) for c in (args.get("capabilities") or [])],
+            transport=str(args.get("transport") or "mcp_stdio"),
+            status=str(args.get("status") or "ONLINE"),
+            endpoint_or_profile=str(args.get("endpoint_or_profile") or ""),
+        )
+        self._log("ace_op_agent_register", args,
+                  {"agent_id": rec["agent_id"], "vendor": rec["vendor"]})
+        return rec
+
+    def _do_ace_op_agent_heartbeat(self, args: dict) -> Any:
+        rec = self.store.heartbeat_agent(
+            str(args["agent_id"]),
+            status=str(args["status"]) if args.get("status") else None,
+            metadata_updates=dict(args.get("metadata") or {}),
+        )
+        return rec
+
+    def _do_ace_op_agent_list(self, args: dict) -> Any:
+        return {
+            "agents": self.store.list_agents(
+                status=str(args["status"]) if args.get("status") else None,
+                vendor=str(args["vendor"]) if args.get("vendor") else None,
+                role=str(args["role"]) if args.get("role") else None,
+            )
+        }
+
+    def _do_ace_op_agent_orient(self, args: dict) -> Any:
+        from ace_operational.agent_director import orient_agent
+        return orient_agent(
+            self.store,
+            self.memory,
+            agent_id=str(args["agent_id"]),
+            vendor=str(args.get("vendor") or ""),
+            role=str(args.get("role") or ""),
+            goal_id=str(args.get("goal_id") or ""),
+            work_order_id=str(args.get("work_order_id") or ""),
+            objective=str(args.get("objective") or ""),
+            tool_specs=OP_TOOL_SPECS,
+            record_heartbeat=self.allow_writes,
+        )
+
+    def _do_ace_op_goal_create(self, args: dict) -> Any:
+        from ace_operational.orchestrator_playbook import create_goal
+        goal = create_goal(
+            self.store,
+            title=str(args["title"]),
+            user_request=str(args["user_request"]),
+            domain=str(args.get("domain") or "general"),
+            publish_mode=str(args.get("publish_mode") or "auto"),
+            min_quality_score_bp=int(args.get("min_quality_score_bp", 8500)),
+            max_revisions=int(args.get("max_revisions", 3)),
+            require_cross_review=bool(args.get("require_cross_review", True)),
+            preferred_vendors=dict(args.get("preferred_vendors") or {}),
+            stage_configs=dict(args.get("stage_configs") or {}),
+            metadata=dict(args.get("metadata") or {}),
+        )
+        self._log("ace_op_goal_create", args, {"goal_id": goal["goal_id"]})
+        return goal
+
+    def _do_ace_op_goal_list(self, args: dict) -> Any:
+        return {
+            "goals": self.store.list_goals(
+                status=str(args["status"]) if args.get("status") else None,
+                limit=int(args.get("limit") or 50),
+            )
+        }
+
+    def _do_ace_op_goal_status(self, args: dict) -> Any:
+        goal = self.store.get_goal(str(args["goal_id"]))
+        if goal is None:
+            raise KeyError(f"goal not found: {args['goal_id']}")
+        return goal
+
+    def _do_ace_op_goal_tick(self, args: dict) -> Any:
+        from ace_operational.orchestrator_playbook import tick_goal
+        res = tick_goal(
+            self.store,
+            self.memory,
+            goal_id=str(args["goal_id"]),
+            workspace=self.store.workspace,
+            repo_root=self._repo_root_for_git(),
+            allow_executors=bool(args.get("allow_executors", True)),
+        )
+        self._log("ace_op_goal_tick", args,
+                  {"goal_id": str(args["goal_id"]), "action": res.get("action")})
+        return res
+
+    def _do_ace_op_work_order_claim(self, args: dict) -> Any:
+        wo = self.store.claim_work_order(
+            str(args["work_order_id"]),
+            str(args["agent_id"]),
+            ttl_sec=int(args.get("ttl_sec") or 300),
+        )
+        self._log("ace_op_work_order_claim", args, {"work_order_id": wo["work_order_id"]})
+        return wo
+
+    def _do_ace_op_work_order_release(self, args: dict) -> Any:
+        wo = self.store.release_work_order(
+            str(args["work_order_id"]),
+            str(args["agent_id"]),
+            lease_token=str(args["lease_token"]),
+            new_status=str(args.get("new_status") or "PENDING"),
+        )
+        self._log("ace_op_work_order_release", args, {"work_order_id": wo["work_order_id"]})
+        return wo
+
+    def _do_ace_op_work_order_verify(self, args: dict) -> Any:
+        from ace_operational.work_order_verifier import verify_work_order
+        res = verify_work_order(
+            self.store,
+            self.memory,
+            work_order_id=str(args["work_order_id"]),
+            workspace=self.store.workspace,
+            repo_root=self._repo_root_for_git(),
+            verifier_agent=self._agent(args),
+            min_score_bp=int(args["min_score_bp"]) if args.get("min_score_bp") is not None else None,
+        )
+        self._log("ace_op_work_order_verify", args,
+                  {"work_order_id": str(args["work_order_id"]), "passed": res["passed"]})
+        return res
+
+    def _do_ace_op_tool_search(self, args: dict) -> Any:
+        from ace_operational.agent_director import search_tools
+        return search_tools(
+            str(args.get("query") or ""),
+            category=str(args["category"]) if args.get("category") else None,
+            mode=str(args["mode"]) if args.get("mode") else None,
+            tool_specs=OP_TOOL_SPECS,
+            limit=int(args.get("limit") or 12),
+        )
+
+    def _do_ace_op_tool_invoke(self, args: dict) -> Any:
+        target = str(args["tool"])
+        if target == "ace_op_tool_invoke":
+            raise ValueError("ace_op_tool_invoke tidak boleh memanggil dirinya sendiri")
+        return self.call(target, dict(args["arguments"]))
+
+    def _do_ace_op_skill_record_outcome(self, args: dict) -> Any:
+        sk = self.store.record_skill_outcome(
+            str(args["skill_id"]),
+            success=bool(args["success"]),
+            negative_transfer=bool(args.get("negative_transfer", False)),
+        )
+        self._log("ace_op_skill_record_outcome", args,
+                  {"skill_id": sk["skill_id"], "status": sk["status"]})
+        return sk
+
+    def _do_ace_op_skill_absorb(self, args: dict) -> Any:
+        from ace_operational.agent_director import absorb_verified_skill
+        res = absorb_verified_skill(
+            self.store,
+            self.memory,
+            name=str(args["name"]),
+            domain=str(args["domain"]),
+            procedure_steps=[str(x) for x in args["procedure_steps"]],
+            preconditions=[str(x) for x in (args.get("preconditions") or [])],
+            boundary_limitations=[str(x) for x in (args.get("boundary_limitations") or [])],
+            source_refs=[str(x) for x in args["source_refs"]],
+            checks_passed=[str(x) for x in args["checks_passed"]],
+            verified_score_bp=int(args.get("verified_score_bp", 8500)),
+            min_score_bp=int(args.get("min_score_bp", 8500)),
+        )
+        self._log("ace_op_skill_absorb", args, {"accepted": res.get("accepted")})
+        return res
+
+    def _do_ace_op_quality_evaluate(self, args: dict) -> Any:
+        from ace_operational.quality_gate_engine import (
+            DEFAULT_MIN_QUALITY_SCORE_BP,
+            evaluate_code_quality,
+            evaluate_kbm_quality,
+            evaluate_reels_quality,
+            evaluate_research_grounding,
+        )
+        dom = str(args["domain"]).strip().lower()
+        payload = dict(args["payload"])
+        min_bp = int(args.get("min_score_bp", DEFAULT_MIN_QUALITY_SCORE_BP))
+        if dom == "research":
+            return evaluate_research_grounding(
+                payload.get("claims") or [],
+                payload.get("sources") or [],
+                min_score_bp=min_bp,
+                prose_markdown=str(payload.get("prose_markdown") or ""),
+            )
+        if dom == "video_reels":
+            return evaluate_reels_quality(
+                payload,
+                min_score_bp=min_bp,
+                require_rendered_mp4=bool(payload.get("video_path")),
+            )
+        if dom == "kbm_apps":
+            return evaluate_kbm_quality(payload, min_score_bp=min_bp)
+        if dom == "code_evolution":
+            return evaluate_code_quality(
+                self.store.workspace,
+                repo_root=self._repo_root_for_git(),
+                target_files=payload.get("target_files") or (),
+                snippet=str(payload.get("snippet") or ""),
+                test_commands=payload.get("test_commands") or (),
+                min_score_bp=min_bp,
+            )
+        raise ValueError(f"Domain quality gate tidak dikenal: {dom!r}")
+
+    def _do_ace_op_outcome_record(self, args: dict) -> Any:
+        from ace_operational.outcome_calibrator import record_real_outcome
+        res = record_real_outcome(
+            self.store,
+            self.memory,
+            goal_id=str(args["goal_id"]),
+            stage_id=str(args.get("stage_id") or ""),
+            domain=str(args.get("domain") or ""),
+            asset_ref=str(args.get("asset_ref") or ""),
+            predicted_score_bp=int(args["predicted_score_bp"]) if args.get("predicted_score_bp") is not None else None,
+            actual_metrics=dict(args["actual_metrics"]),
+            skill_ids=[str(s) for s in (args.get("skill_ids") or [])],
+        )
+        return res
+
+    def _do_ace_op_calibration_report(self, args: dict) -> Any:
+        from ace_operational.outcome_calibrator import calibration_report
+        return calibration_report(
+            self.store,
+            domain=str(args["domain"]) if args.get("domain") else None,
+        )
+
+    def _do_ace_op_vault_status(self, args: dict) -> Any:
+        from ace_operational.connectors.vault import SecretVault
+        vault = SecretVault(self.store.workspace)
+        if args.get("venue"):
+            return vault.venue_status(str(args["venue"]))
+        return vault.all_status()
+
+    # -- toolbox v3: KBM, Reels, & Git ops --------------------------------
+    def _do_ace_op_tool_kbm_arc_rubric(self, args: dict) -> Any:
+        return self._run_tool("arc_rubric", "score_chapter_pack", dict(args["pack"]))
+
+    def _do_ace_op_tool_kbm_qc(self, args: dict) -> Any:
+        ms = self._ws_path(str(args["manuscript_path"]))
+        cfg = self._ws_path(str(args["title_config_path"]))
+        kw: dict[str, Any] = {}
+        if args.get("min_words") is not None:
+            kw["min_words"] = int(args["min_words"])
+        return self._run_tool("kbm_qc", "audit_manuscript", ms, cfg, **kw)
+
+    def _do_ace_op_tool_kbm_schedule(self, args: dict) -> Any:
+        cat = self._ws_path(str(args["catalog_path"]))
+        kw: dict[str, Any] = {}
+        if args.get("as_of_date"):
+            kw["as_of_date"] = str(args["as_of_date"])
+        if args.get("default_weekly_target") is not None:
+            kw["default_weekly_target"] = int(args["default_weekly_target"])
+        return self._run_tool("kbm_schedule", "build_schedule", cat, **kw)
+
+    def _do_ace_op_tool_kbm_titles(self, args: dict) -> Any:
+        st = self._ws_path(str(args["state_path"]))
+        return self._run_tool("kbm_titles", "build_report", st)
+
+    def _do_ace_op_tool_kbm_royalty(self, args: dict) -> Any:
+        csvs = [self._ws_path(str(p)) for p in args["csv_paths"]]
+        load_map = self._repo_tool("royalty_track", "load_column_map")
+        col_map = load_map(self._ws_path(str(args["map_path"]))) if args.get("map_path") else None
+        return self._run_tool("royalty_track", "summarize_royalties", csvs, column_map=col_map)
+
+    def _do_ace_op_tool_kbm_cover_check(self, args: dict) -> Any:
+        img = self._ws_path(str(args["image_path"]))
+        rules = dict(args["rules"]) if args.get("rules") is not None else None
+        return self._run_tool("cover_check", "check_cover", img, rules=rules)
+
+    def _do_ace_op_tool_reels_retention(self, args: dict) -> Any:
+        plan = dict(args["plan"])
+        return self._run_pkg("ace_media_studio", "scene_retention_predictor",
+                             "forecast", plan, self._pkg_anchor("ace_media_studio", plan))
+
+    def _do_ace_op_tool_reels_metadata(self, args: dict) -> Any:
+        plan = dict(args["plan"])
+        return self._run_pkg("ace_media_studio", "upload_metadata_writer",
+                             "prepare_metadata", plan, self._pkg_anchor("ace_media_studio", plan))
+
+    def _do_ace_op_tool_reels_brand_safety(self, args: dict) -> Any:
+        policy = dict(args["policy"])
+        annotations = dict(args["annotations"])
+        return self._run_pkg("ace_media_studio", "brand_safety_qa",
+                             "audit", policy, self._pkg_anchor("ace_media_studio", policy),
+                             annotations, self._pkg_anchor("ace_media_studio", annotations))
+
+    def _do_ace_op_tool_reels_render(self, args: dict) -> Any:
+        out_dir = self._ws_path(str(args["output_dir"]))
+        from ace_media_studio.reels_pipeline import render_vertical_reels
+        res = render_vertical_reels(
+            dict(args["package"]),
+            out_dir,
+            width=int(args.get("width") or 720),
+            height=int(args.get("height") or 1280),
+            fps=int(args.get("fps") or 24),
+        )
+        self._log("ace_op_tool_reels_render", args,
+                  {"video_path": res["video_path"], "bytes": res["probe"]["bytes"]})
+        return _jsonable(res)
+
+    def _do_ace_op_tool_git_pr(self, args: dict) -> Any:
+        from ace_operational.git_ops import prepare_branch_and_commit, push_and_open_pr
+        repo = self._repo_root_for_git()
+        c_res = prepare_branch_and_commit(
+            repo,
+            self.store,
+            task_id=str(args["task_id"]),
+            receipt_id=str(args["receipt_id"]),
+            order_id=str(args["order_id"]),
+            slug=str(args["slug"]),
+            target_files=[str(x) for x in args["target_files"]],
+            commit_message=str(args["commit_message"]),
+            agent_id=self._agent(args),
+            score_bp=int(args["score_bp"]) if args.get("score_bp") is not None else None,
+        )
+        if not c_res.get("ok"):
+            return c_res
+        p_res = push_and_open_pr(
+            repo,
+            self.store,
+            task_id=str(args["task_id"]),
+            receipt_id=str(args["receipt_id"]),
+            branch=c_res["branch"],
+            title=str(args["pr_title"]),
+            body=str(args.get("pr_body") or args["commit_message"]),
+            draft=bool(args.get("draft", False)),
+            score_bp=int(args["score_bp"]) if args.get("score_bp") is not None else None,
+        )
+        return {"commit": c_res, "pr": p_res}
+
+    def _do_ace_op_tool_git_merge(self, args: dict) -> Any:
+        from ace_operational.git_ops import verify_checks_and_merge_pr
+        return verify_checks_and_merge_pr(
+            self._repo_root_for_git(),
+            self.store,
+            task_id=str(args["task_id"]),
+            receipt_id=str(args["receipt_id"]),
+            pr_number=int(args["pr_number"]),
+            expected_head_sha=str(args["expected_head_sha"]),
+            score_bp=int(args["score_bp"]) if args.get("score_bp") is not None else None,
+        )
+
