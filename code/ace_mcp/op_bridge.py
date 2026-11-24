@@ -393,6 +393,33 @@ ACE_TOOLBOX6_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX6_SPECS
 
+# -- Toolbox batch 7: triage class A (probes/checks). All read-only.
+# regression_probe and inheritance_probe move to triage class C
+# (solver/runner callables); platform_requirements_summary is
+# repo-root scoped (class B).
+ACE_TOOLBOX7_SPECS = (
+    _spec("ace_op_tool_bundle_manifest_check",
+          "Check a bundle manifest's entry names against the required/optional bridge_home sets (tools.bundle_manifest_check).",
+          {"manifest_path": _STR}, ("manifest_path",)),
+    _spec("ace_op_tool_organ_forensics",
+          "Analyze log/journal lines for organ incidents, read-only (tools.organ_forensics).",
+          {"lines": _STR_ARR, "source_name": _STR}, ("lines",)),
+    _spec("ace_op_tool_autobiography_suite",
+          "Build a sealed autobiography question suite from custody history rows (tools.autobiography_probe).",
+          {"history": _ARR}, ("history",)),
+    _spec("ace_op_tool_autobiography_grade",
+          "Grade answers against a sealed autobiography suite: correct, honest-unknown, or fabricated (tools.autobiography_probe).",
+          {"suite": _OBJ, "answers": _OBJ}, ("suite", "answers")),
+    _spec("ace_op_tool_cover_check",
+          "Check a cover image file inside the workspace against the cover rules (tools.cover_check).",
+          {"image_path": _STR}, ("image_path",)),
+    _spec("ace_op_tool_pattern_catalog",
+          "Build the pattern catalog snapshot from workspace files (tools.pattern_catalog).",
+          {"paths": _STR_ARR, "previous": _OBJ}, ("paths",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX7_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1104,3 +1131,38 @@ class OperationalBridge:
     def _do_ace_op_tool_dilemma_validate(self, args: dict) -> Any:
         return self._run_tool("constitution_dilemma",
                               "validate_dilemma_item", dict(args["item"]))
+
+    # -- toolbox batch 7 ---------------------------------------------------
+    def _do_ace_op_tool_bundle_manifest_check(self, args: dict) -> Any:
+        return self._run_tool("bundle_manifest_check",
+                              "check_bundle_manifest",
+                              self._ws_path(str(args["manifest_path"])))
+
+    def _do_ace_op_tool_organ_forensics(self, args: dict) -> Any:
+        kw: dict[str, Any] = {}
+        if args.get("source_name"):
+            kw["source_name"] = str(args["source_name"])
+        return self._run_tool("organ_forensics", "analyze_log_lines",
+                              [str(x) for x in args["lines"]], **kw)
+
+    def _do_ace_op_tool_autobiography_suite(self, args: dict) -> Any:
+        return self._run_tool("autobiography_probe",
+                              "build_autobiography_suite",
+                              list(args["history"]))
+
+    def _do_ace_op_tool_autobiography_grade(self, args: dict) -> Any:
+        return self._run_tool("autobiography_probe",
+                              "grade_autobiography_answers",
+                              dict(args["suite"]), dict(args["answers"]))
+
+    def _do_ace_op_tool_cover_check(self, args: dict) -> Any:
+        return self._run_tool("cover_check", "check_cover",
+                              self._ws_path(str(args["image_path"])))
+
+    def _do_ace_op_tool_pattern_catalog(self, args: dict) -> Any:
+        kw: dict[str, Any] = {}
+        if args.get("previous"):
+            kw["previous"] = dict(args["previous"])
+        return self._run_tool("pattern_catalog", "build_catalog",
+                              [str(self._ws_path(p)) for p in args["paths"]],
+                              **kw)

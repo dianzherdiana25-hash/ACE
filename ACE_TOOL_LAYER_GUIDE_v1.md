@@ -217,3 +217,8 @@ experiment_designer, cycle_planner_sim, quota_failover_sim,
 specialization_delta, writeback_diagnose, constitution
 dilemma validate. Total permukaan agen: 81 tool; suite
 ace_mcp 50 tes lulus.
+
+Batch 7 (6 tool, semua baca-saja, dari kelas A triase):
+bundle_manifest_check, organ_forensics, autobiography
+suite + grade, cover_check, pattern_catalog. Total
+permukaan agen: 87 tool; suite ace_mcp 52 tes lulus.

@@ -477,5 +477,35 @@ class ToolboxBatch6Tests(unittest.TestCase):
         self.assertIsInstance(diag, dict)
 
 
+class ToolboxBatch7Tests(unittest.TestCase):
+    """Batch 7: triage class A probes/checks, all read-only."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch7_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX7_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX7_SPECS), 6)
+        for spec in ACE_TOOLBOX7_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_forensics_and_autobiography(self) -> None:
+        out = self.ro.call("ace_op_tool_organ_forensics", {
+            "lines": ["2026-11-24T00:00:00Z INFO siklus mulai",
+                      "2026-11-24T00:01:00Z ERROR organ front timeout"]})
+        self.assertIsInstance(out, dict)
+        suite = self.ro.call("ace_op_tool_autobiography_suite", {
+            "history": [{"decision_id": "d1", "decision": "uji segel",
+                         "date": "2026-11-01", "reason": "uji",
+                         "outcome": "lulus"}]})
+        self.assertIsInstance(suite, dict)
+
+
 if __name__ == "__main__":
     unittest.main()
