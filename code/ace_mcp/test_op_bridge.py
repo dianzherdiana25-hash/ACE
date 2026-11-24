@@ -1465,5 +1465,94 @@ class ToolboxBatch20Tests(unittest.TestCase):
         self.assertEqual(group["ratio_p90"], "2")
 
 
+_POLICY = {
+    "schema": "ace.guardian.compile-rules.v1", "revision": "uji_v1",
+    "actions": [{"kind": "local_read",
+                 "fields": {"verified": "bool", "sealed": "bool"}}],
+    "lines": ["allow read_verified local_read if verified=true and sealed=false",
+              "deny preserve_sealed local_read if sealed=true"]}
+
+
+class ToolboxBatch21Tests(unittest.TestCase):
+    """Batch 21: guardian gate machinery + presence forecasters."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch21_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX21_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX21_SPECS), 5)
+        for spec in ACE_TOOLBOX21_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_guardian_gate_machinery(self) -> None:
+        action = {"id": "act_1", "kind": "local_read",
+                  "facts": {"verified": True, "sealed": False}}
+        gate = {"schema": "ace.guardian.action-gate.v1",
+                "policy": _POLICY, "actions": [action]}
+        decided = self.ro.call("ace_op_tool_guardian_action_gate",
+                               {"plan": gate})
+        self.assertEqual(decided["decisions"][0]["outcome"], "allow")
+        self.assertEqual(decided["decisions"][0]["matched_rules"],
+                         ["read_verified"])
+
+        regression = {"schema": "ace.guardian.gate-regression.v1",
+                      "policy": _POLICY,
+                      "cases": [{"id": "kasus_1", "action": action,
+                                 "expect": "allow",
+                                 "first_rule": "read_verified"}],
+                      "required_kinds": ["local_read"]}
+        pack = self.ro.call("ace_op_tool_guardian_gate_regression",
+                            {"plan": regression})
+        self.assertTrue(pack["passed"])
+        self.assertEqual(pack["verified"], 1)
+
+        budget = {"schema": "ace.guardian.cycle-budget.v1",
+                  "total_ms": 1000, "spent_ms": 100,
+                  "remaining_steps": [
+                      {"id": "wajib", "estimated_ms": 200,
+                       "maximum_ms": 300, "required": True},
+                      {"id": "opsional", "estimated_ms": 100,
+                       "maximum_ms": 200, "required": False}]}
+        planned = self.ro.call("ace_op_tool_guardian_cycle_budget",
+                               {"plan": budget})
+        self.assertEqual(planned["status"], "planned")
+        self.assertEqual(planned["remaining_ms"], 600)
+        self.assertEqual([row["decision"] for row in planned["steps"]],
+                         ["run_fixture", "run_fixture"])
+
+    def test_presence_forecasters(self) -> None:
+        risk = {"schema": "ace.presence.deadline-risk.v1",
+                "history": [{"kind": "tulis", "minutes": 30},
+                            {"kind": "tulis", "minutes": 90}],
+                "tasks": [{"id": "t1", "kind": "tulis",
+                           "minutes_to_deadline": 60}],
+                "minimum_sample": 1}
+        out = self.ro.call("ace_op_tool_presence_deadline_risk",
+                           {"plan": risk})
+        row = out["tasks"][0]
+        self.assertEqual(row["samples"], 2)
+        self.assertEqual(row["past_misses"], 1)
+        self.assertEqual(row["probability"], "1/2")
+
+        best = {"schema": "ace.presence.best-time.v1", "duration": 60,
+                "busy": [],
+                "candidates": [{"id": "pagi",
+                                "starts": "2026-01-05T09:00:00Z"}],
+                "focus_history": [{"weekday": 0, "hour": 9,
+                                   "completed": 3, "tried": 4,
+                                   "source": "test:fokus"}]}
+        advised = self.ro.call("ace_op_tool_presence_best_time",
+                               {"plan": best})
+        self.assertEqual(len(advised["candidates"]), 1)
+        self.assertEqual(advised["candidates"][0]["focus_fraction"], "3/4")
+
+
 if __name__ == "__main__":
     unittest.main()

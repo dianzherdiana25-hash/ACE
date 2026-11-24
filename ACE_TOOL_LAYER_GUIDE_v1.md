@@ -355,3 +355,19 @@ cukup). Catatan fixture: ID di ace_guardian harus kanonis
 huruf kecil (tanpa tanda hubung) dan alasan putusan gate
 adalah ID, bukan teks bebas. Total permukaan agen: 144
 tool; suite ace_mcp 87 tes lulus.
+
+Batch 21 (5 tool, semua baca-saja): mesin gate
+ace_guardian — action gate (putusan aksi terhadap kebijakan
+aturan terkompilasi dengan pengetikan fakta ketat; default
+deny dengan alasan tercatat), regresi gate (setiap kasus
+harus menghasilkan outcome yang diharapkan lewat aturan
+pertama yang diharapkan, dan setiap kelas aksi wajib harus
+terlatih), dan perencana anggaran siklus (cadangan langkah
+wajib didahulukan; held bila langkah wajib melampaui
+plafonnya sendiri); ace_presence — prakiraan risiko tenggat
+(probabilitas keterlambatan per kelas tugas dari durasi yang
+benar-benar tercatat, Laplace-smoothed, ditahan di bawah
+sampel minimum) dan penasihat waktu terbaik (peringkat
+jendela bebas konflik dari keberhasilan fokus yang teramati
+pada hari/jam itu). Total permukaan agen: 149 tool; suite
+ace_mcp 90 tes lulus.

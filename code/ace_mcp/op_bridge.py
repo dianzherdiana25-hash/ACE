@@ -709,6 +709,28 @@ ACE_TOOLBOX20_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX20_SPECS
 
+# -- Toolbox batch 21: guardian gate machinery (action gate,
+# regression, cycle budget) and presence forecasting advisors.
+ACE_TOOLBOX21_SPECS = (
+    _spec("ace_op_tool_guardian_action_gate",
+          "Decide actions against a compiled rule policy with strict fact typing; unmatched or invalid actions default to deny with the reason recorded (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_guardian_gate_regression",
+          "Run a policy regression pack: every case must produce the expected outcome via the expected first rule, and every required action kind must be exercised (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_guardian_cycle_budget",
+          "Plan cycle steps against the real remaining budget, reserving the mandatory steps first; holds when a required step exceeds its own ceiling (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_presence_deadline_risk",
+          "Estimate deadline-miss probability per task kind from actually recorded durations (Laplace-smoothed; withheld below the minimum sample) (code/ace_presence).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_presence_best_time",
+          "Rank conflict-free candidate windows for a heavy task by observed focus success at that weekday/hour (code/ace_presence).",
+          {"plan": _OBJ}, ("plan",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX21_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1868,4 +1890,35 @@ class OperationalBridge:
         plan = args["plan"]
         return self._run_pkg("ace_presence", "estimate_calibrator",
                              "calibrate", plan,
+                             self._pkg_anchor("ace_presence", plan))
+
+    # -- toolbox batch 21 --------------------------------------------------
+    def _do_ace_op_tool_guardian_action_gate(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "action_gate",
+                             "assess", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_guardian_gate_regression(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "gate_regression_runner",
+                             "regress", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_guardian_cycle_budget(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "cycle_budget_guard",
+                             "plan_budget", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_presence_deadline_risk(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_presence", "deadline_risk_forecaster",
+                             "forecast", plan,
+                             self._pkg_anchor("ace_presence", plan))
+
+    def _do_ace_op_tool_presence_best_time(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_presence", "best_time_advisor",
+                             "advise", plan,
                              self._pkg_anchor("ace_presence", plan))
