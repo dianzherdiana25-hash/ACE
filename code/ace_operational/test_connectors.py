@@ -159,7 +159,7 @@ class ConnectorsTests(unittest.TestCase):
             self.skipTest("ffmpeg / ffprobe tidak tersedia")
 
         pkg = _high_bar_reels_pkg()
-        bundle = render_vertical_reels(pkg, self.ws / "reels_out", width=720, height=1280, fps=24)
+        bundle = render_vertical_reels(pkg, self.ws / "reels_out", width=720, height=1280, fps=24, renderer="ffmpeg")
 
         # Low quality package strictly refused even with dry_run=False
         weak_pkg = {

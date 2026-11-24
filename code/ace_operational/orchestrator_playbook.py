@@ -341,13 +341,14 @@ def _run_executor_stage(store: Any, goal: dict[str, Any], stage: dict[str, Any],
             width=int(cfg.get("width", 720)),
             height=int(cfg.get("height", 1280)),
             fps=int(cfg.get("fps", 24)),
+            renderer=str(cfg.get("renderer") or "auto"),
         )
         pkg["video_path"] = bundle["video_path"]
         pkg["cover_path"] = bundle["cover_path"]
         rcpt = store.record_receipt(
             task_id=goal["parent_task_id"],
             action_kind="reels_render_mp4",
-            input_data=json.dumps({"goal_id": goal["goal_id"]}),
+            input_data=json.dumps({"goal_id": goal["goal_id"], "renderer": bundle.get("renderer", "auto")}),
             output_data=json.dumps(bundle["probe"], sort_keys=True),
             command_or_operation="reels_pipeline.render_vertical_reels",
             exit_code=0,

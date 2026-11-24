@@ -131,26 +131,95 @@ def _render_scene_frame(
     return frame
 
 
-def _synthesize_harmonic_bed_wav(duration_sec: float, *, rate: int = 16000) -> bytes:
-    """Create a pleasant subtle non-silent PCM16 WAV ambient bed timed exactly to duration_sec."""
+_REMOTION_STUDIO_DIR = Path(__file__).resolve().parent / "remotion_studio"
+
+# Chord progression in Hz (Cadd9 -> G6 -> Am7 -> Fmaj7 bass+triad)
+_CHORD_PROGRESSION: tuple[tuple[float, float, float, float], ...] = (
+    (130.81, 261.63, 329.63, 392.00),  # C
+    (98.00, 246.94, 293.66, 392.00),   # G
+    (110.00, 220.00, 261.63, 329.63),  # Am
+    (87.31, 220.00, 261.63, 349.23),   # F
+)
+
+
+def is_remotion_available() -> bool:
+    """Return True when Node.js, Remotion render runner, and @remotion/renderer are installed."""
+    if not shutil.which("node"):
+        return False
+    return (
+        (_REMOTION_STUDIO_DIR / "src" / "render.mjs").is_file()
+        and (_REMOTION_STUDIO_DIR / "node_modules" / "@remotion" / "renderer").is_dir()
+    )
+
+
+def get_studio_capabilities() -> dict[str, Any]:
+    """Inspect installed video rendering engines & media binaries without network calls."""
+    chromium_bin = next(
+        (p for p in ("/usr/bin/chromium", "/usr/bin/google-chrome") if Path(p).exists()),
+        shutil.which("chromium") or shutil.which("google-chrome"),
+    )
+    return {
+        "ffmpeg": bool(shutil.which("ffmpeg")),
+        "ffprobe": bool(shutil.which("ffprobe")),
+        "node": bool(shutil.which("node")),
+        "remotion": is_remotion_available(),
+        "chromium": chromium_bin,
+        "espeak_ng": bool(shutil.which("espeak-ng")),
+        "remotion_studio_dir": str(_REMOTION_STUDIO_DIR),
+    }
+
+
+def _synthesize_harmonic_bed_wav(
+    duration_sec: float,
+    *,
+    rate: int = 22050,
+    scene_offsets_sec: tuple[float, ...] = (),
+) -> bytes:
+    """Synthesize an uplifting 120-BPM chord-progression bed + subtle scene transition chimes."""
     total_frames = max(1600, min(9_600_000, int(round(duration_sec * rate))))
-    freqs = (220.0, 277.18, 329.63)
     samples: list[int] = []
     two_pi = 2.0 * math.pi
-    fade = min(rate // 4, total_frames // 4)
+    fade_in = min(int(rate * 0.25), total_frames // 5)
+    fade_out = min(int(rate * 0.45), total_frames // 4)
+    chord_len_sec = 2.5
+
+    transitions = [max(0.0, float(t)) for t in scene_offsets_sec if float(t) > 0.1]
+
     for n in range(total_frames):
         t = n / rate
         env = 1.0
-        if fade > 0 and n < fade:
-            env = n / fade
-        elif fade > 0 and n > total_frames - fade:
-            env = (total_frames - n) / fade
-        val = 0.0
-        for idx, f in enumerate(freqs):
-            val += math.sin(two_pi * f * t) / (idx + 1)
-        # Subtle pulse every 0.5s + gentle audible level (~-18dBFS).
-        pulse = 0.75 + 0.25 * math.sin(two_pi * 2.0 * t)
-        amp = int(max(-32767, min(32767, val * 1400.0 * env * pulse)))
+        if fade_in > 0 and n < fade_in:
+            env = n / fade_in
+        elif fade_out > 0 and n > total_frames - fade_out:
+            env = (total_frames - n) / fade_out
+
+        chord_idx = int(t / chord_len_sec) % len(_CHORD_PROGRESSION)
+        chord = _CHORD_PROGRESSION[chord_idx]
+        bass_f, tri_a, tri_b, tri_c = chord
+
+        # Soft quarter-note rhythmic envelope (120 BPM -> beat every 0.5s)
+        beat_phase = (t % 0.5) / 0.5
+        kick_env = math.exp(-beat_phase * 7.5)
+        pad_pulse = 0.72 + 0.28 * math.sin(two_pi * 2.0 * t)
+
+        bass_wave = (math.sin(two_pi * bass_f * t) + 0.35 * math.sin(two_pi * (bass_f * 2.0) * t)) * (0.45 + 0.55 * kick_env)
+        pad_wave = (
+            0.55 * math.sin(two_pi * tri_a * t)
+            + 0.45 * math.sin(two_pi * tri_b * t)
+            + 0.40 * math.sin(two_pi * tri_c * t)
+            + 0.12 * math.sin(two_pi * (tri_b * 2.0) * t)
+        ) * pad_pulse
+
+        chime = 0.0
+        for tr in transitions:
+            dt = t - tr
+            if 0.0 <= dt < 0.28:
+                chime_env = math.exp(-dt * 14.0)
+                chime += math.sin(two_pi * 880.0 * dt) * chime_env * 0.55
+                chime += math.sin(two_pi * 1318.5 * dt) * chime_env * 0.35
+
+        mixed = (0.48 * bass_wave + 0.42 * pad_wave + chime) * env
+        amp = int(max(-32767, min(32767, mixed * 2600.0)))
         samples.append(amp)
     return encode_wav(Audio(rate=rate, channels=1, samples=tuple(samples)))
 
@@ -209,6 +278,211 @@ def _ffprobe_mp4(mp4_path: Path) -> dict[str, Any]:
     }
 
 
+def _auto_highlight_word(headline: str, promise_terms: list[str], action_terms: list[str]) -> str:
+    upper_hl = headline.upper()
+    for token in upper_hl.split():
+        clean = token.strip("?!.,:;")
+        if any(ch.isdigit() for ch in clean):
+            return clean
+    for term in (*promise_terms, *action_terms):
+        t_up = str(term).strip().upper()
+        if len(t_up) >= 3 and t_up in upper_hl:
+            return t_up
+    words = [w.strip("?!.,:;") for w in upper_hl.split() if len(w.strip("?!.,:;")) >= 4]
+    return words[0] if words else ""
+
+
+def _build_remotion_props(
+    package: dict[str, Any],
+    scenes: list[dict[str, Any]],
+    *,
+    width: int,
+    height: int,
+    fps: int,
+) -> dict[str, Any]:
+    title = str(package.get("title") or "ACE Reels Studio")
+    promise_terms = [str(x) for x in (package.get("promise_terms") or ())]
+    action_terms = [str(x) for x in (package.get("action_terms") or ())]
+    rem_scenes: list[dict[str, Any]] = []
+    total = len(scenes)
+    for idx, sc in enumerate(scenes, 1):
+        narration = str(sc.get("narration") or sc.get("text") or "").strip()
+        raw_hl = str(sc.get("headline") or "").strip()
+        if not raw_hl:
+            first_clause = narration.split(".")[0].split("!")[0].strip()
+            words = first_clause.split()
+            raw_hl = " ".join(words[:7]) if words else title
+        role_lbl = "HOOK 3 DETIK" if idx == 1 else ("AKSI SEKARANG" if idx == total else "STRATEGI & BUKTI")
+        tag = str(sc.get("tag") or f"{idx:02d} • {role_lbl}")
+        hl_word = str(sc.get("highlight_word") or sc.get("highlightWord") or _auto_highlight_word(raw_hl, promise_terms, action_terms))
+        rem_scenes.append({
+            "id": str(sc.get("id") or f"sc_{idx}"),
+            "tag": tag,
+            "headline": raw_hl.upper(),
+            "narration": narration,
+            "highlightWord": hl_word,
+            "metricLabel": str(sc.get("metric_label") or sc.get("metricLabel") or ("RETENSI" if idx == 1 else "QUALITY GATE")),
+            "metricValue": str(sc.get("metric_value") or sc.get("metricValue") or ("HIGH IMPACT" if idx == 1 else f"BAGIAN {idx}/{total}")),
+            "cta": str(sc.get("cta") or (package.get("cta") if idx == total else "") or ""),
+            "durationMs": int(sc["duration_ms"]),
+            "sourceRef": str(sc.get("source_ref") or package.get("source_ref") or ""),
+        })
+
+    return {
+        "title": title,
+        "channelBadge": str(package.get("channel_badge") or package.get("channelBadge") or "@ACE.Studio"),
+        "subtitleBadge": str(package.get("subtitle_badge") or package.get("subtitleBadge") or "Verified Research • High-Bar QA"),
+        "cta": str(package.get("cta") or "SIMPAN & IKUTI SEKARANG"),
+        "qualityScoreBp": int(package.get("quality_score_bp") or package.get("qualityScoreBp") or 9200),
+        "width": width,
+        "height": height,
+        "fps": fps,
+        "scenes": rem_scenes,
+    }
+
+
+def _mux_video_and_audio(
+    ffmpeg: str,
+    *,
+    raw_video: Path,
+    bed_wav: Path,
+    mp4_out: Path,
+    total_sec: float,
+    narration_wav: Path | None = None,
+) -> None:
+    if narration_wav is not None and narration_wav.is_file():
+        cmd = [
+            ffmpeg,
+            "-y",
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-nostdin",
+            "-i",
+            str(raw_video),
+            "-i",
+            str(narration_wav),
+            "-i",
+            str(bed_wav),
+            "-filter_complex",
+            "[1:a]apad[voice];[2:a]volume=0.22[bed];[voice][bed]amix=inputs=2:duration=longest:normalize=0[aout]",
+            "-map",
+            "0:v:0",
+            "-map",
+            "[aout]",
+            "-c:v",
+            "copy",
+            "-c:a",
+            "aac",
+            "-b:a",
+            "192k",
+            "-ac",
+            "2",
+            "-t",
+            f"{total_sec:.3f}",
+            "-movflags",
+            "+faststart",
+            str(mp4_out),
+        ]
+    else:
+        cmd = [
+            ffmpeg,
+            "-y",
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-nostdin",
+            "-i",
+            str(raw_video),
+            "-i",
+            str(bed_wav),
+            "-map",
+            "0:v:0",
+            "-map",
+            "1:a:0",
+            "-c:v",
+            "copy",
+            "-c:a",
+            "aac",
+            "-b:a",
+            "192k",
+            "-ac",
+            "2",
+            "-t",
+            f"{total_sec:.3f}",
+            "-movflags",
+            "+faststart",
+            str(mp4_out),
+        ]
+    res = subprocess.run(cmd, capture_output=True, text=True, timeout=60, check=False)
+    if res.returncode != 0 or not mp4_out.is_file():
+        raise ContractError(f"Mux audio-video MP4 gagal: {res.stderr.strip()[:260]}")
+
+
+def _render_with_remotion(
+    ffmpeg: str,
+    package: dict[str, Any],
+    scenes: list[dict[str, Any]],
+    *,
+    scratch: Path,
+    mp4_out: Path,
+    cover_out: Path,
+    wav_file: Path,
+    narration_wav: Path | None,
+    width: int,
+    height: int,
+    fps: int,
+    crf: int,
+    total_sec: float,
+    timeout_sec: int,
+) -> dict[str, Any]:
+    props_path = scratch / "remotion_props.json"
+    raw_mp4 = scratch / "remotion_raw.mp4"
+    props = _build_remotion_props(package, scenes, width=width, height=height, fps=fps)
+    props_path.write_text(json.dumps(props, ensure_ascii=False), encoding="utf-8")
+
+    node_bin = shutil.which("node")
+    if not node_bin:
+        raise ContractError("Node.js tidak tersedia untuk Remotion.")
+    render_script = _REMOTION_STUDIO_DIR / "src" / "render.mjs"
+    cmd = [
+        node_bin,
+        str(render_script),
+        "--input",
+        str(props_path),
+        "--output",
+        str(raw_mp4),
+        "--cover",
+        str(cover_out),
+        "--crf",
+        str(crf),
+    ]
+    res = subprocess.run(
+        cmd,
+        cwd=str(_REMOTION_STUDIO_DIR),
+        capture_output=True,
+        text=True,
+        timeout=timeout_sec,
+        check=False,
+    )
+    if res.returncode != 0 or not raw_mp4.is_file():
+        err_msg = (res.stderr or res.stdout or "").strip()[:360]
+        raise ContractError(f"Remotion render gagal: {err_msg}")
+
+    _mux_video_and_audio(
+        ffmpeg,
+        raw_video=raw_mp4,
+        bed_wav=wav_file,
+        mp4_out=mp4_out,
+        total_sec=total_sec,
+        narration_wav=narration_wav,
+    )
+    try:
+        return json.loads((res.stdout or "{}").strip().splitlines()[-1])
+    except Exception:
+        return {"ok": True, "renderer": "remotion"}
+
+
 def render_vertical_reels(
     package: dict[str, Any],
     output_dir: str | Path,
@@ -218,8 +492,14 @@ def render_vertical_reels(
     fps: int = 24,
     crf: int = 22,
     narration_wav_path: str | Path | None = None,
+    renderer: str = "auto",
+    timeout_sec: int = 240,
 ) -> dict[str, Any]:
-    """Render a real vertical 9:16 Reels bundle (`reels.mp4`, `cover.png`, `captions.srt`, `metadata_receipt.json`)."""
+    """Render a real vertical 9:16 Reels bundle (`reels.mp4`, `cover.png`, `captions.srt`, `metadata_receipt.json`).
+
+    Uses Remotion React studio (`renderer="remotion"` or `"auto"` when installed) for high-craft
+    motion graphics & synchronized karaoke captions, with deterministic `ffmpeg` raster fallback.
+    """
     ffmpeg = shutil.which("ffmpeg")
     if not ffmpeg:
         raise ContractError("ffmpeg tidak tersedia untuk render Reels nyata.")
@@ -227,17 +507,24 @@ def render_vertical_reels(
         raise ContractError(f"Dimensi Reels harus rasio 9:16 portrait (diberikan {width}x{height}).")
     if fps not in (24, 30):
         raise ContractError("fps Reels harus 24 atau 30.")
+    req_renderer = str(renderer or "auto").strip().lower()
+    if req_renderer not in ("auto", "remotion", "ffmpeg"):
+        raise ContractError(f"Renderer Reels tidak dikenal: {renderer} (gunakan auto, remotion, atau ffmpeg).")
+    if req_renderer == "remotion" and not is_remotion_available():
+        raise ContractError("Remotion Studio belum terpasang di code/ace_media_studio/remotion_studio.")
 
     raw_scenes = package.get("scenes") or package.get("script_scenes") or []
     if not isinstance(raw_scenes, list) or not raw_scenes:
         raise ContractError("Paket Reels membutuhkan minimal 1 scene.")
     scenes: list[dict[str, Any]] = []
+    scene_offsets_sec: list[float] = []
     total_ms = 0
     for idx, raw in enumerate(raw_scenes, 1):
         item = dict(raw) if isinstance(raw, dict) else {"narration": str(raw)}
         dur_ms = max(1000, min(45_000, int(item.get("duration_ms") or 3000)))
         item["duration_ms"] = dur_ms
         item.setdefault("id", f"sc_{idx}")
+        scene_offsets_sec.append(total_ms / 1000.0)
         total_ms += dur_ms
         scenes.append(item)
 
@@ -252,91 +539,110 @@ def render_vertical_reels(
     srt_out = out_dir / "captions.srt"
     meta_out = out_dir / "metadata_receipt.json"
 
+    use_remotion = req_renderer == "remotion" or (req_renderer == "auto" and is_remotion_available())
+    actual_renderer = "remotion" if use_remotion else "ffmpeg"
+
     with tempfile.TemporaryDirectory(prefix="ace-reels-render-") as tmp:
         scratch = Path(tmp)
-        concat_lines: list[str] = []
-        cover_raster: Raster | None = None
-        for idx, sc in enumerate(scenes, 1):
-            raster = _render_scene_frame(sc, index=idx, total_scenes=len(scenes), base_width=720, base_height=1280)
-            if idx == 1:
-                cover_raster = raster
-            img_file = scratch / f"scene_{idx:03d}.ppm"
-            img_file.write_bytes(ppm(raster))
-            dur_s = sc["duration_ms"] / 1000.0
-            concat_lines.append(f"file '{img_file.as_posix()}'")
-            concat_lines.append(f"duration {dur_s:.3f}")
-        # FFmpeg concat demuxer requires last file repeated cleanly without trailing frame loss.
-        last_img = scratch / f"scene_{len(scenes):03d}.ppm"
-        concat_lines.append(f"file '{last_img.as_posix()}'")
-        concat_txt = scratch / "concat.txt"
-        concat_txt.write_text("\n".join(concat_lines) + "\n", encoding="utf-8")
-
-        wav_file = scratch / "audio.wav"
-        if narration_wav_path and Path(narration_wav_path).is_file():
-            wav_file.write_bytes(Path(narration_wav_path).read_bytes())
-        else:
-            # Try offline espeak-ng if installed and requested; otherwise harmonic WAV bed.
-            tts_bin = shutil.which("espeak-ng") if package.get("use_offline_tts") else None
-            if tts_bin:
-                narration_all = ". ".join(str(s.get("narration") or "") for s in scenes if s.get("narration"))
-                tts_res = subprocess.run(
-                    [tts_bin, "-w", str(wav_file), narration_all[:800]],
-                    capture_output=True,
-                    timeout=30,
-                    check=False,
-                )
-                if tts_res.returncode != 0 or not wav_file.is_file() or wav_file.stat().st_size == 0:
-                    wav_file.write_bytes(_synthesize_harmonic_bed_wav(total_sec))
-            else:
-                wav_file.write_bytes(_synthesize_harmonic_bed_wav(total_sec))
+        wav_file = scratch / "bed.wav"
+        wav_file.write_bytes(
+            _synthesize_harmonic_bed_wav(total_sec, scene_offsets_sec=tuple(scene_offsets_sec))
+        )
+        narr_path = Path(narration_wav_path).resolve() if narration_wav_path else None
+        if narr_path is None and package.get("use_offline_tts") and shutil.which("espeak-ng"):
+            tts_wav = scratch / "tts.wav"
+            narration_all = ". ".join(str(s.get("narration") or "") for s in scenes if s.get("narration"))
+            tts_res = subprocess.run(
+                [shutil.which("espeak-ng") or "espeak-ng", "-w", str(tts_wav), narration_all[:800]],
+                capture_output=True,
+                timeout=30,
+                check=False,
+            )
+            if tts_res.returncode == 0 and tts_wav.is_file() and tts_wav.stat().st_size > 0:
+                narr_path = tts_wav
 
         srt_text = _build_srt(scenes)
         srt_out.write_text(srt_text, encoding="utf-8")
-        if cover_raster is None:
-            cover_raster = blank(720, 1280, (18, 22, 36))
-        cover_out.write_bytes(png(cover_raster))
 
-        scale_filter = f"scale={width}:{height}:flags=lanczos,fps={fps},format=yuv420p"
-        cmd = [
-            ffmpeg,
-            "-y",
-            "-hide_banner",
-            "-loglevel",
-            "error",
-            "-nostdin",
-            "-f",
-            "concat",
-            "-safe",
-            "0",
-            "-i",
-            str(concat_txt),
-            "-i",
-            str(wav_file),
-            "-vf",
-            scale_filter,
-            "-map",
-            "0:v:0",
-            "-map",
-            "1:a:0",
-            "-c:v",
-            "libx264",
-            "-preset",
-            "fast",
-            "-crf",
-            str(crf),
-            "-c:a",
-            "aac",
-            "-b:a",
-            "128k",
-            "-t",
-            f"{total_sec:.3f}",
-            "-movflags",
-            "+faststart",
-            str(mp4_out),
-        ]
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=120, check=False)
-        if res.returncode != 0 or not mp4_out.is_file():
-            raise ContractError(f"Render MP4 gagal: {res.stderr.strip()[:260]}")
+        if use_remotion:
+            _render_with_remotion(
+                ffmpeg,
+                package,
+                scenes,
+                scratch=scratch,
+                mp4_out=mp4_out,
+                cover_out=cover_out,
+                wav_file=wav_file,
+                narration_wav=narr_path,
+                width=width,
+                height=height,
+                fps=fps,
+                crf=crf,
+                total_sec=total_sec,
+                timeout_sec=timeout_sec,
+            )
+            if not cover_out.is_file():
+                cover_raster = _render_scene_frame(scenes[0], index=1, total_scenes=len(scenes), base_width=720, base_height=1280)
+                cover_out.write_bytes(png(cover_raster))
+        else:
+            concat_lines: list[str] = []
+            cover_raster: Raster | None = None
+            for idx, sc in enumerate(scenes, 1):
+                raster = _render_scene_frame(sc, index=idx, total_scenes=len(scenes), base_width=720, base_height=1280)
+                if idx == 1:
+                    cover_raster = raster
+                img_file = scratch / f"scene_{idx:03d}.ppm"
+                img_file.write_bytes(ppm(raster))
+                dur_s = sc["duration_ms"] / 1000.0
+                concat_lines.append(f"file '{img_file.as_posix()}'")
+                concat_lines.append(f"duration {dur_s:.3f}")
+            last_img = scratch / f"scene_{len(scenes):03d}.ppm"
+            concat_lines.append(f"file '{last_img.as_posix()}'")
+            concat_txt = scratch / "concat.txt"
+            concat_txt.write_text("\n".join(concat_lines) + "\n", encoding="utf-8")
+
+            if cover_raster is None:
+                cover_raster = blank(720, 1280, (18, 22, 36))
+            cover_out.write_bytes(png(cover_raster))
+
+            raw_ff_mp4 = scratch / "ffmpeg_raw.mp4"
+            scale_filter = f"scale={width}:{height}:flags=lanczos,fps={fps},format=yuv420p"
+            cmd = [
+                ffmpeg,
+                "-y",
+                "-hide_banner",
+                "-loglevel",
+                "error",
+                "-nostdin",
+                "-f",
+                "concat",
+                "-safe",
+                "0",
+                "-i",
+                str(concat_txt),
+                "-vf",
+                scale_filter,
+                "-c:v",
+                "libx264",
+                "-preset",
+                "fast",
+                "-crf",
+                str(crf),
+                "-t",
+                f"{total_sec:.3f}",
+                str(raw_ff_mp4),
+            ]
+            res = subprocess.run(cmd, capture_output=True, text=True, timeout=120, check=False)
+            if res.returncode != 0 or not raw_ff_mp4.is_file():
+                raise ContractError(f"Render MP4 gagal: {res.stderr.strip()[:260]}")
+            _mux_video_and_audio(
+                ffmpeg,
+                raw_video=raw_ff_mp4,
+                bed_wav=wav_file,
+                mp4_out=mp4_out,
+                total_sec=total_sec,
+                narration_wav=narr_path,
+            )
 
     probe = _ffprobe_mp4(mp4_out)
     facts_in = package.get("facts") or [
@@ -372,6 +678,7 @@ def render_vertical_reels(
 
     return {
         "schema": "ace.media.reels_bundle.v1",
+        "renderer": actual_renderer,
         "output_dir": str(out_dir),
         "video_path": str(mp4_out),
         "cover_path": str(cover_out),

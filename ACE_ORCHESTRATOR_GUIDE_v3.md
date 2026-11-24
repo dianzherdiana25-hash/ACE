@@ -105,6 +105,8 @@ PYTHONPATH=code python3 -m ace_mcp.cli --workspace ~/.local/share/ace/workspace 
 python3 tools/ace_autonomous_daemon.py --mode orchestrator --workspace ~/.local/share/ace/workspace
 ```
 
+> **Renderer Video 9:16 (Remotion + FFmpeg)**: Secara default (`renderer="auto"`), [`reels_pipeline.py`](code/ace_media_studio/reels_pipeline.py) memakai **Remotion Studio** (`code/ace_media_studio/remotion_studio/`, React + Chromium headless) untuk animasi spring 9:16, progress bar segmen, kartu metrik, waveform, subtitle karaoke sinkron per kata, serta audio progresi akord & transisi AAC stereo. Jika Node/Remotion belum terpasang, pipeline otomatis fallback ke rasterizer `ffmpeg`. Anda dapat memaksa mode lewat parameter `renderer` (`auto | remotion | ffmpeg`) pada tool MCP `ace_op_tool_reels_render` atau `stage_configs["RENDER_9_16_MP4"]`.
+
 ### B. Web Relay Untuk ChatGPT Web / Gemini Web / Muse.ai Web
 ```bash
 # Ekspor prompt siap salin:

@@ -1,0 +1,24 @@
+{
+  "name": "ace-remotion-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Remotion 9:16 Vertical Reels Studio for ACE Orchestrator v3",
+  "scripts": {
+    "render:reels": "node src/render.mjs",
+    "studio": "npx remotion studio src/index.ts"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.546",
+    "@remotion/cli": "4.0.546",
+    "@remotion/renderer": "4.0.546",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.546"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.2"
+  }
+}

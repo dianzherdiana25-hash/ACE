@@ -859,10 +859,11 @@ ACE_TOOLBOX_V3_SPECS = (
           "Audit Reels script track annotations for blocked categories/phrases (ace_media_studio.brand_safety_qa).",
           {"policy": _OBJ, "annotations": _OBJ}, ("policy", "annotations")),
     _spec("ace_op_tool_reels_render",
-          "Render a real 9:16 vertical MP4 + AAC audio + SRT captions + PNG cover inside the ACE workspace (ace_media_studio.reels_pipeline).",
+          "Render a real 9:16 vertical MP4 (Remotion motion graphics primary + ffmpeg fallback) + AAC audio + SRT captions + PNG cover inside the ACE workspace.",
           {**_AGENT_PROP, "package": _OBJ, "output_dir": _STR,
            "width": {"type": "integer"}, "height": {"type": "integer"},
-           "fps": {"type": "integer"}},
+           "fps": {"type": "integer"},
+           "renderer": {"type": "string", "enum": ["auto", "remotion", "ffmpeg"]}},
           ("package", "output_dir"), write=True),
     _spec("ace_op_tool_git_pr",
           "Create isolated ace-auto/* branch with verified quality receipt, commit target files, and open GitHub PR per host policy.",
@@ -2385,9 +2386,10 @@ class OperationalBridge:
             width=int(args.get("width") or 720),
             height=int(args.get("height") or 1280),
             fps=int(args.get("fps") or 24),
+            renderer=str(args.get("renderer") or "auto"),
         )
         self._log("ace_op_tool_reels_render", args,
-                  {"video_path": res["video_path"], "bytes": res["probe"]["bytes"]})
+                  {"video_path": res["video_path"], "bytes": res["probe"]["bytes"], "renderer": res.get("renderer")})
         return _jsonable(res)
 
     def _do_ace_op_tool_git_pr(self, args: dict) -> Any:
