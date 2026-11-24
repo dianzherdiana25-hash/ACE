@@ -364,6 +364,35 @@ ACE_TOOLBOX5_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX5_SPECS
 
+# -- Toolbox batch 6: simulation/design family. All read-only.
+# program_glossary and handover_decision_extractor stay unwired
+# (repo-root scoped, same open repo-adapter question).
+ACE_TOOLBOX6_SPECS = (
+    _spec("ace_op_tool_chapter_rubric",
+          "Score a story chapter pack on the deterministic reader rubric (tools.arc_rubric).",
+          {"pack": _OBJ}, ("pack",)),
+    _spec("ace_op_tool_experiment_design",
+          "Design the smallest falsifying experiment for each hypothesis (tools.experiment_designer).",
+          {"hypotheses": _ARR}, ("hypotheses",)),
+    _spec("ace_op_tool_cycle_plan_sim",
+          "Simulate cycle step ordering/deferral against a world model (tools.cycle_planner_sim).",
+          {"world_model": _OBJ, "steps": _ARR}, ("world_model", "steps")),
+    _spec("ace_op_tool_failover_sim",
+          "Simulate primary/fallback/wait failover decisions against budget state (tools.quota_failover_sim).",
+          {"budget_state": _OBJ, "steps": _ARR}, ("budget_state", "steps")),
+    _spec("ace_op_tool_specialization_delta",
+          "Compare baseline vs candidate reports for per-domain specialization deltas (tools.specialization_delta).",
+          {"baseline": _OBJ, "candidate": _OBJ}, ("baseline", "candidate")),
+    _spec("ace_op_tool_writeback_diagnose",
+          "Diagnose memory-writeback health over this workspace (tools.writeback_diagnose).",
+          {}),
+    _spec("ace_op_tool_dilemma_validate",
+          "Validate one constitution dilemma item against the pack schema (tools.constitution_dilemma).",
+          {"item": _OBJ}, ("item",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX6_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1046,3 +1075,32 @@ class OperationalBridge:
         return self._run_tool("cross_organ_agreement",
                               "evaluate_cross_organ_agreement",
                               matrix, anomalies=anomalies)
+
+    # -- toolbox batch 6 ---------------------------------------------------
+    def _do_ace_op_tool_chapter_rubric(self, args: dict) -> Any:
+        return self._run_tool("arc_rubric", "score_chapter_pack",
+                              dict(args["pack"]))
+
+    def _do_ace_op_tool_experiment_design(self, args: dict) -> Any:
+        return self._run_tool("experiment_designer", "design_batch",
+                              list(args["hypotheses"]))
+
+    def _do_ace_op_tool_cycle_plan_sim(self, args: dict) -> Any:
+        return self._run_tool("cycle_planner_sim", "plan_cycle_steps",
+                              dict(args["world_model"]), list(args["steps"]))
+
+    def _do_ace_op_tool_failover_sim(self, args: dict) -> Any:
+        return self._run_tool("quota_failover_sim", "simulate_failover",
+                              dict(args["budget_state"]), list(args["steps"]))
+
+    def _do_ace_op_tool_specialization_delta(self, args: dict) -> Any:
+        return self._run_tool("specialization_delta", "compare_reports",
+                              dict(args["baseline"]), dict(args["candidate"]))
+
+    def _do_ace_op_tool_writeback_diagnose(self, args: dict) -> Any:
+        return self._run_tool("writeback_diagnose", "diagnose",
+                              self.store.workspace)
+
+    def _do_ace_op_tool_dilemma_validate(self, args: dict) -> Any:
+        return self._run_tool("constitution_dilemma",
+                              "validate_dilemma_item", dict(args["item"]))

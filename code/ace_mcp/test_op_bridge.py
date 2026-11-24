@@ -445,5 +445,37 @@ class ToolboxBatch5Tests(unittest.TestCase):
         self.assertIsInstance(story, dict)
 
 
+class ToolboxBatch6Tests(unittest.TestCase):
+    """Batch 6: simulation/design family, all read-only."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch6_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX6_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX6_SPECS), 7)
+        for spec in ACE_TOOLBOX6_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_simulators_and_diagnose(self) -> None:
+        plan = self.ro.call("ace_op_tool_cycle_plan_sim", {
+            "world_model": {"house_state": "healthy"},
+            "steps": [{"step_id": "s1", "role": "front",
+                       "critical": False, "cost": 1}]})
+        self.assertIsInstance(plan, dict)
+        sim = self.ro.call("ace_op_tool_failover_sim", {
+            "budget_state": {"roles": {"front": {"remaining": 3}}},
+            "steps": [{"role": "front", "cost": 1, "critical": False}]})
+        self.assertIsInstance(sim, dict)
+        diag = self.ro.call("ace_op_tool_writeback_diagnose", {})
+        self.assertIsInstance(diag, dict)
+
+
 if __name__ == "__main__":
     unittest.main()

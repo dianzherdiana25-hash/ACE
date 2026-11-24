@@ -211,3 +211,9 @@ introspect_recall, bridge_self_check, story_consistency_gate,
 behavior_fingerprint diff, organ_registry_validate,
 recall_ablation, cross_organ_agreement. Total permukaan
 agen: 74 tool; suite ace_mcp 48 tes lulus.
+
+Batch 6 (7 tool, semua baca-saja): arc_rubric,
+experiment_designer, cycle_planner_sim, quota_failover_sim,
+specialization_delta, writeback_diagnose, constitution
+dilemma validate. Total permukaan agen: 81 tool; suite
+ace_mcp 50 tes lulus.
