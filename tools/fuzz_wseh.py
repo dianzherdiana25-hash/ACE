@@ -85,9 +85,9 @@ def _run_target_iteration(target: str, rng: random.Random, tmp_dir: Path) -> str
     sample_file.write_text(payload_str, encoding="utf-8", errors="replace")
 
     if target == "storage_debt":
-        if mod is not None and hasattr(mod, "load_program_map"):
+        if mod is not None and hasattr(mod, "_load_program_map"):
             try:
-                mod.load_program_map(sample_file)
+                mod._load_program_map(sample_file)
             except mod.StorageDebtError:
                 pass
             return "live"
