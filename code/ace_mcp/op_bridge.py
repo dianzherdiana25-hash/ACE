@@ -607,6 +607,25 @@ ACE_TOOLBOX15_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX15_SPECS
 
+# -- Toolbox batch 16: more ace_deliberation plain-record
+# checkers and more anchored guardian/presence evaluators.
+ACE_TOOLBOX16_SPECS = (
+    _spec("ace_op_tool_deliberation_brier",
+          "Score forecasts with Brier against a pre-cutoff base rate; forecasts must precede resolutions and use different source refs (anti-hindsight) (code/ace_deliberation).",
+          {"record": _OBJ}, ("record",)),
+    _spec("ace_op_tool_deliberation_fallacy",
+          "Check a propositional argument by full truth table: entailed, inconsistent premises, or a concrete countermodel, with named fallacy patterns (code/ace_deliberation).",
+          {"record": _OBJ}, ("record",)),
+    _spec("ace_op_tool_guardian_leak",
+          "Detect suspected memory leaks from RSS samples: median pairwise slope per process instance, split across restarts (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_presence_commitments",
+          "Track promises against evidence-bearing resolutions: fulfilled, overdue, due soon, or open as of a date (code/ace_presence).",
+          {"plan": _OBJ}, ("plan",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX16_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1632,3 +1651,24 @@ class OperationalBridge:
     def _do_ace_op_tool_deliberation_circular(self, args: dict) -> Any:
         return self._run_pkg("ace_deliberation", "circular_detector",
                              "detect", args["record"])
+
+    # -- toolbox batch 16 --------------------------------------------------
+    def _do_ace_op_tool_deliberation_brier(self, args: dict) -> Any:
+        return self._run_pkg("ace_deliberation", "brier_scorer",
+                             "score_brier", args["record"])
+
+    def _do_ace_op_tool_deliberation_fallacy(self, args: dict) -> Any:
+        return self._run_pkg("ace_deliberation", "fallacy_detector",
+                             "inspect_argument", args["record"])
+
+    def _do_ace_op_tool_guardian_leak(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "leak_detector",
+                             "detect", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_presence_commitments(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_presence", "commitment_tracker",
+                             "track", plan,
+                             self._pkg_anchor("ace_presence", plan))

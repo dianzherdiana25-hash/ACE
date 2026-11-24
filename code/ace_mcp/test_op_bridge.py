@@ -1022,5 +1022,88 @@ class ToolboxBatch15Tests(unittest.TestCase):
         self.assertEqual(verdict["grounded"], [])
 
 
+class ToolboxBatch16Tests(unittest.TestCase):
+    """Batch 16: more deliberation checkers + anchored evaluators."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch16_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX16_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX16_SPECS), 4)
+        for spec in ACE_TOOLBOX16_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_deliberation_brier_and_fallacy(self) -> None:
+        record = {
+            "cutoff": "2026-01-01T00:00:00+00:00",
+            "as_of": "2026-02-01T00:00:00+00:00",
+            "history": [{"question_id": "h1", "outcome": 1,
+                         "resolved_at": "2025-12-01T00:00:00+00:00",
+                         "resolution_ref": "test:hist"}],
+            "forecasts": [{"question_id": "q1", "probability": "0.5",
+                           "forecast_at": "2026-01-15T00:00:00+00:00",
+                           "forecast_ref": "test:fc"}],
+            "resolutions": [{"question_id": "q1", "outcome": 1,
+                             "resolved_at": "2026-01-20T00:00:00+00:00",
+                             "resolution_ref": "test:res"}]}
+        scored = self.ro.call("ace_op_tool_deliberation_brier",
+                              {"record": record})
+        # Fractions cross the bridge as numerator/denominator pairs.
+        self.assertEqual(scored["brier"],
+                         {"numerator": 1, "denominator": 4})
+        self.assertEqual(scored["baseline_brier"],
+                         {"numerator": 0, "denominator": 1})
+        self.assertEqual(scored["verdict"], "worse")
+
+        argument = {
+            "premises": [
+                {"formula": {"op": "implies",
+                             "args": [{"atom": "P"}, {"atom": "Q"}]},
+                 "source_ref": "test:p1"},
+                {"formula": {"atom": "Q"}, "source_ref": "test:p2"}],
+            "conclusion": {"formula": {"atom": "P"},
+                           "source_ref": "test:c"}}
+        checked = self.ro.call("ace_op_tool_deliberation_fallacy",
+                               {"record": argument})
+        self.assertEqual(checked["status"], "counterexample")
+        codes = [row["code"] for row in checked["findings"]]
+        self.assertIn("affirming_consequent", codes)
+
+    def test_guardian_leak_and_presence_commitments(self) -> None:
+        leak = {
+            "schema": "ace.guardian.rss-leak.v1",
+            "samples": [{"instance": "proc", "at": f"2026-01-01T0{h}:00:00Z",
+                         "rss_mib": 100 * (h + 1), "source": "test:rss"}
+                        for h in range(4)],
+            "minimum": 3, "growth_mib_per_hour": 50, "min_total_mib": 100}
+        report = self.ro.call("ace_op_tool_guardian_leak", {"plan": leak})
+        instance = report["instances"][0]
+        self.assertEqual(instance["status"], "suspected_leak")
+        self.assertEqual(instance["gain_mib"], 300)
+
+        commitments = {
+            "schema": "ace.presence.commitments.v1",
+            "as_of": "2026-01-10", "alert_days": 3,
+            "promises": [{"id": "p1", "due_on": "2026-01-12",
+                          "action": "Kirim laporan", "source": "test:p"},
+                         {"id": "p2", "due_on": "2026-01-05",
+                          "action": "Tugas lama", "source": "test:p"}],
+            "resolutions": [{"id": "p2", "at": "2026-01-04",
+                             "source": "test:done"}]}
+        tracked = self.ro.call("ace_op_tool_presence_commitments",
+                               {"plan": commitments})
+        by_id = {row["id"]: row for row in tracked["commitments"]}
+        self.assertEqual(by_id["p1"]["status"], "due_soon")
+        self.assertEqual(by_id["p1"]["days_left"], 2)
+        self.assertEqual(by_id["p2"]["status"], "fulfilled")
+
+
 if __name__ == "__main__":
     unittest.main()

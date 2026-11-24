@@ -288,3 +288,16 @@ pemeriksa record polos ace_deliberation (detektor
 penalaran melingkar: penutupan grounded + komponen kuat
 residual dengan saksi). Total permukaan agen: 122 tool;
 suite ace_mcp 73 tes lulus.
+
+Batch 16 (4 tool, semua baca-saja): pemeriksa record polos
+ace_deliberation bertambah dua — skor Brier anti-hindsight
+(ramalan wajib mendahului resolusi, baseline hanya dari
+riwayat sebelum cut-off) dan pemeriksa kesesatan logika
+proposisional via tabel kebenaran penuh dengan
+countermodel konkret; ditambah evaluator ter-anchor
+ace_guardian pendeteksi dugaan kebocoran memori dari
+kemiringan median sampel RSS, dan ace_presence pelacak
+janji terhadap resolusi berbukti. Catatan representasi:
+Fraction dari deliberation melintasi bridge sebagai
+pasangan numerator/denominator. Total permukaan agen:
+126 tool; suite ace_mcp 76 tes lulus.
