@@ -142,6 +142,8 @@ def main(argv=None):
     parser.add_argument("--transport", choices=("stdio","http"), default="stdio")
     parser.add_argument("--read-write", action="store_true",
                         help="Operator opt-in: allow changing ACE workspace and running bounded tasks")
+    parser.add_argument("--research-only", action="store_true",
+                        help="Disable the operational tool layer (ace_op_* tools); default is operational ON per ACE_TOOL_LAYER_PLAN_v1")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8735)
     parser.add_argument("--allowed-origin", action="append", default=[])
@@ -151,7 +153,8 @@ def main(argv=None):
     if args.enable_code_diagnostic and args.transport != "stdio":
         parser.error("code diagnostic is restricted to local stdio")
     bridge = ACEBridge(args.workspace, allow_writes=args.read_write,
-                       enable_code_diagnostic=args.enable_code_diagnostic)
+                       enable_code_diagnostic=args.enable_code_diagnostic,
+                       operational=not args.research_only)
     if args.transport == "stdio":
         stdio(bridge)
     else:

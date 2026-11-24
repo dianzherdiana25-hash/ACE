@@ -124,7 +124,7 @@ def _binary_word(value):
 
 
 class ACEBridge:
-    def __init__(self, workspace: str | Path, allow_writes: bool = False, enable_code_diagnostic: bool = False):
+    def __init__(self, workspace: str | Path, allow_writes: bool = False, enable_code_diagnostic: bool = False, operational: bool = False):
         if type(allow_writes) is not bool:
             raise TypeError("allow_writes must be bool")
         self.workspace = Path(workspace)
@@ -132,13 +132,34 @@ class ACEBridge:
         if type(enable_code_diagnostic) is not bool:
             raise TypeError("enable_code_diagnostic must be bool")
         self.enable_code_diagnostic = enable_code_diagnostic
+        if type(operational) is not bool:
+            raise TypeError("operational must be bool")
+        self.operational = operational
+        self._op_bridge = None
+
+    def _operational_bridge(self):
+        """Lazily build the operational core (tool layer v1) on first use,
+        so research-only callers never open the operational store."""
+        if self._op_bridge is None:
+            from .op_bridge import OperationalBridge
+            self._op_bridge = OperationalBridge(
+                self.workspace, allow_writes=self.allow_writes)
+        return self._op_bridge
 
     def tools(self):
-        return list(TOOL_SPECS) + ([CODE_DIAGNOSTIC, PATCH_DIAGNOSTIC, HOST_DIAGNOSTIC] if self.enable_code_diagnostic else [])
+        specs = list(TOOL_SPECS) + ([CODE_DIAGNOSTIC, PATCH_DIAGNOSTIC, HOST_DIAGNOSTIC] if self.enable_code_diagnostic else [])
+        if self.operational:
+            from .op_bridge import OP_TOOL_SPECS
+            specs += list(OP_TOOL_SPECS)
+        return specs
 
     def call(self, name, arguments):
         if type(name) is not str or name not in {s["name"] for s in self.tools()}:
             raise ToolInputError("unknown tool")
+        if self.operational:
+            from .op_bridge import OP_TOOL_NAMES
+            if name in OP_TOOL_NAMES:
+                return self._operational_bridge().call(name, arguments)
         if name == "ace_code_diagnostic":
             args = _object_args(arguments, ("source",))
             from .code_diagnostic import evaluate

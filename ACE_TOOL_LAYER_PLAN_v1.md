@@ -199,3 +199,32 @@ Keadaan repo mengalahkan ingatan sesi mana pun. Bekerja lah dengan jejak:
 commit yang jelas, receipt untuk eksekusi, dan dokumentasikan di repo apa
 yang kamu ubah serta mengapa — AI berikutnya bergantung pada itu, persis
 seperti kamu bergantung pada catatan AI sebelum kamu.
+
+## 9. Status implementasi (ditambahkan 24 Nov 2026, setelah pembangunan)
+
+Pemilik menyetujui pembangunan semua fase sekaligus, termasuk menjalankan
+tes, pada 24 Nov 2026. Atas arahan pemilik ("semua sudah tersedia di repo
+ACE sendiri, tidak perlu dari awal"), pembangunan **memperluas** server
+MCP yang sudah ada (`code/ace_mcp/`) alih-alih membuat paket baru:
+
+- **Fase 1 (inti):** `code/ace_mcp/op_bridge.py` — inti operasional
+  (`OperationalBridge`) di atas `OperationalStore` dan memori kognitif,
+  20 tool `ace_op_*` (tugas, memori, receipt/verifikasi, skill, frontier,
+  gap, work order, tulis berkas terjaga hash preimage).
+- **Fase 2 (MCP):** `ace_mcp.bridge.ACEBridge` merutekan `ace_op_*` ke
+  inti operasional; `ace_mcp.server` mengaktifkannya secara bawaan
+  (`--research-only` untuk mematikan). Transport stdio dan HTTP yang
+  sudah ada dipakai apa adanya.
+- **Fase 3 (CLI):** `code/ace_mcp/cli.py` — CLI tipis di atas inti yang
+  sama persis.
+- **Fase 4 (dogfooding):** Muse memakai tool layer untuk pekerjaan
+  nyata di workspace persisten (tugas pembangunan ini sendiri, ingatan,
+  berkas terjaga), termasuk menerima vonis `NOT_VERIFIED` yang jujur
+  untuk tugas tanpa receipt — receipt memang tidak dapat dibuat lewat
+  tool layer, hanya dari mesin eksekusi.
+- **Fase 5 (dokumentasi):** `ACE_TOOL_LAYER_GUIDE_v1.md`.
+
+Bukti: 30 tes `ace_mcp` lulus (22 lama tanpa regresi + 8 baru di
+`code/ace_mcp/test_op_bridge.py`), uji asap MCP stdio dan CLI end-to-end
+pada workspace uji yang sama. Panduan pemakaian: lihat guide di atas.
+Status ilmiah ACE tetap tidak berubah oleh pekerjaan rekayasa ini.
