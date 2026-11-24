@@ -301,3 +301,17 @@ janji terhadap resolusi berbukti. Catatan representasi:
 Fraction dari deliberation melintasi bridge sebagai
 pasangan numerator/denominator. Total permukaan agen:
 126 tool; suite ace_mcp 76 tes lulus.
+
+Batch 17 (3 tool, semua baca-saja): penguji hipotesis
+eksak ace_research_institute (Fisher eksak + permutasi
+sign-flip berpasangan; menolak menghitung bila asumsi
+desain belum dinyatakan semua — status held_assumption),
+plus dua evaluator ace_deliberation: penghitung nilai
+informasi eksak (EVSI + batas EVPI, merencanakan satu
+langkah, tidak mengeksekusi) dan penimbang bukti per
+klaim (maksimum satu kontribusi terhitung per keluarga
+sumber per sisi; sumber tak terverifikasi tidak pernah
+terhitung). Catatan format: peluang voi_limiter berbentuk
+objek {numerator, denominator}, bukan string desimal.
+Total permukaan agen: 129 tool; suite ace_mcp 79 tes
+lulus.

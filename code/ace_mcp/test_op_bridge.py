@@ -1105,5 +1105,87 @@ class ToolboxBatch16Tests(unittest.TestCase):
         self.assertEqual(by_id["p2"]["status"], "fulfilled")
 
 
+class ToolboxBatch17Tests(unittest.TestCase):
+    """Batch 17: institute hypothesis + deliberation VOI/weigher."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch17_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX17_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX17_SPECS), 3)
+        for spec in ACE_TOOLBOX17_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_institute_hypothesis(self) -> None:
+        plan = {
+            "schema": "ace.institute.hypothesis-plan.v1",
+            "hypothesis": "Kelompok A lebih sering berhasil.",
+            "method": "fisher", "alternative": "two_sided",
+            "alpha": "0.05",
+            "assumptions": {
+                "independent_observations": {
+                    "declared": True, "source_ref": "test:a1"},
+                "fixed_margins": {"declared": True,
+                                  "source_ref": "test:a2"}},
+            "data": {"a": 3, "b": 1, "c": 1, "d": 3}}
+        result = self.ro.call("ace_op_tool_institute_hypothesis",
+                              {"plan": plan})
+        self.assertEqual(result["status"], "fail_to_reject")
+        self.assertEqual(result["p_value_exact"], [17, 35])
+        held = dict(plan)
+        held["assumptions"] = {
+            "independent_observations": {
+                "declared": False, "source_ref": "test:a1"},
+            "fixed_margins": {"declared": True, "source_ref": "test:a2"}}
+        held_result = self.ro.call("ace_op_tool_institute_hypothesis",
+                                   {"plan": held})
+        self.assertEqual(held_result["status"], "held_assumption")
+        self.assertIsNone(held_result["p_value_exact"])
+
+    def test_deliberation_voi_and_weigher(self) -> None:
+        def frac(n, d):
+            return {"numerator": n, "denominator": d}
+        voi = {
+            "prior": {"rain": frac(1, 2), "shine": frac(1, 2)},
+            "utility": {"umbrella": {"rain": 10, "shine": 0},
+                        "no_umbrella": {"rain": -10, "shine": 10}},
+            "experiments": [{"id": "forecast", "source_ref": "test:fc",
+                             "cost": 1,
+                             "outcomes": {
+                                 "pos": {"rain": frac(9, 10),
+                                         "shine": frac(1, 10)},
+                                 "neg": {"rain": frac(1, 10),
+                                         "shine": frac(9, 10)}}}],
+            "budget": 10, "min_net_value": 0}
+        compared = self.ro.call("ace_op_tool_deliberation_voi",
+                                {"record": voi})
+        self.assertEqual(compared["status"], "continue")
+        self.assertEqual(compared["recommended_experiment"], "forecast")
+        self.assertEqual(compared["perfect_information_bound"],
+                         {"numerator": 5, "denominator": 1})
+
+        weigh = {
+            "claims": ["c1"],
+            "sources": [{"id": "s1", "family": "famA",
+                         "source_ref": "test:s1", "credibility": "0.5",
+                         "verified": True}],
+            "evidence": [{"id": "e1", "claim": "c1", "source": "s1",
+                          "evidence_ref": "test:e1", "stance": "support",
+                          "strength": "0.5"}]}
+        weighed = self.ro.call("ace_op_tool_deliberation_evidence_weigh",
+                               {"record": weigh})
+        claim = weighed["claims"][0]
+        self.assertEqual(claim["support"],
+                         {"numerator": 1, "denominator": 4})
+        self.assertEqual(claim["evidence"][0]["state"], "counted")
+
+
 if __name__ == "__main__":
     unittest.main()

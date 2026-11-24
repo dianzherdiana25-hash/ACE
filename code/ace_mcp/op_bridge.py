@@ -626,6 +626,22 @@ ACE_TOOLBOX16_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX16_SPECS
 
+# -- Toolbox batch 17: ace_research_institute anchored tester
+# and more ace_deliberation plain-record evaluators.
+ACE_TOOLBOX17_SPECS = (
+    _spec("ace_op_tool_institute_hypothesis",
+          "Run an exact hypothesis test (Fisher exact or paired sign-flip permutation, exact fractions); refuses to compute unless every design assumption is declared (code/ace_research_institute).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_deliberation_voi",
+          "Compute exact expected value of information for candidate experiments and recommend at most one step, or stop (code/ace_deliberation).",
+          {"record": _OBJ}, ("record",)),
+    _spec("ace_op_tool_deliberation_evidence_weigh",
+          "Weigh evidence per claim with at most one counted contribution per source family per side; unverified sources never count (code/ace_deliberation).",
+          {"record": _OBJ}, ("record",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX17_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1672,3 +1688,19 @@ class OperationalBridge:
         return self._run_pkg("ace_presence", "commitment_tracker",
                              "track", plan,
                              self._pkg_anchor("ace_presence", plan))
+
+    # -- toolbox batch 17 --------------------------------------------------
+    def _do_ace_op_tool_institute_hypothesis(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_research_institute", "hypothesis_tester",
+                             "test_hypothesis", plan,
+                             self._pkg_anchor("ace_research_institute",
+                                              plan))
+
+    def _do_ace_op_tool_deliberation_voi(self, args: dict) -> Any:
+        return self._run_pkg("ace_deliberation", "voi_limiter",
+                             "compare", args["record"])
+
+    def _do_ace_op_tool_deliberation_evidence_weigh(self, args: dict) -> Any:
+        return self._run_pkg("ace_deliberation", "evidence_weigher",
+                             "weigh_evidence", args["record"])
