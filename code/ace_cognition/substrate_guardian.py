@@ -11,12 +11,15 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import datetime
 import json
+import logging
 import os
 from pathlib import Path
 import shutil
 import sys
 import time
 from typing import Any, Dict, Optional, Tuple
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -65,9 +68,9 @@ class SubstrateGuardian:
             usage = resource.getrusage(resource.RUSAGE_SELF)
             # On Linux, ru_maxrss is in kilobytes
             rss_mb = usage.ru_maxrss / 1024.0
-        except Exception:
+        except (ImportError, AttributeError, OSError) as exc:
             # Best-effort probe: failure leaves the default reading.
-            pass
+            logger.debug("Process RSS probe unavailable: %s", exc)
 
         # System Available RAM
         try:
@@ -79,9 +82,9 @@ class SubstrateGuardian:
                         avail_kb = float(line.split()[1])
                         avail_mb = avail_kb / 1024.0
                         break
-        except Exception:
+        except (OSError, ValueError, IndexError) as exc:
             # Best-effort probe: failure leaves the default reading.
-            pass
+            logger.debug("System MemAvailable probe failed: %s", exc)
 
         return rss_mb, avail_mb
 
@@ -107,10 +110,10 @@ class SubstrateGuardian:
                 status = status_file.read_text().strip().lower() if status_file.exists() else ""
                 charging = "charging" in status or "full" in status
                 return level, charging
-            except Exception:
+            except (OSError, ValueError) as exc:
                 # Best-effort battery probe: failure falls through
                 # to the next probe.
-                pass
+                logger.debug("Android sysfs battery probe failed: %s", exc)
 
         # 2. Try termux-battery-status command if available
         try:
@@ -122,10 +125,10 @@ class SubstrateGuardian:
                 status = data.get("status", "").lower()
                 charging = "charging" in status or "full" in status
                 return level, charging
-        except Exception:
+        except (OSError, subprocess.SubprocessError, ValueError, TypeError, AttributeError) as exc:
             # Best-effort battery probe: failure returns the
-            # (None, False) default.
-            pass
+            # (None, None) default.
+            logger.debug("Termux battery probe unavailable: %s", exc)
 
         return None, None
 
@@ -220,10 +223,10 @@ class SubstrateGuardian:
                         token = user_pass.split(":")[1]
                     else:
                         token = user_pass
-            except Exception:
+            except (OSError, subprocess.SubprocessError, ValueError, IndexError) as exc:
                 # Best-effort remote-URL scan: an unparseable URL
                 # leaves the token unset.
-                pass
+                logger.debug("Git remote URL scan failed: %s", type(exc).__name__)
 
         if not token:
             return {"status": "MIGRATION_SKIPPED", "reason": "NO_TOKEN_FOUND"}
