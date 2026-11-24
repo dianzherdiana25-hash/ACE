@@ -1187,5 +1187,78 @@ class ToolboxBatch17Tests(unittest.TestCase):
         self.assertEqual(claim["evidence"][0]["state"], "counted")
 
 
+class ToolboxBatch18Tests(unittest.TestCase):
+    """Batch 18: guardian gate ledger + coverage + compliance."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch18_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX18_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX18_SPECS), 4)
+        for spec in ACE_TOOLBOX18_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_guardian_gate_chain_and_consumers(self) -> None:
+        from ace_guardian._contracts import identity
+        from ace_guardian.rule_compiler import compile_rules
+        policy = {
+            "schema": "ace.guardian.compile-rules.v1", "revision": "r1",
+            "actions": [{"kind": "read", "fields": {}}],
+            "lines": ["allow rule_read read"]}
+        compiled = compile_rules(policy, identity(policy))
+        decision = {
+            "action_id": "act1", "kind": "read", "outcome": "allow",
+            "reason": "ok", "matched_rules": ["rule_read"],
+            "request_sha256": "a" * 64,
+            "policy_sha256": compiled["compiled_sha256"]}
+        appended = self.ro.call("ace_op_tool_guardian_gate_append", {
+            "plan": {"schema": "ace.guardian.gate-receipt.v1",
+                     "prior": [], "decision": decision,
+                     "at": "2026-01-01T10:00:00Z"}})
+        self.assertFalse(appended["replay"])
+        receipt = appended["receipt"]
+        self.assertEqual(appended["head_sha256"], receipt["sha256"])
+        replayed = self.ro.call("ace_op_tool_guardian_gate_append", {
+            "plan": {"schema": "ace.guardian.gate-receipt.v1",
+                     "prior": [receipt], "decision": decision,
+                     "at": "2026-01-01T10:00:00Z"}})
+        self.assertTrue(replayed["replay"])
+
+        verified = self.ro.call("ace_op_tool_guardian_gate_verify",
+                                {"receipts": [receipt]})
+        self.assertEqual(verified["head_sha256"], receipt["sha256"])
+        self.assertEqual(verified["action_ids"], ["act1"])
+
+        coverage = self.ro.call("ace_op_tool_guardian_coverage", {
+            "plan": {"schema": "ace.guardian.policy-coverage.v1",
+                     "policy": policy,
+                     "classes": [{"kind": "read",
+                                  "expected_outcomes": ["allow"]}],
+                     "ledger": [receipt]}})
+        self.assertTrue(coverage["complete"])
+        self.assertEqual(coverage["coverage"][0]["classification"],
+                         "covered")
+
+        compliance = self.ro.call("ace_op_tool_guardian_compliance", {
+            "plan": {"schema": "ace.guardian.compliance-report.v1",
+                     "from": "2026-01-01T00:00:00Z",
+                     "until": "2026-01-02T00:00:00Z",
+                     "ledger": [receipt],
+                     "actions": [{"id": "act1",
+                                  "request_sha256": "a" * 64,
+                                  "at": "2026-01-01T10:00:00Z"}]}})
+        self.assertEqual(compliance["matched_receipts"], 1)
+        self.assertEqual(compliance["coverage"], "1")
+        self.assertEqual(compliance["per_rule"],
+                         {"rule_read": {"allow": 1}})
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -642,6 +642,25 @@ ACE_TOOLBOX17_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX17_SPECS
 
+# -- Toolbox batch 18: ace_guardian gate receipt ledger and
+# the two evaluators that consume it (coverage + compliance).
+ACE_TOOLBOX18_SPECS = (
+    _spec("ace_op_tool_guardian_gate_append",
+          "Append one decision to a guardian gate receipt hash chain (append-only, replay-safe: the same action id with a different decision is rejected) (code/ace_guardian). Pure function over the supplied chain.",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_guardian_gate_verify",
+          "Verify a guardian gate receipt hash chain: sequence, previous links, hashes, monotone times, unique action ids (code/ace_guardian).",
+          {"receipts": {"type": "array", "items": _OBJ}}, ("receipts",)),
+    _spec("ace_op_tool_guardian_coverage",
+          "Check guardian policy coverage: action classes without rules, outcomes never exercised by ledger receipts, and receipts made obsolete by policy changes (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_guardian_compliance",
+          "Build a guardian compliance report over a time window: declared actions matched to chained receipts per rule and outcome (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX18_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1704,3 +1723,35 @@ class OperationalBridge:
     def _do_ace_op_tool_deliberation_evidence_weigh(self, args: dict) -> Any:
         return self._run_pkg("ace_deliberation", "evidence_weigher",
                              "weigh_evidence", args["record"])
+
+    # -- toolbox batch 18 --------------------------------------------------
+    def _do_ace_op_tool_guardian_gate_append(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "gate_receipt_ledger",
+                             "append", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_guardian_gate_verify(self, args: dict) -> Any:
+        verify = self._pkg_tool("ace_guardian", "gate_receipt_ledger",
+                                "verify_ledger")
+        try:
+            head, _when, keys = verify(args["receipts"])
+        except ValueError:
+            raise
+        except Exception as exc:
+            raise ValueError(f"ace_guardian.gate_receipt_ledger: "
+                             f"{exc}") from exc
+        return {"head_sha256": head, "receipt_count": len(keys),
+                "action_ids": sorted(keys)}
+
+    def _do_ace_op_tool_guardian_coverage(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "coverage_checker",
+                             "check", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_guardian_compliance(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "compliance_reporter",
+                             "report", plan,
+                             self._pkg_anchor("ace_guardian", plan))

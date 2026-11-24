@@ -315,3 +315,15 @@ terhitung). Catatan format: peluang voi_limiter berbentuk
 objek {numerator, denominator}, bukan string desimal.
 Total permukaan agen: 129 tool; suite ace_mcp 79 tes
 lulus.
+
+Batch 18 (4 tool, semua baca-saja): rantai receipt gerbang
+ace_guardian terbuka penuh — penambah receipt berantai
+hash (append-only, replay dengan isi berbeda ditolak),
+verifikator rantai, dan dua konsumennya: pemeriksa
+cakupan kebijakan (kelas tanpa aturan, outcome yang belum
+pernah teruji receipt, receipt usang karena kebijakan
+berubah) dan pelapor kepatuhan per jendela waktu (aksi
+terdeklarasi dicocokkan ke receipt berantai per aturan).
+gate_append adalah fungsi murni atas rantai yang dipasok
+pemanggil; bridge tidak menyimpan state rantai. Total
+permukaan agen: 133 tool; suite ace_mcp 81 tes lulus.
