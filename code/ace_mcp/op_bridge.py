@@ -580,6 +580,33 @@ ACE_TOOLBOX14_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX14_SPECS
 
+# -- Toolbox batch 15: ace_guardian + ace_presence anchored
+# evaluators (same derived-anchor design as batches 13-14, using
+# each package's own _contracts.identity) and one plain-record
+# ace_deliberation checker.
+ACE_TOOLBOX15_SPECS = (
+    _spec("ace_op_tool_guardian_abstention",
+          "Choose a decision threshold from a selective-risk curve over labeled samples, with minimum coverage (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_guardian_calibration",
+          "Compute per-domain ECE and Brier scores with exact fractions; scores are withheld below the minimum sample count (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_guardian_action_anomaly",
+          "Flag rare action patterns against a declared baseline: unseen kinds, unseen actors, and MAD unit outliers (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_presence_deadline_collision",
+          "Test deadline feasibility: find windows where task demand exceeds working capacity (cumulative-capacity EDF check) (code/ace_presence).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_presence_duration_estimate",
+          "Estimate task duration from recorded analogues of the same kind, nearest complexity first; refuses to emit numbers below the minimum sample count (code/ace_presence).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_deliberation_circular",
+          "Detect circular reasoning: grounded closure over claims/foundations/rules, then residual strongly-connected components with witnesses (code/ace_deliberation).",
+          {"record": _OBJ}, ("record",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX15_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1503,10 +1530,12 @@ class OperationalBridge:
         return {"result": out}
 
     # -- toolbox batch 13 --------------------------------------------------
-    def _factory_anchor(self, value: Any) -> str:
-        identity = self._pkg_tool("ace_software_factory", "_contracts",
-                                  "identity")
+    def _pkg_anchor(self, package: str, value: Any) -> str:
+        identity = self._pkg_tool(package, "_contracts", "identity")
         return identity(value)
+
+    def _factory_anchor(self, value: Any) -> str:
+        return self._pkg_anchor("ace_software_factory", value)
 
     def _do_ace_op_tool_factory_acceptance(self, args: dict) -> Any:
         spec, contract = args["spec"], args["contract"]
@@ -1568,3 +1597,38 @@ class OperationalBridge:
         return self._run_pkg("ace_software_factory", "auditlog_builder",
                              "verify", payload, policy,
                              self._factory_anchor(policy), tail)
+
+    # -- toolbox batch 15 --------------------------------------------------
+    def _do_ace_op_tool_guardian_abstention(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "abstention_calibrator",
+                             "calibrate", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_guardian_calibration(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "calibration_scorer",
+                             "score", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_guardian_action_anomaly(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "action_anomaly",
+                             "detect", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_presence_deadline_collision(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_presence", "deadline_collision",
+                             "collide", plan,
+                             self._pkg_anchor("ace_presence", plan))
+
+    def _do_ace_op_tool_presence_duration_estimate(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_presence", "duration_estimator",
+                             "estimate", plan,
+                             self._pkg_anchor("ace_presence", plan))
+
+    def _do_ace_op_tool_deliberation_circular(self, args: dict) -> Any:
+        return self._run_pkg("ace_deliberation", "circular_detector",
+                             "detect", args["record"])

@@ -275,3 +275,16 @@ merilis), dan verifikator log audit JSONL berantai hash
 dengan tail hash yang dipegang terpisah (mendeteksi
 pemotongan yang sah secara lokal). Total permukaan agen:
 116 tool; suite ace_mcp 70 tes lulus.
+
+Batch 15 (6 tool, semua baca-saja): pola anchor meluas ke
+paket ter-anchor lain — ace_guardian (kalibrator abstensi
+dari kurva risiko selektif, skor ECE/Brier per domain
+dengan pecahan eksak, detektor anomali aksi vs baseline)
+dan ace_presence (uji kelayakan tenggat kapasitas
+kumulatif EDF, penaksir durasi dari analog tercatat yang
+menolak memberi angka di bawah sampel minimum), memakai
+_contracts.identity masing-masing paket; ditambah satu
+pemeriksa record polos ace_deliberation (detektor
+penalaran melingkar: penutupan grounded + komponen kuat
+residual dengan saksi). Total permukaan agen: 122 tool;
+suite ace_mcp 73 tes lulus.

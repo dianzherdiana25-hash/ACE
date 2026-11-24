@@ -919,5 +919,108 @@ class ToolboxBatch14Tests(unittest.TestCase):
         self.assertEqual(chained["by_status"]["allowed"], 1)
 
 
+class ToolboxBatch15Tests(unittest.TestCase):
+    """Batch 15: ace_guardian + ace_presence + ace_deliberation."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch15_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX15_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX15_SPECS), 6)
+        for spec in ACE_TOOLBOX15_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_guardian_tools(self) -> None:
+        abstention = {
+            "schema": "ace.guardian.abstention-calibration.v1",
+            "samples": [{"id": "s1", "confidence_bp": 9000,
+                         "correct": True},
+                        {"id": "s2", "confidence_bp": 9000,
+                         "correct": True},
+                        {"id": "s3", "confidence_bp": 1000,
+                         "correct": False}],
+            "thresholds": [5000], "max_error_bp": 1000,
+            "minimum_accepted": 1}
+        out = self.ro.call("ace_op_tool_guardian_abstention",
+                           {"plan": abstention})
+        self.assertEqual(out["chosen_threshold_bp"], 5000)
+        self.assertEqual(out["sample_count"], 3)
+
+        calibration = {
+            "schema": "ace.guardian.calibration.v1",
+            "rows": [{"id": "p1", "domain": "d", "confidence_bp": 10000,
+                      "observed": True, "resolved_ref": "f" * 64}],
+            "bins": 10, "minimum": 1}
+        scored = self.ro.call("ace_op_tool_guardian_calibration",
+                              {"plan": calibration})
+        self.assertEqual(scored["domains"]["d"]["ece"], "0")
+        self.assertEqual(scored["domains"]["d"]["brier"], "0")
+
+        def action(key, units):
+            return {"id": key, "kind": "read", "actor": "a1",
+                    "units": units, "source": "e" * 64}
+        anomaly = {
+            "schema": "ace.guardian.action-anomalies.v1",
+            "baseline": [action("b1", 10), action("b2", 10),
+                         action("b3", 10)],
+            "observed": [action("o1", 500)],
+            "minimum_count": 2, "mad_multiplier": 3}
+        flagged = self.ro.call("ace_op_tool_guardian_action_anomaly",
+                               {"plan": anomaly})
+        self.assertEqual(len(flagged["findings"]), 1)
+        self.assertIn("unit_outlier", flagged["findings"][0]["flags"])
+
+    def test_presence_and_deliberation_tools(self) -> None:
+        collision = {
+            "schema": "ace.presence.deadline-collisions.v1",
+            "working": [{"start": "2026-01-01T09:00:00Z",
+                         "end": "2026-01-01T10:00:00Z"}],
+            "tasks": [{"id": "t1", "available_at": "2026-01-01T09:00:00Z",
+                       "due_at": "2026-01-01T10:00:00Z", "minutes": 90,
+                       "source": "test:task"}]}
+        out = self.ro.call("ace_op_tool_presence_deadline_collision",
+                           {"plan": collision})
+        self.assertFalse(out["can_fit_preemptive"])
+        self.assertEqual(out["collisions"][0]["deficit_minutes"], 30)
+
+        duration = {
+            "schema": "ace.presence.duration-plan.v1", "kind": "report",
+            "complexity": 3, "minimum_samples": 2,
+            "history": [{"kind": "report", "complexity": 3,
+                         "minutes": 30, "source": "test:h1"},
+                        {"kind": "report", "complexity": 3,
+                         "minutes": 50, "source": "test:h2"},
+                        {"kind": "report", "complexity": 3,
+                         "minutes": 70, "source": "test:h4"},
+                        {"kind": "other", "complexity": 3,
+                         "minutes": 999, "source": "test:h3"}]}
+        estimate = self.ro.call("ace_op_tool_presence_duration_estimate",
+                                {"plan": duration})
+        self.assertEqual(estimate["samples"], 3)
+        self.assertEqual(estimate["median_minutes"], 50)
+
+        circular = {
+            "claims": [{"id": "x", "source_ref": "test:x"},
+                       {"id": "y", "source_ref": "test:y"}],
+            "foundations": [],
+            "rules": [{"id": "r1", "conclusion": "x", "premises": ["y"],
+                       "source_ref": "test:r1"},
+                      {"id": "r2", "conclusion": "y", "premises": ["x"],
+                       "source_ref": "test:r2"}]}
+        verdict = self.ro.call("ace_op_tool_deliberation_circular",
+                               {"record": circular})
+        self.assertEqual(len(verdict["cycles"]), 1)
+        self.assertEqual(sorted(verdict["cycles"][0]["claims"]),
+                         ["x", "y"])
+        self.assertEqual(verdict["grounded"], [])
+
+
 if __name__ == "__main__":
     unittest.main()
