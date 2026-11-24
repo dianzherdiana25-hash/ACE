@@ -1360,5 +1360,110 @@ class ToolboxBatch19Tests(unittest.TestCase):
         self.assertEqual(fitted["omitted"], ["b2"])
 
 
+class ToolboxBatch20Tests(unittest.TestCase):
+    """Batch 20: guardian exceptions/flags/custody/redaction, presence rhythm/calibration."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch20_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX20_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX20_SPECS), 6)
+        for spec in ACE_TOOLBOX20_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_guardian_batch20(self) -> None:
+        req, pol, appr = "a" * 64, "b" * 64, "c" * 64
+        exceptions = {
+            "schema": "ace.guardian.exceptions.v1",
+            "at": "2026-01-10T12:00:00Z",
+            "decision": {"action_id": "act_1", "kind": "read",
+                         "outcome": "review", "reason": "perlu_izin",
+                         "matched_rules": [], "request_sha256": req,
+                         "policy_sha256": pol},
+            "grants": [{"id": "izin_1", "kind": "read",
+                        "request_sha256": req, "policy_sha256": pol,
+                        "starts": "2026-01-10T00:00:00Z",
+                        "expires": "2026-01-10T20:00:00Z",
+                        "approval_ref": appr, "reason": "disetujui"}],
+            "approved": [appr]}
+        out = self.ro.call("ace_op_tool_guardian_exceptions",
+                           {"plan": exceptions})
+        self.assertEqual(out["outcome"], "allow")
+        self.assertEqual(out["applied"], "izin_1")
+
+        transition = {
+            "schema": "ace.guardian.flag-transition.v1",
+            "at": "2026-01-10T12:00:00Z",
+            "flags": [{"name": "ACE_TEST_FLAG", "phase": "off",
+                       "revision": "d" * 64}],
+            "change": {"name": "ACE_TEST_FLAG", "from": "off",
+                       "to": "fixture", "parent": "d" * 64},
+            "readiness": {"to": "fixture", "passed": True,
+                          "source": "e" * 64,
+                          "at": "2026-01-10T00:00:00Z",
+                          "expires": "2026-01-11T00:00:00Z"}}
+        drafted = self.ro.call("ace_op_tool_guardian_flag_transition",
+                               {"plan": transition})
+        self.assertEqual(drafted["status"], "review_only")
+        self.assertEqual(drafted["rollback"]["phase"], "off")
+
+        policy = self.ro.call(
+            "ace_op_tool_guardian_custody_policy",
+            {"plan": {"schema": "ace.guardian.custody.v1"}})
+        total_rules = sum(len(rows) for rows in policy["by_kind"].values())
+        self.assertEqual(total_rules, 10)
+        self.assertEqual(len(policy["compiled_sha256"]), 64)
+        self.assertEqual(policy["by_kind"]["money"][0]["effect"], "deny")
+
+        redact = {
+            "schema": "ace.guardian.fork-redaction.v1",
+            "snapshot": {"name": "contoh", "token": "rahasia",
+                         "nested": {"password": "sandi"}},
+            "fields": ["/token"]}
+        cleaned = self.ro.call("ace_op_tool_guardian_fork_redact",
+                               {"plan": redact})
+        self.assertEqual(cleaned["snapshot"]["token"], "[redacted]")
+        self.assertEqual(cleaned["snapshot"]["nested"]["password"],
+                         "[redacted]")
+        self.assertEqual(cleaned["counts"],
+                         {"explicit": 1, "sensitive_name": 1})
+
+    def test_presence_batch20(self) -> None:
+        rhythm = {
+            "schema": "ace.presence.owner-rhythm.v1",
+            "zone": "Asia/Jakarta", "first": "2026-01-05",
+            "last": "2026-01-05",
+            "calendar": [{"start": "2026-01-05T02:00:00Z",
+                          "end": "2026-01-05T03:00:00Z",
+                          "source": "test:cal", "include": True}]}
+        out = self.ro.call("ace_op_tool_presence_rhythm",
+                           {"plan": rhythm})
+        monday = out["weekdays"][0]
+        self.assertEqual(monday["weekday"], 0)
+        self.assertEqual(monday["average_booked_minutes"], "60")
+
+        calibration = {
+            "schema": "ace.presence.estimate-calibration.v1",
+            "minimum": 1,
+            "pairs": [{"id": "t1", "kind": "tulis", "forecast": 30,
+                       "actual": 60, "source": "test:t1"},
+                      {"id": "t2", "kind": "tulis", "forecast": 60,
+                       "actual": 60, "source": "test:t2"}]}
+        measured = self.ro.call(
+            "ace_op_tool_presence_estimate_calibration",
+            {"plan": calibration})
+        group = measured["groups"]["tulis"]
+        self.assertEqual(group["bias_minutes"], "15")
+        self.assertEqual(group["mae_minutes"], "15")
+        self.assertEqual(group["ratio_p90"], "2")
+
+
 if __name__ == "__main__":
     unittest.main()

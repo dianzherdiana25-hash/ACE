@@ -683,6 +683,32 @@ ACE_TOOLBOX19_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX19_SPECS
 
+# -- Toolbox batch 20: more anchored ace_guardian / ace_presence
+# evaluators (exceptions, flag transitions, custody policy, fork
+# redaction, owner rhythm, estimate calibration).
+ACE_TOOLBOX20_SPECS = (
+    _spec("ace_op_tool_guardian_exceptions",
+          "Evaluate time-bounded exceptions: a review decision becomes allow only with exactly one unexpired, specifically approved grant matching kind and digests (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_guardian_flag_transition",
+          "Draft a feature-flag phase transition only when the change matches the current revision and fresh readiness evidence covers it; includes the rollback record (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_guardian_custody_policy",
+          "Compile ACE's standing custody policy (the program fences: sealed reads, external send, money, main merge, memory writes) into its auditable rule form (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_guardian_fork_redact",
+          "Redact a fixture snapshot by explicit JSON pointers plus sensitive field names, without emitting the sensitive values (code/ace_guardian).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_presence_rhythm",
+          "Summarize the owner's permitted calendar rhythm per weekday with traceable minutes and sources (code/ace_presence).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_presence_estimate_calibration",
+          "Measure duration-estimate bias and error per task kind from forecast/actual pairs, with a p90 ratio only at enough samples (code/ace_presence).",
+          {"plan": _OBJ}, ("plan",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX20_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1805,4 +1831,41 @@ class OperationalBridge:
         plan = args["plan"]
         return self._run_pkg("ace_presence", "answer_length_adapter",
                              "adapt", plan,
+                             self._pkg_anchor("ace_presence", plan))
+
+    # -- toolbox batch 20 --------------------------------------------------
+    def _do_ace_op_tool_guardian_exceptions(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "exception_manager",
+                             "exceptions", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_guardian_flag_transition(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "flag_transition_manager",
+                             "transition", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_guardian_custody_policy(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "custody_rules",
+                             "standing", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_guardian_fork_redact(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_guardian", "fork_redactor",
+                             "redact", plan,
+                             self._pkg_anchor("ace_guardian", plan))
+
+    def _do_ace_op_tool_presence_rhythm(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_presence", "owner_rhythm",
+                             "rhythm", plan,
+                             self._pkg_anchor("ace_presence", plan))
+
+    def _do_ace_op_tool_presence_estimate_calibration(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_presence", "estimate_calibrator",
+                             "calibrate", plan,
                              self._pkg_anchor("ace_presence", plan))

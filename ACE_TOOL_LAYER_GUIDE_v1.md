@@ -339,3 +339,19 @@ menghapus apa pun), dan penyesuai panjang jawaban ke
 anggaran karakter kanal dengan blok wajib didahulukan.
 Total permukaan agen: 138 tool; suite ace_mcp 84 tes
 lulus.
+
+Batch 20 (6 tool, semua baca-saja): ace_guardian —
+pengecualian berbatas waktu (putusan review hanya menjadi
+allow lewat tepat satu izin spesifik yang belum kedaluwarsa
+dan cocok digest-nya), draf transisi flag (dengan catatan
+rollback; bukti readiness harus segar), kebijakan kustodi
+tetap ACE yang dikompilasi ke bentuk aturan yang bisa
+diaudit, dan redaksi snapshot fixture (pointer eksplisit +
+nama bidang sensitif, tanpa mengeluarkan isi sensitif);
+ace_presence — ritme kalender pemilik per hari-dalam-pekan
+dengan menit tertelusur, dan kalibrasi taksiran durasi
+(bias/MAE per kelas tugas, rasio p90 hanya bila sampel
+cukup). Catatan fixture: ID di ace_guardian harus kanonis
+huruf kecil (tanpa tanda hubung) dan alasan putusan gate
+adalah ID, bukan teks bebas. Total permukaan agen: 144
+tool; suite ace_mcp 87 tes lulus.
