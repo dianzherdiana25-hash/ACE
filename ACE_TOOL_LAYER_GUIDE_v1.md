@@ -190,3 +190,11 @@ Total permukaan agen saat ini: 49 tool (21 operasional + 22 toolbox +
 6 riset). Bukti: suite `ace_mcp` 41 tes lulus, termasuk 11 tes toolbox.
 Batch berikutnya: keluarga organ/observasi dan paket-paket `code/`
 per era, mengikuti peta inventarisasi di workspace agen.
+
+Batch 3 (9 tool, semua baca-saja): organ_quality_board,
+recall_delivery_probe, recall_precision_probe, saturation_scan,
+engine_idle_report, verdict_board, transfer_probe, incident_book,
+memory_anchor_audit. Total permukaan agen: 58 tool; suite ace_mcp
+44 tes lulus. Dua perkakas ditunda dengan alasan tercatat di
+op_bridge.py: organ_smoke (butuh transport suntikan) dan perkakas
+baca-repo (di luar kotak pasir workspace).

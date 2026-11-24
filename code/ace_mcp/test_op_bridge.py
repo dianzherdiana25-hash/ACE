@@ -333,5 +333,44 @@ class ToolboxBatch2Tests(unittest.TestCase):
         self.assertTrue((self.ws / "candidates_v2").is_dir())
 
 
+class ToolboxBatch3Tests(unittest.TestCase):
+    """Batch 3: organ/observation family, all read-only."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch3_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX3_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX3_SPECS), 9)
+        for spec in ACE_TOOLBOX3_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_scoreboard_and_idle_report(self) -> None:
+        board = self.ro.call("ace_op_tool_organ_scoreboard", {
+            "receipts": [{"task_id": "t1", "organ": "front",
+                          "at": "2026-11-24T00:00:00Z", "passed": True}],
+            "grounding_rows": []})
+        self.assertIsInstance(board, dict)
+        idle = self.ro.call("ace_op_tool_idle_report", {
+            "log_records": [{"ts": "2026-11-24T00:00:00Z", "cycle": 1},
+                            {"ts": "2026-11-24T00:05:00Z", "cycle": 2}]})
+        self.assertIsInstance(idle, dict)
+
+    def test_recall_delivery_and_verdict_board(self) -> None:
+        out = self.ro.call("ace_op_tool_recall_delivery", {
+            "tasks": [{"id": "h1", "query": "latihan graf bfs"}],
+            "store": {"records": [{"id": "m1", "title": "graf",
+                                   "text": "latihan graf bfs"}]}})
+        self.assertIsInstance(out, dict)
+        board = self.ro.call("ace_op_tool_verdict_board", {"gate_paths": {}})
+        self.assertIsInstance(board, dict)
+
+
 if __name__ == "__main__":
     unittest.main()

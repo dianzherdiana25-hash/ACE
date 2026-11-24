@@ -257,6 +257,44 @@ ACE_TOOLBOX2_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX2_SPECS
 
+# -- Toolbox batch 3: organ/observation family. All read-only. Two --
+# repo tools were deliberately NOT wired: organ_smoke (needs an
+# injected transport callable) and daily_digest + verdict gates over
+# the repo itself (outside the workspace sandbox; a repo-scoped read
+# adapter is a separate owner decision).
+ACE_TOOLBOX3_SPECS = (
+    _spec("ace_op_tool_organ_scoreboard",
+          "Aggregate per-organ quality metrics and weekly trends from receipts and grounding rows (tools.organ_quality_board).",
+          {"receipts": _ARR, "grounding_rows": _ARR},
+          ("receipts", "grounding_rows")),
+    _spec("ace_op_tool_recall_delivery",
+          "Audit held-out tasks against a memory store snapshot {records: [...]} for recall delivery (tools.recall_delivery_probe, default fixture recall).",
+          {"tasks": _ARR, "store": _OBJ}, ("tasks", "store")),
+    _spec("ace_op_tool_recall_precision",
+          "Evaluate recall precision/recall/F1 over the workspace cognitive memory (tools.recall_precision_probe with its own retriever).",
+          {"queries": _ARR, "memory_path": _STR}, ("queries",)),
+    _spec("ace_op_tool_saturation_scan",
+          "Scan result files for score saturation per task group (tools.saturation_scan).",
+          {"paths": _STR_ARR}, ("paths",)),
+    _spec("ace_op_tool_idle_report",
+          "Compute daily idle minutes, cycles, and per-role budget burn from engine log records (tools.engine_idle_report).",
+          {"log_records": _ARR, "snapshot_records": _ARR}, ("log_records",)),
+    _spec("ace_op_tool_verdict_board",
+          "Assemble the G1-G5 verdict board from gate JSON files inside the workspace (tools.verdict_board).",
+          {"gate_paths": _OBJ}, ("gate_paths",)),
+    _spec("ace_op_tool_transfer_probe",
+          "Run the transfer probe over a suite file with the module's own structural toy solver, exactly as the runtime's leap step does (tools.transfer_probe).",
+          {"suite_path": _STR, "seed": {"type": "integer"}}, ("suite_path",)),
+    _spec("ace_op_tool_incident_summary",
+          "Verify and summarize the incident book over an optional date period (tools.incident_book). Defaults to the workspace incidents file.",
+          {"book_path": _STR, "start_date": _STR, "end_date": _STR}),
+    _spec("ace_op_tool_anchor_audit",
+          "Audit proposal rows against a verified-refs file (tools.memory_anchor_audit).",
+          {"rows": _ARR, "refs_path": _STR}, ("rows", "refs_path")),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX3_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -769,3 +807,70 @@ class OperationalBridge:
                 summary["jsonl_sha256"] = result["jsonl_sha256"]
         self._log("ace_op_tool_discriminating_candidates", args, summary)
         return summary
+
+    # -- toolbox batch 3 ---------------------------------------------------
+    def _do_ace_op_tool_organ_scoreboard(self, args: dict) -> Any:
+        return self._run_tool("organ_quality_board", "build_organ_scoreboard",
+                              list(args["receipts"]),
+                              list(args["grounding_rows"]))
+
+    def _do_ace_op_tool_recall_delivery(self, args: dict) -> Any:
+        return self._run_tool("recall_delivery_probe", "probe_recall_delivery",
+                              list(args["tasks"]), dict(args["store"]))
+
+    def _do_ace_op_tool_recall_precision(self, args: dict) -> Any:
+        ws = self.store.workspace
+        mem = (self._ws_path(str(args["memory_path"])) if args.get("memory_path")
+               else ws / "cognitive_memory" / "memory.jsonl")
+        make = self._repo_tool("recall_precision_probe",
+                               "make_cognitive_memory_retriever")
+        try:
+            retriever = make(mem)
+        except Exception as exc:
+            raise ValueError(f"tools.recall_precision_probe retriever: {exc}") from exc
+        return self._run_tool("recall_precision_probe",
+                              "evaluate_recall_precision",
+                              list(args["queries"]), retriever)
+
+    def _do_ace_op_tool_saturation_scan(self, args: dict) -> Any:
+        paths = [self._ws_path(p) for p in args["paths"]]
+        return self._run_tool("saturation_scan", "scan_saturation", paths)
+
+    def _do_ace_op_tool_idle_report(self, args: dict) -> Any:
+        return self._run_tool("engine_idle_report", "build_idle_report",
+                              list(args["log_records"]),
+                              list(args.get("snapshot_records") or []))
+
+    def _do_ace_op_tool_verdict_board(self, args: dict) -> Any:
+        gates = {str(k): self._ws_path(str(v))
+                 for k, v in dict(args["gate_paths"]).items()}
+        return self._run_tool("verdict_board", "assemble_verdict_board", gates)
+
+    def _do_ace_op_tool_transfer_probe(self, args: dict) -> Any:
+        load = self._repo_tool("transfer_probe", "load_transfer_suite")
+        solver = self._repo_tool("transfer_probe", "structural_toy_solver")
+        suite = load(self._ws_path(str(args["suite_path"])))
+        kw: dict[str, Any] = {}
+        if args.get("seed") is not None:
+            kw["seed"] = int(args["seed"])
+        return self._run_tool("transfer_probe", "run_transfer_probe",
+                              suite, solver, **kw)
+
+    def _do_ace_op_tool_incident_summary(self, args: dict) -> Any:
+        ws = self.store.workspace
+        book = (self._ws_path(str(args["book_path"])) if args.get("book_path")
+                else ws / "incidents.jsonl")
+        if not book.is_file():
+            raise ValueError(f"incident book not found: {book.name}")
+        kw: dict[str, Any] = {}
+        if args.get("start_date"):
+            kw["start_date"] = str(args["start_date"])
+        if args.get("end_date"):
+            kw["end_date"] = str(args["end_date"])
+        return self._run_tool("incident_book", "summarize_period", book, **kw)
+
+    def _do_ace_op_tool_anchor_audit(self, args: dict) -> Any:
+        load = self._repo_tool("memory_anchor_audit", "load_verified_store")
+        store = load(self._ws_path(str(args["refs_path"])))
+        return self._run_tool("memory_anchor_audit", "audit_proposals",
+                              list(args["rows"]), store)
