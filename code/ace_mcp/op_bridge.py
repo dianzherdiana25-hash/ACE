@@ -528,6 +528,37 @@ ACE_TOOLBOX12_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX12_SPECS
 
+# -- Toolbox batch 13: ace_software_factory anchored evaluators.
+# These functions take (plan, expected) pairs where expected is the
+# sha256 of the plan's canonical JSON (the package's own
+# _contracts.identity). The bridge computes the anchor from the plan
+# the caller supplies, so the tools validate internal consistency and
+# run the package logic; they do NOT provide external custody of the
+# plan (with the package CLI the operator passes --expect-sha256 from
+# a separate channel; here the anchor is derived, by design).
+ACE_TOOLBOX13_SPECS = (
+    _spec("ace_op_tool_factory_acceptance",
+          "Judge product acceptance: every spec criterion needs exactly one rule and one matching observation; missing pieces report incomplete, never passed (code/ace_software_factory). The contract's spec_sha256 must be the canonical sha256 of the spec.",
+          {"spec": _OBJ, "contract": _OBJ, "observations": _OBJ},
+          ("spec", "contract", "observations")),
+    _spec("ace_op_tool_factory_trend",
+          "Summarize factory bench quality across products and runs from a bench history, with rates and denominators (code/ace_software_factory).",
+          {"history": _OBJ}, ("history",)),
+    _spec("ace_op_tool_factory_payment_sim",
+          "Simulate a fictional payment lifecycle (authorize/capture/refund/void) in test units with idempotency and balance-conservation reconciliation (code/ace_software_factory).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_factory_flag_eval",
+          "Evaluate a feature flag for one subject: segment rules, time window, stable hash bucketing, fail-closed on unknown flag or invalid attributes (code/ace_software_factory).",
+          {"plan": _OBJ, "request": _OBJ,
+           "disabled": {"type": "array", "items": {"type": "string"}}},
+          ("plan", "request")),
+    _spec("ace_op_tool_factory_uptime",
+          "Evaluate uptime observations against a probe plan; slots without evidence count as unknown and lower the reported bound (code/ace_software_factory).",
+          {"plan": _OBJ, "observations": _OBJ}, ("plan", "observations")),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX13_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1449,3 +1480,43 @@ class OperationalBridge:
         if isinstance(out, list) and len(out) == 2:
             return {"train_rt": out[0], "val_rt": out[1]}
         return {"result": out}
+
+    # -- toolbox batch 13 --------------------------------------------------
+    def _factory_anchor(self, value: Any) -> str:
+        identity = self._pkg_tool("ace_software_factory", "_contracts",
+                                  "identity")
+        return identity(value)
+
+    def _do_ace_op_tool_factory_acceptance(self, args: dict) -> Any:
+        spec, contract = args["spec"], args["contract"]
+        observed = args["observations"]
+        return self._run_pkg(
+            "ace_software_factory", "acceptance_judge", "evaluate",
+            spec, contract, observed,
+            self._factory_anchor(contract),
+            self._factory_anchor(observed),
+            str(observed.get("artifact_sha256", "")))
+
+    def _do_ace_op_tool_factory_trend(self, args: dict) -> Any:
+        plan = args["history"]
+        return self._run_pkg("ace_software_factory", "factory_trend",
+                             "summarize", plan, self._factory_anchor(plan))
+
+    def _do_ace_op_tool_factory_payment_sim(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_software_factory",
+                             "payment_sandbox_builder", "simulate",
+                             plan, self._factory_anchor(plan))
+
+    def _do_ace_op_tool_factory_flag_eval(self, args: dict) -> Any:
+        plan = args["plan"]
+        disabled = tuple(str(x) for x in args.get("disabled") or ())
+        return self._run_pkg("ace_software_factory", "flag_builder",
+                             "evaluate", plan, self._factory_anchor(plan),
+                             args["request"], disabled=disabled)
+
+    def _do_ace_op_tool_factory_uptime(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_software_factory", "uptime_builder",
+                             "evaluate", plan, self._factory_anchor(plan),
+                             args["observations"])

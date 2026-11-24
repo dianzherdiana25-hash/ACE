@@ -672,5 +672,132 @@ class ToolboxBatch12Tests(unittest.TestCase):
         self.assertIn("val_rt", part)
 
 
+class ToolboxBatch13Tests(unittest.TestCase):
+    """Batch 13: ace_software_factory anchored evaluators."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch13_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX13_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX13_SPECS), 5)
+        for spec in ACE_TOOLBOX13_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_factory_flag_and_payment(self) -> None:
+        flag_plan = {
+            "schema": "ace.factory-flag-plan.v1", "product_id": "demo",
+            "source_ref": "test:flags",
+            "attributes": [{"id": "tier", "values": ["free", "pro"]}],
+            "flags": [{"id": "beta", "start": None, "end": None,
+                       "enabled": True, "salt": "s1", "rollout_bp": 10000,
+                       "segments": [], "source_ref": "test:flag"}]}
+        out = self.ro.call("ace_op_tool_factory_flag_eval", {
+            "plan": flag_plan,
+            "request": {"flag": "beta", "subject": "user-1",
+                        "at": "2026-01-01T00:00:00Z", "attributes": {}}})
+        self.assertEqual(out["reason"], "inside_rollout")
+        self.assertTrue(out["enabled"])
+        unknown = self.ro.call("ace_op_tool_factory_flag_eval", {
+            "plan": flag_plan,
+            "request": {"flag": "nope", "subject": "user-1",
+                        "at": "2026-01-01T00:00:00Z", "attributes": {}}})
+        self.assertEqual(unknown["reason"], "unknown_flag")
+
+        pay_plan = {
+            "schema": "ace.factory-payment-sandbox.v1",
+            "source_ref": "test:pay",
+            "fixture_accounts": [{"id": "acct", "units": 100}],
+            "events": [{"id": "e1", "kind": "authorize",
+                        "account": "acct", "units": 40},
+                       {"id": "e2", "kind": "capture",
+                        "authorization": "e1", "units": 40}],
+            "expected_receipts": [{"status": "accepted", "reason": None},
+                                  {"status": "accepted", "reason": None}]}
+        sim = self.ro.call("ace_op_tool_factory_payment_sim",
+                           {"plan": pay_plan})
+        self.assertEqual(sim["status"], "verified_fixture")
+        self.assertTrue(sim["reconciliation"]["acct"]["conserved"])
+
+    def test_factory_acceptance_trend_uptime(self) -> None:
+        from ace_software_factory._contracts import identity
+        spec = {
+            "schema": "ace.factory-product-spec.v1",
+            "brief_sha256": "0" * 64, "product_id": "demo",
+            "name": "Demo", "surface": "cli", "objective": "Demo.",
+            "objective_ref": "test:obj",
+            "requirements": [{"id": "req1", "statement": "Works.",
+                              "source_ref": "test:req",
+                              "acceptance": [{"statement": "Answer is 4.",
+                                              "source_ref": "test:crit"}]}],
+            "constraints": [], "non_goals": [], "pending": [],
+            "status": "ready"}
+        contract = {
+            "schema": "ace.factory-acceptance-contract.v1",
+            "spec_sha256": identity(spec), "source_ref": "test:contract",
+            "rules": [{"id": "r1", "criterion_ref": "test:crit",
+                       "operator": "equals", "expected": 4,
+                       "source_ref": "test:rule"}]}
+        observations = {
+            "schema": "ace.factory-observations.v1",
+            "product_id": "demo", "contract_sha256": identity(contract),
+            "artifact_sha256": "a" * 64,
+            "records": [{"id": "r1", "value": 4,
+                         "source_ref": "test:obs"}]}
+        verdict = self.ro.call("ace_op_tool_factory_acceptance", {
+            "spec": spec, "contract": contract,
+            "observations": observations})
+        self.assertEqual(verdict["status"], "passed")
+        self.assertEqual(verdict["counts"]["passed"], 1)
+
+        bench = {
+            "schema": "ace.factory-bench-report.v1",
+            "plan_sha256": "b" * 64, "source_ref": "test:bench",
+            "product_count": 1, "passed": 1, "status": "passed",
+            "products": [{"product_id": "demo", "surface": "cli",
+                          "artifact_sha256": "a" * 64,
+                          "acceptance": "test:acc",
+                          "counts": {"passed": 1, "failed": 0,
+                                     "missing_rule": 0,
+                                     "missing_observation": 0},
+                          "status": "passed"}]}
+        history = {
+            "schema": "ace.factory-trend-history.v1",
+            "source_ref": "test:history",
+            "runs": [{"id": "run1", "at": "2026-01-01T00:00:00Z",
+                      "ref": "test:run", "bench_sha256": identity(bench),
+                      "bench": bench}]}
+        trend = self.ro.call("ace_op_tool_factory_trend",
+                             {"history": history})
+        self.assertEqual(trend["run_count"], 1)
+        self.assertEqual(trend["by_surface"]["cli"]["passed"], 1)
+
+        up_plan = {
+            "schema": "ace.factory-uptime-plan.v1",
+            "source_ref": "test:uptime",
+            "from": "2026-01-01T00:00:00Z",
+            "until": "2026-01-01T00:03:00Z", "cadence_seconds": 60,
+            "max_delay_seconds": 10,
+            "components": [{"id": "web", "port": 8080, "path": "/health",
+                            "ok_status": 200, "source_ref": "test:comp"}]}
+        up_obs = {
+            "schema": "ace.factory-uptime-observations.v1",
+            "plan_sha256": identity(up_plan),
+            "rows": [{"component": "web", "at": "2026-01-01T00:00:00Z",
+                      "state": "up", "source_ref": "test:probe"}]}
+        report = self.ro.call("ace_op_tool_factory_uptime", {
+            "plan": up_plan, "observations": up_obs})
+        comp = report["components"][0]
+        self.assertEqual(comp["up"], 1)
+        self.assertEqual(comp["unknown"], 2)
+        self.assertEqual(comp["uptime_lower_bound"]["denominator"], 3)
+
+
 if __name__ == "__main__":
     unittest.main()

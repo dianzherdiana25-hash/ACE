@@ -250,3 +250,18 @@ Batch 12 (3 tool, semua baca-saja): status penyegelan OS +
 audit AST kandidat (ace_host_controller), partisi awalan
 beranggaran node (ace_research_discovery). Total
 permukaan agen: 107 tool; suite ace_mcp 64 tes lulus.
+
+Batch 13 (5 tool, semua baca-saja): evaluator ter-anchor
+ace_software_factory — hakim acceptance (setiap kriteria
+perlu tepat satu aturan + satu observasi cocok), tren mutu
+bench lintas run, simulator lifecycle pembayaran fiktif
+(konservasi saldo terverifikasi), evaluasi feature flag
+(bucketing hash stabil, fail-closed), dan evaluasi uptime
+(slot tanpa bukti menurunkan batas bawah). Catatan desain:
+fungsi-fungsi ini menerima pasangan (plan, expected) dengan
+expected = sha256 JSON kanonis plan; bridge menghitung
+anchor dari plan yang dipasok pemanggil, jadi yang
+divalidasi adalah konsistensi internal + logika paket —
+bukan kustodi eksternal atas plan (pada CLI paket, operator
+memberi --expect-sha256 dari saluran terpisah). Total
+permukaan agen: 112 tool; suite ace_mcp 67 tes lulus.
