@@ -450,6 +450,27 @@ ACE_TOOLBOX8_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX8_SPECS
 
+# -- Toolbox batch 9: more code/ packages (causal, epistemic,
+# self-model calibration, Indonesian reporting). All read-only.
+ACE_TOOLBOX9_SPECS = (
+    _spec("ace_op_tool_d_separation",
+          "Test Pearl's d-separation criterion on a DAG given as {node: [parents or children]} adjacency (code/ace_causal).",
+          {"graph": _OBJ, "x": _STR, "y": _STR, "z": _STR_ARR},
+          ("graph", "x", "y")),
+    _spec("ace_op_tool_entropy",
+          "Compute the Shannon entropy of a probability list (code/ace_epistemic).",
+          {"probs": _NUM_ARR}, ("probs",)),
+    _spec("ace_op_tool_calibration_metrics",
+          "Compute Brier score, ECE, coverage, and selective risk from [p_hat, y_true, executed] records (code/ace_selfmodel).",
+          {"records": {"type": "array", "items": {"type": "array"}},
+           "n_bins": {"type": "integer"}}, ("records",)),
+    _spec("ace_op_tool_indo_mobile_report",
+          "Generate the Indonesian mobile-format experiment report text (code/ace_report).",
+          {"experiment_data": _OBJ}, ("experiment_data",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX9_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1268,3 +1289,31 @@ class OperationalBridge:
         return self._run_pkg("ace_indo_nlp", "discourse",
                              "parse_teaching_or_correction",
                              str(args["text"]), **kw)
+
+    # -- toolbox batch 9 ---------------------------------------------------
+    def _do_ace_op_tool_d_separation(self, args: dict) -> Any:
+        graph = {str(k): [str(x) for x in v]
+                 for k, v in dict(args["graph"]).items()}
+        out = self._run_pkg("ace_causal", "causal_miner", "is_d_separated",
+                            graph, str(args["x"]), str(args["y"]),
+                            set(args.get("z") or []))
+        return {"d_separated": bool(out)}
+
+    def _do_ace_op_tool_entropy(self, args: dict) -> Any:
+        return self._run_pkg("ace_epistemic", "active_sampler",
+                             "compute_entropy",
+                             [float(x) for x in args["probs"]])
+
+    def _do_ace_op_tool_calibration_metrics(self, args: dict) -> Any:
+        records = [(float(r[0]), bool(r[1]), bool(r[2]))
+                   for r in args["records"]]
+        kw: dict[str, Any] = {}
+        if args.get("n_bins") is not None:
+            kw["n_bins"] = int(args["n_bins"])
+        return self._run_pkg("ace_selfmodel", "metacognition",
+                             "compute_calibration_metrics", records, **kw)
+
+    def _do_ace_op_tool_indo_mobile_report(self, args: dict) -> Any:
+        return self._run_pkg("ace_report", "mobile_report",
+                             "generate_indonesian_mobile_report",
+                             dict(args["experiment_data"]))

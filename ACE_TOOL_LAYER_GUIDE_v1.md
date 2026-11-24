@@ -230,3 +230,8 @@ kelas A triase) + paket code/ pertama — ace_conformal
 Total permukaan agen: 93 tool; suite ace_mcp 55 tes lulus.
 Pola _pkg_tool membuka 63 paket code/ lain untuk batch
 berikutnya per era.
+
+Batch 9 (4 tool, semua baca-saja, paket code/): ace_causal
+d-separation, ace_epistemic entropi, ace_selfmodel metrik
+kalibrasi, ace_report laporan mobile Bahasa Indonesia.
+Total permukaan agen: 97 tool; suite ace_mcp 58 tes lulus.

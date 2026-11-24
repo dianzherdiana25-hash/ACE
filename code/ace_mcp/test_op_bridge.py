@@ -545,5 +545,41 @@ class ToolboxBatch8Tests(unittest.TestCase):
         self.assertIsInstance(out, dict)
 
 
+class ToolboxBatch9Tests(unittest.TestCase):
+    """Batch 9: causal/epistemic/selfmodel/report packages."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch9_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX9_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX9_SPECS), 4)
+        for spec in ACE_TOOLBOX9_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_causal_and_entropy(self) -> None:
+        dag = {"A": ["B"], "B": ["C"], "C": []}
+        open_path = self.ro.call("ace_op_tool_d_separation", {
+            "graph": dag, "x": "A", "y": "C", "z": []})
+        self.assertEqual(open_path, {"d_separated": False})
+        blocked = self.ro.call("ace_op_tool_d_separation", {
+            "graph": dag, "x": "A", "y": "C", "z": ["B"]})
+        self.assertEqual(blocked, {"d_separated": True})
+        ent = self.ro.call("ace_op_tool_entropy", {"probs": [0.5, 0.5]})
+        self.assertIsInstance(ent, float)
+        self.assertGreater(ent, 0.0)
+
+    def test_calibration(self) -> None:
+        out = self.ro.call("ace_op_tool_calibration_metrics", {
+            "records": [[0.9, True, True], [0.1, False, True]]})
+        self.assertIsInstance(out, dict)
+
+
 if __name__ == "__main__":
     unittest.main()
