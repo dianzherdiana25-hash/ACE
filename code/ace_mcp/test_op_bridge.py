@@ -201,5 +201,137 @@ class CliTests(unittest.TestCase):
         self.assertEqual(out["status"], "ACE_TOOL_ERROR")
 
 
+class ToolboxBatch1Tests(unittest.TestCase):
+    """Batch 1: ACE's own repo tools (tools/) opened to its agents."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.op = OperationalBridge(self.ws, allow_writes=True)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self.op.store.close()
+        self._tmp.cleanup()
+
+    def test_toolbox_registered_and_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX_SPECS), 12)
+        for spec in ACE_TOOLBOX_SPECS:
+            self.assertTrue(spec["name"].startswith("ace_op_tool_"))
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+            self.assertIn(spec["name"],
+                          [s["name"] for s in self.ro.tools()])
+
+    def test_mastery_board_and_curriculum_ab(self) -> None:
+        board = self.ro.call("ace_op_tool_mastery_board",
+                             {"domains": {"coding": {"closure": 0.5},
+                                          "language": {"closure": 1.0}}})
+        self.assertIn("summary", board)
+        report = self.ro.call(
+            "ace_op_tool_curriculum_ab",
+            {"fixed": [{"family": "bfs", "status": "COMPLETED"}],
+             "generated": [{"family": "bfs", "closed": True}]})
+        self.assertIsInstance(report, dict)
+
+    def test_prose_audit_and_practice_lint(self) -> None:
+        audit = self.ro.call("ace_op_tool_prose_audit",
+                             {"text": "# Laporan\n\nSemua sistem pasti sempurna."})
+        self.assertIn("summary", audit)
+        lint = self.ro.call("ace_op_tool_practice_lint", {"tasks": [
+            {"id": "t1", "title": "Latihan", "prompt": "Buat fungsi f",
+             "reference_solution": "def f():\n    return 1",
+             "evaluator_code": "def check(fn):\n    return fn() == 1",
+             "test_cases": [[]]}]})
+        self.assertIn("summary", lint)
+
+    def test_occurrence_outliers_on_live_store(self) -> None:
+        out = self.ro.call("ace_op_tool_occurrence_outliers", {})
+        self.assertIn("summary", out)
+
+    def test_gap_patterns_defaults_to_store_gaps(self) -> None:
+        with self.assertRaises(ValueError):
+            self.ro.call("ace_op_tool_gap_patterns", {})
+        self.op.call("ace_op_gap_report", {
+            "agent": "test-agent", "error_type": "MISSING_SKILL",
+            "missing_skill_or_tool": "uji", "description": "gap uji"})
+        out = self.ro.call("ace_op_tool_gap_patterns", {})
+        self.assertIsInstance(out, dict)
+
+    def test_receipt_chain_and_workspace_escape_guard(self) -> None:
+        path = self.ws / "director_exec_receipts.jsonl"
+        path.write_text('{"at": "2026-11-24T00:00:00Z"}\n', encoding="utf-8")
+        out = self.ro.call("ace_op_tool_receipt_chain",
+                           {"path": "director_exec_receipts.jsonl"})
+        self.assertIsInstance(out, dict)
+        with self.assertRaises(ValueError):
+            self.ro.call("ace_op_tool_receipt_chain",
+                         {"path": "../outside.jsonl"})
+
+
+class ToolboxBatch2Tests(unittest.TestCase):
+    """Batch 2: memory hygiene/decay, director helpers, factories."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.op = OperationalBridge(self.ws, allow_writes=True)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self.op.store.close()
+        self._tmp.cleanup()
+
+    def test_batch2_registration_and_write_gating(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX2_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX2_SPECS), 10)
+        write_names = {s["name"] for s in ACE_TOOLBOX2_SPECS
+                       if s["name"] in OP_WRITE_TOOLS}
+        self.assertEqual(write_names, {"ace_op_tool_candidate_factory_v2",
+                                       "ace_op_tool_discriminating_candidates"})
+        with self.assertRaises(PermissionError):
+            self.ro.call("ace_op_tool_candidate_factory_v2",
+                         {"id_lang_count": 1, "ml_lang_count": 1,
+                          "code_count": 1})
+
+    def test_director_helpers(self) -> None:
+        proposals = [{"proposal_id": "p1", "title": "Latihan BFS",
+                      "rationale": "Ada 3 gap terbuka tentang graf",
+                      "based_on": ["gap_1"]}]
+        out = self.ro.call("ace_op_tool_director_challenge",
+                           {"proposals": proposals,
+                            "facts": {"gap_1": {"status": "OPEN"}}})
+        self.assertIsInstance(out, dict)
+        routed = self.ro.call("ace_op_tool_director_route",
+                              {"proposals": proposals,
+                               "gap_error_types": {"gap_1": "PRACTICE_ERROR"}})
+        self.assertIsInstance(routed, dict)
+        grounded = self.ro.call("ace_op_tool_director_grounding",
+                                {"proposals": proposals,
+                                 "facts": {"open_gaps": 3}})
+        self.assertIsInstance(grounded, dict)
+
+    def test_gap_root_causes_on_live_store(self) -> None:
+        out = self.ro.call("ace_op_tool_gap_root_causes", {})
+        self.assertIsInstance(out, dict)
+
+    def test_discriminating_factory_writes_intake(self) -> None:
+        out = self.op.call("ace_op_tool_discriminating_candidates",
+                           {"agent": "test-agent", "lang_count": 2,
+                            "code_count": 2, "seed": 7,
+                            "write_to": "discriminating_intake.jsonl"})
+        self.assertTrue(out["written"])
+        self.assertTrue((self.ws / "discriminating_intake.jsonl").is_file())
+
+    def test_candidate_factory_v2_bundle(self) -> None:
+        out = self.op.call("ace_op_tool_candidate_factory_v2",
+                           {"agent": "test-agent", "id_lang_count": 5,
+                            "ml_lang_count": 5, "code_count": 5, "seed": 3})
+        self.assertIsInstance(out, dict)
+        self.assertTrue((self.ws / "candidates_v2").is_dir())
+
+
 if __name__ == "__main__":
     unittest.main()

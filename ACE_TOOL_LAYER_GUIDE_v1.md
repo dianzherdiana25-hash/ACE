@@ -161,3 +161,32 @@ dan periksa `kind` pada hasil `ace_op_memory_remember`.
 4. Apa pun yang kamu ubah di repo: commit yang jelas dan dokumentasikan
    di repo. AI berikutnya bergantung pada catatanmu, seperti kamu
    bergantung pada catatan ini.
+
+## 11. Toolbox: perkakas repo ACE untuk agennya (batch 1-2, 24 Nov 2026)
+
+Atas arahan pemilik ("tools/skill ACE banyak sekali — dari jaman sebelum
+EVO sampai EVO 0060"), tool layer diperluas bertahap dari 21 tool
+operasional ke perkakas ACE sendiri di paket `tools/` (205 modul).
+Prinsipnya sama dengan v1: registri eksplisit per fungsi yang sudah
+terverifikasi tanda tangannya dari sumber asli — bukan pintu impor
+bebas. Semua argumen berkas bersifat relatif terhadap workspace dan
+dijaga seperti `ace_op_file_write`.
+
+Batch 1 (`ace_op_tool_*`, baca-saja, 12 tool): mastery_board,
+metacog_memory_consolidate, occurrence_outlier_scan, candidate_census,
+receipt_chain_verify, custody_manifest_check, director_prose_audit,
+practice_task_lint, curriculum_ab_report, director_cap_simulator,
+gap_pattern_report, memory_chain_compare — fungsi audit/laporan yang
+sudah dipakai runtime ACE sendiri lewat leap_wiring.
+
+Batch 2 (10 tool): memory_hygiene_audit, memory_decay (rencana saja,
+tidak menghapus), gap_root_cause_report, director_challenger,
+director_fold, director_queue_router, director_grounding_check,
+failure_taskgen (baca-saja), plus candidate_factory_v2 dan
+discriminating_candidate_factory (menulis di dalam workspace, jadi
+tunduk pada opt-in tulis operator yang sama).
+
+Total permukaan agen saat ini: 49 tool (21 operasional + 22 toolbox +
+6 riset). Bukti: suite `ace_mcp` 41 tes lulus, termasuk 11 tes toolbox.
+Batch berikutnya: keluarga organ/observasi dan paket-paket `code/`
+per era, mengikuti peta inventarisasi di workspace agen.

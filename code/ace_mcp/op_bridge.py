@@ -21,7 +21,9 @@ cognitive memory) as MCP tools, per ACE_TOOL_LAYER_PLAN_v1.md
 from __future__ import annotations
 
 import hashlib
+import importlib
 import os
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -41,6 +43,19 @@ def _spec(name: str, description: str, properties: dict, required: tuple = (), *
         },
         "annotations": {"readOnlyHint": not write, "destructiveHint": False},
     }
+
+
+def _jsonable(value: Any) -> Any:
+    """Coerce repo-tool results into plain JSON data (Paths, tuples, sets)."""
+    if isinstance(value, Path):
+        return str(value)
+    if isinstance(value, dict):
+        return {str(k): _jsonable(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_jsonable(v) for v in value]
+    if isinstance(value, (set, frozenset)):
+        return sorted(_jsonable(v) for v in value)
+    return value
 
 
 _STR = {"type": "string"}
@@ -139,6 +154,108 @@ OP_TOOL_SPECS = (
           "Verify a task from ACE's own records: its receipts (all must pass) and the memory chain state. Returns the components; the verdict never exceeds the evidence.",
           {"task_id": _STR}, ("task_id",)),
 )
+
+# -- Toolbox batch 1 (owner direction 2026-11-24): ACE's own repo tools --
+# (the `tools/` package at the repo root, 205 modules) opened to ACE's
+# agents through this same core. Batch 1 wires the read-only audit and
+# report functions that ACE's own runtime already uses via leap_wiring,
+# so their behaviour in production is proven. Every file argument is a
+# workspace-relative path, guarded exactly like ace_op_file_write.
+# Later batches extend ACE_TOOLBOX_SPECS; nothing here is a generic
+# eval/import escape hatch - each entry names one verified function.
+_OBJ = {"type": "object"}
+_ARR = {"type": "array", "items": _OBJ}
+_STR_ARR = {"type": "array", "items": _STR}
+
+ACE_TOOLBOX_SPECS = (
+    _spec("ace_op_tool_mastery_board",
+          "Build ACE's cross-domain mastery board (tools.mastery_board) from per-domain metric inputs {domain: {closure|transfer|retention: number}}.",
+          {"domains": _OBJ}, ("domains",)),
+    _spec("ace_op_tool_metacog_consolidate",
+          "Consolidate metacognitive memory (tools.metacog_memory_consolidate) over workspace JSONL inputs: failure/success clusters, negative-transfer alerts, superseded debt.",
+          {"paths": _STR_ARR}, ("paths",)),
+    _spec("ace_op_tool_occurrence_outliers",
+          "Scan the operational store for occurrence outliers - gaps recurring without learning progress (tools.occurrence_outlier_scan, read-only).",
+          {"db_path": _STR, "threshold": {"type": "integer"},
+           "include_closed": {"type": "boolean"}}),
+    _spec("ace_op_tool_candidate_census",
+          "Census one candidate JSONL file (tools.candidate_census): readiness, schema and constraint checks, read-only.",
+          {"path": _STR}, ("path",)),
+    _spec("ace_op_tool_receipt_chain",
+          "Verify a director execution receipt chain file (tools.receipt_chain_verify).",
+          {"path": _STR}, ("path",)),
+    _spec("ace_op_tool_custody_check",
+          "Verify a custody manifest's SHA-256 entries against the workspace (tools.custody_manifest_check). Defaults mirror the runtime's own lookup.",
+          {"manifest_path": _STR, "root": _STR}),
+    _spec("ace_op_tool_prose_audit",
+          "Audit prose/narrative text for unrecognized or unsupported claims (tools.director_prose_audit). Pass text directly or a workspace file path.",
+          {"text": _STR, "path": _STR, "product_path": _STR}),
+    _spec("ace_op_tool_practice_lint",
+          "Lint practice tasks (tools.practice_task_lint): prompt leakage, evaluator validity, schema checks.",
+          {"tasks": _ARR}, ("tasks",)),
+    _spec("ace_op_tool_curriculum_ab",
+          "Compare fixed vs generated curricula (tools.curriculum_ab_report) from gap/task rows.",
+          {"fixed": _ARR, "generated": _ARR}, ("fixed", "generated")),
+    _spec("ace_op_tool_cap_simulator",
+          "Replay director receipt events through the AIMD daily-cap simulator (tools.director_cap_simulator). Defaults to the workspace's director receipt files.",
+          {"paths": _STR_ARR}),
+    _spec("ace_op_tool_gap_patterns",
+          "Analyze gap patterns (tools.gap_pattern_report). Defaults to the store's own gaps when none are passed.",
+          {"gaps": _ARR, "proposals": _ARR}),
+    _spec("ace_op_tool_memory_chain",
+          "Verify one memory chain file, or compare two chains for forks (tools.memory_chain_compare).",
+          {"left": _STR, "right": _STR}, ("left",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX_SPECS
+
+# -- Toolbox batch 2: memory hygiene/decay, gap root causes, director --
+# helpers, failure task generation, and the candidate factories. The two
+# factories WRITE inside the workspace, so they carry the operator
+# write opt-in like every other mutating tool; the rest are read-only.
+ACE_TOOLBOX2_SPECS = (
+    _spec("ace_op_tool_memory_hygiene",
+          "Audit a cognitive-memory JSONL log (tools.memory_hygiene_audit): duplicates, orphans, stale entries, chain state. Read-only.",
+          {"path": _STR, "refs_path": _STR}),
+    _spec("ace_op_tool_memory_decay_plan",
+          "Build a memory archive PLAN (tools.memory_decay) - candidates only, nothing is deleted. Defaults to the workspace's memory and recall logs.",
+          {"memory_path": _STR, "recall_log_path": _STR,
+           "stale_days": {"type": "integer"}}),
+    _spec("ace_op_tool_gap_root_causes",
+          "Analyze root causes of gaps in the operational store (tools.gap_root_cause_report).",
+          {"db_path": _STR}),
+    _spec("ace_op_tool_director_challenge",
+          "Challenge director proposals against reference facts (tools.director_challenger).",
+          {"proposals": _ARR, "facts": _OBJ}, ("proposals", "facts")),
+    _spec("ace_op_tool_director_fold",
+          "Fold duplicate director proposals (tools.director_fold).",
+          {"rows": _ARR}, ("rows",)),
+    _spec("ace_op_tool_director_route",
+          "Route director proposals to practice/umbrella/research queues (tools.director_queue_router). gap_error_types defaults to the store's own gap errors.",
+          {"proposals": _ARR, "gap_error_types": _OBJ}, ("proposals",)),
+    _spec("ace_op_tool_director_grounding",
+          "Check quantitative claims in director proposals against facts (tools.director_grounding_check). facts defaults to counts loaded from the store.",
+          {"proposals": _ARR, "facts": _OBJ}, ("proposals",)),
+    _spec("ace_op_tool_failure_taskgen",
+          "Generate and validate learning tasks from failure fingerprints (tools.failure_taskgen). Pure generation; nothing is stored.",
+          {"fingerprints": _ARR}, ("fingerprints",)),
+    _spec("ace_op_tool_candidate_factory_v2",
+          "Generate a candidate v2 bundle into a workspace directory (tools.candidate_factory_v2), like the runtime's own leap step.",
+          {**_AGENT_PROP, "output_dir": _STR,
+           "id_lang_count": {"type": "integer"},
+           "ml_lang_count": {"type": "integer"},
+           "code_count": {"type": "integer"},
+           "seed": {"type": "integer"}},
+          (), write=True),
+    _spec("ace_op_tool_discriminating_candidates",
+          "Generate discriminating candidates (tools.discriminating_candidate_factory); when write_to is given, also writes the intake JSONL and its meta file inside the workspace.",
+          {**_AGENT_PROP, "lang_count": {"type": "integer"},
+           "code_count": {"type": "integer"},
+           "seed": {"type": "integer"}, "write_to": _STR},
+          (), write=True),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX2_SPECS
 
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
@@ -402,3 +519,253 @@ class OperationalBridge:
                   {"path": rel, "sha256_before": before, "sha256_after": after})
         return {"path": rel, "sha256_before": before,
                 "sha256_after": after, "bytes": len(data)}
+
+    # -- toolbox batch 1: ACE's own repo tools, opened to its agents -------
+    def _ws_path(self, rel: str) -> Path:
+        rel_path = Path(str(rel))
+        if rel_path.is_absolute() or ".." in rel_path.parts or not str(rel):
+            raise ValueError("path must be a workspace-relative path without '..'")
+        dest = (self.store.workspace / rel_path).resolve()
+        root = self.store.workspace.resolve()
+        if dest != root and root not in dest.parents:
+            raise ValueError("path escapes the ACE workspace")
+        return dest
+
+    def _repo_tool(self, module_name: str, func_name: str):
+        repo_root = Path(__file__).resolve().parents[2]
+        if (repo_root / "tools").is_dir() and str(repo_root) not in sys.path:
+            sys.path.insert(0, str(repo_root))
+        try:
+            module = importlib.import_module(f"tools.{module_name}")
+            return getattr(module, func_name)
+        except Exception as exc:
+            raise ValueError(f"tools.{module_name}.{func_name} unavailable: {exc}") from exc
+
+    def _run_tool(self, module_name: str, func_name: str, *a, **kw) -> Any:
+        fn = self._repo_tool(module_name, func_name)
+        try:
+            return _jsonable(fn(*a, **kw))
+        except ValueError:
+            raise
+        except Exception as exc:
+            raise ValueError(f"tools.{module_name}.{func_name}: {exc}") from exc
+
+    def _store_db(self, args: dict) -> Path:
+        if args.get("db_path"):
+            return self._ws_path(str(args["db_path"]))
+        db = Path(getattr(self.store, "db_path", None)
+                  or (self.store.workspace / "ace_operational.sqlite3"))
+        if not db.is_file():
+            raise ValueError(f"store database not found: {db.name}")
+        return db
+
+    def _do_ace_op_tool_mastery_board(self, args: dict) -> Any:
+        domains = args["domains"]
+        if not isinstance(domains, dict):
+            raise ValueError("domains must be an object")
+        return self._run_tool("mastery_board", "build_mastery_board", domains)
+
+    def _do_ace_op_tool_metacog_consolidate(self, args: dict) -> Any:
+        inputs = [self._ws_path(p) for p in args["paths"]]
+        return self._run_tool(
+            "metacog_memory_consolidate", "consolidate_metacognitive_memory",
+            inputs, root=self.store.workspace)
+
+    def _do_ace_op_tool_occurrence_outliers(self, args: dict) -> Any:
+        if args.get("db_path"):
+            db = self._ws_path(str(args["db_path"]))
+        else:
+            db = Path(getattr(self.store, "db_path", None)
+                      or (self.store.workspace / "ace_operational.sqlite3"))
+        if not db.is_file():
+            raise ValueError(f"store database not found: {db.name}")
+        kw: dict[str, Any] = {}
+        if args.get("threshold") is not None:
+            kw["threshold"] = int(args["threshold"])
+        if args.get("include_closed") is not None:
+            kw["include_closed"] = bool(args["include_closed"])
+        return self._run_tool("occurrence_outlier_scan",
+                              "scan_occurrence_outliers", db, **kw)
+
+    def _do_ace_op_tool_candidate_census(self, args: dict) -> Any:
+        return self._run_tool("candidate_census", "census_file",
+                              self._ws_path(str(args["path"])))
+
+    def _do_ace_op_tool_receipt_chain(self, args: dict) -> Any:
+        return self._run_tool("receipt_chain_verify", "verify_receipts_file",
+                              self._ws_path(str(args["path"])))
+
+    def _do_ace_op_tool_custody_check(self, args: dict) -> Any:
+        ws = self.store.workspace
+        if args.get("manifest_path"):
+            manifest = self._ws_path(str(args["manifest_path"]))
+        elif (ws / "custody_manifest.json").is_file():
+            manifest = ws / "custody_manifest.json"
+        else:
+            manifest = ws / "custody" / "custody_manifest.json"
+        if not manifest.is_file():
+            raise ValueError("no custody_manifest.json in the workspace")
+        if args.get("root"):
+            root = self._ws_path(str(args["root"]))
+        else:
+            root = (ws / "custody") if (ws / "custody").is_dir() else ws
+        return self._run_tool("custody_manifest_check",
+                              "verify_custody_manifest", manifest, root)
+
+    def _do_ace_op_tool_prose_audit(self, args: dict) -> Any:
+        if args.get("text"):
+            text = str(args["text"])
+            product = str(args.get("product_path") or "input.md")
+        elif args.get("path"):
+            path = self._ws_path(str(args["path"]))
+            text = path.read_text(encoding="utf-8", errors="ignore")
+            product = str(args.get("product_path") or path.name)
+        else:
+            raise ValueError("pass either text or a workspace file path")
+        return self._run_tool("director_prose_audit", "audit_historical_prose",
+                              text, product_path=product)
+
+    def _do_ace_op_tool_practice_lint(self, args: dict) -> Any:
+        return self._run_tool("practice_task_lint", "lint_practice_tasks",
+                              list(args["tasks"]))
+
+    def _do_ace_op_tool_curriculum_ab(self, args: dict) -> Any:
+        return self._run_tool("curriculum_ab_report", "compare_curricula",
+                              list(args["fixed"]), list(args["generated"]))
+
+    def _do_ace_op_tool_cap_simulator(self, args: dict) -> Any:
+        ws = self.store.workspace
+        rels = list(args.get("paths") or
+                    ["director_exec_receipts.jsonl",
+                     "director_exec_a2_receipts.jsonl"])
+        load = self._repo_tool("director_cap_simulator", "load_receipt_events")
+        events: list = []
+        malformed: list = []
+        for rel in rels:
+            path = self._ws_path(str(rel))
+            if path.is_file():
+                ev, bad = load(path)
+                events.extend(ev)
+                malformed.extend(bad)
+        if not events and not malformed:
+            raise ValueError("no director receipt files found in the workspace")
+        sim = self._run_tool("director_cap_simulator", "simulate_daily_caps",
+                             events)
+        return {"simulation": sim, "events": len(events),
+                "malformed_lines": len(malformed)}
+
+    def _do_ace_op_tool_gap_patterns(self, args: dict) -> Any:
+        gaps = list(args["gaps"]) if args.get("gaps") else self.store.list_gaps()
+        proposals = list(args.get("proposals") or [])
+        return self._run_tool("gap_pattern_report", "analyze_gap_patterns",
+                              gaps, proposals)
+
+    def _do_ace_op_tool_memory_chain(self, args: dict) -> Any:
+        left = self._ws_path(str(args["left"]))
+        if args.get("right"):
+            return self._run_tool("memory_chain_compare",
+                                  "compare_memory_chains",
+                                  left, self._ws_path(str(args["right"])))
+        entries, findings = self._run_tool("memory_chain_compare",
+                                           "load_and_verify_chain", left)
+        return {"entries": len(entries), "finding_count": len(findings),
+                "findings": list(findings)[:20]}
+
+    # -- toolbox batch 2 ---------------------------------------------------
+    def _do_ace_op_tool_memory_hygiene(self, args: dict) -> Any:
+        ws = self.store.workspace
+        path = (self._ws_path(str(args["path"])) if args.get("path")
+                else ws / "cognitive_memory" / "memory.jsonl")
+        if not path.is_file():
+            raise ValueError(f"memory log not found: {path.name}")
+        kw: dict[str, Any] = {}
+        if args.get("refs_path"):
+            load_refs = self._repo_tool("memory_hygiene_audit", "load_refs_file")
+            kw["known_refs"] = load_refs(self._ws_path(str(args["refs_path"])))
+        return self._run_tool("memory_hygiene_audit", "audit_memory_log",
+                              path, **kw)
+
+    def _do_ace_op_tool_memory_decay_plan(self, args: dict) -> Any:
+        from datetime import datetime, timezone
+        ws = self.store.workspace
+        mem = (self._ws_path(str(args["memory_path"])) if args.get("memory_path")
+               else ws / "cognitive_memory" / "memory.jsonl")
+        recall = (self._ws_path(str(args["recall_log_path"]))
+                  if args.get("recall_log_path") else ws / "recall_probe.jsonl")
+        kw: dict[str, Any] = {"as_of": datetime.now(timezone.utc)}
+        if args.get("stale_days") is not None:
+            kw["stale_days"] = int(args["stale_days"])
+        return self._run_tool("memory_decay", "build_archive_plan",
+                              mem, recall, **kw)
+
+    def _do_ace_op_tool_gap_root_causes(self, args: dict) -> Any:
+        return self._run_tool("gap_root_cause_report",
+                              "analyze_gap_root_causes", self._store_db(args))
+
+    def _do_ace_op_tool_director_challenge(self, args: dict) -> Any:
+        return self._run_tool("director_challenger", "review_proposals",
+                              list(args["proposals"]), dict(args["facts"]))
+
+    def _do_ace_op_tool_director_fold(self, args: dict) -> Any:
+        return self._run_tool("director_fold", "fold_proposals",
+                              list(args["rows"]))
+
+    def _do_ace_op_tool_director_route(self, args: dict) -> Any:
+        if args.get("gap_error_types") is not None:
+            gap_errors = dict(args["gap_error_types"])
+        else:
+            load = self._repo_tool("director_queue_router",
+                                   "load_gap_errors_from_sqlite")
+            gap_errors = load(self._store_db(args))
+        return self._run_tool("director_queue_router", "route_proposals",
+                              list(args["proposals"]), gap_errors)
+
+    def _do_ace_op_tool_director_grounding(self, args: dict) -> Any:
+        if args.get("facts") is not None:
+            facts = dict(args["facts"])
+        else:
+            load = self._repo_tool("director_grounding_check",
+                                   "load_facts_from_sqlite")
+            facts = load(self._store_db(args))
+        return self._run_tool("director_grounding_check",
+                              "check_proposal_grounding",
+                              list(args["proposals"]), facts)
+
+    def _do_ace_op_tool_failure_taskgen(self, args: dict) -> Any:
+        return self._run_tool("failure_taskgen", "generate_and_validate_tasks",
+                              list(args["fingerprints"]))
+
+    def _do_ace_op_tool_candidate_factory_v2(self, args: dict) -> Any:
+        out_dir = self._ws_path(str(args.get("output_dir") or "candidates_v2"))
+        kw: dict[str, Any] = {}
+        for key in ("id_lang_count", "ml_lang_count", "code_count", "seed"):
+            if args.get(key) is not None:
+                kw[key] = int(args[key])
+        result = self._run_tool("candidate_factory_v2",
+                                "generate_candidate_v2_bundle", out_dir, **kw)
+        self._log("ace_op_tool_candidate_factory_v2", args,
+                  {"output_dir": str(args.get("output_dir") or "candidates_v2")})
+        return result
+
+    def _do_ace_op_tool_discriminating_candidates(self, args: dict) -> Any:
+        kw: dict[str, Any] = {}
+        for key in ("lang_count", "code_count", "seed"):
+            if args.get(key) is not None:
+                kw[key] = int(args[key])
+        result = self._run_tool("discriminating_candidate_factory",
+                                "generate_discriminating_candidates", **kw)
+        summary = {"total_episodes": result.get("total_episodes"),
+                   "rejected_count": result.get("rejected_count"),
+                   "written": False}
+        if args.get("write_to"):
+            intake = self._ws_path(str(args["write_to"]))
+            write = self._repo_tool("discriminating_candidate_factory",
+                                    "write_new_candidate_file")
+            write(intake, result,
+                  meta_path=intake.with_suffix(".meta.json"))
+            summary["written"] = True
+            summary["intake_path"] = str(args["write_to"])
+            if result.get("jsonl_sha256"):
+                summary["jsonl_sha256"] = result["jsonl_sha256"]
+        self._log("ace_op_tool_discriminating_candidates", args, summary)
+        return summary
