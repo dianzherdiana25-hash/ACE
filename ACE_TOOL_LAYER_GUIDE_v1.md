@@ -245,3 +245,8 @@ Batch 11 (4 tool, semua baca-saja): validasi skema misi
 (ace_mission), verifikasi receipt patch (ace_code_agent),
 skor Brier + ECE (ace_self_dev). Total permukaan agen:
 104 tool; suite ace_mcp 62 tes lulus.
+
+Batch 12 (3 tool, semua baca-saja): status penyegelan OS +
+audit AST kandidat (ace_host_controller), partisi awalan
+beranggaran node (ace_research_discovery). Total
+permukaan agen: 107 tool; suite ace_mcp 64 tes lulus.

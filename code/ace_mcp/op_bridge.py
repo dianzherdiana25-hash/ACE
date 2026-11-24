@@ -510,6 +510,24 @@ ACE_TOOLBOX11_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX11_SPECS
 
+# -- Toolbox batch 12: host-controller boundary checks and the
+# research-discovery prefix partitioner. All read-only.
+ACE_TOOLBOX12_SPECS = (
+    _spec("ace_op_tool_os_sealing",
+          "Detect the host OS sealing status ACE's host controller reports (code/ace_host_controller).",
+          {}, ()),
+    _spec("ace_op_tool_candidate_ast_audit",
+          "Audit candidate source code's AST against the host controller's isolation rules; errors when a rule is violated (code/ace_host_controller).",
+          {"code": _STR}, ("code",)),
+    _spec("ace_op_tool_prefix_partition",
+          "Partition train+validation examples under the runtime's prefix-node budget (code/ace_research_discovery).",
+          {"train": {"type": "array", "items": {"type": "array"}},
+           "validation": {"type": "array", "items": {"type": "array"}},
+           "max_prefix_nodes": {"type": "integer"}}, ("train", "validation")),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX12_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1406,3 +1424,28 @@ class OperationalBridge:
                              "compute_expected_calibration_error",
                              [float(x) for x in args["predictions"]],
                              [bool(x) for x in args["outcomes"]], **kw)
+
+    # -- toolbox batch 12 --------------------------------------------------
+    def _do_ace_op_tool_os_sealing(self, args: dict) -> Any:
+        out = self._run_pkg("ace_host_controller", "boundary",
+                            "detect_os_sealing")
+        return {"sealing": out}
+
+    def _do_ace_op_tool_candidate_ast_audit(self, args: dict) -> Any:
+        self._run_pkg("ace_host_controller", "isolated_worker",
+                      "audit_candidate_ast", str(args["code"]))
+        return {"passed": True}
+
+    def _do_ace_op_tool_prefix_partition(self, args: dict) -> Any:
+        def _pairs(rows: Any) -> list:
+            return [(str(r[0]), bool(r[1])) for r in rows]
+        kw: dict[str, Any] = {}
+        if args.get("max_prefix_nodes") is not None:
+            kw["max_prefix_nodes"] = int(args["max_prefix_nodes"])
+        out = self._run_pkg("ace_research_discovery", "arms",
+                            "partition_for_runtime_prefix_budget",
+                            _pairs(args["train"]), _pairs(args["validation"]),
+                            **kw)
+        if isinstance(out, list) and len(out) == 2:
+            return {"train_rt": out[0], "val_rt": out[1]}
+        return {"result": out}

@@ -641,5 +641,36 @@ class ToolboxBatch11Tests(unittest.TestCase):
         self.assertEqual(verdict, {"valid": False})
 
 
+class ToolboxBatch12Tests(unittest.TestCase):
+    """Batch 12: host controller + research discovery."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch12_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX12_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX12_SPECS), 3)
+        for spec in ACE_TOOLBOX12_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_host_and_partition(self) -> None:
+        sealing = self.ro.call("ace_op_tool_os_sealing", {})
+        self.assertIn("sealing", sealing)
+        audit = self.ro.call("ace_op_tool_candidate_ast_audit",
+                             {"code": "def f(x):\n    return x + 1\n"})
+        self.assertEqual(audit, {"passed": True})
+        part = self.ro.call("ace_op_tool_prefix_partition", {
+            "train": [["kata", True], ["buku", False]],
+            "validation": [["meja", True]]})
+        self.assertIn("train_rt", part)
+        self.assertIn("val_rt", part)
+
+
 if __name__ == "__main__":
     unittest.main()
