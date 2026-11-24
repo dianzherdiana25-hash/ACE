@@ -915,13 +915,45 @@ if __name__ == "__main__":
 
     # --- 9. F09: Autonomous Multi-Task Continuation Without Step-by-Step Prompting ---
     def run_autonomous_continuation_cycle(self, max_steps: int = 4) -> dict[str, Any]:
-        """Automatically select and execute queued/open agenda items across phases (`F09`)."""
+        """Automatically select and execute queued/open agenda items across phases (`F09`).
+
+        Determination rule (owner direction, 2026-11-24): a task that
+        carries a work order is delegated to an external agent — the agent
+        is ACE's brain and its worker. The engine must NOT execute such a
+        task itself: substituting a template project mints receipts that
+        certify work the task never asked for (proven live on
+        task_1795516343713_597f18e1, whose VERIFIED verdict rested on
+        expense-tracker template receipts). Delegated tasks stay QUEUED,
+        are reported under ``routed_to_agent``, and the routing is recorded
+        as a store event so the determination is auditable.
+        """
         executed: list[dict[str, Any]] = []
-        for _ in range(max_steps):
-            agenda = [a for a in self.get_prioritized_agenda() if a["status"] in ("QUEUED", "PAUSED")]
-            if not agenda:
+        routed: list[dict[str, Any]] = []
+        agenda = [a for a in self.get_prioritized_agenda() if a["status"] in ("QUEUED", "PAUSED")]
+        for top in agenda:
+            if len(executed) >= max_steps:
                 break
-            top = agenda[0]
+            orders = self.store.list_work_orders(parent_task_id=top["task_id"])
+            if orders:
+                task = self.store.get_task(top["task_id"]) or {}
+                self.store.emit_event(
+                    conversation_id=task.get("conversation_id", ""),
+                    task_id=top["task_id"],
+                    kind="task_routed_to_agent",
+                    status="QUEUED",
+                    summary_code="task_routed_to_agent",
+                    technical_detail={
+                        "title_id": top["title_id"],
+                        "work_order_ids": [o["work_order_id"] for o in orders],
+                        "reason": "delegated_via_work_order",
+                    },
+                )
+                routed.append({
+                    "task_id": top["task_id"],
+                    "title_id": top["title_id"],
+                    "work_order_ids": [o["work_order_id"] for o in orders],
+                })
+                continue
             res = self.coding.execute_coding_task(top["task_id"], domain="expense_tracker")
             executed.append({
                 "task_id": top["task_id"],
@@ -937,7 +969,8 @@ if __name__ == "__main__":
                 artifacts=[e["task_id"] for e in executed],
                 checks_executed=[f"autonomous_continuation:{len(executed)}_tasks"],
             )
-        return {"executed_count": len(executed), "executed": executed}
+        return {"executed_count": len(executed), "executed": executed,
+                "routed_to_agent": routed}
 
     # --- 10. F12: Cross-Task Skill Retention & Transfer After Process Restart ---
     def verify_skill_transfer_after_restart(self, skill_name: str = "rekap_kelompok_json_csv") -> dict[str, Any]:
