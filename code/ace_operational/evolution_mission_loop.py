@@ -1561,6 +1561,18 @@ class EvolutionPatchVerifier:
         )
         if not resolved_ok:
             reasons.append(resolution_note)
+        # Fail-closed evidence floor (gap_1654ad7ff3): a non-OAIE patch
+        # must not be ratified on the static resolution re-audit alone.
+        # _run_acceptance_checks legitimately returns [] when the order
+        # declares no checks, no changed code/*.py has a sibling test
+        # module, and tools/verify_sources.py is absent — and all([]) is
+        # True, so _ratify_passing_evolution would accept with zero
+        # executed checks. OAIE findings are exempt: their evidence is
+        # the subprocess-measured metrics from _check_finding_resolved.
+        if not check_results and not str(
+            order.get("finding", {}).get("kind", "")
+        ).startswith("oaie_"):
+            reasons.append("no_acceptance_checks_executed")
         if reasons:
             return self._quarantine_failure(
                 order,

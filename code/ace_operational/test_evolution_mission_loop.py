@@ -548,6 +548,75 @@ class EvolutionMissionLoopTests(unittest.TestCase):
             self.assertTrue((ws / "user_missions" / "mission-0001-demo.ratified.json").is_file())
             self.assertEqual((ws / "EVOLUTION_WORK_ORDER.json").read_text(encoding="utf-8"), static_order_before)
 
+    def test_zero_acceptance_checks_quarantined_not_ratified(self) -> None:
+        """Regression for gap_1654ad7ff3: a non-OAIE order whose patch
+        executes ZERO acceptance checks (order declares none, the changed
+        module has no sibling test to infer, and tools/verify_sources.py
+        is absent) must be quarantined, never VERIFIED_AND_RATIFIED on the
+        static resolution re-audit alone. The positive control — the same
+        patch with a sibling test module present, so one check is
+        inferred and runs — must still be accepted. (OAIE findings are
+        exempt by design: their evidence is subprocess-measured metrics;
+        see test_oaie_high_search_cost_verified_by_subprocess_not_static_ast.)
+        """
+        target_src = (
+            "def parse_positive(raw: str) -> int:\n"
+            "    try:\n"
+            "        return max(0, int(raw))\n"
+            "    except Exception:\n"
+            "        pass\n"
+            "    return 0\n"
+        )
+        fixed_src = target_src.replace(
+            "    except Exception:\n        pass\n",
+            "    except ValueError:\n        return 0\n",
+        )
+        test_src = (
+            "import unittest\n"
+            "from ace_operational.target_mod import parse_positive\n\n"
+            "class TargetTests(unittest.TestCase):\n"
+            "    def test_parse(self) -> None:\n"
+            "        self.assertEqual(parse_positive('5'), 5)\n"
+            "        self.assertEqual(parse_positive('bad'), 0)\n"
+        )
+        with tempfile.TemporaryDirectory(prefix="ace_evo_zero_checks_") as d:
+            base = Path(d)
+            repo = base / "repo"
+            ws = base / "ws"
+            _create_sandbox_repo(repo, target_src=target_src, test_src=test_src)
+            companion = repo / "code" / "ace_operational" / "test_target_mod.py"
+            companion.unlink()
+
+            planner = PassiveEvolutionPlanner(ws, repo, scan_subpath="code/ace_operational")
+            plan = planner.plan_next_evolution()
+            self.assertEqual(plan["status"], "MISSION_EMITTED")
+            self.assertEqual(plan["top_finding"]["kind"], "silent_except_pass")
+
+            (repo / "code" / "ace_operational" / "target_mod.py").write_text(
+                fixed_src, encoding="utf-8")
+            rejected = EvolutionPatchVerifier(ws, repo).verify_and_ratify_evolution()
+            self.assertFalse(rejected["accepted"], msg=str(rejected))
+            self.assertEqual(rejected["check_results"], [])
+            self.assertTrue(
+                any("no_acceptance_checks_executed" in str(r)
+                    for r in rejected.get("reasons", [])),
+                msg=str(rejected))
+
+        with tempfile.TemporaryDirectory(prefix="ace_evo_one_check_") as d:
+            base = Path(d)
+            repo = base / "repo"
+            ws = base / "ws"
+            _create_sandbox_repo(repo, target_src=target_src, test_src=test_src)
+            planner = PassiveEvolutionPlanner(ws, repo, scan_subpath="code/ace_operational")
+            plan = planner.plan_next_evolution(test_modules=["ace_operational.test_target_mod"])
+            self.assertEqual(plan["status"], "MISSION_EMITTED")
+            (repo / "code" / "ace_operational" / "target_mod.py").write_text(
+                fixed_src, encoding="utf-8")
+            accepted = EvolutionPatchVerifier(ws, repo).verify_and_ratify_evolution()
+            self.assertTrue(accepted["accepted"], msg=str(accepted))
+            self.assertTrue(accepted["check_results"], msg=str(accepted))
+            self.assertTrue(all(c["passed"] for c in accepted["check_results"]))
+
 
 if __name__ == "__main__":
     unittest.main()
