@@ -661,6 +661,28 @@ ACE_TOOLBOX18_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX18_SPECS
 
+# -- Toolbox batch 19: ace_deliberation synthesis and more
+# anchored ace_presence evaluators.
+ACE_TOOLBOX19_SPECS = (
+    _spec("ace_op_tool_deliberation_synthesis",
+          "Synthesize a recommendation from an argument graph using Dung grounded semantics; defers on ties or insufficient accepted support (code/ace_deliberation).",
+          {"record": _OBJ}, ("record",)),
+    _spec("ace_op_tool_presence_greeting",
+          "Choose a greeting only from a currently valid, permission-bearing preference of the receiver themselves; otherwise the generic fallback (code/ace_presence).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_presence_clarify",
+          "Pick the single most valuable clarification question from unfilled or conflicting slots (code/ace_presence).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_presence_fact_expiry",
+          "List facts due for expiry review as of a date; held facts are retained, nothing is deleted (code/ace_presence).",
+          {"plan": _OBJ}, ("plan",)),
+    _spec("ace_op_tool_presence_answer_length",
+          "Fit an answer into a channel character budget by selecting whole blocks, mandatory information first (code/ace_presence).",
+          {"plan": _OBJ}, ("plan",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX19_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -1755,3 +1777,32 @@ class OperationalBridge:
         return self._run_pkg("ace_guardian", "compliance_reporter",
                              "report", plan,
                              self._pkg_anchor("ace_guardian", plan))
+
+    # -- toolbox batch 19 --------------------------------------------------
+    def _do_ace_op_tool_deliberation_synthesis(self, args: dict) -> Any:
+        return self._run_pkg("ace_deliberation", "synthesis_engine",
+                             "synthesize", args["record"])
+
+    def _do_ace_op_tool_presence_greeting(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_presence", "greeting_keeper",
+                             "greeting", plan,
+                             self._pkg_anchor("ace_presence", plan))
+
+    def _do_ace_op_tool_presence_clarify(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_presence", "clarification_asker",
+                             "ask", plan,
+                             self._pkg_anchor("ace_presence", plan))
+
+    def _do_ace_op_tool_presence_fact_expiry(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_presence", "fact_expiry_janitor",
+                             "mark", plan,
+                             self._pkg_anchor("ace_presence", plan))
+
+    def _do_ace_op_tool_presence_answer_length(self, args: dict) -> Any:
+        plan = args["plan"]
+        return self._run_pkg("ace_presence", "answer_length_adapter",
+                             "adapt", plan,
+                             self._pkg_anchor("ace_presence", plan))

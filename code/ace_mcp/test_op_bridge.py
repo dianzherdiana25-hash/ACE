@@ -1260,5 +1260,105 @@ class ToolboxBatch18Tests(unittest.TestCase):
                          {"rule_read": {"allow": 1}})
 
 
+class ToolboxBatch19Tests(unittest.TestCase):
+    """Batch 19: deliberation synthesis + presence evaluators."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch19_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX19_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX19_SPECS), 5)
+        for spec in ACE_TOOLBOX19_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_deliberation_synthesis(self) -> None:
+        record = {
+            "graph": {
+                "nodes": [
+                    {"id": "c1", "kind": "claim", "text": "Pilih A",
+                     "source_ref": "test:c1"},
+                    {"id": "c2", "kind": "claim", "text": "Pilih B",
+                     "source_ref": "test:c2"},
+                    {"id": "e1", "kind": "evidence", "text": "Data",
+                     "source_ref": "test:ev"}],
+                "edges": [{"source": "e1", "target": "c1",
+                           "relation": "supports",
+                           "source_ref": "test:edge"}]},
+            "choices": ["c1", "c2"],
+            "recognized_evidence_refs": ["test:ev"],
+            "min_support_refs": 1}
+        out = self.ro.call("ace_op_tool_deliberation_synthesis",
+                           {"record": record})
+        self.assertEqual(out["status"], "recommendation")
+        self.assertEqual(out["recommended_choice"], "c1")
+        self.assertEqual(out["reason"], "best_supported")
+
+    def test_presence_small_evaluators(self) -> None:
+        greeting = {
+            "schema": "ace.presence.greeting.v1", "receiver": "rina",
+            "as_of": "2026-01-10", "locale": "id",
+            "choices": [{"receiver": "rina", "locale": "id",
+                         "opening": "Halo Rina", "from": "2026-01-01",
+                         "until": "2026-12-31", "permission": True,
+                         "source": "test:izin"}],
+            "fallbacks": {"id": "Halo", "en": "Hello"}}
+        picked = self.ro.call("ace_op_tool_presence_greeting",
+                              {"plan": greeting})
+        self.assertEqual(picked["opening"], "Halo Rina")
+        self.assertTrue(picked["personalized"])
+
+        clarify = {
+            "schema": "ace.presence.clarify-plan.v1",
+            "slots": [{"id": "kota", "question": "Kota mana?",
+                       "required": True, "cost_if_wrong": 10,
+                       "candidates": []},
+                      {"id": "nama", "question": "Nama siapa?",
+                       "required": False, "cost_if_wrong": 1,
+                       "candidates": [{"value": "Rina",
+                                       "source": "test:n"}]}]}
+        asked = self.ro.call("ace_op_tool_presence_clarify",
+                             {"plan": clarify})
+        self.assertEqual(asked["clarify"]["slot"], "kota")
+        self.assertEqual(asked["resolved"]["nama"]["value"], "Rina")
+
+        expiry = {
+            "schema": "ace.presence.expiry-plan.v1",
+            "as_of": "2026-01-10",
+            "facts": [{"id": "f1", "until": "2026-01-01",
+                       "source": "test:f1", "hold": False},
+                      {"id": "f2", "until": "2026-01-01",
+                       "source": "test:f2", "hold": True},
+                      {"id": "f3", "until": None,
+                       "source": "test:f3", "hold": False}]}
+        marked = self.ro.call("ace_op_tool_presence_fact_expiry",
+                              {"plan": expiry})
+        self.assertEqual([row["id"] for row in marked["expire_candidates"]],
+                         ["f1"])
+        reasons = {row["id"]: row["reason"] for row in marked["retained"]}
+        self.assertEqual(reasons, {"f2": "held", "f3": "valid"})
+
+        length = {
+            "schema": "ace.presence.answer-length.v1", "max_chars": 20,
+            "blocks": [{"id": "b1", "text": "wajib", "required": True,
+                        "priority": 0, "source": "test:b1"},
+                       {"id": "b2", "text": "tambahan panjang sekali",
+                        "required": False, "priority": 5,
+                        "source": "test:b2"},
+                       {"id": "b3", "text": "ok", "required": False,
+                        "priority": 9, "source": "test:b3"}]}
+        fitted = self.ro.call("ace_op_tool_presence_answer_length",
+                              {"plan": length})
+        self.assertEqual(fitted["status"], "ready")
+        self.assertEqual(fitted["answer"], "wajib\nok")
+        self.assertEqual(fitted["omitted"], ["b2"])
+
+
 if __name__ == "__main__":
     unittest.main()

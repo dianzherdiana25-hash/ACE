@@ -327,3 +327,15 @@ terdeklarasi dicocokkan ke receipt berantai per aturan).
 gate_append adalah fungsi murni atas rantai yang dipasok
 pemanggil; bridge tidak menyimpan state rantai. Total
 permukaan agen: 133 tool; suite ace_mcp 81 tes lulus.
+
+Batch 19 (5 tool, semua baca-saja): mesin sintesis
+ace_deliberation (semantik grounded Dung atas graf
+argumen; menunda rekomendasi saat seri atau dukungan
+diterima kurang) dan empat evaluator kecil ace_presence:
+pemilih sapaan (hanya dari izin yang masih berlaku dari
+orangnya sendiri), penanya klarifikasi tunggal paling
+bernilai, penanda fakta kedaluwarsa untuk ditinjau (tidak
+menghapus apa pun), dan penyesuai panjang jawaban ke
+anggaran karakter kanal dengan blok wajib didahulukan.
+Total permukaan agen: 138 tool; suite ace_mcp 84 tes
+lulus.
