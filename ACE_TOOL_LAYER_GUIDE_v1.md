@@ -222,3 +222,11 @@ Batch 7 (6 tool, semua baca-saja, dari kelas A triase):
 bundle_manifest_check, organ_forensics, autobiography
 suite + grade, cover_check, pattern_catalog. Total
 permukaan agen: 87 tool; suite ace_mcp 52 tes lulus.
+
+Batch 8 (6 tool, semua baca-saja): curriculum_lab (terakhir
+kelas A triase) + paket code/ pertama — ace_conformal
+(kuantil), ace_pac_bayes (tiga batas), ace_game_theory
+(nash gap), ace_indo_nlp (kueri arti + parse pengajaran).
+Total permukaan agen: 93 tool; suite ace_mcp 55 tes lulus.
+Pola _pkg_tool membuka 63 paket code/ lain untuk batch
+berikutnya per era.

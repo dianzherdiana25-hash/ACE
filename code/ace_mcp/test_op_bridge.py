@@ -507,5 +507,43 @@ class ToolboxBatch7Tests(unittest.TestCase):
         self.assertIsInstance(suite, dict)
 
 
+class ToolboxBatch8Tests(unittest.TestCase):
+    """Batch 8: curriculum lab + first code/ packages, read-only."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ws = Path(self._tmp.name)
+        self.ro = OperationalBridge(self.ws, allow_writes=False)
+
+    def tearDown(self) -> None:
+        self.ro.store.close()
+        self._tmp.cleanup()
+
+    def test_batch8_registered_readonly(self) -> None:
+        from ace_mcp.op_bridge import ACE_TOOLBOX8_SPECS, OP_WRITE_TOOLS
+        self.assertEqual(len(ACE_TOOLBOX8_SPECS), 6)
+        for spec in ACE_TOOLBOX8_SPECS:
+            self.assertNotIn(spec["name"], OP_WRITE_TOOLS)
+
+    def test_numeric_packages(self) -> None:
+        q = self.ro.call("ace_op_tool_conformal_quantile",
+                         {"scores": [0.1, 0.2, 0.3, 0.4], "alpha": 0.1})
+        self.assertIsInstance(q, float)
+        bounds = self.ro.call("ace_op_tool_pac_bayes_bounds", {
+            "empirical_risk": 0.1, "kl_div": 2.0, "m": 100})
+        self.assertEqual(sorted(bounds),
+                         ["catoni", "mcallester", "seeger_maurer"])
+        gap = self.ro.call("ace_op_tool_nash_gap", {
+            "payoff_matrix": [[1, -1], [-1, 1]],
+            "p": [0.5, 0.5], "q": [0.5, 0.5]})
+        self.assertIsInstance(gap, float)
+        self.assertAlmostEqual(gap, 0.0, places=6)
+
+    def test_indo_nlp(self) -> None:
+        out = self.ro.call("ace_op_tool_indo_meaning_query",
+                           {"text": "apa arti kata swastamita?"})
+        self.assertIsInstance(out, dict)
+
+
 if __name__ == "__main__":
     unittest.main()

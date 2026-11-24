@@ -420,6 +420,36 @@ ACE_TOOLBOX7_SPECS = (
 
 OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX7_SPECS
 
+# -- Toolbox batch 8: last triage class-A tool + first code/
+# packages (research era). All read-only, plain numeric/text data.
+_NUM = {"type": "number"}
+_NUM_ARR = {"type": "array", "items": {"type": "number"}}
+ACE_TOOLBOX8_SPECS = (
+    _spec("ace_op_tool_curriculum_lab",
+          "Run the curriculum lab over an episodes file inside the workspace and return its report text (tools.curriculum_lab).",
+          {"episodes_path": _STR, "corpus_path": _STR}, ("episodes_path",)),
+    _spec("ace_op_tool_conformal_quantile",
+          "Compute the conformal quantile of nonconformity scores at level alpha (code/ace_conformal).",
+          {"scores": _NUM_ARR, "alpha": _NUM}, ("scores", "alpha")),
+    _spec("ace_op_tool_pac_bayes_bounds",
+          "Compute McAllester, Seeger-Maurer, and Catoni PAC-Bayes bounds on true risk (code/ace_pac_bayes).",
+          {"empirical_risk": _NUM, "kl_div": _NUM,
+           "m": {"type": "integer"}, "delta": _NUM},
+          ("empirical_risk", "kl_div", "m")),
+    _spec("ace_op_tool_nash_gap",
+          "Compute the Nash duality gap (exploitability) of a two-player zero-sum strategy pair (code/ace_game_theory).",
+          {"payoff_matrix": {"type": "array", "items": _NUM_ARR},
+           "p": _NUM_ARR, "q": _NUM_ARR}, ("payoff_matrix", "p", "q")),
+    _spec("ace_op_tool_indo_meaning_query",
+          "Extract the target word from an Indonesian 'apa arti ...' meaning question (code/ace_indo_nlp).",
+          {"text": _STR}, ("text",)),
+    _spec("ace_op_tool_indo_teaching_parse",
+          "Parse an Indonesian teaching/correction utterance into its structured form (code/ace_indo_nlp).",
+          {"text": _STR, "pending_word": _STR}, ("text",)),
+)
+
+OP_TOOL_SPECS = OP_TOOL_SPECS + ACE_TOOLBOX8_SPECS
+
 OP_WRITE_TOOLS = frozenset(
     s["name"] for s in OP_TOOL_SPECS if not s["annotations"]["readOnlyHint"]
 )
@@ -703,6 +733,29 @@ class OperationalBridge:
             return getattr(module, func_name)
         except Exception as exc:
             raise ValueError(f"tools.{module_name}.{func_name} unavailable: {exc}") from exc
+
+    def _pkg_tool(self, package: str, module_name: str, func_name: str):
+        """Resolve one function from a code/ package (ace_* sibling
+        of ace_mcp). code/ is this package's own parent directory,
+        so it is importable wherever ace_mcp itself is."""
+        try:
+            module = importlib.import_module(f"{package}.{module_name}")
+            return getattr(module, func_name)
+        except Exception as exc:
+            raise ValueError(
+                f"{package}.{module_name}.{func_name} unavailable: {exc}"
+            ) from exc
+
+    def _run_pkg(self, package: str, module_name: str, func_name: str,
+                 *a, **kw) -> Any:
+        fn = self._pkg_tool(package, module_name, func_name)
+        try:
+            return _jsonable(fn(*a, **kw))
+        except ValueError:
+            raise
+        except Exception as exc:
+            raise ValueError(
+                f"{package}.{module_name}.{func_name}: {exc}") from exc
 
     def _run_tool(self, module_name: str, func_name: str, *a, **kw) -> Any:
         fn = self._repo_tool(module_name, func_name)
@@ -1166,3 +1219,52 @@ class OperationalBridge:
         return self._run_tool("pattern_catalog", "build_catalog",
                               [str(self._ws_path(p)) for p in args["paths"]],
                               **kw)
+
+    # -- toolbox batch 8 ---------------------------------------------------
+    def _do_ace_op_tool_curriculum_lab(self, args: dict) -> Any:
+        kw: dict[str, Any] = {}
+        if args.get("corpus_path"):
+            kw["corpus"] = self._ws_path(str(args["corpus_path"]))
+        return self._run_tool("curriculum_lab", "run_lab",
+                              self._ws_path(str(args["episodes_path"])), **kw)
+
+    def _do_ace_op_tool_conformal_quantile(self, args: dict) -> Any:
+        return self._run_pkg("ace_conformal", "conformal_risk",
+                             "compute_conformal_quantile",
+                             [float(x) for x in args["scores"]],
+                             float(args["alpha"]))
+
+    def _do_ace_op_tool_pac_bayes_bounds(self, args: dict) -> Any:
+        kw: dict[str, Any] = {}
+        if args.get("delta") is not None:
+            kw["delta"] = float(args["delta"])
+        base = (float(args["empirical_risk"]), float(args["kl_div"]),
+                int(args["m"]))
+        return {
+            "mcallester": self._run_pkg("ace_pac_bayes", "pac_bounds",
+                                        "mcallester_bound", *base, **kw),
+            "seeger_maurer": self._run_pkg("ace_pac_bayes", "pac_bounds",
+                                           "seeger_maurer_bound", *base, **kw),
+            "catoni": self._run_pkg("ace_pac_bayes", "pac_bounds",
+                                    "catoni_bound", *base, **kw),
+        }
+
+    def _do_ace_op_tool_nash_gap(self, args: dict) -> Any:
+        matrix = [[float(x) for x in row] for row in args["payoff_matrix"]]
+        return self._run_pkg("ace_game_theory", "minimax_synthesizer",
+                             "compute_nash_gap", matrix,
+                             [float(x) for x in args["p"]],
+                             [float(x) for x in args["q"]])
+
+    def _do_ace_op_tool_indo_meaning_query(self, args: dict) -> Any:
+        out = self._run_pkg("ace_indo_nlp", "discourse",
+                            "extract_meaning_query", str(args["text"]))
+        return {"target": out}
+
+    def _do_ace_op_tool_indo_teaching_parse(self, args: dict) -> Any:
+        kw: dict[str, Any] = {}
+        if args.get("pending_word"):
+            kw["pending_word"] = str(args["pending_word"])
+        return self._run_pkg("ace_indo_nlp", "discourse",
+                             "parse_teaching_or_correction",
+                             str(args["text"]), **kw)
