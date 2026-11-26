@@ -21,9 +21,13 @@ StaleLeaseError = LeaseRejected
 from . import (
     RELEASE_VERSION,
     SCHEMA_ACTIVITY,
+    SCHEMA_AGENT,
     SCHEMA_FRONTIER,
     SCHEMA_GAP,
+    SCHEMA_GOAL,
+    SCHEMA_GOAL_STAGE,
     SCHEMA_LEARNING_EXPERIENCE,
+    SCHEMA_OUTCOME,
     SCHEMA_PROBLEM_IR,
     SCHEMA_RECEIPT,
     SCHEMA_SKILL,
@@ -458,9 +462,100 @@ class OperationalStore:
                 entry_hash TEXT NOT NULL,
                 created_at TEXT NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS agents (
+                agent_id TEXT PRIMARY KEY,
+                vendor TEXT NOT NULL,
+                roles_json TEXT NOT NULL DEFAULT '[]',
+                capabilities_json TEXT NOT NULL DEFAULT '[]',
+                transport TEXT NOT NULL DEFAULT 'mcp_stdio',
+                status TEXT NOT NULL DEFAULT 'ONLINE',
+                endpoint_or_profile TEXT NOT NULL DEFAULT '',
+                metadata_json TEXT NOT NULL DEFAULT '{}',
+                last_heartbeat_at TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS goals (
+                goal_id TEXT PRIMARY KEY,
+                parent_task_id TEXT NOT NULL,
+                title TEXT NOT NULL,
+                user_request TEXT NOT NULL,
+                domain TEXT NOT NULL DEFAULT 'general',
+                publish_mode TEXT NOT NULL DEFAULT 'auto',
+                min_quality_score_bp INTEGER NOT NULL DEFAULT 8500,
+                max_revisions INTEGER NOT NULL DEFAULT 3,
+                require_cross_review INTEGER NOT NULL DEFAULT 1,
+                quality_policy_json TEXT NOT NULL DEFAULT '{}',
+                status TEXT NOT NULL DEFAULT 'ACTIVE',
+                current_stage_index INTEGER NOT NULL DEFAULT 0,
+                final_receipt_id TEXT NOT NULL DEFAULT '',
+                error_summary TEXT NOT NULL DEFAULT '',
+                metadata_json TEXT NOT NULL DEFAULT '{}',
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS goal_stages (
+                stage_id TEXT PRIMARY KEY,
+                goal_id TEXT NOT NULL,
+                stage_order INTEGER NOT NULL,
+                name TEXT NOT NULL,
+                required_role TEXT NOT NULL,
+                preferred_vendor TEXT NOT NULL DEFAULT '',
+                work_order_id TEXT NOT NULL DEFAULT '',
+                status TEXT NOT NULL DEFAULT 'PENDING',
+                revision_count INTEGER NOT NULL DEFAULT 0,
+                quality_score_bp INTEGER NOT NULL DEFAULT 0,
+                verifier_report_json TEXT NOT NULL DEFAULT '{}',
+                execution_receipt_id TEXT NOT NULL DEFAULT '',
+                stage_config_json TEXT NOT NULL DEFAULT '{}',
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS outcome_records (
+                outcome_id TEXT PRIMARY KEY,
+                goal_id TEXT NOT NULL,
+                stage_id TEXT NOT NULL DEFAULT '',
+                domain TEXT NOT NULL,
+                asset_ref TEXT NOT NULL DEFAULT '',
+                predicted_score_bp INTEGER NOT NULL DEFAULT 0,
+                actual_metrics_json TEXT NOT NULL DEFAULT '{}',
+                actual_score_bp INTEGER NOT NULL DEFAULT 0,
+                calibration_delta_bp INTEGER NOT NULL DEFAULT 0,
+                skill_ids_json TEXT NOT NULL DEFAULT '[]',
+                created_at TEXT NOT NULL
+            );
             """
         )
+        self._ensure_columns(
+            "work_orders",
+            (
+                ("goal_id", "TEXT NOT NULL DEFAULT ''"),
+                ("stage_id", "TEXT NOT NULL DEFAULT ''"),
+                ("assigned_agent", "TEXT NOT NULL DEFAULT ''"),
+                ("required_role", "TEXT NOT NULL DEFAULT ''"),
+                ("revision_count", "INTEGER NOT NULL DEFAULT 0"),
+                ("quality_score_bp", "INTEGER NOT NULL DEFAULT 0"),
+                ("required_skills_json", "TEXT NOT NULL DEFAULT '[]'"),
+                ("acceptance_checks_json", "TEXT NOT NULL DEFAULT '[]'"),
+                ("lease_token", "TEXT NOT NULL DEFAULT ''"),
+                ("lease_epoch", "INTEGER NOT NULL DEFAULT 0"),
+                ("lease_expires_at", "TEXT NOT NULL DEFAULT ''"),
+            ),
+        )
         self._conn.commit()
+
+    def _ensure_columns(self, table: str, specs: tuple[tuple[str, str], ...]) -> None:
+        existing = {
+            row["name"]
+            for row in self._conn.execute(f"PRAGMA table_info({table})").fetchall()
+        }
+        for col, col_def in specs:
+            if col not in existing:
+                self._conn.execute(f"ALTER TABLE {table} ADD COLUMN {col} {col_def}")
 
     def _seed_defaults(self) -> None:
         now = utc_now_iso()
@@ -1606,6 +1701,12 @@ class OperationalStore:
         objective: str,
         base_snapshot_hash: str,
         payload: dict[str, Any] | None = None,
+        goal_id: str = "",
+        stage_id: str = "",
+        assigned_agent: str = "",
+        required_role: str = "",
+        required_skills: list[str] | None = None,
+        acceptance_checks: list[dict[str, Any]] | None = None,
     ) -> tuple[dict[str, Any], bool]:
         """Create or deduplicate an ace.work_order.v1 by idempotency_key."""
         with self._lock:
@@ -1622,8 +1723,12 @@ class OperationalStore:
                 INSERT INTO work_orders(
                     work_order_id, parent_task_id, mission_id, idempotency_key,
                     worker_kind, objective, base_snapshot_hash, payload_json,
-                    status, claimed_by, result_json, verification_status, created_at, updated_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'PENDING', '', '{}', 'UNVERIFIED', ?, ?)
+                    status, claimed_by, result_json, verification_status,
+                    goal_id, stage_id, assigned_agent, required_role,
+                    revision_count, quality_score_bp, required_skills_json, acceptance_checks_json,
+                    lease_token, lease_epoch, lease_expires_at,
+                    created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'PENDING', '', '{}', 'UNVERIFIED', ?, ?, ?, ?, 0, 0, ?, ?, '', 0, '', ?, ?)
                 """,
                 (
                     wo_id,
@@ -1634,6 +1739,12 @@ class OperationalStore:
                     objective,
                     base_snapshot_hash,
                     json.dumps(payload or {}, ensure_ascii=False),
+                    goal_id,
+                    stage_id,
+                    assigned_agent,
+                    required_role,
+                    json.dumps(required_skills or [], ensure_ascii=False),
+                    json.dumps(acceptance_checks or [], ensure_ascii=False),
                     now,
                     now,
                 ),
@@ -1643,6 +1754,7 @@ class OperationalStore:
             return self._row_to_work_order(row), True
 
     def _row_to_work_order(self, r: sqlite3.Row) -> dict[str, Any]:
+        keys = set(r.keys())
         return {
             "schema": SCHEMA_WORK_ORDER,
             "work_order_id": r["work_order_id"],
@@ -1657,6 +1769,17 @@ class OperationalStore:
             "claimed_by": r["claimed_by"],
             "result": json.loads(r["result_json"] or "{}"),
             "verification_status": r["verification_status"],
+            "goal_id": r["goal_id"] if "goal_id" in keys else "",
+            "stage_id": r["stage_id"] if "stage_id" in keys else "",
+            "assigned_agent": r["assigned_agent"] if "assigned_agent" in keys else "",
+            "required_role": r["required_role"] if "required_role" in keys else "",
+            "revision_count": int(r["revision_count"] or 0) if "revision_count" in keys else 0,
+            "quality_score_bp": int(r["quality_score_bp"] or 0) if "quality_score_bp" in keys else 0,
+            "required_skills": json.loads((r["required_skills_json"] if "required_skills_json" in keys else "[]") or "[]"),
+            "acceptance_checks": json.loads((r["acceptance_checks_json"] if "acceptance_checks_json" in keys else "[]") or "[]"),
+            "lease_token": r["lease_token"] if "lease_token" in keys else "",
+            "lease_epoch": int(r["lease_epoch"] or 0) if "lease_epoch" in keys else 0,
+            "lease_expires_at": r["lease_expires_at"] if "lease_expires_at" in keys else "",
             "created_at": r["created_at"],
             "updated_at": r["updated_at"],
         }
@@ -1666,9 +1789,19 @@ class OperationalStore:
             row = self._conn.execute("SELECT * FROM work_orders WHERE work_order_id = ?", (work_order_id,)).fetchone()
             return self._row_to_work_order(row) if row else None
 
-    def list_work_orders(self, parent_task_id: str | None = None) -> list[dict[str, Any]]:
+    def list_work_orders(self, parent_task_id: str | None = None, *, goal_id: str | None = None) -> list[dict[str, Any]]:
         with self._lock:
-            if parent_task_id:
+            if parent_task_id and goal_id:
+                rows = self._conn.execute(
+                    "SELECT * FROM work_orders WHERE parent_task_id = ? AND goal_id = ? ORDER BY created_at DESC",
+                    (parent_task_id, goal_id),
+                ).fetchall()
+            elif goal_id:
+                rows = self._conn.execute(
+                    "SELECT * FROM work_orders WHERE goal_id = ? ORDER BY created_at DESC",
+                    (goal_id,),
+                ).fetchall()
+            elif parent_task_id:
                 rows = self._conn.execute(
                     "SELECT * FROM work_orders WHERE parent_task_id = ? ORDER BY created_at DESC",
                     (parent_task_id,),
@@ -1685,6 +1818,14 @@ class OperationalStore:
         claimed_by: str | None = None,
         result: dict[str, Any] | None = None,
         verification_status: str | None = None,
+        payload: dict[str, Any] | None = None,
+        assigned_agent: str | None = None,
+        revision_count: int | None = None,
+        quality_score_bp: int | None = None,
+        acceptance_checks: list[dict[str, Any]] | None = None,
+        lease_token: str | None = None,
+        lease_epoch: int | None = None,
+        lease_expires_at: str | None = None,
     ) -> dict[str, Any]:
         with self._lock:
             wo = self.get_work_order(work_order_id)
@@ -1698,6 +1839,14 @@ class OperationalStore:
                     claimed_by = ?,
                     result_json = ?,
                     verification_status = ?,
+                    payload_json = ?,
+                    assigned_agent = ?,
+                    revision_count = ?,
+                    quality_score_bp = ?,
+                    acceptance_checks_json = ?,
+                    lease_token = ?,
+                    lease_epoch = ?,
+                    lease_expires_at = ?,
                     updated_at = ?
                 WHERE work_order_id = ?
                 """,
@@ -1706,12 +1855,579 @@ class OperationalStore:
                     claimed_by if claimed_by is not None else wo["claimed_by"],
                     json.dumps(result if result is not None else wo["result"], ensure_ascii=False),
                     verification_status if verification_status is not None else wo["verification_status"],
+                    json.dumps(payload if payload is not None else wo["payload"], ensure_ascii=False),
+                    assigned_agent if assigned_agent is not None else wo["assigned_agent"],
+                    int(revision_count) if revision_count is not None else wo["revision_count"],
+                    int(quality_score_bp) if quality_score_bp is not None else wo["quality_score_bp"],
+                    json.dumps(
+                        acceptance_checks if acceptance_checks is not None else wo["acceptance_checks"],
+                        ensure_ascii=False,
+                    ),
+                    lease_token if lease_token is not None else wo["lease_token"],
+                    int(lease_epoch) if lease_epoch is not None else wo["lease_epoch"],
+                    lease_expires_at if lease_expires_at is not None else wo["lease_expires_at"],
                     now,
                     work_order_id,
                 ),
             )
             self._conn.commit()
             return self.get_work_order(work_order_id)  # type: ignore[return-value]
+
+    def claim_work_order(
+        self,
+        work_order_id: str,
+        agent_id: str,
+        *,
+        ttl_sec: int = 300,
+        now: float | None = None,
+    ) -> dict[str, Any]:
+        """Claim a work order atomically via FencedStore lease so two agents cannot double-claim."""
+        if not agent_id or not str(agent_id).strip():
+            raise ValueError("agent_id tidak boleh kosong saat claim_work_order")
+        with self._lock:
+            wo = self.get_work_order(work_order_id)
+            if not wo:
+                raise KeyError(f"Work order tidak ditemukan: {work_order_id}")
+            if wo["status"] in ("COMPLETED", "CANCELLED"):
+                raise ValueError(f"Work order {work_order_id} sudah berada di status akhir {wo['status']}")
+            lease = self.fenced.acquire(f"wo:{work_order_id}", str(agent_id), ttl=float(ttl_sec), now=now)
+            expires_iso = datetime.fromtimestamp(lease.expires_at, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            self._active_leases[f"wo:{work_order_id}"] = lease
+            return self.update_work_order(
+                work_order_id,
+                status="CLAIMED",
+                claimed_by=str(agent_id),
+                assigned_agent=str(agent_id),
+                lease_token=lease.token,
+                lease_epoch=lease.epoch,
+                lease_expires_at=expires_iso,
+            )
+
+    def _resolve_wo_lease(self, work_order_id: str, agent_id: str, lease_token: str) -> Lease:
+        cached = self._active_leases.get(f"wo:{work_order_id}")
+        if cached and cached.owner == agent_id and cached.token == lease_token:
+            return cached
+        with self.fenced._connect() as con:
+            row = con.execute(
+                "SELECT owner, token, epoch, expires_at FROM leases WHERE job_id = ?",
+                (f"wo:{work_order_id}",),
+            ).fetchone()
+        if not row or row[0] != agent_id or row[1] != lease_token:
+            raise LeaseRejected("lease work order tidak sah atau sudah dilepas/diambil agen lain")
+        return Lease(
+            job_id=f"wo:{work_order_id}",
+            owner=row[0],
+            token=row[1],
+            epoch=int(row[2]),
+            expires_at=float(row[3]),
+        )
+
+    def renew_work_order_lease(
+        self,
+        work_order_id: str,
+        agent_id: str,
+        *,
+        lease_token: str,
+        ttl_sec: int = 300,
+        now: float | None = None,
+    ) -> dict[str, Any]:
+        with self._lock:
+            lease = self._resolve_wo_lease(work_order_id, agent_id, lease_token)
+            renewed = self.fenced.renew(lease, ttl=float(ttl_sec), now=now)
+            self._active_leases[f"wo:{work_order_id}"] = renewed
+            expires_iso = datetime.fromtimestamp(renewed.expires_at, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            return self.update_work_order(work_order_id, lease_expires_at=expires_iso)
+
+    def release_work_order(
+        self,
+        work_order_id: str,
+        agent_id: str,
+        *,
+        lease_token: str,
+        new_status: str = "PENDING",
+        now: float | None = None,
+    ) -> dict[str, Any]:
+        with self._lock:
+            wo = self.get_work_order(work_order_id)
+            if not wo:
+                raise KeyError(f"Work order tidak ditemukan: {work_order_id}")
+            lease = self._resolve_wo_lease(work_order_id, agent_id, lease_token)
+            self.fenced.release(lease, now=now)
+            self._active_leases.pop(f"wo:{work_order_id}", None)
+            return self.update_work_order(
+                work_order_id,
+                status=new_status,
+                claimed_by="",
+                lease_token="",
+                lease_expires_at="",
+            )
+
+    # --- Multi-Agent Registry (`ace.agent.v1`) ---
+    def register_agent(
+        self,
+        *,
+        agent_id: str,
+        vendor: str,
+        roles: list[str] | None = None,
+        capabilities: list[str] | None = None,
+        transport: str = "mcp_stdio",
+        status: str = "ONLINE",
+        endpoint_or_profile: str = "",
+        metadata: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        if not agent_id or not str(agent_id).strip():
+            raise ValueError("agent_id wajib diisi")
+        if not vendor or not str(vendor).strip():
+            raise ValueError("vendor agen wajib diisi")
+        aid = str(agent_id).strip()
+        v = str(vendor).strip().lower()
+        clean_roles = sorted({str(r).strip().lower() for r in (roles or ["creator"]) if str(r).strip()})
+        clean_caps = sorted({str(c).strip().lower() for c in (capabilities or []) if str(c).strip()})
+        now = utc_now_iso()
+        with self._lock:
+            self._conn.execute(
+                """
+                INSERT INTO agents(
+                    agent_id, vendor, roles_json, capabilities_json, transport,
+                    status, endpoint_or_profile, metadata_json, last_heartbeat_at,
+                    created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(agent_id) DO UPDATE SET
+                    vendor = excluded.vendor,
+                    roles_json = excluded.roles_json,
+                    capabilities_json = excluded.capabilities_json,
+                    transport = excluded.transport,
+                    status = excluded.status,
+                    endpoint_or_profile = excluded.endpoint_or_profile,
+                    metadata_json = excluded.metadata_json,
+                    last_heartbeat_at = excluded.last_heartbeat_at,
+                    updated_at = excluded.updated_at
+                """,
+                (
+                    aid,
+                    v,
+                    json.dumps(clean_roles, ensure_ascii=False),
+                    json.dumps(clean_caps, ensure_ascii=False),
+                    str(transport).strip() or "mcp_stdio",
+                    str(status).strip().upper() or "ONLINE",
+                    str(endpoint_or_profile or ""),
+                    json.dumps(metadata or {}, ensure_ascii=False),
+                    now,
+                    now,
+                    now,
+                ),
+            )
+            self._conn.commit()
+            return self.get_agent(aid)  # type: ignore[return-value]
+
+    def _row_to_agent(self, r: sqlite3.Row) -> dict[str, Any]:
+        return {
+            "schema": SCHEMA_AGENT,
+            "agent_id": r["agent_id"],
+            "vendor": r["vendor"],
+            "roles": json.loads(r["roles_json"] or "[]"),
+            "capabilities": json.loads(r["capabilities_json"] or "[]"),
+            "transport": r["transport"],
+            "status": r["status"],
+            "endpoint_or_profile": r["endpoint_or_profile"],
+            "metadata": json.loads(r["metadata_json"] or "{}"),
+            "last_heartbeat_at": r["last_heartbeat_at"],
+            "created_at": r["created_at"],
+            "updated_at": r["updated_at"],
+        }
+
+    def get_agent(self, agent_id: str) -> dict[str, Any] | None:
+        with self._lock:
+            r = self._conn.execute("SELECT * FROM agents WHERE agent_id = ?", (agent_id,)).fetchone()
+            return self._row_to_agent(r) if r else None
+
+    def list_agents(self, *, status: str | None = None, vendor: str | None = None, role: str | None = None) -> list[dict[str, Any]]:
+        with self._lock:
+            rows = self._conn.execute("SELECT * FROM agents ORDER BY last_heartbeat_at DESC").fetchall()
+            out = [self._row_to_agent(r) for r in rows]
+        if status:
+            want_s = status.strip().upper()
+            out = [a for a in out if a["status"] == want_s]
+        if vendor:
+            want_v = vendor.strip().lower()
+            out = [a for a in out if a["vendor"] == want_v]
+        if role:
+            want_r = role.strip().lower()
+            out = [a for a in out if want_r in a["roles"]]
+        return out
+
+    def heartbeat_agent(self, agent_id: str, *, status: str | None = None, metadata_updates: dict[str, Any] | None = None) -> dict[str, Any]:
+        with self._lock:
+            cur = self.get_agent(agent_id)
+            if not cur:
+                raise KeyError(f"Agent tidak ditemukan: {agent_id}")
+            now = utc_now_iso()
+            meta = dict(cur["metadata"])
+            if metadata_updates:
+                meta.update(metadata_updates)
+            new_status = str(status).strip().upper() if status else cur["status"]
+            self._conn.execute(
+                "UPDATE agents SET status = ?, metadata_json = ?, last_heartbeat_at = ?, updated_at = ? WHERE agent_id = ?",
+                (new_status, json.dumps(meta, ensure_ascii=False), now, now, agent_id),
+            )
+            self._conn.commit()
+            return self.get_agent(agent_id)  # type: ignore[return-value]
+
+    def select_agent_for_role(
+        self,
+        required_role: str,
+        *,
+        preferred_vendor: str = "",
+        exclude_agents: tuple[str, ...] = (),
+        exclude_vendors: tuple[str, ...] = (),
+    ) -> dict[str, Any] | None:
+        """Select highest-fit registered agent for a role, enforcing optional vendor exclusion for cross-review."""
+        role_low = required_role.strip().lower()
+        pref_v = preferred_vendor.strip().lower()
+        excl_a = set(exclude_agents)
+        excl_v = {v.strip().lower() for v in exclude_vendors if v.strip()}
+        candidates = [
+            a
+            for a in self.list_agents()
+            if a["status"] != "OFFLINE" and a["agent_id"] not in excl_a
+        ]
+        if not candidates:
+            return None
+
+        def _score(agent: dict[str, Any]) -> tuple[int, int, int, int, str]:
+            has_role = 1 if role_low in agent["roles"] else 0
+            diff_vendor = 1 if (excl_v and agent["vendor"] not in excl_v) else (0 if excl_v else 1)
+            pref_hit = 1 if (pref_v and agent["vendor"] == pref_v) else 0
+            online = 1 if agent["status"] == "ONLINE" else 0
+            return (has_role, diff_vendor, pref_hit, online, agent["last_heartbeat_at"])
+
+        best = max(candidates, key=_score)
+        if excl_v and best["vendor"] in excl_v and any(a["vendor"] not in excl_v for a in candidates):
+            non_excluded = [a for a in candidates if a["vendor"] not in excl_v]
+            return max(non_excluded, key=_score)
+        return best
+
+    # --- Goals & Goal DAG Stages (`ace.goal.v1`, `ace.goal_stage.v1`) ---
+    def create_goal_with_stages(
+        self,
+        *,
+        parent_task_id: str,
+        title: str,
+        user_request: str,
+        domain: str = "general",
+        publish_mode: str = "auto",
+        min_quality_score_bp: int = 8500,
+        max_revisions: int = 3,
+        require_cross_review: bool = True,
+        quality_policy: dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
+        stages: list[dict[str, Any]],
+    ) -> dict[str, Any]:
+        if not stages:
+            raise ValueError("Goal membutuhkan minimal 1 stage")
+        if publish_mode not in ("auto", "draft_first"):
+            raise ValueError("publish_mode harus 'auto' atau 'draft_first'")
+        gid = f"goal_{int(time.time() * 1000)}_{secrets.token_hex(4)}"
+        now = utc_now_iso()
+        with self._lock:
+            self._conn.execute(
+                """
+                INSERT INTO goals(
+                    goal_id, parent_task_id, title, user_request, domain, publish_mode,
+                    min_quality_score_bp, max_revisions, require_cross_review,
+                    quality_policy_json, status, current_stage_index,
+                    final_receipt_id, error_summary, metadata_json, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', 0, '', '', ?, ?, ?)
+                """,
+                (
+                    gid,
+                    parent_task_id,
+                    title,
+                    user_request,
+                    domain,
+                    publish_mode,
+                    int(min_quality_score_bp),
+                    int(max_revisions),
+                    1 if require_cross_review else 0,
+                    json.dumps(quality_policy or {}, ensure_ascii=False),
+                    json.dumps(metadata or {}, ensure_ascii=False),
+                    now,
+                    now,
+                ),
+            )
+            for idx, st in enumerate(stages):
+                sid = f"stg_{gid}_{idx:02d}"
+                self._conn.execute(
+                    """
+                    INSERT INTO goal_stages(
+                        stage_id, goal_id, stage_order, name, required_role,
+                        preferred_vendor, work_order_id, status, revision_count,
+                        quality_score_bp, verifier_report_json, execution_receipt_id,
+                        stage_config_json, created_at, updated_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 0, '{}', '', ?, ?, ?)
+                    """,
+                    (
+                        sid,
+                        gid,
+                        idx,
+                        str(st["name"]),
+                        str(st["required_role"]),
+                        str(st.get("preferred_vendor") or ""),
+                        str(st.get("work_order_id") or ""),
+                        "ACTIVE" if idx == 0 else "PENDING",
+                        json.dumps(st.get("stage_config") or {}, ensure_ascii=False),
+                        now,
+                        now,
+                    ),
+                )
+            self._conn.commit()
+            return self.get_goal(gid)  # type: ignore[return-value]
+
+    def _row_to_stage(self, r: sqlite3.Row) -> dict[str, Any]:
+        return {
+            "schema": SCHEMA_GOAL_STAGE,
+            "stage_id": r["stage_id"],
+            "goal_id": r["goal_id"],
+            "stage_order": r["stage_order"],
+            "name": r["name"],
+            "required_role": r["required_role"],
+            "preferred_vendor": r["preferred_vendor"],
+            "work_order_id": r["work_order_id"],
+            "status": r["status"],
+            "revision_count": r["revision_count"],
+            "quality_score_bp": r["quality_score_bp"],
+            "verifier_report": json.loads(r["verifier_report_json"] or "{}"),
+            "execution_receipt_id": r["execution_receipt_id"],
+            "stage_config": json.loads(r["stage_config_json"] or "{}"),
+            "created_at": r["created_at"],
+            "updated_at": r["updated_at"],
+        }
+
+    def _row_to_goal(self, r: sqlite3.Row, stages: list[dict[str, Any]]) -> dict[str, Any]:
+        return {
+            "schema": SCHEMA_GOAL,
+            "goal_id": r["goal_id"],
+            "parent_task_id": r["parent_task_id"],
+            "title": r["title"],
+            "user_request": r["user_request"],
+            "domain": r["domain"],
+            "publish_mode": r["publish_mode"],
+            "min_quality_score_bp": r["min_quality_score_bp"],
+            "max_revisions": r["max_revisions"],
+            "require_cross_review": bool(r["require_cross_review"]),
+            "quality_policy": json.loads(r["quality_policy_json"] or "{}"),
+            "status": r["status"],
+            "current_stage_index": r["current_stage_index"],
+            "final_receipt_id": r["final_receipt_id"],
+            "error_summary": r["error_summary"],
+            "metadata": json.loads(r["metadata_json"] or "{}"),
+            "stages": stages,
+            "created_at": r["created_at"],
+            "updated_at": r["updated_at"],
+        }
+
+    def get_goal(self, goal_id: str) -> dict[str, Any] | None:
+        with self._lock:
+            r = self._conn.execute("SELECT * FROM goals WHERE goal_id = ?", (goal_id,)).fetchone()
+            if not r:
+                return None
+            st_rows = self._conn.execute(
+                "SELECT * FROM goal_stages WHERE goal_id = ? ORDER BY stage_order ASC",
+                (goal_id,),
+            ).fetchall()
+            stages = [self._row_to_stage(s) for s in st_rows]
+            return self._row_to_goal(r, stages)
+
+    def list_goals(self, *, status: str | None = None, limit: int = 50) -> list[dict[str, Any]]:
+        with self._lock:
+            if status:
+                rows = self._conn.execute(
+                    "SELECT goal_id FROM goals WHERE status = ? ORDER BY created_at DESC LIMIT ?",
+                    (status, int(limit)),
+                ).fetchall()
+            else:
+                rows = self._conn.execute(
+                    "SELECT goal_id FROM goals ORDER BY created_at DESC LIMIT ?",
+                    (int(limit),),
+                ).fetchall()
+            return [g for g in (self.get_goal(r["goal_id"]) for r in rows) if g is not None]
+
+    def update_goal(
+        self,
+        goal_id: str,
+        *,
+        status: str | None = None,
+        current_stage_index: int | None = None,
+        final_receipt_id: str | None = None,
+        error_summary: str | None = None,
+        metadata_updates: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        with self._lock:
+            cur = self.get_goal(goal_id)
+            if not cur:
+                raise KeyError(f"Goal tidak ditemukan: {goal_id}")
+            now = utc_now_iso()
+            meta = dict(cur["metadata"])
+            if metadata_updates:
+                meta.update(metadata_updates)
+            self._conn.execute(
+                """
+                UPDATE goals SET
+                    status = ?,
+                    current_stage_index = ?,
+                    final_receipt_id = ?,
+                    error_summary = ?,
+                    metadata_json = ?,
+                    updated_at = ?
+                WHERE goal_id = ?
+                """,
+                (
+                    status if status is not None else cur["status"],
+                    int(current_stage_index) if current_stage_index is not None else cur["current_stage_index"],
+                    final_receipt_id if final_receipt_id is not None else cur["final_receipt_id"],
+                    error_summary if error_summary is not None else cur["error_summary"],
+                    json.dumps(meta, ensure_ascii=False),
+                    now,
+                    goal_id,
+                ),
+            )
+            self._conn.commit()
+            return self.get_goal(goal_id)  # type: ignore[return-value]
+
+    def update_goal_stage(
+        self,
+        stage_id: str,
+        *,
+        work_order_id: str | None = None,
+        status: str | None = None,
+        revision_count: int | None = None,
+        quality_score_bp: int | None = None,
+        verifier_report: dict[str, Any] | None = None,
+        execution_receipt_id: str | None = None,
+        stage_config_updates: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        with self._lock:
+            row = self._conn.execute("SELECT * FROM goal_stages WHERE stage_id = ?", (stage_id,)).fetchone()
+            if not row:
+                raise KeyError(f"Goal stage tidak ditemukan: {stage_id}")
+            cur = self._row_to_stage(row)
+            now = utc_now_iso()
+            cfg = dict(cur["stage_config"])
+            if stage_config_updates:
+                cfg.update(stage_config_updates)
+            self._conn.execute(
+                """
+                UPDATE goal_stages SET
+                    work_order_id = ?,
+                    status = ?,
+                    revision_count = ?,
+                    quality_score_bp = ?,
+                    verifier_report_json = ?,
+                    execution_receipt_id = ?,
+                    stage_config_json = ?,
+                    updated_at = ?
+                WHERE stage_id = ?
+                """,
+                (
+                    work_order_id if work_order_id is not None else cur["work_order_id"],
+                    status if status is not None else cur["status"],
+                    int(revision_count) if revision_count is not None else cur["revision_count"],
+                    int(quality_score_bp) if quality_score_bp is not None else cur["quality_score_bp"],
+                    json.dumps(verifier_report if verifier_report is not None else cur["verifier_report"], ensure_ascii=False),
+                    execution_receipt_id if execution_receipt_id is not None else cur["execution_receipt_id"],
+                    json.dumps(cfg, ensure_ascii=False),
+                    now,
+                    stage_id,
+                ),
+            )
+            self._conn.commit()
+            updated = self._conn.execute("SELECT * FROM goal_stages WHERE stage_id = ?", (stage_id,)).fetchone()
+            return self._row_to_stage(updated)
+
+    # --- Outcome Calibration (`ace.outcome.v1`) ---
+    def record_outcome_metric(
+        self,
+        *,
+        goal_id: str,
+        stage_id: str = "",
+        domain: str,
+        asset_ref: str = "",
+        predicted_score_bp: int,
+        actual_metrics: dict[str, Any],
+        actual_score_bp: int,
+        skill_ids: list[str] | None = None,
+    ) -> dict[str, Any]:
+        oid = f"out_{int(time.time() * 1000)}_{secrets.token_hex(4)}"
+        now = utc_now_iso()
+        delta = int(actual_score_bp) - int(predicted_score_bp)
+        with self._lock:
+            self._conn.execute(
+                """
+                INSERT INTO outcome_records(
+                    outcome_id, goal_id, stage_id, domain, asset_ref,
+                    predicted_score_bp, actual_metrics_json, actual_score_bp,
+                    calibration_delta_bp, skill_ids_json, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    oid,
+                    goal_id,
+                    stage_id,
+                    domain,
+                    asset_ref,
+                    int(predicted_score_bp),
+                    json.dumps(actual_metrics, ensure_ascii=False),
+                    int(actual_score_bp),
+                    delta,
+                    json.dumps(skill_ids or [], ensure_ascii=False),
+                    now,
+                ),
+            )
+            self._conn.commit()
+        return {
+            "schema": SCHEMA_OUTCOME,
+            "outcome_id": oid,
+            "goal_id": goal_id,
+            "stage_id": stage_id,
+            "domain": domain,
+            "asset_ref": asset_ref,
+            "predicted_score_bp": int(predicted_score_bp),
+            "actual_metrics": actual_metrics,
+            "actual_score_bp": int(actual_score_bp),
+            "calibration_delta_bp": delta,
+            "skill_ids": list(skill_ids or []),
+            "created_at": now,
+        }
+
+    def list_outcomes(self, *, domain: str | None = None, limit: int = 100) -> list[dict[str, Any]]:
+        with self._lock:
+            if domain:
+                rows = self._conn.execute(
+                    "SELECT * FROM outcome_records WHERE domain = ? ORDER BY created_at DESC LIMIT ?",
+                    (domain, int(limit)),
+                ).fetchall()
+            else:
+                rows = self._conn.execute(
+                    "SELECT * FROM outcome_records ORDER BY created_at DESC LIMIT ?",
+                    (int(limit),),
+                ).fetchall()
+            return [
+                {
+                    "schema": SCHEMA_OUTCOME,
+                    "outcome_id": r["outcome_id"],
+                    "goal_id": r["goal_id"],
+                    "stage_id": r["stage_id"],
+                    "domain": r["domain"],
+                    "asset_ref": r["asset_ref"],
+                    "predicted_score_bp": r["predicted_score_bp"],
+                    "actual_metrics": json.loads(r["actual_metrics_json"] or "{}"),
+                    "actual_score_bp": r["actual_score_bp"],
+                    "calibration_delta_bp": r["calibration_delta_bp"],
+                    "skill_ids": json.loads(r["skill_ids_json"] or "[]"),
+                    "created_at": r["created_at"],
+                }
+                for r in rows
+            ]
 
     # --- F01-F24 Execution Contract Deliverables & OAIE Experiments ---
     def _row_to_deliverable(self, r: sqlite3.Row) -> dict[str, Any]:

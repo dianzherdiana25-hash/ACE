@@ -124,7 +124,7 @@ def _binary_word(value):
 
 
 class ACEBridge:
-    def __init__(self, workspace: str | Path, allow_writes: bool = False, enable_code_diagnostic: bool = False, operational: bool = False):
+    def __init__(self, workspace: str | Path, allow_writes: bool = False, enable_code_diagnostic: bool = False, operational: bool = False, tool_profile: str = "full"):
         if type(allow_writes) is not bool:
             raise TypeError("allow_writes must be bool")
         self.workspace = Path(workspace)
@@ -135,6 +135,9 @@ class ACEBridge:
         if type(operational) is not bool:
             raise TypeError("operational must be bool")
         self.operational = operational
+        if tool_profile not in ("full", "core"):
+            raise ValueError("tool_profile must be 'full' or 'core'")
+        self.tool_profile = tool_profile
         self._op_bridge = None
 
     def _operational_bridge(self):
@@ -149,8 +152,13 @@ class ACEBridge:
     def tools(self):
         specs = list(TOOL_SPECS) + ([CODE_DIAGNOSTIC, PATCH_DIAGNOSTIC, HOST_DIAGNOSTIC] if self.enable_code_diagnostic else [])
         if self.operational:
-            from .op_bridge import OP_TOOL_SPECS
-            specs += list(OP_TOOL_SPECS)
+            if self.tool_profile == "core":
+                from ace_operational.agent_director import CORE_PROFILE_TOOLS
+                from .op_bridge import OP_TOOL_SPECS
+                specs += [s for s in OP_TOOL_SPECS if s["name"] in CORE_PROFILE_TOOLS]
+            else:
+                from .op_bridge import OP_TOOL_SPECS
+                specs += list(OP_TOOL_SPECS)
         return specs
 
     def call(self, name, arguments):

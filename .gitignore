@@ -15,3 +15,7 @@ build/
 dist/
 .ace_evolution/.*.lock
 .ace_evolution/**/.*.lock
+node_modules/
+.remotion/
+code/ace_media_studio/remotion_studio/out/
+code/ace_media_studio/remotion_studio/build/
